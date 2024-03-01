@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--Each item id should be same as in the nav_graph fragment id-->
+    <item
+
+        android:id="@+id/listentToQuranActivity"
+        android:icon="@drawable/icon_allah"
+        android:title="@string/home" />
+
+    <item
+        android:id="@+id/surah_list_fragment"
+        android:icon="@drawable/ic_settings"
+        android:title="Read Quran" />
+
+
+
+</menu>

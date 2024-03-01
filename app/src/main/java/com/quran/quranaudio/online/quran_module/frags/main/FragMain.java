@@ -1,0 +1,316 @@
+package com.quran.quranaudio.online.quran_module.frags.main;
+
+import static com.quran.quranaudio.online.prayertimes.notifier.PrayerAlarmScheduler.TAG;
+
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.asynclayoutinflater.view.AsyncLayoutInflater;
+import androidx.core.content.ContextCompat;
+
+import com.raiadnan.ads.sdk.format.BannerAd;
+import com.raiadnan.ads.sdk.format.InterstitialAd;
+import com.quran.quranaudio.online.activities.LiveActivity;
+import com.quran.quranaudio.online.activities.SixKalmasActivity;
+import com.quran.quranaudio.online.activities.ZakatCalculatorActivity;
+import com.quran.quranaudio.online.ads.data.Constant;
+import com.quran.quranaudio.online.compass.QiblaDirectionActivity;
+import com.quran.quranaudio.online.hadith.HadithActivity;
+import com.quran.quranaudio.online.quran_module.activities.ActivityReaderIndexPage;
+import com.quran.quranaudio.online.quran_module.components.quran.QuranMeta;
+import com.quran.quranaudio.online.quran_module.utils.app.UpdateManager;
+import com.quran.quranaudio.online.quran_module.views.VOTDView;
+import com.quran.quranaudio.online.R;
+import com.quran.quranaudio.online.activities.LiveActivity;
+import com.quran.quranaudio.online.databinding.FragMainBinding;
+import com.quran.quranaudio.online.prayertimes.ui.calendar.CalendarActivity;
+import com.quran.quranaudio.online.quran_module.activities.ActivityReaderIndexPage;
+import com.quran.quranaudio.online.quran_module.frags.BaseFragment;
+import com.quran.quranaudio.online.quran_module.utils.app.UpdateManager;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+
+
+public class FragMain extends BaseFragment {
+    private FragMainBinding mBinding;
+    private AsyncLayoutInflater mAsyncInflater;
+    private VOTDView mVotdView;
+    private UpdateManager mUpdateManager;
+
+    LinearLayout bannerAdView;
+    BannerAd.Builder bannerAd;
+    InterstitialAd.Builder interstitialAd;
+
+
+    ActivityResultLauncher<String[]> mPermissionResultLauncher;
+    private boolean isLocationPermissionGranted = false;
+
+
+    public FragMain() {
+    }
+
+    @Override
+    public boolean networkReceiverRegistrable() {
+        return true;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+
+        Context context = getContext();
+        if (context == null) {
+            return;
+        }
+
+        QuranMeta.prepareInstance(context, quranMeta -> {
+            if (mVotdView != null) {
+                mVotdView.post(() -> mVotdView.refresh(quranMeta));
+            }
+
+        });
+    }
+
+    @Override
+    public void onDestroy() {
+        if (mVotdView != null) {
+            mVotdView.destroy();
+        }
+
+
+        super.onDestroy();
+    }
+
+    public static FragMain newInstance() {
+        return new FragMain();
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mAsyncInflater = new AsyncLayoutInflater(inflater.getContext());
+
+        mBinding = FragMainBinding.inflate(inflater, container, false);
+        return mBinding.getRoot();
+    }
+
+
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (mBinding == null) {
+            mBinding = FragMainBinding.bind(view);
+        }
+
+        //PermissionStart
+
+        mPermissionResultLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), new ActivityResultCallback<Map<String, Boolean>>() {
+            @Override
+            public void onActivityResult(Map<String, Boolean> result) {
+                if (result.get(Manifest.permission.ACCESS_FINE_LOCATION) !=null) {
+                    isLocationPermissionGranted = result.get(Manifest.permission.ACCESS_FINE_LOCATION);
+                }
+            }
+        });
+
+        requestPermission();
+        //Permission End
+
+
+        mUpdateManager = new UpdateManager(view.getContext(), mBinding.appUpdateContainer);
+        // If update is not critical, proceed to load the rest of the content
+        if (!mUpdateManager.check4Update()) {
+            QuranMeta.prepareInstance(view.getContext(), quranMeta -> initContent(view, quranMeta));
+        }
+
+        mBinding.readQuran.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), ActivityReaderIndexPage.class));
+                showInterstitialAd();
+            }
+        });
+        mBinding.hadithBooks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), HadithActivity.class));
+                showInterstitialAd();
+            }
+        });
+        mBinding.qiblaDirection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), QiblaDirectionActivity.class));
+                showInterstitialAd();
+            }
+        });
+        mBinding.prayerCalender.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), CalendarActivity.class));
+                showInterstitialAd();
+            }
+        });
+        mBinding.sixKalmas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), SixKalmasActivity.class));
+                showInterstitialAd();
+            }
+        });
+        mBinding.zakatCalculator.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), ZakatCalculatorActivity.class));
+                showInterstitialAd();
+            }
+        });
+        mBinding.meccaLive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), LiveActivity.class);
+                intent.putExtra("live", "http://m.live.net.sa:1935/live/quran/playlist.m3u8");
+                startActivity(intent);
+            }
+        });
+        mBinding.medinaLive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), LiveActivity.class);
+                intent.putExtra("live", "http://m.live.net.sa:1935/live/sunnah/playlist.m3u8");
+                startActivity(intent);
+            }
+        });
+
+        //ads
+        bannerAdView = view.findViewById(R.id.banner_ad_view);
+        bannerAdView.addView(View.inflate(getContext(),R.layout.view_banner_ad, null));
+        loadBannerAd();
+        loadInterstitialAd();
+
+        //ads*
+
+
+    }
+
+    private void loadBannerAd() {
+        bannerAd = new BannerAd.Builder((Activity) getContext())
+                .setAdStatus(Constant.AD_STATUS)
+                .setAdNetwork(Constant.AD_NETWORK)
+                .setBackupAdNetwork(Constant.BACKUP_AD_NETWORK)
+                .setAdMobBannerId(Constant.ADMOB_BANNER_ID)
+                .setGoogleAdManagerBannerId(Constant.GOOGLE_AD_MANAGER_BANNER_ID)
+                .setFanBannerId(Constant.FAN_BANNER_ID)
+                .setUnityBannerId(Constant.UNITY_BANNER_ID)
+                .setAppLovinBannerId(Constant.APPLOVIN_BANNER_ID)
+                .setAppLovinBannerZoneId(Constant.APPLOVIN_BANNER_ZONE_ID)
+                .build();
+    }
+
+    private void loadInterstitialAd() {
+        interstitialAd = new InterstitialAd.Builder((Activity) getContext())
+                .setAdStatus(Constant.AD_STATUS)
+                .setAdNetwork(Constant.AD_NETWORK)
+                .setBackupAdNetwork(Constant.BACKUP_AD_NETWORK)
+                .setAdMobInterstitialId(Constant.ADMOB_INTERSTITIAL_ID)
+                .setGoogleAdManagerInterstitialId(Constant.GOOGLE_AD_MANAGER_INTERSTITIAL_ID)
+                .setFanInterstitialId(Constant.FAN_INTERSTITIAL_ID)
+                .setUnityInterstitialId(Constant.UNITY_INTERSTITIAL_ID)
+                .setAppLovinInterstitialId(Constant.APPLOVIN_INTERSTITIAL_ID)
+                .setAppLovinInterstitialZoneId(Constant.APPLOVIN_INTERSTITIAL_ZONE_ID)
+                .setInterval(Constant.INTERSTITIAL_AD_INTERVAL)
+                .build(() -> {
+                    Log.d(TAG, "onAdDismissed");
+                });
+    }
+
+    private void showInterstitialAd() {
+        interstitialAd.show(() -> {
+            Log.d(TAG, "onAdShowed");
+        }, () -> {
+            Log.d(TAG, "onAdDismissed");
+        });
+
+    }
+
+    private void requestPermission(){
+        isLocationPermissionGranted = ContextCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED;
+
+        List<String> permissionRequest = new ArrayList<String>();
+
+        if (!isLocationPermissionGranted) {
+            permissionRequest.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+
+        if (!permissionRequest.isEmpty()) {
+
+            mPermissionResultLauncher.launch(permissionRequest.toArray(new String[0]));
+        }
+    }
+
+    private void initContent(View root, QuranMeta quranMeta) {
+        initVOTD(root, quranMeta);
+        //        initReadHistory(root, quranMeta);
+    }
+
+    private void initVOTD(View root, QuranMeta quranMeta) {
+        mVotdView = new VOTDView(root.getContext());
+        mVotdView.setId(R.id.homepageVOTD);
+        mBinding.container.addView(mVotdView, resolvePosReadHistory(root));
+        mVotdView.refresh(quranMeta);
+    }
+
+
+    private void initFeaturedReading(View root, QuranMeta quranMeta) {
+
+    }
+
+
+
+    public static int resolvePosUpdateCont() {
+        return 0;
+    }
+
+    private int resolvePosVOTD(View root) {
+        int pos = resolvePosUpdateCont() + 1;
+        if (root.findViewById(R.id.appUpdateContainer) == null) {
+            pos--;
+        }
+        return pos;
+    }
+
+    private int resolvePosReadHistory(View root) {
+        int pos = resolvePosVOTD(root) + 1;
+        if (root.findViewById(R.id.homepageVOTD) == null) {
+            pos--;
+        }
+        return pos;
+    }
+
+
+}

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CircleImageView">
+        <attr name="civ_border_width" format="dimension" />
+        <attr name="civ_border_color" format="color" />
+        <attr name="civ_border_overlay" format="boolean" />
+        <attr name="civ_circle_background_color" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="ZoomageView">
+        <attr name="zoomage_zoomable" format="boolean" />
+        <attr name="zoomage_translatable" format="boolean" />
+        <attr name="zoomage_restrictBounds" format="boolean" />
+        <attr name="zoomage_animateOnReset" format="boolean" />
+        <attr name="zoomage_doubleTapToZoom" format="boolean" />
+        <attr name="zoomage_doubleTapToZoomScaleFactor" format="float" />
+        <attr name="zoomage_autoCenter" format="boolean" />
+        <attr name="zoomage_minScale" format="float" />
+        <attr name="zoomage_maxScale" format="float" />
+        <attr name="zoomage_autoResetMode" format="enum">
+            <enum name="UNDER" value="0" />
+            <enum name="OVER" value="1" />
+            <enum name="ALWAYS" value="2" />
+            <enum name="NEVER" value="3" />
+        </attr>
+    </declare-styleable>
+
+    <attr name="BlackWhite"> #ffffff</attr>
+    <attr name="WhiteBlack" format="color">BlackWhite</attr>
+    <attr name="IconBack" format="color">IconBack</attr>
+    <attr name="CBack" format="color">CBlack</attr>
+
+    <attr name="play_pause_bg">#E90E0E0E</attr>
+    <attr name="TabColor" format="color">TabColor</attr>
+    <attr name="playbutton">#playbutton</attr>
+
+    <!-- Prayer Times -->
+
+    <declare-styleable name="mainStyles">
+
+        <attr name="colorPrimary" format="color" />
+        <attr name="colorPrimaryDark" format="color" />
+        <attr name="colorAccent" format="color" />
+
+        <attr name="textColorPrimary" format="color" />
+        <attr name="textColorSecondary" format="color" />
+
+        <attr name="mainBackgroundStartColor" format="color" />
+        <attr name="mainBackgroundEndColor" format="color" />
+
+        <attr name="navigationBackgroundStartColor" format="color" />
+        <attr name="navigationBackgroundEndColor" format="color" />
+
+        <attr name="navigationCheckedColor" format="color" />
+        <attr name="navigationUnCheckedColor" format="color" />
+
+        <attr name="progressbarBackgroundColor" format="color" />
+        <attr name="progressbarColor" format="color" />
+        <attr name="progressbarMainTextColor" format="color" />
+
+        <attr name="notificationEnabledIconColor" format="color" />
+        <attr name="notificationDisabledIconColor" format="color" />
+
+        <attr name="iconsMainColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="tooltipStyle">
+        <attr name="tooltipBackgroundColor" format="color" />
+        <attr name="tooltipTextColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="toolbarStyle">
+        <attr name="toolbarBackgroundColor" format="color" />
+        <attr name="toolbarTextColorPrimary" format="color" />
+        <attr name="toolbarTextColorSecondary" format="color" />
+        <attr name="toolbarTabBackground" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="SimpleAnalogClock">
+        <attr name="faceDrawable" format="reference" />
+        <attr name="hourDrawable" format="reference" />
+        <attr name="minuteDrawable" format="reference" />
+        <attr name="secondDrawable" format="reference" />
+
+        <attr name="faceTint" format="color" />
+        <attr name="hourTint" format="color" />
+        <attr name="minuteTint" format="color" />
+        <attr name="secondTint" format="color" />
+
+        <attr name="hourRotation" format="float" />
+        <attr name="minuteRotation" format="float" />
+        <attr name="secondRotation" format="float" />
+    </declare-styleable>
+
+    <declare-styleable name="ExtraRingtonePreference">
+        <attr name="extraRingtones" format="reference" />
+        <attr name="extraRingtoneTitles" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="RoundedImageView">
+        <attr name="corner_radius" format="dimension" />
+        <attr name="border_width" format="dimension" />
+        <attr name="border_color" format="color" />
+        <attr name="round_background" format="boolean" />
+        <attr name="is_oval" format="boolean" />
+        <attr name="android:scaleType" />
+    </declare-styleable>
+
+    <!-- Features-->
+
+
+    <!-- Quran_Module -->
+
+    <attr name="chapterNumber" format="integer" />
+
+    <declare-styleable name="ChapterIcon">
+        <attr name="chapterNumber" />
+        <attr name="includePrefix" format="boolean" />
+        <attr name="android:textSize" />
+        <attr name="android:textColor" />
+    </declare-styleable>
+    <declare-styleable name="ChapterTitleView">
+        <attr name="chapterNumber" />
+        <attr name="chapterTitleSize" format="enum">
+            <enum name="small" value="0" />
+            <enum name="medium" value="1" />
+        </attr>
+    </declare-styleable>
+    <declare-styleable name="PageNoView">
+        <attr name="pageNumber" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="CardSection">
+        <attr name="cardSectionExpandable" format="boolean|reference" />
+        <attr name="cardSectionExpanded" format="boolean|reference" />
+        <attr name="cardSectionTitle" format="string|reference" />
+        <attr name="cardSectionTitleIcon" format="reference" />
+        <attr name="cardSectionTitleDividerEnabled" format="boolean|reference" />
+        <attr name="cardSection_titlePaddingHorizontal" format="dimension|reference" />
+        <attr name="cardSection_titlePaddingVertical" format="dimension|reference" />
+        <attr name="cardSection_contentPadding" format="dimension|reference" />
+        <attr name="cardSection_contentPaddingHorizontal" format="dimension|reference" />
+        <attr name="cardSection_contentPaddingVertical" format="dimension|reference" />
+        <attr name="cardSection_contentPaddingStart" format="dimension|reference" />
+        <attr name="cardSection_contentPaddingTop" format="dimension|reference" />
+        <attr name="cardSection_contentPaddingEnd" format="dimension|reference" />
+        <attr name="cardSection_contentPaddingBottom" format="dimension|reference" />
+        <attr name="android:orientation" />
+    </declare-styleable>
+
+    <declare-styleable name="IconedTextView">
+        <attr name="drawableStartDimen" format="dimension" />
+        <attr name="drawableTopDimen" format="dimension" />
+        <attr name="drawableEndDimen" format="dimension" />
+        <attr name="drawableBottomDimen" format="dimension" />
+        <attr name="android:drawablePadding" />
+        <attr name="android:gravity" />
+    </declare-styleable>
+
+    <declare-styleable name="UnscaledTextView">
+        <attr name="android:textSize" />
+    </declare-styleable>
+
+    <attr name="PeaceFFTitle" format="string|reference" />
+    <attr name="PeaceFFRequired" format="boolean|reference" />
+    <attr name="PeaceFFText" format="string|reference" />
+
+    <declare-styleable name="PeaceFormInputField">
+        <attr name="PeaceFFTitle" />
+        <attr name="PeaceFFRequired" />
+        <attr name="PeaceFFText" />
+        <attr name="PeaceFFHint" format="string|reference" />
+        <attr name="android:imeOptions" />
+        <attr name="android:inputType" />
+    </declare-styleable>
+    <declare-styleable name="PeaceFormSelectField">
+        <attr name="PeaceFFTitle" />
+        <attr name="PeaceFFRequired" />
+    </declare-styleable>
+
+    <declare-styleable name="PeaceCompoundButton">
+        <attr name="peaceComp_subText" format="string|reference" />
+        <attr name="peaceComp_direction" format="enum">
+            <enum name="textStart" value="0" />
+            <enum name="textTop" value="1" />
+            <enum name="textEnd" value="2" />
+            <enum name="textBottom" value="3" />
+        </attr>
+        <attr name="peaceComp_spaceBetween" format="dimension|reference" />
+        <attr name="peaceComp_subTextAppearance" format="reference" />
+        <attr name="peaceComp_textGravity" format="enum">
+            <enum name="start" value="0" />
+            <enum name="end" value="1" />
+            <enum name="center" value="2" />
+            <enum name="left" value="3" />
+            <enum name="right" value="4" />
+        </attr>
+        <attr name="peaceComp_buttonCompat" format="reference" />
+        <attr name="android:text" />
+        <attr name="android:checked" />
+        <attr name="android:textAppearance" />
+    </declare-styleable>
+
+
+    <!-- Quran_Module*-->
+
+</resources>

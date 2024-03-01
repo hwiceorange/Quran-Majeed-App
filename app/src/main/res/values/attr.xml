@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ExpandableTextView">
+        <attr name="trimLength" format="integer"/>
+    </declare-styleable>
+
+    <declare-styleable name="FontText">
+        <attr name="typefaceAsset" format="string"/>
+    </declare-styleable>
+
+    <declare-styleable name="WeatherViewStyle">
+        <attr name="startTime"  format="string|reference"/>
+        <attr name="endTime"  format="string|reference"/>
+        <attr name="currentTime"  format="string|reference"/>
+        <attr name="timeTextSize" format="dimension|reference"/>
+        <attr name="timeTextColor" format="color|reference"/>
+        <attr name="weatherDrawable" format="reference"/>
+        <attr name="bottomLineColor" format="color|reference"/>
+        <attr name="bottomLineHeight" format="dimension|reference"/>
+        <attr name="arcColor" format="color|reference"/>
+        <attr name="arcDashWidth" format="dimension|reference"/>
+        <attr name="arcDashGapWidth" format="dimension|reference"/>
+        <attr name="arcDashHeight" format="dimension|reference"/>
+        <attr name="arcSolidColor" format="color|reference"/>
+        <attr name="arcRadius" format="dimension|reference"/>
+        <attr name="arcOffsetAngle" format="integer|reference"/>
+        <attr name="sunColor" format="color|reference"/>
+        <attr name="textPadding" format="dimension|reference"/>
+    </declare-styleable>
+
+</resources>

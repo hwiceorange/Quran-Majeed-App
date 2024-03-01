@@ -1,0 +1,52 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/language_header">
+
+        <ListPreference
+            app:defaultValue="urd"
+            app:entries="@array/language_entries"
+            app:entryValues="@array/language_values"
+            app:key="language"
+            app:title="@string/language_title"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/appearance_header">
+
+        <CheckBoxPreference
+            app:defaultValue="true"
+            app:key="display_arabic"
+            app:title="@string/display_arabic" />
+
+        <CheckBoxPreference
+            app:defaultValue="true"
+            app:key="display_translation"
+            app:title="@string/display_translation" />
+
+        <SeekBarPreference
+            app:defaultValue="20"
+            app:key="textsize_arabic"
+            app:showSeekBarValue="true"
+            app:title="@string/textsize_arabic" />
+
+        <SeekBarPreference
+            app:defaultValue="20"
+            app:key="textsize_translation"
+            app:showSeekBarValue="true"
+            app:title="@string/textsize_translation" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:isPreferenceVisible="false"
+        app:title="@string/contact_us">
+
+        <Preference
+            app:key="signature"
+            app:title="lecheng2019@gmail.com"
+            app:useSimpleSummaryProvider="true"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

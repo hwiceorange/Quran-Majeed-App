@@ -1,0 +1,854 @@
+
+
+package com.quran.quranaudio.online.quran_module.frags.settings;
+
+import static android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import static android.widget.LinearLayout.HORIZONTAL;
+import static android.widget.LinearLayout.VERTICAL;
+import static com.quran.quranaudio.online.quran_module.utils.univ.Codes.SETTINGS_LAUNCHER_RESULT_CODE;
+import static com.quran.quranaudio.online.quran_module.utils.univ.Keys.READER_KEY_SAVE_TRANSL_CHANGES;
+import static com.quran.quranaudio.online.quran_module.utils.univ.Keys.READER_KEY_SETTING_IS_FROM_READER;
+import static com.quran.quranaudio.online.quran_module.utils.univ.Keys.READER_KEY_TRANSL_SLUGS;
+
+import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.os.Bundle;
+import android.provider.Settings;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.SeekBar;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.AppCompatSeekBar;
+import androidx.cardview.widget.CardView;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentResultListener;
+
+import com.google.android.material.tabs.TabLayout;
+import com.peacedesign.android.utils.DrawableUtils;
+import com.peacedesign.android.utils.WindowUtils;
+import com.peacedesign.android.widget.dialog.base.PeaceDialog;
+import com.quran.quranaudio.online.quran_module.activities.readerSettings.Activity_Quran_Settings;
+import com.quran.quranaudio.online.quran_module.frags.settings.recitations.FragSettingsRecitations;
+import com.quran.quranaudio.online.quran_module.frags.settings.recitations.manage.FragSettingsManageAudio;
+import com.quran.quranaudio.online.quran_module.reader_managers.ReaderParams;
+import com.quran.quranaudio.online.quran_module.reader_managers.ReaderVerseDecorator;
+import com.quran.quranaudio.online.quran_module.utils.gesture.HoverPushOpacityEffect;
+import com.quran.quranaudio.online.quran_module.utils.reader.QuranScriptUtils;
+import com.quran.quranaudio.online.quran_module.utils.reader.ReaderTextSizeUtils;
+import com.quran.quranaudio.online.quran_module.utils.reader.TranslUtils;
+import com.quran.quranaudio.online.quran_module.utils.reader.factory.QuranTranslationFactory;
+import com.quran.quranaudio.online.quran_module.utils.reader.recitation.RecitationManager;
+import com.quran.quranaudio.online.quran_module.utils.reader.recitation.RecitationUtils;
+import com.quran.quranaudio.online.quran_module.utils.reader.tafsir.TafsirManager;
+import com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs;
+import com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPReader;
+import com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPVerses;
+import com.quran.quranaudio.online.quran_module.utils.simplified.SimpleSeekbarChangeListener;
+import com.quran.quranaudio.online.quran_module.utils.simplified.SimpleTabSelectorListener;
+import com.quran.quranaudio.online.quran_module.utils.tafsir.TafsirUtils;
+import com.quran.quranaudio.online.quran_module.utils.univ.Codes;
+import com.quran.quranaudio.online.quran_module.utils.univ.Keys;
+import com.quran.quranaudio.online.quran_module.utils.votd.VOTDUtils;
+import com.quran.quranaudio.online.quran_module.views.BoldHeader;
+import com.quran.quranaudio.online.quran_module.widgets.IconedTextView;
+import com.quran.quranaudio.online.quran_module.widgets.bottomSheet.PeaceBottomSheet;
+import com.quran.quranaudio.online.quran_module.widgets.bottomSheet.PeaceBottomSheetParams;
+import com.quran.quranaudio.online.R;
+import com.quran.quranaudio.online.quran_module.api.models.recitation.RecitationInfoModel;
+import com.quran.quranaudio.online.quran_module.api.models.recitation.RecitationTranslationInfoModel;
+import com.quran.quranaudio.online.quran_module.api.models.tafsir.TafsirInfoModel;
+import com.quran.quranaudio.online.databinding.FragSettingsMainBinding;
+import com.quran.quranaudio.online.databinding.LytReaderIndexTabBinding;
+import com.quran.quranaudio.online.databinding.LytReaderSettingsItemBinding;
+import com.quran.quranaudio.online.databinding.LytReaderSettingsTextDecoratorBinding;
+import com.quran.quranaudio.online.databinding.LytReaderSettingsTextSizeBinding;
+import com.quran.quranaudio.online.databinding.LytSettingsLayoutStyleBinding;
+import com.quran.quranaudio.online.databinding.LytSettingsReaderBinding;
+import com.quran.quranaudio.online.databinding.LytSettingsVotdToggleBinding;
+import com.quran.quranaudio.online.quran_module.frags.settings.recitations.FragSettingsRecitations;
+import com.quran.quranaudio.online.quran_module.frags.settings.recitations.manage.FragSettingsManageAudio;
+import com.quran.quranaudio.online.quran_module.reader_managers.ReaderVerseDecorator;
+import com.quran.quranaudio.online.quran_module.utils.extensions.ContextKt;
+import com.quran.quranaudio.online.quran_module.utils.extensions.LayoutParamsKt;
+import com.quran.quranaudio.online.quran_module.utils.gesture.HoverPushOpacityEffect;
+import com.quran.quranaudio.online.quran_module.utils.reader.QuranScriptUtils;
+import com.quran.quranaudio.online.quran_module.utils.reader.QuranScriptUtilsKt;
+import com.quran.quranaudio.online.quran_module.utils.reader.factory.QuranTranslationFactory;
+import com.quran.quranaudio.online.quran_module.utils.reader.recitation.RecitationManager;
+import com.quran.quranaudio.online.quran_module.utils.reader.tafsir.TafsirManager;
+import com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs;
+import com.quran.quranaudio.online.quran_module.utils.simplified.SimpleSeekbarChangeListener;
+import com.quran.quranaudio.online.quran_module.utils.simplified.SimpleTabSelectorListener;
+import com.quran.quranaudio.online.quran_module.utils.univ.Keys;
+import com.quran.quranaudio.online.quran_module.widgets.bottomSheet.PeaceBottomSheet;
+import com.quran.quranaudio.online.quran_module.widgets.bottomSheet.PeaceBottomSheetParams;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
+
+import kotlin.Pair;
+import kotlin.Unit;
+
+public class FragSettingsMain extends FragSettingsBase implements FragmentResultListener {
+    private FragSettingsMainBinding mBinding;
+    private LytReaderSettingsItemBinding mThemeExplorerBinding;
+    private LytReaderSettingsItemBinding mVOTDToggleBinding;
+    private LytReaderSettingsItemBinding mTranslExplorerBinding;
+    private LytReaderSettingsItemBinding mTafsirExplorerBinding;
+    private LytReaderSettingsItemBinding mRecitationExplorerBinding;
+    private LytReaderSettingsItemBinding mManageAudioExplorerBinding;
+    private LytReaderSettingsItemBinding mScriptExplorerBinding;
+    private QuranTranslationFactory mTranslFactory;
+    private ReaderVerseDecorator mVerseDecorator;
+    private LayoutInflater mInflater;
+
+    private boolean mIsFromReader;
+    private String[] initTranslSlugs;
+    private boolean saveTranslChanges;
+
+    private LytReaderSettingsTextSizeBinding mLytTextSizeArabic;
+    private LytReaderSettingsTextSizeBinding mLytTextSizeTransl;
+
+    public FragSettingsMain() {
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mTranslFactory != null) {
+            mTranslFactory.close();
+        }
+    }
+
+    @Override
+    public String getFragTitle(Context ctx) {
+        return ctx.getString(R.string.strTitleSettings);
+    }
+
+    @Override
+    public int getLayoutResource() {
+        return R.layout.frag_settings_main;
+    }
+
+    @Override
+    public int getPageBackgroundColor(@NonNull Context ctx) {
+        return ContextKt.color(ctx, R.color.colorBGPageVariable);
+    }
+
+    @Override
+    public void onNewArguments(@NonNull Bundle args) {
+        super.onNewArguments(args);
+        if (getContext() == null) {
+            return;
+        }
+
+        tryLaunchVOTDToggleExplorer(getContext(), args);
+    }
+
+    @Override
+    public void setupHeader(@NonNull Activity_Quran_Settings activity, @NonNull BoldHeader header) {
+        super.setupHeader(activity, header);
+        header.setCallback(activity::onBackPressed);
+        header.setShowSearchIcon(false);
+        header.setShowRightIcon(false);
+    }
+
+    @Override
+    protected boolean getShouldCreateScrollerView() {
+        return true;
+    }
+
+    @Override
+    public void onViewReady(@NonNull Context ctx, @NonNull View view, @Nullable Bundle savedInstanceState) {
+        mBinding = FragSettingsMainBinding.bind(view);
+
+        mTranslFactory = new QuranTranslationFactory(ctx);
+        mVerseDecorator = new ReaderVerseDecorator(ctx);
+        mInflater = LayoutInflater.from(ctx);
+
+        init(ctx);
+
+        getParentFragmentManager().setFragmentResultListener(
+            String.valueOf(Codes.SETTINGS_LAUNCHER_RESULT_CODE),
+            getViewLifecycleOwner(),
+            this
+        );
+    }
+
+    private void init(Context ctx) {
+        initValues();
+
+        mBinding.getRoot().setBackgroundColor(ContextKt.color(ctx, R.color.colorBGPageVariable));
+
+        initExplorers(ctx);
+        initLayoutStyle(ctx);
+        initDecorator(ctx);
+
+        setupItemsVisibility(SPReader.getSavedReaderStyle(ctx));
+    }
+
+    private void setupItemsVisibility(int readerStyle) {
+        int visibilityForReadingStyle = readerStyle == ReaderParams.READER_STYLE_PAGE ? GONE : VISIBLE;
+
+        if (mTranslExplorerBinding != null) {
+            mTranslExplorerBinding.getRoot().setVisibility(visibilityForReadingStyle);
+        }
+        if (mLytTextSizeTransl != null) {
+            mLytTextSizeTransl.getRoot().setVisibility(visibilityForReadingStyle);
+        }
+    }
+
+    private void initValues() {
+        final Bundle args = getArgs();
+        mIsFromReader = args.getBoolean(Keys.READER_KEY_SETTING_IS_FROM_READER, false);
+        initTranslSlugs = args.getStringArray(Keys.READER_KEY_TRANSL_SLUGS);
+        saveTranslChanges = args.getBoolean(Keys.READER_KEY_SAVE_TRANSL_CHANGES, true);
+    }
+
+    private void initExplorers(Context ctx) {
+        mBinding.appSettings.getRoot().setVisibility(!mIsFromReader ? VISIBLE : GONE); //RaiAdnan
+
+        if (!mIsFromReader) {
+            iniAppSettings();
+        }
+
+        initReaderSettings(ctx);
+
+    }
+
+    private void iniAppSettings() {
+        initAppLanguage(mBinding.appSettings.getRoot());
+    }
+
+    private void initAppLanguage(LinearLayout parent) {
+        LytReaderSettingsItemBinding appLangExplorerBinding = LytReaderSettingsItemBinding.inflate(mInflater, parent,
+            false);
+
+        setupLauncherParams(R.drawable.dr_icon_language, appLangExplorerBinding);
+        setupAppLangTitle(appLangExplorerBinding);
+
+        appLangExplorerBinding.launcher.setOnClickListener(v -> launchFrag(FragSettingsLanguage.class, null));
+
+        parent.addView(appLangExplorerBinding.getRoot());
+    }
+
+    private void setupAppLangTitle(LytReaderSettingsItemBinding binding) {
+        Context ctx = binding.getRoot().getContext();
+        final String[] availableLocalesValues = ContextKt.getStringArray(ctx, R.array.availableLocalesValues);
+        final String[] availableLocaleNames = ContextKt.getStringArray(ctx, R.array.availableLocalesNames);
+
+        String selectedLanguage = SPAppConfigs.getLocale(ctx);
+        String selectedLanguageName = "";
+
+        for (int i = 0, l = availableLocalesValues.length; i < l; i++) {
+            if (Objects.equals(availableLocalesValues[i], selectedLanguage)) {
+                selectedLanguageName = availableLocaleNames[i];
+                break;
+            }
+        }
+
+        prepareTitle(binding, R.string.strTitleAppLanguage, selectedLanguageName);
+    }
+
+
+    private void tryLaunchVOTDToggleExplorer(Context ctx, Bundle args) {
+        if (args.getInt(Activity_Quran_Settings.KEY_SETTINGS_DESTINATION) == Activity_Quran_Settings.SETTINGS_VOTD) {
+            launchVOTDToggleExplorer(ctx);
+        }
+    }
+
+    private void launchVOTDToggleExplorer(Context ctx) {
+        AlarmManager alarmManager = ContextCompat.getSystemService(ctx, AlarmManager.class);
+
+        PeaceBottomSheet sheetDialog = new PeaceBottomSheet();
+        PeaceBottomSheetParams params = sheetDialog.getParams();
+        params.setHeaderTitle(getString(R.string.strTitleVOTD));
+
+        LytSettingsVotdToggleBinding binding = LytSettingsVotdToggleBinding.inflate(mInflater);
+
+        if (VOTDUtils.isVOTDTrulyEnabled(ctx)) {
+            binding.getRoot().check(R.id.on);
+        } else {
+            binding.getRoot().check(R.id.off);
+        }
+
+        params.setContentView(binding.getRoot());
+
+        binding.getRoot().setBeforeCheckChangeListener((group, newButtonId) -> {
+            if (newButtonId == R.id.on) {
+                if (alarmManager == null) {
+                    Toast.makeText(ctx, R.string.msgAlarmManagerNotAvailable, Toast.LENGTH_LONG).show();
+                    return false;
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !NotificationManagerCompat.from(
+                    ctx).areNotificationsEnabled()) {
+                    requestNotificationPermission(ctx);
+                    return false;
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
+                    requestAlarmPermission(ctx);
+                    return false;
+                }
+
+                VOTDUtils.enableVOTDReminder(ctx);
+            } else {
+                VOTDUtils.disableVOTDReminder(ctx);
+            }
+
+            SPVerses.setVOTDReminderEnabled(ctx, newButtonId == R.id.on);
+            sheetDialog.dismiss();
+            return true;
+        });
+
+        sheetDialog.show(getParentFragmentManager());
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void requestNotificationPermission(Context ctx) {
+        Toast.makeText(ctx, R.string.msgVerseReminderNotifPermission, Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+        intent.putExtra(Settings.EXTRA_APP_PACKAGE, ctx.getPackageName());
+        startActivity(intent);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.S)
+    private void requestAlarmPermission(Context ctx) {
+        Toast.makeText(ctx, R.string.msgVerseReminderAlarmPermission, Toast.LENGTH_LONG).show();
+        startActivity(new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM));
+    }
+
+    private void initReaderSettings(Context ctx) {
+        LytSettingsReaderBinding readerSettings = mBinding.readerSettings;
+
+        initTranslExplorer(readerSettings.explorerLauncherContainer);
+    //    initTafsirExplorer(readerSettings.explorerLauncherContainer);
+        initScriptExplorer(readerSettings.explorerLauncherContainer);
+        if (RecitationUtils.isRecitationSupported()) {
+            initRecitationExplorer(readerSettings.explorerLauncherContainer);
+            initManageAudioExplorer(readerSettings.explorerLauncherContainer);
+        }
+        readerSettings.btnReset.setOnTouchListener(new HoverPushOpacityEffect());
+        readerSettings.btnReset.setOnClickListener(v -> resetCheckpoint(ctx));
+        readerSettings.getRoot().setVisibility(VISIBLE);
+    }
+
+    private void initTranslExplorer(LinearLayout parent) {
+        mTranslExplorerBinding = LytReaderSettingsItemBinding.inflate(mInflater);
+
+        setupLauncherParams(R.drawable.dr_icon_translations, mTranslExplorerBinding);
+        setupTranslTitle();
+
+        mTranslExplorerBinding.launcher.setOnClickListener(v -> {
+            Bundle args = new Bundle();
+            args.putBoolean(Keys.READER_KEY_SAVE_TRANSL_CHANGES, saveTranslChanges);
+            args.putStringArray(Keys.READER_KEY_TRANSL_SLUGS, initTranslSlugs);
+            launchFrag(FragSettingsTransl.class, args);
+        });
+
+        parent.addView(mTranslExplorerBinding.getRoot());
+    }
+
+    private void setupTranslTitle() {
+        if (mTranslExplorerBinding == null) return;
+        Context ctx = mTranslExplorerBinding.getRoot().getContext();
+
+        Set<String> slugs;
+
+        if (initTranslSlugs == null) {
+            slugs = SPReader.getSavedTranslations(ctx);
+        } else {
+            slugs = new TreeSet<>(Arrays.asList(initTranslSlugs.clone()));
+        }
+
+        // Filter out translation slugs who are downloaded.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            slugs = slugs.stream().filter(slug -> {
+                if (TranslUtils.isPrebuilt(slug)) {
+                    return true;
+                }
+
+                return mTranslFactory.isTranslationDownloaded(slug);
+            }).collect(Collectors.toSet());
+        }
+
+        if (initTranslSlugs == null) {
+            SPReader.setSavedTranslations(ctx, slugs);
+        } else {
+            initTranslSlugs = slugs.toArray(new String[0]);
+        }
+
+        final int size = slugs.size();
+        String subtext = size == 0 ? null : getString(R.string.strLabelSelectedCount, size);
+        prepareTitle(mTranslExplorerBinding, R.string.strTitleTranslations, subtext);
+    }
+
+    private void initTafsirExplorer(LinearLayout parent) {
+        mTafsirExplorerBinding = LytReaderSettingsItemBinding.inflate(mInflater);
+
+        setupLauncherParams(R.drawable.dr_icon_tafsir, mTafsirExplorerBinding);
+        setupTafsirTitle();
+
+        mTafsirExplorerBinding.launcher.setOnClickListener(v -> launchFrag(FragSettingsTafsirs.class, null));
+
+        parent.addView(mTafsirExplorerBinding.getRoot());
+    }
+
+    private void initScriptExplorer(LinearLayout parent) {
+        mScriptExplorerBinding = LytReaderSettingsItemBinding.inflate(mInflater);
+
+        setupLauncherParams(R.drawable.dr_icon_quran_script, mScriptExplorerBinding);
+        setupScriptTitle();
+
+        mScriptExplorerBinding.launcher.setOnClickListener(v -> launchFrag(FragSettingsScripts.class, null));
+
+        parent.addView(mScriptExplorerBinding.getRoot());
+    }
+
+
+    private void setupScriptTitle() {
+        if (mScriptExplorerBinding == null) return;
+
+        String subtitle = QuranScriptUtilsKt.getQuranScriptName(
+            SPReader.getSavedScript(mScriptExplorerBinding.getRoot().getContext())
+        );
+        prepareTitle(mScriptExplorerBinding, R.string.strTitleSelectScripts, subtitle);
+    }
+
+   private void setupTafsirTitle() {
+        if (mTafsirExplorerBinding == null) return;
+        Context ctx = mTafsirExplorerBinding.getRoot().getContext();
+
+        prepareTitle(mTafsirExplorerBinding, R.string.strTitleSelectTafsir, null);
+
+        TafsirManager.prepare(ctx, false, () -> {
+            prepareTitle(
+                mTafsirExplorerBinding,
+                R.string.strTitleSelectTafsir,
+                TafsirUtils.getTafsirName(SPReader.getSavedTafsirKey(ctx))
+            );
+
+            return Unit.INSTANCE;
+        });
+    }
+
+    private void initRecitationExplorer(LinearLayout parent) {
+        mRecitationExplorerBinding = LytReaderSettingsItemBinding.inflate(mInflater);
+
+        setupLauncherParams(R.drawable.dr_icon_recitation, mRecitationExplorerBinding);
+        setupRecitationTitle();
+
+        mRecitationExplorerBinding.launcher.setOnClickListener(v -> launchFrag(FragSettingsRecitations.class, null));
+
+        parent.addView(mRecitationExplorerBinding.getRoot());
+    }
+
+    private void setupRecitationTitle() {
+        if (mRecitationExplorerBinding == null) return;
+        Context ctx = mRecitationExplorerBinding.getRoot().getContext();
+
+        prepareTitle(mRecitationExplorerBinding, R.string.strTitleSelectReciter, null);
+        RecitationManager.prepare(ctx, false, () -> {
+            RecitationManager.prepareTranslations(ctx, false, () -> {
+                prepareTitle(
+                    mRecitationExplorerBinding,
+                    R.string.strTitleSelectReciter,
+                    RecitationManager.getCurrentReciterNameForAudioOption(ctx)
+                );
+
+                return Unit.INSTANCE;
+            });
+            return Unit.INSTANCE;
+        });
+    }
+
+    private void initManageAudioExplorer(LinearLayout parent) {
+        mManageAudioExplorerBinding = LytReaderSettingsItemBinding.inflate(mInflater);
+
+        setupLauncherParams(R.drawable.dr_icon_download, mManageAudioExplorerBinding);
+
+        prepareTitle(mManageAudioExplorerBinding, R.string.titleManageAudio, getString(R.string.downloadRecitations));
+
+        mManageAudioExplorerBinding.launcher.setOnClickListener(v -> launchFrag(FragSettingsManageAudio.class, null));
+
+        parent.addView(mManageAudioExplorerBinding.getRoot());
+    }
+
+    private void setupLauncherIcon(int startIconRes, IconedTextView textView) {
+        Context context = textView.getContext();
+        Drawable chevronRight = ContextKt.drawable(context, R.drawable.dr_icon_chevron_right);
+
+        if (WindowUtils.isRTL(context)) chevronRight = DrawableUtils.rotate(context, chevronRight, 180);
+
+        textView.setDrawables(ContextKt.drawable(context, startIconRes), null, chevronRight, null);
+    }
+
+    @SuppressLint("RtlHardcoded")
+    private void prepareTitle(LytReaderSettingsItemBinding binding, int titleRes, String subtitle) {
+        Context ctx = binding.getRoot().getContext();
+
+        SpannableStringBuilder ssb = new SpannableStringBuilder();
+        int flag = SPAN_EXCLUSIVE_EXCLUSIVE;
+
+        String title = ctx.getString(titleRes);
+        SpannableString titleSS = new SpannableString(title);
+        titleSS.setSpan(new StyleSpan(Typeface.BOLD), 0, titleSS.length(), flag);
+        ssb.append(titleSS);
+
+        if (!TextUtils.isEmpty(subtitle)) {
+            SpannableString subtitleSS = new SpannableString(subtitle);
+            subtitleSS.setSpan(new AbsoluteSizeSpan(ContextKt.getDimenPx(ctx, R.dimen.dmnCommonSize2)), 0,
+                subtitleSS.length(), flag);
+            subtitleSS.setSpan(new ForegroundColorSpan(ContextKt.color(ctx, R.color.colorText3)), 0,
+                subtitleSS.length(), flag);
+            ssb.append("\n").append(subtitleSS);
+        }
+
+        binding.launcher.setText(ssb);
+        binding.launcher.setGravity(WindowUtils.isRTL(ctx) ? Gravity.RIGHT : Gravity.LEFT);
+    }
+
+    private void setupLauncherParams(int startIconRes, LytReaderSettingsItemBinding launcherBinding) {
+        View launcherRoot = launcherBinding.getRoot();
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
+        LayoutParamsKt.updateMarginHorizontal(params, ContextKt.dp2px(launcherRoot.getContext(), 10));
+        LayoutParamsKt.updateMarginVertical(params, ContextKt.dp2px(launcherRoot.getContext(), 5));
+        launcherRoot.setLayoutParams(params);
+
+        setupLauncherIcon(startIconRes, launcherBinding.launcher);
+    }
+
+    private void initLayoutStyle(Context ctx) {
+        CardView readerStyleContainer = mBinding.readerSettings.readerStyleContainer;
+
+        int initReaderStyle = SPReader.getSavedReaderStyle(ctx);
+        int readType = getArgs().getInt(Keys.READER_KEY_READ_TYPE, -1);
+        if (readType == ReaderParams.READER_READ_TYPE_VERSES) {
+            readerStyleContainer.setVisibility(GONE);
+            return;
+        } else {
+            readerStyleContainer.setVisibility(VISIBLE);
+        }
+
+        LytSettingsLayoutStyleBinding bindingLayoutStyle = LytSettingsLayoutStyleBinding.inflate(mInflater);
+        bindingLayoutStyle.title.setText(R.string.strTitleReaderLayoutStyle);
+        String[] labels = ContextKt.getStringArray(ctx, R.array.arrReaderStyle);
+        int[] styles = {ReaderParams.READER_STYLE_TRANSLATION, ReaderParams.READER_STYLE_PAGE};
+
+        for (int i = 0, l = labels.length; i < l; i++) {
+            TabLayout.Tab tab = bindingLayoutStyle.tabLayout.newTab();
+            LytReaderIndexTabBinding binding = LytReaderIndexTabBinding.inflate(mInflater);
+            tab.setCustomView(binding.getRoot());
+            binding.tabTitle.setText(labels[i]);
+            tab.setTag(styles[i]);
+
+            bindingLayoutStyle.tabLayout.addTab(tab, styles[i] == initReaderStyle);
+        }
+
+
+        bindingLayoutStyle.tabLayout.addOnTabSelectedListener(new SimpleTabSelectorListener() {
+            @Override
+            public void onTabSelected(@NonNull TabLayout.Tab tab) {
+                Integer style = (Integer) tab.getTag();
+
+                if (style == null) {
+                    return;
+                }
+
+                SPReader.setSavedReaderStyle(ctx, style);
+                setupItemsVisibility(style);
+            }
+        });
+
+        readerStyleContainer.addView(bindingLayoutStyle.getRoot());
+    }
+
+    private void initDecorator(Context ctx) {
+        LytReaderSettingsTextDecoratorBinding binding = LytReaderSettingsTextDecoratorBinding.inflate(mInflater,
+            mBinding.readerSettings.getRoot(), true);
+
+        boolean isLandscape = WindowUtils.isLandscapeMode(ctx);
+        int orientation = isLandscape ? HORIZONTAL : VERTICAL;
+        binding.lytTextSizeCont.setOrientation(orientation);
+
+        initTextSizeArabic(binding, isLandscape);
+        initTextSizeTransl(binding, isLandscape);
+    }
+
+    private void initTextSizeArabic(LytReaderSettingsTextDecoratorBinding parent, boolean isLandscape) {
+        mLytTextSizeArabic = parent.lytTextSizeArabic;
+
+        LinearLayout.LayoutParams p = (LinearLayout.LayoutParams) mLytTextSizeArabic.getRoot().getLayoutParams();
+        p.width = isLandscape ? 0 : MATCH_PARENT;
+        if (isLandscape) {
+            p.weight = 1;
+        }
+        mLytTextSizeArabic.getRoot().setLayoutParams(p);
+
+        mLytTextSizeArabic.title.setText(R.string.strTitleReaderTextSizeArabic);
+
+        AppCompatSeekBar seekbar = mLytTextSizeArabic.seekbar;
+        seekbar.setMax(ReaderTextSizeUtils.getMaxProgress());
+
+        setProgressAndTextArabic(SPReader.getSavedTextSizeMultArabic(parent.getRoot().getContext()));
+
+        setupTextSizeArabicPreview();
+
+        seekbar.setOnSeekBarChangeListener(new SimpleSeekbarChangeListener() {
+            @Override
+            public void onProgressChanged(@NonNull SeekBar seekBar, int progress, boolean fromUser) {
+                progress = progress + ReaderTextSizeUtils.TEXT_SIZE_MIN_PROGRESS;
+                final String text = progress + "%";
+                mLytTextSizeArabic.progressText.setText(text);
+                demonstrateTextSizeArabic(progress);
+            }
+
+            @Override
+            public void onStopTrackingTouch(@NonNull SeekBar seekBar) {
+                SPReader.setSavedTextSizeMultArabic(
+                    seekBar.getContext(),
+                    ReaderTextSizeUtils.calculateMultiplier(ReaderTextSizeUtils.normalizeProgress(seekbar.getProgress()))
+                );
+            }
+        });
+    }
+
+    private void setupTextSizeArabicPreview() {
+        if (mLytTextSizeArabic == null) {
+            return;
+        }
+        Context ctx = mLytTextSizeArabic.getRoot().getContext();
+
+        mVerseDecorator.refresh();
+        mVerseDecorator.refreshQuranTextFonts(mVerseDecorator.isKFQPCScript() ? new Pair<>(1, 1) : null);
+
+        final String savedScript = SPReader.getSavedScript(ctx);
+
+        int scriptPreviewRes = QuranScriptUtilsKt.getScriptPreviewRes(savedScript);
+        mLytTextSizeArabic.demoText.setText(scriptPreviewRes);
+        mVerseDecorator.setTextSizeArabic(mLytTextSizeArabic.demoText);
+        if (QuranScriptUtilsKt.isKFQPCScript(savedScript)) {
+            mLytTextSizeArabic.demoText.setTypeface(
+                ContextKt.getFont(ctx, QuranScriptUtilsKt.getQuranScriptFontRes(savedScript))
+            );
+        } else {
+            mVerseDecorator.setFontArabic(mLytTextSizeArabic.demoText, -1);
+        }
+    }
+
+    private void initTextSizeTransl(LytReaderSettingsTextDecoratorBinding parent, boolean isLandscape) {
+        mLytTextSizeTransl = parent.lytTextSizeTransl;
+
+        LinearLayout.LayoutParams p = (LinearLayout.LayoutParams) mLytTextSizeTransl.getRoot().getLayoutParams();
+        p.width = isLandscape ? 0 : MATCH_PARENT;
+        if (isLandscape) {
+            p.weight = 1;
+            p.leftMargin = ContextKt.dp2px(parent.getRoot().getContext(), 15);
+        } else {
+            p.topMargin = ContextKt.dp2px(parent.getRoot().getContext(), 15);
+        }
+
+        mLytTextSizeTransl.getRoot().setLayoutParams(p);
+
+        mLytTextSizeTransl.title.setText(R.string.strTitleReaderTextSizeTransl);
+
+        AppCompatSeekBar seekbar = mLytTextSizeTransl.seekbar;
+        seekbar.setMax(ReaderTextSizeUtils.getMaxProgress());
+
+        setProgressAndTextTransl(SPReader.getSavedTextSizeMultTransl(parent.getRoot().getContext()));
+
+        mLytTextSizeTransl.demoText.setText(getString(R.string.strPreviewTextTransl));
+        mVerseDecorator.setTextSizeTransl(mLytTextSizeTransl.demoText);
+
+        seekbar.setOnSeekBarChangeListener(new SimpleSeekbarChangeListener() {
+            @Override
+            public void onProgressChanged(@NonNull SeekBar seekBar, int progress, boolean fromUser) {
+                progress = progress + ReaderTextSizeUtils.TEXT_SIZE_MIN_PROGRESS;
+                final String text = progress + "%";
+                mLytTextSizeTransl.progressText.setText(text);
+                demonstrateTextSizeTransl(progress);
+            }
+
+            @Override
+            public void onStopTrackingTouch(@NonNull SeekBar seekBar) {
+                SPReader.setSavedTextSizeMultTransl(
+                    seekBar.getContext(),
+                    ReaderTextSizeUtils.calculateMultiplier(ReaderTextSizeUtils.normalizeProgress(seekbar.getProgress()))
+                );
+            }
+        });
+    }
+
+    private void setProgressAndTextArabic(float multiplier) {
+        if (mLytTextSizeArabic == null) return;
+
+        mLytTextSizeArabic.seekbar.setProgress(ReaderTextSizeUtils.calculateProgress(multiplier));
+        mLytTextSizeArabic.seekbar.invalidate();
+        final String text = ReaderTextSizeUtils.calculateProgressText(multiplier) + "%";
+        mLytTextSizeArabic.progressText.setText(text);
+    }
+
+    private void demonstrateTextSizeArabic(int progress) {
+        if (mLytTextSizeArabic == null) {
+            return;
+        }
+
+        final float size = mVerseDecorator.getTextSizeArabic() * ReaderTextSizeUtils.calculateMultiplier(progress);
+        mLytTextSizeArabic.demoText.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
+    }
+
+    private void setProgressAndTextTransl(float multiplier) {
+        if (mLytTextSizeTransl == null) return;
+        mLytTextSizeTransl.seekbar.setProgress(ReaderTextSizeUtils.calculateProgress(multiplier));
+        final String text = ReaderTextSizeUtils.calculateProgressText(multiplier) + "%";
+        mLytTextSizeTransl.progressText.setText(text);
+    }
+
+    private void demonstrateTextSizeTransl(int progress) {
+        if (mLytTextSizeTransl == null) {
+            return;
+        }
+
+        final float size = mVerseDecorator.getTextSizeTransl() * ReaderTextSizeUtils.calculateMultiplier(progress);
+        mLytTextSizeTransl.demoText.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
+    }
+
+
+    private void resetToDefault(Context ctx) {
+        SPReader.setSavedTextSizeMultArabic(ctx, ReaderTextSizeUtils.TEXT_SIZE_MULT_AR_DEFAULT);
+        SPReader.setSavedTextSizeMultTransl(ctx, ReaderTextSizeUtils.TEXT_SIZE_MULT_TRANSL_DEFAULT);
+        SPReader.setSavedTextSizeMultTafsir(ctx, ReaderTextSizeUtils.TEXT_SIZE_MULT_TAFSIR_DEFAULT);
+        SPReader.setSavedScript(ctx, QuranScriptUtils.SCRIPT_DEFAULT);
+
+        initTranslSlugs = TranslUtils.defaultTranslationSlugs().toArray(new String[0]);
+
+        TafsirManager.prepare(ctx, false, () -> {
+            Map<String, List<TafsirInfoModel>> tafsirModels = TafsirManager.getModels();
+
+            if (tafsirModels != null) {
+                for (List<TafsirInfoModel> tafsirList : tafsirModels.values()) {
+                    for (TafsirInfoModel model : tafsirList) {
+                        SPReader.setSavedRecitationSlug(ctx, model.getKey());
+                        break;
+                    }
+                }
+
+             //   setupTafsirTitle();
+            }
+
+            return Unit.INSTANCE;
+        });
+
+        RecitationManager.prepare(ctx, false, () -> {
+            List<RecitationInfoModel> models = RecitationManager.getModels();
+
+            if (models != null) {
+                for (RecitationInfoModel model : models) {
+                    if (model != null) {
+                        SPReader.setSavedRecitationSlug(ctx, model.getSlug());
+                        break;
+                    }
+                }
+
+            //    setupRecitationTitle();
+            }
+
+            return Unit.INSTANCE;
+        });
+
+        RecitationManager.prepareTranslations(ctx, false, () -> {
+            List<RecitationTranslationInfoModel> models = RecitationManager.getTranslationModels();
+
+            if (models != null) {
+                for (RecitationTranslationInfoModel model : models) {
+                    if (model != null) {
+                        SPReader.setSavedRecitationTranslationSlug(ctx, model.getSlug());
+                        break;
+                    }
+                }
+
+              //  setupRecitationTitle();
+            }
+
+            return Unit.INSTANCE;
+        });
+
+        setupTranslTitle();
+        setupScriptTitle();
+        setupTextSizeArabicPreview();
+
+        demonstrateTextSizeArabic(ReaderTextSizeUtils.TEXT_SIZE_DEFAULT_PROGRESS);
+        demonstrateTextSizeTransl(ReaderTextSizeUtils.TEXT_SIZE_DEFAULT_PROGRESS);
+        setProgressAndTextArabic(ReaderTextSizeUtils.TEXT_SIZE_MULT_AR_DEFAULT);
+        setProgressAndTextTransl(ReaderTextSizeUtils.TEXT_SIZE_MULT_TRANSL_DEFAULT);
+    }
+
+    private void resetCheckpoint(Context ctx) {
+        PeaceDialog.Builder builder = PeaceDialog.newBuilder(ctx);
+        builder.setTitle(R.string.strTitleResetReaderSettings);
+        builder.setMessage(R.string.strMsgResetReaderSettings);
+        builder.setButtonsDirection(PeaceDialog.STACKED);
+        builder.setTitleTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        builder.setMessageTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        builder.setDialogGravity(PeaceDialog.GRAVITY_BOTTOM);
+        builder.setNeutralButton(R.string.strLabelCancel, null);
+        builder.setPositiveButton(R.string.strLabelReset, ContextKt.color(ctx, R.color.colorSecondary),
+            (dialog1, which) -> resetToDefault(ctx));
+        builder.setFocusOnPositive(true);
+        builder.show();
+    }
+
+    @Override
+    public Bundle getFinishingResult(@NonNull Context ctx) {
+        Bundle data = new Bundle();
+        data.putStringArray(Keys.READER_KEY_TRANSL_SLUGS, initTranslSlugs);
+        if (saveTranslChanges && initTranslSlugs != null) {
+            SPReader.setSavedTranslations(ctx, new TreeSet<>(Arrays.asList(initTranslSlugs)));
+        }
+        return data;
+    }
+
+    @Override
+    public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+        if (!String.valueOf(Codes.SETTINGS_LAUNCHER_RESULT_CODE).equals(requestKey)) {
+            return;
+        }
+
+        initTranslSlugs = result.getStringArray(Keys.READER_KEY_TRANSL_SLUGS);
+        setupTranslTitle();
+
+        // Update the args so that it can reflect when this fragment is recreated.
+        Bundle args = getArgs();
+        args.putStringArray(Keys.READER_KEY_TRANSL_SLUGS, initTranslSlugs);
+        setArguments(args);
+    }
+}

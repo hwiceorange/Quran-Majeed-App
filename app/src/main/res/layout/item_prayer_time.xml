@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/view_bg"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="10dp"
+    android:background="@color/colorPrimaryDark"
+    android:foreground="?attr/selectableItemBackground"
+    style="?android:attr/borderlessButtonStyle">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:background="#267C7C7C"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/img_icon"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:padding="15dp"
+                app:srcCompat="@drawable/symbol_fajr"
+                android:layout_marginLeft="10dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:layout_toStartOf="@+id/img_tone"
+                android:layout_toEndOf="@+id/img_icon"
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_toLeftOf="@+id/img_tone"
+                android:layout_toRightOf="@+id/img_icon"
+                tools:ignore="UnknownId">
+
+                <TextView
+                    android:id="@+id/tv_prayer_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fajar"
+                    android:textColor="#222"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/tv_prayer_tone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:text="Default"
+                    android:textColor="#555"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:visibility="gone"
+                android:id="@+id/img_tonee"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_toStartOf="@+id/tv_time"
+                android:padding="15dp"
+                app:srcCompat="@drawable/ic_muusic"
+                android:layout_toLeftOf="@+id/tv_time" />
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="20dp"
+                android:text="04:47"
+                android:textColor="#222"
+                android:textSize="16sp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp" />
+
+
+        </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:background="#267C7C7C"/>
+</androidx.cardview.widget.CardView>

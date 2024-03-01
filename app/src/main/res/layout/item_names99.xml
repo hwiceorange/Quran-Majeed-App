@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="#22555555" />
+
+    <RelativeLayout
+        android:id="@+id/index_row"
+        android:layout_width="match_parent"
+        android:layout_height="70dp">
+
+        <TextView
+            android:id="@+id/tv_surah_no"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="17.5dp"
+            android:layout_marginTop="17.5dp"
+            android:layout_marginEnd="17.5dp"
+            android:layout_marginBottom="17.5dp"
+            android:background="@drawable/id_bg"
+            android:gravity="center"
+            android:text="1"
+            android:textColor="#fff"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:id="@+id/layout_index_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/tv_surah_no"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvEnglishName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Surah Fatiha"
+                android:textColor="#555"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/maki_madni"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Madni"
+                android:textColor="#f0555555"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/arabic_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:text="الفاتحة"
+            android:textColor="#2a2a2a"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="#22555555" />
+</LinearLayout>

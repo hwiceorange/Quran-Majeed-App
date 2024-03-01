@@ -1,0 +1,1125 @@
+<resources>
+
+    <string name="app_name">Quran Majeed</string>
+    <string name="actionbar_name">Quran Majeed-audio and Urdu</string>
+    <string name="the_holy_quran">The Holy Quran</string>
+    <string name="listen_quran">Listen to Quran</string>
+    <string name="read_quran_arabic">Read Quran</string>
+    <string name="read_quran_english">Azkar</string>
+    <string name="hadith_btn">Hadith Books</string>
+    <string name="hadith">        Hadith Books</string>
+    <string name="quran_reader">Read Quran</string>
+    <string name="surah_index">Surah Index</string>
+    <string name="juz_index">Juz Index</string>
+    <string name="bookmark"><![CDATA[           Bookmark]]></string>
+    <string name="names99">99 Names</string>
+    <string name="names_of_allah">99 Names of Allah</string>
+    <string name="qibla_direction">Qibla Direction</string>
+    <string name="tasbih">Tasbih</string>
+    <string name="time_settings">Salat  Time Settings</string>
+    <string name="set_location">Location</string>
+
+    <string name="about_me">About me</string>
+    <string name="about_me_text">I'm Lecheng, an Android developer. Do you like this app? Please give a 5-star praise.</string>
+    <string name="cancel">Cancel</string>
+    <string name="pleaseBeConnectedToInternet">please be connected to internet</string>
+    <string name="buffering">buffering</string>
+    <string name="limitReached">limit reached</string>
+    <string name="firstPage">First page</string>
+    <string name="lastPage">Last page</string>
+    <string name="arabb">الفاتحة</string>
+    <string name="ar_rahman">Ar Rahman</string>
+    <string name="eng_meaning">Who Has the Absolute Gracious nature</string>
+
+    <!--    Quran Reader -->
+
+
+    <string name="page_hint">Go To Page</string>
+    <string name="ok">OK</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+    <string name="feedback">Have some feedback?</string>
+    <string name="whatsapp">Whatsapp:</string>
+
+    <!--    rate app -->
+    <string name="rate_dialog">Rate Us</string>
+    <string name="RateAppTitle">Like this app?</string>
+    <string name="RateApp">Share the love by rating 5 stars in Play Store.</string>
+    <string name="rate_later">Later</string>
+    <string name="are_you_sure_you_want_to_exit">Are You Sure You Want To Exit ?</string>
+
+
+    <!--    privacy policy url-->
+    <string name="privacy">Privacy Policy</string>
+    <string name="privacy_policy_url" translatable="false">https://iceorange.org/privacy-policy/</string>
+
+
+    //Toast
+    <string name="location_permission_not_granted">Location Permission not granted</string>
+    <string name="toast_permission">Please accept Permissions</string>
+
+    //Snackbar
+    <string name="sneaker_connected">Connected!!</string>
+    <string name="sneaker_msg_network">The network is back.</string>
+    <string name="sneaker_disconnected">Connection lost</string>
+    <string name="sneaker_msg_network_lost">No Network.</string>
+
+
+    <string name="duree">Duration: </string>
+    <string name="default_error_message">An error occurred, please try again.</string>
+    <string name="network_error_message">Please check your internet connection and try again.</string>
+
+
+    <string name="azkar">Azkar</string>
+    <string name="_99_names_of_allah">99 Names of Allah</string>
+    <string name="quran">Quran</string>
+    <string name="get_to_know_the_99_names_of_allah">Get to know the 99 names of Allah</string>
+    <string name="explore_and_learn_new_daily_azkhars">Explore and learn new daily azkhars</string>
+
+    <string name="channel_name" translatable="false">channel_name</string>
+    <string name="channel_desc" translatable="false">channel_desc</string>
+    <string name="play_surah">Play entire Surah</string>
+    <string name="download_surah">Download Surah</string>
+    <string name="dl_available">This Surah is already available offline</string>
+    <string name="dl_started">Download started, check notification</string>
+    <string name="refresh">Refresh</string>
+    <string name="next_prayer">Next Prayer</string>
+    <string name="translate_in_french">Translate in French</string>
+    <string name="internet_msg">You need Internet to perform this action</string>
+    <string name="chapter">Chapter</string>
+    <string name="surah">Surah</string>
+    <string name="categories">Categories</string>
+    <string name="home">Home</string>
+    <string name="language">Language</string>
+    <string name="share">Share with others</string>
+
+    <string name="notification_title">Daily Ayah</string>
+
+    <string name="pref_notification_key" translatable="false">notification</string>
+    <string name="pref_notification_title">Notification</string>
+    <string name="pref_notification_summary">An Ayah is displayed daily.</string>
+
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="settings">Settings</string>
+    <string name="home_family"><![CDATA[Home & Family]]></string>
+    <string name="food_drink"><![CDATA[Food & Drink]]></string>
+    <string name="joy_distress"><![CDATA[Joy & Distress]]></string>
+    <string name="travel">Travel</string>
+    <string name="prayer">Prayer</string>
+    <string name="praising_allah">Praising Allah</string>
+    <string name="hajj_umrah"><![CDATA[Hajj & Umrah]]></string>
+    <string name="good_etiquette">Good Etiquette</string>
+    <string name="nature">Nature</string>
+    <string name="sickeness_death"><![CDATA[Sickeness & Death]]></string>
+    <string name="morning_evening">Morning-Evening</string>
+    <string name="surah_dl">Do you want to download this Surah?</string>
+    <string name="data_loading">Please wait \n The data is being loaded. \n This is the only time this operation will take place</string>
+    <string name="auto_start">Enabling auto-start will prevent your phone from disabling notifications. Allow?</string>
+    <string name="bubble_aya_title1">Listen to the entire Surah \n Press the desired Ayah below if
+    you only want to listen a particular Ayah.</string>
+    <string name="bubble_ayah_des1">Press here to play the whole Surah</string>
+    <string name="bubble_ayah_title3">Download Surah</string>
+    <string name="bubble_ayah_desc3">You can download the surah to listen to it offline</string>
+    <string name="search_hint">Search</string>
+    <string name="internet_ayah">You need Internet connection to play the Ayah</string>
+
+
+    <string name="action_settings">Settings</string>
+
+    <!-- Prayer Times -->
+
+    <string name="day1">Saturday</string>
+    <string name="day1m">SUN</string>
+    <string name="day2">Sunday</string>
+    <string name="day2m">MON</string>
+    <string name="day3">Monday</string>
+    <string name="day3m">TUE</string>
+    <string name="day4">Tuesday</string>
+    <string name="day4m">WED</string>
+    <string name="day5">Wednesday</string>
+    <string name="day5m">THU</string>
+    <string name="day6">Thursday</string>
+    <string name="day6m">FRI</string>
+    <string name="day7">Friday</string>
+    <string name="day7m">SAT</string>
+    <string name="default_end_time">18:30</string>
+    <string name="default_start_time">6:30</string>
+    <string name="month1">Muharram</string>
+    <string name="month10">Shawwal</string>
+    <string name="month10e">Shawwal</string>
+    <string name="month10g">October</string>
+    <string name="month11">Thul Qa`dah</string>
+    <string name="month11e">Thul Qa`dah</string>
+    <string name="month11g">November</string>
+    <string name="month12">Thul Hijjah</string>
+    <string name="month12e">Thul Hijjah</string>
+    <string name="month12g">December</string>
+    <string name="month1e">Muharram</string>
+    <string name="month1g">January</string>
+    <string name="month2">Safar</string>
+    <string name="month2e">Safar</string>
+    <string name="month2g">February</string>
+    <string name="month3">Raby` al-awal</string>
+    <string name="month3e">Rabi\'I</string>
+    <string name="month3g">March</string>
+    <string name="month4">Raby` al-THaany</string>
+    <string name="month4e">Rabi\'II</string>
+    <string name="month4g">April</string>
+    <string name="month5">Jumaada al-awal</string>
+    <string name="month5e">Jumaada I</string>
+    <string name="month5g">May</string>
+    <string name="month6">Jumaada al-THaany</string>
+    <string name="month6e">Jumaada II</string>
+    <string name="month6g">June</string>
+    <string name="month7">Rajab</string>
+    <string name="month7e">Rajab</string>
+    <string name="month7g">July</string>
+    <string name="month8">Sha`baan</string>
+    <string name="month8e">Sha`baan</string>
+    <string name="month8g">August</string>
+    <string name="month9">Ramadhan</string>
+    <string name="month9e">Ramadhan</string>
+    <string name="month9g">September</string>
+    <string name="title_activity_bottomtest">bottomtest</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="salat_time">Salat</string>
+
+    <!-- Intro -->
+    <string name="intro_books">Hadith Books</string>
+    <string name="intro_grades">Hadith Grades</string>
+    <string name="intro_issues">Known Issues</string>
+    <string name="intro_translation">Hadith Translation</string>
+    <string name="intro_skip">Skip</string>
+    <string name="intro_next">Next</string>
+    <string name="intro_getstarted">Get Started</string>
+    <string name="intro_issues1">Some mistakes in Zubair Ali Zai Grades</string>
+    <string name="intro_issues2">Some Ahadith are missing in English</string>
+
+    <!-- Title -->
+    <string name="title_book">Books</string>
+    <string name="title_bookmark">Bookmark</string>
+    <string name="title_random">Random Hadith</string>
+    <string name="title_rate">Rate our app</string>
+    <string name="title_reference">Reference</string>
+    <string name="title_moreapps">More apps</string>
+    <string name="title_contribute">How to contribute</string>
+    <string name="title_source">Source code</string>
+    <string name="title_settings">Settings</string>
+
+    <!-- Menu -->
+    <string name="menu_menu">Menu</string>
+    <string name="menu_others">Others</string>
+
+    <!-- Book Fragment -->
+    <!-- Books -->
+    <string name="bukhari_book">Sahih Bukhari</string>
+    <string name="muslim_book">Sahih Muslim</string>
+    <string name="nasai_book">Sunan an-Nasa\'i</string>
+    <string name="abudawud_book">Sunan Abi Dawud</string>
+    <string name="tirmidhi_book">Jami` at-Tirmidhi</string>
+    <string name="ibnmajah_book">Sunan Ibn Majah</string>
+
+    <!-- Book Author -->
+    <string name="by_author">By:</string>
+    <string name="bukhari_author">Imam al-Bukhari</string>
+    <string name="muslim_author">Imam Muslim</string>
+    <string name="nasai_author">Imam an-Nasa\'i</string>
+    <string name="abudawud_author">Imam Abu Dawud</string>
+    <string name="tirmidhi_author">Imam at-Tirmidhi</string>
+    <string name="ibnmajah_author">Imam Ibn Majah</string>
+    <string name="malik_author">Imam Malik</string>
+
+
+    <!-- Section Fragment -->
+
+    <!-- Hadith Fragment -->
+    <!-- Reference -->
+    <string name="chapterText">Chapter</string>
+    <string name="reference">Reference</string>
+    <string name="reference_book">In-book reference</string>
+
+    <!-- Copy -->
+    <!-- Bottomsheet -->
+    <string name="bottomsheet_copy_header">Copy options</string>
+    <string name="bottomsheet_copy_hadith_arabic">Hadith in Arabic</string>
+    <string name="bottomsheet_copy_hadith_translated">Hadith in translated language</string>
+    <string name="bottomsheet_copy_hadith_grades">Hadith Grades</string>
+    <string name="bottomsheet_copy_hadith_reference">Reference</string>
+    <string name="bottomsheet_copy_button">Copy</string>
+
+    <!-- Copy message -->
+    <string name="message_copy_success">Copied successfully</string>
+    <string name="message_copy_error">Nothing copied</string>
+
+    <!-- Copy text -->
+    <string name="copyright">Copied from Hadith Pro (Download our app from https://github.com/unkn4wn/hadith-pro/releases/tag/Latest)</string>
+
+    <!-- Bookmark -->
+    <!-- Bookmark message -->
+    <string name="message_bookmark_add">Added Successfully!</string>
+    <string name="message_bookmark_remove">Removed Successfully!</string>
+    <string name="message_bookmark_add_error">Failed to Add</string>
+    <string name="message_bookmark_remove_error">Failed to Remove</string>
+
+    <!-- Random Hadith -->
+    <!-- RefreshCardview -->
+    <string name="random_cardview_hadith">Show me an Hadith</string>
+    <string name="random_cardview_anotherhadith">Show me another Hadith</string>
+
+
+    <!-- Search -->
+    <!-- Custom Action Bar Search -->
+    <string name="search_cancel_button">Cancel</string>
+    <string name="search_filter_title">Filter results</string>
+
+    <!-- Bottomsheet Filter -->
+    <string name="search_only_title">Search only</string>
+    <string name="search_in_title">Search in</string>
+    <string name="search_grade_title">Grades</string>
+    <string name="search_book_translatedtext">Translated Hadith Text</string>
+    <string name="search_book_arabictext">Arabic Hadith Text</string>
+    <string name="search_book_number">Hadith Number</string>
+    <string name="search_grade_sahih">Sahih</string>
+    <string name="search_grade_daif">Daif</string>
+
+    <!-- Preferences -->
+    <!-- Preference Titles -->
+    <string name="language_header">Language</string>
+    <string name="appearance_header">Appearance</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Language Preferences -->
+    <string name="language_title">Hadith language</string>
+    <string name="language_arabic">Arabic</string>
+    <string name="language_urdu">Urdu</string>
+    <string name="language_indonesian">Indonesian</string>
+
+    <!-- Appearance Preferences -->
+    <string name="display_arabic">Display Arabic Text</string>
+    <string name="display_translation">Display Translation Text</string>
+    <string name="textsize_arabic">Arabic Text Size</string>
+    <string name="textsize_translation">Translation Text Size</string>
+
+    <!-- Contact us Preference -->
+    <string name="contact_us">If you found any error, please email us</string>
+    <string name="salat_time_settings">Salat Time Settings</string>
+    <string name="location">Location</string>
+    <string name="general">General</string>
+    <string name="application">Application</string>
+    <string name="contact">Contact Us</string>
+    <string name="calendar">Calendar</string>
+    <string name="prayer_calendar">Prayer Timing</string>
+
+    <!-- Prayer Times -->
+
+
+    <string name="whats_new_dialog_title">New feature</string>
+    <string name="whats_new_dialog_message">We have added Daily Ayah notifications and new Widget with weather information</string>
+
+    <string name="about_shaheen_developers">About Us</string>
+    <string name="our_portfolio">Our Portfolio</string>
+    <string name="privacy_policy_title">Privacy Policy</string>
+    <string name="custom_work">Contact me on Whatsapp for custom work.</string>
+    <string name="start_accept_privacy_policy">In order to comply with the European General Data Protection Regulation (GDPR), we herby draw your attention to Quran Reader Pro\'s privacy policy. Please read it carefully.\nYou must accept it to send us the bug report.</string>
+    <string name="read_privacy_policy">Read privacy policy</string>
+    <string name="sorry_string">Sorry, that should not have happened.</string>
+    <string name="what_happened_headline">What happened:</string>
+    <string name="info_labels">Language:\\nGMT Time:\\nPackage:\\nVersion:\\nOS version:</string>
+    <string name="what_device_headline">Info:</string>
+    <string name="error_details_headline">Details:</string>
+    <string name="your_comment">Your comment (in English):</string>
+    <string name="error_report_button_text">Report this error via e-mail</string>
+    <string name="error_report_open_github_notice">Please check whether an issue discussing your crash already exists. When creating duplicate tickets, you take time from us which we could spend with fixing the actual bug.</string>
+    <string name="copy_for_github">Copy formatted report</string>
+    <string name="error_report_open_issue_button_text">Report error on GitHub</string>
+    <string name="msg_copied">Message copied</string>
+    <string name="share_dialog_title">share_dialog_title</string>
+    <string name="permission_denied">permission_denied</string>
+
+    <!-- Common -->
+    <string name="common.cancel">Cancel</string>
+    <string name="common.ok">OK</string>
+    <string name="common.accept">Accept</string>
+    <string name="common.decline">Decline</string>
+    <string name="common.error">Error</string>
+    <string name="common_alert">Alert</string>
+    <string name="common_page">Page</string>
+    <string name="common.loading">Loading, please wait …</string>
+    <string name="common.sunrise">Sunrise</string>
+    <string name="common.sunset">Sunset</string>
+    <string name="common.close">Close</string>
+    <string name="for_custom_work">WhatsApp</string>
+    <string name="common.offline">Offline</string>
+    <string name="common.plus" translatable="false">+</string>
+    <string name="common.minus" translatable="false">-</string>
+    <string name="common.minutes">minutes</string>
+    <string name="common.hours.separator">h</string>
+    <string name="common.minutes.separator">m</string>
+    <string name="common.in">in</string>
+    <string name="common.at">at</string>
+    <string name="common.update">Update</string>
+
+    <string name="location_alert_title">Location Error</string>
+    <string name="location_alert_settings_button_title">Enable Location Service</string>
+    <string name="location_alert_manual_position_button_title">Set Location Manually</string>
+
+    <string name="label.unknown_location">Unknown Location</string>
+
+    <!-- Widgets -->
+    <string name="simple_widget_description">Simple Widget</string>
+    <string name="clock_widget_description">Clock Widget</string>
+    <string name="next_prayer_widget_description">Next Prayer Widget</string>
+
+    <!-- App Theme preferences -->
+    <string name="theme_preference_section">Appearance</string>
+    <string name="theme_preference_title">Theme</string>
+    <string name="theme_preference_dialog_title">Choose your preferred theme</string>
+    <string name="theme_preference_name_white_blue">Blue sky (Default)</string>
+    <string name="theme_preference_name_dark_orange">Orange night</string>
+    <string name="theme_preference_name_dark_Turquoise">Nightly aurore</string>
+    <string name="theme_preference_use_arabic_locale">Arabic mode (الوضع العربي)</string>
+    <string name="theme_preference_use_arabic_locale_summay">Use Arabic for application interface</string>
+    <string name="theme_preference_numerals_title">Numerals type</string>
+    <string name="theme_preference_numerals_dialog_title">Choose numerals type</string>
+    <string name="theme_preference_numerals_type_arabic_indic">Arabic–Indic numerals</string>
+    <string name="theme_preference_numerals_type_arabic">Arabic numerals</string>
+
+    <!-- App Intro -->
+    <string name="app_intro_frag_1_title">Welcome to Quran Reader Pro</string>
+    <string name="app_intro_frag_1_description">An open source set of muslim tools, lightweight and ads free</string>
+
+    <string name="app_intro_frag_2_title">Privacy Policy</string>
+    <string name="app_intro_frag_2_description">Quran Reader Pro project aims to provide a private,
+        anonymous and ads free experience for all users. Therefore, the app does not collect any data without your consent</string>
+
+    <string name="app_intro_frag_3_title">Use your location data</string>
+    <string name="app_intro_frag_3_description">In order to calculate prayer timings effectively,
+        this application need your permission to use your location capabilities. (recommended)</string>
+
+    <string name="app_intro_frag_3_5_description">We need also your permission to use background location capabilities
+        to update prayer timings even when the app is closed or not used, please select \"allow all the time option\" in the next screen (recommended)</string>
+
+    <string name="app_intro_frag_4_title">Enjoy !</string>
+    <string name="app_intro_frag_4_description">Quran Reader Pro Android introduces great features and capabilities for all users,
+        like : Worldwide Prayer Timings, different calculation methods, notifications, reads Adhan, Qibla direction and more</string>
+
+    <string name="app_intro_permission_denied_dialog_title">Information</string>
+    <string name="app_intro_permission_denied_dialog_message">The application needs to know your location to calculate prayer times correctly. You can set your location manually in the settings screen.</string>
+
+    <string name="last_update_time_key">last_update_time_key</string>
+
+    <string name="calendar_view_title">Prayer Calendar in</string>
+    <string name="title_calendar">Prayer Calendar</string>
+    <string name="desc_calendar_view_title">Monthly Prayer table</string>
+
+    <string name="FAJR">Fajr</string>
+    <string name="SUNRISE">Sunrise</string>
+    <string name="DOHA">Dhuha</string>
+    <string name="DHOHR">Dhuhr</string>
+    <string name="ASR">Asr</string>
+    <string name="MAGHRIB">Maghrib</string>
+    <string name="ICHA">Isha</string>
+    <string name="LAST_THIRD_OF_THE_NIGHT">Last third of the Night</string>
+
+    <string name="SHORT_FAJR">Fajr</string>
+    <string name="SHORT_SUNRISE">Sunrise</string>
+    <string name="SHORT_DHOHR">Dohr</string>
+    <string name="SHORT_ASR">Asr</string>
+    <string name="SHORT_MAGHRIB">Maghreb</string>
+    <string name="SHORT_ICHA">Ichaa</string>
+
+    <string name="FIRST_DAY_OF_YEAR">Hijri new year</string>
+    <string name="YAWM_ASHURA">Yawm Ashura</string>
+    <string name="MAWLID_A_NABAWI">Al Mawlid A Nabawi</string>
+    <string name="LAILAT_AL_MIRAJ">Lailat Al Miiraj</string>
+    <string name="MID_SHAABAN_NIGHT">Laila Al Baraah</string>
+    <string name="MID_SHAABAN">Mid Of Shaaban</string>
+    <string name="FIRST_DAY_OF_RAMADAN">1st Day Of Ramadan</string>
+    <string name="DAY_20_OF_RAMADAN">Last days of Ramadan</string>
+    <string name="DAY_21_OF_RAMADAN">Last days of Ramadan</string>
+    <string name="DAY_22_OF_RAMADAN">Last days of Ramadan</string>
+    <string name="DAY_23_OF_RAMADAN">Last days of Ramadan</string>
+    <string name="DAY_24_OF_RAMADAN">Last days of Ramadan</string>
+    <string name="DAY_25_OF_RAMADAN">Last days of Ramadan</string>
+    <string name="DAY_26_OF_RAMADAN">Last days of Ramadan</string>
+    <string name="DAY_27_OF_RAMADAN">Last days of Ramadan</string>
+    <string name="DAY_28_OF_RAMADAN">Last days of Ramadan</string>
+    <string name="DAY_29_OF_RAMADAN">Last days of Ramadan</string>
+    <string name="DAY_30_OF_RAMADAN">Last days of Ramadan</string>
+    <string name="EID_AL_FITR">Eid Al Fitr</string>
+    <string name="FIRST_DAY_OF_AL_Hajj">Al Hajj</string>
+    <string name="DAY_OF_ARAFAH">Day Of Arafah</string>
+    <string name="EID_AL_ADHA">Eid Al Adha</string>
+    <string name="FOURTH_DAY_OF_AL_Hajj">Al Hajj</string>
+    <string name="FIFTH_DAY_OF_AL_Hajj">Al Hajj</string>
+    <string name="SIXT_DAY_OF_AL_Hajj">Al Hajj</string>
+
+    <string name="hijri">Hijri</string>
+    <string name="hijri_month_1">Mouharram</string>
+    <string name="hijri_month_2">Safar</string>
+    <string name="hijri_month_3">Rabii Al Awal</string>
+    <string name="hijri_month_4">Rabii Ath`Thani</string>
+    <string name="hijri_month_5">Joumada Al Oula</string>
+    <string name="hijri_month_6">Joumada Ath`Thania</string>
+    <string name="hijri_month_7">Rajab</string>
+    <string name="hijri_month_8">Chaabane</string>
+    <string name="hijri_month_9">Ramadan</string>
+    <string name="hijri_month_10">Chawwal</string>
+    <string name="hijri_month_11">Dhou Al Qi`da</string>
+    <string name="hijri_month_12">Dhou Al Hijja</string>
+
+    <string name="method_fajr_angle">Fajr angle</string>
+    <string name="method_ichaa_angle">Ichaa angle</string>
+    <string name="method_shia_ithna_ansari">Shia Ithna Ashari, Leva Research Institute, Qum</string>
+    <string name="method_university_of_islamic_sciences_karachi">University of Islamic Sciences, Karachi</string>
+    <string name="method_islamic_society_of_north_america">Islamic Society of North America</string>
+    <string name="method_muslim_world_league">Muslim World League</string>
+    <string name="method_umm_al_qura_university_makkah">Umm al-Qura University</string>
+    <string name="method_egyptian_general_authority_of_survey">Egyptian General Authority of Survey</string>
+    <string name="method_institute_of_geophysics_university_of_tehran">Institute of Geophysics, University of Tehran</string>
+    <string name="method_gulf_region">Gulf Region</string>
+    <string name="method_kuwait">Kuwait Method</string>
+    <string name="method_qatar">Qatar Method</string>
+    <string name="method_majlis_ugama_islam_singapura">Majlis Ugama Islam Singapura</string>
+    <string name="method_union_organization_islamic_de_france">L\'Union des Organisations Islamiques de France (UOIF)</string>
+    <string name="method_diyanet_isleri_baskanligi_turkey">Diyanet İşleri Başkanlığı - Turkey</string>
+    <string name="method_spiritual_administration_of_muslims_of_russia">Spiritual Administration of Muslims of Russia</string>
+    <string name="method_moroccan_ministry_of_islamic_affairs">Ministry of Islamic Affairs - Morocco</string>
+    <string name="method_department_of_islamic_advancement_malaysia">Jabatan Kemajuan Islam - Malaysia</string>
+    <string name="method_kementerian_agama_ri_indonesia">Kementerian Agama RI - Indonesia</string>
+    <string name="method_mosquee_de_paris_france">Mosquée de Paris - France</string>
+    <string name="method_france_18">Angle 18° - France</string>
+    <string name="method_france_15">Angle 15° - France</string>
+    <string name="method_tunisian_ministry_of_religious_affairs">Ministry of religious affairs - Tunisia</string>
+    <string name="method_algerian_ministry_of_religious_affairs_and_wakfs">Ministry of Religious Affairs and wakfs- Algeria</string>
+    <string name="method_london_unified_prayer_times">London Unified Prayer Times</string>
+
+    <string name="short_method_shia_ithna_ansari">Shia Ithna Ashari</string>
+    <string name="short_method_university_of_islamic_sciences_karachi">University of Islamic Sciences</string>
+    <string name="short_method_islamic_society_of_north_america">ISNA</string>
+    <string name="short_method_muslim_world_league">Muslim World League</string>
+    <string name="short_method_umm_al_qura_university_makkah">Umm al-Qura University</string>
+    <string name="short_method_egyptian_general_authority_of_survey">General Authority of Survey</string>
+    <string name="short_method_institute_of_geophysics_university_of_tehran">University of Tehran</string>
+    <string name="short_method_gulf_region">Gulf Region</string>
+    <string name="short_method_kuwait">Kuwait Method</string>
+    <string name="short_method_qatar">Qatar Method</string>
+    <string name="short_method_majlis_ugama_islam_singapura">Majlis Ugama Islam</string>
+    <string name="short_method_union_organization_islamic_de_france">UOIF</string>
+    <string name="short_method_diyanet_isleri_baskanligi_turkey">Diyanet İşleri Başkanlığı</string>
+    <string name="short_method_spiritual_administration_of_muslims_of_russia">Spiritual Administration of Russia</string>
+    <string name="short_method_department_of_islamic_advancement_malaysia">Jabatan Kemajuan Islam</string>
+    <string name="short_method_kementerian_agama_ri_indonesia">Kementerian Agama RI</string>
+    <string name="short_method_mosquee_de_paris_france">Mosquée de Paris</string>
+    <string name="short_method_france_18">Angle 18° - France</string>
+    <string name="short_method_france_15">Angle 15° - France</string>
+    <string name="short_method_moroccan_ministry_of_islamic_affairs">Ministry of Islamic Affairs</string>
+    <string name="short_method_tunisian_ministry_of_religious_affairs">Ministry of religious affairs</string>
+    <string name="short_method_algerian_ministry_of_religious_affairs_and_wakfs">Ministry of Religious Affairs and wakfs</string>
+    <string name="short_method_london_unified_prayer_times">London Unified Prayer Times</string>
+
+    <string name="gps_settings_title" translatable="true">GPS settings</string>
+    <string name="gps_settings_text" translatable="false">GPS is not enabled. Do you want to go to settings menu?</string>
+    <string name="settings_button_ok" translatable="false">Settings</string>
+    <string name="settings_button_cancel" translatable="false">Cancel</string>
+
+    <string name="title_location_preference_section">Location</string>
+    <string name="sub_title_reminder_preference_section">Adhan reminder</string>
+    <string name="sub_title_dhuha_reminder_preference_section">Dhuha prayer reminder</string>
+    <string name="sub_title_lton_reminder_preference_section">Last third of the Night reminder</string>
+    <string name="title_checkbox_location_preference">Set Location Manually</string>
+    <string name="title_adhan_notifications_preference">Enable Notifications</string>
+    <string name="title_adhan_vibration_preference">Enable Vibration</string>
+    <string name="title_douae_adhan_preference">Enable Dua After Adhan</string>
+    <string name="title_adhan_reminder_preference">Enable Reminder Before Adhan</string>
+    <string name="title_enable_reminder_sound_preference">Enable reminder</string>
+    <string name="title_reminder_sound_preference">Enable Reminder Sound</string>
+    <string name="title_doha_reminder_preference">Enable Reminder for Ad`Dhuha prayer</string>
+    <string name="title_adhan_reminder_interval_preference">Reminder interval (min)</string>
+    <string name="title_edit_text_location_preference">Your Location</string>
+    <string name="dialog_title_edit_text_location_preference">Search Your City</string>
+    <string name="title_prayer_timings_section">Prayer Timings Calculation</string>
+    <string name="title_calculation_method_preference">Calculation Method</string>
+    <string name="dialog_title_calculation_method_preference">Calculation Method</string>
+    <string name="title_edit_text_timing_adjustment_preference">Adjust Prayer Timings</string>
+    <string name="dialog_title_edit_text_timing_adjustment_preference">Timings Adjustment (in minutes)</string>
+    <string name="preference_title_contact">Contact us</string>
+    <string name="preference_add_new_adhan">Add New Adhan File</string>
+    <string name="preference_unable_add_new_adhan">Unable to add new Adhan file</string>
+
+    <string name="title_silenter_preference_section">Silent Mode</string>
+    <string name="text_silenter_preference_section">Turn phone on \'do not disturb\' state during prayer times</string>
+    <string name="error_summary_silenter_preference_section">The application is not allowed to change to \'Do Not Disturb\' state</string>
+    <string name="title_silenter_start_time">Start time after Adhan (in minutes)</string>
+    <string name="dialog_title_silenter_start_time">Start time</string>
+    <string name="title_silenter_duration">Duration (in minutes)</string>
+    <string name="title_silenter_duration_friday_prayer">Duration for Friday prayer (in minutes)</string>
+    <string name="dialog_title_silenter_duration">Duration</string>
+
+
+    <string name="latitude_adjustment_method_middle_of_the_night">Middle of the Night</string>
+    <string name="latitude_adjustment_method_one_seventh">One Seventh</string>
+    <string name="latitude_adjustment_method_angle_based">Angle Based</string>
+    <string name="title_latitude_adjustment_method">Adjusting times in higher latitudes</string>
+    <string name="dialog_title_latitude_adjustment_method">Choose a method</string>
+    <string name="gregorian_hijri_calendar">Gregorian/Hijri Calendar</string>
+    <string name="desc_gregorian_hijri_calendar">Hijri dates and Holidays</string>
+    <string name="title_hijri_day_adjustment_preference">Hijri date adjustment</string>
+    <string name="dialog_title_hijri_day_adjustment_preference">Adjust Hijri date</string>
+
+    <string name="compass_dial" translatable="false">Compass Dial</string>
+    <string name="compass_hands" translatable="false">Compass Hands</string>
+    <string name="your_location">Your Location: </string>
+    <string name="unable_to_get_your_location">Unable to get your location</string>
+    <string name="location_not_ready">Location not ready.</string>
+    <string name="pls_enable_location">Please turn on Location</string>
+    <string name="degree" translatable="false">°</string>
+    <string name="dialog_message_sensor_not_exist">Your device doesn\'t have the required sensors</string>
+    <string name="dialog_title_sensor_not_calibrate">Calibration needed</string>
+    <string name="dialog_message_sensor_not_calibrate">Please calibrate your sensors, by pointing your phone up toward the sky and move it in a figure 8 motion</string>
+
+    <string name="title_qibla_direction">Qibla Direction</string>
+    <string name="desc_qibla_direction">Locate Qibla direction</string>
+
+    <string name="school_adjustment_method_shafii">Shafii (Default)</string>
+    <string name="school_adjustment_method_hanafi">Hanafi</string>
+    <string name="title_school_adjustment_method">School</string>
+    <string name="midnight_mode_adjustment_method_standard">Default (Mid Sunset to Sunrise)</string>
+    <string name="midnight_mode_adjustment_method_jafari">Jafari (Mid Sunset to Fajr)</string>
+    <string name="title_midnight_mode_adjustment_method">Midnight mode</string>
+    <string name="adthan_notification_title">It\'s time to pray</string>
+    <string name="adthan_reminder_notification_title">The time for the next prayer is near</string>
+    <string name="adthan_notification_close_action_title">Silent and close</string>
+
+    <string name="scheduling_adhan_alert_notification_title">Not able to schedule Adhan</string>
+    <string name="scheduling_adhan_alert_notification_text">Scheduling exact alarm permission was revoked on your phone, without it, you cannot receive any Adhan notification. Please grant this permission to continue using Quran Reader Pro correctly</string>
+    <string name="scheduling_adhan_alert_notification_action_title">Grant this permission</string>
+    <!--   User Messages    -->
+
+    <string name="location_service_unavailable">Unable to find your location: Please verify that location service is enabled on your phone or set your location manually in the settings section</string>
+    <string name="enable_to_reverse_geolocalisation">Unable to find your location : Please check your network connection</string>
+    <string name="network_unavailable">Cannot update prayer timing : Please check your network connection</string>
+
+    <string name="message_wait_for_quran_files">Preparing Quran files, please wait…</string>
+    <string name="message_download_quran_files_in_progress">Download in progress … %1$d%%</string>
+    <string name="message_unzip_quran_files_in_progress">Unzipping Quran files in progress … %1$d\/%2$d</string>
+    <string name="message_download_quran_files_error">Download error ! please verify your storage and network and try later …</string>
+    <string name="message_unzip_quran_files_error">Error while unzipping files ! please verify your storage and try later …</string>
+
+
+    <string name="sura_rev_mackkia">Makkia</string>
+    <string name="sura_rev_madniaa">Madania</string>
+    <string name="ayahs">Ayahs</string>
+    <string name="surat">Quran Suras</string>
+    <string name="bookmarks">Bookmarks</string>
+    <string name="automatic_bookmarks_title">Continue reading</string>
+    <string name="usermade_bookmarks_title">Favorites</string>
+    <string name="msg_delete_bookmark_confirmation">Remove this Bookmark ?</string>
+    <string name="msg_empty_bookmarks_place_holer">There is no Bookmarks to show !</string>
+
+    <string name="daily_verse_title">Today\'s verse</string>
+    <string name="daily_verse__description">Read Today\'s verse</string>
+    <string name="daily_verse_notification_title">Today\'s verse</string>
+    <string name="daily_verse_notification_description">Read Today\'s verse: Surat %1$s - Ayah %2$d</string>
+    <string name="daily_verse_notification_action_title">See more</string>
+
+    <string name="juz_to_display">الجزء %d</string>
+    <string name="hizb_to_display">الحزب %d</string>
+    <string name="part_to_display">%s  الحزب  %d</string>
+    <string name="desc_quran">Recite the Holy Quran</string>
+    <string name="title_checkbox_quran_night_mode">Night Mode</string>
+    <string name="title_notification_section">Notifications</string>
+    <string name="dialog_title_fajr_adhan">Select Fajr Adhan</string>
+    <string name="dialog_title_adhan">Select Adhan</string>
+
+    <string name="adhan_abdelbasset_abdessamad">Abdelbasset Abdessamad</string>
+    <string name="adhan_al_haram_el_madani">Al Haram Al Madani</string>
+    <string name="adhan_meshary_al_fasy">Mishary Rashid Al-Afasy</string>
+    <string name="adhan_omar_al_kazabri">Omar Al Kazabri</string>
+    <string name="adhan_riad_al_djazairi">Riad Al Djazairi</string>
+    <string name="short_prayer_call">Short Call (no Adhan)</string>
+    <string name="takbeer_only_call">Takbeer only</string>
+    <string name="adhan_manssour_el_zahrani">Manssour El Zahrani</string>
+    <string name="adhan_nurdin_al_haddiwi_fajr_morocco">Nurdin Al Haddiwi</string>
+    <string name="adhan_nurdin_hamza_al_maghriby">Nurdin Al Maghriby (Al Quds)</string>
+    <string name="adhan_sayed_al_nakshabandi">Sayed Al Nakshabandi</string>
+
+    <string name="title_adhan_fajr">Fajr Adhan</string>
+    <string name="title_adhan_rest_prayers">Adhan of other prayers</string>
+    <string name="title_adhan">Adhan</string>
+    <string name="title_adhan_volume">Adhan Volume</string>
+
+
+    <string name="title_weather_information_preference">Weather</string>
+    <string name="title_weather_api_key">API Key (from openweathermap.org)</string>
+    <string name="title_temperature_unit">Temperature unit</string>
+
+    <string name="temperature_unit_standard">K</string>
+    <string name="temperature_unit_metric">°C</string>
+    <string name="temperature_unit_imperial">°F</string>
+
+    <string name="title_temperature_unit_standard">Kelvin</string>
+    <string name="title_temperature_unit_metric">Celsius</string>
+    <string name="title_temperature_unit_imperial">Fahrenheit</string>
+    <string name="mecca_live">Mecca Live</string>
+    <string name="madina_live">Madina Live</string>
+
+
+    <!-- Features -->
+
+    <string name="rabbana_dua_server_link" translatable="false">https://github.com/octalops/MyDis/raw/main/rabbana/</string>
+    <string name="rDua_server_link" translatable="false">https://github.com/octalops/MyDis/raw/main/ramadan/</string>
+    <string name="kalma_server_link" translatable="false">https://github.com/octalops/MyDis/raw/main/kalmas/kalma_</string>
+
+
+    <string name="zakat_calculator">Zakat Calculator</string>
+    <string name="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</string>
+    <string name="six_kalmas">Six Kalmas</string>
+    <string name="kalmas" translatable="false">Kalmas</string>
+    <string name="share_kalma" translatable="false">Share Kalma</string>
+    <string name="downloading_failed">Downloading Failed</string>
+    <string name="downloading">Downloading:</string>
+    <string name="please_wait">Please Wait.</string>
+    <string name="downloading_download_progress">Download Progress</string>
+    <string name="downloading_start_downloading">Start Downloading.</string>
+    <string name="downloading_mb">MB</string>
+    <string name="downloading_kb">KB</string>
+    <string name="connecting">Connecting.</string>
+    <string name="downloading_complete" translatable="false">Downloading Complete</string>
+    <string name="qurantp_download">Download.</string>
+    <string name="kalma_audio" translatable="false">Kalam Audio</string>
+    <string name="text_dua_audio">Dua_Audio</string>
+    <string name="download_this">Download this</string>
+    <string name="download">Download</string>
+    <string name="tafseer_download_message">Download this tafseer ?</string>
+    <string name="copied">Copied successfully</string>
+    <string name="qurankhatam_QuranKhatamCompleted">Quran Khatam Completed</string>
+    <string name="qurankhatam_CongrateQuranKhatmCompleted">Congratulations you have completed your Quran khatam</string>
+
+
+    <!-- Quran_Module -->
+
+    <string name="strTitleAppVersion">App version</string>
+    <string name="strVersion" formatted="false">Version %s</string>
+    <string name="strTitleLicenses">Licenses</string>
+    <string name="strLabelClose">Close</string>
+    <string name="strLabelOkay">Okay</string>
+    <string name="strLabelGotIt">Got it</string>
+    <string name="strLabelCancel">Cancel</string>
+    <string name="strLabelApply">Apply</string>
+    <string name="strLabelSend">Send</string>
+    <string name="labelAdd">Add</string>
+    <string name="strLabelRemove">Remove</string>
+    <string name="strLabelDelete">Delete</string>
+    <string name="strLabelRemoveAll">Remove all</string>
+    <string name="strLabelCopy">Copy</string>
+    <string name="strLabelBack">Back</string>
+    <string name="strLabelTop">Top</string>
+    <string name="strLabelReset">Reset</string>
+    <string name="strLabelRetry">Retry</string>
+    <string name="strLabelRefresh">Refresh</string>
+    <string name="strLabelDismiss">Dismiss</string>
+    <string name="strLabelDiscard">Discard</string>
+    <string name="strLabelHide">Hide</string>
+    <string name="strLabelEdit">Edit</string>
+    <string name="strLabelDone">Done</string>
+    <string name="strLabelRestart">Restart</string>
+    <string name="strLabelView">View</string>
+    <string name="strLabelOpen">Open</string>
+    <string name="strLabelOpenInReader">Open in Reader</string>
+    <string name="strLabelRead">Read »</string>
+    <string name="strLabelViewAll">View all</string>
+    <string name="strLabelChangeNRestart">Change &amp; Restart</string>
+    <string name="strLabelAdvertisement">Advertisement</string>
+    <string name="strLabelSkip">Skip</string>
+    <string name="strLabelNotNow">Not now</string>
+    <string name="strLabelPrevious">Previous</string>
+    <string name="strLabelNext">Next</string>
+    <string name="strLabelStart">Start</string>
+    <string name="strLabelUpdateQuranApp">Update QuranApp</string>
+    <string name="labelDownload">Download</string>
+    <string name="strLabelDownloadNow">DOWNLOAD NOW</string>
+    <string name="strLabelUpdate">Update</string>
+    <string name="strLabelInstall">Install</string>
+    <string name="strLabelNew">New</string>
+    <string name="strLabelPremium">Premium</string>
+    <string name="strLabelOn">On</string>
+    <string name="strLabelOff">Off</string>
+    <string name="strLabelThemeDark">Dark</string>
+    <string name="strLabelThemeLight">Light</string>
+    <string name="strLabelSystemDefault">System Default</string>
+    <string name="strLabelPreviousChapter">Previous chapter</string>
+    <string name="strLabelNextChapter">Next chapter</string>
+    <string name="strLabelNoPreviousChapter">No previous chapter</string>
+    <string name="strLabelNoNextChapter">No next chapter</string>
+    <string name="strLabelPreviousJuz">Previous juz</string>
+    <string name="strLabelNextJuz">Next juz</string>
+    <string name="strLabelNoPreviousJuz">No previous juz</string>
+    <string name="strLabelNoNextJuz">No next juz</string>
+    <string name="strLabelFullChapter">Read full chapter</string>
+    <string name="strLabelContinueChapter">Continue chapter</string>
+    <string name="strLabelPreviousVerse">Previous verse</string>
+    <string name="strLabelNextVerse">Next verse</string>
+    <string name="strLabelVersesText">Verses</string>
+    <string name="strLabelSurah" formatted="false">Surah %s</string>
+    <string name="strLabelPageNo" formatted="false">Page %d</string>
+    <string name="strLabelJuzNo" formatted="false">Juz %d</string>
+    <string name="strLabelVerseNo" formatted="false">Verse %d</string>
+    <string name="strLabelVerses" formatted="false">Verses %1$d–%2$d</string>
+    <string name="strLabelVerseNoWithColon" formatted="false">Verse : %d</string>
+    <string name="strLabelVersesWithColon" formatted="false">Verses : %1$d–%2$d</string>
+    <string name="strLabelVerseCountWithColon" formatted="false">Verses: %d</string>
+    <string name="strLabelVerseNoRange" formatted="false">%1$d–%2$d</string>
+    <string name="strLabelVerseWithChapNo" formatted="false">Verse %1$d:%2$d</string>
+    <string name="strLabelVerseSerial" formatted="false">%1$d:%2$d</string>
+    <string name="strLabelVerseSerialWithChapter" formatted="false">%1$s %2$d:%3$d</string>
+    <string name="strLabelVerseWithChapNameAndNo" formatted="false">Surah %1$s %2$d: Verse %3$d</string>
+    <string name="strLabelVerseWithChapNameWithBar" formatted="false">Surah %1$s │ Verse %2$d</string>
+    <string name="strLabelVerseWithChapNameWithColon" formatted="false">Surah %1$s : Verse %2$d</string>
+    <string name="strLabelFeatureQuranMiniInfo" formatted="false">Chapter No. %1$d │ Verses %2$d–%3$d</string>
+    <string name="strTitleAppUser">QuranApp user</string>
+    <string name="strTitleHolyQuran">The Holy Quran</string>
+    <string name="strTitleQuran">Quran</string>
+    <string name="strTitleMakki">Meccan</string>
+    <string name="strTitleMadani">Medinan</string>
+    <string name="strTitleFootnote">Footnote</string>
+    <string name="strTitleFootnotes">Footnotes</string>
+    <string name="noFootnotesForThisVerse">There are no footnotes for this verse.</string>
+    <string name="strTitleReaderChapters">Surah</string>
+    <string name="strTitleReaderJuz">Juz</string>
+    <string name="strTitleReaderChapters2">Surah</string>
+    <string name="strTitleReaderJuz2">Juz</string>
+    <string name="strTitleReaderVerses">Verses</string>
+    <string name="strTitleReaderJumpToVerse">Jump to verse</string>
+    <string name="strTitleVerseOptions">Verse options</string>
+    <string name="strTitleVerseRecitation">Verse Recitation</string>
+    <string name="strTitleReaderVerseInformation" formatted="false">Surah %1$s : %2$d</string>
+    <string name="strTitleGotoVerseNo" formatted="false">Go to Verse %d</string>
+    <string name="strTitleReadVerseRange" formatted="false">Read Verses %1$d - %2$d</string>
+    <string name="strTitleReadTafsirOfVerse" formatted="false">Read tafsir of verse %d</string>
+    <string name="strTitleReaderLayoutStyle">Quran view style</string>
+    <string name="strTitleReaderLayoutStyleTranslationsView">Translations view</string>
+    <string name="strTitleReaderLayoutStylePageView">Page view</string>
+    <string name="strTitleReaderTextSizeArabic">Arabic text size</string>
+    <string name="strTitleReaderTextSizeTransl">Translation text size</string>
+    <string name="titleReaderTextSizeTafsir">Tafsir text Size</string>
+    <string name="strTitleSettings">Settings</string>
+    <string name="strTitleBookmark">Bookmark</string>
+    <string name="strTitleSendFeedback">Send Feedback</string>
+    <string name="strTitleHelpSupport">Help &amp; Support</string>
+    <string name="strTitleAboutUs">About Us</string>
+    <string name="strTitleBookmarks">Bookmarks</string>
+    <string name="strTitleShareApp">Share App</string>
+    <string name="strTitleAddNote">Add note</string>
+    <string name="strTitleNote">Note</string>
+    <string name="strTitleRateApp">Rate App</string>
+    <string name="strTitleFilters">Filters</string>
+    <string name="strTitleMenu">Menu</string>
+    <string name="strTitleTafsir">Tafsir</string>
+    <string name="strTitleSelectTafsir">Select Tafsir</string>
+    <string name="strTitleAboutSurah">About Surah</string>
+    <string name="strTitleTranslations">Translations</string>
+    <string name="strTitleDownloadTranslations">Download</string>
+    <string name="strTitleRecitations">Recitations</string>
+    <string name="strTitleSelectReciter">Select Reciter</string>
+    <string name="titleManageAudio">Manage Audio</string>
+    <string name="downloadRecitations">Download Recitations</string>
+    <string name="audioOption">Audio option</string>
+    <string name="playbackSpeed">Playback speed</string>
+    <string name="audioOnlyArabic">Play only Arabic</string>
+    <string name="audioOnlyTranslation">Play only translation</string>
+    <string name="audioBothArabicTranslation">Play both Arabic and translation</string>
+    <string name="strTitleScripts">Scripts</string>
+    <string name="strTitleSelectScripts">Select Script</string>
+    <string name="strTitleBookmarkDeleteThis">Remove this bookmark?</string>
+    <string name="strTitleBookmarkDeleteAll">Remove all bookmarks?</string>
+    <string name="strTitleBookmarkDeleteCount" formatted="false">Remove %d bookmarks?</string>
+    <string name="strTitleTranslDelete">Delete Translation?</string>
+    <string name="strTitleResetReaderSettings">Reset Reader Settings?</string>
+    <string name="strTitleHideAd">Hide Ad</string>
+    <string name="strTitleRecitationOptions">Options</string>
+    <string name="strTitleRepeatVerse">Repeat verse</string>
+    <string name="strTitleAutoPlayNext">Autoplay next</string>
+    <string name="strTitleQuickEdit">Quick Edit</string>
+    <string name="strTitleShareVerse">Share Verse</string>
+    <string name="strTitleReportVerse">Report Verse</string>
+    <string name="strTitleSelectReason">Select Reason</string>
+    <string name="strTitleExplainIssue">Explain the issue</string>
+    <string name="strTitleFeaturedQuran">Featured Reading</string>
+    <string name="strTitleVOTD">Verse of The Day</string>
+    <string name="strTitleTopics">Topics</string>
+    <string name="strTitleDuas">Quranic Duas</string>
+    <string name="strTitleProphets">Prophets</string>
+    <string name="strTitleFeaturedTopics">Topics in Quran</string>
+    <string name="strTitleFeaturedDuas">Duas in Quran</string>
+    <string name="strTitleFeaturedProphets">Prophets in Quran</string>
+    <string name="strTitlePrivacyPolicy">Privacy Policy</string>
+    <string name="strTitleFailed">Failed</string>
+    <string name="strTitleSuccess">Success</string>
+    <string name="strTitleThresholdReached">Threshold Reached</string>
+    <string name="strChapInfoSeeMore">See more info ›</string>
+    <string name="strTitleChapInfoChapterNo">Chapter Number</string>
+    <string name="strTitleChapInfoJuzNo">Juz No.</string>
+    <string name="strTitleChapInfoVerses">Verses</string>
+    <string name="strTitleChapInfoRukus">Rukus</string>
+    <string name="strTitleChapInfoPages">Pages</string>
+    <string name="strTitleChapInfoRevOrder">Revelation Order</string>
+    <string name="strTitleChapInfoRevType">Revelation Type</string>
+    <string name="strMsgChapInfoFailedLoad">Failed to load surah information. Please try again later.</string>
+    <string name="strTitleAppSettings">App Settings</string>
+    <string name="strTitleReaderSettings">Reader Settings</string>
+    <string name="titleOtherSettings">Other Settings</string>
+    <string name="strTitleAppLanguage">App Language</string>
+    <string name="strTitleChangeLanguage">Change language?</string>
+    <string name="strTitleTheme">Theme</string>
+    <string name="strTitleNoInternet">No Internet</string>
+    <string name="strLabelPlay">Play</string>
+    <string name="strLabelPause">Pause</string>
+    <string name="strLabelBookmark">Bookmark</string>
+    <string name="strLabelRemoveBookmark">Remove Bookmark</string>
+    <string name="strLabelBookmarked">Bookmarked</string>
+    <string name="strLabelRemoveAds">Remove Ads</string>
+    <string name="strLabelShare">Share</string>
+    <string name="strLabelReport">Report</string>
+    <string name="strLabelContinueReading">Continue Reading »</string>
+    <string name="strLabelReading">Reading</string>
+    <string name="strLabelMostPlaces">Most mentions</string>
+    <string name="strLabelOrder">Order</string>
+    <string name="strLabelSelectedCount" formatted="false">%d selected</string>
+    <string name="strLabelMoreTranslations" formatted="false">+%d more translations</string>
+    <string name="strLabelAdvanceSharing">Advance Sharing</string>
+    <string name="strLabelSelectVerse">Select Verses</string>
+    <string name="strLabelCurrentVerse">Current verse</string>
+    <string name="strLabelVerseRange">Verse range</string>
+    <string name="strLabelSelectTranslations">Select translations</string>
+    <string name="strLabelSelectTranslation">Select translation</string>
+    <string name="strLabelWhatsappStyling">Whatsapp styling</string>
+    <string name="strLabelIncludeArabic">Include arabic</string>
+    <string name="strLabelIncludeFootnotes">Include footnotes</string>
+    <string name="strLabelIncludeTranslation">Include translation</string>
+    <string name="strLabelIncludeReference">Include reference</string>
+    <string name="strLabelQuickLinks">Quick links</string>
+    <string name="strLabelLater">Later</string>
+    <string name="strHintSearch">Search</string>
+    <string name="strHintSearchQuran">Type a term e.g., \"Life\"</string>
+    <string name="strHintSearchTopic">Search topic</string>
+    <string name="strHintSearchTopicAlphabet" formatted="false">Search topic in \"%s\"</string>
+    <string name="strHintSearchProphet">Search prophet</string>
+    <string name="strHintSearchChapter">Search surah</string>
+    <string name="strHintSearchVerse">Search verse</string>
+    <string name="strHintSearchJuz">Search juz</string>
+    <string name="strHintSearchTranslation">Search translation</string>
+    <string name="strHintSearchReciter">Search reciter</string>
+    <string name="strHintSearchScript">Search script</string>
+    <string name="strHintSearchLanguage">Search language</string>
+    <string name="strHintFromVerse">From verse</string>
+    <string name="strHintToVerse">To verse</string>
+    <string name="strHintFeedback">Write your feedback here…</string>
+    <string name="strHintFeedbackEmail">Email</string>
+    <string name="strHintFeedbackMessage">Message</string>
+    <string name="strHintBookmarkViewerNote">Write an additional note on this bookmark here…</string>
+    <string name="strNotFound">Not found</string>
+    <string name="strBismillahEntity" translatable="false">﷽</string>
+    <string name="strMsgThemeDark">Dark mode reduces power consumption.</string>
+    <string name="strMsgThemeDefault">Adjust according to system settings.</string>
+    <string name="strMsgVOTDOn">Get a notification daily in the morning.</string>
+    <string name="strMsgYouAreReadingVerses">You are reading verses:</string>
+    <string name="strMsgInvalidChapterNo" formatted="false">%d is not a valid Surah No.</string>
+    <string name="strMsgInvalidVerseNo" formatted="false">%1$d is not a valid Verse No. for Surah No. %2$d</string>
+    <string name="strMsgInvalidVersesRange">Not a valid verse range</string>
+    <string name="strMsgInvalidVersesRange2" formatted="false">%1$d-%2$d is not a valid verse range for Surah No. %3$d</string>
+    <string name="strMsgInvalidJuzNo" formatted="false">%d is not a valid Juz (Para) No.</string>
+    <string name="strMsgBookmarkAdded">Verse successfully added to bookmarks</string>
+    <string name="strMsgBookmarkAddFailed">Verse failed to add to bookmarks</string>
+    <string name="strMsgBookmarkAddedAlready">Verse is already added to bookmarks</string>
+    <string name="strMsgBookmarkRemoved">Verse successfully removed from bookmarks</string>
+    <string name="strMsgBookmarkRemoveFailed">Verse failed to remove from bookmarks</string>
+    <string name="strMsgBookmarkRemovedAlready">Verse is not in the bookmarks</string>
+    <string name="strMsgBookmarkNoItems">No bookmarks</string>
+    <string name="strMsgBookmarkDeleteSelected">Selected bookmarks will be removed.</string>
+    <string name="strMsgBookmarkDeleteAll">All bookmarks will be removed.</string>
+    <string name="strTitleReadHistory">Read History</string>
+    <string name="strMsgReadShowupHere">Your read history will show up here.</string>
+    <string name="strMsgReadHistoryRemoved">Read history successfully removed.</string>
+    <string name="strMsgReadHistoryRemoveFailed">Read history failed to remove.</string>
+    <string name="strMsgReadHistoryRemovedAlready">Read history is already removed.</string>
+    <string name="strMsgReadHistoryNoItems">No read history</string>
+    <string name="strMsgReadHistoryDeleteSelected">Selected read histories will be removed.</string>
+    <string name="strMsgReadHistoryDeleteAll">All read histories will be removed.</string>
+    <string name="strMsgBookmarkDate" formatted="false">%1$s at %2$s</string>
+    <string name="strMsgBookmarkDateToday" formatted="false">Today at %s</string>
+    <string name="strMsgHistoryRemove">Remove this history?</string>
+    <string name="strMsgHistoryRemoved" formatted="false">\"%s\" removed from history</string>
+    <string name="strMsgSearchMultResultsFound" formatted="false">Total results found in %1$s: %2$d</string>
+    <string name="strMsgSearchOneResultFoundIn" formatted="false">Only 1 result found in %s</string>
+    <string name="strMsgSearchNoResultsFoundIn" formatted="false">No results found in %s. Please check the search filters or search in another translation.</string>
+    <string name="strMsgSearchNoResultsFound">No results found. Please check the search filters or search in another translation.</string>
+    <string name="strMsgSearchNoResultsFoundAbsolute">No results found. Please check the search filters.</string>
+    <string name="strMsgSearchWordPart">Search for word part</string>
+    <string name="strMsgSearchWordPartExample">For example: \'man\' in \'mankind\'</string>
+    <string name="strMsgSearchArabic">Search in Arabic text</string>
+    <string name="strMsgChangeLanguage">The app will be restarted to affect language change.</string>
+    <string name="strMsgResetReaderSettings">Reset all settings to the default.</string>
+    <string name="strMsgProphetsOrder">Showing prophets in chronological order</string>
+    <string name="strMsgShareRange" formatted="false">Enter range between %1$d–%2$d</string>
+    <string name="strMsgEnterValidRange">Please enter a valid range</string>
+    <string name="strMsgTranslLoadFailed">Could not load translations from the server. Please try again later.</string>
+    <string name="strMsgTranslNoDownloads">No downloaded translations available</string>
+    <string name="strMsgTranslNoDownloadsAvailable">No downloads available</string>
+    <string name="strMsgTranslFailedToDownload" formatted="false">Failed to download \"%s\".</string>
+    <string name="strMsgTranslDownloaded" formatted="false">Downloaded: \"%s\".</string>
+    <string name="strMsgTranslNoneSelected">No translation is selected. Go to settings to find translations.</string>
+    <string name="strMsgTranslSelectionLimit" formatted="false">Maximum %d translations can be selected at once. Please unselect one before selecting another. This is to avoid performance loss.</string>
+    <string name="strMsgRecitationsLoadFailed">Could not load recitations from the server. Please try again later.</string>
+    <string name="strMsgRecitationsNoAvailable">No recitations available</string>
+    <string name="strMsgTafsirsNoAvailable">No tafsirs available</string>
+    <string name="strDescAddToBookmarks">Add to bookmarks</string>
+    <string name="strDescGoBack">Go back</string>
+    <string name="strDescClose">Close</string>
+    <string name="strDescVerseNo" formatted="false">Verse number %d.</string>
+    <string name="strDescVerseNoWithChapter" formatted="false">Surah %1$s, verse number %2$d.</string>
+    <string name="strMsgNoInternet">Please check your internet connection.</string>
+    <string name="strMsgNoInternetLong">No internet connection. Make sure Wi-Fi or cellular data is turned on, then try again.</string>
+    <string name="strMsgSomethingWrong">Something went wrong!</string>
+    <string name="strMsgSomethingWrongFixing">Something went wrong! We are working to fix this.</string>
+    <string name="strMsgVerseCredsInvalid">Verse credentials are not valid.</string>
+    <string name="strMsgTryLater">Please try again later.</string>
+    <string name="strMsgReportUs">Please report us.</string>
+    <string name="strMsgCouldNotOpenPage">Could not open the page.</string>
+    <string name="strLabelNavHome">Home</string>
+    <string name="strLabelNavSearch">Search</string>
+    <string name="strTextPreparing">Preparing…</string>
+    <string name="strTextPleaseWait">Please wait…</string>
+    <string name="strTextSending">Sending…</string>
+    <string name="strAyatulKursi">Ayatul Kursi</string>
+    <string name="strTitleError">Error!</string>
+    <string name="strTitleInfo">Info!</string>
+    <string name="strTitleOops">Oops!</string>
+    <string name="strLabelProceed">PROCEED</string>
+    <string name="strTextUpdating">Updating…</string>
+    <string name="strTextInstalling">Installing…</string>
+    <string name="strTextLoading">Loading…</string>
+    <string name="strMsgUpdateAvailable">UPDATE AVAILABLE! Please update the app to get the latest features.</string>
+    <string name="strMsgUpdateAvailable4Dialog">UPDATE AVAILABLE!\nPlease update the app.</string>
+    <string name="strMsgUpdateAvailable2Continue">UPDATE REQUIRED!\nPlease update the app to continue.</string>
+    <string name="strMsgUpdateDownloaded">UPDATE DOWNLOADED! Please install to complete the update.</string>
+    <string name="strLabelAllChapters">All Chapters</string>
+    <string name="strLabelDownloadImage">Download image</string>
+    <string name="strLabelShareImage">Share image</string>
+    <string name="strTitleImageSavedWithName" formatted="false">Image saved with name: %s</string>
+    <string name="strTitleAlphaBG">Alpha background</string>
+    <string name="strMsgEditShareTransl">Translations selected from the settings, are only shown here.</string>
+    <string name="strMsgEditShareLongTransl">Translation is very long, it may not fit properly.</string>
+    <string name="strMsgReferenceInQuran" formatted="false">%s in Quran</string>
+    <string name="strMsgReferenceFoundPlaces" formatted="false">Found verses related to %1$s at total %2$d places.</string>
+    <string name="strMsgReferenceDuas">Gathered some duas from the Quran.</string>
+    <string name="strSalam">Assalam Alaikum</string>
+    <string name="strSalamShort">Salam</string>
+    <string name="titleDownloadScriptResources">Download resources for this script\?</string>
+    <string name="msgDownloadKFQPCResources">Following resources need downloading before you can use this script:</string>
+    <string name="msgDownloadKFQPCResourcesScript" formatted="false">Script: %s (~1MB)</string>
+    <string name="msgDownloadKFQPCResourcesFonts" formatted="false">Fonts: %1$d downloaded of total %2$d (~%3$dMB remaining)</string>
+    <string name="msgDownloadFailed">Download failed</string>
+    <string name="msgDownloadingScript">Downloading script</string>
+    <string name="msgDownloadingFonts">Downloading fonts</string>
+    <string name="msgFontsDonwloadProgress" formatted="false">%1$d of %2$d fonts downloaded</string>
+    <string name="msgFontsDonwloadProgressShort" formatted="false">%1$d of %2$d</string>
+    <string name="msgDownloadingResource" formatted="false">Downloading %s</string>
+    <string name="msgScriptFontsDownloaded">Scripts and fonts downloaded successfully.</string>
+    <string name="textDownloading">Downloading…</string>
+    <string name="textDownloaded">Downloaded</string>
+    <string name="textPercentage" formatted="false">%d%%</string>
+    <string name="labelBackgroundDownload">Background download</string>
+    <string name="msgAnotherDownloadInProgress">Another download is in progress.</string>
+    <string name="lastCrashLog">Last crash log</string>
+    <string name="appLogs">App logs</string>
+    <string name="crashLogs">Crash logs</string>
+    <string name="suppressedLogs">Suppressed logs</string>
+    <string name="logRemoved">Log removed</string>
+    <string name="createIssue">Create issue</string>
+    <string name="copiedToClipboard">Copied to clipboard.</string>
+    <string name="pasteCrashLogGithubIssue">Log has been copied to clipboard. Please on WhatsApp.</string>
+    <string name="codecanyon">codecanyon</string>
+    <string name="msgAlarmManagerNotAvailable">Alarm manager is not available on this device.</string>
+    <string name="msgVerseReminderNotifPermission">Notification permission is required to enable verse reminder.</string>
+    <string name="msgVerseReminderAlarmPermission">Alarm permission is required to enable verse reminder.</string>
+    <string name="titleStorageCleanup">Storage cleanup</string>
+    <string name="storageCleanupMessage">Free up space by deleting unused downloaded resources. This will not delete any bookmarks or settings.\n\nFollowing resources can be freed up:</string>
+    <string name="translationCanBeFreedUp" formatted="false">%d downloaded translations can be freed up.</string>
+    <string name="recitationCanBeFreedUp" formatted="false">%1$d stored recitation files from %2$d reciters can be freed up.</string>
+    <string name="scriptCanBeFreedUp" formatted="false">%d downloaded scripts and their fonts can be freed up.</string>
+    <string name="chapterInfoCanBeFreedUp" formatted="false">%d saved chapter information can be cleaned up.</string>
+    <string name="tafseerCanBeFreedUp" formatted="false">%d saved tafsirs can be cleaned up.</string>
+    <string name="titleChapterInfo">Chapter info</string>
+    <string name="labelFreeUpSpace">Free up space</string>
+    <string name="msgDeleteTranslation" formatted="false">%1$s\n%2$s\n\nYou will need to download it again.</string>
+    <string name="titleRecitationCleanup">Delete recitation\?</string>
+    <string name="msgRecitationCleanup" formatted="false">All the stored recitation from %s will be deleted. To individually delete recitations by Surah, go to the manage audio settings.</string>
+    <string name="titleScriptCleanup">Delete script\?</string>
+    <string name="msgScriptCleanup" formatted="false">%s script and all its stored fonts will be deleted. You will need to re-download to use them.</string>
+    <string name="titleChapterInfoCleanup">Clear chapter info\?</string>
+    <string name="msgChapterInfoCleanup">All the saved chapter info will be deleted.</string>
+    <string name="titleTafsirCleanup">Delete tafsir\?</string>
+    <string name="msgTafsirCleanup" formatted="false">All the stored tafsir from %s will be deleted.</string>
+    <string name="nFiles" formatted="false">%d files</string>
+    <string name="nScriptsAndFonts" formatted="false">%1$d scripts and %2$d fonts</string>
+    <string name="nothingToCleanup">There is nothing to clean up.</string>
+    <string name="nItem" formatted="false">%d item</string>
+    <string name="nItems" formatted="false">%d items</string>
+    <string name="noItems">No items</string>
+    <string name="verseSyncOn">Verse sync : ON</string>
+    <string name="verseSyncOff">Verse sync : OFF</string>
+    <string name="inPlaces">in %s</string>
+    <string name="inPlacesMore">in %1$s &amp; %2$d more</string>
+    <string name="onboardDescLanguage">Personalize the app in your language. You can always change this later.</string>
+    <string name="onboardDescTheme">You can always change this later.</string>
+    <string name="onboardDescTranslations">You can always change this later. You can download more translations from the settings.</string>
+    <string name="onboardDescReciter">You can always change this later. You can find more reciters in the settings.</string>
+    <string name="labelArabic">Arabic</string>
+    <string name="labelTranslation">Translation</string>
+    <string name="titleAddToFavourites">Add to favourites</string>
+    <string name="msgAddedToFavourites">Added to favourites</string>
+    <string name="titleRemoveFromFavourites">Remove from favourites</string>
+    <string name="msgRemovedFromFavourites">Removed from favourites</string>
+    <string name="msgNoFavouriteChapters">Add a chapter to favourites to see here.</string>
+    <string name="msgChapterAddedToFavourites">Surah added to favourites.</string>
+    <string name="msgChapterRemovedFromFavourites">Surah removed from favourites.</string>
+    <string name="textTranslationReciterInfo">Language: %1$s
+\nBook: %2$s</string>
+    <string name="textNoLogsFound">No logs found</string>
+    <string name="msgRecitaionFailedToDownload" formatted="false">Failed to download \"%1$s\" for reciter \"%2$s\".</string>
+    <string name="msgRecitaionDownloaded" formatted="false">Downloaded \"%1$s\" for reciter \"%2$s\".</string>
+    <string name="msgRecitaionDeleleSurah" formatted="false">All recitations of \"%1$s\" for reciter \"%2$s\" will be deleted.</string>
+    <string name="msgRecitaionDeleletedSurah" formatted="false">Deleted recitations of \"%1$s\" for reciter \"%2$s\".</string>
+    <string name="strScriptPreviewIndopak" translatable="false">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِیْمِ </string>
+    <string name="strScriptPreviewUthmani" translatable="false">بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ ١</string>
+    <string name="strScriptPreviewKFQPC_V1" translatable="false">ﭑ ﭒ ﭓ ﭔ ﭕ</string>
+    <string name="strPreviewTextTransl">In the Name of Allâh, the Most Gracious, the Most Merciful</string>
+    <string name="strNotifChannelRecitation" translatable="false">Recitation Player</string>
+    <string name="strNotifChannelIdRecitation" translatable="false">recitation_player</string>
+    <string name="strNotifChannelDefault" translatable="false">Default Channel</string>
+    <string name="strNotifChannelIdDefault" translatable="false">default</string>
+    <string name="strNotifChannelVOTD" translatable="false">@string/strTitleVOTD</string>
+    <string name="strNotifChannelIdVOTD" translatable="false">votd</string>
+    <string name="strNotifChannelDownloads" translatable="false">Downloads</string>
+    <string name="strNotifChannelIdDownloads" translatable="false">downloads</string>
+    <string name="strShortcutIdVOTD" translatable="false">@string/strNotifChannelIdVOTD</string>
+    <string name="strShortcutIdLastVerses" translatable="false">last_verses</string>
+    <string name="strMsgShareApp" formatted="false" translatable="false">
+        QuranApp\n\nBest free app to read the Noble Qur\'an with translations. This app has nice and clean look and many other features. \n\nDOWNLOAD NOW:\n%s
+    </string>
+
+
+    <!-- Quran_Module* -->
+
+
+
+</resources>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="top"
+    android:orientation="vertical"
+    android:paddingLeft="16dp"
+    android:paddingTop="16dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="0dp">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="10dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:src="@drawable/ic_notify2"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:focusable="true"
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground"
+            app:civ_border_color="?BlackWhite"
+            app:itemTextColor="?BlackWhite"
+            app:itemIconTint="?BlackWhite"
+            app:civ_border_width="1dp"
+            android:layout_marginTop="20dp"
+            tools:ignore="MissingClass" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:text="@string/actionbar_name"
+            android:textAllCaps="true"
+            android:textSize="15sp"
+            android:layout_marginTop="20dp"
+            android:textColor="?BlackWhite"
+            android:textStyle="bold"
+            android:focusable="true"
+            android:clickable="false"
+            app:itemTextColor="?BlackWhite"
+            app:itemIconTint="?BlackWhite"
+            android:layout_marginStart="70dp" />
+
+
+        <LinearLayout
+            android:visibility="visible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="end"
+            android:layout_marginEnd="80dp"
+            android:layout_marginTop="60dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/day_theme" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/change_theme"
+                android:layout_width="40dp"
+                android:layout_height="0dp"
+                android:thumb="@drawable/switch_thumb"
+                app:track="@drawable/switch_track"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:src="@drawable/dark_theme"/>
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <View
+
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="15dp"
+        android:background="#888888"/>
+
+</LinearLayout>

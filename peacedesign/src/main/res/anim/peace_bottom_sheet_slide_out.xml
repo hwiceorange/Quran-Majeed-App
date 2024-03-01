@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+
+/**
+ * Author: le cheng
+ * Whatsapp: +4407803311518
+ * Email: lecheng2019@gmail.com
+ */
+
+  -->
+
+
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="120"
+    android:interpolator="@android:anim/accelerate_interpolator">
+
+    <translate
+        android:fromYDelta="0"
+        android:toYDelta="20%p"/>
+
+    <alpha
+        android:fromAlpha="1.0"
+        android:toAlpha="0.0"/>
+
+</set>

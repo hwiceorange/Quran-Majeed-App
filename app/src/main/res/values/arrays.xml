@@ -1,0 +1,1149 @@
+<resources>
+    <!-- Reply Preference -->
+    <string-array name="reply_entries">
+        <item>Reply</item>
+        <item>Reply to all</item>
+    </string-array>
+
+    <string-array name="reply_values">
+        <item>reply</item>
+        <item>reply_all</item>
+    </string-array>
+
+    <array name="allah_name_time">
+        <item>0:00.000</item>
+        <item>0:11.022</item>
+        <item>0:13.132</item>
+        <item>0:14.502</item>
+        <item>0:16.152</item>
+        <item>0:17.862</item>
+        <item>0:19.552</item>
+        <item>0:20.872</item>
+        <item>0:22.392</item>
+        <item>0:24.152</item>
+        <item>0:25.462</item>
+        <item>0:27.702</item>
+        <item>0:29.492</item>
+        <item>0:31.202</item>
+        <item>0:32.942</item>
+        <item>0:34.166</item>
+        <item>0:36.106</item>
+        <item>0:37.786</item>
+        <item>0:39.336</item>
+        <item>0:41.069</item>
+        <item>0:42.699</item>
+        <item>0:44.829</item>
+        <item>0:46.449</item>
+        <item>0:47.928</item>
+        <item>0:49.738</item>
+        <item>0:51.038</item>
+        <item>0:52.028</item>
+        <item>0:53.628</item>
+        <item>0:55.368</item>
+        <item>0:56.222</item>
+        <item>0:57.042</item>
+        <item>0:58.492</item>
+        <item>0:59.842</item>
+        <item>1:01.432</item>
+        <item>1:02.542</item>
+        <item>1:04.070</item>
+        <item>1:05.440</item>
+        <item>1:07.010</item>
+        <item>1:08.130</item>
+        <item>1:09.401</item>
+        <item>1:10.493</item>
+        <item>1:12.113</item>
+        <item>1:13.393</item>
+        <item>1:14.930</item>
+        <item>1:16.423</item>
+        <item>1:17.943</item>
+        <item>1:19.653</item>
+        <item>1:20.893</item>
+        <item>1:22.063</item>
+        <item>1:23.423</item>
+        <item>1:25.689</item>
+        <item>1:27.029</item>
+        <item>1:28.079</item>
+        <item>1:29.339</item>
+        <item>1:30.999</item>
+        <item>1:32.149</item>
+        <item>1:33.779</item>
+        <item>1:35.009</item>
+        <item>1:36.255</item>
+        <item>1:37.185</item>
+        <item>1:38.405</item>
+        <item>1:39.855</item>
+        <item>1:41.015</item>
+        <item>1:42.125</item>
+        <item>1:43.685</item>
+        <item>1:45.455</item>
+        <item>1:47.115</item>
+        <item>1:48.715</item>
+        <item>1:48.716</item>
+        <item>1:49.825</item>
+        <item>1:51.525</item>
+        <item>1:53.045</item>
+        <item>1:54.685</item>
+        <item>1:56.135</item>
+        <item>1:57.325</item>
+        <item>1:58.595</item>
+        <item>2:00.295</item>
+        <item>2:01.945</item>
+        <item>2:03.445</item>
+        <item>2:04.655</item>
+        <item>2:05.285</item>
+        <item>2:06.995</item>
+        <item>2:08.555</item>
+        <item>2:09.871</item>
+        <item>2:11.031</item>
+        <item>2:13.611</item>
+        <item>2:17.031</item>
+        <item>2:18.196</item>
+        <item>2:19.836</item>
+        <item>2:21.156</item>
+        <item>2:22.406</item>
+        <item>2:24.326</item>
+        <item>2:28.336</item>
+        <item>2:29.916</item>
+        <item>2:31.156</item>
+        <item>2:32.316</item>
+        <item>2:33.776</item>
+        <item>2:35.186</item>
+        <item>2:36.956</item>
+        <item>2:38.576</item>
+        <item>2:40.266</item>
+        <item>3:29.653</item>
+    </array>
+    <array name="allah_names">
+        <item>اللَّـهُ</item>
+        <item>الرَّحْمَـٰنُ</item>
+        <item>الرَّحِيمُ</item>
+        <item>الْمَلِكُ</item>
+        <item>الْقُدُّوسُ</item>
+        <item>السَّلَامُ</item>
+        <item>الْمُؤْمِنُ</item>
+        <item>الْمُهَيْمِنُ</item>
+        <item>الْعَزِيزُ</item>
+        <item>الْجَبَّارُ</item>
+        <item>الْمُتَكَبِّرُ</item>
+        <item>الْخَالِقُ</item>
+        <item>الْبَارِئُ</item>
+        <item>الْمُصَوِّرُ</item>
+        <item>الْغَفَّارُ</item>
+        <item>الْقَهَّارُ</item>
+        <item>الْوَهَّابِ</item>
+        <item>الرَّزَّاقُ</item>
+        <item>الْفَتَّاحُ</item>
+        <item>الْعَلِيمُ</item>
+        <item>الْقَابِضُ</item>
+        <item>الْبَاسِطُ</item>
+        <item>الْخَافِضُ</item>
+        <item>الرَّافِعُ</item>
+        <item>الْمُعِزُّ</item>
+        <item>الْمُذِلُّ</item>
+        <item>السَّمِيعُ</item>
+        <item>الْبَصِيرُ</item>
+        <item>الْحَكَمُ</item>
+        <item>الْعَدْلُ</item>
+        <item>اللَّطِيفُ</item>
+        <item>الْخَبِيرُ</item>
+        <item>الْحَلِيمُ</item>
+        <item>الْعَظِيمُ</item>
+        <item>الْغَفُورُ</item>
+        <item>الشَّكُورُ</item>
+        <item>الْعَلِيُّ</item>
+        <item>الْكَبِيرُ</item>
+        <item>الْحَفِيظُ</item>
+        <item>الْمُقِيتُ</item>
+        <item>الْحَسِيبُ</item>
+        <item>الْجَلِيلُ</item>
+        <item>الْكَرِيمُ</item>
+        <item>الرَّقِيبُ</item>
+        <item>الْمُجِيبُ</item>
+        <item>الْوَاسِعُ</item>
+        <item>الْحَكِيمُ</item>
+        <item>الْوَدُودُ</item>
+        <item>الْمَجِيدُ</item>
+        <item>الْبَاعِثُ</item>
+        <item>الشَّهِيدُ</item>
+        <item>الْحَقُّ</item>
+        <item>الْوَكِيلُ</item>
+        <item>الْقَوِيُّ</item>
+        <item>الْمَتِينُ</item>
+        <item>الْوَلِيُّ</item>
+        <item>الْحَمِيدُ</item>
+        <item>الْمُحْصِي</item>
+        <item>الْمُبْدِئُ</item>
+        <item>الْمُعِيدُ</item>
+        <item>الْمُحْيِي</item>
+        <item>الْمُمِيتُ</item>
+        <item>الْحَىُّ</item>
+        <item>الْقَيُّومُ</item>
+        <item>الْوَاجِدُ</item>
+        <item>الْمَاجِدُ</item>
+        <item>الْوَاحِدُ</item>
+        <item>الْأَحَدُ</item>
+        <item>الصَّمَدُ</item>
+        <item>الْقَادِرُ</item>
+        <item>الْمُقْتَدِرُ</item>
+        <item>الْمُقَدِّمُ</item>
+        <item>الْمُؤَخِّرُ</item>
+        <item>الأَوَّلُ</item>
+        <item>الآخِرُ</item>
+        <item>الظَّاهِرُ</item>
+        <item>الْبَاطِنُ</item>
+        <item>الْوَالِي</item>
+        <item>الْمُتَعَالِي</item>
+        <item>الْبَرُّ</item>
+        <item>التَّوَّابُ</item>
+        <item>الْمُنْتَقِمُ</item>
+        <item>الْعَفُوُّ</item>
+        <item>الرَّءُوفُ</item>
+        <item>الْمُلْكِ مَالِكُ</item>
+        <item>ذُوالْجَلاَل وَالإِكْرَام</item>
+        <item>الْمُقْسِطُ</item>
+        <item>الْجَامِعُ</item>
+        <item>الْغَنِيُّ</item>
+        <item>الْمُغْنِي</item>
+        <item>الْمَانِعُ</item>
+        <item>الضَّارُّ</item>
+        <item>النَّافِعُ</item>
+        <item>النُّورُ</item>
+        <item>الْهَادِي</item>
+        <item>الْبَدِيعُ</item>
+        <item>الْبَاقِي</item>
+        <item>الْوَارِثُ</item>
+        <item>الرَّشِيدُ</item>
+        <item>الصَّبُورُ</item>
+    </array>
+    <array name="allah_names_detail_english">
+        <item>He who repeats this Name will find all the things easy.</item>
+        <item>He who repeats this Name will have good memory, a keen awareness, and be free of a
+            heavy heart.
+        </item>
+        <item>He who repeats this Name will have good memory.</item>
+        <item>If you recite this name of Allah, Allah will give him abundant wealth. Insha-Allah.
+        </item>
+        <item>The hearts of those who repeat this Name will be free from anxiety.</item>
+        <item>He who repeats this Name to a sick person, help them regain health.</item>
+        <item>If you recite this name, Allah will protect you from all calamities.</item>
+        <item>Those who repeat this Name, Allah purify them physically and spirtually.</item>
+        <item>He who repeats this Name will be independent of need from others.</item>
+        <item>He who repeats this Name will not be compelled to do anything against his wishes, and
+            will not be exposes to violence, severity, or hardness.
+        </item>
+        <item>He who repeats this Name, Allah will bless him with the righteous child.</item>
+        <item>He who repeats this Name, Allah will create an angel whose duty is to act righteously
+            for this person until the day of judgement. The reward of this angels actions will be
+            given to that person.
+        </item>
+        <item>He who repeats this Name, Allah will give him male children. InshaAllah !</item>
+        <item>He who repeats this Name, Allah will bless her with a child.</item>
+        <item>He who repeats this Name, will soon begin Allahs forgiveness.</item>
+        <item>He who repeats this Name, Allah will free him from the love of this world and,
+            instead, Allahs love will become inborn in his heart. Insha-Allah.
+        </item>
+        <item>The person who repeats this Name, his appeal will be answered. He who has a desire or
+            a person who is captured by an enemy or someone who cannot earn enough to maintain
+            himself, if he repeats this Name, Allah will bless him with all his needs.
+        </item>
+        <item>He who repeats this Name will be provided with sustenance by Allah.</item>
+        <item>The heart of him who repeats this Name will be open, and he will be given victory.
+        </item>
+        <item>He who repeats this name, his heard will become luminous, revelling divine light
+            (Nur).
+        </item>
+        <item>He who repeats this Name will be free from hunger.</item>
+        <item>He who repeats this Name, will be free of needs from others.</item>
+        <item>He who repeats this Name, Allah will free them from harm by their enemy.</item>
+        <item>He who repeats this Name, Allah will make him higher as far as honor, richness and
+            merit are concerned.
+        </item>
+        <item>He ho repeats this Name, Allah makes him dignified in the eyes of others. That person
+            will have fear of no one but Allah.
+        </item>
+        <item>He who repeats this Name will be free from harm by those who are jealous of him and
+            wish to harm him. Allah will protect him.
+        </item>
+        <item>He who repeats this Name, Allah will bestow on him any desire.</item>
+        <item>He who repeats this Name, Allah will give this person esteem in the eyes of others.
+        </item>
+        <item>He who repeats this Name, many secrets (sirr) will be revealed to him.</item>
+        <item>If you repeat this Name, people will obey you.</item>
+        <item>He who has become poor, and is lonely, if he repeats this Name, his earlier desired
+            will be fulfilled.
+        </item>
+        <item>He who has a bad habit which he doesnt like, and continuously repeats this Name, will
+            be quickly freed from this habit.
+        </item>
+        <item>If one repeats this Name, Allah will save him from clamity disaster.</item>
+        <item>He who repeats this Name many times will be respected.</item>
+        <item>He who has a headache, fever, and is despondent, who continuously repeats this Name,
+            will be relived of his ailment.
+        </item>
+        <item>He who has a heavy heart, and repeats this name, his heart will lighten and will be
+            able to maintain himself.
+        </item>
+        <item>He whose faith is low and repeats this Name, will be raised, his density will be
+            opened; the traveller will reach his homeland.
+        </item>
+        <item>He who repeats this Name will have esteem.</item>
+        <item>He who repeats this Name will be protected against calamities.</item>
+        <item>If someone with the bad-mannered child repeats this Name, the child will have good
+            manners.
+        </item>
+        <item>If one is afraid of being robbed, afraid of jealously of another, of being harmed or
+            wronged, he begins to repeat this Name, he will be free from his fears.
+        </item>
+        <item>He who repeats this Name, will be revered among men.</item>
+        <item>He who repeats this Name many times will have esteem in this world and the
+            hereafter.
+        </item>
+        <item>He who repeats this Name, will be under Allahs protection.</item>
+        <item>The appeal of him who repeats this Name will be answered.</item>
+        <item>He who has a difficulty earning, repeats this Name, he will have good earnings.</item>
+        <item>He who repeats this Name will not have difficulty in his work.</item>
+        <item>If there is a quarrel between two people, and one of them repeats this Name, there
+            will be no disagreement between them.
+        </item>
+        <item>He who repeats this Name will gain glory.</item>
+        <item>He who repeats this Name gains the fear of Allah.</item>
+        <item>He who has a rebellious child and repeats this Name, the child will be obedient.
+        </item>
+        <item>If one has lost something and repeats this Name, he will find what he lost.</item>
+        <item>He who is afraid of drowning, being burnt in a fire, or any similar danger, and
+            repeats this Name will be under the protection of Allah.
+        </item>
+        <item>He who cant defeat his enemy, and repeats this Name with the intention of not being
+            harmed, will be free from his enemys harm.
+        </item>
+        <item>If one has troubles and repeates this Name, his troubles will disappear.</item>
+        <item>He who repeats this Name, his house will be free from danger.</item>
+        <item>He who repeats this Name will be loved and praised.</item>
+        <item>He who is afraid of being questioned on the judgement day and repeats this Name will
+            have easiness.
+        </item>
+        <item>He who repeats this Name, will be free from danger.</item>
+        <item>If this Name is repeated for someone who is away from his family, thar person will
+            return safely.
+        </item>
+        <item>If a person has a heavy burden and repeats this Name, his burden will be taken away.
+        </item>
+        <item>This Name is repeated to destroy ones enemy.</item>
+        <item>He who repeats this Name will have long life.</item>
+        <item>He who repeats this Name will not fall into inadvertency.</item>
+        <item>Those who repeat this Name many times, will be respected.</item>
+        <item>He who repeats this Name, his heart will be enlightened.</item>
+        <item>He who repeats this Name alone and in quiet place will be free from fear and
+            delusion.
+        </item>
+        <item>He who repeats this Name, will have certain secrets open to him.</item>
+        <item>He who repeats this Name, Allah will provide his needs, and as a result he will not
+            need others, but they will need them.
+        </item>
+        <item>He who repeats this Name, all his desired will be fulfilled.</item>
+        <item>He who repeats this Name will be aware of the truth.</item>
+        <item>He who repeats this Name on the bettlefield, or who has fear of being alone in an awe
+            - inspiring place, no harm will come to him.
+        </item>
+        <item>He who repeats this Name, only Allah will remain. No other love can enter.</item>
+        <item>He who likes to have a child, or would like to come together with a person who is
+            travelling, repeats this Name.
+        </item>
+        <item>He who repeats this Name will lead a good life and at the end of the life will have a
+            good death.
+        </item>
+        <item>He who repeats this Name, divine light (Nur) will enter his heart.</item>
+        <item>He who repeats this Name will be able to see the truth in things.</item>
+        <item>He who repeats this Name is likely to walliullah, the friend of Allah.</item>
+        <item>He who repeats this Name many times will gain the benecolence of Allah.</item>
+        <item>He who repeats this Name to his child, this child will be free from misfortune.</item>
+        <item>He who repeats this Name many times, his repentance will be accepted.</item>
+        <item>He who repeats this Name many times, will be victorious against his enemies.</item>
+        <item>He who repeats this Name many times, all his sins will be forgiven.</item>
+        <item>He who repeats this Name many times will be blessed by Allah.</item>
+        <item>He who repeats this Name will have esteem among people.</item>
+        <item>He who repeats this Name many times will be rich.</item>
+        <item>He who repeats this Name will be free from the hard of the devil.</item>
+        <item>He who repeats this Name will find the things that he lost.</item>
+        <item>He who repeats this Name will be contented and not covetous.</item>
+        <item>He who repeats this Name will become self-sufficient.</item>
+        <item>Those who repeat this Name will have a good family life.</item>
+        <item>Those who are in low class, if they repeat this Name, their status will be raised.
+        </item>
+        <item>He who repeats this Name, no harm will come to him.</item>
+        <item>Those who repeat this Name will have inner light.</item>
+        <item>He who repeats this Name will have spiritual knowledge.</item>
+        <item>He who repeats, all his troubles will disappear.</item>
+        <item>He who repeats this Name will be free from all disasters throughout his life, and will
+            be shown mercy in the hereafter.
+        </item>
+        <item>He who repeats this Name will have long life.</item>
+        <item>He who repeats this Name, his troubles will be cleared up.</item>
+        <item>He who is any trouble, difficulty or sorrow and repeats this Name, will be rescued
+            from his difficulty.
+        </item>
+    </array>
+    <array name="allah_names_english">
+        <item>The Greatest Name</item>
+        <item>The Most Beneficent</item>
+        <item>The Most Merciful</item>
+        <item>The King</item>
+        <item>The Most Holy</item>
+        <item>The Peace</item>
+        <item>Bestower of Security</item>
+        <item>The Guardian</item>
+        <item>The Almighty</item>
+        <item>The Irresistible</item>
+        <item>The Tremendous</item>
+        <item>The Maker</item>
+        <item>The Creator</item>
+        <item>The Designer</item>
+        <item>The Forgiver</item>
+        <item>The Subduer</item>
+        <item>The Bestower</item>
+        <item>The Provider</item>
+        <item>The Opener</item>
+        <item>The All Knowing</item>
+        <item>The Restrainer</item>
+        <item>The Extender</item>
+        <item>The Humbler</item>
+        <item>The Raiser</item>
+        <item>The Giver of Honour</item>
+        <item>The Giver of dishonour</item>
+        <item>The Hearer</item>
+        <item>The All Seeing</item>
+        <item>The Judge</item>
+        <item>The Equitable</item>
+        <item>The Gracious</item>
+        <item>The Aware</item>
+        <item>The Forbearing</item>
+        <item>The Great</item>
+        <item>The Forgiving</item>
+        <item>The Thankful</item>
+        <item>The Most High</item>
+        <item>The Great</item>
+        <item>The Preserver</item>
+        <item>The Nourisher</item>
+        <item>The Reckoner</item>
+        <item>The Majestic</item>
+        <item>The Generous</item>
+        <item>The Guardian</item>
+        <item>The Responder</item>
+        <item>The Knowledgeable</item>
+        <item>The Wise</item>
+        <item>The Loving</item>
+        <item>The Glorious</item>
+        <item>The Resurrecter</item>
+        <item>The Witness</item>
+        <item>The Truth</item>
+        <item>The Trustee</item>
+        <item>The Strong</item>
+        <item>The Firm</item>
+        <item>The Friend</item>
+        <item>The Praiseworthy</item>
+        <item>The Counter</item>
+        <item>The Originator</item>
+        <item>The Restorer</item>
+        <item>The Bestower</item>
+        <item>The Destroyer</item>
+        <item>The Ever Living</item>
+        <item>The Eternal</item>
+        <item>The Finder</item>
+        <item>The Magnificent</item>
+        <item>The Unique</item>
+        <item>The One</item>
+        <item>The Self Sufficient</item>
+        <item>The Capable</item>
+        <item>The Dominant</item>
+        <item>The Presenter</item>
+        <item>The Keeper Behind</item>
+        <item>The First</item>
+        <item>The Last</item>
+        <item>The Evident</item>
+        <item>The Hidden</item>
+        <item>The Master</item>
+        <item>The Exalted and Most High</item>
+        <item>The Courteous</item>
+        <item>The Acceptor of Repentance</item>
+        <item>The Avenger</item>
+        <item>The Forgiver</item>
+        <item>The Merciful</item>
+        <item>The King of Universe</item>
+        <item>The Lord of Majesty and Generosity</item>
+        <item>The Equitable</item>
+        <item>The Gatherer</item>
+        <item>The Independent</item>
+        <item>The Enricher</item>
+        <item>The Withholder</item>
+        <item>The Afflicter</item>
+        <item>The Propitious</item>
+        <item>The Light to Guide</item>
+        <item>The Guide</item>
+        <item>The Originator</item>
+        <item>The Everlasting</item>
+        <item>The Inheritor</item>
+        <item>The Guide to the right path</item>
+        <item>The Patient</item>
+    </array>
+    <array name="allah_names_transliteration">
+        <item>Allah</item>
+        <item>Ar-Rahman</item>
+        <item>Ar-Rahim</item>
+        <item>Al-Malik</item>
+        <item>Al-Qudoos</item>
+        <item>As-Salam</item>
+        <item>Al-Mumin</item>
+        <item>Al-Muhaymin</item>
+        <item>Al-Aziz</item>
+        <item>Al-Jabbar</item>
+        <item>Al-Mutakabbir</item>
+        <item>Al-Khaliq</item>
+        <item>Al-Bari</item>
+        <item>Al-Musawwir</item>
+        <item>Al-Ghaffar</item>
+        <item>Al-Qahhar</item>
+        <item>Al-Wahhab</item>
+        <item>Ar-Razzaq</item>
+        <item>Al-Fattah</item>
+        <item>Al-Aleem</item>
+        <item>Al-Qabid</item>
+        <item>Al-Basit</item>
+        <item>Al-Khafid</item>
+        <item>Ar-Rafi</item>
+        <item>Al-Muiz</item>
+        <item>Al-Muzil</item>
+        <item>As-Sami</item>
+        <item>Al-Basir</item>
+        <item>Al-Hakam</item>
+        <item>Al-Adl</item>
+        <item>Al-Latif</item>
+        <item>Al-Khabir</item>
+        <item>Al-Halim</item>
+        <item>Al-Azim</item>
+        <item>Al-Ghafoor</item>
+        <item>Ash-Shakur</item>
+        <item>Al-Ali</item>
+        <item>Al-Kabir</item>
+        <item>Al-Hafiz</item>
+        <item>Al-Muqit</item>
+        <item>Al-Hasib</item>
+        <item>Aj-Jalil</item>
+        <item>Al-Karim</item>
+        <item>Ar-Raqib</item>
+        <item>Al-Mujib</item>
+        <item>Al-Wasi</item>
+        <item>Al-Hakim</item>
+        <item>Al-Wadud</item>
+        <item>Al-Majid</item>
+        <item>Al-Baith</item>
+        <item>Ash-Shahid</item>
+        <item>Al-Haqq</item>
+        <item>Al-Wakil</item>
+        <item>Al-Qawee</item>
+        <item>Al-Matin</item>
+        <item>Al-Walee</item>
+        <item>Al-Hamid</item>
+        <item>Al-Muhsi</item>
+        <item>Al-Mubdi</item>
+        <item>Al-Mueed</item>
+        <item>Al-Muhyee</item>
+        <item>Al-Mumeet</item>
+        <item>Al-Hayy</item>
+        <item>Al-Qayyum</item>
+        <item>Al-Wajid</item>
+        <item>Al-Majid</item>
+        <item>Al-Wahid</item>
+        <item>Al-Ahad</item>
+        <item>As-Samad</item>
+        <item>Al-Qadir</item>
+        <item>Al-Muqtadir</item>
+        <item>Al-Muqaddim</item>
+        <item>Al-Muakhkhir</item>
+        <item>Al-Awwal</item>
+        <item>Al-Akhir</item>
+        <item>Az-Zahir</item>
+        <item>Al-Batin</item>
+        <item>Al-Wali</item>
+        <item>Al-Mutaali</item>
+        <item>Al-Barr</item>
+        <item>At-Tawwab</item>
+        <item>Al-Muntaqim</item>
+        <item>Al-Afuww</item>
+        <item>Ar-Rauf</item>
+        <item>Malik-Al-Mulk</item>
+        <item>Zul-Jalal wal-Ikram</item>
+        <item>Al-Muqsit</item>
+        <item>Aj-Jami</item>
+        <item>Al-Ghanee</item>
+        <item>Al-Mughnee</item>
+        <item>Al-Mani</item>
+        <item>Ad-Darr</item>
+        <item>An-Nafi</item>
+        <item>An-Nur</item>
+        <item>Al-Hadi</item>
+        <item>Al-Badi</item>
+        <item>Al-Baqi</item>
+        <item>Al-Warith</item>
+        <item>Ar-Rashid</item>
+        <item>As-Sabur</item>
+    </array>
+    <array name="allah_names_without_araab">
+        <item>الله</item>
+        <item>الرحمن</item>
+        <item>الرحيم</item>
+        <item>الملك</item>
+        <item>القدوس</item>
+        <item>السلام</item>
+        <item>المؤمن</item>
+        <item>المهيمن</item>
+        <item>العزيز</item>
+        <item>الجبار</item>
+        <item>المتكبر</item>
+        <item>الخالق</item>
+        <item>البارئ</item>
+        <item>المصور</item>
+        <item>الغفار</item>
+        <item>القهار</item>
+        <item>الوهاب</item>
+        <item>الرزاق</item>
+        <item>الفتاح</item>
+        <item>العليم</item>
+        <item>القابض</item>
+        <item>الباسط</item>
+        <item>الخافض</item>
+        <item>الرافع</item>
+        <item>المعز</item>
+        <item>المذل</item>
+        <item>السميع</item>
+        <item>البصير</item>
+        <item>الحكم</item>
+        <item>العدل</item>
+        <item>اللطيف</item>
+        <item>الخبير</item>
+        <item>الحليم</item>
+        <item>العظيم</item>
+        <item>الغفور</item>
+        <item>الشكور</item>
+        <item>العلي</item>
+        <item>الكبير</item>
+        <item>الحفيظ</item>
+        <item>المقيت</item>
+        <item>الحسيب</item>
+        <item>الجليل</item>
+        <item>الكريم</item>
+        <item>الرقيب</item>
+        <item>المجيب</item>
+        <item>الواسع</item>
+        <item>الحكيم</item>
+        <item>الودود</item>
+        <item>المجيد</item>
+        <item>الباعث</item>
+        <item>الشهيد</item>
+        <item>الحق</item>
+        <item>الوكيل</item>
+        <item>القوى</item>
+        <item>المتين</item>
+        <item>الولى</item>
+        <item>الحميد</item>
+        <item>المحصى</item>
+        <item>المبدئ</item>
+        <item>المعيد</item>
+        <item>المحيى</item>
+        <item>المميت</item>
+        <item>الحي</item>
+        <item>القيوم</item>
+        <item>الواجد</item>
+        <item>الماجد</item>
+        <item>الواحد</item>
+        <item>الاحد</item>
+        <item>الصمد</item>
+        <item>القادر</item>
+        <item>المقتدر</item>
+        <item>المقدم</item>
+        <item>المؤخر</item>
+        <item>الأول</item>
+        <item>الأخر</item>
+        <item>الظاهر</item>
+        <item>الباطن</item>
+        <item>الوالي</item>
+        <item>المتعالي</item>
+        <item>البر</item>
+        <item>التواب</item>
+        <item>المنتقم</item>
+        <item>العفو</item>
+        <item>الرؤوف</item>
+        <item>مالك الملك</item>
+        <item>ذو الجلال والإكرام</item>
+        <item>المقسط</item>
+        <item>الجامع</item>
+        <item>الغني</item>
+        <item>المغني</item>
+        <item>المانع</item>
+        <item>الضار</item>
+        <item>النافع</item>
+        <item>النور</item>
+        <item>الهادي</item>
+        <item>البديع</item>
+        <item>الباقي</item>
+        <item>الوارث</item>
+        <item>الرشيد</item>
+        <item>الصبور</item>
+    </array>
+
+    <array name="arr_juristic">
+        <item>Shafi/Maliki/Hanbali</item>
+        <item>Hanafi</item>
+    </array>
+    <array name="arr_latitude_adjustment">
+        <item>None</item>
+        <item>Angle Based</item>
+        <item>Mid Night</item>
+        <item>One Seventh</item>
+    </array>
+    <array name="array_calculation_methods_angles">
+        <item>Fajr 18.0° / Ishaa 17.0°</item>
+        <item>Fajr 19.5° / Ishaa 17.5°</item>
+        <item>Fajr 20.0° / Ishaa 18.0°</item>
+        <item>Fajr 19.5° / Ishaa 90 min</item>
+        <item>Fajr 18.0° / Ishaa 18.0°</item>
+        <item>Fajr 15.0° / Ishaa 15.0°</item>
+        <item>Fajr 20.0° / Ishaa 18.0°</item>
+        <item>Fajr 20.0° / Ishaa 18.0°</item>
+        <item>Fajr 20.0° / Ishaa 18.0°</item>
+        <item>Fajr 18.0° / Ishaa 17.0°</item>
+        <item>Fajr 16.0° / Ishaa 14.0°</item>
+        <item>Fajr 19.5° / Ishaa 90 min</item>
+        <item>Fajr 18.5° / Ishaa 90 min</item>
+        <item>Fajr 17.7° / Ishaa 15.0°</item>
+    </array>
+    <array name="array_calculation_methods_index">
+        <item>12</item>
+        <item>5</item>
+        <item>7</item>
+        <item>10</item>
+        <item>1</item>
+        <item>2</item>
+        <item>11</item>
+        <item>8</item>
+        <item>9</item>
+        <item>3</item>
+        <item>@null</item>
+        <item>10</item>
+        <item>4</item>
+        <item>6</item>
+    </array>
+    <array name="array_calculation_methods_new">
+        <item>Algerian Minister of Religious Affairs and Wakfs</item>
+        <item>Egyptian General Authority</item>
+        <item>Egyptian General Authority (bis)</item>
+        <item>Fixed Isha Angle Interval</item>
+        <item>Islamic University, Karachi</item>
+        <item>ISNA(Islamic State of North America)</item>
+        <item>JAKIM(Jabatan Kemajuan Islam Malaysia)</item>
+        <item>KEMENAG(Kementerian Agama RI)</item>
+        <item>MUIS(Majlis Ugama Islam Singapura)</item>
+        <item>MWL(Muslim World League)</item>
+        <item>Shia Athna Ashari(Jafari)</item>
+        <item>UAE General Authority of Islamic Affairs</item>
+        <item>Umm Al-Qura, Makkah</item>
+        <item>University of Tehran</item>
+    </array>
+
+    <!-- Hadith language Preference -->
+    <string-array name="language_entries">
+        <item>@string/language_arabic</item>
+        <item>@string/language_urdu</item>
+        <item>@string/language_indonesian</item>
+    </string-array>
+
+    <string-array name="language_values">
+        <item>ara</item>
+        <item>urd</item>
+        <item>ind</item>
+    </string-array>
+
+    <!-- Prayer Times -->>
+    <string-array name="entries_theme_list_preference">
+        <item>@string/theme_preference_name_white_blue</item>
+        <item>@string/theme_preference_name_dark_orange</item>
+        <item>@string/theme_preference_name_dark_Turquoise</item>
+    </string-array>
+    <string-array name="entryvalues_theme_list_preference">
+        <item>THEME_WHITE_BLUE</item>
+        <item>THEME_DARK_ORANGE</item>
+        <item>THEME_DARK_TURQUOISE</item>
+    </string-array>
+
+    <string-array name="entries__arabic_numerals_type_list_preference">
+        <item>@string/theme_preference_numerals_type_arabic</item>
+        <item>@string/theme_preference_numerals_type_arabic_indic</item>
+    </string-array>
+    <string-array name="entryvalues_arabic_numerals_type_list_preference">
+        <item>ARABIC_NUMERALS_TYPE_ARABIC</item>
+        <item>ARABIC_NUMERALS_TYPE_ARABIC_INDIC</item>
+    </string-array>
+
+    <string-array name="entries_calculation_method_list_preference">
+        <item>@string/method_shia_ithna_ansari</item>
+        <item>@string/method_university_of_islamic_sciences_karachi</item>
+        <item>@string/method_islamic_society_of_north_america</item>
+        <item>@string/method_muslim_world_league</item>
+        <item>@string/method_umm_al_qura_university_makkah</item>
+        <item>@string/method_egyptian_general_authority_of_survey</item>
+        <item>@string/method_institute_of_geophysics_university_of_tehran</item>
+        <item>@string/method_gulf_region</item>
+        <item>@string/method_kuwait</item>
+        <item>@string/method_qatar</item>
+        <item>@string/method_majlis_ugama_islam_singapura</item>
+        <item>@string/method_department_of_islamic_advancement_malaysia</item>
+        <item>@string/method_kementerian_agama_ri_indonesia</item>
+        <item>@string/method_union_organization_islamic_de_france</item>
+        <item>@string/method_mosquee_de_paris_france</item>
+        <item>@string/method_france_18</item>
+        <item>@string/method_france_15</item>
+        <item>@string/method_diyanet_isleri_baskanligi_turkey</item>
+        <item>@string/method_london_unified_prayer_times</item>
+        <item>@string/method_spiritual_administration_of_muslims_of_russia</item>
+        <item>@string/method_moroccan_ministry_of_islamic_affairs</item>
+        <item>@string/method_algerian_ministry_of_religious_affairs_and_wakfs</item>
+        <item>@string/method_tunisian_ministry_of_religious_affairs</item>
+    </string-array>
+    <string-array name="entryvalues_calculation_method_list_preference">
+        <item>SHIA_ITHNA_ANSARI</item>
+        <item>UNIVERSITY_OF_ISLAMIC_SCIENCES_KARACHI</item>
+        <item>ISLAMIC_SOCIETY_OF_NORTH_AMERICA</item>
+        <item>MUSLIM_WORLD_LEAGUE</item>
+        <item>UMM_AL_QURA_UNIVERSITY_MAKKAH</item>
+        <item>EGYPTIAN_GENERAL_AUTHORITY_OF_SURVEY</item>
+        <item>INSTITUTE_OF_GEOPHYSICS_UNIVERSITY_OF_TEHRAN</item>
+        <item>GULF_REGION</item>
+        <item>KUWAIT</item>
+        <item>QATAR</item>
+        <item>MAJLIS_UGAMA_ISLAM_SINGAPURA</item>
+        <item>DEPARTMENT_OF_ISLAMIC_ADVANCEMENT_MALAYSIA</item>
+        <item>KEMENTERIAN_AGAMA_RI_INDONESIA</item>
+        <item>UNION_ORGANIZATION_ISLAMIC_DE_FRANCE</item>
+        <item>MOSQUEE_DE_PARIS_FRANCE</item>
+        <item>FRANCE_18</item>
+        <item>FRANCE_15</item>
+        <item>DIYANET_ISLERI_BASKANLIGI_TURKEY</item>
+        <item>LONDON_UNIFIED_PRAYER_TIMES</item>
+        <item>SPIRITUAL_ADMINISTRATION_OF_MUSLIMS_OF_RUSSIA</item>
+        <item>MOROCCAN_MINISTRY_OF_ISLAMIC_AFFAIRS</item>
+        <item>ALGERIAN_MINISTRY_OF_RELIGIOUS_AFFAIRS_AND_WAKFS</item>
+        <item>TUNISIAN_MINISTRY_OF_RELIGIOUS_AFFAIRS</item>
+    </string-array>
+
+    <string-array name="entries_latitude_adjustment_method_list_preference">
+        <item>@string/latitude_adjustment_method_middle_of_the_night</item>
+        <item>@string/latitude_adjustment_method_one_seventh</item>
+        <item>@string/latitude_adjustment_method_angle_based</item>
+    </string-array>
+    <string-array name="entryvalues_latitude_adjustment_method_list_preference">
+        <item>MIDDLE_OF_THE_NIGHT</item>
+        <item>ONE_SEVENTH</item>
+        <item>ANGLE_BASED</item>
+    </string-array>
+
+    <string-array name="entries_school_adjustment_method_list_preference">
+        <item>@string/school_adjustment_method_shafii</item>
+        <item>@string/school_adjustment_method_hanafi</item>
+    </string-array>
+    <string-array name="entryvalues_school_adjustment_method_list_preference">
+        <item>SHAFII</item>
+        <item>HANAFI</item>
+    </string-array>
+
+    <string-array name="entries_midnight_mode_adjustment_method_list_preference">
+        <item>@string/midnight_mode_adjustment_method_standard</item>
+        <item>@string/midnight_mode_adjustment_method_jafari</item>
+    </string-array>
+    <string-array name="entryvalues_midnight_mode_adjustment_method_list_preference">
+        <item>STANDARD</item>
+        <item>JAFARI</item>
+    </string-array>
+
+
+    <string-array name="entries_fajr_adhan_list_preference">
+        <item>@string/adhan_abdelbasset_abdessamad</item>
+        <item>@string/adhan_al_haram_el_madani</item>
+        <item>@string/adhan_meshary_al_fasy</item>
+        <item>@string/adhan_nurdin_al_haddiwi_fajr_morocco</item>
+        <item>@string/takbeer_only_call</item>
+        <item>@string/short_prayer_call</item>
+    </string-array>
+    <string-array name="entryvalues_fajr_adhan_list_preference">
+        <item>ADHAN_FAJR_ABDELBASSET_ABDESSAMAD_EGYPTE</item>
+        <item>ADHAN_FAJR_AL_HARAM_EL_MADANI_SAOUDIA</item>
+        <item>ADHAN_FAJR_MESHARY_AL_FASY_KUWAIT</item>
+        <item>ADHAN_FAJR_NURDIN_AL_HADDIWI_FAJR_MOROCCO</item>
+        <item>TAKBEER_ONLY_CALL</item>
+        <item>SHORT_PRAYER_CALL</item>
+    </string-array>
+
+    <string-array name="entries_adhan_list_preference">
+        <item>@string/adhan_abdelbasset_abdessamad</item>
+        <item>@string/adhan_manssour_el_zahrani</item>
+        <item>@string/adhan_meshary_al_fasy</item>
+        <item>@string/adhan_nurdin_hamza_al_maghriby</item>
+        <item>@string/adhan_omar_al_kazabri</item>
+        <item>@string/adhan_riad_al_djazairi</item>
+        <item>@string/adhan_sayed_al_nakshabandi</item>
+        <item>@string/takbeer_only_call</item>
+        <item>@string/short_prayer_call</item>
+    </string-array>
+    <string-array name="entryvalues_adhan_list_preference">
+        <item>ADHAN_ABDELBASSET_ABDESSAMAD_EGYPTE</item>
+        <item>ADHAN_MANSSOUR_EL_ZAHRANI</item>
+        <item>ADHAN_MESHARY_AL_FASY_KUWAIT</item>
+        <item>ADHAN_OMAR_AL_KAZABRI_MOROCCO</item>
+        <item>ADHAN_NURDIN_HAMZA_AL_MAGHRIBY_QUDS</item>
+        <item>ADHAN_RIAD_AL_DJAZAIRI_ALGERIA</item>
+        <item>ADHAN_SAYED_AL_NAKSHABANDI_EGYPTE</item>
+        <item>TAKBEER_ONLY_CALL</item>
+        <item>SHORT_PRAYER_CALL</item>
+    </string-array>
+
+    <string-array name="entries_temperature_unit_list_preference">
+        <item>@string/title_temperature_unit_standard</item>
+        <item>@string/title_temperature_unit_metric</item>
+        <item>@string/title_temperature_unit_imperial</item>
+    </string-array>
+    <string-array name="entryvalues_temperature_unit_list_preference">
+        <item>standard</item>
+        <item>metric</item>
+        <item>imperial</item>
+    </string-array>
+
+
+    <!-- Zakat -->
+
+    <string name="zakatMoneyTitle">Money</string>
+    <string name="totalMoney" translatable="false">0.00</string>
+    <string name="moneyCashInHandTitle">Cash in hand</string>
+    <string name="moneyCashInHandET" translatable="false">0.00</string>
+    <string name="moneyCashInBankAccountTitle">Cash in Bank account</string>
+    <string name="moneyCashInBankET" translatable="false">0.00</string>
+    <string name="zakatGoldTitle">Gold</string>
+    <string name="totalGoldTV" translatable="false">0.00</string>
+    <string name="goldValuePriceTV">Gold Price</string>
+    <string name="goldValuePriceET" translatable="false">00.0</string>
+    <string name="goldWeight24caratPriceTV">Gold Price (in 24 carat)</string>
+    <string name="goldWeightUnitPriceET" translatable="false">00.0</string>
+    <string name="goldWeight24caratQuantityTV">Gold quantity</string>
+    <string name="goldWeight24caratET" translatable="false">0</string>
+    <string name="goldWeight24caratgiramTV">Gram</string>
+    <string name="gold24caratpriceTitleTV">Gold 24 carat Price</string>
+    <string name="goldWeight24CaratPriceTV" translatable="false">00.0</string>
+    <string name="gold22CaratWeightQuentityTV">Gold quantity</string>
+    <string name="gold22CaratweightPerUnitPriceET" translatable="false">0</string>
+    <string name="gold22CaratWeightUnit_Txt">Gram</string>
+    <string name="goldWeight22caratTitleTV2">Gold 22 carat Price</string>
+    <string name="goldWeight22CaratPriceTV" translatable="false">00.0</string>
+    <string name="gold18CaratWeightQuentityTV">Gold quantity</string>
+    <string name="gold18CaratweightPerUnitPriceET" translatable="false">0</string>
+    <string name="gold18CaratWeightUnit_Txt">Gram</string>
+    <string name="goldWeight18caratTitleTV2">Gold 18 carat Price</string>
+    <string name="goldWeight18CaratPriceTV" translatable="false">00.0</string>
+    <string name="silverHeadingTV">Silver</string>
+    <string name="silverValueRB">In cash</string>
+    <string name="silverWeightRB">In Weight</string>
+    <string name="silverValueTitle2TV">Silver Price</string>
+    <string name="silverValuePriceET" translatable="false">00.0</string>
+    <string name="silverWeightTitleTV">Silver Price</string>
+    <string name="silverWeightUnitPriceET" translatable="false">00.0</string>
+    <string name="silverWeightQuentityTV">Silver quantity</string>
+    <string name="silverWeightQuentityET" translatable="false">0</string>
+    <string name="weightUnit_Txt">Gram</string>
+    <string name="silverWeightTitleTV2">Silver Price</string>
+    <string name="weightPriceTV" translatable="false">00.0</string>
+    <string name="investmentHeadingTV">Investment</string>
+    <string name="totalInvestmentTV" translatable="false">0.00</string>
+    <string name="sharesTV">Shares</string>
+    <string name="sharesET" translatable="false">0.00</string>
+    <string name="otherInvestmentTV">Cash in Bank account</string>
+    <string name="otherInvestmentET" translatable="false">0.00</string>
+    <string name="propertyHeadingTV">Properties</string>
+    <string name="totalPropertyTV" translatable="false">0.00</string>
+    <string name="rentTV">Rental Incomes</string>
+    <string name="propertyRentET" translatable="false">0.00</string>
+    <string name="propertyTV">Properties</string>
+    <string name="propertyET" translatable="false">0.00</string>
+    <string name="businessHeadingTV">Business</string>
+    <string name="totalBusinessTV" translatable="false">0.00</string>
+    <string name="businessCashTV">Business Cash</string>
+    <string name="businessCashET" translatable="false">0.00</string>
+    <string name="businessGoodsTV">Goods / Stocks</string>
+    <string name="businessGoodsET" translatable="false">0.00</string>
+    <string name="agricultureHeadingTV">Agriculture</string>
+    <string name="totalAgriTV" translatable="false">0.00</string>
+    <string name="agriPriceTitleTV">Total agri incom</string>
+    <string name="agriPriceET" translatable="false">00.0</string>
+    <string name="agriRainHeadingTV">By Rain Water 10%</string>
+    <string name="agriRainET" translatable="false">00.0</string>
+    <string name="agriIrrigationHeadingTV">By irrigation 5%</string>
+    <string name="agriIrrigationET" translatable="false">00.0</string>
+    <string name="agriBothHeadingTV">by both 7.5%</string>
+    <string name="agriBothET" translatable="false">00.0</string>
+    <string name="cattleHeadingTV">Cattle</string>
+    <string name="totalCattleTV" translatable="false">0.00</string>
+    <string name="cattleCamelET" translatable="false">00.0</string>
+    <string name="cattleCowHeadingTV">Cow</string>
+    <string name="cattleCowET" translatable="false">00.0</string>
+    <string name="cattleSheepHeadingTV">Sheep</string>
+    <string name="cattleSheepET" translatable="false">00.0</string>
+    <string name="preciousStonesHeadingTV">Precious Stones</string>
+    <string name="totalPreciousStonesTV" translatable="false">0.00</string>
+    <string name="preciousStonesHeadingChildTV">Precious Stones</string>
+    <string name="preciousStonesET" translatable="false">00.0</string>
+    <string name="otherHeadingTV">Others</string>
+    <string name="totalOtherTV" translatable="false">0.00</string>
+    <string name="otherPensionHeadingTV">Pension</string>
+    <string name="otherPensionET" translatable="false">00.0</string>
+    <string name="otherLoanHeadingTV">Loans to family and others</string>
+    <string name="otherLoanET" translatable="false">00.0</string>
+    <string name="otherAssetsHeadingTV">Other Assets</string>
+    <string name="zakatPayablesTitle">Payables</string>
+    <string name="zakatTotalPayableTV" translatable="false">0.00</string>
+    <string name="zakatCreditCardPaymentHeadingTV">Credit card payment</string>
+    <string name="zakatCreditCardPaymentET" translatable="false">00.0</string>
+    <string name="zakatHomeHeadingTV">Home payment</string>
+    <string name="homePaymentET" translatable="false">00.0</string>
+    <string name="zakatCarHeadingTV">Car payment</string>
+    <string name="zakatCarPaymentET" translatable="false">00.0</string>
+    <string name="zakatBusinessPaymentHeadingTV">Business payment</string>
+    <string name="zakatBusinessPaymentET" translatable="false">00.0</string>
+    <string name="zakatFamilyDebtHeadingTV">Debt to family</string>
+    <string name="zakatFamilyDebtET" translatable="false">00.0</string>
+    <string name="zakatOthersDebtHeadingTV">Debt to others</string>
+    <string name="zakatOthersDebtET" translatable="false">00.0</string>
+    <string name="zakatTotalAssetsHeadingTV">Total Assets</string>
+    <string name="zakatTotalAssetsTV" translatable="false">0.00</string>
+    <string name="zakatDueHeadingTV">Zakat Due</string>
+    <string name="totalZakatDueTV" translatable="false">0.00</string>
+    <string name="zakatTotalSilverTV" translatable="false">0.00</string>
+    <string name="zakatDetailTitle">Zakat Detail</string>
+    <string name="zakatDetailInfo">one year wealth apply 2.5% zakat. except agriculture. agriculture divide into 3 parts for zakat apply from rain-water zakat apply 10% , from irrigation-water zakat apply 5% and from both-water( rain-water and irrigation-water) zakat apply 7.5%</string>
+    <string name="goldValueRB">In cash</string>
+    <string name="goldWeightRB">in Weight</string>
+    <string name="cattleCamelHeadingTV">Camel</string>
+
+    <string-array name="zakat_weight_unit_array">
+        <item>Gram</item>
+        <item>tola</item>
+        <item>Kg</item>
+    </string-array>
+
+    <string-array name="zakat_info_detail_array">
+        <item>Zakat is applicable on all cash balances and bank balances of 2.5%</item>
+        <item>Zakat is applicable on all gold but as a pure gold(24-carat) 2.5%. when you calculate zakat as a gold weight enter price of 24-carat(pure gold) gold. this calculate zakat on 22-carat and 18-carat automatically</item>
+        <item>Zakat is applicable on all silver but as a pure silver(without decorative item, all household item) 2.5%</item>
+        <item>Zakat is applicable on all investment as firm or separately by owners 2.5%</item>
+        <item>Zakat is applicable on Property(only rental incomes) 2.5%. However zakat is applied after deducting maintenance and other expenses</item>
+        <item>Zakat is applicable on all Business(cash, goods/stocks) 2.5%. This is for business person only. No matter what business you are into, you have got to pay zakat on all stoke-in-trade. the stock must be valued at its Landed Cast Price. if you have any bills receivable(sales on credit) then you need to add the same towards calculations.</item>
+        <item>Zakat is applicable on all Agriculture(fruits, commercially grown flowers, vegetables,all type of grains) at harvest time itself. in agriculture zakat not applied after year.
+        if there are two or more crop on the same land per year, then zakat has to be paid as many times on crop. Crop depend on rain-water 10% zakat, crop depend on irrigation-water 5% zakat and both-water 7.5% zakat</item>
+        <item>Zakat is applicable on all Cattle(camel, cows, sheeps, goats,broiler chickens) every 40 animals 1 animal zakat. you may wish to give cash as animal price please consult your Scholar or Imaam who can guide you to the right direction</item>
+        <item>if they have a value, then they calculate towards your wealth, and it is on the wealth that zakat is mandatory. However please consult with Ullema. Most Ullema contentd that a diamond is a piece of corbin and its value varies, unlike that of gold or silver. One may calculate the Saleable Value of Items-at-hand on the date of Zakat Calculation</item>
+        <item>Zakat is applicable on Loans you have given from friends and relatives. it should be treated as Cash in Hand. if you are in doubt, on the return of your money, then you may not calculate it as your wealth. when you receive your money, then add it your wealth.</item>
+        <item>if you have any pending tax payable to the govt, as of the date of zakat calculation, then the same may be deducted before arriving at the net worth. if you have taken any loans from any person or institution, and if you have not already deducted the same from any of the above sections, then you can deduct your payable over here. please be truthful, as zakat is a sure way of protecting ones wealth if zakat has been paid on it regularly and fully.  LOANS takes only for zakatable-wealth should be deducted. Cars, Houses etc are not zakatable wealth. So any loan/mort-gate taken for these purposes are not to be deducted</item>
+    </string-array>
+
+    <!-- Zakat* -->
+
+    <!-- Quran_Module -->
+
+    <string-array name="arrReaderStyle">
+        <item>@string/strTitleReaderLayoutStyleTranslationsView</item>
+        <item>@string/strTitleReaderLayoutStylePageView</item>
+    </string-array>
+
+    <integer-array name="arrBookmarkItemMenuIcons">
+        <item>@drawable/dr_icon_view</item>
+        <item>@drawable/dr_icon_open</item>
+        <item>@drawable/dr_icon_bookmark_remove</item>
+    </integer-array>
+
+    <string-array name="arrBookmarkItemMenuLabels">
+        <item>@string/strLabelView</item>
+        <item>@string/strLabelOpen</item>
+        <item>@string/strLabelRemoveBookmark</item>
+    </string-array>
+
+    <string-array name="arrBookmarkItemMenuDescs">
+        <item>@null</item>
+        <item>@string/strLabelOpenInReader</item>
+        <item>@null</item>
+    </string-array>
+
+    <string-array name="arrTopicFilterItems">
+        <item>A-Z</item>
+        <item>@string/strLabelMostPlaces</item>
+    </string-array>
+    <string-array name="arrProphetFilterItems">
+        <item>A-Z</item>
+        <item>@string/strLabelOrder</item>
+    </string-array>
+
+    <!--  Verse options  -->
+    <string-array name="arrVODIds">
+        <item>@id/btnPlayControl</item>
+        <item>@id/btnFootnotes</item>
+        <item>@id/btnTafsir</item>
+        <item>@id/btnBookmark</item>
+        <item>@id/btnQuickEdit</item>
+        <item>@id/btnShare</item>
+        <item>@id/btnReport</item>
+    </string-array>
+
+    <string-array name="arrVODLabels">
+        <item>@string/strLabelPlay</item>
+        <item>@string/strTitleFootnotes</item>
+        <item>@string/strTitleTafsir</item>
+        <item>@string/strLabelBookmark</item>
+        <item>@string/strTitleQuickEdit</item>
+        <item>@string/strLabelShare</item>
+        <item>@string/strLabelReport</item>
+    </string-array>
+
+    <array name="arrVODIcons">
+        <item>@drawable/dr_icon_play_verse</item>
+        <item>@drawable/dr_icon_footnote</item>
+        <item>@drawable/dr_icon_tafsir</item>
+        <item>@drawable/dr_icon_bookmark_outlined</item>
+        <item>@drawable/dr_icon_quick_edit</item>
+        <item>@drawable/dr_icon_share</item>
+        <item>@drawable/dr_icon_report_problem</item>
+    </array>
+
+    <string-array name="arrFeaturedQuranItems">
+        <item>1</item>
+        <item>2:255</item>
+        <item>18</item>
+        <item>36</item>
+        <item>55</item>
+        <item>59</item>
+        <item>59:22–24</item>
+        <item>62</item>
+        <item>67</item>
+    </string-array>
+
+    <string-array name="arrReportReasons">
+        <item>Select reason</item>
+        <item>Issue with Arabic text</item>
+        <item>Issue with translations</item>
+        <item>Issue with recitation</item>
+        <item>Issue with footnotes</item>
+    </string-array>
+
+    <string-array name="arrEditShareTabs">
+        <item>Background</item>
+        <item>Colours</item>
+        <item>Options</item>
+        <item>Translations</item>
+        <item>Size</item>
+    </string-array>
+
+    <!--  Quran_Module*  -->
+</resources>

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fafafa"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/view_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:visibility="invisible"
+            android:id="@+id/bt_previous"
+            android:layout_width="60dp"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?android:attr/selectableItemBackground"
+            android:contentDescription="@string/app_name"
+            android:padding="18dp"
+            app:srcCompat="@drawable/ic_back"
+            app:tint="#fff" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_toEndOf="@+id/bt_previous"
+            android:gravity="center_vertical"
+            android:fontFamily="@font/uthman"
+            android:layout_marginLeft="80dp"
+            android:text="@string/tasbih"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textColor="#fff" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/tasbih"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="230dp"
+            android:background="@drawable/tasbih_bg"
+            android:focusableInTouchMode="true">
+
+            <LinearLayout
+                android:id="@+id/tasbih_menu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/bt_speak"
+                    android:layout_width="40dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_toStartOf="@+id/bt_tasbih_count"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="10dp"
+                    android:tint="@color/bg_img_click"
+                    app:srcCompat="@drawable/ic_vibration" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/bt_tasbih_count"
+                    android:layout_width="40dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_toStartOf="@+id/bt_refresh"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="10dp"
+                    android:tint="@color/bg_img_click"
+                    app:srcCompat="@drawable/ic_33" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/bt_refresh"
+                    android:layout_width="40dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_alignParentEnd="true"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="10dp"
+                    android:tint="@color/bg_img_click"
+                    app:srcCompat="@drawable/ic_refresh" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tasbih_count"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginRight="90dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_tasbih_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="monospace"
+                    android:text="3"
+                    android:textColor="#fff"
+                    android:textSize="60sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="/"
+                    android:textColor="#fff"
+                    android:textSize="30sp" />
+
+                <TextView
+                    android:id="@+id/tv_tasbih_33"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="monospace"
+                    android:text="99"
+                    android:textColor="#fff"
+                    android:textSize="25sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="110dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="monospace"
+                    android:text="Total : "
+                    android:textColor="#fff"
+                    android:textSize="20sp"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tv_tasbih_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="monospace"
+                    android:text="22"
+                    android:textColor="#fff"
+                    android:textSize="20sp"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/tasbih_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:src="@drawable/tasbih_animation" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="60dp" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,618 @@
+{
+  "BD": {
+    "hijri": 0,
+    "dst": 0,
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "convention": "Karachi",
+    "convention_position": 4,
+    "convention_index": 1,
+    "corrections": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "BE": {
+    "hijri": 1,
+    "dst": 0,
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "convention": "MWL",
+    "convention_position": 9,
+    "convention_index": 3,
+    "corrections": [
+      -2,
+      -1,
+      0,
+      0,
+      0,
+      4
+    ]
+  },
+  "FR": {
+    "hijri": 1,
+    "dst": 0,
+    "convention": "Custom",
+    "convention_index": 13,
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "angle-fajr": 12,
+    "corrections": [
+      -9,
+      2,
+      5,
+      0,
+      2,
+      11
+    ],
+    "angle-isha": 12
+  },
+  "DK": {
+    "hijri": 1,
+    "dst": 0,
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "convention": "MWL",
+    "convention_position": 9,
+    "convention_index": 3,
+    "corrections": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "BN": {
+    "hijri": 1,
+    "dst": 0,
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "convention": "MWL",
+    "convention_position": 9,
+    "convention_index": 3,
+    "corrections": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "DE": {
+    "hijri": 1,
+    "dst": 0,
+    "convention": "Custom",
+    "convention_index": 13,
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "angle-fajr": 18,
+    "corrections": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "angle-isha": 16.5
+  },
+  "BH": {
+    "hijri": 1,
+    "dst": 0,
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "convention": "Makkah",
+    "convention_position": 12,
+    "convention_index": 4,
+    "corrections": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "JO": {
+    "hijri": 1,
+    "dst": 0,
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "convention": "Makkah",
+    "convention_position": 12,
+    "convention_index": 4,
+    "corrections": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "DZ": {
+    "hijri": 1,
+    "dst": 0,
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "convention": "Algeria",
+    "convention_position": 0,
+    "convention_index": 12,
+    "corrections": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "RU": {
+    "hijri": 1,
+    "dst": 1,
+    "convention": "Custom",
+    "convention_index": 13,
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "angle-fajr": 16,
+    "corrections": [
+      13,
+      4,
+      2,
+      0,
+      -3,
+      -7
+
+    ],
+    "angle-isha": 15
+  },
+  "NL": {
+    "hijri": 1,
+    "dst": 0,
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "convention": "MWL",
+    "convention_position": 9,
+    "convention_index": 3,
+    "corrections": [
+      -2,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "NO": {
+    "hijri": 1,
+    "dst": 0,
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "convention": "MWL",
+    "convention_position": 9,
+    "convention_index": 3,
+    "corrections": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "TR": {
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "dst": 0,
+    "hijri": 1,
+    "convention": "MWL",
+    "convention_position": 9,
+    "convention_index": 3,
+    "corrections": [
+      -2,
+      -6,
+      7,
+      4,
+      7,
+      1
+    ]
+  },
+  "PK": {
+    "hijri": 0,
+    "dst": 0,
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "convention": "Karachi",
+    "convention_position": 4,
+    "convention_index": 1,
+    "corrections": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "EG": {
+    "hijri": 1,
+    "dst": 0,
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "convention": "Egypt",
+    "convention_position": 1,
+    "convention_index": 5,
+    "corrections": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "AE": {
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "dst": 0,
+    "hijri": 1,
+    "convention": "FixedIsha",
+    "convention_position": 3,
+    "convention_index": 10,
+    "corrections": [
+      2,
+      0,
+      5,
+      5,
+      1,
+      1
+    ]
+  },
+  "AF": {
+    "hijri": 1,
+    "dst": 0,
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "convention": "Karachi",
+    "convention_position": 4,
+    "convention_index": 1,
+    "corrections": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "IQ": {
+    "hijri": 1,
+    "dst": 0,
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "convention": "MWL",
+    "convention_position": 9,
+    "convention_index": 3,
+    "corrections": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "GB": {
+    "hijri": 1,
+    "dst": 0,
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "convention": "MWL",
+    "convention_position": 9,
+    "convention_index": 3,
+    "corrections": [
+      2,
+      -1,
+      5,
+      0,
+      2,
+      -1
+    ]
+  },
+  "CA": {
+    "hijri": 1,
+    "dst": 0,
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "convention": "ISNA",
+    "convention_position": 5,
+    "convention_index": 2,
+    "corrections": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "IR": {
+    "hijri": 1,
+    "dst": 0,
+   "juristic": "Standard",
+    "juristic_index": 1,
+    "convention": "Karachi",
+    "convention_position": 4,
+    "convention_index": 1,
+    "corrections": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "OM": {
+    "hijri": 1,
+    "dst": 0,
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "convention": "Makkah",
+    "convention_position": 12,
+    "convention_index": 4,
+    "corrections": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "AU": {
+    "hijri": 1,
+    "dst": 0,
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "convention": "MWL",
+    "convention_position": 9,
+    "convention_index": 3,
+    "corrections": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "IN": {
+    "hijri": 0,
+    "dst": 0,
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "convention": "Karachi",
+    "convention_position": 4,
+    "convention_index": 1,
+    "corrections": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "LB": {
+    "hijri": 1,
+    "dst": 0,
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "convention": "EgyptBis",
+    "convention_position": 2,
+    "convention_index": 7,
+    "corrections": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "ID": {
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "dst": 0,
+    "hijri": 1,
+    "convention": "KEMENAG",
+    "convention_position": 7,
+    "convention_index": 8,
+    "corrections": [
+      2,
+      -2,
+      3,
+      2,
+      2,
+      2
+    ]
+  },
+  "ES": {
+    "hijri": 1,
+    "dst": 0,
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "convention": "MWL",
+    "convention_position": 9,
+    "convention_index": 3,
+    "corrections": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "SY": {
+    "hijri": 1,
+    "dst": 0,
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "convention": "EgyptBis",
+    "convention_position": 2,
+    "convention_index": 7,
+    "corrections": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "MA": {
+    "hijri": 1,
+    "dst": 0,
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "convention": "MWL",
+    "convention_position": 9,
+    "convention_index": 3,
+    "corrections": [
+      -7,
+      -1,
+      5,
+      1,
+      3,
+      1
+    ]
+  },
+  "MS": {
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "dst": 0,
+    "hijri": 1,
+    "convention": "MUIS",
+    "convention_position": 8,
+    "convention_index": 9,
+    "corrections": [
+      1,
+      2,
+      2,
+      1,
+      2,
+      1
+    ]
+  },
+  "US": {
+    "hijri": 1,
+    "dst": 0,
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "convention": "ISNA",
+    "convention_position": 5,
+    "convention_index": 2,
+    "corrections": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "QA": {
+    "hijri": 1,
+    "dst": 0,
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "convention": "FixedIsha",
+    "convention_position": 3,
+    "convention_index": 10,
+    "corrections": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "KW": {
+    "hijri": 1,
+    "dst": 0,
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "convention": "Karachi",
+    "convention_position": 4,
+    "convention_index": 1,
+    "corrections": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "SA": {
+    "hijri": 1,
+    "dst": 0,
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "convention": "Makkah",
+    "convention_position": 12,
+    "convention_index": 4,
+    "corrections": [
+      1,
+      0,
+      1,
+      1,
+      1,
+      -1
+    ]
+  },
+  "MY": {
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "dst": 0,
+    "hijri": 1,
+    "convention": "JAKIM",
+    "convention_position": 6,
+    "convention_index": 11,
+    "corrections": [
+      1,
+      0,
+      1,
+      1,
+      0,
+      1
+    ]
+  },
+  "SE": {
+    "hijri": 1,
+    "dst": 0,
+    "juristic": "Standard",
+    "juristic_index": 1,
+    "convention": "MWL",
+    "convention_position": 9,
+    "convention_index": 3,
+    "corrections": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

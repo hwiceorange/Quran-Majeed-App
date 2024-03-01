@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+
+/**
+ * Author: le cheng
+ * Whatsapp: +4407803311518
+ * Email: lecheng2019@gmail.com
+ */
+
+  -->
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/colorBGPage1_5" />
+    <corners android:radius="100dp" />
+</shape>

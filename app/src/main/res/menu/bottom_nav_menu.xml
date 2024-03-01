@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_home"
+        android:title="@string/home" />
+
+    <item
+        android:id="@+id/nav_namaz"
+        android:icon="@drawable/ic_prayer"
+        android:title="@string/salat_time" />
+
+    <item
+        android:id="@+id/nav_name_99"
+        android:icon="@drawable/ic_name_99"
+        android:title="@string/names99" />
+
+
+    <item
+        android:id="@+id/nav_tasbih"
+        android:icon="@drawable/ic_tasbih"
+        android:title="@string/tasbih" />
+
+
+    <item
+        android:id="@+id/navigation_settings"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/settings" />
+
+</menu>

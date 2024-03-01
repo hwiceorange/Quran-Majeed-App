@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+
+    <dimen name="size_avatar_toolbar">40dp</dimen>
+    <dimen name="spacing_double">16dp</dimen>
+    <dimen name="elevation_header">4dp</dimen>
+
+    <dimen name="custom_marker_image">50dp</dimen>
+    <dimen name="custom_marker_padding">2dp</dimen>
+
+    <dimen name="nav_header_vertical_spacing">8dp</dimen>
+    <dimen name="nav_header_height">176dp</dimen>
+
+    <dimen name="margin_16">16dp</dimen>
+    <dimen name="padding_30">30dp</dimen>
+    <dimen name="margin_8">8dp</dimen>
+
+    <dimen name="main_app_text_size">18sp</dimen>
+    <dimen name="main_app_icon_size">25dp</dimen>
+    <dimen name="main_app_icon_size_big">25dp</dimen>
+
+    <dimen name="main_padding_big">25dp</dimen>
+    <dimen name="main_padding">16dp</dimen>
+    <dimen name="main_padding_mini">8dp</dimen>
+
+    <dimen name="main_margin_big">25dp</dimen>
+    <dimen name="main_margin">16dp</dimen>
+    <dimen name="main_margin_mini">8dp</dimen>
+
+    <dimen name="main_item_card_borders">20dp</dimen>
+
+
+    <dimen name="tab_max_width">264dp</dimen>
+    <dimen name="tab_padding_bottom">16dp</dimen>
+    <dimen name="tab_label">14sp</dimen>
+    <dimen name="custom_tab_layout_height">72dp</dimen>
+    <dimen name="btn_margin">1dp</dimen>
+    <dimen name="btn_txt">20sp</dimen>
+    <dimen name="tab_text">20sp</dimen>
+    <dimen name="navigation_drawer_width">240dp</dimen>
+
+
+    <dimen name="browser_actions_context_menu_max_width">500dp</dimen>
+    <dimen name="browser_actions_context_menu_min_padding">20dp</dimen>
+    <dimen name="cardview_compat_inset_shadow">1dp</dimen>
+    <dimen name="cardview_default_elevation">2dp</dimen>
+    <dimen name="cardview_default_radius">2dp</dimen>
+    <dimen name="compat_button_inset_horizontal_material">4dp</dimen>
+    <dimen name="compat_button_inset_vertical_material">6dp</dimen>
+    <dimen name="compat_button_padding_horizontal_material">8dp</dimen>
+    <dimen name="compat_button_padding_vertical_material">4dp</dimen>
+    <dimen name="compat_control_corner_material">2dp</dimen>
+    <dimen name="compat_notification_large_icon_max_height">320dp</dimen>
+    <dimen name="compat_notification_large_icon_max_width">320dp</dimen>
+    <dimen name="default_arc_dash_gap_width">5dp</dimen>
+    <dimen name="default_arc_dash_height">2dp</dimen>
+    <dimen name="default_arc_dash_width">5dp</dimen>
+    <dimen name="default_bottom_line_height">2dp</dimen>
+    <dimen name="default_text_size">12sp</dimen>
+    <dimen name="default_weather_icon_size">10dp</dimen>
+    <dimen name="design_appbar_elevation">4dp</dimen>
+    <dimen name="design_bottom_navigation_active_item_max_width">168dp</dimen>
+    <dimen name="design_bottom_navigation_active_item_min_width">96dp</dimen>
+    <dimen name="design_bottom_navigation_active_text_size">14sp</dimen>
+    <dimen name="design_bottom_navigation_elevation">8dp</dimen>
+    <dimen name="design_bottom_navigation_height">56dp</dimen>
+    <dimen name="fastscroll_default_thickness">8dp</dimen>
+    <dimen name="fastscroll_margin">0dp</dimen>
+    <dimen name="fastscroll_minimum_range">50dp</dimen>
+    <dimen name="item_touch_helper_max_drag_scroll_per_frame">20dp</dimen>
+    <dimen name="item_touch_helper_swipe_escape_max_velocity">800dp</dimen>
+    <dimen name="item_touch_helper_swipe_escape_velocity">120dp</dimen>
+    <dimen name="notification_action_icon_size">32dp</dimen>
+    <dimen name="notification_action_text_size">13sp</dimen>
+    <dimen name="notification_big_circle_margin">12dp</dimen>
+    <dimen name="notification_content_margin_start">8dp</dimen>
+    <dimen name="notification_large_icon_height">64dp</dimen>
+    <dimen name="notification_large_icon_width">64dp</dimen>
+    <dimen name="notification_main_column_padding_top">10dp</dimen>
+    <dimen name="notification_media_narrow_margin">@dimen/notification_content_margin_start</dimen>
+    <dimen name="notification_right_icon_size">16dp</dimen>
+    <dimen name="notification_right_side_padding_top">4dp</dimen>
+    <dimen name="notification_small_icon_background_padding">3dp</dimen>
+    <dimen name="notification_small_icon_size_as_large">24dp</dimen>
+    <dimen name="notification_subtext_size">13sp</dimen>
+    <dimen name="notification_top_pad">10dp</dimen>
+    <dimen name="notification_top_pad_large_text">5dp</dimen>
+    <dimen name="subtitle_corner_radius">2dp</dimen>
+    <dimen name="subtitle_outline_width">2dp</dimen>
+    <dimen name="subtitle_shadow_offset">2dp</dimen>
+    <dimen name="subtitle_shadow_radius">2dp</dimen>
+    <dimen name="tooltip_corner_radius">2dp</dimen>
+    <dimen name="tooltip_horizontal_padding">16dp</dimen>
+    <dimen name="tooltip_margin">8dp</dimen>
+    <dimen name="tooltip_precise_anchor_extra_offset">8dp</dimen>
+    <dimen name="tooltip_precise_anchor_threshold">96dp</dimen>
+    <dimen name="tooltip_vertical_padding">6.5dp</dimen>
+    <dimen name="tooltip_y_offset_non_touch">0dp</dimen>
+    <dimen name="tooltip_y_offset_touch">16dp</dimen>
+
+    <!-- Prayer Times -->
+
+    <dimen name="spacing_xsmall">2dp</dimen>
+    <dimen name="spacing_small">3dp</dimen>
+    <dimen name="spacing_medium">5dp</dimen>
+    <dimen name="spacing_xmedium">8dp</dimen>
+    <dimen name="spacing_middle">10dp</dimen>
+    <dimen name="spacing_large">16dp</dimen>
+    <dimen name="spacing_smlarge">18dp</dimen>
+    <dimen name="spacing_mlarge">20dp</dimen>
+    <dimen name="spacing_mxlarge">25dp</dimen>
+    <dimen name="spacing_xlarge">35dp</dimen>
+    <dimen name="spacing_xmlarge">40dp</dimen>
+    <dimen name="spacing_xxlarge">50dp</dimen>
+    <dimen name="spacing_xxxlarge">55dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
+
+    <dimen name="text_middle">13sp</dimen>
+    <dimen name="text_large">15sp</dimen>
+    <dimen name="text_smlarge">20sp</dimen>
+    <dimen name="text_mlarge">25sp</dimen>
+    <dimen name="text_xmlarge">30sp</dimen>
+    <dimen name="text_xxlarge">35sp</dimen>
+    <dimen name="text_xxxlarge">45sp</dimen>
+
+    <dimen name="dial">205dp</dimen>
+    <dimen name="qibla">320dp</dimen>
+    <dimen name="bottom_image">180dp</dimen>
+    <dimen name="appbar_padding">16dp</dimen>
+
+    <dimen name="cell_height">40dp</dimen>
+    <dimen name="row_header_width">55dp</dimen>
+    <dimen name="text_size">12sp</dimen>
+
+    <!-- Overriding the default values of the tableView -->
+    <dimen name="default_row_header_width">55dp</dimen>
+    <dimen name="default_column_header_height">40dp</dimen>
+
+    <dimen name="widget_text_small">14sp</dimen>
+    <dimen name="widget_text_medium">16sp</dimen>
+    <dimen name="widget_text_large">28sp</dimen>
+    <dimen name="widget_text_xxxlarge">70sp</dimen>
+
+    <dimen name="quran_text_large">17sp</dimen>
+
+
+    <dimen name="margin_medium_small">6dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_medium">12dp</dimen>
+    <dimen name="margin_11">11dp</dimen>
+    <dimen name="margin_large">16dp</dimen>
+    <dimen name="margin_1">1dp</dimen>
+    <dimen name="margin_58dp">58dp</dimen>
+    <dimen name="margin_20dp">20dp</dimen>
+    <dimen name="margin_16dp">16dp</dimen>
+
+    <!-- Quran_Module -->
+
+    <!--  Texts  -->
+    <dimen name="dmnAppNameSize">24sp</dimen>
+    <dimen name="dmnCommonSizeLarger">20sp</dimen>
+    <dimen name="dmnCommonSizeLarge">18sp</dimen>
+    <dimen name="dmnCommonSizeMedium">17sp</dimen>
+    <dimen name="dmnCommonSize">16sp</dimen>
+    <dimen name="dmnCommonSize1_5">15sp</dimen>
+    <dimen name="dmnCommonSize2">14sp</dimen>
+    <dimen name="dmnCommonSize2_5">13sp</dimen>
+    <dimen name="dmnCommonSize3">12sp</dimen>
+    <dimen name="dmnCommonSize3_5">11sp</dimen>
+    <dimen name="dmnCommonSize4">10sp</dimen>
+    <dimen name="dmnCommonSize4_5">9sp</dimen>
+    <dimen name="dmnCommonSizeTitle">@dimen/dmnCommonSize</dimen>
+    <dimen name="dmnCommonSizeHighlighted">@dimen/dmnCommonSize</dimen>
+    <dimen name="dmnPageBigTitleSize">20sp</dimen>
+    <dimen name="dmnPageAlertHeading">25sp</dimen>
+
+    <dimen name="dmnReaderHeaderHeight">65dp</dimen>
+    <dimen name="dmnFootnoteSize">16sp</dimen>
+    <dimen name="dmnFootnoteDescSize">13sp</dimen>
+
+    <!--  Views  -->
+    <dimen name="dmnAppBarHeight">55dp</dimen>
+    <dimen name="dmnAppBarHeight1_5">50dp</dimen>
+    <dimen name="dmnAppBarHeight2">40dp</dimen>
+
+    <!--  Padding  -->
+    <dimen name="dmnPadBig">50dp</dimen>
+    <dimen name="dmnPadHuge">100dp</dimen>
+    <dimen name="dmnPadMassive">150dp</dimen>
+
+    <dimen name="dmnActionButton">38dp</dimen>
+    <dimen name="dmnActionButtonSmall">30dp</dimen>
+    <dimen name="dmnActionButtonTiny">25dp</dimen>
+
+    <dimen name="dmnReaderTextSizeTransl">16sp</dimen>
+
+    <dimen name="dmnReaderTextSizeArIndoPakMedium">28sp</dimen>
+    <dimen name="dmnReaderTextSizeArIndoPakSmall">23sp</dimen>
+
+    <dimen name="dmnReaderTextSizeArUthmaniMedium">28sp</dimen>
+    <dimen name="dmnReaderTextSizeArUthmaniSmall">23sp</dimen>
+
+    <dimen name="dmnReaderTextSizeArKFQPCMedium">30sp</dimen>
+    <dimen name="dmnReaderTextSizeArKFQPCSmall">25sp</dimen>
+
+    <dimen name="dmnEditScreen">350dp</dimen>
+
+    <dimen name="dmnChapterIcon">31sp</dimen>
+    <dimen name="dmnChapterIcon2">25sp</dimen>
+
+    <dimen name="dmnChipGroupHeight">45dp</dimen>
+
+    <fraction name="dmnIndexMenuWidth">85%</fraction>
+
+    <dimen name="dmnProgressBarSize">35dp</dimen>
+
+    <!-- Quran_Module* -->
+
+
+</resources>

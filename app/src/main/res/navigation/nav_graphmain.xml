@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/nav_home">
+
+ <fragment
+        android:id="@+id/nav_name_99"
+        android:name="com.quran.quranaudio.online.Allah.names99.fragments.Names99Fragment"
+        android:label="Name99Fragment" />
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.quran.quranaudio.online.quran_module.frags.main.FragMain"
+        android:label="HomeFragment" />
+
+
+
+
+   <fragment
+        android:id="@+id/nav_namaz"
+        android:name="com.quran.quranaudio.online.prayertimes.ui.home.PrayersFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="com.quran.quranaudio.online.prayertimes.ui.dashboard.DashboardFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_dashboard" />
+
+    <fragment
+        android:id="@+id/nav_tasbih"
+        android:name="com.quran.quranaudio.online.tasbih.fragments.TasbihFragment"
+        android:label="TasbihFragment" />
+
+
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.quran.quranaudio.online.prayertimes.ui.settings.SettingsFragment"
+        android:label="@string/title_settings" />
+   <fragment
+       android:id="@+id/fragMain"
+       android:name="com.quran.quranaudio.online.quran_module.frags.main.FragMain"
+       android:label="FragMain" />
+
+
+</navigation>
+
+
+
