@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cvContentItem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    app:cardCornerRadius="@dimen/main_item_card_borders"
+    app:cardElevation="3dp">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:background="?CBack"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatTextView
+
+            android:id="@+id/tv_item_arab"
+            android:text="Arabic Text"
+            android:textSize="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/al_qalam"
+            android:textColor="?attr/BlackWhite"
+            android:padding="@dimen/main_padding" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_item_translate"
+            android:text="Translation text"
+            android:textSize="12sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/medium"
+            android:textColor="?attr/BlackWhite"
+            android:textStyle="normal"
+            android:paddingLeft="@dimen/main_padding"
+            android:paddingRight="@dimen/main_padding"
+            android:paddingBottom="@dimen/main_padding" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_item_translate_french"
+            android:text="Translation text"
+            android:textSize="12sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/arab"
+            android:textColor="?attr/BlackWhite"
+            android:textStyle="normal"
+            android:paddingLeft="@dimen/main_padding"
+            android:paddingRight="@dimen/main_padding"
+            android:paddingBottom="@dimen/main_padding"
+            android:visibility="gone"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/main_margin"
+            android:layout_marginRight="@dimen/main_margin"
+            android:background="@color/grey" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_item_source"
+            android:text="Translation text"
+            android:textSize="12sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/arab"
+            android:textColor="?attr/BlackWhite"
+            android:textStyle="normal"
+            android:paddingLeft="@dimen/main_padding"
+            android:paddingRight="@dimen/main_padding"
+            android:paddingBottom="@dimen/main_padding" />
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/main_margin"
+            android:layout_marginRight="@dimen/main_margin"
+            android:background="@color/grey" />
+
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:focusable="true" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/translate_in_french"
+                android:layout_gravity="center"
+                android:id="@+id/btn_translate"
+                android:visibility="gone"/>
+
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_item_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/circle_content_name"
+                android:paddingLeft="@dimen/main_padding_mini"
+                android:paddingTop="5dp"
+                android:paddingRight="@dimen/main_padding_mini"
+                android:paddingBottom="5dp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/main_app_text_size"
+                android:fontFamily="@font/gilroy_medium"/>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.cardview.widget.CardView>

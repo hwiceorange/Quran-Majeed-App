@@ -5,49 +5,11 @@
     android:id="@+id/ad_unit"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="10dp">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toStartOf="@+id/ad_choices_container"
-            android:orientation="horizontal">
-
-            <include layout="@layout/view_native_ad_label" />
-
-            <TextView
-                android:id="@+id/native_ad_sponsored_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="1dp"
-                android:ellipsize="end"
-                android:lines="1"
-                android:text="@string/txt_advertiser" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ad_choices_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:gravity="end"
-            android:orientation="horizontal" />
-
-    </RelativeLayout>
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/item_post_padding_small"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -65,7 +27,7 @@
         </androidx.cardview.widget.CardView>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="vertical"
@@ -76,34 +38,60 @@
                 android:id="@+id/native_ad_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
                 android:ellipsize="end"
                 android:lines="1"
-                android:text=""
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
                 android:textSize="@dimen/post_primary_font_size"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/native_ad_social_context"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:lines="1"
-                android:text="" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/ad_notification_view"
+                    android:layout_width="@dimen/gnt_ad_indicator_width"
+                    android:layout_height="@dimen/gnt_ad_indicator_height"
+                    android:background="@drawable/gnt_ad_icon"
+                    android:gravity="center"
+                    android:paddingTop="2dp"
+                    android:text="@string/txt_ad"
+                    android:textSize="@dimen/gnt_ad_indicator_text_size"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/native_ad_sponsored_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="1dp"
+                    android:ellipsize="end"
+                    android:lines="1" />
+
+            </LinearLayout>
 
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ad_choices_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:orientation="horizontal" />
 
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/item_post_padding_small">
+        android:layout_marginTop="8dp">
 
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintDimensionRatio="H,16:9"
+            app:layout_constraintDimensionRatio="H,2:1.2"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -129,7 +117,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/item_post_padding_small"
+        android:layout_marginTop="6dp"
         android:orientation="vertical"
         android:visibility="visible">
 
@@ -139,13 +127,23 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/native_ad_body"
+                android:id="@+id/native_ad_social_context"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:gravity="center_vertical"
                 android:lines="1"
-                android:text="" />
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                android:textSize="@dimen/post_primary_font_size"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/native_ad_body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:lines="1" />
 
         </LinearLayout>
 
@@ -153,7 +151,7 @@
             android:id="@+id/native_ad_call_to_action"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/item_post_padding_small"
+            android:layout_marginTop="6dp"
             android:textColor="@color/gnt_white"
             android:textStyle="bold" />
 

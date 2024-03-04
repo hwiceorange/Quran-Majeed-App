@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_scrollFlags="scroll|enterAlways"
+    android:scrollbars="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_scrollFlags="scroll|enterAlways"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/view_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary">
+
+            <ImageView
+                android:visibility="invisible"
+                android:id="@+id/bt_previous"
+                android:layout_width="60dp"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?android:attr/selectableItemBackground"
+                android:contentDescription="@string/app_name"
+                android:padding="18dp"
+                app:srcCompat="@drawable/ic_back"
+                app:tint="#fff" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_toEndOf="@+id/bt_previous"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="90dp"
+                android:fontFamily="@font/uthman"
+                android:text="@string/salat_time"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textColor="#fff" />
+
+            <ImageView
+                android:id="@+id/prayer_time_calendar"
+                android:layout_width="60dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_alignParentEnd="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:contentDescription="@string/app_name"
+                android:padding="18dp"
+                app:srcCompat="@drawable/ic_islami_calendar"
+                app:tint="#fff" />
+
+        </RelativeLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="210dp"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical">
+
+            <com.raiadnan.quranreader.prayertimes.prayers.views.PrayerSunView
+                android:id="@+id/pray_sun_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#3e000000"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/bt_back_day"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="15dp"
+                    android:tint="@color/bg_img_click"
+                    app:srcCompat="@drawable/ic_back" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_prayer_day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="28 Muharram 1441"
+                        android:textColor="#fff"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="27 September 2019"
+                        android:textColor="#fff" />
+                </LinearLayout>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/bt_next_day"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="15dp"
+                    android:rotation="180"
+                    android:tint="@color/bg_img_click"
+                    app:srcCompat="@drawable/ic_back" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcv_prayer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            app:layout_scrollFlags="scroll|enterAlways"/>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

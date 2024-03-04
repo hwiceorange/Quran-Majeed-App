@@ -1,4 +1,2 @@
-include ':app'
-rootProject.name = "Quran Reader Pro Extended"
-include ':peacedesign'
-include ':shaheendevelopersAds_SDK'
+rootProject.name = "Quran Reader Pro"
+include ':app', ':shaheendevelopersAds_SDK'

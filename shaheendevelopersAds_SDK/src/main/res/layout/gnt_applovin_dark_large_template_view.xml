@@ -12,8 +12,7 @@
         android:id="@+id/applovin_native_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -26,7 +25,18 @@
                 android:layout_toStartOf="@+id/ad_options_view"
                 android:orientation="horizontal">
 
-                <include layout="@layout/view_native_ad_label" />
+                <TextView
+                    android:id="@+id/ad_notification_view"
+                    android:layout_width="@dimen/gnt_ad_indicator_width"
+                    android:layout_height="@dimen/gnt_ad_indicator_height"
+                    android:background="@drawable/gnt_ad_icon"
+                    android:fontFamily="@font/custom_font"
+                    android:gravity="center"
+                    android:paddingTop="2dp"
+                    android:text="@string/txt_ad"
+                    android:textColor="@color/applovin_dark_secondary_text_color"
+                    android:textSize="@dimen/gnt_ad_indicator_text_size"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/advertiser_textView"
@@ -56,7 +66,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/item_post_padding_small">
+            android:layout_marginTop="8dp">
 
             <RelativeLayout
                 android:layout_width="0dp"
@@ -86,7 +96,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/item_post_padding_small"
+            android:layout_marginTop="8dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -153,15 +163,15 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/cta_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/item_post_padding_small"
-            android:fontFamily="@font/custom_font"
-            android:textColor="@color/gnt_white"
-            android:textStyle="bold" />
-
     </LinearLayout>
+
+    <Button
+        android:id="@+id/cta_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:fontFamily="@font/custom_font"
+        android:textColor="@color/gnt_white"
+        android:textStyle="bold" />
 
 </LinearLayout>

@@ -1,0 +1,527 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.core.widget.NestedScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fillViewport="true"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginBottom="60dp">
+
+        <LinearLayout
+            android:id="@+id/header_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="230dp"
+                android:focusableInTouchMode="true">
+
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="230dp"
+                    android:background="@drawable/bg_header_isha">
+
+                    <ImageView
+                        android:id="@+id/greeting_img"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY" />
+
+                </FrameLayout>
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/mBgAnim"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.5"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/bg_birds"
+                    app:lottie_imageAssetsFolder="images/"
+                    app:lottie_speed="0.2" />
+
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/mBirdsAnim"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:layout_marginBottom="110dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.5"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/flying_birds"
+                    app:lottie_colorFilter="@color/white"
+                    app:lottie_imageAssetsFolder="images/"
+                    app:lottie_speed="0.2" />
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/islamic_Calender"
+                    android:layout_width="50dp"
+                    android:layout_height="60dp"
+                    android:padding="15dp"
+                    app:srcCompat="@drawable/ic_calendar"
+                    app:tint="#fff" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_toEndOf="@+id/islamic_Calender"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_date_muslim"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="28 Muharram 1441"
+                        android:textColor="#fff"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/tv_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="27 September 2019"
+                        android:textColor="#fff"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/languages"
+                    android:layout_width="50dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentEnd="true"
+                    android:padding="15dp"
+                    android:tint="#fff"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/ic_language_black_24dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/islamic_Calender"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_next"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Dhuhr"
+                        android:textColor="#fff"
+                        android:textSize="14sp" />
+
+                    <TextClock
+                        android:id="@+id/tv_time_next"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:format12Hour="HH:mm"
+                        android:format24Hour="HH:mm"
+                        android:text="09:30"
+                        android:textColor="#fff"
+                        android:textSize="40sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_time_down"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_sand_clock"
+                        android:paddingTop="10dp"
+                        android:text=" 02:15:58"
+                        android:textColor="#fff"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/tv_city"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_location"
+                        android:padding="5dp"
+                        android:text=" Lahore"
+                        android:textColor="#fff"
+                        android:textSize="15sp" />
+                </LinearLayout>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ad_container_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/header_main"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="3dp">
+
+                <com.shaheendevelopers.ads.sdk.ui.BannerAdView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true" />
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="5dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/read_quran"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layoutDirection="ltr"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="3dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:focusable="true"
+                    android:layoutDirection="ltr"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="115dp"
+                        android:layout_height="60dp"
+                        android:paddingLeft="30dp"
+                        android:paddingTop="20dp"
+                        android:paddingRight="30dp"
+                        android:src="@drawable/ic_quran"
+                        app:tint="?BlackWhite" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/arab"
+                        android:gravity="center"
+                        android:paddingBottom="0dp"
+                        android:text="@string/read_quran_arabic"
+                        android:textColor="?BlackWhite"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/offline_quran"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layoutDirection="ltr"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="3dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:focusable="true"
+                    android:layoutDirection="ltr"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="115dp"
+                        android:layout_height="60dp"
+                        android:paddingLeft="30dp"
+                        android:paddingTop="20dp"
+                        android:paddingRight="30dp"
+                        android:src="@drawable/icon_quran"
+                        app:tint="?BlackWhite" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/arab"
+                        android:gravity="center"
+                        android:paddingBottom="0dp"
+                        android:text="@string/quran_reader"
+                        android:textColor="?BlackWhite"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/hadith_books"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layoutDirection="ltr"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="3dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:focusable="true"
+                    android:layoutDirection="ltr"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="115dp"
+                        android:layout_height="60dp"
+                        android:paddingLeft="30dp"
+                        android:paddingTop="20dp"
+                        android:paddingRight="30dp"
+                        android:src="@drawable/hadith"
+                        app:tint="?BlackWhite" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/arab"
+                        android:gravity="center"
+                        android:paddingBottom="0dp"
+                        android:text="@string/hadith_btn"
+                        android:textColor="?BlackWhite"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/menu_two"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="5dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/menu">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/azkar_list"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layoutDirection="ltr"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="3dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:focusable="true"
+                    android:layoutDirection="ltr"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="115dp"
+                        android:layout_height="60dp"
+                        android:paddingLeft="30dp"
+                        android:paddingTop="20dp"
+                        android:paddingRight="30dp"
+                        android:src="@drawable/ic_dua"
+                        app:tint="?BlackWhite" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/arab"
+                        android:gravity="center"
+                        android:paddingBottom="0dp"
+                        android:text="@string/azkar"
+                        android:textColor="?BlackWhite"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/qibla_direction"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layoutDirection="ltr"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="3dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:focusable="true"
+                    android:layoutDirection="ltr"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="115dp"
+                        android:layout_height="60dp"
+                        android:paddingLeft="30dp"
+                        android:paddingTop="20dp"
+                        android:paddingRight="30dp"
+                        android:src="@drawable/ic_qibla"
+                        app:tint="?BlackWhite" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/arab"
+                        android:gravity="center"
+                        android:paddingBottom="0dp"
+                        android:text="@string/qibla_direction"
+                        android:textColor="?BlackWhite"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/mecca_live"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layoutDirection="ltr"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="3dp">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:background="?attr/selectableItemBackground"
+                    android:focusable="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layoutDirection="ltr">
+
+
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="60dp"
+                        android:paddingLeft="30dp"
+                        android:paddingTop="20dp"
+                        android:paddingRight="30dp"
+                        android:src="@drawable/ic_kaba"/>
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:gravity="center"
+                        android:paddingBottom="0dp"
+                        android:layout_marginTop="5dp"
+                        android:textColor="?BlackWhite"
+                        android:text="@string/mecca_live"
+                        android:fontFamily="@font/arab"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/menu_three"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/menu_two"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/medina_live"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layoutDirection="ltr"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="3dp">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:background="?attr/selectableItemBackground"
+                    android:focusable="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layoutDirection="ltr">
+
+
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="60dp"
+                        android:paddingLeft="30dp"
+                        android:paddingTop="20dp"
+                        android:paddingRight="30dp"
+                        android:src="@drawable/ic_madina"/>
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:gravity="center"
+                        android:paddingBottom="0dp"
+                        android:layout_marginTop="5dp"
+                        android:textColor="?BlackWhite"
+                        android:text="@string/madina_live"
+                        android:fontFamily="@font/arab"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</androidx.core.widget.NestedScrollView>
+
+
+
+
+
+
+
+

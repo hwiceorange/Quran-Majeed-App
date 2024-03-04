@@ -3,8 +3,9 @@
 
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="@color/dialog_button3"/>
-
+            <solid android:color="#00FFFFFF"/>
+            <stroke android:color="?attr/colorPrimary"
+                android:width="4dp"/>
 
             <corners android:radius="10dp"></corners>
         </shape>

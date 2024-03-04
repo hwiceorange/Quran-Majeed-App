@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fafafa"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="10dp"
+        android:text="Manual Corrections"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textColor="@color/colorPrimary" />
+
+    <LinearLayout
+        android:id="@+id/rd_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title1"
+        android:orientation="vertical"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <TextView
+                android:id="@+id/title2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fajar"
+                android:textColor="#333"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/tv_fajar_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title2"
+                android:text="-2" />
+
+            <com.shawnlin.numberpicker.NumberPicker
+                android:id="@+id/np_fajar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="10dp"
+                android:background="#fafafa"
+                app:np_dividerColor="@color/colorPrimary"
+                app:np_max="60"
+                app:np_min="-60"
+                app:np_orientation="vertical"
+                app:np_selectedTextColor="@color/colorPrimary"
+                app:np_selectedTextSize="18sp"
+                app:np_textSize="15sp"
+                app:np_value="0" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:background="#22555555" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <TextView
+                android:id="@+id/title3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sun Rise"
+                android:textColor="#333"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/tv_sun_rise_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title3"
+                android:text="-1" />
+
+            <com.shawnlin.numberpicker.NumberPicker
+                android:id="@+id/np_sun_rise"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="10dp"
+                android:background="#fafafa"
+                app:np_dividerColor="@color/colorPrimary"
+                app:np_max="60"
+                app:np_min="-60"
+                app:np_orientation="vertical"
+                app:np_selectedTextColor="@color/colorPrimary"
+                app:np_selectedTextSize="18sp"
+                app:np_textSize="15sp"
+                app:np_value="0" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:background="#22555555" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <TextView
+                android:id="@+id/title4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Duhar"
+                android:textColor="#333"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/tv_duhar_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title4"
+                android:text="-1" />
+
+            <com.shawnlin.numberpicker.NumberPicker
+                android:id="@+id/np_duhar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="10dp"
+                android:background="#fafafa"
+                app:np_dividerColor="@color/colorPrimary"
+                app:np_max="60"
+                app:np_min="-60"
+                app:np_orientation="vertical"
+                app:np_selectedTextColor="@color/colorPrimary"
+                app:np_selectedTextSize="18sp"
+                app:np_textSize="15sp"
+                app:np_value="0" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:background="#22555555" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <TextView
+                android:id="@+id/title5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Asar"
+                android:textColor="#333"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/tv_asar_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title5"
+                android:text="-1" />
+
+            <com.shawnlin.numberpicker.NumberPicker
+                android:id="@+id/np_asar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="10dp"
+                android:background="#fafafa"
+                app:np_dividerColor="@color/colorPrimary"
+                app:np_max="60"
+                app:np_min="-60"
+                app:np_orientation="vertical"
+                app:np_selectedTextColor="@color/colorPrimary"
+                app:np_selectedTextSize="18sp"
+                app:np_textSize="15sp"
+                app:np_value="0" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:background="#22555555" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <TextView
+                android:id="@+id/title6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Maghrib"
+                android:textColor="#333"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/tv_maghrib_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title6"
+                android:text="-1" />
+
+            <com.shawnlin.numberpicker.NumberPicker
+                android:id="@+id/np_maghrib"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="10dp"
+                android:background="#fafafa"
+                app:np_dividerColor="@color/colorPrimary"
+                app:np_max="60"
+                app:np_min="-60"
+                app:np_orientation="vertical"
+                app:np_selectedTextColor="@color/colorPrimary"
+                app:np_selectedTextSize="18sp"
+                app:np_textSize="15sp"
+                app:np_value="0" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:background="#22555555" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Esha"
+                android:textColor="#333"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/tv_esha_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title"
+                android:text="-1" />
+
+            <com.shawnlin.numberpicker.NumberPicker
+                android:id="@+id/np_esha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="10dp"
+                android:background="#fafafa"
+                app:np_dividerColor="@color/colorPrimary"
+                app:np_max="60"
+                app:np_min="-60"
+                app:np_orientation="vertical"
+                app:np_selectedTextColor="@color/colorPrimary"
+                app:np_selectedTextSize="18sp"
+                app:np_textSize="15sp"
+                app:np_value="0" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/bt_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rd_group"
+        android:layout_marginBottom="10dp"
+        android:layout_toStartOf="@+id/bt_ok"
+        android:background="?attr/selectableItemBackground"
+        android:text="Cancel"
+        android:textColor="@color/colorPrimary" />
+
+    <Button
+        android:id="@+id/bt_ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rd_group"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
+        android:background="?attr/selectableItemBackground"
+        android:text="OK"
+        android:textColor="@color/colorPrimary" />
+</RelativeLayout>

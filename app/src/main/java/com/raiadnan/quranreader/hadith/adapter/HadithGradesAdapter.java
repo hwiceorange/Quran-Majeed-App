@@ -1,0 +1,63 @@
+package com.raiadnan.quranreader.hadith.adapter;
+
+import android.util.TypedValue;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.raiadnan.quranreader.R;
+import androidx.cardview.widget.CardView;
+
+import java.util.List;
+
+public class HadithGradesAdapter extends RecyclerView.Adapter<HadithGradesAdapter.NestedViewHolder> {
+    private final List<HadithGradesModel> hadithGradesModelList;
+    private View view;
+
+    public HadithGradesAdapter(List<HadithGradesModel> hadithGradesModelList) {
+        this.hadithGradesModelList = hadithGradesModelList;
+    }
+
+    @NonNull
+    @Override
+    public NestedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recylerview_hadith_grades , parent , false);
+        return new NestedViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull NestedViewHolder holder, int position) {
+        holder.gradesScholar.setText(hadithGradesModelList.get(position).getHadithGradesScholar());
+        holder.gradesAuthenticitiy.setText(hadithGradesModelList.get(position).getHadithGradesAuthenticity());
+        String gradesAuthenticityText = holder.gradesAuthenticitiy.getText().toString();
+
+        if(gradesAuthenticityText.contains("Daif") || gradesAuthenticityText.contains("Mawdu") || gradesAuthenticityText.contains("Munqar") || gradesAuthenticityText.contains("Shadh")) {
+            TypedValue typedValue = new TypedValue();
+            view.getContext().getTheme().resolveAttribute(com.google.android.material.R.attr.colorError, typedValue, true);
+            int color = typedValue.data;
+            holder.gradesAuthenticityCardView.setCardBackgroundColor(color);
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return hadithGradesModelList.size();
+    }
+
+    public static class NestedViewHolder extends RecyclerView.ViewHolder{
+        private final TextView gradesScholar;
+        private final TextView gradesAuthenticitiy;
+        private final CardView gradesAuthenticityCardView;
+
+        public NestedViewHolder(@NonNull View itemView) {
+            super(itemView);
+            gradesScholar = itemView.findViewById(R.id.gradesScholar);
+            gradesAuthenticitiy = itemView.findViewById(R.id.gradesAuthenticitiy);
+            gradesAuthenticityCardView = itemView.findViewById(R.id.gradesAuthenticitiyCardView);
+        }
+    }
+}

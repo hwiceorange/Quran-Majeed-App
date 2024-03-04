@@ -22,11 +22,18 @@
     </FrameLayout>
 
     <LinearLayout
-        android:id="@+id/banner_ad_view"
+        android:id="@+id/ad_container_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical" />
+        android:layout_below="@+id/calendar_view"
+        android:orientation="vertical">
+
+        <com.shaheendevelopers.ads.sdk.ui.BannerAdView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"/>
+
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/compass_view"

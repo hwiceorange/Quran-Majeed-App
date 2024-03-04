@@ -6,7 +6,7 @@
     android:background="@color/white"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".sixteenlines.Quran_BookMark">
+    tools:context=".sixteenlines.BookMark">
 
     <FrameLayout
         android:id="@+id/custom_toolbar"
@@ -46,6 +46,20 @@
             app:tint="@color/white" />
 
     </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/banner_ad_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.shaheendevelopers.ads.sdk.ui.BannerAdView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"/>
+
+    </LinearLayout>
+
 
 
     <LinearLayout
