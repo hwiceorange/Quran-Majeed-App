@@ -1,2 +1,6 @@
-rootProject.name = "Quran Reader Pro"
-include ':app', ':shaheendevelopersAds_SDK'
+include ':app'
+rootProject.name = "Quran Reader Pro Extended"
+include ':peacedesign'
+include ':shaheendevelopersAds_SDK'
+include ':quiz'
+include ':adlib'

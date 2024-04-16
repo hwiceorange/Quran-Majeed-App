@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <internal
+        locale="en"
+        longName="King James"
+        prefix="kjv"
+        preset_name="en-kjv"
+        shortName="KJV" />
+</config>

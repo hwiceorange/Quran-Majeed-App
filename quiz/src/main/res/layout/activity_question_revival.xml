@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_1b0c37"
+    tools:context="com.bible.tools.quiz.QuestionRevivalActivity">
+
+    <TextView
+        android:id="@+id/gemCountTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_36"
+        android:fitsSystemWindows="true"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:drawablePadding="@dimen/dp_5"
+        android:textColor="@color/color_FFE792"
+        android:textStyle="bold"
+        android:textSize="@dimen/dp_16"
+        app:drawableStartCompat="@drawable/bible_quiz_reward_gem_small"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="200" />
+
+
+
+    <com.bible.tools.utils.CircleProgress
+        android:id="@+id/circleProgress"
+        android:layout_width="@dimen/dp_52"
+        android:layout_height="@dimen/dp_52"
+        android:layout_marginTop="@dimen/dp_170"
+        app:circleBgColor="@color/color_493D5F"
+        app:circleIsReverse="true"
+        app:circleProgressColor="@color/color_FB5835"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/countTimeTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="8"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp_28"
+        app:layout_constraintBottom_toBottomOf="@id/circleProgress"
+        app:layout_constraintEnd_toEndOf="@id/circleProgress"
+        app:layout_constraintStart_toStartOf="@id/circleProgress"
+        app:layout_constraintTop_toTopOf="@id/circleProgress" />
+
+    <TextView
+        android:id="@+id/tipsTv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_24"
+        android:gravity="center"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="@string/bible_quiz_revival_ad_tips"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp_14"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/circleProgress" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/btnCl"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_82"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tipsTv">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/recoveryAdCl"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_52"
+            android:background="@drawable/btn_quiz_try_again"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/recoveryAdTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="@dimen/dp_8"
+                android:fontFamily="@font/montserrat_bold"
+                android:gravity="center"
+                android:text="@string/bible_recovery"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp_18"
+                app:drawableStartCompat="@drawable/ic_question_revival_tv"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_10"
+                android:text="@string/bible_gnt_ad"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp_14"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/recoverGemCl"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_52"
+            android:background="@drawable/btn_amen_select"
+            android:visibility="visible"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/recoverGemTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="@dimen/dp_5"
+                android:fontFamily="@font/montserrat_bold"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp_18"
+                app:drawableStartCompat="@drawable/bible_quiz_reward_gem_small"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="8 Recovery" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/noThanksTv"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_52"
+        android:fontFamily="@font/montserrat_bold"
+        android:gravity="center"
+        android:text="@string/bible_no_thanks"
+        android:layout_marginTop="@dimen/dp_16"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp_18"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnCl" />
+
+    <com.bible.tools.ad.AdNativeSmallWrapperView
+        android:id="@+id/adView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dp_20"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/noThanksTv" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_quiz"
+    tools:context="com.quran.quranaudio.quiz.activity.QuestionFailActivity">
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="@dimen/dp_195"
+                android:layout_height="@dimen/dp_195"
+                android:layout_marginTop="@dimen/dp_80"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:srcCompat="@drawable/icon_quiz_fail" />
+
+            <TextView
+                android:id="@+id/quizAnswerFailTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_34"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="@string/bible_question_fail"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+
+            <TextView
+                android:id="@+id/skipQuestionTv"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp_52"
+                android:layout_marginHorizontal="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_44"
+                android:background="@drawable/btn_amen_select"
+                android:fontFamily="@font/montserrat_bold"
+                android:gravity="center"
+                android:text="@string/bible_skip_question"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp_18"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/quizAnswerFailTv" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_12"
+                android:layout_marginTop="@dimen/dp_6"
+                android:fontFamily="@font/montserrat_regular"
+                android:text="@string/bible_gnt_ad"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp_10"
+                app:layout_constraintStart_toStartOf="@+id/skipQuestionTv"
+                app:layout_constraintTop_toTopOf="@+id/skipQuestionTv" />
+
+            <TextView
+                android:id="@+id/tryAgainTv"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp_52"
+                android:layout_marginHorizontal="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_16"
+                android:background="@drawable/btn_quiz_try_again"
+                android:fontFamily="@font/montserrat_bold"
+                android:gravity="center"
+                android:text="@string/bible_try_again"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp_18"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/skipQuestionTv" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_12"
+                android:layout_marginTop="@dimen/dp_6"
+                android:fontFamily="@font/montserrat_regular"
+                android:text="@string/bible_gnt_ad"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp_10"
+                app:layout_constraintStart_toStartOf="@+id/tryAgainTv"
+                app:layout_constraintTop_toTopOf="@+id/tryAgainTv" />
+
+            <TextView
+                android:id="@+id/quitTv"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_52"
+                android:layout_marginTop="@dimen/dp_16"
+                android:fontFamily="@font/montserrat_bold"
+                android:gravity="center"
+                android:text="@string/bible_quit"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp_18"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tryAgainTv" />
+
+            <com.bible.tools.ad.AdNativeSmallWrapperView
+                android:id="@+id/adView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/page_margin"
+                android:layout_marginTop="@dimen/dp_20"
+                app:layout_constraintTop_toBottomOf="@+id/quitTv" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_20"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/adView" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

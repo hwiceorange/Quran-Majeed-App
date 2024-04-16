@@ -56,4 +56,10 @@
         android:layout_height="wrap_content"
         android:visibility="gone" />
 
+    <FrameLayout
+        android:id="@+id/wortise_banner_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
 </LinearLayout>

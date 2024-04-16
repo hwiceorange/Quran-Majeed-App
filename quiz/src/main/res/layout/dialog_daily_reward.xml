@@ -1,0 +1,639 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:background="#cc000000">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/daily_top_view"
+            android:layout_width="@dimen/dp_270"
+            android:layout_height="@dimen/dp_108"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bg_quiz_daily_dia_top_star"
+            app:layout_constraintBottom_toTopOf="@id/daily_top_bg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <ImageView
+            android:id="@+id/daily_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_quiz_dialog_close"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="@dimen/dp_14"
+            android:layout_marginTop="@dimen/dp_40"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/daily_top_bg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dp_36"
+            android:background="@drawable/bg_quiz_daily_dia_content"
+            android:paddingHorizontal="@dimen/dp_16"
+            android:paddingTop="@dimen/dp_30"
+            android:paddingBottom="@dimen/dp_20"
+            app:layout_constraintBottom_toTopOf="@id/watch_ad"
+            app:layout_constraintTop_toBottomOf="@id/daily_top_view">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/day1_group"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_quiz_daily_dia_item"
+                app:layout_constraintEnd_toStartOf="@id/day2_group"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/day1_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/bible_day_1"
+                    android:textColor="@color/text_color_daily_day_select"
+                    android:textSize="@dimen/dp_14"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/day1_iv"
+                    android:layout_width="@dimen/dp_48"
+                    android:layout_height="@dimen/dp_48"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_quiz_daily_dia_gem"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/day1_tv" />
+
+                <TextView
+                    android:id="@+id/day1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_8"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:textColor="@color/text_color_daily_gem_select"
+                    android:textSize="@dimen/dp_16"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/day1_iv"
+                    tools:text="20" />
+
+                <ImageView
+                    android:id="@+id/day1_checked"
+                    android:layout_width="@dimen/dp_48"
+                    android:layout_height="@dimen/dp_48"
+                    android:src="@drawable/ic_quiz_daily_dia_day_checked"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="visible" />
+
+                <View
+                    android:id="@+id/day1_mark"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/mark_daily_reward_item"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/day2_group"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_8"
+                android:background="@drawable/bg_quiz_daily_dia_item"
+                app:layout_constraintEnd_toStartOf="@id/day3_group"
+                app:layout_constraintStart_toEndOf="@id/day1_group"
+                app:layout_constraintTop_toTopOf="@id/day1_group">
+
+                <TextView
+                    android:id="@+id/day2_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/bible_day_2"
+                    android:textColor="@color/text_color_daily_day_select"
+                    android:textSize="@dimen/dp_14"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/day2_iv"
+                    android:layout_width="@dimen/dp_48"
+                    android:layout_height="@dimen/dp_48"
+
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_quiz_daily_dia_gem"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/day2_tv" />
+
+                <TextView
+                    android:id="@+id/day2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_8"
+                    android:textColor="@color/text_color_daily_gem_select"
+                    android:textSize="@dimen/dp_16"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/day2_iv"
+                    tools:text="20" />
+
+                <ImageView
+                    android:id="@+id/day2_checked"
+                    android:layout_width="@dimen/dp_48"
+                    android:layout_height="@dimen/dp_48"
+                    android:src="@drawable/ic_quiz_daily_dia_day_checked"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/day2_mark"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/mark_daily_reward_item"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/day3_group"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_5"
+                android:background="@drawable/bg_quiz_daily_dia_item"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/day2_group"
+                app:layout_constraintTop_toTopOf="@id/day1_group">
+
+                <TextView
+                    android:id="@+id/day3_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/bible_day_3"
+                    android:textColor="@color/text_color_daily_day_select"
+                    android:textSize="@dimen/dp_14"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/day3_iv"
+                    android:layout_width="@dimen/dp_48"
+                    android:layout_height="@dimen/dp_48"
+
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_quiz_daily_dia_gem"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/day3_tv" />
+
+                <TextView
+                    android:id="@+id/day3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_8"
+                    android:textColor="@color/text_color_daily_gem_select"
+                    android:textSize="@dimen/dp_16"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/day3_iv"
+                    tools:text="20" />
+
+                <ImageView
+                    android:id="@+id/day3_checked"
+                    android:layout_width="@dimen/dp_48"
+                    android:layout_height="@dimen/dp_48"
+                    android:src="@drawable/ic_quiz_daily_dia_day_checked"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/day3_mark"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/mark_daily_reward_item"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/day4_group"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@drawable/bg_quiz_daily_dia_item"
+                app:layout_constraintEnd_toStartOf="@id/day5_group"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/day1_group">
+
+                <TextView
+                    android:id="@+id/day4_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/bible_day_4"
+                    android:textColor="@color/text_color_daily_day_select"
+                    android:textSize="@dimen/dp_14"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/day4_iv"
+                    android:layout_width="@dimen/dp_48"
+                    android:layout_height="@dimen/dp_48"
+
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_quiz_daily_dia_gem"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/day4_tv" />
+
+                <TextView
+                    android:id="@+id/day4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_8"
+                    android:textColor="@color/text_color_daily_gem_select"
+                    android:textSize="@dimen/dp_16"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/day4_iv"
+                    tools:text="20" />
+
+                <ImageView
+                    android:id="@+id/day4_checked"
+                    android:layout_width="@dimen/dp_48"
+                    android:layout_height="@dimen/dp_48"
+                    android:src="@drawable/ic_quiz_daily_dia_day_checked"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/day4_mark"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/mark_daily_reward_item"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/day5_group"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_5"
+                android:background="@drawable/bg_quiz_daily_dia_item"
+                app:layout_constraintEnd_toStartOf="@id/day6_group"
+                app:layout_constraintStart_toEndOf="@id/day4_group"
+                app:layout_constraintTop_toTopOf="@id/day4_group">
+
+                <TextView
+                    android:id="@+id/day5_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/bible_day_5"
+                    android:textColor="@color/text_color_daily_day_select"
+                    android:textSize="@dimen/dp_14"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/day5_iv"
+                    android:layout_width="@dimen/dp_48"
+                    android:layout_height="@dimen/dp_48"
+
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_quiz_daily_dia_gem"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/day5_tv" />=
+
+                <TextView
+                    android:id="@+id/day5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_8"
+                    android:textColor="@color/text_color_daily_gem_select"
+                    android:textSize="@dimen/dp_16"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/day5_iv"
+                    tools:text="20" />
+
+                <ImageView
+                    android:id="@+id/day5_checked"
+                    android:layout_width="@dimen/dp_48"
+                    android:layout_height="@dimen/dp_48"
+                    android:src="@drawable/ic_quiz_daily_dia_day_checked"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/day5_mark"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/mark_daily_reward_item"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/day6_group"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_5"
+                android:background="@drawable/bg_quiz_daily_dia_item"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/day5_group"
+                app:layout_constraintTop_toTopOf="@id/day4_group">
+
+                <TextView
+                    android:id="@+id/day6_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/bible_day_6"
+                    android:textColor="@color/text_color_daily_day_select"
+                    android:textSize="@dimen/dp_14"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/day6_iv"
+                    android:layout_width="@dimen/dp_48"
+                    android:layout_height="@dimen/dp_48"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_quiz_daily_dia_gem"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/day6_tv" />
+
+                <TextView
+                    android:id="@+id/day6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_8"
+                    android:textColor="@color/text_color_daily_gem_select"
+                    android:textSize="@dimen/dp_16"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/day6_iv"
+                    tools:text="20" />
+
+                <ImageView
+                    android:id="@+id/day6_checked"
+                    android:layout_width="@dimen/dp_48"
+                    android:layout_height="@dimen/dp_48"
+                    android:src="@drawable/ic_quiz_daily_dia_day_checked"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/day6_mark"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/mark_daily_reward_item"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/day7_group"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@drawable/bg_quiz_daily_dia_item"
+                app:layout_constraintEnd_toEndOf="@id/day6_group"
+                app:layout_constraintStart_toStartOf="@id/day4_group"
+                app:layout_constraintTop_toBottomOf="@id/day4_group">
+
+                <TextView
+                    android:id="@+id/day7_surprise"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_20"
+                    android:background="@drawable/ic_quiz_daily_dia_surprise"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:gravity="center"
+                    android:paddingStart="@dimen/dp_10"
+                    android:paddingEnd="@dimen/dp_8"
+                    android:text="@string/bible_daily_surprise"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dp_8"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/day7_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/bible_day_7"
+                    android:textColor="@color/text_color_daily_day_select"
+                    android:textSize="@dimen/dp_14"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/day7_iv"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/day7_iv"
+                    android:layout_width="@dimen/dp_80"
+                    android:layout_height="@dimen/dp_80"
+                    android:layout_marginVertical="@dimen/dp_8"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_quiz_daily_box"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/day7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:textColor="@color/text_color_daily_gem_select"
+                    android:textSize="@dimen/dp_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/day7_iv"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="20" />
+
+                <ImageView
+                    android:id="@+id/day7_checked"
+                    android:layout_width="@dimen/dp_48"
+                    android:layout_height="@dimen/dp_48"
+                    android:src="@drawable/ic_quiz_daily_dia_day_checked"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/day7_mark"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/mark_daily_reward_item"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/watch_ad"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_52"
+            android:layout_marginTop="@dimen/dp_28"
+            android:background="@drawable/btn_level_up_reward"
+            app:layout_constraintBottom_toTopOf="@id/no_thanks"
+            app:layout_constraintEnd_toEndOf="@id/daily_top_bg"
+            app:layout_constraintStart_toStartOf="@id/daily_top_bg"
+            app:layout_constraintTop_toBottomOf="@id/daily_top_bg">
+
+            <ImageView
+                android:id="@+id/daily_watch_ad_iv"
+                android:layout_width="@dimen/dp_24"
+                android:layout_height="@dimen/dp_24"
+                android:src="@drawable/ic_question_revival_tv"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/daily_watch_ad_tv"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/daily_watch_ad_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_10"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="@string/bible_get_gem_with_video"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp_18"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/daily_watch_ad_iv"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/daily_watch_ad_gem"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_20"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:layout_marginBottom="@dimen/dp_42"
+            android:background="@drawable/bg_quiz_watch_ad_gem"
+            android:paddingStart="@dimen/dp_7"
+            android:paddingEnd="@dimen/dp_10"
+            android:text="+30"
+            android:textColor="@color/white"
+            app:drawableStartCompat="@drawable/bible_quiz_reward_gem_small"
+            app:layout_constraintBottom_toBottomOf="@id/watch_ad"
+            app:layout_constraintEnd_toEndOf="@id/watch_ad" />
+
+        <TextView
+            android:id="@+id/no_thanks"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_52"
+            android:layout_marginTop="@dimen/dp_16"
+            android:fontFamily="@font/montserrat_bold"
+            android:gravity="center"
+            android:text="@string/bible_no_thanks"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp_18"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/watch_ad" />
+
+        <TextView
+            android:layout_width="@dimen/dp_231"
+            android:layout_height="@dimen/dp_68"
+            android:layout_marginTop="@dimen/dp_68"
+            android:background="@drawable/bg_quiz_daily_dia_top"
+            android:fontFamily="@font/montserrat_bold"
+            android:gravity="center_horizontal"
+            android:paddingTop="@dimen/dp_8"
+            android:text="@string/bible_daily_reward"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp_18"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/daily_top_view" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

@@ -1,7 +1,8 @@
 /**
- * Author: le cheng
- * Whatsapp: +4407803311518
- * Email: lecheng2019@gmail.com
+ * Author: Rai Adnan
+ * Whatsapp: +923002375907
+ * Email: officialshaheendevelopers@gmail.com
+ * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
  */
 
 package com.peacedesign.android.utils.span;

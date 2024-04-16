@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_quiz">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/quizNsv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true">
+
+            <com.bible.tools.utils.CircleProgress
+                android:id="@+id/timeCountPb"
+                android:layout_width="@dimen/dp_52"
+                android:layout_height="@dimen/dp_52"
+                android:layout_marginTop="@dimen/dp_10"
+                android:progressDrawable="@drawable/bg_progress_bar"
+                app:circleBgColor="@color/color_ffffff_20"
+                app:circleIsReverse="true"
+                app:circleProgressColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/levelTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_20"
+                android:fontFamily="@font/montserrat_bold"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp_18"
+                app:layout_constraintBottom_toBottomOf="@+id/timeCountPb"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/timeCountPb"
+                tools:text="TextView" />
+
+            <TextView
+                android:id="@+id/timeCountTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp_21"
+                app:layout_constraintBottom_toBottomOf="@+id/timeCountPb"
+                app:layout_constraintEnd_toEndOf="@+id/timeCountPb"
+                app:layout_constraintStart_toStartOf="@+id/timeCountPb"
+                app:layout_constraintTop_toTopOf="@+id/timeCountPb"
+                tools:text="25" />
+
+            <TextView
+                android:id="@+id/quizGemCountTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dp_20"
+                android:drawablePadding="@dimen/dp_5"
+                android:textColor="#FFE792"
+                android:textSize="@dimen/dp_16"
+                android:textStyle="bold"
+                app:drawableStartCompat="@drawable/bible_quiz_reward_gem_small"
+                app:layout_constraintBottom_toBottomOf="@+id/timeCountPb"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/timeCountPb"
+                tools:text="200" />
+
+            <TextView
+                android:id="@+id/questionProgressTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_20"
+                android:background="@drawable/bg_quiz_progress"
+                android:fontFamily="@font/montserrat_bold"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp_10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/timeCountPb"
+                tools:text="Question 1/99" />
+
+            <TextView
+                android:id="@+id/debugRightAnswerTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp_10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/questionProgressTv"
+                app:layout_constraintTop_toBottomOf="@+id/questionProgressTvSpaceLine"
+                tools:text="A" />
+
+            <Space
+                android:id="@+id/questionProgressTvSpaceLine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/questionProgressTv"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/questionProgressTv" />
+
+            <TextView
+                android:id="@+id/questionContentTv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dp_25"
+                android:background="@drawable/bg_quiz_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:gravity="start|center_vertical"
+                android:lineSpacingExtra="@dimen/dp_6"
+                android:minLines="3"
+                android:padding="@dimen/dp_15"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp_22"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/questionProgressTvSpaceLine"
+                tools:text="In the book of Leviticus, the Israelites were given instructions for various ___." />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_quiz_content"
+                app:layout_constraintBottom_toBottomOf="@+id/questionContentTv"
+                app:layout_constraintEnd_toEndOf="@+id/questionContentTv"
+                app:layout_constraintStart_toStartOf="@+id/questionContentTv"
+                app:layout_constraintTop_toTopOf="@+id/questionContentTv" />
+
+            <TextView
+                android:id="@+id/answerResultTv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:gravity="center"
+                android:textColor="#0BC9B2"
+                android:textSize="@dimen/dp_32"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/questionContentTv"
+                app:layout_constraintEnd_toEndOf="@+id/questionContentTv"
+                app:layout_constraintStart_toStartOf="@+id/questionContentTv"
+                app:layout_constraintTop_toTopOf="@+id/questionContentTv"
+                tools:text="Correct" />
+
+            <com.bible.tools.quiz.QuestionOptionView
+                android:id="@+id/optionsView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_20"
+                app:divider="@drawable/bg_quiz_option"
+                app:layout_constraintTop_toBottomOf="@+id/questionContentTv"
+                app:showDividers="middle" />
+
+            <ImageView
+                android:id="@+id/daily_box"
+                android:layout_width="@dimen/dp_64"
+                android:layout_height="@dimen/dp_64"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginEnd="@dimen/dp_12"
+                android:src="@drawable/ic_quiz_daily_box"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/quizGemCountTv"
+                tools:visibility="visible" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_80"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/optionsView" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_20"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:id="@+id/hideOptionIv"
+            android:layout_width="@dimen/dp_52"
+            android:layout_height="@dimen/dp_52"
+            android:src="@drawable/ic_quiz_hide_option"
+            app:layout_constraintHorizontal_chainStyle="spread" />
+
+        <TextView
+            android:id="@+id/hideOptionPropCountTv"
+            android:layout_width="@dimen/dp_18"
+            android:layout_height="@dimen/dp_18"
+            android:background="@drawable/bg_quiz_red_hot"
+            android:gravity="center"
+            android:paddingStart="@dimen/dp_1"
+            android:paddingBottom="@dimen/dp_2"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp_12"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintDimensionRatio="w,18:15"
+            app:layout_constraintEnd_toEndOf="@+id/hideOptionIv"
+            app:layout_constraintHeight_percent="0.254"
+            app:layout_constraintTop_toTopOf="@+id/hideOptionIv"
+            tools:ignore="RtlSymmetry"
+            tools:text="2"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/hideOptionTv"
+            android:layout_width="@dimen/dp_52"
+            android:layout_height="@dimen/dp_24"
+            android:layout_marginTop="@dimen/dp_60"
+            android:background="@drawable/bg_quiz_menu_watch_ad_gem"
+            android:fontFamily="@font/montserrat_semi_bold"
+            android:gravity="center"
+            android:maxLines="1"
+            android:paddingHorizontal="@dimen/dp_6"
+            android:singleLine="true"
+            android:textColor="#FFE792"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintBottom_toBottomOf="@+id/hideOptionIv"
+            app:layout_constraintEnd_toEndOf="@+id/hideOptionIv"
+            app:layout_constraintStart_toStartOf="@+id/hideOptionIv"
+            app:layout_constraintTop_toTopOf="@+id/hideOptionIv"
+            tools:text="+5" />
+
+        <ImageView
+            android:id="@+id/addTimeIv"
+            android:layout_width="@dimen/dp_52"
+            android:layout_height="@dimen/dp_52"
+            android:src="@drawable/ic_quiz_add_time"
+            app:layout_constraintHorizontal_chainStyle="spread" />
+
+        <TextView
+            android:id="@+id/addTimePropCountTv"
+            android:layout_width="@dimen/dp_18"
+            android:layout_height="@dimen/dp_18"
+            android:background="@drawable/bg_quiz_red_hot"
+            android:gravity="center"
+            android:paddingStart="@dimen/dp_1"
+            android:paddingBottom="@dimen/dp_2"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp_12"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintDimensionRatio="w,18:15"
+            app:layout_constraintEnd_toEndOf="@+id/addTimeIv"
+            app:layout_constraintHeight_percent="0.254"
+            app:layout_constraintTop_toTopOf="@+id/addTimeIv"
+            tools:ignore="RtlSymmetry"
+            tools:text="2"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/addTimeTipsTv"
+            android:layout_width="@dimen/dp_52"
+            android:layout_height="@dimen/dp_24"
+            android:layout_marginTop="@dimen/dp_60"
+            android:background="@drawable/bg_quiz_menu_watch_ad_gem"
+            android:fontFamily="@font/montserrat_semi_bold"
+            android:gravity="center"
+            android:maxLines="1"
+            android:paddingHorizontal="@dimen/dp_6"
+            android:singleLine="true"
+            android:textColor="#FFE792"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintBottom_toBottomOf="@+id/addTimeIv"
+            app:layout_constraintEnd_toEndOf="@+id/addTimeIv"
+            app:layout_constraintStart_toStartOf="@+id/addTimeIv"
+            app:layout_constraintTop_toTopOf="@+id/addTimeIv"
+            tools:text="+5" />
+
+        <View
+            android:id="@+id/addTimeAreaView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/addTimeTipsTv"
+            app:layout_constraintEnd_toEndOf="@id/addTimeIv"
+            app:layout_constraintStart_toStartOf="@id/addTimeIv"
+            app:layout_constraintTop_toTopOf="@id/addTimeIv" />
+
+        <View
+            android:id="@+id/hideOptionAreaView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/hideOptionTv"
+            app:layout_constraintEnd_toEndOf="@id/hideOptionIv"
+            app:layout_constraintStart_toStartOf="@id/hideOptionIv"
+            app:layout_constraintTop_toTopOf="@id/hideOptionIv" />
+
+        <View
+            android:id="@+id/watchAdAreaView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/watchAdRewardTipsTv"
+            app:layout_constraintEnd_toEndOf="@id/watchAdIv"
+            app:layout_constraintStart_toStartOf="@id/watchAdIv"
+            app:layout_constraintTop_toTopOf="@id/watchAdIv" />
+
+        <ImageView
+            android:id="@+id/watchAdIv"
+            android:layout_width="@dimen/dp_52"
+            android:layout_height="@dimen/dp_52"
+            android:src="@drawable/ic_quiz_watch_tv" />
+
+        <TextView
+            android:id="@+id/watchAdRewardTipsTv"
+            android:layout_width="@dimen/dp_52"
+            android:layout_height="@dimen/dp_24"
+            android:layout_marginTop="@dimen/dp_60"
+            android:background="@drawable/bg_quiz_menu_watch_ad_gem"
+            android:fontFamily="@font/montserrat_semi_bold"
+            android:gravity="center"
+            android:maxLines="1"
+            android:paddingHorizontal="@dimen/dp_6"
+            android:singleLine="true"
+            android:textColor="#FFE792"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintBottom_toBottomOf="@+id/watchAdIv"
+            app:layout_constraintEnd_toEndOf="@+id/watchAdIv"
+            app:layout_constraintStart_toStartOf="@+id/watchAdIv"
+            app:layout_constraintTop_toTopOf="@+id/watchAdIv"
+            tools:text="+5" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="hideOptionIv,addTimeIv,watchAdIv"
+            app:flow_horizontalGap="@dimen/dp_40"
+            app:flow_horizontalStyle="packed"
+            app:flow_wrapMode="aligned"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <include
+        android:id="@+id/levelThoughtCl"
+        layout="@layout/include_question_level_up"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="gone" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/correctLav"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="false"
+        app:lottie_fileName="quiz_correct/lottie.json"
+        app:lottie_imageAssetsFolder="quiz_correct/images" />
+
+    <ImageView
+        android:id="@+id/adGemAnimatorIv"
+        android:layout_width="@dimen/dp_48"
+        android:layout_height="@dimen/dp_48"
+        android:src="@drawable/bible_quiz_reward_gem_fly"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lightCl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:visibility="gone">
+
+        <Space
+            android:id="@+id/statusBarPlaceHolder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Space
+            android:id="@+id/timeCountPbPlaceHolder"
+            android:layout_width="@dimen/dp_52"
+            android:layout_height="@dimen/dp_52"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/statusBarPlaceHolder" />
+
+        <TextView
+            android:id="@+id/lightTv"
+            android:layout_width="@dimen/dp_144"
+            android:layout_height="@dimen/dp_144"
+            android:background="@drawable/icon_quiz_add_time"
+            android:elevation="10dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp_24"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/timeCountPbPlaceHolder"
+            app:layout_constraintEnd_toEndOf="@+id/timeCountPbPlaceHolder"
+            app:layout_constraintStart_toStartOf="@+id/timeCountPbPlaceHolder"
+            app:layout_constraintTop_toTopOf="@+id/timeCountPbPlaceHolder"
+            tools:text="+20"
+            tools:visibility="visible" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

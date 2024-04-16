@@ -12,14 +12,14 @@
         android:orientation="vertical"
         android:visibility="gone">
 
-        <com.shaheendevelopers.ads.sdk.util.TemplateView
+        <com.raiadnan.ads.sdk.util.TemplateView
             android:id="@+id/admob_native_ad_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
             app:gnt_template_type="@layout/gnt_admob_video_small_template_view" />
 
-        <com.shaheendevelopers.ads.sdk.util.AdManagerTemplateView
+        <com.raiadnan.ads.sdk.util.AdManagerTemplateView
             android:id="@+id/google_ad_manager_native_ad_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -41,6 +41,20 @@
 
         <FrameLayout
             android:id="@+id/applovin_native_ad_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/applovin_discovery_mrec_ad_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone" />
+
+        <FrameLayout
+            android:id="@+id/wortise_native_ad_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone" />

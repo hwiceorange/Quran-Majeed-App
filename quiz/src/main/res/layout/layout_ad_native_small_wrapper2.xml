@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:visibility="visible">
+
+    <com.google.android.gms.ads.nativead.NativeAdView
+        android:id="@+id/nativeAdView"
+        android:layout_width="@dimen/dp_120"
+        android:layout_height="@dimen/dp_160"
+        android:layout_marginHorizontal="@dimen/dp_4"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <com.noober.background.view.BLConstraintLayout
+            android:id="@+id/background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="false"
+            android:enabled="false"
+            app:bl_corners_radius="@dimen/dp_12"
+            app:bl_solid_color="#f4f4f4"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/ad_notification_view"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_15"
+                android:layout_marginStart="@dimen/dp_2"
+                android:background="@drawable/gnt_rounded_corners_shape_native"
+                android:gravity="center"
+                android:paddingHorizontal="@dimen/dp_5"
+                android:text="@string/bible_gnt_ad"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/dp_12"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.gms.ads.nativead.MediaView
+                android:id="@+id/coverview"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp_68"
+                android:layout_marginBottom="@dimen/dp_15"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ad_notification_view"
+                tools:background="@android:color/holo_blue_dark" />
+
+            <TextView
+                android:id="@+id/nativeAdTitle"
+                android:layout_width="@dimen/dp_0"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dp_7"
+                android:maxWidth="@dimen/dp_270"
+                android:maxLines="2"
+                android:textAlignment="viewStart"
+                android:textColor="#DE000000"
+                android:textSize="10dp"
+                android:textStyle="bold"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toTopOf="@+id/nativeAdBody"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/coverview"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:layout_goneMarginStart="@dimen/dp_0"
+                tools:text="TestAd:Google0XXXXXXXXXXXX" />
+
+
+            <TextView
+                android:id="@+id/nativeAdBody"
+                android:layout_width="@dimen/dp_0"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dp_7"
+                android:layout_marginTop="@dimen/dp_2"
+                android:maxLines="2"
+                android:textAlignment="viewStart"
+                android:textColor="#80000000"
+                android:textSize="11dp"
+                app:layout_constraintBottom_toTopOf="@+id/cta"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/nativeAdTitle"
+                tools:text="aldkjaljds;fkldsjf;axxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" />
+
+            <TextView
+                android:id="@+id/cta"
+                android:layout_width="@dimen/dp_67"
+                android:layout_height="@dimen/dp_20"
+                android:layout_marginStart="@dimen/dp_16"
+                android:layout_marginEnd="@dimen/dp_6"
+                android:layout_marginBottom="@dimen/dp_4"
+                android:background="@drawable/adb_btn_selector_native"
+                android:gravity="center"
+                android:text="@string/bible_download"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/middle"
+                android:layout_width="@dimen/dp_0"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_10"
+                android:layout_marginEnd="@dimen/dp_16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/coverview"
+                app:layout_constraintTop_toTopOf="@+id/coverview">
+
+                <ImageView
+                    android:id="@+id/nativeAdIcon"
+                    android:layout_width="@dimen/dp_42"
+                    android:layout_height="@dimen/dp_42"
+                    android:scaleType="fitCenter"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:background="@android:color/holo_blue_dark" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.noober.background.view.BLConstraintLayout>
+
+    </com.google.android.gms.ads.nativead.NativeAdView>
+
+    <FrameLayout
+        android:id="@+id/adMaxFl"
+        android:layout_width="@dimen/dp_120"
+        android:layout_height="@dimen/dp_160"
+        android:layout_marginHorizontal="@dimen/dp_4"
+        android:background="#f4f4f4"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/moodView" />
+
+</FrameLayout>

@@ -153,4 +153,7 @@
     <integer name="sura113">549</integer>
     <integer name="sura114">549</integer>
 
+    <integer name="intActionBtnRotation">0</integer>
+    <integer name="intBGTransition">120</integer>
+
 </resources>

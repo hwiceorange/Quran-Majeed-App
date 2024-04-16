@@ -1,0 +1,32 @@
+/**
+ * Author: Rai Adnan
+ * Whatsapp: +923002375907
+ * Email: officialshaheendevelopers@gmail.com
+ * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
+ */
+
+package com.quran.quranaudio.online.quran_module.utils.receivers;
+
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
+import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
+import static android.content.pm.PackageManager.DONT_KILL_APP;
+
+public final class ReceiverUtils {
+    public static void enableReceiver(Context context, Class<? extends BroadcastReceiver> receiverClass) {
+        ComponentName receiver = new ComponentName(context, receiverClass);
+        PackageManager pm = context.getPackageManager();
+
+        pm.setComponentEnabledSetting(receiver, COMPONENT_ENABLED_STATE_ENABLED, DONT_KILL_APP);
+    }
+
+    public static void disableReceiver(Context context, Class<? extends BroadcastReceiver> receiverClass) {
+        ComponentName receiver = new ComponentName(context, receiverClass);
+        PackageManager pm = context.getPackageManager();
+
+        pm.setComponentEnabledSetting(receiver, COMPONENT_ENABLED_STATE_DISABLED, DONT_KILL_APP);
+    }
+}

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_54"
+    tools:background="#44ff0000"
+    tools:parentTag="com.noober.background.view.BLConstraintLayout">
+
+    <TextView
+        android:id="@+id/optionTitleTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_20"
+        android:fontFamily="@font/montserrat_medium"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp_20"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/optionAnswerTv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="A:" />
+
+    <TextView
+        android:id="@+id/optionAnswerTv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dp_52"
+        android:fontFamily="@font/montserrat_medium"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp_18"
+        android:maxLines="2"
+        app:autoSizeMaxTextSize="@dimen/dp_20"
+        app:autoSizeMinTextSize="@dimen/dp_15"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="The 10th CommandmentThe" />
+
+    <ImageView
+        android:id="@+id/optionResultIv"
+        android:layout_width="@dimen/dp_24"
+        android:layout_height="@dimen/dp_24"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/optionAnswerTv"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/vector_quiz_right" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

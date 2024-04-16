@@ -103,4 +103,123 @@
     <dimen name="tooltip_y_offset_non_touch">0dp</dimen>
     <dimen name="tooltip_y_offset_touch">16dp</dimen>
 
+    <!-- Prayer Times -->
+
+    <dimen name="spacing_xsmall">2dp</dimen>
+    <dimen name="spacing_small">3dp</dimen>
+    <dimen name="spacing_medium">5dp</dimen>
+    <dimen name="spacing_xmedium">8dp</dimen>
+    <dimen name="spacing_middle">10dp</dimen>
+    <dimen name="spacing_large">16dp</dimen>
+    <dimen name="spacing_smlarge">18dp</dimen>
+    <dimen name="spacing_mlarge">20dp</dimen>
+    <dimen name="spacing_mxlarge">25dp</dimen>
+    <dimen name="spacing_xlarge">35dp</dimen>
+    <dimen name="spacing_xmlarge">40dp</dimen>
+    <dimen name="spacing_xxlarge">50dp</dimen>
+    <dimen name="spacing_xxxlarge">55dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
+
+    <dimen name="text_middle">13sp</dimen>
+    <dimen name="text_large">15sp</dimen>
+    <dimen name="text_smlarge">20sp</dimen>
+    <dimen name="text_mlarge">25sp</dimen>
+    <dimen name="text_xmlarge">30sp</dimen>
+    <dimen name="text_xxlarge">35sp</dimen>
+    <dimen name="text_xxxlarge">45sp</dimen>
+
+    <dimen name="dial">205dp</dimen>
+    <dimen name="qibla">320dp</dimen>
+    <dimen name="bottom_image">180dp</dimen>
+    <dimen name="appbar_padding">16dp</dimen>
+
+    <dimen name="cell_height">40dp</dimen>
+    <dimen name="row_header_width">55dp</dimen>
+    <dimen name="text_size">12sp</dimen>
+
+    <!-- Overriding the default values of the tableView -->
+    <dimen name="default_row_header_width">55dp</dimen>
+    <dimen name="default_column_header_height">40dp</dimen>
+
+    <dimen name="widget_text_small">14sp</dimen>
+    <dimen name="widget_text_medium">16sp</dimen>
+    <dimen name="widget_text_large">28sp</dimen>
+    <dimen name="widget_text_xxxlarge">70sp</dimen>
+
+    <dimen name="quran_text_large">17sp</dimen>
+
+
+    <dimen name="margin_medium_small">6dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_medium">12dp</dimen>
+    <dimen name="margin_11">11dp</dimen>
+    <dimen name="margin_large">16dp</dimen>
+    <dimen name="margin_1">1dp</dimen>
+    <dimen name="margin_58dp">58dp</dimen>
+    <dimen name="margin_20dp">20dp</dimen>
+    <dimen name="margin_16dp">16dp</dimen>
+
+    <!-- Quran_Module -->
+
+    <!--  Texts  -->
+    <dimen name="dmnAppNameSize">24sp</dimen>
+    <dimen name="dmnCommonSizeLarger">20sp</dimen>
+    <dimen name="dmnCommonSizeLarge">18sp</dimen>
+    <dimen name="dmnCommonSizeMedium">17sp</dimen>
+    <dimen name="dmnCommonSize">16sp</dimen>
+    <dimen name="dmnCommonSize1_5">15sp</dimen>
+    <dimen name="dmnCommonSize2">14sp</dimen>
+    <dimen name="dmnCommonSize2_5">13sp</dimen>
+    <dimen name="dmnCommonSize3">12sp</dimen>
+    <dimen name="dmnCommonSize3_5">11sp</dimen>
+    <dimen name="dmnCommonSize4">10sp</dimen>
+    <dimen name="dmnCommonSize4_5">9sp</dimen>
+    <dimen name="dmnCommonSizeTitle">@dimen/dmnCommonSize</dimen>
+    <dimen name="dmnCommonSizeHighlighted">@dimen/dmnCommonSize</dimen>
+    <dimen name="dmnPageBigTitleSize">20sp</dimen>
+    <dimen name="dmnPageAlertHeading">25sp</dimen>
+
+    <dimen name="dmnReaderHeaderHeight">65dp</dimen>
+    <dimen name="dmnFootnoteSize">16sp</dimen>
+    <dimen name="dmnFootnoteDescSize">13sp</dimen>
+
+    <!--  Views  -->
+    <dimen name="dmnAppBarHeight">55dp</dimen>
+    <dimen name="dmnAppBarHeight1_5">50dp</dimen>
+    <dimen name="dmnAppBarHeight2">40dp</dimen>
+
+    <!--  Padding  -->
+    <dimen name="dmnPadBig">50dp</dimen>
+    <dimen name="dmnPadHuge">100dp</dimen>
+    <dimen name="dmnPadMassive">150dp</dimen>
+
+    <dimen name="dmnActionButton">38dp</dimen>
+    <dimen name="dmnActionButtonSmall">30dp</dimen>
+    <dimen name="dmnActionButtonTiny">25dp</dimen>
+
+    <dimen name="dmnReaderTextSizeTransl">16sp</dimen>
+
+    <dimen name="dmnReaderTextSizeArIndoPakMedium">28sp</dimen>
+    <dimen name="dmnReaderTextSizeArIndoPakSmall">23sp</dimen>
+
+    <dimen name="dmnReaderTextSizeArUthmaniMedium">28sp</dimen>
+    <dimen name="dmnReaderTextSizeArUthmaniSmall">23sp</dimen>
+
+    <dimen name="dmnReaderTextSizeArKFQPCMedium">30sp</dimen>
+    <dimen name="dmnReaderTextSizeArKFQPCSmall">25sp</dimen>
+
+    <dimen name="dmnEditScreen">350dp</dimen>
+
+    <dimen name="dmnChapterIcon">31sp</dimen>
+    <dimen name="dmnChapterIcon2">25sp</dimen>
+
+    <dimen name="dmnChipGroupHeight">45dp</dimen>
+
+    <fraction name="dmnIndexMenuWidth">85%</fraction>
+
+    <dimen name="dmnProgressBarSize">35dp</dimen>
+
+    <!-- Quran_Module* -->
+
+
 </resources>

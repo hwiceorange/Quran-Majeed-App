@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+
+ * Author: Rai Adnan
+ * Whatsapp: +923002375907
+ * Email: officialshaheendevelopers@gmail.com
+ * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
+
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBGPageVariable"
+    android:orientation="vertical">
+
+    <com.quran.quranaudio.online.quran_module.views.BoldHeader
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/notifs"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="5dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="@dimen/dmnPadBig" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/noNotifs"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBGPage"
+        android:gravity="center"
+        android:text="No Notifications"
+        android:textAppearance="@style/TextAppearanceCommonTitle"
+        android:textColor="@color/colorText3"
+        android:visibility="gone" />
+</LinearLayout>

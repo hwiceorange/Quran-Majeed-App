@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:installLocation="auto">
+
+    <uses-sdk tools:overrideLibrary="androidx.core.splashscreen" />
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+        </intent>
+    </queries>
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -11,117 +23,80 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 
     <application
-        android:name="com.raiadnan.quranreader.prayertimes.App"
+        android:name="com.quran.quranaudio.online.App"
         android:allowBackup="true"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-        android:hardwareAccelerated="false"
-        android:usesCleartextTraffic="true"
-        android:icon="@drawable/ic_launcher"
+        android:hardwareAccelerated="true"
+        android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar">
+        android:theme="@style/AppTheme"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="true"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="s">
 
-        <receiver
-            android:name=".ui.broadcast_receiver.DbReceiver"
-            android:enabled="true"
+
+        <activity android:name="com.quran.quranaudio.online.SplashScreenActivity"
+            android:theme="@style/LaunchTheme"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.shid.mosquefinder.DBLOAD" />
-            </intent-filter>
-        </receiver>
+                <action android:name="android.intent.action.MAIN" />
 
-        <activity android:name=".ui.Main.View.LoadingActivity" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity
-            android:name=".ui.Main.View.SettingsActivity"
-            android:label="Settings"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".ui.Main.View.ItemActivity"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".ui.Main.View.ChapterActivity"
-            android:theme="@style/AppTheme" />
+            android:name="com.quran.quranaudio.online.prayertimes.ui.DefaultActivity"
+            android:exported="true">
+        </activity>
+
+
         <activity
             android:name=".activities.HomeActivity"
             android:theme="@style/AppTheme" />
 
-        <service
-            android:name=".ui.services.SurahDLService"
-            android:enabled="true"
-            android:exported="true" />
-        <service
-            android:name=".ui.services.MusicService"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.media.browse.MediaBrowserService" />
-            </intent-filter>
-        </service>
-
         <activity
-            android:name=".ui.Main.View.MusicActivity"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".ui.Main.View.CategoriesActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".ui.Main.View.AyahActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".ui.Main.View.SurahActivity"
+            android:name="com.quran.quranaudio.online.activities.SixKalmasActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
         <activity
-            android:name=".Allah.activities.AllahNameActivity"
+            android:name="com.quran.quranaudio.online.compass.QiblaDirectionActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+
+        <activity
+            android:name="com.quran.quranaudio.online.activities.ZakatCalculatorActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
         <activity
             android:name=".activities.LiveActivity"
-            android:screenOrientation="portrait"
+            android:exported="true"
+        android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
-        <activity
-            android:name=".activities.CalendarActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-
-        <activity
-            android:name=".activities.PrayerCalendarActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-
-
-        <activity
-            android:name=".sixteenlines.ReadActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"></activity>
-        <activity
-            android:name=".sixteenlines.SixteenLines_MainPage"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name="com.raiadnan.quranreader.sixteenlines.JuzContents"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name="com.raiadnan.quranreader.sixteenlines.SuraContents"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name="com.raiadnan.quranreader.sixteenlines.BookMark"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
 
         <service
-            android:name=".MyFirebaseMessagingService"
+            android:name="com.quran.quranaudio.online.MyFirebaseMessagingService"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -137,37 +112,12 @@
 
 
         <!-- Prayer Times -->
+
         <activity
-            android:name=".compass.QiblaDirectionActivity"
+            android:name="com.quran.quranaudio.online.prayertimes.ui.appintro.IntroActivity"
+            android:theme="@style/AppTheme"
             android:exported="false" />
-        <activity
-            android:name=".activities.QuickAccessActivity"
-            android:excludeFromRecents="true"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.NotificationActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.SplashActivity"
-            android:exported="true"
-            android:theme="@style/LaunchTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
 
-        <activity
-            android:name=".activities.orclass"
-            android:exported="true"
-            android:theme="@style/AppTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -177,19 +127,9 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <receiver
-            android:name=".prayertimes.services.BootReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-
-        <service android:name=".prayertimes.services.PrayerService" />
-
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.raiadnan.quranreader.prayertimes.fileprovider"
+            android:authorities="com.quran.quranaudio.online.prayertimes.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -205,7 +145,7 @@
             android:value="@xml/splits0" />
 
         <activity
-            android:name=".hadith.settings.SettingsActivity"
+            android:name="com.quran.quranaudio.online.hadith.settings.SettingsActivity"
             android:theme="@style/Theme.HadithPro"
             android:exported="false"
             android:label="@string/title_settings">
@@ -215,21 +155,235 @@
         </activity>
 
         <activity
-            android:name=".hadith.HadithActivity"
+            android:name="com.quran.quranaudio.online.hadith.HadithActivity"
             android:theme="@style/Theme.HadithPro"
             android:exported="true"/>
 
         <activity
-            android:name=".hadith.search.SearchActivity"
+            android:name="com.quran.quranaudio.online.hadith.search.Hadith_SearchActivity"
             android:theme="@style/Theme.HadithPro"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713" />
+            android:value="@string/admob_app_id" />
+
+        <meta-data
+            android:name="applovin.sdk.key"
+            android:value="@string/applovin_sdk_key" />
+
+        <!-- Prayer Times -->
+
+        <activity
+            android:name="com.quran.quranaudio.online.prayertimes.ui.MainActivity"
+            android:screenOrientation="portrait" />
+
+        <activity android:name="com.quran.quranaudio.online.prayertimes.ui.calendar.CalendarActivity" />
+        <activity
+            android:name="com.quran.quranaudio.online.prayertimes.ui.timingtable.TimingTableActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- Quran_Module -->
+
+        <activity android:name="com.quran.quranaudio.online.quran_module.activities.Activity_Quran_Bookmark" />
+        <activity android:name="com.quran.quranaudio.online.quran_module.activities.ActivityReadHistory" />
+        <activity android:name="com.quran.quranaudio.online.quran_module.activities.ActivityDownloads" />
+        <activity android:name="com.quran.quranaudio.online.quran_module.activities.ActivityReference"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.quran.quranaudio.online.action.OPEN_REFERENCE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.quran.quranaudio.online.quran_module.activities.ActivityTopics" />
+        <activity android:name="com.quran.quranaudio.online.quran_module.activities.ActivityProphets" />
+        <activity
+            android:name=".quran_module.activities.ActivityTafsir"
+            android:exported="true"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="com.quran.quranaudio.online.action.OPEN_TAFSIR" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.quran.quranaudio.online.quran_module.activities.ActivityChapInfo"
+            android:exported="true"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="com.quran.quranaudio.online.action.OPEN_CHAPTER_INFO" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <intent-filter android:label="About Surah (QuranApp)">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="quran.com"/>
+                <data android:pathPattern="/chapter_info/.*"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.quran.quranaudio.online.quran_module.activities.readerSettings.Activity_Quran_Settings"
+            android:launchMode="singleTask" />
+        <activity
+            android:name="com.quran.quranaudio.online.quran_module.activities.ActivityQuran_Search"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+        <activity android:name=".quran_module.activities.ActivityReaderIndexPage" />
+        <activity
+            android:name="com.quran.quranaudio.online.quran_module.activities.ActivityReader"
+            android:exported="true"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="com.quran.quranaudio.online.action.OPEN_READER" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <intent-filter android:label="@string/app_name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https"/>
+                <data android:host="quran.com"/>
+                <data android:pathPattern="/juz/.*"/>
+                <data android:pathPattern="/\\d+"/>
+                <data android:pathPattern="/\\d+/\\d+"/>
+                <data android:pathPattern="/\\d+/\\d+-\\d+"/>
+                <data android:pathPattern="/\\d+:\\d+"/>
+                <data android:pathPattern="/\\d+:\\d+-\\d+"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.quran.quranaudio.online.quran_module.activities.ActivityEditShare"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".quran_module.activities.ActivityOnboarding" />
+        <activity android:name=".quran_module.activities.ActivityAbout" />
+        <activity android:name=".quran_module.activities.ActivityStorageCleanup" />
+        <activity android:name="com.quran.quranaudio.online.quran_module.activities.test.ActivityExperiment" />
+
+
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
+        <receiver
+            android:name=".quran_module.utils.receivers.VotdReceiver"
+            android:enabled="true"
+            android:process=":remote" />
+
+        <receiver
+            android:name=".quran_module.utils.receivers.CrashReceiver"
+            android:enabled="true" />
+
+        <receiver
+            android:name=".quran_module.utils.receivers.AlarmPermissionReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.quran.quranaudio.online.quran_module.utils.receivers.BootReceiver"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".quran_module.utils.services.RecitationService" />
+        <service android:name=".quran_module.utils.services.RecitationChapterDownloadService" />
+        <service android:name=".quran_module.utils.services.TranslationDownloadService" />
+        <service android:name=".quran_module.utils.services.KFQPCScriptFontsDownloadService" />
+
+
+
+        <!-- Quran_Module** -->
+
+        <receiver
+            android:name="com.quran.quranaudio.online.prayertimes.notifier.NotifierBootReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.quran.quranaudio.online.prayertimes.notifier.AlarmPermissionReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.quran.quranaudio.online.prayertimes.notifier.NotifierReceiver"
+            android:enabled="true" />
+        <receiver
+            android:name="com.quran.quranaudio.online.prayertimes.notifier.ReminderReceiver"
+            android:enabled="true" />
+        <receiver
+            android:name="com.quran.quranaudio.online.prayertimes.notifier.SilenterReceiver"
+            android:enabled="true" />
+        <receiver
+            android:name="com.quran.quranaudio.online.prayertimes.notifier.NotifierActionReceiver"
+            android:enabled="true" />
+        <receiver android:name="com.quran.quranaudio.online.prayertimes.notifier.NotificationDismissedReceiver" />
+
+        <receiver
+            android:name="com.quran.quranaudio.online.prayertimes.notifier.CustomMediaButtonReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </receiver>
+        <!-- Disable androidx.startup only for WorkManagerInitializer -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+
+            <!-- If you are using androidx.startup to initialize other components -->
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
+        </provider>
 
     </application>
+
+    <queries>
+        <intent>
+            <action android:name="android.speech.action.RECOGNIZE_SPEECH" />
+        </intent>
+    </queries>
+
 </manifest>

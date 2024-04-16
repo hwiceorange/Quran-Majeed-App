@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="AdNativeSmallWrapperView">
+        <attr name="default_show" format="boolean"/>
+        <attr name="default_load" format="boolean"/>
+        <attr name="default_margin_top" format="dimension"/>
+        <attr name="default_margin_bottom" format="dimension"/>
+    </declare-styleable>
+    <declare-styleable name="MeItemVIew">
+        <attr name="itemLeftVisibility" format="boolean"/>
+        <attr name="itemLeftDrawable" format="reference"/>
+        <attr name="itemRightDrawable" format="reference"/>
+        <attr name="android:text" format="reference"/>
+    </declare-styleable>
+    <declare-styleable name="StrokeTextView">
+        <attr name="strokeThickness" format="dimension"/>
+        <attr name="strokeColor" format="color"/>
+    </declare-styleable>
+    <!--圆形进度条属性-->
+    <declare-styleable name="CircleProgress">
+        <!--圆弧背景色-->
+        <attr name="circleBgColor" format="reference" />
+        <!--圆弧进度条颜色-->
+        <attr name="circleProgressColor" format="reference" />
+        <!--圆弧宽度-->
+        <attr name="circleRadius" format="dimension" />
+        <!--渐变开始颜色-->
+        <attr name="circleStartColor" format="reference" />
+        <!--渐变中间颜色-->
+        <attr name="circleMidColor" format="reference" />
+        <!--渐变结束颜色-->
+        <attr name="circleEndColor" format="reference" />
+        <!--是否渐变-->
+        <attr name="circleIsGradient" format="boolean" />
+        <!--是否逆时针进度显示 true 代表逆时针展示进度  false 代表顺时针展示进度-->
+        <attr name="circleIsReverse" format="boolean" />
+    </declare-styleable>
+
+    <array name="mood_keys">
+        <item>faithful</item>
+        <item>blessed</item>
+        <item>happy</item>
+        <item>weak</item>
+        <item>sad</item>
+        <item>calm</item>
+        <item>angry</item>
+        <item>fearful</item>
+        <item>anxious</item>
+    </array>
+</resources>

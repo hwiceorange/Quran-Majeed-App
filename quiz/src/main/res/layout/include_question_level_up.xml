@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_quiz">
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/levelThoughtLav"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/nextLevelAd"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:lottie_autoPlay="false"
+        app:lottie_fileName="quiz_level/lottie.json"
+        app:lottie_imageAssetsFolder="quiz_level/images" />
+
+    <TextView
+        android:id="@+id/levelPassTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_34"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="@string/bible_level_up"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp_24"
+        app:layout_constraintBottom_toBottomOf="@+id/levelThoughtLav"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/nextLevelAd"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp_52"
+        android:layout_marginHorizontal="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_50"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/levelThoughtLav"
+        app:layout_constraintBottom_toTopOf="@id/nextLevelTv">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/btn_level_up_reward"
+            android:fontFamily="@font/montserrat_bold"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp_18"
+            android:text="@string/bible_reward" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bible_gnt_ad"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp_10"
+            android:layout_marginStart="@dimen/dp_12"
+            android:layout_marginTop="@dimen/dp_6"/>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/next_level_reward"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_24"
+        app:drawableStartCompat="@drawable/bible_quiz_reward_gem_small"
+        android:text="+5"
+        android:textSize="@dimen/dp_16"
+        android:drawablePadding="@dimen/dp_5"
+        android:textColor="#FFE792"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:background="@drawable/bg_quiz_watch_ad_gem"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_38"
+        android:paddingStart="@dimen/dp_7"
+        android:paddingEnd="@dimen/dp_10"
+        app:layout_constraintEnd_toEndOf="@id/nextLevelAd"
+        app:layout_constraintTop_toBottomOf="@id/levelThoughtLav"
+        />
+
+    <TextView
+        android:id="@+id/nextLevelTv"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp_52"
+        android:layout_marginHorizontal="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_20"
+        android:background="@drawable/btn_amen_select"
+        android:fontFamily="@font/montserrat_bold"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp_18"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nextLevelAd"
+        tools:text="Level5" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

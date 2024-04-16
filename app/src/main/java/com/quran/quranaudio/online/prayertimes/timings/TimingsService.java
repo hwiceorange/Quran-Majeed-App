@@ -1,0 +1,21 @@
+package com.quran.quranaudio.online.prayertimes.timings;
+
+import android.location.Address;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import io.reactivex.rxjava3.core.Single;
+
+/**
+ * Author: Rai Adnan
+ * Whatsapp: +923002375907
+ * Email: officialshaheendevelopers@gmail.com
+ * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
+ */
+public interface TimingsService {
+
+    Single<DayPrayer> getTimingsByCity(final LocalDate localDate, final Address address);
+
+    Single<List<DayPrayer>> getCalendarByCity(final Address address, int month, int year);
+}

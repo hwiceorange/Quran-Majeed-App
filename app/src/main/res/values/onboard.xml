@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="arrOnboardingTitles">
+      <item>@string/strTitleAppLanguage</item>
+          <item>@string/strTitleSelectReciter</item>
+        <item>@string/strLabelSelectTranslations</item>
+
+    </string-array>
+
+    <string-array name="arrOnboardingDescs">
+    <item>@string/onboardDescLanguage</item>
+        <item>@string/onboardDescReciter</item>
+        <item>@string/onboardDescTranslations</item>
+
+    </string-array>
+</resources>

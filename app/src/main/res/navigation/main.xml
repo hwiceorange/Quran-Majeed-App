@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/book"
-        android:name="com.raiadnan.quranreader.hadith.book.BookFragment"
+        android:name="com.quran.quranaudio.online.hadith.book.BookFragment"
         android:label="Book"
         tools:layout="@layout/fragment_book"/>
     <fragment
         android:id="@+id/bookmark"
-        android:name="com.raiadnan.quranreader.hadith.bookmark.BookmarkFragment"
+        android:name="com.quran.quranaudio.online.hadith.bookmark.BookmarkFragment"
         android:label="BookmarkFragment" />
 
 

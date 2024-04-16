@@ -1,0 +1,201 @@
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/header_main"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_header"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:background="@drawable/bg_header_isha"
+        android:focusableInTouchMode="true">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/mBgAnim"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/bg_birds"
+            app:lottie_imageAssetsFolder="images/"
+            app:lottie_speed="0.2" />
+
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/mBirdsAnim"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:layout_marginBottom="110dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/flying_birds"
+           app:lottie_colorFilter="@color/white"
+            app:lottie_imageAssetsFolder="images/"
+            app:lottie_speed="0.2" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusableInTouchMode="true">
+
+            <ImageView
+                android:id="@+id/islamic_Calender"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_calendar"
+                app:tint="#fff" />
+
+            <TextView
+                android:id="@+id/todayDateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginStart="10dp"
+                android:text="28 Muharram 1441"
+                android:textColor="#fff"
+                android:textSize="15sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/islamic_Calender" />
+
+            <ImageView
+                android:id="@+id/location"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/islamic_Calender"
+                app:srcCompat="@drawable/ic_location"
+                app:tint="#fff" />
+
+            <TextView
+                android:id="@+id/location_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lahore, Punjab, Pakistan"
+                android:textColor="#fff"
+                android:textSize="15sp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/todayDateTextView"
+                android:paddingStart="40dp" />
+
+            <com.mikhaellopez.circularprogressbar.CircularProgressBar
+                android:visibility="visible"
+                android:layout_marginTop="30dp"
+                android:id="@+id/circularProgressBar"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                app:cpb_background_progressbar_color="@color/dark_grey"
+                app:cpb_background_progressbar_width="3dp"
+                app:cpb_progress_direction="to_right"
+                app:cpb_progressbar_color="@color/white"
+                app:cpb_progressbar_width="5dp"
+                app:cpb_round_border="true"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/prayerNametextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Next: Dhuhr"
+                android:textColor="#fff"
+                android:textSize="14sp"
+                app:layout_constraintTop_toTopOf="@+id/circularProgressBar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="33dp"
+                />
+
+            <TextView
+                android:id="@+id/prayerTimetextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="25dp"
+                android:fontFamily="@font/roboto_medium_numbers"
+                android:gravity="center"
+                android:maxLines="1"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@+id/prayerNametextView"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="02:48 AM" />
+
+            <TextView
+                android:id="@+id/timeRemainingTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" Remaining: 02:15:58"
+                android:textColor="#fff"
+                android:textSize="12sp"
+                app:layout_constraintTop_toBottomOf="@+id/prayerTimetextView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:visibility="invisible"
+                android:id="@+id/sunrise_timing_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_location"
+                android:text=" Sunrise"
+                android:textColor="#fff"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/location_text_view"
+                android:paddingStart="40dp" />
+
+            <TextView
+                android:visibility="invisible"
+                android:id="@+id/sunset_timing_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_location"
+                android:padding="5dp"
+                android:text=" Sunset"
+                android:textColor="#fff"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sunrise_timing_text_view"
+                android:paddingStart="40dp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</LinearLayout>

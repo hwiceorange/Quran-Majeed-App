@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1C0C37">
+
+    <ImageView
+        android:id="@+id/free_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_quiz_dialog_close"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bg_free_iv"
+        android:layout_marginEnd="@dimen/dp_14"
+        android:layout_marginBottom="@dimen/dp_40"/>
+
+    <ImageView
+        android:id="@+id/bg_free_iv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        android:src="@drawable/bg_quiz_free_dia_gem"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/watch_ad"/>
+
+    <ImageView
+        android:id="@+id/free_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_quiz_free_dia_gem"
+        app:layout_constraintStart_toStartOf="@id/bg_free_iv"
+        app:layout_constraintTop_toTopOf="@id/bg_free_iv"
+        app:layout_constraintBottom_toBottomOf="@id/bg_free_iv"
+        app:layout_constraintEnd_toEndOf="@id/bg_free_iv" />
+
+    <TextView
+        android:id="@+id/free_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/bible_free_diamonds"
+        app:layout_constraintTop_toBottomOf="@id/free_iv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="@dimen/dp_28"
+        android:textColor="#FFDD5E"
+        android:textSize="@dimen/dp_24"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/free_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/bible_watch_video_free_diamonds"
+        app:layout_constraintTop_toBottomOf="@id/free_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp_14"
+        android:layout_marginTop="@dimen/dp_6"/>
+
+    <LinearLayout
+        android:id="@+id/watch_ad"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp_48"
+        android:layout_marginTop="@dimen/dp_72"
+        android:layout_marginHorizontal="@dimen/dp_40"
+        android:background="@drawable/btn_level_up_reward"
+        app:layout_constraintTop_toBottomOf="@id/bg_free_iv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:gravity="center">
+        <TextView
+            android:id="@+id/free_watch_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bible_watch"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp_18"
+            android:gravity="center"
+            android:fontFamily="@font/montserrat_medium"
+            app:drawableStartCompat="@drawable/ic_question_revival_tv"
+            android:drawablePadding="@dimen/dp_12"/>
+
+        <TextView
+            android:id="@+id/free_reward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+5"
+            android:textColor="@color/white"
+            android:layout_marginStart="@dimen/dp_20"
+            android:gravity="center"
+            android:drawablePadding="@dimen/dp_5"/>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

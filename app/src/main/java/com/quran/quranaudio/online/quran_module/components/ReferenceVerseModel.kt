@@ -1,0 +1,26 @@
+/**
+ * Author: Rai Adnan
+ * Whatsapp: +923002375907
+ * Email: officialshaheendevelopers@gmail.com
+ * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
+ */
+package com.quran.quranaudio.online.quran_module.components
+
+import java.io.Serializable
+
+class ReferenceVerseModel(
+    private val showChaptersSugg: Boolean = false,
+    val title: String,
+    val desc: String,
+    val translSlugs: Array<String>,
+    val chapters: List<Int>,
+    val verses: List<String>
+) : Serializable {
+    fun showChaptersSugg(): Boolean {
+        return showChaptersSugg
+    }
+
+    override fun toString(): String {
+        return "showChaptersSugg:$showChaptersSugg, title: $title, desc: $desc, desc: $translSlugs, chapters: $chapters, verses: $verses"
+    }
+}

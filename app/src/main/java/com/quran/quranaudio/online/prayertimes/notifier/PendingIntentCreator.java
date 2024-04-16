@@ -1,0 +1,31 @@
+package com.quran.quranaudio.online.prayertimes.notifier;
+
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+
+/**
+ * Author: Rai Adnan
+ * Whatsapp: +923002375907
+ * Email: officialshaheendevelopers@gmail.com
+ * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
+ */
+public class PendingIntentCreator {
+
+    public static PendingIntent getActivity(Context context, int id, Intent intent, int flags) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return PendingIntent.getActivity(context, id, intent, flags | PendingIntent.FLAG_IMMUTABLE);
+        } else {
+            return PendingIntent.getActivity(context, id, intent, flags);
+        }
+    }
+
+    public static PendingIntent getBroadcast(Context context, int id, Intent intent, int flags) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return PendingIntent.getBroadcast(context, id, intent, flags | PendingIntent.FLAG_IMMUTABLE);
+        } else {
+            return PendingIntent.getBroadcast(context, id, intent, flags);
+        }
+    }
+}

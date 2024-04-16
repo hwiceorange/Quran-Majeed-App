@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_quiz"
+    tools:context="com.bible.tools.quiz.QuizNotifyResultActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/notifyFailCl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/playMoreTv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible">
+
+        <com.noober.background.view.BLView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="@dimen/dp_25"
+            android:layout_marginTop="@dimen/dp_50"
+            app:bl_corners_radius="@dimen/dp_30"
+            app:bl_solid_color="#33856FFF"
+            app:layout_constraintBottom_toBottomOf="@+id/bottomSpace"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/failTipsTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_88"
+            android:layout_marginHorizontal="@dimen/dp_25"
+            android:gravity="center"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="@string/bible_quiz_notify_tips"
+            android:textColor="#6be7ff"
+            android:textSize="@dimen/dp_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_24"
+            android:fontFamily="@font/montserrat_regular"
+            android:text="@string/bible_correct_answer"
+            android:textColor="#B2FFFFFF"
+            android:textSize="@dimen/dp_18"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/failTipsTv" />
+
+        <TextView
+            android:id="@+id/correctAnswerTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_44"
+            android:fontFamily="@font/montserrat_bold"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/failTipsTv"
+            tools:text="ABC" />
+
+        <Space
+            android:id="@+id/bottomSpace"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_50"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/correctAnswerTv" />
+
+        <ImageView
+            android:layout_width="@dimen/dp_173"
+            android:layout_height="@dimen/dp_80"
+            android:src="@drawable/icon_quiz_notify_fail"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/notifyCorrectCl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/playMoreTv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible">
+
+        <ImageView
+            android:layout_width="@dimen/dp_173"
+            android:layout_height="@dimen/dp_288"
+            android:src="@drawable/icon_quiz_notify_correct"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_300"
+            android:drawablePadding="@dimen/dp_4"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="@string/bible_quiz_notify_correct_title"
+            android:textColor="#6be7ff"
+            android:textSize="@dimen/dp_24"
+            app:drawableEndCompat="@drawable/icon_quiz_notify_leaf_right"
+            app:drawableStartCompat="@drawable/icon_quiz_notify_leaf_left"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_334"
+            android:fontFamily="@font/montserrat_regular"
+            android:text="@string/bible_quiz_notify_correct_msg"
+            android:textColor="#B2FFFFFF"
+            android:textSize="@dimen/dp_18"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/playMoreTv"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp_52"
+        android:layout_marginHorizontal="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_16"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:background="@drawable/btn_amen_select"
+        android:fontFamily="@font/montserrat_bold"
+        android:gravity="center"
+        android:text="@string/bible_play_more"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp_18"
+        app:layout_constraintBottom_toTopOf="@+id/quitTv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/quitTv"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_52"
+        android:layout_marginTop="@dimen/dp_16"
+        android:layout_marginBottom="@dimen/dp_108"
+        android:fontFamily="@font/montserrat_bold"
+        android:gravity="center"
+        android:text="@string/bible_quit"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp_18"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

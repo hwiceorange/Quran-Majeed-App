@@ -1,14 +1,26 @@
 buildscript {
-    ext.kotlin_version = "1.7.20"
+    ext.kotlin_version = "1.9.0"
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://jitpack.io' }
+
+        maven {url "https://jitpack.io"}
+        maven { url 'https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea'}
+        maven { url 'https://artifact.bytedance.com/repository/pangle/' }
+        maven { url 'https://artifacts.applovin.com/android' }
+        maven { url 'https://mvnrepository.com/artifact/'}
+
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.0.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.0"
+        classpath 'com.android.tools.build:gradle:8.3.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.google.gms:google-services:4.3.13'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.7.1'
+        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
+        classpath 'com.google.android.gms:oss-licenses-plugin:0.10.6'
+       // classpath "com.applovin.quality:AppLovinQualityServiceGradlePlugin:+"
+
+
     }
 }
 
@@ -16,9 +28,16 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://jitpack.io' }
         jcenter()
-      //  maven { url "file:C:/Users/Rai Adnan/AppData/Local/Android/Sdk" }
+        maven {url "https://jitpack.io"}
+      //  maven { url 'https://mvnrepository.com/artifact/'}
+        maven { url "https://oss.jfrog.org/libs-snapshot" }
+
+        maven { url 'https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea'}
+        maven { url 'https://artifact.bytedance.com/repository/pangle/' }
+       // maven { url 'https://artifacts.applovin.com/android' }
+
+
     }
 }
 

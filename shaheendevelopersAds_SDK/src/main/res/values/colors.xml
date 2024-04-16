@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="colorBackgroundLight">#FFFFFF</color>
-    <color name="colorBackgroundDark">#101D24</color>
+    <color name="color_native_background_light">#FFFFFF</color>
+    <color name="color_native_background_dark">#101D24</color>
 
     <color name="gnt_test_background_color">#00F4F4F4</color>
     <color name="gnt_test_background_color_2">#00A3A3A3</color>

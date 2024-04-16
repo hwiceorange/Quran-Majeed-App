@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+
+ * Author: Rai Adnan
+ * Whatsapp: +923002375907
+ * Email: officialshaheendevelopers@gmail.com
+ * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
+
+  -->
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true">
+        <shape>
+            <stroke android:width="2dp" android:color="@color/colorPrimary" />
+            <corners android:radius="5dp" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <stroke android:width="2dp" android:color="@color/colorDivider" />
+            <corners android:radius="5dp" />
+        </shape>
+    </item>
+</selector>

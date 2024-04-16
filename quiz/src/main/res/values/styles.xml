@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme_AppCompat_Dialog_Loading_Fullscreen" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:statusBarColor">#CC000000</item>
+        <item name="android:windowBackground">#CC000000</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <style name="BtnStyle">
+        <item name="bl_gradient_angle">0</item>
+        <item name="bl_gradient_endColor">#9B80FC</item>
+        <item name="bl_gradient_startColor">#6BE7FF</item>
+        <item name="fontFamily">@font/montserrat_bold</item>
+        <item name="android:fontFamily">@font/montserrat_bold</item>
+    </style>
+</resources>
