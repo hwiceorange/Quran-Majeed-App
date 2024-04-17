@@ -22,6 +22,7 @@ import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.quran.quranaudio.quiz.activity.QuestionFailActivity
 import com.quran.quranaudio.quiz.databinding.ActivityQuestionRevivalBinding
+import com.quran.quranaudio.quiz.fragments.QuestionFragment
 
 class QuestionRevivalActivity :
     BaseBindingActivity<ActivityQuestionRevivalBinding>(ActivityQuestionRevivalBinding::inflate) {
@@ -129,10 +130,10 @@ class QuestionRevivalActivity :
 
     companion object {
         fun open(context: Context) {
-            // todo MainActivity
-            //if (MainActivity.isSelectQuizTab()) {
+
+            if (QuestionFragment.isSelected) {
                 context.startActivity(Intent(context, QuestionRevivalActivity::class.java))
-           // }
+            }
         }
     }
 }

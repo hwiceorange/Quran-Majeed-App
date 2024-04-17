@@ -63,6 +63,7 @@ public class AppOpenAdMob {
 
     public void showAdIfAvailable(@NonNull final Activity activity, String appOpenAdUnitId) {
         showAdIfAvailable(activity, appOpenAdUnitId, () -> {
+
         });
     }
 

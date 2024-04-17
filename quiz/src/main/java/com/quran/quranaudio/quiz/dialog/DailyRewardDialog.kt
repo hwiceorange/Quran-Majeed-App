@@ -83,9 +83,8 @@ class DailyRewardDialog : BaseDialogFragment<DialogDailyRewardBinding>() {
 
     @SuppressLint("SetTextI18n")
     private fun initData(){
-        //todo SPTools
-        var dailyNums = byteArrayOf(0, 0, 0, 0, 0, 0, 0)
-           // SPTools.getByte(Constants.DAILY_REWARD_NUM, byteArrayOf(0, 0, 0, 0, 0, 0, 0))
+        var dailyNums =
+            SPTools.getBytes(Constants.DAILY_REWARD_NUM, byteArrayOf(0, 0, 0, 0, 0, 0, 0))
         val receivedReward = SPTools.getLong(Constants.LAST_RECEIVED_BOX_TIME, 0)
         val daysBetween = System.currentTimeMillis().daysBetween(receivedReward)
         if (daysBetween > 0){

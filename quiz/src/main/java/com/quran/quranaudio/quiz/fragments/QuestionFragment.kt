@@ -424,10 +424,10 @@ class QuestionFragment :
 
     override fun onResume() {
         super.onResume()
-        // todo MainActivity
-      //  if (MainActivity.isSelectQuizTab() && this.userVisibleHint && !isSkipNextLevel && !isShowDailyRewardDialog()) {
+        isSelected=true
+        if (isSelected && this.userVisibleHint && !isSkipNextLevel && !isShowDailyRewardDialog()) {
             timeStart()
-      //  }
+        }
     }
 
     private fun isShowDailyRewardDialog(): Boolean {
@@ -444,6 +444,7 @@ class QuestionFragment :
             binding.quizGemCountTv.text = QuizGemManager.getGemCount().toString()
             checkAndShowDailyBox()
         }
+        isSelected=visible
     }
 
     private fun timeStart() {

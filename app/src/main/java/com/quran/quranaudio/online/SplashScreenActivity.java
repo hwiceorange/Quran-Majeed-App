@@ -43,7 +43,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     private static final String TAG = "ActivitySplash";
     Call<CallbackConfig> callbackConfigCall = null;
-    public static int DELAY_PROGRESS = 1500;
+    public static int DELAY_PROGRESS = 500;
     AdNetwork.Initialize adNetwork;
     AppOpenAd.Builder appOpenAdBuilder;
     SharedPref sharedPref;

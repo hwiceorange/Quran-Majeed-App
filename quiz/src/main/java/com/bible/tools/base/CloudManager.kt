@@ -18,11 +18,12 @@ object CloudManager {
     var adLastShowTime = 0L
     fun isSysViewTime(): Boolean {
 
-        val version = FireBaseConfigManager.getLong("new_sys_view_version_name")
-        if (version <= 0) {
-            return false
-        }
-        return AppUtils.getAppVersionCode().toLong() > version
+//        val version = FireBaseConfigManager.getLong("new_sys_view_version_name")
+//        if (version <= 0) {
+//            return false
+//        }
+//        return AppUtils.getAppVersionCode().toLong() > version
+        return false
     }
 
     //shengcha期间，广告有冷却期3分钟，并且只有10%概率
@@ -52,32 +53,7 @@ object CloudManager {
      * 广告展示概率，level_0：100%，level_1：10%，默认100, level_2：默认0
      */
     fun adShowPercent(level: Int = 0): Boolean {
-        if (!FireBaseConfigManager.isInitSuccess()) {
-            return false
-        }
-        val percent = if (isSysViewTime()) { //审核
-            10
-        } else if (level == 0) {
-            FireBaseConfigManager.getLong("ad_level_0_Show_Percent")
-        } else if (level == 1) {
-            FireBaseConfigManager.getLong("ad_level_1_Show_Percent")
-        } else if (level == 2) {
-            FireBaseConfigManager.getLong("ad_level_2_Show_Percent")
-        } else {
-            100
-        }
-
-        if (percent <= 0L) { //-1关闭
-            return false
-        }
-        if (percent == 100L) { //100 全开
-            loge("进入2级页面 percent=$percent ")
-            return true
-        } else {
-            val randomNum = Random().nextInt(100) //按百分比开
-            loge("进入2级页面 randomNum=$randomNum , percent=$percent")
-            return randomNum <= percent
-        }
+       return true
     }
 
     fun isShowDailyMood(): Boolean {
@@ -220,6 +196,6 @@ object CloudManager {
         if (!FireBaseConfigManager.isInitSuccess()) {
             return false
         }
-        return FireBaseConfigManager.getBoolean("quiz_use_inter_ad")
+        return true// FireBaseConfigManager.getBoolean("quiz_use_inter_ad")
     }
 }

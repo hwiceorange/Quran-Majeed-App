@@ -2,15 +2,16 @@ package com.quran.quranaudio.online.ads.data;
 
 public class Constant {
 
-    public static final String AD_STATUS = "0";
+    public static final String AD_STATUS = "1";
 
     public static String AD_NETWORK = "admob";
     public static final String BACKUP_AD_NETWORK = "fan";
 
-    public static final String ADMOB_BANNER_ID = "ca-app-pub-3940256099942544/6300978111";
-    public static final String ADMOB_INTERSTITIAL_ID = "ca-app-pub-3940256099942544/1033173712";
-    public static final String ADMOB_NATIVE_ID = "ca-app-pub-3940256099942544/2247696110";
-    public static final String ADMOB_APP_OPEN_AD_ID = "ca-app-pub-3940256099942544/3419835294";
+    public static final String ADMOB_BANNER_ID = "ca-app-pub-3940256099942544/6300978111"; // "ca-app-pub-3940256099942544/6300978111";
+    public static final String ADMOB_INTERSTITIAL_ID = "ca-app-pub-3940256099942544/1033173712";// "ca-app-pub-3940256099942544/1033173712";
+    public static final String ADMOB_NATIVE_ID ="ca-app-pub-3940256099942544/2247696110";// "ca-app-pub-3940256099942544/2247696110";
+    public static final String ADMOB_APP_OPEN_AD_ID = "ca-app-pub-3940256099942544/9257395921"; //"ca-app-pub-3940256099942544/3419835294";
+
 
     public static final String GOOGLE_AD_MANAGER_BANNER_ID = "/6499/example/banner";
     public static final String GOOGLE_AD_MANAGER_INTERSTITIAL_ID = "/6499/example/interstitial";
@@ -48,7 +49,7 @@ public class Constant {
 
     public static boolean isAppOpen = false;
 
-    public static final boolean FORCE_TO_SHOW_APP_OPEN_AD_ON_START = false;
+    public static final boolean FORCE_TO_SHOW_APP_OPEN_AD_ON_START = true;
     public static final boolean OPEN_ADS_ON_START = true;
     public static final boolean OPEN_ADS_ON_RESUME = true;
 

@@ -3,6 +3,7 @@ package com.bible.tools.base
 import android.app.Application
 import android.content.Context
 import androidx.multidex.MultiDexApplication
+import com.bible.tools.extension.SPTools
 import com.bible.tools.quiz.QuestionTools
 import com.blankj.utilcode.util.ThreadUtils
 
@@ -21,6 +22,8 @@ open class BaseApp: MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
 
+        SPTools.init(this)
+        FireBaseConfigManager.initCloud(this)
         initPlanAndQuiz()
     }
 

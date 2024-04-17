@@ -48,6 +48,6 @@ object AdConfig {
     }
 
     private fun useTestAD(): Boolean {
-        return false//BuildConfig.DEBUG
+        return BuildConfig.DEBUG
     }
 }

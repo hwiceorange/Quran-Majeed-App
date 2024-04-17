@@ -17,6 +17,7 @@ import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.hydra.common.ad.AdConfig
 import com.quran.quranaudio.quiz.databinding.ActivityQuestionFailBinding
+import com.quran.quranaudio.quiz.fragments.QuestionFragment
 
 class QuestionFailActivity :
     BaseBindingActivity<ActivityQuestionFailBinding>(ActivityQuestionFailBinding::inflate) {
@@ -78,10 +79,10 @@ class QuestionFailActivity :
     companion object {
         fun open(context: Context) {
 
-            // todo MainActivity
-           // if (MainActivity.isSelectQuizTab()) {
+
+            if (QuestionFragment.isSelected) {
                 context.startActivity(Intent(context, QuestionFailActivity::class.java))
-         //   }
+            }
         }
     }
 }

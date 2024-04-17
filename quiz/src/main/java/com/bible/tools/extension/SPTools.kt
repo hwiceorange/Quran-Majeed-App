@@ -3,6 +3,7 @@ package com.bible.tools.extension
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Base64
 
 object SPTools {
 
@@ -19,9 +20,10 @@ object SPTools {
             is Long -> mmkv?.putLong(key, value)
             is Float -> mmkv?.putFloat(key, value)
             is Int -> mmkv?.putInt(key, value)
+            is ByteArray ->mmkv?.putString(key,Base64.encodeToString(value,Base64.DEFAULT))
             is Nothing -> return
         }
-        mmkv?.apply()
+        mmkv?.commit()//.apply()
     }
 
     fun putSet(key:String,  value:Set<String>){
@@ -52,6 +54,15 @@ object SPTools {
 
     fun getSet(key:String, def:Set<String>): Set<String> {
         return sp?.getStringSet(key, def) ?: def
+    }
+    fun getBytes(key:String,def:ByteArray):ByteArray {
+        try {
+            var temp = sp?.getString(key, null)
+            return Base64.decode(temp, Base64.DEFAULT) ?: def
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
+        return def
     }
 
 }
