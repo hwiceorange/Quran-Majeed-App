@@ -1,8 +1,8 @@
-package com.bible.tools.quiz
+package com.quranaudio.quiz.quiz
 
 import android.util.Log
-import com.bible.tools.base.Constants
-import com.bible.tools.extension.SPTools
+import com.quran.quranaudio.quiz.base.Constants
+import com.quran.quranaudio.quiz.extension.SPTools
 import com.blankj.utilcode.util.GsonUtils
 import com.quran.quranaudio.quiz.QuestionBean
 import kotlinx.coroutines.DelicateCoroutinesApi

@@ -95,7 +95,7 @@
                 app:layout_constraintTop_toTopOf="@+id/questionContentTv"
                 tools:text="Correct" />
 
-            <com.bible.tools.quiz.QuestionOptionView
+            <com.quranaudio.quiz.quiz.QuestionOptionView
                 android:id="@+id/optionsView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

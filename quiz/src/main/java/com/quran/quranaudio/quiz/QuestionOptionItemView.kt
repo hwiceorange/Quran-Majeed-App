@@ -1,6 +1,5 @@
-package com.bible.tools.quiz
+package com.quranaudio.quiz.quiz
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Paint
 import android.graphics.drawable.Drawable
@@ -8,9 +7,9 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.quran.quranaudio.quiz.R
-import com.bible.tools.extension.getResDrawable
-import com.bible.tools.extension.gone
-import com.bible.tools.extension.visible
+import com.quran.quranaudio.quiz.extension.getResDrawable
+import com.quran.quranaudio.quiz.extension.gone
+import com.quran.quranaudio.quiz.extension.visible
 import com.quran.quranaudio.quiz.databinding.LayoutQuestionOptionBinding
 
 class QuestionOptionItemView : ConstraintLayout {

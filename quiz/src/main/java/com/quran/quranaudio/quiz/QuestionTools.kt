@@ -1,6 +1,6 @@
-package com.bible.tools.quiz
+package com.quranaudio.quiz.quiz
 
-import com.bible.tools.utils.AppConfig
+import com.quran.quranaudio.quiz.utils.AppConfig
 import com.blankj.utilcode.util.EncodeUtils
 import com.blankj.utilcode.util.FileIOUtils
 import com.blankj.utilcode.util.FileUtils

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_1b0c37"
-    tools:context="com.bible.tools.quiz.QuestionRevivalActivity">
+    tools:context="com.quranaudio.quiz.quiz.QuestionRevivalActivity">
 
     <TextView
         android:id="@+id/gemCountTv"
@@ -25,7 +25,7 @@
 
 
 
-    <com.bible.tools.utils.CircleProgress
+    <com.quran.quranaudio.quiz.utils.CircleProgress
         android:id="@+id/circleProgress"
         android:layout_width="@dimen/dp_52"
         android:layout_height="@dimen/dp_52"
@@ -156,7 +156,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnCl" />
 
-    <com.bible.tools.ad.AdNativeSmallWrapperView
+    <com.quran.quranaudio.quiz.ad.AdNativeSmallWrapperView
         android:id="@+id/adView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

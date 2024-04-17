@@ -1,13 +1,13 @@
-package com.bible.tools.quiz
+package com.quranaudio.quiz.quiz
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.quran.quranaudio.quiz.R
-import com.bible.tools.base.Constants
-import com.bible.tools.extension.SPTools
-import com.bible.tools.extension.getResString
-import com.bible.tools.extension.logd
+import com.quran.quranaudio.quiz.base.Constants
+import com.quran.quranaudio.quiz.extension.SPTools
+import com.quran.quranaudio.quiz.extension.getResString
+import com.quran.quranaudio.quiz.extension.logd
 import com.quran.quranaudio.quiz.QuestionBean
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch

@@ -1,4 +1,4 @@
-package com.bible.tools.quiz.dialog
+package com.quranaudio.quiz.quiz.dialog
 
 import android.annotation.SuppressLint
 import android.content.DialogInterface
@@ -11,14 +11,14 @@ import androidx.core.graphics.toColorInt
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.quran.quranaudio.quiz.R
-import com.bible.tools.ad.FunctionTag
-import com.bible.tools.base.BaseDialogFragment
-import com.bible.tools.base.Constants
-import com.bible.tools.extension.SPTools
-import com.bible.tools.extension.daysBetween
-import com.bible.tools.extension.reportClickEvent
-import com.bible.tools.extension.showGemAd
-import com.bible.tools.quiz.QuizGemManager
+import com.quran.quranaudio.quiz.ad.FunctionTag
+import com.quran.quranaudio.quiz.base.BaseDialogFragment
+import com.quran.quranaudio.quiz.base.Constants
+import com.quran.quranaudio.quiz.extension.SPTools
+import com.quran.quranaudio.quiz.extension.daysBetween
+import com.quran.quranaudio.quiz.extension.reportClickEvent
+import com.quran.quranaudio.quiz.extension.showGemAd
+import com.quranaudio.quiz.quiz.QuizGemManager
 import com.quran.quranaudio.quiz.databinding.DialogDailyRewardBinding
 import kotlin.math.max
 

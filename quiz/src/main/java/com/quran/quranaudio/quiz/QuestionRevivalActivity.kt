@@ -1,4 +1,4 @@
-package com.bible.tools.quiz
+package com.quranaudio.quiz.quiz
 
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
@@ -9,15 +9,15 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.animation.doOnEnd
 import androidx.core.view.isVisible
 import com.quran.quranaudio.quiz.R
-import com.bible.tools.ad.FunctionTag
-import com.bible.tools.base.BaseBindingActivity
-import com.bible.tools.extension.getResColor
-import com.bible.tools.extension.getResString
-import com.bible.tools.extension.isValid
-import com.bible.tools.extension.reportClickEvent
-import com.bible.tools.extension.setDrawableLeft
-import com.bible.tools.extension.showGemAd
-import com.bible.tools.utils.RxBus
+import com.quran.quranaudio.quiz.ad.FunctionTag
+import com.quran.quranaudio.quiz.base.BaseBindingActivity
+import com.quran.quranaudio.quiz.extension.getResColor
+import com.quran.quranaudio.quiz.extension.getResString
+import com.quran.quranaudio.quiz.extension.isValid
+import com.quran.quranaudio.quiz.extension.reportClickEvent
+import com.quran.quranaudio.quiz.extension.setDrawableLeft
+import com.quran.quranaudio.quiz.extension.showGemAd
+import com.quran.quranaudio.quiz.utils.RxBus
 import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.quran.quranaudio.quiz.activity.QuestionFailActivity

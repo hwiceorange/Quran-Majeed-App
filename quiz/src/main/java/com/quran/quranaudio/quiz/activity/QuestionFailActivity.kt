@@ -5,17 +5,17 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.activity.OnBackPressedCallback
 import com.quran.quranaudio.quiz.R
-import com.bible.tools.ad.FunctionTag
-import com.bible.tools.base.BaseBindingActivity
-import com.bible.tools.extension.hasInterAdByPool
-import com.bible.tools.extension.reportClickEvent
-import com.bible.tools.extension.reportExitFunShowEvent
-import com.bible.tools.extension.showInterAdByPoolNew
-import com.bible.tools.quiz.QuestionFail
-import com.bible.tools.utils.RxBus
+import com.quran.quranaudio.quiz.ad.FunctionTag
+import com.quran.quranaudio.quiz.base.BaseBindingActivity
+import com.quran.quranaudio.quiz.extension.hasInterAdByPool
+import com.quran.quranaudio.quiz.extension.reportClickEvent
+import com.quran.quranaudio.quiz.extension.reportExitFunShowEvent
+import com.quran.quranaudio.quiz.extension.showInterAdByPoolNew
+import com.quranaudio.quiz.quiz.QuestionFail
+import com.quran.quranaudio.quiz.utils.RxBus
 import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ToastUtils
-import com.hydra.common.ad.AdConfig
+import com.quranaudio.common.ad.AdConfig
 import com.quran.quranaudio.quiz.databinding.ActivityQuestionFailBinding
 import com.quran.quranaudio.quiz.fragments.QuestionFragment
 

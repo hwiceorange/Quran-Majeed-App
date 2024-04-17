@@ -1,10 +1,10 @@
-package com.bible.tools.quiz
+package com.quranaudio.quiz.quiz
 
 import android.content.Context
 import android.util.AttributeSet
 import androidx.appcompat.widget.LinearLayoutCompat
-import com.bible.tools.extension.logd
-import com.bible.tools.extension.reportClickEvent
+import com.quran.quranaudio.quiz.extension.logd
+import com.quran.quranaudio.quiz.extension.reportClickEvent
 import com.quran.quranaudio.quiz.QuestionBean
 
 class QuestionOptionView : LinearLayoutCompat {

@@ -1,4 +1,4 @@
-package com.bible.tools.quiz
+package com.quranaudio.quiz.quiz
 
 import android.content.Context
 import android.content.Intent
@@ -7,15 +7,14 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
-import androidx.core.content.IntentCompat
 import com.quran.quranaudio.quiz.R
-import com.bible.tools.base.BaseBindingActivity
-import com.bible.tools.base.Constants
-import com.bible.tools.base.MainTabChangeEvent
-import com.bible.tools.extension.getResString
-import com.bible.tools.utils.RxBus
-import com.bible.tools.utils.Tasks
-import com.bible.tools.utils.isDebug
+import com.quran.quranaudio.quiz.base.BaseBindingActivity
+import com.quran.quranaudio.quiz.base.Constants
+import com.quran.quranaudio.quiz.base.MainTabChangeEvent
+import com.quran.quranaudio.quiz.extension.getResString
+import com.quran.quranaudio.quiz.utils.RxBus
+import com.quran.quranaudio.quiz.utils.Tasks
+import com.quran.quranaudio.quiz.utils.isDebug
 import com.blankj.utilcode.util.BarUtils
 import com.quran.quranaudio.quiz.QuestionBean
 import com.quran.quranaudio.quiz.databinding.ActivityQuizNotifyBinding

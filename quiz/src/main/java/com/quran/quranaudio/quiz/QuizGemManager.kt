@@ -1,8 +1,8 @@
-package com.bible.tools.quiz
+package com.quranaudio.quiz.quiz
 
-import com.bible.tools.base.Constants
-import com.bible.tools.extension.SPTools
-import com.bible.tools.utils.RxBus
+import com.quran.quranaudio.quiz.base.Constants
+import com.quran.quranaudio.quiz.extension.SPTools
+import com.quran.quranaudio.quiz.utils.RxBus
 
 /**
  * quiz 金币管理

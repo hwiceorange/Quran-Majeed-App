@@ -16,7 +16,7 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true">
 
-            <com.bible.tools.utils.CircleProgress
+            <com.quran.quranaudio.quiz.utils.CircleProgress
                 android:id="@+id/timeCountPb"
                 android:layout_width="@dimen/dp_52"
                 android:layout_height="@dimen/dp_52"
@@ -148,7 +148,7 @@
                 app:layout_constraintTop_toTopOf="@+id/questionContentTv"
                 tools:text="Correct" />
 
-            <com.bible.tools.quiz.QuestionOptionView
+            <com.quranaudio.quiz.quiz.QuestionOptionView
                 android:id="@+id/optionsView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

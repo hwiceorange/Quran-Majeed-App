@@ -3,15 +3,15 @@
 
     <application>
         <activity
-            android:name="com.bible.tools.quiz.QuestionRevivalActivity"
+            android:name="com.quranaudio.quiz.quiz.QuestionRevivalActivity"
             android:exported="false" />
 
         <activity
-            android:name="com.bible.tools.quiz.QuizNotifyActivity"
+            android:name="com.quranaudio.quiz.quiz.QuizNotifyActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.bible.tools.quiz.QuizNotifyResultActivity"
+            android:name="com.quranaudio.quiz.quiz.QuizNotifyResultActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

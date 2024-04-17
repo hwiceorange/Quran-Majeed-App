@@ -1,4 +1,4 @@
-package com.bible.tools.quiz.dialog
+package com.quranaudio.quiz.quiz.dialog
 
 import android.content.DialogInterface
 import android.text.SpannableString
@@ -7,12 +7,12 @@ import android.text.style.ImageSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.quran.quranaudio.quiz.R
-import com.bible.tools.ad.FunctionTag
-import com.bible.tools.base.BaseDialogFragment
-import com.bible.tools.extension.reportClickEvent
-import com.bible.tools.extension.setDrawableLeft
-import com.bible.tools.extension.showGemAd
-import com.bible.tools.quiz.QuizGemManager
+import com.quran.quranaudio.quiz.ad.FunctionTag
+import com.quran.quranaudio.quiz.base.BaseDialogFragment
+import com.quran.quranaudio.quiz.extension.reportClickEvent
+import com.quran.quranaudio.quiz.extension.setDrawableLeft
+import com.quran.quranaudio.quiz.extension.showGemAd
+import com.quranaudio.quiz.quiz.QuizGemManager
 import com.quran.quranaudio.quiz.databinding.DialogFreeGemsBinding
 
 
@@ -47,7 +47,8 @@ class FreeRewardDialog : BaseDialogFragment<DialogFreeGemsBinding>() {
         }
         mBinding.watchAd.setOnClickListener {
             reportClickEvent("quiz_free_dia_ad")
-            activity?.showGemAd(FunctionTag.QUESTION_FREE_INTERS,
+            activity?.showGemAd(
+                FunctionTag.QUESTION_FREE_INTERS,
                 FunctionTag.QUESTION_FREE_REWARD, QuizGemManager.WATCH_AD_REWARD, getPageName(), getFromPageName()){
                 dismiss()
             }

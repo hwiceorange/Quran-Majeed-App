@@ -110,7 +110,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tryAgainTv" />
 
-            <com.bible.tools.ad.AdNativeSmallWrapperView
+            <com.quran.quranaudio.quiz.ad.AdNativeSmallWrapperView
                 android:id="@+id/adView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

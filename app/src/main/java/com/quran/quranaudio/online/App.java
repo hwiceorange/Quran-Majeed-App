@@ -21,11 +21,10 @@ import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ProcessLifecycleOwner;
-import androidx.multidex.MultiDexApplication;
 import androidx.work.Configuration;
 import androidx.work.WorkManager;
 
-import com.bible.tools.base.BaseApp;
+import com.quran.quranaudio.quiz.base.BaseApp;
 import com.raiadnan.ads.sdk.format.AppOpenAdAppLovin;
 import com.raiadnan.ads.sdk.format.AppOpenAdManager;
 import com.raiadnan.ads.sdk.format.AppOpenAdMob;
