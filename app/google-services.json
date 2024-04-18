@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1075696385145",
+    "project_id": "quran-fda60",
+    "storage_bucket": "quran-fda60.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1075696385145:android:ac93672701fca78798a8a8",
+        "android_client_info": {
+          "package_name": "com.quran.quranaudio.online"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1075696385145-peassm8fnpns09vatv8q7kerf8q30tdg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqEJ8kUQPL-EBipMxaUQjeihy-rhV02to"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1075696385145-peassm8fnpns09vatv8q7kerf8q30tdg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
