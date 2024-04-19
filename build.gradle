@@ -12,13 +12,22 @@ buildscript {
 
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.3.2'
+
+        classpath libs.gradle
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.google.gms:google-services:4.3.13'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.7.1'
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
         classpath 'com.google.android.gms:oss-licenses-plugin:0.10.6'
        // classpath "com.applovin.quality:AppLovinQualityServiceGradlePlugin:+"
+      //  classpath 'com.github.megatronking.stringfog:gradle-plugin:5.1.0'
+        // 选用加解密算法库，默认实现了xor算法，也可以使用自己的加解密库。
+       // classpath 'com.github.megatronking.stringfog:xor:5.0.0'
+
+        //代码注入依赖
+        // https://github.com/qq549631030/AndroidJunkCode
+       // classpath 'com.github.qq549631030:android-junk-code:1.2.3'
+
 
 
     }

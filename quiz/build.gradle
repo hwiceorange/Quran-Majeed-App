@@ -70,4 +70,5 @@ dependencies {
     implementation 'com.github.JavaNoober.BackgroundLibrary:libraryx:1.7.6'
     implementation "com.github.ve3344.BindingAdapter:binding-adapter:2.1.0"
     implementation 'androidx.multidex:multidex:2.0.1'
+
 }

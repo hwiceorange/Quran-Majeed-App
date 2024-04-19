@@ -8,7 +8,32 @@ plugins {
     id 'com.google.gms.google-services'
 
    // id 'kotlinx-serialization'
+  //  id 'stringfog'
+
+
+
 }
+// apply from : '../resguard/junkcode.gradle'
+// 导入RandomKeyGenerator类，如果使用HardCodeKeyGenerator，更换下类名
+/*
+import com.github.megatronking.stringfog.plugin.kg.RandomKeyGenerator
+import com.github.megatronking.stringfog.plugin.StringFogMode
+
+stringfog {
+    // 必要：加解密库的实现类路径，需和上面配置的加解密算法库一致。
+    implementation 'com.github.megatronking.stringfog.xor.StringFogImpl'
+    // 可选：加密开关，默认开启。
+    enable true
+    // 可选：指定需加密的代码包路径，可配置多个，未指定将默认全部加密。
+    fogPackages = ['com.quran.quranaudio','com.quranaudio']
+    // 可选（3.0版本新增）：指定密钥生成器，默认使用长度8的随机密钥（每个字符串均有不同随机密钥）,
+    // 也可以指定一个固定的密钥：HardCodeKeyGenerator("This is a key")
+    kg new RandomKeyGenerator()
+    // 可选（4.0版本新增）：用于控制字符串加密后在字节码中的存在形式, 默认为base64，
+    // 也可以使用text或者bytes
+    mode StringFogMode.bytes
+}
+*/
 
 def secretsPropertiesFile = rootProject.file("secrets.properties")
 def secretsProperties = new Properties()
@@ -42,6 +67,19 @@ android {
         def ipList = getLocalIPv4()
         buildConfigField("String", "DEVELOPER_MACHINE_IP", ipList.empty ? '""' : '"' + ipList.get(0) + '"')
 
+    }
+
+    kapt {
+        javacOptions {
+            option("-Xmaxerrs", 500)
+            option("-Xlint:deprecation", true)
+            option("-Xlint:unchecked", true)
+        }
+        arguments {
+            arg("plugin", "org.jetbrains.kotlin.kapt3:kotlin-allopen")
+            arg("plugin", "org.jetbrains.kotlin.kapt3:kotlin-noarg")
+        }
+        useBuildCache = true
     }
 
     lintOptions {
@@ -328,6 +366,7 @@ dependencies {
     //Quran_Module*
 
     implementation 'androidx.multidex:multidex:2.0.1'
+  //  implementation 'com.github.megatronking.stringfog:xor:5.0.0'
 }
 
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
