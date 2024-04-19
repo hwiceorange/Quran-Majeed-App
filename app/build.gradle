@@ -10,8 +10,9 @@ plugins {
    // id 'kotlinx-serialization'
   //  id 'stringfog'
 
-
-
+}
+if(JUNKCODE_ENABLE.toBoolean()){
+    apply plugin: 'android-junk-code'
 }
 // apply from : '../resguard/junkcode.gradle'
 // 导入RandomKeyGenerator类，如果使用HardCodeKeyGenerator，更换下类名
@@ -399,3 +400,5 @@ static def getLocalIPv4() {
             }
     return ip4s
 }
+
+apply from: "junkcode.gradle"

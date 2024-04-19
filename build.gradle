@@ -26,7 +26,7 @@ buildscript {
 
         //代码注入依赖
         // https://github.com/qq549631030/AndroidJunkCode
-       // classpath 'com.github.qq549631030:android-junk-code:1.2.3'
+        classpath 'com.github.qq549631030:android-junk-code:1.3.3'
 
 
 
