@@ -24,7 +24,7 @@ object AppConfig {
     val TAG = AppConfig::class.java.simpleName
     private lateinit var lastAppConfig: AppConfigInfo
     private var lan: String = "en"
-    fun isPtLan() = "pt" == lan
+    fun isIDLan() = "id" == lan
     fun isEsLan() = "es" == lan
     fun setLanguage() {
         var locale = BaseApp.instance!!.resources.configuration.locale

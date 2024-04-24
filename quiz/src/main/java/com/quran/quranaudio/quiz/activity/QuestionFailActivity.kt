@@ -79,7 +79,6 @@ class QuestionFailActivity :
     companion object {
         fun open(context: Context) {
 
-
             if (QuestionFragment.isSelected) {
                 context.startActivity(Intent(context, QuestionFailActivity::class.java))
             }

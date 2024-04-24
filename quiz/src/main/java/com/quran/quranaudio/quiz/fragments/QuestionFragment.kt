@@ -444,7 +444,7 @@ class QuestionFragment :
             binding.quizGemCountTv.text = QuizGemManager.getGemCount().toString()
             checkAndShowDailyBox()
         }
-        isSelected=visible
+
     }
 
     private fun timeStart() {
@@ -478,10 +478,11 @@ class QuestionFragment :
         super.onHiddenChanged(hidden)
         if (hidden) {
             timePause()
-            isSelected=false
         } else {
             timeStart()
             isSelected=true
         }
+
+
     }
 }

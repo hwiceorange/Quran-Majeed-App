@@ -51,6 +51,7 @@ class HomeActivity : BaseActivity() {
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
 
+        QuestionFragment.isSelected=false
         when (item.itemId) {
             R.id.nav_home -> {
                 val mFragment = HomeFragment.newInstance()

@@ -15,11 +15,9 @@ object QuestionTools {
     private const val BIBLE_QUIZ_ZIP_PW = "a2p2MjAyM3F1aXo="
 
     fun getQuestionStr(): String {
-        val planFileName = if (AppConfig.isPtLan()) {
-            "quiz_all_pt"
-        } else if (AppConfig.isEsLan()) {
-            "quiz_all_es"
-        } else {
+        val planFileName = if (AppConfig.isIDLan()) {
+            "quiz_all_id"
+        }else {
             "quiz_all_en"
         }
         val readPath = "${saveRootPath}${File.separator}quiz${File.separator}$planFileName"
@@ -50,8 +48,8 @@ object QuestionTools {
             val saveFile = File(filePath)
             val copySuccess = FileIOUtils.writeFileFromIS(saveFile, assetsInput)
             if (copySuccess) {
-                val password = String(EncodeUtils.base64Decode(BIBLE_QUIZ_ZIP_PW))
-                val zipFile = ZipFile(filePath, password.toCharArray())
+               // val password = String(EncodeUtils.base64Decode(BIBLE_QUIZ_ZIP_PW))
+                val zipFile = ZipFile(filePath, null)
                 zipFile.extractAll(saveRootPath)
                 if (FileUtils.isFileExists(filePath)) {
                     FileUtils.delete(filePath)
