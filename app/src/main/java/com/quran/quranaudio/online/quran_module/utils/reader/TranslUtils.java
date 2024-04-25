@@ -15,6 +15,7 @@ import com.quran.quranaudio.online.quran_module.utils.Logger;
 import com.quran.quranaudio.online.quran_module.utils.app.AppUtils;
 import com.quran.quranaudio.online.quran_module.utils.univ.FileUtils;
 import com.quran.quranaudio.online.quran_module.utils.univ.MessageUtils;
+import com.quran.quranaudio.quiz.utils.AppConfig;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,7 +64,11 @@ public class TranslUtils {
 
     public static Set<String> defaultTranslationSlugs() {
         Set<String> defTranslations = new HashSet<>();
-        defTranslations.add(TRANSL_SLUG_DEFAULT);
+        if(AppConfig.INSTANCE.isIDLan()){
+            defTranslations.add(TRANSL_SLUG_IN);
+        } else {
+            defTranslations.add(TRANSL_SLUG_DEFAULT);
+        }
         return defTranslations;
     }
 
