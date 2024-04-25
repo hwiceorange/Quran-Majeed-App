@@ -32,6 +32,11 @@ object AppConfig {
             locale = Locale.getDefault()
         }
         lan = locale.language
+        when(lan) {
+            "in" -> lan = "id"
+            "ji"-> lan="yi"
+            "he"-> lan="iw"
+        }
         loge("当前语言: " + lan, "lan_config")
         initAppConfigInfo()
     }

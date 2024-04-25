@@ -6,6 +6,7 @@ import androidx.multidex.MultiDexApplication
 import com.quran.quranaudio.quiz.extension.SPTools
 import com.quranaudio.quiz.quiz.QuestionTools
 import com.blankj.utilcode.util.ThreadUtils
+import com.quran.quranaudio.quiz.utils.AppConfig
 
 /**
 create by microspark 4/14/24
@@ -24,6 +25,7 @@ open class BaseApp: MultiDexApplication() {
 
         SPTools.init(this)
         FireBaseConfigManager.initCloud(this)
+        AppConfig.setLanguage()
         initPlanAndQuiz()
     }
 

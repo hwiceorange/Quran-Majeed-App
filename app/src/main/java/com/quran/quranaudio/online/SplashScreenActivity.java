@@ -11,9 +11,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 
+import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.quranaudio.common.ad.AdConfig;
+import com.quranaudio.common.ad.AdFactory;
+import com.quranaudio.common.ad.AdShowCallback;
+import com.quranaudio.common.ad.model.AdItem;
+import com.quranaudio.common.ad.model.RewardItem;
 import com.raiadnan.ads.sdk.format.AdNetwork;
 import com.raiadnan.ads.sdk.format.AppOpenAd;
 import com.quran.quranaudio.online.ads.callback.CallbackConfig;
@@ -53,8 +60,10 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         sharedPref = new SharedPref(this);
-        initAds();
+      //  initAds();
 
+        AdFactory.INSTANCE.loadAppOpenAd(this, AdConfig.AD_APPOPEN,null);
+        /*
         if (Constant.AD_STATUS.equals(AD_STATUS_ON) && Constant.OPEN_ADS_ON_START) {
             if (!Constant.FORCE_TO_SHOW_APP_OPEN_AD_ON_START) {
                 new Handler(Looper.getMainLooper()).postDelayed(() -> {
@@ -91,12 +100,58 @@ public class SplashScreenActivity extends AppCompatActivity {
             }
         } else {
             requestConfig();
-        }
+        }*/
+
+        requestConfig();
 
     }
 
+    Handler handler=new Handler(Looper.getMainLooper());
+    int count=0;
+    Runnable r=new Runnable() {
+        @Override public void run() {
+            if(AdFactory.INSTANCE.hasAppOpenAd(AdConfig.AD_APPOPEN)){
+               AdFactory.INSTANCE.showAppOpenAd(SplashScreenActivity.this, AdConfig.AD_APPOPEN, new AdShowCallback() {
+                   @Override public void onAdImpression(@Nullable AdItem adItem) {
+
+                   }
+
+                   @Override public void onAdClicked(@Nullable AdItem adItem) {
+
+                   }
+
+                   @Override public void onUserEarnedReward(@Nullable AdItem adItem, @Nullable RewardItem rewardItem) {
+
+                   }
+
+                   @Override public void onAdClosed(@Nullable AdItem adItem) {
+                       startMainActivity();
+                   }
+
+                   @Override public void onShow(@Nullable AdItem adItem) {
+
+                   }
+
+                   @Override public void onShowFail() {
+
+                   }
+               });
+            } else if(count>=5){
+                startMainActivity();
+            } else {
+                count++;
+                handler.removeCallbacks(r);
+                handler.postDelayed(r,1000);
+            }
+
+        }
+    };
+
     private void requestConfig() {
-        requestAPI("https://envato.shaheendevelopers.net/");
+
+       // requestAPI("https://envato.shaheendevelopers.net/");
+        handler.postDelayed(r,1000);
+
     }
 
     private void requestAPI(@SuppressWarnings("SameParameterValue") String url) {

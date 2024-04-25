@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="bible_no_ad_tips">Iklan tidak dimuat, coba lagi nanti</string>
+    <string name="bible_loading_ad">Memuat Iklan...</string>
+    <string name="bible_correct">Benar</string>
+    <string name="bible_wrong">Salah</string>
+    <string name="bible_question">Pertanyaan %1$s</string>
+    <string name="bible_level">Tingkat %1$s</string>
+    <string name="bible_not_enough_gems">Permata tidak cukup</string>
+    <string name="bible_no_thanks">Tidak, terima kasih</string>
+    <string name="bible_recovery">Pemulihan</string>
+    <string name="bible_quiz_revival_ad_tips">Bertahanlah, Cobalah untuk menang terus menerus.</string>
+    <string name="bible_quiz_revival_gem_tips">Jangan menyerah, kemenangan beruntun akan terhenti!</string>
+    <string name="bible_skip_question">Lewati Pertanyaan</string>
+    <string name="bible_try_again">Coba Lagi</string>
+    <string name="bible_quit">Keluar</string>
+    <string name="bible_tip">Kiat</string>
+    <string name="bible_plan_title">Rencana</string>
+    <string name="bible_gnt_ad">AD</string>
+    <string name="bible_question_fail">Pertanyaan Gagal</string>
+    <string name="bible_quiz_notify_tips">Maaf, jawaban Anda salah.</string>
+    <string name="bible_correct_answer">Jawaban Benar</string>
+    <string name="bible_quiz_notify_correct_msg">Bagus sekali! Itu benar.</string>
+    <string name="bible_quiz_notify_correct_title">Semoga Tuhan memberkati Anda</string>
+    <string name="bible_play_more">Mainkan Lebih Banyak</string>
+    <string name="bible_level_up">Naik Level</string>
+    <string name="bible_reward">Hadiah</string>
+    <string name="bible_download">Unduh</string>
+    <string name="bible_cancel">Batal</string>
+    <string name="bible_ok">Oke</string>
+    <string name="bible_day_1">Hari 1</string>
+    <string name="bible_day_2">Hari ke-2</string>
+    <string name="bible_day_3">Hari ke-3</string>
+    <string name="bible_day_4">Hari ke-4</string>
+    <string name="bible_day_5">Hari ke-5</string>
+    <string name="bible_day_6">Hari ke-6</string>
+    <string name="bible_day_7">Hari ke-7</string>
+    <string name="bible_get_gem_with_video">Dapatkan 30 Batu Permata</string>
+    <string name="bible_daily_surprise">Kejutan</string>
+    <string name="bible_daily_reward">Hadiah Harian</string>
+    <string name="bible_free_diamonds">Batu Permata Gratis</string>
+    <string name="bible_watch_video_free_diamonds">Tonton video dapatkan 5 Batu Permata</string>
+    <string name="bible_watch">Tonton</string>
+
+
+</resources>
