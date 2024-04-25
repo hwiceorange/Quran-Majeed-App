@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="bible_no_ad_tips">Ad not loaded, try again later</string>
-    <string name="bible_loading_ad">Loading Ad ...</string>
+    <string name="bible_loading_ad">Loading Ad...</string>
     <string name="bible_correct">Correct</string>
     <string name="bible_wrong">Wrong</string>
     <string name="bible_question">Question %1$s</string>

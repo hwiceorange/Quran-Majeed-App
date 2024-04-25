@@ -46,54 +46,13 @@ object AppConfig {
     }
 
     private fun initAppConfigInfo(){
-        kotlin.runCatching {
-            val res: AppConfigInfo
-            when (lan) {
-                "pt" -> {
-                    Log.e("lan_config", "使用pt版本")
-                    res = loadConfig(BaseApp.instance!!.resources.getXml(R.xml.bible_config_pt))
-                }
 
-                "es" -> {
-                    Log.e("lan_config", "使用es版本")
-                    res = loadConfig(BaseApp.instance!!.resources.getXml(R.xml.bible_config_es))
-                }
-
-                else -> {
-                    Log.e("lan_config", "使用en版本")
-                    lan = "en"
-                    res = loadConfig(BaseApp.instance!!.resources.getXml(R.xml.bible_config_en))
-                }
-            }
-
-            loge(res.toString(),"app_config")
-            return@runCatching res
-        }.onSuccess {
-            lastAppConfig = it
-        }.onFailure {
-            //            FirebaseCrashlytics.getInstance().recordException(e);
-            throw RuntimeException("error in loading app config", it)
-        }
     }
 
     @Throws(Exception::class)
     private fun loadConfig(parser: XmlResourceParser): AppConfigInfo {
         val res = AppConfigInfo()
-        while (true) {
-            val next = parser.next()
-            if (next == XmlPullParser.START_TAG) {
-                val tagName = parser.name
-                if ("internal" == tagName) {
-                    res.internalLocale = parser.getAttributeValue(null, "locale")
-                    res.internalShortName = parser.getAttributeValue(null, "shortName")
-                    res.internalLongName = parser.getAttributeValue(null, "longName")
-                    res.internalPrefix = parser.getAttributeValue(null, "prefix")
-                    res.internalPresetName = parser.getAttributeValue(null, "preset_name")
-                }
-            } else if (next == XmlPullParser.END_DOCUMENT) {
-                break
-            }
-        }
+
         return res
     }
 

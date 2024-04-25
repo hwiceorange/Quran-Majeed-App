@@ -2,14 +2,14 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape>
-            <gradient android:startColor="#6555AE" android:endColor="#DECEC3FF" android:angle="270"/>
+            <gradient android:startColor="#477A3F" android:endColor="#477A3F" android:angle="270"/>
             <corners android:radius="@dimen/dp_16"/>
         </shape>
     </item>
 
     <item android:right="@dimen/dp_2" android:left="@dimen/dp_2" android:top="@dimen/dp_2" android:bottom="@dimen/dp_2">
         <shape >
-            <gradient android:startColor="#5F4CBB" android:endColor="#7B64FF" android:angle="270"/>
+            <gradient android:startColor="#477A3F" android:endColor="#477A3F" android:angle="270"/>
             <corners android:radius="@dimen/dp_16"/>
         </shape>
     </item>

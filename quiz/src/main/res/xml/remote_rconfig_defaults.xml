@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <defaults>
-    <entry>
-        <key>new_sys_view_version_name</key>
-        <!--默认为非审核模式-->
-        <value>99999</value>
-    </entry>
+
     <entry>
         <key>ad_level_0_Show_Percent</key>
         <value>100</value>
@@ -37,18 +33,12 @@
         <key>new_main_notify_show</key>
         <value>true</value>
     </entry>
-    <entry>
-        <key>splash_loading_time</key>
-        <value>10000</value>
-    </entry>
+
     <entry>
         <key>prayer_animator_duration</key>
         <value>20000</value>
     </entry>
-    <entry>
-        <key>plan_notification_cool_time</key>
-        <value>7200000</value>
-    </entry>
+
     <entry>
         <key>quiz_notification_cool_time</key>
         <value>3600000</value>
@@ -69,34 +59,7 @@
         <key>native_interval_time</key>
         <value>60000</value>
     </entry>
-    <!--no_ad : 限流无广告；to_max ： 限流自动切换到max-->
-    <entry>
-        <key>firebase_key_limit_action_auto_ad</key>
-        <value>no_ad</value>
-    </entry>
-    <entry>
-        <key>fraud2max</key>
-        <value>true</value>
-    </entry>
-<!--    &lt;!&ndash;广告单元配置ad_mediation广告中介(max\admob)&ndash;&gt;-->
-<!--    <entry>-->
-<!--        <key>ad_mediation</key>-->
-<!--        <value>admob</value>-->
-<!--    </entry>-->
 
-<!--    <entry>-->
-<!--        <key>ad_cloud_click_limit</key>-->
-<!--        <value>0#3,1#3</value>-->
-<!--    </entry>-->
 
-<!--    <entry>-->
-<!--        <key>native_ad_show_click_rate</key>-->
-<!--        <value>20,20</value>-->
-<!--    </entry>-->
-
-<!--    <entry>-->
-<!--        <key>inter_ad_show_click_rate</key>-->
-<!--        <value>10,30</value>-->
-<!--    </entry>-->
 
 </defaults>

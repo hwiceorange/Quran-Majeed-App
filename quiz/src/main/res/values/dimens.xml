@@ -575,32 +575,5 @@
     <dimen name="dp_570">570dp</dimen>
     <dimen name="dp_571">571dp</dimen>
     <dimen name="dp_572">572dp</dimen>
-    <dimen name="dp_573">573dp</dimen>
-    <dimen name="dp_574">574dp</dimen>
-    <dimen name="dp_575">575dp</dimen>
-    <dimen name="dp_576">576dp</dimen>
-    <dimen name="dp_577">577dp</dimen>
-    <dimen name="dp_578">578dp</dimen>
-    <dimen name="dp_579">579dp</dimen>
-    <dimen name="dp_580">580dp</dimen>
-    <dimen name="dp_581">581dp</dimen>
-    <dimen name="dp_582">582dp</dimen>
-    <dimen name="dp_583">583dp</dimen>
-    <dimen name="dp_584">584dp</dimen>
-    <dimen name="dp_585">585dp</dimen>
-    <dimen name="dp_586">586dp</dimen>
-    <dimen name="dp_587">587dp</dimen>
-    <dimen name="dp_588">588dp</dimen>
-    <dimen name="dp_589">589dp</dimen>
-    <dimen name="dp_590">590dp</dimen>
-    <dimen name="dp_591">591dp</dimen>
-    <dimen name="dp_592">592dp</dimen>
-    <dimen name="dp_593">593dp</dimen>
-    <dimen name="dp_594">594dp</dimen>
-    <dimen name="dp_595">595dp</dimen>
-    <dimen name="dp_596">596dp</dimen>
-    <dimen name="dp_597">597dp</dimen>
-    <dimen name="dp_598">598dp</dimen>
-    <dimen name="dp_599">599dp</dimen>
-    <dimen name="dp_600">600dp</dimen>
+
 </resources>
