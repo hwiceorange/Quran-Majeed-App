@@ -26,8 +26,13 @@
 
 #让混淆包 显示行号
 -keepattributes SourceFile,LineNumberTable
-
+-keepattributes Signature
+-keepattributes *Annotation*
+-keepclassmembers class * implements android.os.Parcel { public *;}
 -keep class com.adjust.sdk.** { *; }
+-keep class org.json.** {*;}
+# -keep class com.quran.** { *; }
+-keep class java.**{*;}
 -keep class com.google.android.gms.common.ConnectionResult {
     int SUCCESS;
 }
@@ -63,6 +68,13 @@
     public static **[] values();
     public static ** valueOf(java.lang.String);
 }
+
+
+-keep public class com.google.android.gms.analytics.** {
+    public *;
+}
+-keep public class com.google.firebase.FirebaseApp{*;}
+
 
 #删除日志打印
 -assumenosideeffects class android.util.Log {
