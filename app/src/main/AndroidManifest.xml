@@ -108,7 +108,7 @@
             android:resource="@drawable/notification_ic" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/colorPrimaryDark" /> <!-- Sample  app ID: ca-app-pub-3940256099942544~3347511713 -->
+            android:resource="@color/colorPrimaryDark" /> <!-- Sample  app ID: ca-app-pub-3966802724737141~7853010339 -->
 
 
         <!-- Prayer Times -->

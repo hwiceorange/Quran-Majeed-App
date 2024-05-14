@@ -23,13 +23,13 @@ object AdConfig {
     private const val AD_TEST_BANNER_ID = "ca-app-pub-3940256099942544/6300978111"
     private const val AD_TEST_REWARD_ID = "ca-app-pub-3940256099942544/5224354917"
 
-    private const val AD_QUIZ_INTERS_ID = "ca-app-pub-6849578260822952/5976862787"
-    private const val AD_QUIZ_REWARD_ID = "ca-app-pub-6849578260822952/2912587882"
-    private const val AD_APPOPEN_ID = "ca-app-pub-6849578260822952/6851832893"
-    private const val AD_NEW_USER_INTERS_ID = "ca-app-pub-6849578260822952/1116290484"
-    private const val AD_INTERS_ID = "ca-app-pub-6849578260822952/8506807294"
-    private const val AD_NATIVE_ID = "ca-app-pub-6849578260822952/7193725629"
-    private const val AD_BANNER_ID = "ca-app-pub-6849578260822952/4663781119"
+    private const val AD_QUIZ_INTERS_ID = "ca-app-pub-3966802724737141/2182661506"
+    private const val AD_QUIZ_REWARD_ID = "ca-app-pub-3966802724737141/2186558832"
+    private const val AD_APPOPEN_ID = "ca-app-pub-3966802724737141/3298687654"
+    private const val AD_NEW_USER_INTERS_ID = "ca-app-pub-3966802724737141/7804176008"
+    private const val AD_INTERS_ID = "ca-app-pub-3966802724737141/2182661506"
+    private const val AD_NATIVE_ID = "ca-app-pub-3966802724737141/1300824672"
+    private const val AD_BANNER_ID = "ca-app-pub-3966802724737141/1386840185"
 
 
     fun getAdIdByPosition(position: String): String {

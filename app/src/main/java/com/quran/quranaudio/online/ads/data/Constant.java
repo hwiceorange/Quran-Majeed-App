@@ -7,20 +7,20 @@ public class Constant {
     public static String AD_NETWORK = "admob";
     public static final String BACKUP_AD_NETWORK = "fan";
 
-    public static final String ADMOB_BANNER_ID = "ca-app-pub-3940256099942544/6300978111"; // "ca-app-pub-3940256099942544/6300978111";
-    public static final String ADMOB_INTERSTITIAL_ID = "ca-app-pub-3940256099942544/1033173712";// "ca-app-pub-3940256099942544/1033173712";
-    public static final String ADMOB_NATIVE_ID ="ca-app-pub-3940256099942544/2247696110";// "ca-app-pub-3940256099942544/2247696110";
-    public static final String ADMOB_APP_OPEN_AD_ID = "ca-app-pub-3940256099942544/9257395921"; //"ca-app-pub-3940256099942544/3419835294";
+    public static final String ADMOB_BANNER_ID = "ca-app-pub-3966802724737141/1386840185"; // "ca-app-pub-3940256099942544/6300978111";
+    public static final String ADMOB_INTERSTITIAL_ID = "ca-app-pub-3966802724737141/2182661506";// "ca-app-pub-3940256099942544/1033173712";
+    public static final String ADMOB_NATIVE_ID ="ca-app-pub-3966802724737141/1300824672";// "ca-app-pub-3940256099942544/2247696110";
+    public static final String ADMOB_APP_OPEN_AD_ID = "ca-app-pub-3966802724737141/3298687654"; //"ca-app-pub-3940256099942544/3419835294";
 
 
-    public static final String GOOGLE_AD_MANAGER_BANNER_ID = "/6499/example/banner";
-    public static final String GOOGLE_AD_MANAGER_INTERSTITIAL_ID = "/6499/example/interstitial";
-    public static final String GOOGLE_AD_MANAGER_NATIVE_ID = "/6499/example/native";
-    public static final String GOOGLE_AD_MANAGER_APP_OPEN_AD_ID = "/6499/example/app-open";
+    public static final String GOOGLE_AD_MANAGER_BANNER_ID = "/69/exle/banner";
+    public static final String GOOGLE_AD_MANAGER_INTERSTITIAL_ID = "/699/exa/inttitial";
+    public static final String GOOGLE_AD_MANAGER_NATIVE_ID = "/64/example/native";
+    public static final String GOOGLE_AD_MANAGER_APP_OPEN_AD_ID = "/69/exple/appopen";
 
-    public static final String FAN_BANNER_ID = "IMG_16_9_APP_INSTALL#782095786538726_782096253205346";
-    public static final String FAN_INTERSTITIAL_ID = "IMG_16_9_APP_INSTALL#782095786538726_782096399871998";
-    public static final String FAN_NATIVE_ID = "IMG_16_9_APP_INSTALL#782095786538726_782096519871986";
+    public static final String FAN_BANNER_ID = "154641400992658_154641934325938";
+    public static final String FAN_INTERSTITIAL_ID = "154641400992658_154641894325942";
+    public static final String FAN_NATIVE_ID = "154641400992658_154642014325930";
 
 
     public static final String STARTAPP_APP_ID = "0";
