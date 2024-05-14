@@ -80,13 +80,24 @@ android {
             arg("plugin", "org.jetbrains.kotlin.kapt3:kotlin-allopen")
             arg("plugin", "org.jetbrains.kotlin.kapt3:kotlin-noarg")
         }
-        useBuildCache = true
+       // useBuildCache = true
+    }
+
+
+    signingConfigs {
+
+        release {
+            storeFile file("quran_keystore")//hashcode 1961951595
+            keyAlias "key0"
+            storePassword "Huwei123"
+            keyPassword "Huwei123"
+        }
     }
 
     lintOptions {
         abortOnError false
+        checkReleaseBuilds false
     }
-
     buildTypes {
 
         debug {
@@ -98,12 +109,23 @@ android {
         }
 
         release {
-            minifyEnabled false
+            minifyEnabled true
             debuggable false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            //proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
-           // shrinkResources true
+            // shrinkResources true
             resValue "string", "cleartextTrafficPermitted", "false"
+
+            signingConfig signingConfigs.release
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+        }
+    }
+    bundle {
+        language {
+            enableSplit false //语言不分包
         }
     }
 
