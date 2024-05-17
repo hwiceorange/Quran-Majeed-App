@@ -15,7 +15,10 @@
         <item name="android:windowDisablePreview">true</item>
         <item name="playbutton">@color/colorPrimary</item>
     </style>
-
+    <style name="ProgressBar_Scale" parent="@android:style/Widget.ProgressBar.Horizontal">
+        <item name="android:indeterminateDrawable">@android:drawable/progress_indeterminate_horizontal</item>
+        <item name="android:progressDrawable">@drawable/splash_progressbar</item>
+    </style>
 
     <style name="LaunchTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash</item>

@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.widget.ProgressBar;
 
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
@@ -50,11 +51,12 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     private static final String TAG = "ActivitySplash";
     Call<CallbackConfig> callbackConfigCall = null;
-    public static int DELAY_PROGRESS = 500;
+    public static int DELAY_PROGRESS = 100;
     AdNetwork.Initialize adNetwork;
     AppOpenAd.Builder appOpenAdBuilder;
     SharedPref sharedPref;
 
+    ProgressBar pbView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +64,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         sharedPref = new SharedPref(this);
       //  initAds();
 
+        pbView=findViewById(R.id.progressbar);
         AdFactory.INSTANCE.loadAppOpenAd(this, AdConfig.AD_APPOPEN,null);
         /*
         if (Constant.AD_STATUS.equals(AD_STATUS_ON) && Constant.OPEN_ADS_ON_START) {
@@ -114,6 +117,9 @@ public class SplashScreenActivity extends AppCompatActivity {
                AdFactory.INSTANCE.showAppOpenAd(SplashScreenActivity.this, AdConfig.AD_APPOPEN, new AdShowCallback() {
                    @Override public void onAdImpression(@Nullable AdItem adItem) {
 
+                       progressBarRunning=false;
+                       pbView.setProgress(100);
+
                    }
 
                    @Override public void onAdClicked(@Nullable AdItem adItem) {
@@ -136,7 +142,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
                    }
                });
-            } else if(count>=5){
+            } else if(count>=8){
                 startMainActivity();
             } else {
                 count++;
@@ -223,4 +229,34 @@ public class SplashScreenActivity extends AppCompatActivity {
         }, DELAY_PROGRESS);
     }
 
+    boolean progressBarRunning=true;
+    int progressCount=0;
+    Runnable updateProgress=new Runnable() {
+        @Override public void run() {
+            if(progressCount<80 && progressBarRunning){
+                progressCount++;
+                pbView.setProgress(progressCount*100/80);
+                handler.removeCallbacks(updateProgress);
+                handler.postDelayed(this,100);
+            }
+        }
+    };
+    @Override
+    public void onResume(){
+        super.onResume();
+        if(progressBarRunning) {
+            pbView.setProgress(0);
+            handler.removeCallbacks(updateProgress);
+            handler.postDelayed(updateProgress, 100);
+        }
+
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+
+        handler.removeCallbacks(updateProgress);
+
+    }
 }

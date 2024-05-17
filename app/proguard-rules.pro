@@ -32,6 +32,7 @@
 -keep class com.adjust.sdk.** { *; }
 -keep class org.json.** {*;}
 # -keep class com.quran.** { *; }
+-keep class com.quran.quranaudio.online.prayertimes.** {*;}
 -keep class java.**{*;}
 -keep class com.google.android.gms.common.ConnectionResult {
     int SUCCESS;
