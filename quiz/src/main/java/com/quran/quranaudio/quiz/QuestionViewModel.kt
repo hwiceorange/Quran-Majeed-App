@@ -74,7 +74,7 @@ class QuestionViewModel : ViewModel() {
     }
 
     fun getProgressQuestion() =
-        R.string.bible_question.getResString("${currentQuestionIndex + 1}/$QUESTION_COUNT_PRE")
+        R.string.quran_question.getResString("${currentQuestionIndex + 1}/$QUESTION_COUNT_PRE")
 
     class Factory() : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")

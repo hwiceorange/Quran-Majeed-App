@@ -376,10 +376,10 @@ class QuestionFragment :
         binding.answerResultTv.visible()
         binding.questionContentTv.invisible()
         if (isRight) {
-            binding.answerResultTv.text = R.string.bible_correct.getResString()
+            binding.answerResultTv.text = R.string.quran_correct.getResString()
             binding.answerResultTv.setTextColor(R.color.color_0BC9B2.getResColor())
         } else {
-            binding.answerResultTv.text = R.string.bible_wrong.getResString()
+            binding.answerResultTv.text = R.string.quran_wrong.getResString()
             binding.answerResultTv.setTextColor(R.color.color_FF567F.getResColor())
         }
     }
@@ -393,9 +393,9 @@ class QuestionFragment :
         binding.levelThoughtCl.root.gone()
         binding.quizNsv.visible()
         val currentLevel = SPTools.getInt(Constants.KEY_LAST_QUESTION_LEVEL, 1)
-        binding.levelTv.text = R.string.bible_level.getResString(currentLevel.toString())
+        binding.levelTv.text = R.string.quran_level.getResString(currentLevel.toString())
         binding.levelThoughtCl.nextLevelTv.text =
-            R.string.bible_level.getResString((currentLevel + 1).toString())
+            R.string.quran_level.getResString((currentLevel + 1).toString())
         binding.questionContentTv.text = questionBean.question
         binding.questionProgressTv.text = viewModel.getProgressQuestion()
         binding.optionsView.setData(questionBean)

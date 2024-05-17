@@ -37,7 +37,7 @@ class QuestionFailActivity :
                     finish()
                 })
             } else {
-                ToastUtils.showLong(R.string.bible_no_ad_tips)
+                ToastUtils.showLong(R.string.quran_no_ad_tips)
             }
 
         }

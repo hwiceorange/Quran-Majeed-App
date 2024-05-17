@@ -57,7 +57,7 @@ class QuestionRevivalActivity :
         binding.recoveryAdCl.isVisible = true
         binding.recoverGemCl.isVisible = false
         binding.gemCountTv.text = "${QuizGemManager.getGemCount()}"
-        binding.recoverGemTv.text = "${QuizGemManager.RESTART_PLAY} ${R.string.bible_recovery.getResString()}"
+        binding.recoverGemTv.text = "${QuizGemManager.RESTART_PLAY} ${R.string.quran_recovery.getResString()}"
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 reportClickEvent("quiz_relive_back_close")
@@ -86,7 +86,7 @@ class QuestionRevivalActivity :
                 binding.recoveryAdCl.isVisible = false
                 binding.recoverGemCl.isVisible = true
 
-                binding.tipsTv.text = R.string.bible_quiz_revival_gem_tips.getResString()
+                binding.tipsTv.text = R.string.quran_quiz_revival_gem_tips.getResString()
             }
         }
         binding.recoverGemCl.setOnClickListener {
@@ -95,7 +95,7 @@ class QuestionRevivalActivity :
                 RxBus.INSTANCE().post(QuestionFail(QuestionFail.TRY_AGAIN))
                 finish()
             } else {
-                ToastUtils.showShort(R.string.bible_not_enough_gems)
+                ToastUtils.showShort(R.string.quran_not_enough_gems)
             }
         }
         binding.noThanksTv.setOnClickListener {

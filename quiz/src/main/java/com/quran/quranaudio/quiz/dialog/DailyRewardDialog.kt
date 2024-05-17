@@ -51,9 +51,9 @@ class DailyRewardDialog : BaseDialogFragment<DialogDailyRewardBinding>() {
 
     override fun ensureViewAndClicks() {
         initData()
-        val spannable = SpannableString(getString(R.string.bible_get_gem_with_video))
+        val spannable = SpannableString(getString(R.string.quran_get_gem_with_video))
         val colorSpan = ForegroundColorSpan("#FFE792".toColorInt())
-        val start = getString(R.string.bible_get_gem_with_video).indexOf("30")
+        val start = getString(R.string.quran_get_gem_with_video).indexOf("30")
         val end = start + 2
         spannable.setSpan(colorSpan, start,end, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
         mBinding.dailyWatchAdTv.text = spannable

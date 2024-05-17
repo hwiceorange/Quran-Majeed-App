@@ -132,7 +132,7 @@ fun Activity.showInterAdByPoolNew(
                 wrapCallback.invoke(false)
                 return
             }
-            val loadingDialog = LoadingDialog(this, R.string.bible_loading_ad.getResString())
+            val loadingDialog = LoadingDialog(this, R.string.quran_loading_ad.getResString())
             loadingDialog.show()
             Tasks.postDelayedByUI({
                 if (this.isValid()) {
@@ -195,7 +195,7 @@ fun Activity.showRewardAd(
                 callbacks.invoke(false)
                 return
             }
-            val loadingDialog = LoadingDialog(this, R.string.bible_loading_ad.getResString())
+            val loadingDialog = LoadingDialog(this, R.string.quran_loading_ad.getResString())
             loadingDialog.show()
             Tasks.postDelayedByUI({
                 if (this.isValid()) {
@@ -251,7 +251,7 @@ fun Activity.showGemAd(
                 if (it) {
                     nextSetup?.invoke()
                 }else {
-                    ToastUtils.showLong(R.string.bible_no_ad_tips)
+                    ToastUtils.showLong(R.string.quran_no_ad_tips)
                 }
             }, {
                 reportEvent(intersFunction,"quiz_reward_gem","$rewardGems")
@@ -259,7 +259,7 @@ fun Activity.showGemAd(
                 reloadQuizInterstitial()
             })
         }else {
-            ToastUtils.showLong(R.string.bible_no_ad_tips)
+            ToastUtils.showLong(R.string.quran_no_ad_tips)
             reloadQuizInterstitial()
             return false
         }
@@ -271,7 +271,7 @@ fun Activity.showGemAd(
                 if (it) {
                     nextSetup?.invoke()
                 }else {
-                    ToastUtils.showLong(R.string.bible_no_ad_tips)
+                    ToastUtils.showLong(R.string.quran_no_ad_tips)
                 }
             }, {
             }, {
@@ -279,7 +279,7 @@ fun Activity.showGemAd(
                 if (rewardGems > 0) QuizGemManager.addCount(rewardGems)
             })
         } else {
-            ToastUtils.showLong(R.string.bible_no_ad_tips)
+            ToastUtils.showLong(R.string.quran_no_ad_tips)
             reloadQuizRewardAd()
             return false
         }

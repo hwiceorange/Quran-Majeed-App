@@ -58,7 +58,7 @@ class QuizNotifyActivity :
     }
 
     private fun updateQuestionUI(questionBean: QuestionBean) {
-        binding.questionProgressTv.text = R.string.bible_question.getResString("").trim()
+        binding.questionProgressTv.text = R.string.quran_question.getResString("").trim()
         binding.questionContentTv.text = questionBean.question
         binding.optionsView.setData(questionBean)
         if (isDebug()) {
