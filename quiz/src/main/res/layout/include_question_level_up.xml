@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_34"
         android:fontFamily="@font/montserrat_bold"
-        android:text="@string/bible_level_up"
+        android:text="@string/quran_level_up"
         android:textColor="@color/white"
         android:textSize="@dimen/dp_24"
         app:layout_constraintBottom_toBottomOf="@+id/levelThoughtLav"
@@ -51,12 +51,12 @@
             android:gravity="center"
             android:textColor="@color/white"
             android:textSize="@dimen/dp_18"
-            android:text="@string/bible_reward" />
+            android:text="@string/quran_reward" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/bible_gnt_ad"
+            android:text="@string/quran_gnt_ad"
             android:textColor="@color/white"
             android:textSize="@dimen/dp_10"
             android:layout_marginStart="@dimen/dp_12"

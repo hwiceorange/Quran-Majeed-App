@@ -36,7 +36,7 @@ class TipDialog(context: Context, cancel: () -> Unit, sure: () -> Unit) :
         }
     }
 
-    fun show(msg:String,title:String = R.string.bible_tip.getResString()) {
+    fun show(msg:String,title:String = R.string.quran_tip.getResString()) {
         binding.msgTv.text = msg
         binding.titleTv.text = title
         super.show()
