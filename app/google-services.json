@@ -1,36 +1,26 @@
 {
   "project_info": {
-    "project_number": "1075696385145",
-    "project_id": "quran-fda60",
-    "storage_bucket": "quran-fda60.appspot.com"
+    "project_number": "517834286063",
+    "project_id": "quran-majeed-aa3d2",
+    "storage_bucket": "quran-majeed-aa3d2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1075696385145:android:ac93672701fca78798a8a8",
+        "mobilesdk_app_id": "1:517834286063:android:aea3c459125d4c2cd80c1a",
         "android_client_info": {
           "package_name": "com.quran.quranaudio.online"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "1075696385145-peassm8fnpns09vatv8q7kerf8q30tdg.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCqEJ8kUQPL-EBipMxaUQjeihy-rhV02to"
+          "current_key": "AIzaSyCxNDh9qjiGHO5nIMZKfl0RscYYErskVsg"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "1075696385145-peassm8fnpns09vatv8q7kerf8q30tdg.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
