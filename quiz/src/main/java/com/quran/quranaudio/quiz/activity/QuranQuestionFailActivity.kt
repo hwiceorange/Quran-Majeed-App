@@ -17,9 +17,9 @@ import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.quranaudio.common.ad.AdConfig
 import com.quran.quranaudio.quiz.databinding.ActivityQuestionFailBinding
-import com.quran.quranaudio.quiz.fragments.QuestionFragment
+import com.quran.quranaudio.quiz.fragments.QuranQuestionFragment
 
-class QuestionFailActivity :
+class QuranQuestionFailActivity :
     BaseBindingActivity<ActivityQuestionFailBinding>(ActivityQuestionFailBinding::inflate) {
 
     override fun initView() {
@@ -79,8 +79,8 @@ class QuestionFailActivity :
     companion object {
         fun open(context: Context) {
 
-            if (QuestionFragment.isSelected) {
-                context.startActivity(Intent(context, QuestionFailActivity::class.java))
+            if (QuranQuestionFragment.isSelected) {
+                context.startActivity(Intent(context, QuranQuestionFailActivity::class.java))
             }
         }
     }

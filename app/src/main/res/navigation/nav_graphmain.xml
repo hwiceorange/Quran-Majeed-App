@@ -8,7 +8,7 @@
     <!-- "com.quran.quranaudio.online.Allah.names99.fragments.Names99Fragment" -->
  <fragment
         android:id="@+id/nav_name_99"
-        android:name="com.quran.quranaudio.quiz.fragments.QuestionFragment"
+        android:name="com.quran.quranaudio.quiz.fragments.QuranQuestionFragment"
         android:label="Name99Fragment" />
 
     <fragment
@@ -28,7 +28,7 @@
     <!-- "com.quran.quranaudio.online.prayertimes.ui.dashboard.DashbozrdFragment" -->
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name= "com.quran.quranaudio.quiz.fragments.QuestionFragment"
+        android:name= "com.quran.quranaudio.quiz.fragments.QuranQuestionFragment"
 
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" />

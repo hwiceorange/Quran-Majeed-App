@@ -25,7 +25,7 @@ import kotlin.math.max
 /**
  * 每日宝箱奖励弹窗
  */
-class DailyRewardDialog : BaseDialogFragment<DialogDailyRewardBinding>() {
+class QuranDailyRewardDialog : BaseDialogFragment<DialogDailyRewardBinding>() {
 
     companion object {
         const val TAG = "DailyRewardDialog"

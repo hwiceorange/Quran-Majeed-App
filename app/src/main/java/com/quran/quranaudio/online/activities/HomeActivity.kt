@@ -19,8 +19,7 @@ import com.quran.quranaudio.online.Allah.names99.fragments.Name99Fragment
 import com.quran.quranaudio.online.BaseActivity
 import com.quran.quranaudio.online.prayertimes.ui.home.HomeFragment
 import com.quran.quranaudio.online.prayertimes.ui.home.PrayersFragment
-import com.quran.quranaudio.quiz.fragments.QuestionFragment
-import java.util.*
+import com.quran.quranaudio.quiz.fragments.QuranQuestionFragment
 
 
 @Suppress("DEPRECATION")
@@ -51,7 +50,7 @@ class HomeActivity : BaseActivity() {
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
 
-        QuestionFragment.isSelected=false
+        QuranQuestionFragment.isSelected=false
         when (item.itemId) {
             R.id.nav_home -> {
                 val mFragment = HomeFragment.newInstance()
@@ -67,8 +66,8 @@ class HomeActivity : BaseActivity() {
 
             R.id.nav_name_99 -> {
                // startActivity(Intent(this, AllahNameActivity::class.java))
-              val mFragment = QuestionFragment()  //com.quran.quranaudio.online.Allah.names99.fragments.Name99Fragment.newInstance()
-                QuestionFragment.isSelected=true
+              val mFragment = QuranQuestionFragment()  //com.quran.quranaudio.online.Allah.names99.fragments.Name99Fragment.newInstance()
+                QuranQuestionFragment.isSelected=true
                 replaceFragment(mFragment)
                 return@OnNavigationItemSelectedListener true
             }

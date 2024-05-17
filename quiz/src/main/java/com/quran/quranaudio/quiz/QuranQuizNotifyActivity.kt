@@ -20,7 +20,7 @@ import com.quran.quranaudio.quiz.QuestionBean
 import com.quran.quranaudio.quiz.databinding.ActivityQuizNotifyBinding
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-class QuizNotifyActivity :
+class QuranQuizNotifyActivity :
     BaseBindingActivity<ActivityQuizNotifyBinding>(ActivityQuizNotifyBinding::inflate) {
 
     private val questionBean by lazy {
@@ -66,7 +66,7 @@ class QuizNotifyActivity :
         }
         binding.optionsView.setAnswerResultListener {_, selectAnswer ->
             Tasks.postDelayedByUI({
-                QuizNotifyResultActivity.open(this, Bundle().apply {
+                QuranQuizNotifyResultActivity.open(this, Bundle().apply {
                     putParcelable(Constants.INTENT_NOTIFY_QUIZ_BEAN, questionBean)
                     putString(Constants.INTENT_NOTIFY_QUIZ_SELECT_ANSWER, selectAnswer)
                 })
@@ -85,7 +85,7 @@ class QuizNotifyActivity :
 
     companion object {
         fun open(context: Context, bundle: Bundle) {
-            context.startActivity(Intent(context, QuizNotifyActivity::class.java).apply {
+            context.startActivity(Intent(context, QuranQuizNotifyActivity::class.java).apply {
                 putExtras(bundle)
             })
         }

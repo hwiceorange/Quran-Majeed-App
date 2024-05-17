@@ -19,7 +19,7 @@ import com.quran.quranaudio.quiz.databinding.DialogFreeGemsBinding
 /**
  * 更多钻石奖励
  */
-class FreeRewardDialog : BaseDialogFragment<DialogFreeGemsBinding>() {
+class QuranFreeRewardDialog : BaseDialogFragment<DialogFreeGemsBinding>() {
 
     companion object{
         const val TAG = "FreeRewardDialog"

@@ -3,19 +3,19 @@
 
     <application>
         <activity
-            android:name="com.quranaudio.quiz.quiz.QuestionRevivalActivity"
+            android:name="com.quranaudio.quiz.quiz.QuranQuestionRevivalActivity"
             android:exported="false" />
 
         <activity
-            android:name="com.quranaudio.quiz.quiz.QuizNotifyActivity"
+            android:name="com.quranaudio.quiz.quiz.QuranQuizNotifyActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.quranaudio.quiz.quiz.QuizNotifyResultActivity"
+            android:name="com.quranaudio.quiz.quiz.QuranQuizNotifyResultActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.quran.quranaudio.quiz.activity.QuestionFailActivity"
+            android:name="com.quran.quranaudio.quiz.activity.QuranQuestionFailActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
 

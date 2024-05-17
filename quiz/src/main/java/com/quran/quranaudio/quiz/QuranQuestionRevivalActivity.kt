@@ -20,11 +20,11 @@ import com.quran.quranaudio.quiz.extension.showGemAd
 import com.quran.quranaudio.quiz.utils.RxBus
 import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ToastUtils
-import com.quran.quranaudio.quiz.activity.QuestionFailActivity
+import com.quran.quranaudio.quiz.activity.QuranQuestionFailActivity
 import com.quran.quranaudio.quiz.databinding.ActivityQuestionRevivalBinding
-import com.quran.quranaudio.quiz.fragments.QuestionFragment
+import com.quran.quranaudio.quiz.fragments.QuranQuestionFragment
 
-class QuestionRevivalActivity :
+class QuranQuestionRevivalActivity :
     BaseBindingActivity<ActivityQuestionRevivalBinding>(ActivityQuestionRevivalBinding::inflate) {
     private val playTime = 8f
     private var isAutoClose = true
@@ -37,7 +37,7 @@ class QuestionRevivalActivity :
         doOnEnd {
             if (isValid() && isAutoClose) {
                 reportClickEvent("quiz_relive_auto_close")
-                QuestionFailActivity.open(this@QuestionRevivalActivity)
+                QuranQuestionFailActivity.open(this@QuranQuestionRevivalActivity)
                 finish()
             }
         }
@@ -62,7 +62,7 @@ class QuestionRevivalActivity :
             override fun handleOnBackPressed() {
                 reportClickEvent("quiz_relive_back_close")
                 isAutoClose = false
-                QuestionFailActivity.open(this@QuestionRevivalActivity)
+                QuranQuestionFailActivity.open(this@QuranQuestionRevivalActivity)
                 finish()
             }
         })
@@ -102,7 +102,7 @@ class QuestionRevivalActivity :
             reportClickEvent("quiz_relive_no_thanks")
             isAutoClose = false
             countValueAnimator.cancel()
-            QuestionFailActivity.open(this)
+            QuranQuestionFailActivity.open(this)
             finish()
         }
         binding.gemCountTv.setDrawableLeft(
@@ -131,8 +131,8 @@ class QuestionRevivalActivity :
     companion object {
         fun open(context: Context) {
 
-            if (QuestionFragment.isSelected) {
-                context.startActivity(Intent(context, QuestionRevivalActivity::class.java))
+            if (QuranQuestionFragment.isSelected) {
+                context.startActivity(Intent(context, QuranQuestionRevivalActivity::class.java))
             }
         }
     }

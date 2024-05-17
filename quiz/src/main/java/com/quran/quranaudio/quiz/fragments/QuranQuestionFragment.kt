@@ -39,13 +39,13 @@ import com.quran.quranaudio.quiz.extension.showGemAd
 import com.quran.quranaudio.quiz.extension.showInterAdByPoolNew
 import com.quran.quranaudio.quiz.extension.visible
 import com.quranaudio.quiz.quiz.QuestionFail
-import com.quranaudio.quiz.quiz.QuestionRevivalActivity
+import com.quranaudio.quiz.quiz.QuranQuestionRevivalActivity
 import com.quranaudio.quiz.quiz.QuestionViewModel
 import com.quranaudio.quiz.quiz.QuizGemChange
 import com.quranaudio.quiz.quiz.QuizGemManager
 import com.quranaudio.quiz.quiz.QuizPropChange
-import com.quranaudio.quiz.quiz.dialog.DailyRewardDialog
-import com.quranaudio.quiz.quiz.dialog.FreeRewardDialog
+import com.quranaudio.quiz.quiz.dialog.QuranDailyRewardDialog
+import com.quranaudio.quiz.quiz.dialog.QuranFreeRewardDialog
 import com.quran.quranaudio.quiz.utils.AnimatorUtils
 import com.quran.quranaudio.quiz.utils.RxBus
 import com.quran.quranaudio.quiz.utils.Tasks
@@ -56,7 +56,7 @@ import com.quran.quranaudio.quiz.databinding.FragmentQuestionBinding
 import kotlinx.coroutines.launch
 
 @Suppress("DEPRECATION")
-class QuestionFragment :
+class QuranQuestionFragment :
     BaseBindingFragment<FragmentQuestionBinding>(FragmentQuestionBinding::inflate) {
         companion object{
             var isSelected=false
@@ -85,7 +85,7 @@ class QuestionFragment :
         binding.dailyBox.isVisible = showDailyBox
         if (showDailyBox) {
             reportEvent("daily_box_dialog", "show_quiz_reward", "auto")
-            DailyRewardDialog().apply {
+            QuranDailyRewardDialog().apply {
                 dismissCallBack = { gem ->
                     timeStart()
                     binding.dailyBox.isVisible = false
@@ -93,7 +93,7 @@ class QuestionFragment :
                         addGemCountAnimator(gem)
                     }
                 }
-            }.show(childFragmentManager, DailyRewardDialog.TAG)
+            }.show(childFragmentManager, QuranDailyRewardDialog.TAG)
             timePause()
         }
     }
@@ -103,14 +103,14 @@ class QuestionFragment :
         val receivedReward = SPTools.getLong(Constants.LAST_RECEIVED_BOX_TIME, 0)
         if (System.currentTimeMillis().daysBetween(receivedReward) <= 0) {
             reportEvent("free_dialog", "show_quiz_reward")
-            FreeRewardDialog().apply {
+            QuranFreeRewardDialog().apply {
                 dismissCallBack = {
                     timeStart()
                 }
-            }.show(childFragmentManager, FreeRewardDialog.TAG)
+            }.show(childFragmentManager, QuranFreeRewardDialog.TAG)
         } else {
             reportEvent("daily_box_dialog", "show_quiz_reward")
-            DailyRewardDialog().apply {
+            QuranDailyRewardDialog().apply {
                 dismissCallBack = { gem ->
                     timeStart()
                     binding.dailyBox.isVisible = false
@@ -118,7 +118,7 @@ class QuestionFragment :
                         addGemCountAnimator(gem)
                     }
                 }
-            }.show(childFragmentManager, DailyRewardDialog.TAG)
+            }.show(childFragmentManager, QuranDailyRewardDialog.TAG)
         }
         timePause()
         return true
@@ -137,7 +137,7 @@ class QuestionFragment :
                 currentBean = it
                 it?.run {
                     updateQuestionUI(this)
-                    if (this@QuestionFragment.userVisibleHint && !isShowDailyRewardDialog()) {
+                    if (this@QuranQuestionFragment.userVisibleHint && !isShowDailyRewardDialog()) {
                         countValueAnimator?.start()
                     }
                 }
@@ -414,7 +414,7 @@ class QuestionFragment :
             }
             doOnEnd {
                 if (context != null && activity.isValid()) {
-                    QuestionRevivalActivity.open(requireContext())
+                    QuranQuestionRevivalActivity.open(requireContext())
                 }
             }
             duration = (playTime * 1000).toLong()
@@ -431,7 +431,7 @@ class QuestionFragment :
     }
 
     private fun isShowDailyRewardDialog(): Boolean {
-        childFragmentManager.findFragmentByTag(DailyRewardDialog.TAG)?.let {
+        childFragmentManager.findFragmentByTag(QuranDailyRewardDialog.TAG)?.let {
             it as DialogFragment
             if (it.dialog?.isShowing == true) return true
         }

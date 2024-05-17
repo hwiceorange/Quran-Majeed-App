@@ -14,7 +14,7 @@ import com.blankj.utilcode.util.BarUtils
 import com.quran.quranaudio.quiz.QuestionBean
 import com.quran.quranaudio.quiz.databinding.ActivityQuizNotifyResultBinding
 
-class QuizNotifyResultActivity :
+class QuranQuizNotifyResultActivity :
     BaseBindingActivity<ActivityQuizNotifyResultBinding>(ActivityQuizNotifyResultBinding::inflate) {
 
     override fun initView() {
@@ -60,7 +60,7 @@ class QuizNotifyResultActivity :
 
     companion object {
         fun open(context: Context, bundle: Bundle) {
-            context.startActivity(Intent(context, QuizNotifyResultActivity::class.java).apply {
+            context.startActivity(Intent(context, QuranQuizNotifyResultActivity::class.java).apply {
                 putExtras(bundle)
             })
         }
