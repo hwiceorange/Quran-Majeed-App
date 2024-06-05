@@ -1111,4 +1111,10 @@
     <string name="verseSyncOn">متابعة الآية: مفعل</string>
     <string name="strTitleFeaturedQuran">قراءة مختارة</string>
     <string name="verseSyncOff">متابعة الآية: متوقف</string>
+
+  <string name="warning_skip">تخطي</string>
+  <string name="warning_enable_location">تمكين الموقع</string>
+  <string name="warning_welcome">مرحبا</string>
+  <string name="warning_use_location">احصل على أوقات الصلاة واتجاه القبلة بدقة</string>
+
 </resources>

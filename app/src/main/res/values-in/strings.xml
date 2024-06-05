@@ -1119,5 +1119,10 @@ seperti: Waktu Sholat Global, metode perhitungan yang berbeda, notifikasi, memba
     QuranApp\n\nAplikasi terbaik untuk membaca Al-Qur\'an yang mulia dengan terjemahan. Aplikasi ini memiliki tampilan yang bagus dan bersih serta fitur-fitur lainnya. \n\nUNDUH SEKARANG:\n%s
 </string>
 
+    <string name="warning_skip">Lewati</string>
+    <string name="warning_enable_location">Aktifkan Lokasi</string>
+    <string name="warning_welcome">Selamat Datang</string>
+    <string name="warning_use_location">Dapatkan waktu sholat dan arah kiblat yang akurat</string>
+
 
 </resources>

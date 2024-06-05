@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:textSize="32sp"
+      android:textStyle="bold"
+      android:text="@string/warning_welcome"
+      />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/location_warning"/>
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="16dp"
+
+      android:textSize="20sp"
+      android:textStyle="bold"
+      android:text="@string/warning_use_location"
+      />
+
+  <TextView android:id="@+id/btn_skip"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="32dp"
+      android:layout_marginLeft="8dp"
+      android:layout_marginRight="8dp"
+
+      android:textColor="#8888"
+      android:textSize="20sp"
+      android:textStyle="bold"
+      android:text="@string/warning_skip"
+      />
+
+  <Button android:id="@+id/btn_enable_location"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textAllCaps="false"
+      android:textSize="24sp"
+      android:layout_marginTop="16dp"
+      android:text="@string/warning_enable_location"/>
+</LinearLayout>

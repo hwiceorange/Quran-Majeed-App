@@ -2,6 +2,8 @@ package com.quran.quranaudio.online.prayertimes.ui.home;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -141,7 +144,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        requestPermission();
+        if(!checkLocationPermission()){
+            showPermissionWarning();
+        }
         //Permission End
 
         homeViewModel
@@ -175,10 +180,33 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         return rootView;
     }
 
-    private void requestPermission(){
+    View.OnClickListener dialogListener=new View.OnClickListener() {
+        @Override public void onClick(View v) {
+            if(v.getId()==R.id.btn_skip){
+                dialogWarning.dismiss();
+            } else if(v.getId()==R.id.btn_enable_location){
+                dialogWarning.dismiss();
+                requestPermission();
+            }
+        }
+    };
+    Dialog dialogWarning;
+    private boolean checkLocationPermission(){
         isLocationPermissionGranted = ContextCompat.checkSelfPermission(requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
+            Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED;
+        return isLocationPermissionGranted;
+    }
+    private void showPermissionWarning(){
+        dialogWarning=new AlertDialog.Builder(getActivity()).setView(R.layout.layout_dialog_location_warning).create();
+        TextView skip=dialogWarning.findViewById(R.id.btn_skip);
+        Button enable=dialogWarning.findViewById(R.id.btn_enable_location);
+        skip.setOnClickListener(dialogListener);
+        enable.setOnClickListener(dialogListener);
+        dialogWarning.show();
+    }
+    private void requestPermission(){
+
 
         List<String> permissionRequest = new ArrayList<String>();
 

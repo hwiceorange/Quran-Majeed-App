@@ -1120,6 +1120,10 @@
 
     <!-- Quran_Module* -->
 
+    <string name="warning_skip">Skip</string>
+    <string name="warning_enable_location">Enable Location</string>
+    <string name="warning_welcome">Welcome</string>
+    <string name="warning_use_location">Get accurate prayer times and qibla directions</string>
 
 
 </resources>
