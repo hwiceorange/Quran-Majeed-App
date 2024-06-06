@@ -47,6 +47,6 @@
       android:layout_height="wrap_content"
       android:textAllCaps="false"
       android:textSize="24sp"
-      android:layout_marginTop="16dp"
+      android:layout_marginTop="8dp"
       android:text="@string/warning_enable_location"/>
 </LinearLayout>

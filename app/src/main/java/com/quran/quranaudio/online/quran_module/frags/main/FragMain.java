@@ -292,6 +292,7 @@ public class FragMain extends BaseFragment {
         Button enable=view.findViewById(R.id.btn_enable_location);
         skip.setOnClickListener(dialogListener);
         enable.setOnClickListener(dialogListener);
+        dialogWarning.setCanceledOnTouchOutside(false);
         dialogWarning.show();
     }
     private void requestPermission(){
