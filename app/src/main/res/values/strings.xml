@@ -51,7 +51,7 @@
 
     <!--    privacy policy url-->
     <string name="privacy">Privacy Policy</string>
-    <string name="privacy_policy_url" translatable="false">https://www.dochubai.com/privacy-policy</string>
+    <string name="privacy_policy_url" translatable="false">https://docs.google.com/document/d/1eNo3c02el7FKiRUwTH5NaV7YIhXwjJrsrx9Rp1_keZg</string>
 
 
     //Toast

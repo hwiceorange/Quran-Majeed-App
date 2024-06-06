@@ -21,12 +21,7 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 public class BaseActivity extends AppCompatActivity {
 
     @Inject

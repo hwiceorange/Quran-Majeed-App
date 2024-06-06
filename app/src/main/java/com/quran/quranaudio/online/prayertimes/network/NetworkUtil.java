@@ -8,12 +8,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 public class NetworkUtil {
 
     public static Single<Boolean> hasInternetConnection() {

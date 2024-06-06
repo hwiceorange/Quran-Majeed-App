@@ -10,12 +10,7 @@ import com.quran.quranaudio.online.prayertimes.preferences.PreferencesConstants;
 import com.quran.quranaudio.online.prayertimes.preferences.PreferencesHelper;
 import com.quran.quranaudio.online.R;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 public class BaseNotification {
 
     protected final Context context;

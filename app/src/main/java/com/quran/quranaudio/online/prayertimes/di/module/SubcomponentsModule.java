@@ -8,12 +8,7 @@ import com.quran.quranaudio.online.prayertimes.ui.timingtable.di.TimingTableComp
 
 import dagger.Module;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 @Module(subcomponents = {
         HomeComponent.class,
         TimingTableComponent.class,

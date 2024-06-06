@@ -9,12 +9,7 @@ import dagger.Binds;
 import dagger.Module;
 import dagger.multibindings.IntoMap;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 @Module
 public interface WorkerBindingModule {
     @Binds

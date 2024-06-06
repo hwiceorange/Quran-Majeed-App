@@ -33,12 +33,7 @@ import com.takisoft.preferencex.PreferenceFragmentCompat;
 
 import javax.inject.Inject;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String DIALOG_FRAGMENT_TAG = "PreferencesDialogFragment";

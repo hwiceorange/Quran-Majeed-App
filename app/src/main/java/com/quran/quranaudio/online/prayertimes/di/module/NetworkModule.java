@@ -42,12 +42,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.quran.quranaudio.online.BuildConfig.DEBUG;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 @Module
 public class NetworkModule {
 

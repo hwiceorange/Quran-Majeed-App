@@ -18,12 +18,7 @@ import java.util.List;
 
 import io.reactivex.rxjava3.core.Single;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 public abstract class AbstractTimingsService implements TimingsService {
 
     protected final PrayerRegistry prayerRegistry;

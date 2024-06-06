@@ -11,12 +11,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Map;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 public class DayPrayer implements Serializable {
 
     private String date;

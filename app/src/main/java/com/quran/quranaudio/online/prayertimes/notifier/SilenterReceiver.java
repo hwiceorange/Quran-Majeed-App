@@ -12,12 +12,7 @@ import com.quran.quranaudio.online.prayertimes.preferences.PreferencesHelper;
 
 import javax.inject.Inject;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 
 public class SilenterReceiver extends BroadcastReceiver {
 

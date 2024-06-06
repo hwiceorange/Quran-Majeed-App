@@ -2,12 +2,7 @@ package com.quran.quranaudio.online.prayertimes.openweathermap;
 
 import java.util.List;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 public class OpenWeatherMapResponse {
 
     private MainWeatherData main;

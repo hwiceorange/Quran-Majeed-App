@@ -5,12 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 public class PendingIntentCreator {
 
     public static PendingIntent getActivity(Context context, int id, Intent intent, int flags) {

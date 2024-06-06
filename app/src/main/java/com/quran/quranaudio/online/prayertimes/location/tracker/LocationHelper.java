@@ -19,12 +19,7 @@ import io.reactivex.rxjava3.core.Single;
 
 import static android.content.Context.MODE_PRIVATE;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 @Singleton
 public class LocationHelper {
 

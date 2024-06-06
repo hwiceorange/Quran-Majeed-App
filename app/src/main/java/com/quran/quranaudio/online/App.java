@@ -52,12 +52,7 @@ import cat.ereza.customactivityoncrash.config.CaocConfig;
 import kotlin.jvm.JvmField;
 import kotlin.jvm.internal.Intrinsics;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 public class App extends BaseApp {
 
     //Ads

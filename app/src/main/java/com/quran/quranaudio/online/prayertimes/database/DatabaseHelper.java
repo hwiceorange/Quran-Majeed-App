@@ -6,12 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "quran_reader.db";

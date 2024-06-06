@@ -5,12 +5,7 @@ import com.quran.quranaudio.online.prayertimes.timings.calculations.LatitudeAdju
 import com.quran.quranaudio.online.prayertimes.timings.calculations.MidnightModeAdjustmentMethod;
 import com.quran.quranaudio.online.prayertimes.timings.calculations.SchoolAdjustmentMethod;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 public class TimingsPreferences {
 
     private CalculationMethodEnum method;

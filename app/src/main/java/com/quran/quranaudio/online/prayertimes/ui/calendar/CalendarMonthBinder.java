@@ -15,12 +15,7 @@ import java.time.format.TextStyle;
 import java.time.temporal.WeekFields;
 import java.util.Locale;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 public class CalendarMonthBinder implements MonthHeaderFooterBinder<MonthViewContainer> {
 
     @Override

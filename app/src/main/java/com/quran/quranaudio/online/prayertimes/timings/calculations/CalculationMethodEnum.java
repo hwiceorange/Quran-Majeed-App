@@ -1,11 +1,6 @@
 package com.quran.quranaudio.online.prayertimes.timings.calculations;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 public enum CalculationMethodEnum {
     SHIA_ITHNA_ANSARI(0, "16", "4", "14", false),
     UNIVERSITY_OF_ISLAMIC_SCIENCES_KARACHI(1, "18", "null", "18", false),

@@ -45,7 +45,7 @@
 
         <Preference
             app:key="signature"
-            app:title="officialshaheendevelopers@gmail.com"
+            app:title="lecheng2019@gmail.com"
             app:useSimpleSummaryProvider="true"/>
     </PreferenceCategory>
 

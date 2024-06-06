@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace 'com.quran.quranaudio.quiz'
-    compileSdk 34
+    compileSdk 33
 
     defaultConfig {
         minSdk 26

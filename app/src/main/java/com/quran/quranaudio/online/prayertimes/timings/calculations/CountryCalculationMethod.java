@@ -6,12 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 public class CountryCalculationMethod {
 
     private static final Map<String, CalculationMethodEnum> CALCULATION_METHOD_BY_COUNTRY = createMap();

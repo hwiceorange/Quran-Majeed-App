@@ -15,12 +15,7 @@ import com.quran.quranaudio.online.prayertimes.timings.DayPrayer;
 
 import java.util.concurrent.TimeUnit;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 public final class WorkCreator {
 
     private WorkCreator() {

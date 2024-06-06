@@ -68,12 +68,7 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private boolean allowRefresh = false;

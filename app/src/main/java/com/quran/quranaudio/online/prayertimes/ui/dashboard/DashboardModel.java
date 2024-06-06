@@ -2,12 +2,7 @@ package com.quran.quranaudio.online.prayertimes.ui.dashboard;
 
 import android.content.Intent;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 public class DashboardModel {
     private String head, sub;
     private int image;

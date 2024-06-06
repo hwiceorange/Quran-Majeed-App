@@ -9,12 +9,7 @@ import java.lang.annotation.Target;
 
 import dagger.MapKey;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 @MapKey
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

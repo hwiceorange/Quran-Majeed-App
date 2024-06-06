@@ -2,12 +2,7 @@ package com.quran.quranaudio.online.prayertimes.database;
 
 import android.provider.BaseColumns;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 class PrayerModel implements BaseColumns {
 
     static final String TABLE_NAME = "prayer_timing";

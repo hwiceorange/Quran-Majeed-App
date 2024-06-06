@@ -5,12 +5,7 @@ import com.quran.quranaudio.online.prayertimes.ui.home.PrayersFragment;
 
 import dagger.Subcomponent;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 @Subcomponent(modules = {HomeModule.class})
 public interface HomeComponent {
 

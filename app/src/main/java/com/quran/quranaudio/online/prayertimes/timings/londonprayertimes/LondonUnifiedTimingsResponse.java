@@ -2,12 +2,7 @@ package com.quran.quranaudio.online.prayertimes.timings.londonprayertimes;
 
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 public class LondonUnifiedTimingsResponse {
 
     private String date;

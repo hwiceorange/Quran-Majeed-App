@@ -4,12 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 public enum TimingsTuneEnum {
 
     MOROCCAN_MINISTRY_OF_ISLAMIC_AFFAIRS(0, 0, 0, 5, 0, 0, 0, 0, 0),

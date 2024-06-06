@@ -13,12 +13,7 @@ import com.kizitonwose.calendarview.ui.ViewContainer;
 
 import org.greenrobot.eventbus.EventBus;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 public class DayViewContainer extends ViewContainer {
 
     private TextView hijriDayTextView;

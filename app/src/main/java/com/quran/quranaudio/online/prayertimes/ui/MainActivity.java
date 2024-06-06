@@ -25,12 +25,7 @@ import com.quran.quranaudio.online.R;
 
 import javax.inject.Inject;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 public class MainActivity extends BaseActivity {
 
    /* ActivityResultLauncher<String[]> mPermissionResultLauncher;

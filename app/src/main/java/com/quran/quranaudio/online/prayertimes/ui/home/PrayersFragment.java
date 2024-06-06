@@ -58,12 +58,7 @@ import javax.inject.Inject;
 import cl.jesualex.stooltip.Position;
 import cl.jesualex.stooltip.Tooltip;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 public class PrayersFragment extends Fragment {
 
     @Inject

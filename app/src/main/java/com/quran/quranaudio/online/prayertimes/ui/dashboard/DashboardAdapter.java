@@ -14,12 +14,7 @@ import com.quran.quranaudio.online.R;
 
 import java.util.ArrayList;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.ViewHolder> {
 
     ArrayList<DashboardModel> dashboardModelArrayList;

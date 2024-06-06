@@ -24,12 +24,7 @@ import javax.inject.Provider;
 
 import io.reactivex.rxjava3.core.Single;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 public class PrayerUpdater extends RxWorker {
 
     private static final String TAG = "PrayerUpdater";

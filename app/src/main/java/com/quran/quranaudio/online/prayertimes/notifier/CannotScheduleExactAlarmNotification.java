@@ -20,12 +20,7 @@ import com.quran.quranaudio.online.R;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 @Singleton
 @RequiresApi(api = Build.VERSION_CODES.S)
 class CannotScheduleExactAlarmNotification extends BaseNotification {

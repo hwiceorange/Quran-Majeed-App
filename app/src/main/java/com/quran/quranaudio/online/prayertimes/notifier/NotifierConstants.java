@@ -1,11 +1,6 @@
 package com.quran.quranaudio.online.prayertimes.notifier;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 public class NotifierConstants {
 
     public static final String ADTHAN_NOTIFICATION_CHANNEL_ID = "ADHAN_CHANNEL_ID";

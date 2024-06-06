@@ -27,12 +27,7 @@ import javax.inject.Singleton;
 
 import static android.content.Context.MODE_PRIVATE;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
+
 @Singleton
 class PrayerNotification extends BaseNotification {
 
