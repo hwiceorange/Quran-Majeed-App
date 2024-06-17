@@ -40,8 +40,12 @@ object AdFactory : ActivityLifecycleCallbacks {
     }
 
     private fun initAdmob(context: Context) {
-        MobileAds.initialize(context) {
-            Log.d(TAG, "MobileAds init: successful")
+        try {
+            MobileAds.initialize(context) {
+                Log.d(TAG, "MobileAds init: successful")
+            }
+        }catch (e:Exception){
+
         }
     }
 

@@ -2,7 +2,9 @@ package com.quran.quranaudio.online.quran_module.frags.settings
 
 import android.app.Activity
 import android.content.*
+import android.content.Context.RECEIVER_EXPORTED
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.view.View
@@ -68,12 +70,21 @@ class FragSettingsTranslationsDownload :
         translDownloadReceiver = TranslDownloadReceiver()
             .apply {
             setDownloadStateListener(this@FragSettingsTranslationsDownload)
-            requireActivity().registerReceiver(
-                this,
-                IntentFilter(TranslDownloadReceiver.ACTION_TRANSL_DOWNLOAD_STATUS).apply {
-                    addAction(TranslDownloadReceiver.ACTION_NO_MORE_DOWNLOADS)
-                }
-            )
+            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.TIRAMISU) {
+                requireActivity().registerReceiver(
+                    this,
+                    IntentFilter(TranslDownloadReceiver.ACTION_TRANSL_DOWNLOAD_STATUS).apply {
+                        addAction(TranslDownloadReceiver.ACTION_NO_MORE_DOWNLOADS)
+                    }, RECEIVER_EXPORTED
+                )
+            } else {
+                requireActivity().registerReceiver(
+                    this,
+                    IntentFilter(TranslDownloadReceiver.ACTION_TRANSL_DOWNLOAD_STATUS).apply {
+                        addAction(TranslDownloadReceiver.ACTION_NO_MORE_DOWNLOADS)
+                    }
+                )
+            }
             bindTranslService(requireActivity())
         }
     }
