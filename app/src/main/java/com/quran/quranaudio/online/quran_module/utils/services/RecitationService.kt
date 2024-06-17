@@ -372,7 +372,7 @@ class RecitationService : Service(), MediaDescriptionAdapter {
         }
     }
 
-    val isPlaying get() = player.isPlaying
+    val isPlaying get() = if(player==null) false else player.isPlaying
 
     fun isReciting(chapterNo: Int, verseNo: Int) = recParams.isCurrentVerse(chapterNo, verseNo) && isPlaying
 

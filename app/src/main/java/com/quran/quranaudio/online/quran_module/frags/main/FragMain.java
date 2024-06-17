@@ -229,7 +229,9 @@ public class FragMain extends BaseFragment {
     }
 
     private void loadBannerAd() {
-        bannerAd = new BannerAd.Builder((Activity) getContext())
+        if(getActivity()==null)
+            return;
+        bannerAd = new BannerAd.Builder(getActivity())
                 .setAdStatus(Constant.AD_STATUS)
                 .setAdNetwork(Constant.AD_NETWORK)
                 .setBackupAdNetwork(Constant.BACKUP_AD_NETWORK)
@@ -243,7 +245,9 @@ public class FragMain extends BaseFragment {
     }
 
     private void loadInterstitialAd() {
-        interstitialAd = new InterstitialAd.Builder((Activity) getContext())
+        if(getActivity()==null)
+            return;
+        interstitialAd = new InterstitialAd.Builder(getActivity())
                 .setAdStatus(Constant.AD_STATUS)
                 .setAdNetwork(Constant.AD_NETWORK)
                 .setBackupAdNetwork(Constant.BACKUP_AD_NETWORK)
@@ -260,11 +264,13 @@ public class FragMain extends BaseFragment {
     }
 
     private void showInterstitialAd() {
-        interstitialAd.show(() -> {
-            Log.d(TAG, "onAdShowed");
-        }, () -> {
-            Log.d(TAG, "onAdDismissed");
-        });
+        if(interstitialAd!=null) {
+            interstitialAd.show(() -> {
+                Log.d(TAG, "onAdShowed");
+            }, () -> {
+                Log.d(TAG, "onAdDismissed");
+            });
+        }
 
     }
 

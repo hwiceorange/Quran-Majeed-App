@@ -481,7 +481,11 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
     private fun setZakatCalculationListener() {
         binding.cashInHandET.doAfterTextChanged {
             cashInHand = if (binding.cashInHandET.text.toString().isNotEmpty()) {
-                binding.cashInHandET.text.toString().toDouble().limitTo2Decimal()
+                try {
+                    binding.cashInHandET.text.toString().replace(",",".").toDouble().limitTo2Decimal()
+                }catch (e:Exception){
+                    0.0
+                }
 
             } else {
                 0.0
@@ -493,7 +497,12 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         }
         binding.cashInBankET.doAfterTextChanged {
             cashInBank = if (binding.cashInBankET.text.toString().isNotEmpty()) {
-                binding.cashInBankET.text.toString().toDouble()
+
+                try {
+                    binding.cashInBankET.text.toString().replace(",",".").toDouble()
+                }catch (e:Exception){
+                    0.0
+                }
 
             } else {
                 0.0
@@ -504,7 +513,12 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         }
         binding.goldValuePriceET.doAfterTextChanged {
             goldValuePrice = if (binding.goldValuePriceET.text.toString().isNotEmpty()) {
-                binding.goldValuePriceET.text.toString().toDouble()
+                try {
+                    binding.goldValuePriceET.text.toString().replace(",", ".").replace(",", ".")
+                        .toDouble()
+                }catch (e:Exception){
+                    0.0
+                }
             } else {
                 0.0
             }
@@ -515,7 +529,11 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         }
         binding.goldweightUnitPriceET.doAfterTextChanged {
             goldWeightPrice = if (binding.goldweightUnitPriceET.text.toString().isNotEmpty()) {
-                binding.goldweightUnitPriceET.text.toString().toDouble()
+                try {
+                    binding.goldweightUnitPriceET.text.toString().replace(",", ".").toDouble()
+                }catch (e:Exception){
+                    0.0
+                }
             } else {
                 0.0
             }
@@ -538,7 +556,12 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         binding.gold24CaratweightPerUnitPriceET.doAfterTextChanged {
             goldWeight24CaratUnit =
                 if (binding.gold24CaratweightPerUnitPriceET.text.toString().isNotEmpty()) {
-                    binding.gold24CaratweightPerUnitPriceET.text.toString().toDouble()
+                    try {
+                        binding.gold24CaratweightPerUnitPriceET.text.toString().replace(",", ".")
+                            .toDouble()
+                    }catch (e:Exception){
+                        0.0
+                    }
                 } else {
                     0.0
                 }
@@ -557,7 +580,12 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         binding.gold22CaratweightPerUnitPriceET.doAfterTextChanged {
             goldWeight22CaratUnit =
                 if (binding.gold22CaratweightPerUnitPriceET.text.toString().isNotEmpty()) {
-                    binding.gold22CaratweightPerUnitPriceET.text.toString().toDouble()
+                    try {
+                        binding.gold22CaratweightPerUnitPriceET.text.toString().replace(",", ".")
+                            .toDouble()
+                    }catch(e:Exception){
+                        0.0
+                    }
                 } else {
                     0.0
                 }
@@ -581,7 +609,12 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         binding.gold18CaratweightPerUnitPriceET.doAfterTextChanged {
             goldWeight18CaratUnit =
                 if (binding.gold18CaratweightPerUnitPriceET.text.toString().isNotEmpty()) {
-                    binding.gold18CaratweightPerUnitPriceET.text.toString().toDouble()
+                    try {
+                        binding.gold18CaratweightPerUnitPriceET.text.toString().replace(",", ".")
+                            .toDouble()
+                    }catch (e:Exception){
+                        0.0
+                    }
                 } else {
                     0.0
                 }
@@ -606,7 +639,11 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         binding.silverValuePriceET.doAfterTextChanged {
             silverValuePrice =
                 if (binding.silverValuePriceET.text.toString().isNotEmpty()) {
-                    binding.silverValuePriceET.text.toString().toDouble()
+                    try {
+                        binding.silverValuePriceET.text.toString().replace(",", ".").toDouble()
+                    }catch (e:Exception){
+                        0.0
+                    }
 
                 } else {
                     0.0
@@ -618,7 +655,11 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         binding.silverWeightUnitPriceET.doAfterTextChanged {
             silverWeightPrice =
                 if (binding.silverWeightUnitPriceET.text.toString().isNotEmpty()) {
-                    binding.silverWeightUnitPriceET.text.toString().toDouble()
+                    try {
+                        binding.silverWeightUnitPriceET.text.toString().replace(",", ".").toDouble()
+                    }catch (e:Exception){
+                        0.0
+                    }
 
                 } else {
                     0.0
@@ -632,8 +673,11 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         binding.silverWeightQuentityET.doAfterTextChanged {
             silverWeightQuentity =
                 if (binding.silverWeightQuentityET.text.toString().isNotEmpty()) {
-                    binding.silverWeightQuentityET.text.toString().toDouble()
-
+                    try {
+                        binding.silverWeightQuentityET.text.toString().replace(",", ".").toDouble()
+                    }catch (e:Exception){
+                        0.0
+                    }
                 } else {
                     0.0
                 }
@@ -645,7 +689,11 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         }
         binding.sharesET.doAfterTextChanged {
             investmentShares = if (binding.sharesET.text.toString().isNotEmpty()) {
-                binding.sharesET.text.toString().toDouble()
+                try {
+                    binding.sharesET.text.toString().replace(",", ".").toDouble()
+                }catch (e:Exception){
+                    0.0
+                }
 
             } else {
                 0.0
@@ -658,7 +706,11 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         }
         binding.otherInvestmentET.doAfterTextChanged {
             investmentCashInBank = if (binding.otherInvestmentET.text.toString().isNotEmpty()) {
-                binding.otherInvestmentET.text.toString().toDouble()
+                try {
+                    binding.otherInvestmentET.text.toString().replace(",", ".").toDouble()
+                }catch (e:Exception){
+                    0.0
+                }
 
             } else {
                 0.0
@@ -671,7 +723,11 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         }
         binding.propertyRentET.doAfterTextChanged {
             propertyRentIncom = if (binding.propertyRentET.text.toString().isNotEmpty()) {
-                binding.propertyRentET.text.toString().toDouble()
+                try {
+                    binding.propertyRentET.text.toString().replace(",", ".").toDouble()
+                }catch (e:Exception){
+                    0.0
+                }
 
             } else {
                 0.0
@@ -681,8 +737,11 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         }
         binding.businessCashET.doAfterTextChanged {
             businessCash = if (binding.businessCashET.text.toString().isNotEmpty()) {
-                binding.businessCashET.text.toString().toDouble()
-
+                try {
+                    binding.businessCashET.text.toString().replace(",", ".").toDouble()
+                }catch (e:Exception){
+                    0.0
+                }
             } else {
                 0.0
             }
@@ -692,7 +751,11 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         }
         binding.businessGoodsET.doAfterTextChanged {
             businessGoodsStocks = if (binding.businessGoodsET.text.toString().isNotEmpty()) {
-                binding.businessGoodsET.text.toString().toDouble()
+                try {
+                    binding.businessGoodsET.text.toString().replace(",", ".").toDouble()
+                }catch (e:Exception){
+                    0.0
+                }
 
             } else {
                 0.0
@@ -705,7 +768,11 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         }
         binding.agriRainET.doAfterTextChanged {
             agriRainWater = if (binding.agriRainET.text.toString().isNotEmpty()) {
-                binding.agriRainET.text.toString().toDouble()
+                try {
+                    binding.agriRainET.text.toString().replace(",", ".").toDouble()
+                }catch (e:Exception){
+                    0.0
+                }
             } else {
                 0.0
             }
@@ -722,7 +789,11 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         }
         binding.agriIrrigationET.doAfterTextChanged {
             agriIrrigationWater = if (binding.agriIrrigationET.text.toString().isNotEmpty()) {
-                binding.agriIrrigationET.text.toString().toDouble()
+                try {
+                    binding.agriIrrigationET.text.toString().replace(",", ".").toDouble()
+                }catch (e:Exception){
+                    0.0
+                }
             } else {
                 0.0
             }
@@ -738,7 +809,11 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         }
         binding.agriBothET.doAfterTextChanged {
             agriBothWater = if (binding.agriBothET.text.toString().isNotEmpty()) {
-                binding.agriBothET.text.toString().toDouble()
+                try {
+                    binding.agriBothET.text.toString().replace(",", ".").toDouble()
+                }catch (e:Exception){
+                    0.0
+                }
             } else {
                 0.0
             }
@@ -754,7 +829,11 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         }
         binding.cattleCamelET.doAfterTextChanged {
             cattleCamel = if (binding.cattleCamelET.text.toString().isNotEmpty()) {
-                binding.cattleCamelET.text.toString().toDouble()
+                try {
+                    binding.cattleCamelET.text.toString().replace(",", ".").toDouble()
+                }catch (e:Exception){
+                    0.0
+                }
             } else {
                 0.0
             }
@@ -769,7 +848,11 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         }
         binding.cattleCowET.doAfterTextChanged {
             cattleCow = if (binding.cattleCowET.text.toString().isNotEmpty()) {
-                binding.cattleCowET.text.toString().toDouble()
+                try {
+                    binding.cattleCowET.text.toString().replace(",", ".").toDouble()
+                }catch (e:Exception){
+                    0.0
+                }
             } else {
                 0.0
             }
@@ -784,7 +867,11 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         }
         binding.cattleSheepET.doAfterTextChanged {
             cattleSheep = if (binding.cattleSheepET.text.toString().isNotEmpty()) {
-                binding.cattleSheepET.text.toString().toDouble()
+                try {
+                    binding.cattleSheepET.text.toString().replace(",", ".").toDouble()
+                }catch (e:Exception){
+                    0.0
+                }
             } else {
                 0.0
             }
@@ -799,7 +886,11 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         }
         binding.preciousStonesET.doAfterTextChanged {
             preciousStones = if (binding.preciousStonesET.text.toString().isNotEmpty()) {
-                binding.preciousStonesET.text.toString().toDouble()
+                try {
+                    binding.preciousStonesET.text.toString().replace(",", ".").toDouble()
+                }catch (e:Exception){
+                    0.0
+                }
             } else {
                 0.0
             }
@@ -809,7 +900,11 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         }
         binding.otherPensionET.doAfterTextChanged {
             otherPension = if (binding.otherPensionET.text.toString().isNotEmpty()) {
-                binding.otherPensionET.text.toString().toDouble()
+                try {
+                    binding.otherPensionET.text.toString().replace(",", ".").toDouble()
+                }catch (e:Exception){
+                    0.0
+                }
             } else {
                 0.0
             }
@@ -824,7 +919,11 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         }
         binding.otherLoanET.doAfterTextChanged {
             otherLoan = if (binding.otherLoanET.text.toString().isNotEmpty()) {
-                binding.otherLoanET.text.toString().toDouble()
+                try {
+                    binding.otherLoanET.text.toString().replace(",", ".").toDouble()
+                }catch (e:Exception){
+                    0.0
+                }
             } else {
                 0.0
             }
@@ -840,7 +939,11 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         }
         binding.otherAssetsET.doAfterTextChanged {
             otherAssets = if (binding.otherAssetsET.text.toString().isNotEmpty()) {
-                binding.otherAssetsET.text.toString().toDouble()
+                try {
+                    binding.otherAssetsET.text.toString().replace(",", ".").toDouble()
+                }catch (e:Exception){
+                    0.0
+                }
             } else {
                 0.0
             }
@@ -857,7 +960,11 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         // payable
         binding.creditCardPaymentET.doAfterTextChanged {
             payableCreditCard = if (binding.creditCardPaymentET.text.toString().isNotEmpty()) {
-                binding.creditCardPaymentET.text.toString().toDouble()
+                try {
+                    binding.creditCardPaymentET.text.toString().replace(",", ".").toDouble()
+                }catch (e:Exception){
+                    0.0
+                }
             } else {
                 0.0
             }
@@ -879,7 +986,11 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         }
         binding.homePaymentET.doAfterTextChanged {
             payableHome = if (binding.homePaymentET.text.toString().isNotEmpty()) {
-                binding.homePaymentET.text.toString().toDouble()
+                try {
+                    binding.homePaymentET.text.toString().replace(",", ".").toDouble()
+                }catch (e:Exception){
+                    0.0
+                }
             } else {
                 0.0
             }
@@ -902,7 +1013,11 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         }
         binding.carPaymentET.doAfterTextChanged {
             payableCar = if (binding.carPaymentET.text.toString().isNotEmpty()) {
-                binding.carPaymentET.text.toString().toDouble()
+                try {
+                    binding.carPaymentET.text.toString().toDouble()
+                }catch (e:Exception){
+                    0.0
+                }
             } else {
                 0.0
             }
@@ -926,7 +1041,11 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         binding.businessPaymentET.doAfterTextChanged {
 
             payableBusiness = if (binding.businessPaymentET.text.toString().isNotEmpty()) {
-                binding.businessPaymentET.text.toString().toDouble()
+                try {
+                    binding.businessPaymentET.text.toString().replace(",", ".").toDouble()
+                }catch (e:Exception){
+                    0.0
+                }
             } else {
                 0.0
             }
@@ -949,7 +1068,11 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         }
         binding.familyDebtET.doAfterTextChanged {
             payableFamilyDebt = if (binding.familyDebtET.text.toString().isNotEmpty()) {
-                binding.familyDebtET.text.toString().toDouble()
+                try {
+                    binding.familyDebtET.text.toString().replace(",", ".").toDouble()
+                }catch (e:Exception){
+                    0.0
+                }
             } else {
                 0.0
             }
@@ -973,7 +1096,11 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         binding.othersDebtET.doAfterTextChanged {
 
             payableOtherDebt = if (binding.othersDebtET.text.toString().isNotEmpty()) {
-                binding.othersDebtET.text.toString().toDouble()
+                try {
+                    binding.othersDebtET.text.toString().replace(",", ".").toDouble()
+                }catch (e:Exception){
+                    0.0
+                }
             } else {
                 0.0
             }

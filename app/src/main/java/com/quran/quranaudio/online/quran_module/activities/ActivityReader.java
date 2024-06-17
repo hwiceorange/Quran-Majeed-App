@@ -1129,7 +1129,9 @@ public class ActivityReader extends ReaderPossessingActivity {
             final boolean isCurrVerse = verse.chapterNo == chapterNo && verse.verseNo == verseNo;
             final boolean bool = reciting && isCurrVerse;
             if (bool && mPlayerService.getP().getSyncWithVerse()) {
-                mLayoutManager.scrollToPositionWithOffset(i, 0);
+                if(mLayoutManager!=null) {
+                    mLayoutManager.scrollToPositionWithOffset(i, 0);
+                }
             }
         }
     }
@@ -1160,7 +1162,7 @@ public class ActivityReader extends ReaderPossessingActivity {
                 final boolean isCurrVerse = section.getChapterNo() == chapterNo && section.hasVerse(verseNo);
                 final boolean bool = reciting && isCurrVerse;
 
-                if (bool && mPlayerService.getP().getSyncWithVerse()) {
+                if (bool && mPlayerService.getP().getSyncWithVerse()&&mLayoutManager!=null) {
                     mNavigator.scrollToVerseOnPageValidate(pos, verseNo, mLayoutManager.findViewByPosition(pos),
                         section, false);
                     break outer;
@@ -1328,18 +1330,21 @@ public class ActivityReader extends ReaderPossessingActivity {
     }
 
     private void saveReaderState() {// Get first & last visible item positions (both could be same)
-        int firstPos = mLayoutManager.findFirstVisibleItemPosition();
-        int lastPos = mLayoutManager.findLastVisibleItemPosition();
 
-        if (firstPos < 0) {
-            return;
-        }
+        if(mLayoutManager!=null &&mBinding!=null&&mBinding.readerVerses!=null) {
+            int firstPos = mLayoutManager.findFirstVisibleItemPosition();
+            int lastPos = mLayoutManager.findLastVisibleItemPosition();
 
-        RecyclerView.Adapter<?> adapter = mBinding.readerVerses.getAdapter();
-        if (adapter instanceof ADPReader) {
-            saveTranslationViewState((ADPReader) adapter, firstPos, lastPos);
-        } else if (adapter instanceof ADPQuranPages) {
-            savePageViewState((ADPQuranPages) adapter, firstPos, lastPos);
+            if (firstPos < 0) {
+                return;
+            }
+
+            RecyclerView.Adapter<?> adapter = mBinding.readerVerses.getAdapter();
+            if (adapter instanceof ADPReader) {
+                saveTranslationViewState((ADPReader) adapter, firstPos, lastPos);
+            } else if (adapter instanceof ADPQuranPages) {
+                savePageViewState((ADPQuranPages) adapter, firstPos, lastPos);
+            }
         }
     }
 
