@@ -2,5 +2,5 @@ include ':app'
 rootProject.name = "Quran Reader Pro Extended"
 include ':peacedesign'
 include ':shaheendevelopersAds_SDK'
-include ':quiz'
-include ':adlib'
+//include ':quiz'
+//include ':adlib'
