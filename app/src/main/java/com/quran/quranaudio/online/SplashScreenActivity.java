@@ -109,7 +109,6 @@ public class SplashScreenActivity extends AppCompatActivity {
     int count=0;
     Runnable r=new Runnable() {
         @Override public void run() {
-
             /*
             if(AdFactory.INSTANCE.hasAppOpenAd(AdConfig.AD_APPOPEN)){
                AdFactory.INSTANCE.showAppOpenAd(SplashScreenActivity.this, AdConfig.AD_APPOPEN, new AdShowCallback() {
@@ -148,7 +147,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 handler.removeCallbacks(r);
                 handler.postDelayed(r,1000);
             }
-
+*/
         }
     };
 
