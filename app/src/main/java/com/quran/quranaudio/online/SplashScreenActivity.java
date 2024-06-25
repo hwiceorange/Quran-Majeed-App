@@ -147,7 +147,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 handler.removeCallbacks(r);
                 handler.postDelayed(r,1000);
             }
-*/
+
         }
     };
 
