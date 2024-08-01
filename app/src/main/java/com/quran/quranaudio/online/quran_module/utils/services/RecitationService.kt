@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.ServiceInfo
 import android.graphics.Bitmap
 import android.media.AudioManager
 import android.net.Uri
@@ -13,6 +14,7 @@ import android.os.Build
 import android.os.Handler
 import android.support.v4.media.session.MediaSessionCompat
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.net.toUri
 import androidx.core.util.Pair
@@ -177,8 +179,21 @@ class RecitationService : Service(), MediaDescriptionAdapter {
                     stopMedia()
                 }
 
+
                 override fun onNotificationPosted(notificationId: Int, notification: Notification, ongoing: Boolean) {
-                    startForeground(notificationId, notification)
+                    if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q) {
+                        startForeground(
+                            notificationId,
+                            notification,
+                            ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
+                        )
+                    }
+                    else{
+                        startForeground(
+                            notificationId,
+                            notification
+                        )
+                    }
                 }
             })
             .setSmallIconResourceId(R.drawable.logo)

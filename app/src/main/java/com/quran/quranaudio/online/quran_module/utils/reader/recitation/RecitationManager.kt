@@ -1,6 +1,7 @@
 package com.quran.quranaudio.online.quran_module.utils.reader.recitation
 
 import android.content.Context
+import com.google.gson.Gson
 import com.quran.quranaudio.online.quran_module.api.JsonHelper
 import com.quran.quranaudio.online.quran_module.api.RetrofitInstance
 import com.quran.quranaudio.online.quran_module.api.models.recitation.AvailableRecitationTranslationsModel
@@ -112,6 +113,7 @@ object RecitationManager {
 
             callback(availableRecitationsModel)
         } catch (e: Exception) {
+
             Log.saveError(e, "postRecitationsLoad")
             e.printStackTrace()
             callback(null)

@@ -168,11 +168,17 @@ public class BannerAd {
         }
 
         public void loadBannerAd() {
+            if(activity==null)
+                return;
             if (adStatus.equals(AD_STATUS_ON) && placementStatus != 0) {
                 switch (adNetwork) {
                     case ADMOB:
                     case FAN_BIDDING_ADMOB:
                         FrameLayout adContainerView = activity.findViewById(R.id.admob_banner_view_container);
+                        if(adContainerView==null){
+                            Log.e("AD_ERROR","FAN_BIDDING_ADMOB adContainerView is null");
+                            return;
+                        }
                         adContainerView.post(() -> {
                             adView = new AdView(activity);
                             adView.setAdUnitId(adMobBannerId);
