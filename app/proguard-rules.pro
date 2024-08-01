@@ -33,7 +33,9 @@
 -keep class org.json.** {*;}
 # -keep class com.quran.** { *; }
 -keep class com.quran.quranaudio.online.prayertimes.** {*;}
+-keep class com.quran.quranaudio.online.quran_module.api.models.recitation.**{*;}
 -keep class java.**{*;}
+-keep @kotlinx.serialization.Serializable class * {*;}
 -keep class com.google.android.gms.common.ConnectionResult {
     int SUCCESS;
 }
