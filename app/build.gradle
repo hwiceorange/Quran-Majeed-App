@@ -179,8 +179,8 @@ android {
 }
 
 dependencies {
-    //implementation project(path: ':adlib')
-    //implementation project(path: ':quiz')
+    implementation project(path: ':adlib')
+    implementation project(path: ':quiz')
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'

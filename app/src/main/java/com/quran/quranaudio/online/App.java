@@ -24,8 +24,8 @@ import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.work.Configuration;
 import androidx.work.WorkManager;
 
-//import com.quran.quranaudio.quiz.base.BaseApp;
-//import com.quranaudio.common.ad.AdFactory;
+import com.quran.quranaudio.quiz.base.BaseApp;
+import com.quranaudio.common.ad.AdFactory;
 import com.raiadnan.ads.sdk.format.AppOpenAdAppLovin;
 import com.raiadnan.ads.sdk.format.AppOpenAdManager;
 import com.raiadnan.ads.sdk.format.AppOpenAdMob;
@@ -53,7 +53,7 @@ import kotlin.jvm.JvmField;
 import kotlin.jvm.internal.Intrinsics;
 
 
-public class App extends Application {
+public class App extends BaseApp {
 
     //Ads
     private AppOpenAdMob appOpenAdMob;
@@ -123,7 +123,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-       // AdFactory.INSTANCE.init(this,BuildConfig.DEBUG);
+        AdFactory.INSTANCE.init(this,BuildConfig.DEBUG);
         //Ads
         if (!Constant.FORCE_TO_SHOW_APP_OPEN_AD_ON_START) {
             registerActivityLifecycleCallbacks(activityLifecycleCallbacks);

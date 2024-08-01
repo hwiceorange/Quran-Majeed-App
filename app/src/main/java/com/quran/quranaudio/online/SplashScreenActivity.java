@@ -16,13 +16,12 @@ import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-/*
+
 import com.quranaudio.common.ad.AdConfig;
 import com.quranaudio.common.ad.AdFactory;
 import com.quranaudio.common.ad.AdShowCallback;
 import com.quranaudio.common.ad.model.AdItem;
 import com.quranaudio.common.ad.model.RewardItem;
-*/
 import com.raiadnan.ads.sdk.format.AdNetwork;
 import com.raiadnan.ads.sdk.format.AppOpenAd;
 import com.quran.quranaudio.online.ads.callback.CallbackConfig;
@@ -61,7 +60,7 @@ public class SplashScreenActivity extends AppCompatActivity {
       //  initAds();
 
         pbView=findViewById(R.id.progressbar);
-       // AdFactory.INSTANCE.loadAppOpenAd(this, AdConfig.AD_APPOPEN,null);
+        AdFactory.INSTANCE.loadAppOpenAd(this, AdConfig.AD_APPOPEN,null);
         /*
         if (Constant.AD_STATUS.equals(AD_STATUS_ON) && Constant.OPEN_ADS_ON_START) {
             if (!Constant.FORCE_TO_SHOW_APP_OPEN_AD_ON_START) {
@@ -109,7 +108,6 @@ public class SplashScreenActivity extends AppCompatActivity {
     int count=0;
     Runnable r=new Runnable() {
         @Override public void run() {
-            /*
             if(AdFactory.INSTANCE.hasAppOpenAd(AdConfig.AD_APPOPEN)){
                AdFactory.INSTANCE.showAppOpenAd(SplashScreenActivity.this, AdConfig.AD_APPOPEN, new AdShowCallback() {
                    @Override public void onAdImpression(@Nullable AdItem adItem) {
@@ -139,8 +137,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
                    }
                });
-            }*/
-             if(count>=3){
+            } else if(count>=8){
                 startMainActivity();
             } else {
                 count++;
@@ -176,17 +173,17 @@ public class SplashScreenActivity extends AppCompatActivity {
                 CallbackConfig resp = response.body();
                 if (resp != null) {
                     sharedPref.savePostList(resp.android);
-                 //   loadOpenAds();
-                 //   android.util.Log.d(TAG, "responses success");
+                    loadOpenAds();
+                    android.util.Log.d(TAG, "responses success");
                 } else {
-                   // loadOpenAds();
+                    loadOpenAds();
                     android.util.Log.d(TAG, "responses null");
                 }
             }
 
             public void onFailure(@NonNull Call<CallbackConfig> call, @NonNull Throwable th) {
                 Log.d(TAG, "responses failed: " + th.getMessage());
-             //   loadOpenAds();
+                loadOpenAds();
             }
         });
     }
