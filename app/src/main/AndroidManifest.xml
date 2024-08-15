@@ -290,11 +290,13 @@
 
         <receiver
             android:name=".quran_module.utils.receivers.VotdReceiver"
+            android:exported="true"
             android:enabled="true"
             android:process=":remote" />
 
         <receiver
             android:name=".quran_module.utils.receivers.CrashReceiver"
+            android:exported="true"
             android:enabled="true" />
 
         <receiver
@@ -345,17 +347,22 @@
         </receiver>
         <receiver
             android:name="com.quran.quranaudio.online.prayertimes.notifier.NotifierReceiver"
+            android:exported="true"
             android:enabled="true" />
         <receiver
             android:name="com.quran.quranaudio.online.prayertimes.notifier.ReminderReceiver"
+            android:exported="true"
             android:enabled="true" />
         <receiver
             android:name="com.quran.quranaudio.online.prayertimes.notifier.SilenterReceiver"
+            android:exported="true"
             android:enabled="true" />
         <receiver
             android:name="com.quran.quranaudio.online.prayertimes.notifier.NotifierActionReceiver"
+            android:exported="true"
             android:enabled="true" />
-        <receiver android:name="com.quran.quranaudio.online.prayertimes.notifier.NotificationDismissedReceiver" />
+        <receiver android:name="com.quran.quranaudio.online.prayertimes.notifier.NotificationDismissedReceiver"
+            android:exported="true"/>
 
         <receiver
             android:name="com.quran.quranaudio.online.prayertimes.notifier.CustomMediaButtonReceiver"

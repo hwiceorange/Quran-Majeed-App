@@ -67,9 +67,9 @@ public class MainActivity extends BaseActivity {
         NavGraph navGraph = navController.getNavInflater().inflate(R.navigation.nav_graphmain);
 
         if (displaySettingsScreenFirst()) {
-            navGraph.setStartDestination(R.id.nav_home);
+            navGraph.setStartDestination(R.id.nav_name_99);
         } else {
-            navGraph.setStartDestination(R.id.nav_home);
+            navGraph.setStartDestination(R.id.nav_name_99);
         }
 
         navController.setGraph(navGraph);
