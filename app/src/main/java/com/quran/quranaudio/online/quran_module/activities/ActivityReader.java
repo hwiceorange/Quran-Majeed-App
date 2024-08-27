@@ -216,10 +216,13 @@ public class ActivityReader extends ReaderPossessingActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        try{
         outState.putBoolean("preventRecitationPlayerReset", mPlayerService.isPlaying());
 
         if (mLayoutManager != null) {
             outState.putParcelable("recyclerView", mLayoutManager.onSaveInstanceState());
+        }}catch(Exception e){
+            e.printStackTrace();
         }
     }
 
