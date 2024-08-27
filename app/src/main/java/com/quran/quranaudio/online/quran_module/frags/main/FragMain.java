@@ -311,8 +311,12 @@ public class FragMain extends BaseFragment {
         }
 
         if (!permissionRequest.isEmpty()) {
+            try {
+                mPermissionResultLauncher.launch(permissionRequest.toArray(new String[0]));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
 
-            mPermissionResultLauncher.launch(permissionRequest.toArray(new String[0]));
         }
     }
 

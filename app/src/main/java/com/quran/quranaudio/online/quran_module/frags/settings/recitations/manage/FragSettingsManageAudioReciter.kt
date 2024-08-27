@@ -6,10 +6,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.ServiceConnection
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.view.View
 import android.widget.EditText
+import androidx.core.content.ContextCompat
 import androidx.core.util.valueIterator
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -68,10 +70,18 @@ class FragSettingsManageAudioReciter :
 
         downloadReceiver = RecitationChapterDownloadReceiver().apply {
             stateListener = this@FragSettingsManageAudioReciter
-            requireActivity().registerReceiver(
-                this,
-                IntentFilter(RecitationChapterDownloadReceiver.ACTION_RECITATION_DOWNLOAD_STATUS)
-            )
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                requireActivity().registerReceiver(
+                    this,
+                    IntentFilter(RecitationChapterDownloadReceiver.ACTION_RECITATION_DOWNLOAD_STATUS),
+                    Context.RECEIVER_EXPORTED
+                )
+            } else {
+                requireActivity().registerReceiver(
+                    this,
+                    IntentFilter(RecitationChapterDownloadReceiver.ACTION_RECITATION_DOWNLOAD_STATUS)
+                )
+            }
             bindService(requireActivity())
         }
     }

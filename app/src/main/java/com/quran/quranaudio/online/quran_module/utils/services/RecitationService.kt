@@ -181,18 +181,23 @@ class RecitationService : Service(), MediaDescriptionAdapter {
 
 
                 override fun onNotificationPosted(notificationId: Int, notification: Notification, ongoing: Boolean) {
-                    if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q) {
-                        startForeground(
-                            notificationId,
-                            notification,
-                            ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
-                        )
-                    }
-                    else{
-                        startForeground(
-                            notificationId,
-                            notification
-                        )
+                    try{
+                        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q) {
+
+                            startForeground(
+                                notificationId,
+                                notification,
+                                ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
+                            )
+                        }
+                        else{
+                            startForeground(
+                                notificationId,
+                                notification
+                            )
+                        }
+                    }catch (e:Exception){
+                        e.printStackTrace()
                     }
                 }
             })
