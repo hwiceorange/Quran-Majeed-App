@@ -182,7 +182,9 @@ dependencies {
     implementation project(path: ':adlib')
     implementation project(path: ':quiz')
 
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation files('libs/muslimdata-0.6.aar')
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
     implementation(platform('org.jetbrains.kotlin:kotlin-bom:1.8.10'))
     implementation 'androidx.core:core-ktx:1.9.0'
@@ -252,7 +254,7 @@ dependencies {
 
     implementation "androidx.activity:activity-ktx:1.6.1"
     implementation 'com.github.GwonHyeok:StickySwitch:0.0.16'
-    implementation 'dev.kosrat.muslimdata:muslimdata:0.6'
+    //implementation 'dev.kosrat.muslimdata:0.6'
     implementation 'com.github.ahmedeltaher:Azan:3.0'
     implementation "com.github.ssseasonnn:DownloadX:1.0.2"
     implementation 'com.github.mumayank:AirLocation:2.5.2'

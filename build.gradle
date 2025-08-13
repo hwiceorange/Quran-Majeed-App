@@ -3,7 +3,8 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-
+        maven {url 'https://repo1.maven.org/maven2/'}
+        maven {url "https://maven.aliyun.com/repository/public"}
         maven {url "https://jitpack.io"}
         maven { url 'https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea'}
         maven { url 'https://artifact.bytedance.com/repository/pangle/' }
@@ -37,7 +38,9 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        jcenter()
+        maven {url 'https://repo1.maven.org/maven2/'}
+        maven {url "https://maven.aliyun.com/repository/public"}
+      //  jcenter()
         maven {url "https://jitpack.io"}
       //  maven { url 'https://mvnrepository.com/artifact/'}
         maven { url "https://oss.jfrog.org/libs-snapshot" }
@@ -46,9 +49,19 @@ allprojects {
         maven { url 'https://artifact.bytedance.com/repository/pangle/' }
        // maven { url 'https://artifacts.applovin.com/android' }
 
-
+        flatDir { dirs '/app/libs' }
+    }
+    configurations.all {
+        resolutionStrategy {
+            // 强制所有 Kotlin 相关库使用你的目标版本（如 1.9.0）
+            force "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+            force "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+            force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+            force "org.jetbrains.kotlin:kotlin-stdlib-common:$kotlin_version"
+        }
     }
 }
+
 
 task clean(type: Delete) {
     delete rootProject.buildDir
