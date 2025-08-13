@@ -47,13 +47,13 @@ if (secretsPropertiesFile.exists()) {
 }
 
 android {
-    compileSdk 34
+    compileSdk 35
     ndkVersion "21.0.6113669"
 
     defaultConfig {
         applicationId "com.quran.quranaudio.online"
         minSdkVersion 26
-        targetSdkVersion 34
+        targetSdkVersion 35
         versionCode 12
         versionName "1.2.0"
         multiDexEnabled true
