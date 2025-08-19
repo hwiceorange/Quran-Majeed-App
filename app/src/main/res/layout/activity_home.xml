@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="?WhiteBlack"
-    android:fitsSystemWindows="true"
+
     tools:context=".activities.HomeActivity"
     android:id="@+id/ll"
     xmlns:android="http://schemas.android.com/apk/res/android">

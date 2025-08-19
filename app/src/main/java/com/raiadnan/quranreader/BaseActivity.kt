@@ -1,15 +1,21 @@
-@file:Suppress("DEPRECATION")
-
-package com.quran.quranaudio.online
+package com.raiadnan.quranreader
 
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.raiadnan.quranreader.Utils.StatusBarUtils
 
-open class BaseActivity : AppCompatActivity() {
+/**
+ * 基础Activity类 - 处理状态栏适配
+ * 适配Android 35及以上版本的Edge-to-Edge要求
+ */
+abstract class BaseActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
         // 设置Edge-to-Edge和状态栏适配
         setupStatusBar()
     }
@@ -59,6 +65,7 @@ open class BaseActivity : AppCompatActivity() {
 
     /**
      * 是否使用浅色状态栏
+     * 子类可以重写此方法来自定义状态栏颜色
      */
     protected open fun isLightStatusBar(): Boolean {
         return true
@@ -66,6 +73,7 @@ open class BaseActivity : AppCompatActivity() {
 
     /**
      * 是否排除在系统栏内边距处理之外
+     * 子类可以重写此方法来排除特殊页面（如全屏页面）
      */
     protected open fun isExcludedFromSystemBarInsets(): Boolean {
         return false
@@ -97,5 +105,33 @@ open class BaseActivity : AppCompatActivity() {
      */
     protected open fun shouldApplyRightInset(): Boolean {
         return false
+    }
+
+    /**
+     * 手动为指定View应用系统栏内边距
+     * 用于需要特殊处理的View
+     */
+    protected fun applySystemBarInsetsToView(
+        view: View,
+        applyTop: Boolean = true,
+        applyBottom: Boolean = true,
+        applyLeft: Boolean = false,
+        applyRight: Boolean = false
+    ) {
+        StatusBarUtils.applySystemBarInsets(view, applyTop, applyBottom, applyLeft, applyRight)
+    }
+
+    /**
+     * 手动为指定View应用系统栏margin
+     * 用于需要使用margin而非padding的View
+     */
+    protected fun applySystemBarMarginsToView(
+        view: View,
+        applyTop: Boolean = true,
+        applyBottom: Boolean = true,
+        applyLeft: Boolean = false,
+        applyRight: Boolean = false
+    ) {
+        StatusBarUtils.applySystemBarMargins(view, applyTop, applyBottom, applyLeft, applyRight)
     }
 }
