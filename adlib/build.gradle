@@ -48,8 +48,11 @@ dependencies {
     api 'com.google.ads.mediation:mintegral:16.4.31.0'
     api 'com.google.ads.mediation:adcolony:4.8.0.2'
     api 'com.google.ads.mediation:vungle:6.12.1.1'
-   // api 'com.google.ads.mediation:pangle:5.3.0.4.0'
-    api 'com.google.ads.mediation:pangle:5.3.0.4.0'
+    //api 'com.google.ads.mediation:pangle:5.3.0.4.0'
+   // api 'com.google.ads.mediation:pangle:7.3.0.3.0'
+//    api ('com.google.ads.mediation:pangle:7.2.0.2.0') {
+//        exclude group: 'org.jetbrains.kotlin'  // 避免 Kotlin 版本冲突
+//    }
 
     api "com.mbridge.msdk.oversea:mbbid:16.4.31"
 

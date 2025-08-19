@@ -104,7 +104,7 @@ object AdFactory : ActivityLifecycleCallbacks {
         reportEvent("startLoadAd", adPosition, null, adId)
         AppOpenAd.load(
             activity, adId, request,
-            AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT,
+            //AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT,
             object : AppOpenAd.AppOpenAdLoadCallback() {
                 val startTime = System.currentTimeMillis()
                 override fun onAdLoaded(ad: AppOpenAd) {
