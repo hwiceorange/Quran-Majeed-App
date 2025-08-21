@@ -163,6 +163,8 @@ public abstract class BaseActivity extends ResHelperActivity implements NetworkS
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setTheme(getThemeId());
         super.onCreate(savedInstanceState);
+        // Fix for Android 35 edge-to-edge
+        setupWindowInsetsAndStatusBar();
         adjustStatusAndNavigationBar();
         initCreate(savedInstanceState);
     }
@@ -199,6 +201,29 @@ public abstract class BaseActivity extends ResHelperActivity implements NetworkS
 
     protected abstract void onActivityInflated(@NonNull View activityView, @Nullable Bundle savedInstanceState);
 
+    /**
+     * Setup window insets for Android 35 edge-to-edge compatibility
+     */
+    private void setupWindowInsetsAndStatusBar() {
+        Window window = getWindow();
+        
+        // Enable edge-to-edge for Android 35+
+        if (Build.VERSION.SDK_INT >= 35) {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            );
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
+        
+        // Ensure system bars are drawn by the system
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS,
+            WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
+        );
+    }
+
     public void adjustStatusAndNavigationBar() {
         Window window = getWindow();
         boolean isLight = isStatusBarLight();
@@ -209,7 +234,15 @@ public abstract class BaseActivity extends ResHelperActivity implements NetworkS
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             View decorView = window.getDecorView();
 
-            window.setStatusBarColor(statusBarBG);
+            // For Android 35, use solid color instead of transparent
+            if (Build.VERSION.SDK_INT >= 35) {
+                // Use primary color for status bar to avoid overlap
+                int primaryColor = ContextCompat.getColor(this, R.color.colorPrimary);
+                window.setStatusBarColor(primaryColor);
+            } else {
+                window.setStatusBarColor(statusBarBG);
+            }
+            
             window.setNavigationBarColor(navBarBG);
 
             WindowInsetsControllerCompat wic = new WindowInsetsControllerCompat(window, decorView);
@@ -251,11 +284,19 @@ public abstract class BaseActivity extends ResHelperActivity implements NetworkS
     }
 
     protected boolean isStatusBarLight() {
+        // For Android 35, force dark status bar icons for better visibility
+        if (Build.VERSION.SDK_INT >= 35) {
+            return false;
+        }
         return !WindowUtils.isNightMode(this) || WindowUtils.isNightUndefined(this);
     }
 
     @ColorInt
     protected int getStatusBarBG() {
+        // For Android 35, always use primary color to avoid transparency issues
+        if (Build.VERSION.SDK_INT >= 35) {
+            return ContextCompat.getColor(this, R.color.colorPrimary);
+        }
         return getWindowBackgroundColor();
     }
 

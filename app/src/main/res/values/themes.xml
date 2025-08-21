@@ -40,12 +40,11 @@
         <item name="colorControlNormal">@color/colorIcon</item>
 
         <item name="android:windowBackground">@color/colorBGPage</item>
-        <!-- Edge-to-Edge 配置 -->
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+        
+        <!-- Android 35 status bar fix -->
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:enforceStatusBarContrast" tools:targetApi="29">false</item>
-        <item name="android:enforceNavigationBarContrast" tools:targetApi="29">false</item>
+        <item name="android:windowLightStatusBar">false</item>
 
         <item name="android:textSize">@dimen/dmnCommonSize</item>
         <item name="android:textColor">@color/colorText</item>

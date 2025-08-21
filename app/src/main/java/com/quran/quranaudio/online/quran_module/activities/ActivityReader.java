@@ -8,6 +8,7 @@ import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResult;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
@@ -287,19 +289,32 @@ public class ActivityReader extends ReaderPossessingActivity {
         Window window = getWindow();
         View decorView = window.getDecorView();
 
-        int uiVisibility = SYSTEM_UI_FLAG_LAYOUT_STABLE | SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
-        decorView.setSystemUiVisibility(uiVisibility);
+        // For Android 35, adjust the approach to avoid status bar overlap
+        if (Build.VERSION.SDK_INT >= 35) {
+            // Use solid status bar color for Android 35
+            int primaryColor = ContextCompat.getColor(this, R.color.colorPrimary);
+            window.setStatusBarColor(primaryColor);
+            window.setNavigationBarColor(Color.TRANSPARENT);
+            
+            WindowInsetsControllerCompat wic = new WindowInsetsControllerCompat(window, decorView);
+            wic.setAppearanceLightStatusBars(false); // Dark icons for better visibility
+            wic.setAppearanceLightNavigationBars(isStatusBarLight());
+        } else {
+            // Original implementation for older versions
+            int uiVisibility = SYSTEM_UI_FLAG_LAYOUT_STABLE | SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
+            decorView.setSystemUiVisibility(uiVisibility);
 
-        window.getAttributes().flags &= ~(FLAG_TRANSLUCENT_STATUS | FLAG_TRANSLUCENT_NAVIGATION);
+            window.getAttributes().flags &= ~(FLAG_TRANSLUCENT_STATUS | FLAG_TRANSLUCENT_NAVIGATION);
 
-        int clr = Color.TRANSPARENT;
-        window.setStatusBarColor(clr);
-        window.setNavigationBarColor(clr);
+            int clr = Color.TRANSPARENT;
+            window.setStatusBarColor(clr);
+            window.setNavigationBarColor(clr);
 
-        boolean isLight = isStatusBarLight();
-        WindowInsetsControllerCompat wic = new WindowInsetsControllerCompat(window, decorView);
-        wic.setAppearanceLightNavigationBars(isLight);
-        wic.setAppearanceLightStatusBars(isLight);
+            boolean isLight = isStatusBarLight();
+            WindowInsetsControllerCompat wic = new WindowInsetsControllerCompat(window, decorView);
+            wic.setAppearanceLightNavigationBars(isLight);
+            wic.setAppearanceLightStatusBars(isLight);
+        }
     }
 
     @Override

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Android 35 specific theme overrides for proper status bar handling -->
+    
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Base theme properties -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="BlackWhite">@color/colorBlack</item>
+        <item name="WhiteBlack">@color/colorWhite</item>
+        <item name="materialButtonStyle">@style/Button</item>
+        <item name="CBack">#EDEDED</item>
+        <item name="chipStyle">@style/Chip_Style</item>
+        <item name="toolbarStyle">@style/ToolBarLight</item>
+        <item name="android:actionOverflowButtonStyle">@style/MyTheme</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="playbutton">@color/colorPrimary</item>
+        
+        <!-- Android 35 specific fixes -->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:enforceStatusBarContrast">true</item>
+        <item name="android:enforceNavigationBarContrast">true</item>
+    </style>
+
+    <style name="LaunchTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorSecondaryVariant">@color/colorPrimaryDark</item>
+        
+        <!-- Android 35 specific fixes -->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:enforceStatusBarContrast">true</item>
+    </style>
+
+    <style name="Theme.QuranApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+
+        <item name="android:colorPrimary">@color/colorPrimary</item>
+        <item name="android:colorAccent">@color/colorPrimary</item>
+
+        <item name="colorControlNormal">@color/colorIcon</item>
+
+        <item name="android:windowBackground">@color/colorBGPage</item>
+        
+        <!-- Android 35 specific fixes -->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:enforceStatusBarContrast">true</item>
+
+        <item name="android:textSize">@dimen/dmnCommonSize</item>
+        <item name="android:textColor">@color/colorText</item>
+        <item name="android:textColorPrimary">@color/colorText</item>
+
+        <item name="android:clipToPadding">false</item>
+
+        <item name="android:autofillHints" tools:targetApi="o">@null</item>
+        <item name="android:importantForAutofill" tools:targetApi="o">no</item>
+
+        <item name="android:dropDownListViewStyle">@style/ListView</item>
+        <item name="android:colorEdgeEffect">@android:color/transparent</item>
+
+        <item name="chipGroupStyle">@style/ChipGroupStyle</item>
+        <item name="chipStyle">@style/ChipStyle</item>
+    </style>
+
+    <style name="Theme.HadithPro" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:fontFamily">@font/uthman</item>
+
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">#F3EBE0</item>
+        <item name="colorSecondaryVariant">@color/colorPrimaryDark</item>
+        <item name="colorOnSecondary">#49454F</item>
+
+        <item name="colorOutline">#C4C7C5</item>
+        <item name="colorAccent">?attr/colorPrimary</item>
+        <item name="backgroundColor">#F5F6F8</item>
+        <item name="colorSurface">#FFFFFF</item>
+        <item name="colorOnSurface">#151D2C</item>
+        <item name="colorError">#FF1611</item>
+        
+        <!-- Android 35 specific fixes -->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:enforceStatusBarContrast">true</item>
+    </style>
+
+</resources>
