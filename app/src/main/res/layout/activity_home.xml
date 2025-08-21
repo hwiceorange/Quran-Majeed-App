@@ -6,7 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="?WhiteBlack"
-    android:fitsSystemWindows="true"
     tools:context=".activities.HomeActivity"
     android:id="@+id/ll"
     xmlns:android="http://schemas.android.com/apk/res/android">
@@ -16,10 +15,11 @@
             android:id="@+id/home_host_fragment"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             app:defaultNavHost="true"
             app:navGraph="@navigation/nav_graphmain"
             app:layout_constraintBottom_toTopOf="@id/bottom_nav"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

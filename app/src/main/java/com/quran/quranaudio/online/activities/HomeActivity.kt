@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.view.Window
 import android.widget.Button
 import androidx.core.app.ActivityCompat
@@ -36,6 +37,11 @@ class HomeActivity : BaseActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+        
+        // Apply window insets to the main container
+        val mainContainer = findViewById<View>(R.id.ll)
+        applySystemWindowInsets(mainContainer)
+        
         isStoragePermissionGranted()
 
         HomeFragment()

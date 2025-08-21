@@ -15,9 +15,9 @@
         <item name="android:windowDisablePreview">true</item>
         <item name="playbutton">@color/colorPrimary</item>
         
-        <!-- Android 35 status bar fix -->
+        <!-- Status bar configuration -->
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@color/colorPrimary</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">false</item>
     </style>
     <style name="ProgressBar_Scale" parent="@android:style/Widget.ProgressBar.Horizontal">

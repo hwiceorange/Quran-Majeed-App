@@ -8,12 +8,14 @@
     android:layout_height="match_parent"
     android:background="@drawable/main_gradient_background"
     android:fillViewport="true"
+    android:fitsSystemWindows="true"
     tools:context=".prayertimes.ui.home.PrayersFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/next_prayer_constraint_container"
