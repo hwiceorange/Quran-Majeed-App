@@ -6,17 +6,20 @@
     android:background="?attr/BlackWhite"
     android:layoutDirection="ltr"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
 
     <FrameLayout
         android:id="@+id/qibla_fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_marginBottom="0dp"
         android:background="@color/white"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/custom_toolbar"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <FrameLayout
         android:visibility="visible"
