@@ -25,7 +25,7 @@ public class QiblaDirectionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qibla_direction);
-        loadFragment(new QiblaFragment());
+        loadFragment(new QiblaFragment()); // 使用增强版Fragment，移除地图依赖
 
 
 

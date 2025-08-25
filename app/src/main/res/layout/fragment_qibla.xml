@@ -8,25 +8,14 @@
     android:weightSum="10"
     android:fitsSystemWindows="true">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="4"
-        android:background="#dadada">
-
-        <com.google.android.gms.maps.MapView
-            android:id="@+id/map"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </FrameLayout>
-
-    <!-- 广告已移除 -->
+    <!-- Google地图已移除，专注于罗盘显示 -->
 
     <FrameLayout
         android:id="@+id/compass_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="5">
+        android:layout_weight="9"
+        android:background="#f5f5f5">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/compass"
@@ -42,25 +31,122 @@
             android:padding="10dp"
             app:srcCompat="@drawable/compass_1_k" />
 
+        <!-- 校准状态指示Icon -->
+        <View
+            android:id="@+id/calibration_indicator"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/calibration_status_red"
+            android:elevation="8dp" />
+
+        <!-- 距离信息 -->
         <TextView
             android:id="@+id/tv_distance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_vertical|center_horizontal|center"
-            android:layout_margin="3dp"
-            android:padding="5dp"
-            android:text=""
-            android:textColor="#555" />
+            android:layout_gravity="center|bottom"
+            android:layout_marginBottom="80dp"
+            android:background="@drawable/circle_shape"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="You are within the range of Qibla"
+            android:textColor="#555"
+            android:textSize="12sp" />
 
+        <!-- 方向信息 -->
         <TextView
             android:id="@+id/tv_heading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_margin="3dp"
-            android:padding="5dp"
-            android:text="284 NW"
-            android:textColor="#555" />
+            android:layout_gravity="center|top"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/circle_shape"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="284° NW"
+            android:textColor="#555"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <!-- 磁场强度指示器 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/circle_shape"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="磁场强度"
+                android:textSize="10sp"
+                android:textColor="#888" />
+
+            <TextView
+                android:id="@+id/tv_magnetic_strength"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="正常"
+                android:textSize="12sp"
+                android:textColor="#4CAF50"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- 校准提示（默认隐藏） -->
+        <LinearLayout
+            android:id="@+id/calibration_warning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="40dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:background="@color/orange"
+            android:orientation="horizontal"
+            android:padding="12dp"
+            android:visibility="gone"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="⚠️ 检测到磁场干扰，请校准罗盘以获得准确方向"
+                android:textColor="@android:color/white"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/btn_calibrate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:text="校准"
+                android:textColor="@color/orange"
+                android:padding="8dp"
+                android:layout_marginStart="8dp"
+                android:textStyle="bold"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- 设备倾斜警告 -->
+        <TextView
+            android:id="@+id/tv_tilt_warning"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="#FFEB3B"
+            android:padding="8dp"
+            android:text="请保持设备水平"
+            android:textColor="#F57F17"
+            android:textSize="12sp"
+            android:visibility="gone" />
     </FrameLayout>
 
     <androidx.cardview.widget.CardView
