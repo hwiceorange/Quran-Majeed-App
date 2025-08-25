@@ -223,14 +223,16 @@ public class FragMain extends BaseFragment {
         mBinding.medinaLive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 备用直播URL列表
+                // 备用直播URL列表（YouTube链接优先，更稳定）
                 String[] medinaLiveUrls = {
+                    "https://www.youtube.com/watch?v=4s4XX-qaNgg", // 新的Medina Live YouTube直播（优先）
+                    "https://www.youtube.com/watch?v=0lg0XeJ2gAU", // 备用Medina Live YouTube直播
                     "http://m.live.net.sa:1935/live/sunnah/playlist.m3u8", // 原始URL
-                    "https://ythls.armelin.one/channel/UCJr4gikBowJ8I-iUXs7CkMg.m3u8", // Medina Live YouTube转HLS
-                    "https://www.youtube.com/watch?v=4Ar8JHRCdSE" // YouTube backup
+                    "https://ythls.armelin.one/channel/UCJr4gikBowJ8I-iUXs7CkMg.m3u8", // YouTube转HLS
+                    "https://www.youtube.com/watch?v=4Ar8JHRCdSE" // 原有YouTube backup
                 };
                 
-                String selectedUrl = medinaLiveUrls[0]; // 默认使用第一个
+                String selectedUrl = medinaLiveUrls[0]; // 默认使用第一个（YouTube）
                 Log.d("FragMain", "Medina Live URL: " + selectedUrl);
                 Log.d("FragMain", "Available backup URLs: " + java.util.Arrays.toString(medinaLiveUrls));
                 

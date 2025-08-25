@@ -257,6 +257,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
             case R.id.medina_live:
                 String[] medinaLiveUrls = {
+                    "https://www.youtube.com/watch?v=4s4XX-qaNgg", // 新的Medina Live YouTube直播（优先）
+                    "https://www.youtube.com/watch?v=0lg0XeJ2gAU", // 备用Medina Live YouTube直播
                     "http://m.live.net.sa:1935/live/sunnah/playlist.m3u8",
                     "https://ythls.armelin.one/channel/UCJr4gikBowJ8I-iUXs7CkMg.m3u8",
                     "https://www.youtube.com/watch?v=4Ar8JHRCdSE"
