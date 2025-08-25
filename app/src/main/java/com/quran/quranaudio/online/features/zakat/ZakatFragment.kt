@@ -17,7 +17,7 @@ import com.quran.quranaudio.online.databinding.FragmentZakatBinding
 import com.quran.quranaudio.online.features.base.BaseFragment
 import com.quran.quranaudio.online.features.utils.extensions.DoubleExtensions.limitTo2Decimal
 import com.quran.quranaudio.online.features.utils.extensions.setSafeOnClickListener
-import com.raiadnan.ads.sdk.format.BannerAd
+// import com.raiadnan.ads.sdk.format.BannerAd // 广告导入已移除
 import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip
 
 class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
@@ -78,8 +78,7 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
     private var payableFamilyDebt: Double = 0.0
     private var payableOtherDebt: Double = 0.0
     private var totalPayable: Double = 0.0
-    var bannerAdView: LinearLayout? = null
-    var bannerAd: BannerAd.Builder? = null
+    // 广告相关变量已移除
 
   //  override val viewModel: ZakatViewModel by hiltNavGraphViewModels(R.id.main_navigation)
 
@@ -96,29 +95,10 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
         setSpinner()
         setInfoListner()
         setZakatCalculationListener()
-        //ads
-
-        //ads
-        bannerAdView = requireView().findViewById<LinearLayout>(R.id.banner_ad_view)
-        bannerAdView?.addView(View.inflate(context, R.layout.view_banner_ad, null))
-        loadBannerAd()
-
-        //ads*
+        // 广告代码已移除
     }
 
-    private fun loadBannerAd() {
-        bannerAd = BannerAd.Builder(context as Activity?)
-            .setAdStatus(com.quran.quranaudio.online.ads.data.Constant.AD_STATUS)
-            .setAdNetwork(com.quran.quranaudio.online.ads.data.Constant.AD_NETWORK)
-            .setBackupAdNetwork(com.quran.quranaudio.online.ads.data.Constant.BACKUP_AD_NETWORK)
-            .setAdMobBannerId(com.quran.quranaudio.online.ads.data.Constant.ADMOB_BANNER_ID)
-            .setGoogleAdManagerBannerId(com.quran.quranaudio.online.ads.data.Constant.GOOGLE_AD_MANAGER_BANNER_ID)
-            .setFanBannerId(com.quran.quranaudio.online.ads.data.Constant.FAN_BANNER_ID)
-            .setUnityBannerId(com.quran.quranaudio.online.ads.data.Constant.UNITY_BANNER_ID)
-            .setAppLovinBannerId(com.quran.quranaudio.online.ads.data.Constant.APPLOVIN_BANNER_ID)
-            .setAppLovinBannerZoneId(com.quran.quranaudio.online.ads.data.Constant.APPLOVIN_BANNER_ZONE_ID)
-            .build()
-    }
+    // loadBannerAd方法已移除
 
     private fun loadFragment(fragment: Fragment) {
         val fragmentTransaction = parentFragmentManager.beginTransaction()

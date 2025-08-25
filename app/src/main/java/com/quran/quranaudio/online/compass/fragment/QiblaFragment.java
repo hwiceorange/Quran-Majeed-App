@@ -35,11 +35,11 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.raiadnan.ads.sdk.format.BannerAd;
+// import com.raiadnan.ads.sdk.format.BannerAd; // 广告导入已移除
 import com.quran.quranaudio.online.activities.HomeActivity;
 import com.quran.quranaudio.online.fragments.BaseFragment;
 import com.quran.quranaudio.online.activities.HomeActivity;
-import com.quran.quranaudio.online.ads.data.Constant;
+// import com.quran.quranaudio.online.ads.data.Constant; // 广告常量导入已移除
 import com.quran.quranaudio.online.compass.QiblaDirectionActivity;
 import com.quran.quranaudio.online.R;
 import com.quran.quranaudio.online.compass.helper.AddressHelper;
@@ -77,8 +77,7 @@ public class QiblaFragment extends BaseFragment implements OnMapReadyCallback {
     private double result;
     private TextView tvDistance;
     private TextView tvHeading;
-    LinearLayout bannerAdView;
-    BannerAd.Builder bannerAd;
+    // 广告相关变量已移除
 
     public int getLayoutId() {
         return R.layout.fragment_qibla;
@@ -92,21 +91,30 @@ public class QiblaFragment extends BaseFragment implements OnMapReadyCallback {
     }
 
     public void onMapReady(GoogleMap googleMap) {
+        Log.d("QiblaFragment", "onMapReady called with GoogleMap: " + (googleMap != null ? "valid" : "null"));
         if (googleMap != null) {
+            Log.d("QiblaFragment", "GoogleMap is ready, setting up...");
             this.mMap = googleMap;
             this.myMaker = new MyMaker(this.activity);
             this.myMaker.enableSensor(this.mMap);
             this.mMap.setMyLocationEnabled(false);
             this.mMap.getUiSettings().setMyLocationButtonEnabled(false);
+            
+            Log.d("QiblaFragment", "Map is ready! Initializing Qibla marker...");
             initQibla();
+            
+            Log.d("QiblaFragment", "Requesting location permissions...");
             ((QiblaDirectionActivity) this.activity).mRequestObject = PermissionUtil.with(this.activity).request("android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION").onAllGranted(new Func() {
 
                 @SuppressLint({"MissingPermission", "SetTextI18n"})
                 public void call() {
+                    Log.d("QiblaFragment", "Location permissions granted, getting device location...");
                     QiblaFragment.this.getDeviceLocation(false);
                     QiblaFragment.this.listenLocationChange();
                 }
             }).ask(12);
+        } else {
+            Log.e("QiblaFragment", "GoogleMap is null in onMapReady!");
         }
     }
 
@@ -143,40 +151,54 @@ public class QiblaFragment extends BaseFragment implements OnMapReadyCallback {
 
     private void initMapView(Bundle bundle) {
         this.mMapView = (MapView) this.view.findViewById(R.id.map);
-        this.mMapView.onCreate(bundle);
-        this.mMapView.getMapAsync(this);
+        if (this.mMapView != null) {
+            Log.d("QiblaFragment", "MapView found, initializing with robust strategy...");
+            try {
+                // 健壮的地图初始化策略
+                this.mMapView.onCreate(bundle);
+                
+                // 延迟500ms再加载地图，确保所有组件都准备好
+                this.mMapView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Log.d("QiblaFragment", "Starting delayed map loading...");
+                            if (mMapView != null && isAdded() && !isDetached()) {
+                                mMapView.getMapAsync(QiblaFragment.this);
+                            } else {
+                                Log.w("QiblaFragment", "Fragment not ready for map loading");
+                            }
+                        } catch (Exception e) {
+                            Log.e("QiblaFragment", "Error in delayed map loading: " + e.getMessage());
+                        }
+                    }
+                }, 500); // 延迟500ms
+                
+                Log.d("QiblaFragment", "MapView delayed initialization scheduled");
+            } catch (Exception e) {
+                Log.e("QiblaFragment", "Error initializing MapView: " + e.getMessage());
+                e.printStackTrace();
+            }
+        } else {
+            Log.e("QiblaFragment", "MapView is null!");
+        }
     }
 
     @SuppressLint({"SetTextI18n"})
     public void onViewCreated(@NonNull View view, @Nullable Bundle bundle) {
         super.onViewCreated(view, bundle);
         initLocation();
-        initMapView(bundle);
         initView();
+        // 异步初始化地图，不阻塞其他组件
+        initMapView(bundle);
+        // 正常初始化指南针，与地图加载并行
         setupCompass();
         initBottomCompass();
 
-        //ads
-        bannerAdView = view.findViewById(R.id.banner_ad_view);
-        bannerAdView.addView(View.inflate(getContext(),R.layout.view_banner_ad, null));
-        loadBannerAd();
-
-        //ads*
+        // 广告代码已移除
     }
 
-    private void loadBannerAd() {
-        bannerAd = new BannerAd.Builder((Activity) getContext())
-                .setAdStatus(Constant.AD_STATUS)
-                .setAdNetwork(Constant.AD_NETWORK)
-                .setBackupAdNetwork(Constant.BACKUP_AD_NETWORK)
-                .setAdMobBannerId(Constant.ADMOB_BANNER_ID)
-                .setGoogleAdManagerBannerId(Constant.GOOGLE_AD_MANAGER_BANNER_ID)
-                .setFanBannerId(Constant.FAN_BANNER_ID)
-                .setUnityBannerId(Constant.UNITY_BANNER_ID)
-                .setAppLovinBannerId(Constant.APPLOVIN_BANNER_ID)
-                .setAppLovinBannerZoneId(Constant.APPLOVIN_BANNER_ZONE_ID)
-                .build();
-    }
+    // loadBannerAd方法已移除
 
     private void initLocation() {
         this.mLocation = new Location("dummyprovider");
@@ -193,7 +215,13 @@ public class QiblaFragment extends BaseFragment implements OnMapReadyCallback {
             }
 
             public void onAccuracyChanged(String str) {
-                new CalibrateCompassDialog(QiblaFragment.this.activity, str).show();
+                // 正常显示校准对话框，与地图加载并行进行
+                Log.d("QiblaFragment", "Compass accuracy changed: " + str + ", showing calibration dialog");
+                try {
+                    new CalibrateCompassDialog(QiblaFragment.this.activity, str).show();
+                } catch (Exception e) {
+                    Log.e("QiblaFragment", "Error showing calibration dialog: " + e.getMessage());
+                }
             }
         });
     }
@@ -249,7 +277,7 @@ public class QiblaFragment extends BaseFragment implements OnMapReadyCallback {
     }
 
     public void myLocationClick(final Boolean bool) {
-        ((HomeActivity) this.activity).mRequestObject = PermissionUtil.with(this.activity).request("android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION").onAllGranted(new Func() {
+        ((QiblaDirectionActivity) this.activity).mRequestObject = PermissionUtil.with(this.activity).request("android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION").onAllGranted(new Func() {
             /* access modifiers changed from: protected */
             @SuppressLint({"MissingPermission", "SetTextI18n"})
             public void call() {
@@ -380,16 +408,35 @@ public class QiblaFragment extends BaseFragment implements OnMapReadyCallback {
 
     public void onResume() {
         super.onResume();
-        this.mMapView.onResume();
+        // 安全地恢复MapView
+        if (this.mMapView != null) {
+            try {
+                this.mMapView.onResume();
+            } catch (Exception e) {
+                Log.e("QiblaFragment", "Error resuming MapView: " + e.getMessage());
+            }
+        }
+        // 启动指南针传感器
         Compass compass2 = this.compass;
         if (compass2 != null) {
-            compass2.start(this.activity);
+            Log.d("QiblaFragment", "Starting compass in onResume");
+            try {
+                compass2.start(this.activity);
+            } catch (Exception e) {
+                Log.e("QiblaFragment", "Error starting compass: " + e.getMessage());
+            }
         }
     }
 
     public void onPause() {
         super.onPause();
-        this.mMapView.onPause();
+        if (this.mMapView != null) {
+            try {
+                this.mMapView.onPause();
+            } catch (Exception e) {
+                Log.e("QiblaFragment", "Error pausing MapView: " + e.getMessage());
+            }
+        }
         Compass compass2 = this.compass;
         if (compass2 != null) {
             compass2.stop();
@@ -398,7 +445,13 @@ public class QiblaFragment extends BaseFragment implements OnMapReadyCallback {
 
     public void onDestroy() {
         super.onDestroy();
-        this.mMapView.onDestroy();
+        if (this.mMapView != null) {
+            try {
+                this.mMapView.onDestroy();
+            } catch (Exception e) {
+                Log.e("QiblaFragment", "Error destroying MapView: " + e.getMessage());
+            }
+        }
         MyMaker myMaker2 = this.myMaker;
         if (myMaker2 != null) {
             myMaker2.removeSensor();
@@ -407,11 +460,23 @@ public class QiblaFragment extends BaseFragment implements OnMapReadyCallback {
 
     public void onLowMemory() {
         super.onLowMemory();
-        this.mMapView.onLowMemory();
+        if (this.mMapView != null) {
+            try {
+                this.mMapView.onLowMemory();
+            } catch (Exception e) {
+                Log.e("QiblaFragment", "Error handling low memory for MapView: " + e.getMessage());
+            }
+        }
     }
 
     public void onSaveInstanceState(@NonNull Bundle bundle) {
         super.onSaveInstanceState(bundle);
-        this.mMapView.onSaveInstanceState(bundle);
+        if (this.mMapView != null) {
+            try {
+                this.mMapView.onSaveInstanceState(bundle);
+            } catch (Exception e) {
+                Log.e("QiblaFragment", "Error saving MapView state: " + e.getMessage());
+            }
+        }
     }
 }

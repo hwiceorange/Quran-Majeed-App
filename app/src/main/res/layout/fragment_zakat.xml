@@ -2906,13 +2906,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
-            android:id="@+id/banner_ad_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_alignParentBottom="true"
-            android:orientation="vertical" />
+        <!-- 广告视图已移除 -->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

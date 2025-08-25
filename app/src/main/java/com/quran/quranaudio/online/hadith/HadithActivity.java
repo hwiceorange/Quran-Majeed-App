@@ -15,20 +15,19 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.raiadnan.ads.sdk.format.BannerAd;
+// import com.raiadnan.ads.sdk.format.BannerAd; // 广告导入已移除
 import com.quran.quranaudio.online.hadith.book.BookFragment;
 import com.quran.quranaudio.online.hadith.bookmark.BookmarkFragment;
 import com.quran.quranaudio.online.hadith.search.Hadith_SearchActivity;
 import com.quran.quranaudio.online.hadith.settings.SettingsActivity;
 import com.quran.quranaudio.online.R;
-import com.quran.quranaudio.online.ads.data.Constant;
+// import com.quran.quranaudio.online.ads.data.Constant; // 广告常量导入已移除
 
 public class HadithActivity extends AppCompatActivity {
 
     ActionBarDrawerToggle drawerToggle;
 
-    BannerAd.Builder bannerAd;
-    LinearLayout bannerAdView;
+    // 广告相关变量已移除
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,27 +67,10 @@ public class HadithActivity extends AppCompatActivity {
             startActivity(intent); //, ActivityOptions.makeCustomAnimation(this,android.R.anim.slide_in_left,android.R.anim.slide_out_right).toBundle()
         });
 
-        //ads
-        bannerAdView = findViewById(R.id.banner_ad_view);
-        bannerAdView.addView(View.inflate(this, R.layout.view_banner_ad, null));
-        loadBannerAd();
-
-        //ads*
+        // 广告代码已移除
     }
 
-    private void loadBannerAd() {
-        bannerAd = new BannerAd.Builder(this)
-                .setAdStatus(Constant.AD_STATUS)
-                .setAdNetwork(Constant.AD_NETWORK)
-                .setBackupAdNetwork(Constant.BACKUP_AD_NETWORK)
-                .setAdMobBannerId(Constant.ADMOB_BANNER_ID)
-                .setGoogleAdManagerBannerId(Constant.GOOGLE_AD_MANAGER_BANNER_ID)
-                .setFanBannerId(Constant.FAN_BANNER_ID)
-                .setUnityBannerId(Constant.UNITY_BANNER_ID)
-                .setAppLovinBannerId(Constant.APPLOVIN_BANNER_ID)
-                .setAppLovinBannerZoneId(Constant.APPLOVIN_BANNER_ZONE_ID)
-                .build();
-    }
+    // loadBannerAd方法已移除
 
     @Nullable
     @Override

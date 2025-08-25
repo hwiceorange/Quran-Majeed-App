@@ -21,12 +21,7 @@
             android:layout_height="wrap_content"
             android:visibility="gone" />
 
-        <LinearLayout
-            android:id="@+id/banner_ad_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:orientation="vertical" />
+        <!-- 广告视图已移除 -->
 
         <LinearLayout
             android:id="@+id/menu_one"

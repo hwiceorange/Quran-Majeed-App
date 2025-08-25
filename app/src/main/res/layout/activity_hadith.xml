@@ -18,15 +18,7 @@
 
     <include layout="@layout/custom_actionbar"/>
 
-        <LinearLayout
-            android:id="@+id/banner_ad_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/header_main"
-            android:layout_alignParentBottom="true"
-            android:orientation="vertical">
-
-        </LinearLayout>
+        <!-- 广告视图已移除 -->
 
 
         <FrameLayout

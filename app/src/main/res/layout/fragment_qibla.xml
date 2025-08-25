@@ -20,12 +20,7 @@
             android:layout_height="match_parent" />
     </FrameLayout>
 
-    <LinearLayout
-        android:id="@+id/banner_ad_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical" />
+    <!-- 广告已移除 -->
 
     <FrameLayout
         android:id="@+id/compass_view"

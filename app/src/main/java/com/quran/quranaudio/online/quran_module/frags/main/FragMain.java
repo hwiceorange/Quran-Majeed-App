@@ -26,12 +26,13 @@ import androidx.annotation.Nullable;
 import androidx.asynclayoutinflater.view.AsyncLayoutInflater;
 import androidx.core.content.ContextCompat;
 
-import com.raiadnan.ads.sdk.format.BannerAd;
-import com.raiadnan.ads.sdk.format.InterstitialAd;
+// 广告导入已移除
+// import com.raiadnan.ads.sdk.format.BannerAd;
+// import com.raiadnan.ads.sdk.format.InterstitialAd;
 import com.quran.quranaudio.online.activities.LiveActivity;
 import com.quran.quranaudio.online.activities.SixKalmasActivity;
 import com.quran.quranaudio.online.activities.ZakatCalculatorActivity;
-import com.quran.quranaudio.online.ads.data.Constant;
+// import com.quran.quranaudio.online.ads.data.Constant; // 广告常量导入已移除
 import com.quran.quranaudio.online.compass.QiblaDirectionActivity;
 import com.quran.quranaudio.online.hadith.HadithActivity;
 import com.quran.quranaudio.online.quran_module.activities.ActivityReaderIndexPage;
@@ -63,9 +64,7 @@ public class FragMain extends BaseFragment {
     private VOTDView mVotdView;
     private UpdateManager mUpdateManager;
 
-    LinearLayout bannerAdView;
-    BannerAd.Builder bannerAd;
-    InterstitialAd.Builder interstitialAd;
+    // 广告相关变量已移除
 
 
     ActivityResultLauncher<String[]> mPermissionResultLauncher;
@@ -162,42 +161,42 @@ public class FragMain extends BaseFragment {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), ActivityReaderIndexPage.class));
-                showInterstitialAd();
+                // 广告调用已移除
             }
         });
         mBinding.hadithBooks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), HadithActivity.class));
-                showInterstitialAd();
+                // 广告调用已移除
             }
         });
         mBinding.qiblaDirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), QiblaDirectionActivity.class));
-                showInterstitialAd();
+                // 广告调用已移除
             }
         });
         mBinding.prayerCalender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), CalendarActivity.class));
-                showInterstitialAd();
+                // 广告调用已移除
             }
         });
         mBinding.sixKalmas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), SixKalmasActivity.class));
-                showInterstitialAd();
+                // 广告调用已移除
             }
         });
         mBinding.zakatCalculator.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), ZakatCalculatorActivity.class));
-                showInterstitialAd();
+                // 广告调用已移除
             }
         });
         mBinding.meccaLive.setOnClickListener(new View.OnClickListener() {
@@ -217,62 +216,12 @@ public class FragMain extends BaseFragment {
             }
         });
 
-        //ads
-        bannerAdView = view.findViewById(R.id.banner_ad_view);
-        bannerAdView.addView(View.inflate(getContext(),R.layout.view_banner_ad, null));
-        loadBannerAd();
-        loadInterstitialAd();
-
-        //ads*
+        // 广告代码已移除
 
 
     }
 
-    private void loadBannerAd() {
-        if(getActivity()==null)
-            return;
-        bannerAd = new BannerAd.Builder(getActivity())
-                .setAdStatus(Constant.AD_STATUS)
-                .setAdNetwork(Constant.AD_NETWORK)
-                .setBackupAdNetwork(Constant.BACKUP_AD_NETWORK)
-                .setAdMobBannerId(Constant.ADMOB_BANNER_ID)
-                .setGoogleAdManagerBannerId(Constant.GOOGLE_AD_MANAGER_BANNER_ID)
-                .setFanBannerId(Constant.FAN_BANNER_ID)
-                .setUnityBannerId(Constant.UNITY_BANNER_ID)
-                .setAppLovinBannerId(Constant.APPLOVIN_BANNER_ID)
-                .setAppLovinBannerZoneId(Constant.APPLOVIN_BANNER_ZONE_ID)
-                .build();
-    }
-
-    private void loadInterstitialAd() {
-        if(getActivity()==null)
-            return;
-        interstitialAd = new InterstitialAd.Builder(getActivity())
-                .setAdStatus(Constant.AD_STATUS)
-                .setAdNetwork(Constant.AD_NETWORK)
-                .setBackupAdNetwork(Constant.BACKUP_AD_NETWORK)
-                .setAdMobInterstitialId(Constant.ADMOB_INTERSTITIAL_ID)
-                .setGoogleAdManagerInterstitialId(Constant.GOOGLE_AD_MANAGER_INTERSTITIAL_ID)
-                .setFanInterstitialId(Constant.FAN_INTERSTITIAL_ID)
-                .setUnityInterstitialId(Constant.UNITY_INTERSTITIAL_ID)
-                .setAppLovinInterstitialId(Constant.APPLOVIN_INTERSTITIAL_ID)
-                .setAppLovinInterstitialZoneId(Constant.APPLOVIN_INTERSTITIAL_ZONE_ID)
-                .setInterval(Constant.INTERSTITIAL_AD_INTERVAL)
-                .build(() -> {
-                    Log.d(TAG, "onAdDismissed");
-                });
-    }
-
-    private void showInterstitialAd() {
-        if(interstitialAd!=null) {
-            interstitialAd.show(() -> {
-                Log.d(TAG, "onAdShowed");
-            }, () -> {
-                Log.d(TAG, "onAdDismissed");
-            });
-        }
-
-    }
+    // 广告方法已全部移除
 
     View.OnClickListener dialogListener=new View.OnClickListener() {
         @Override public void onClick(View v) {
