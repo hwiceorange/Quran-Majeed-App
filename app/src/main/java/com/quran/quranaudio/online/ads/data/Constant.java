@@ -2,7 +2,7 @@ package com.quran.quranaudio.online.ads.data;
 
 public class Constant {
 
-    public static final String AD_STATUS = "1";
+    public static final String AD_STATUS = "1"; // 广告开启状态
 
     public static String AD_NETWORK = "admob";
     public static final String BACKUP_AD_NETWORK = "fan";
@@ -49,11 +49,11 @@ public class Constant {
 
     public static boolean isAppOpen = false;
 
-    public static final boolean FORCE_TO_SHOW_APP_OPEN_AD_ON_START = true;
-    public static final boolean OPEN_ADS_ON_START = true;
-    public static final boolean OPEN_ADS_ON_RESUME = true;
+    public static final boolean FORCE_TO_SHOW_APP_OPEN_AD_ON_START = true; // 保留启动时开屏广告
+    public static final boolean OPEN_ADS_ON_START = true; // 保留开屏广告
+    public static final boolean OPEN_ADS_ON_RESUME = true; // 保留恢复时开屏广告
 
-    public static final int INTERSTITIAL_AD_INTERVAL = 3;
+    public static final int INTERSTITIAL_AD_INTERVAL = 999999; // 禁用插页式广告通过设置极大间隔
     public static final int NATIVE_AD_INDEX = 2;
     public static final int NATIVE_AD_INTERVAL = 8;
 
