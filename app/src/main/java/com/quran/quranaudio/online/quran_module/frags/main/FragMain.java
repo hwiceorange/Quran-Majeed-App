@@ -202,16 +202,41 @@ public class FragMain extends BaseFragment {
         mBinding.meccaLive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // 备用直播URL列表
+                String[] meccaLiveUrls = {
+                    "http://m.live.net.sa:1935/live/quran/playlist.m3u8", // 原始URL
+                    "https://ythls.armelin.one/channel/UCos52-JmjOoBnBOnxJCWAQA.m3u8", // Mecca Live YouTube转HLS
+                    "https://www.youtube.com/watch?v=e85tJVzKwDU", // YouTube backup 1
+                    "https://www.youtube.com/watch?v=yd19lGSibQ4"  // YouTube backup 2
+                };
+                
+                String selectedUrl = meccaLiveUrls[0]; // 默认使用第一个
+                Log.d("FragMain", "Mecca Live URL: " + selectedUrl);
+                Log.d("FragMain", "Available backup URLs: " + java.util.Arrays.toString(meccaLiveUrls));
+                
                 Intent intent = new Intent(getActivity(), LiveActivity.class);
-                intent.putExtra("live", "http://m.live.net.sa:1935/live/quran/playlist.m3u8");
+                intent.putExtra("live", selectedUrl);
+                intent.putExtra("backup_urls", meccaLiveUrls);
                 startActivity(intent);
             }
         });
         mBinding.medinaLive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // 备用直播URL列表
+                String[] medinaLiveUrls = {
+                    "http://m.live.net.sa:1935/live/sunnah/playlist.m3u8", // 原始URL
+                    "https://ythls.armelin.one/channel/UCJr4gikBowJ8I-iUXs7CkMg.m3u8", // Medina Live YouTube转HLS
+                    "https://www.youtube.com/watch?v=4Ar8JHRCdSE" // YouTube backup
+                };
+                
+                String selectedUrl = medinaLiveUrls[0]; // 默认使用第一个
+                Log.d("FragMain", "Medina Live URL: " + selectedUrl);
+                Log.d("FragMain", "Available backup URLs: " + java.util.Arrays.toString(medinaLiveUrls));
+                
                 Intent intent = new Intent(getActivity(), LiveActivity.class);
-                intent.putExtra("live", "http://m.live.net.sa:1935/live/sunnah/playlist.m3u8");
+                intent.putExtra("live", selectedUrl);
+                intent.putExtra("backup_urls", medinaLiveUrls);
                 startActivity(intent);
             }
         });

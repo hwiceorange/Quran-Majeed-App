@@ -256,8 +256,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.medina_live:
+                String[] medinaLiveUrls = {
+                    "http://m.live.net.sa:1935/live/sunnah/playlist.m3u8",
+                    "https://ythls.armelin.one/channel/UCJr4gikBowJ8I-iUXs7CkMg.m3u8",
+                    "https://www.youtube.com/watch?v=4Ar8JHRCdSE"
+                };
                 Intent intent = new Intent(getActivity(), LiveActivity.class);
-                intent.putExtra("live", "http://m.live.net.sa:1935/live/sunnah/playlist.m3u8");
+                intent.putExtra("live", medinaLiveUrls[0]);
+                intent.putExtra("backup_urls", medinaLiveUrls);
                 startActivity(intent);
                 break;
 
@@ -266,8 +272,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.mecca_live:
+                String[] meccaLiveUrls = {
+                    "http://m.live.net.sa:1935/live/quran/playlist.m3u8",
+                    "https://ythls.armelin.one/channel/UCos52-JmjOoBnBOnxJCWAQA.m3u8",
+                    "https://www.youtube.com/watch?v=e85tJVzKwDU",
+                    "https://www.youtube.com/watch?v=yd19lGSibQ4"
+                };
                 intent = new Intent(getActivity(), LiveActivity.class);
-                intent.putExtra("live", "http://m.live.net.sa:1935/live/quran/playlist.m3u8");
+                intent.putExtra("live", meccaLiveUrls[0]);
+                intent.putExtra("backup_urls", meccaLiveUrls);
                 startActivity(intent);
                 break;
 
