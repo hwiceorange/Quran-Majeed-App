@@ -140,57 +140,73 @@
             android:visibility="gone" />
     </FrameLayout>
 
-    <!-- Direction and Distance Info Area -->
-    <LinearLayout
+    <!-- Direction and Distance Info Area (Improved Layout) -->
+    <RelativeLayout
+        android:id="@+id/compass_info_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:padding="16dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
         android:background="@android:color/white">
 
-        <!-- Direction text -->
+        <!-- Qibla Direction Row -->
         <TextView
             android:id="@+id/tv_direction_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
             android:text="QIBLAH FROM THE NORTH"
             android:textSize="14sp"
-            android:textColor="#666"
-            android:layout_marginBottom="4dp" />
+            android:textColor="#666666"
+            android:textAllCaps="true"
+            android:fontFamily="sans-serif-medium" />
 
-        <!-- Direction degree -->
         <TextView
             android:id="@+id/tv_heading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignBaseline="@id/tv_direction_label"
             android:text="-81.2°"
             android:textSize="24sp"
-            android:textColor="#000"
+            android:textColor="#000000"
             android:textStyle="bold"
-            android:layout_marginBottom="16dp" />
+            android:fontFamily="sans-serif" />
 
-        <!-- Distance label -->
+        <!-- Distance Row -->
         <TextView
+            android:id="@+id/tv_distance_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/tv_direction_label"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="24dp"
             android:text="DISTANCE"
             android:textSize="14sp"
-            android:textColor="#666"
-            android:layout_marginBottom="4dp" />
+            android:textColor="#666666"
+            android:textAllCaps="true"
+            android:fontFamily="sans-serif-medium" />
 
-        <!-- Distance value -->
         <TextView
             android:id="@+id/tv_distance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/tv_direction_label"
+            android:layout_alignParentEnd="true"
+            android:layout_alignBaseline="@id/tv_distance_label"
+            android:layout_marginTop="24dp"
             android:text="7383.5 kms"
             android:textSize="18sp"
-            android:textColor="#000"
-            android:textStyle="bold" />
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <!-- Compass skin selector -->
     <LinearLayout
