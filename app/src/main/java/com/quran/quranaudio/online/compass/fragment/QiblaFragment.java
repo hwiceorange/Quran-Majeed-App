@@ -480,70 +480,54 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
 
     @Override
     public void onMagneticFieldChanged(float strength, EnhancedCompass.MagneticFieldStatus status) {
+        String statusText;
+        int statusColor;
+        
+        switch (status) {
+            case NORMAL:
+                statusText = "Normal";
+                statusColor = getResources().getColor(R.color.colorPrimary);
+                hideMagneticWarning();
+                // When magnetic field is normal, update calibration status based on sensor accuracy
+                if (compassAccuracy == android.hardware.SensorManager.SENSOR_STATUS_ACCURACY_HIGH) {
+                    updateCalibrationIndicator(CalibrationStatus.CALIBRATED);
+                }
+                break;
+            case WEAK:
+                statusText = "Weak";
+                statusColor = 0xFFFF4444; // Red color for weak signal
+                showMagneticWarning("Weak magnetic field signal");
+                updateCalibrationIndicator(CalibrationStatus.CALIBRATING);
+                break;
+            case STRONG:
+                statusText = "Strong";
+                statusColor = 0xFFFFA726; // Orange color for strong interference
+                showMagneticWarning("Strong magnetic field interference");
+                updateCalibrationIndicator(CalibrationStatus.UNCALIBRATED);
+                break;
+            case DISTURBED:
+                statusText = "Disturbed";
+                statusColor = 0xFFFF4444; // Red color for disturbance
+                showMagneticWarning("Magnetic interference detected");
+                updateCalibrationIndicator(CalibrationStatus.UNCALIBRATED);
+                break;
+            default:
+                statusText = "Unknown";
+                statusColor = 0xFF888888; // Grey color
+                updateCalibrationIndicator(CalibrationStatus.UNCALIBRATED);
+                break;
+        }
+        
+        // Update magnetic strength text and color (main status text)
         if (tvMagneticStrength != null) {
-            String statusText;
-            int statusColor;
-            
-            switch (status) {
-                case NORMAL:
-                    statusText = "Normal";
-                    statusColor = getResources().getColor(R.color.colorPrimary);
-                    hideMagneticWarning();
-                    // When magnetic field is normal, update calibration status based on sensor accuracy
-                    if (compassAccuracy == android.hardware.SensorManager.SENSOR_STATUS_ACCURACY_HIGH) {
-                        updateCalibrationIndicator(CalibrationStatus.CALIBRATED);
-                    }
-                    break;
-                case WEAK:
-                    statusText = "Weak";
-                    statusColor = getResources().getColor(R.color.orange);
-                    showMagneticWarning("Weak magnetic field signal");
-                    updateCalibrationIndicator(CalibrationStatus.CALIBRATING);
-                    break;
-                case STRONG:
-                    statusText = "Strong";
-                    statusColor = getResources().getColor(R.color.red);
-                    showMagneticWarning("Strong magnetic field interference");
-                    updateCalibrationIndicator(CalibrationStatus.UNCALIBRATED);
-                    break;
-                case DISTURBED:
-                    statusText = "Disturbed";
-                    statusColor = getResources().getColor(R.color.red);
-                    showMagneticWarning("Magnetic interference detected");
-                    updateCalibrationIndicator(CalibrationStatus.UNCALIBRATED);
-                    break;
-                default:
-                    statusText = "Unknown";
-                    statusColor = getResources().getColor(R.color.grey);
-                    updateCalibrationIndicator(CalibrationStatus.UNCALIBRATED);
-                    break;
-            }
-            
             tvMagneticStrength.setText(statusText);
             tvMagneticStrength.setTextColor(statusColor);
         }
         
-        // Update calibration status text
+        // Update calibration status label (always "Field")
         if (tvCalibrationStatus != null) {
-            String statusDisplayText;
-            switch (status) {
-                case NORMAL:
-                    statusDisplayText = "Field";
-                    break;
-                case WEAK:
-                    statusDisplayText = "Field\nWeak";
-                    break;
-                case STRONG:
-                    statusDisplayText = "Field\nStrong";
-                    break;
-                case DISTURBED:
-                    statusDisplayText = "Field\nDisturbed";
-                    break;
-                default:
-                    statusDisplayText = "Field";
-                    break;
-            }
-            tvCalibrationStatus.setText(statusDisplayText);
+            tvCalibrationStatus.setText("Field");
+            tvCalibrationStatus.setTextColor(0xFF888888); // Grey label color
         }
         
         Log.d(TAG, "Magnetic field status: " + status + " (" + strength + " μT)");

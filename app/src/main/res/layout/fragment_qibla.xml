@@ -30,62 +30,65 @@
             android:padding="10dp"
             android:src="@drawable/compass_1_k" />
 
-        <!-- Calibration status indicator -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <!-- Calibration status indicator (improved design) -->
+        <FrameLayout
+            android:id="@+id/calibration_status_container"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
             android:layout_gravity="top|end"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:elevation="8dp">
-            
-            <TextView
-                android:id="@+id/tv_calibration_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Field"
-                android:textSize="12sp"
-                android:textColor="#666666"
-                android:layout_marginEnd="4dp" />
-            
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:elevation="4dp">
+
+            <!-- Circular background -->
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/calibration_indicator_background"
+                android:scaleType="fitXY" />
+
+            <!-- Status indicator dot (top-right corner) -->
             <View
                 android:id="@+id/calibration_indicator"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="top|end"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
                 android:background="@drawable/calibration_status_red" />
-        </LinearLayout>
 
+            <!-- Field strength text container -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:gravity="center">
 
+                <TextView
+                    android:id="@+id/tv_calibration_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Field"
+                    android:textSize="10sp"
+                    android:textColor="#888888"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
 
-        <!-- Magnetic field strength indicator -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|end"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/circle_shape"
-            android:orientation="vertical"
-            android:padding="8dp">
-
-                               <TextView
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:text="Field"
-                       android:textSize="10sp"
-                       android:textColor="#888" />
-
-                   <TextView
-                       android:id="@+id/tv_magnetic_strength"
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:text="Normal"
-                       android:textSize="12sp"
-                       android:textColor="#4CAF50"
-                       android:textStyle="bold" />
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_magnetic_strength"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Weak"
+                    android:textSize="12sp"
+                    android:textColor="#FF4444"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
+            </LinearLayout>
+        </FrameLayout>
 
         <!-- Calibration prompt (hidden by default) -->
         <LinearLayout
