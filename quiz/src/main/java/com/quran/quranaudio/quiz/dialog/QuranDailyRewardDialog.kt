@@ -92,14 +92,14 @@ class QuranDailyRewardDialog : BaseDialogFragment<DialogDailyRewardBinding>() {
             dailyNums.forEachIndexed { index, byte ->
                 if (byte.toInt() == 1) lastDayIndex = index
             }
-            val newIndex = if (lastDayIndex + daysBetween > 6) { //超出一个循环，重置
+            val newIndex = if (lastDayIndex + 1 > 6 || daysBetween > 1) { //超出一个循环或跨天过多，重置
                 dailyNums = byteArrayOf(0, 0, 0, 0, 0, 0, 0)
                 0
-            } else lastDayIndex + daysBetween
+            } else (lastDayIndex + 1) % 7
             dailyNums[newIndex] = 1
             SPTools.put(Constants.DAILY_REWARD_NUM, dailyNums)
             toDayGem = list[newIndex]
-//            QuizGemManager.addCount(list[newIndex])
+            QuizGemManager.addCount(list[newIndex])
         }
         val dayTvList = listOf(mBinding.day1,mBinding.day2,mBinding.day3,mBinding.day4,
             mBinding.day5,mBinding.day6,mBinding.day7)

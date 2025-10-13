@@ -44,22 +44,22 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
- * 增强版Qibla Direction Fragment
- * 特性：
- * 1. 移除Google地图依赖，专注于罗盘功能
- * 2. 使用增强型传感器数据处理
- * 3. 实时磁场检测和校准提示
- * 4. 设备倾斜补偿
+ * Enhanced Qibla Direction Fragment
+ * Features:
+ * 1. Removed Google Maps dependency, focused on compass functionality
+ * 2. Enhanced sensor data processing
+ * 3. Real-time magnetic field detection and calibration prompts
+ * 4. Device tilt compensation
  */
 public class QiblaFragment extends BaseFragment implements EnhancedCompass.EnhancedCompassListener {
 
     private static final String TAG = "QiblaFragmentEnhanced";
     
-    // 天房坐标 (麦加)
+    // Kaaba coordinates (Mecca)
     public final double KAABA_LATITUDE = 21.42251d;
     public final double KAABA_LONGITUDE = 39.82616d;
     
-    // 传感器和位置相关
+    // Sensor and location related
     private EnhancedCompass enhancedCompass;
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationCallback locationCallback;
@@ -67,7 +67,7 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
     private Location currentLocation;
     private CompositeDisposable compositeDisposable;
     
-    // UI元素
+    // UI elements
     private View view;
     public ImageView imgCompass;
     public ImageView imgCompassK;
@@ -79,24 +79,27 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
     private TextView btnCalibrate;
     private RecyclerView rcvCompass;
     private View calibrationIndicator;
+    private TextView tvCalibrationStatus;
     
-    // 状态变量
+    // State variables
     private float currentAzimuth = 0f;
     private double qiblaDirection = 0d;
     private boolean isLocationReady = false;
+    private android.os.Handler updateHandler;
+    private Runnable updateRunnable;
     
-    // 校准状态相关变量
+    // Calibration status related variables
     private int compassAccuracy = android.hardware.SensorManager.SENSOR_STATUS_UNRELIABLE;
     private CalibrationStatus currentCalibrationStatus = CalibrationStatus.UNCALIBRATED;
     
-    // 罗盘数据适配器
+    // Compass data adapter
     private CompassAdapter compassAdapter;
     
-    // 校准状态枚举
+    // Calibration status enum
     public enum CalibrationStatus {
-        UNCALIBRATED,   // 红色 - 未校准/需要校准
-        CALIBRATING,    // 黄色 - 校准中/部分校准
-        CALIBRATED      // 绿色 - 已校准/精度良好
+        UNCALIBRATED,   // Red - Uncalibrated/needs calibration
+        CALIBRATING,    // Yellow - Calibrating/partial calibration
+        CALIBRATED      // Green - Calibrated/good accuracy
     }
     
     @Override
@@ -108,7 +111,7 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(getLayoutId(), container, false);
-        Log.d(TAG, "增强版Qibla Fragment创建");
+        Log.d(TAG, "Enhanced Qibla Fragment created");
         return view;
     }
 
@@ -116,7 +119,7 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         
-        Log.d(TAG, "初始化增强版Qibla Direction功能");
+        Log.d(TAG, "Initialize enhanced Qibla Direction functionality");
         
         initializeUI();
         initializeLocation();
@@ -124,10 +127,25 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
         initializeCompassList();
         
         compositeDisposable = new CompositeDisposable();
+        
+        // Initialize update handler for real-time data updates
+        updateHandler = new android.os.Handler();
+        updateRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (isLocationReady && currentLocation != null) {
+                    // Force UI update every 1 second
+                    updateQiblaUI();
+                    double distance = calculateDistanceToKaaba();
+                    Log.d(TAG, "Periodic UI update - Qibla: " + qiblaDirection + "°, Distance: " + distance + " km");
+                }
+                updateHandler.postDelayed(this, 1000); // Update every 1 second
+            }
+        };
     }
 
     private void initializeUI() {
-        // 绑定UI元素
+        // Bind UI elements
         imgCompass = view.findViewById(R.id.compass);
         imgCompassK = view.findViewById(R.id.compass_k);
         tvHeading = view.findViewById(R.id.tv_heading);
@@ -138,28 +156,45 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
         btnCalibrate = view.findViewById(R.id.btn_calibrate);
         rcvCompass = view.findViewById(R.id.rcv_compass);
         calibrationIndicator = view.findViewById(R.id.calibration_indicator);
+        tvCalibrationStatus = view.findViewById(R.id.tv_calibration_status);
         
-        // 设置校准按钮点击事件
+        // Set calibration button click event
         if (btnCalibrate != null) {
             btnCalibrate.setOnClickListener(v -> showCalibrationDialog());
         }
         
-        // 初始设置校准指示器为未校准状态
+        // Add refresh location button for testing
+        if (tvDistance != null) {
+            tvDistance.setOnClickListener(v -> {
+                Log.d(TAG, "Manual location refresh triggered");
+                getCurrentLocation();
+            });
+        }
+        
+        // Add test location change button for testing real-time updates
+        if (tvHeading != null) {
+            tvHeading.setOnClickListener(v -> {
+                Log.d(TAG, "Test location change triggered");
+                simulateLocationChange();
+            });
+        }
+        
+        // Initially set calibration indicator to uncalibrated state
         updateCalibrationIndicator(CalibrationStatus.UNCALIBRATED);
         
-        Log.d(TAG, "UI元素初始化完成");
+        Log.d(TAG, "UI elements initialization completed");
     }
 
     private void initializeLocation() {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
         
-        // 创建位置请求
+        // Create location request
         locationRequest = LocationRequest.create();
-        locationRequest.setInterval(10000); // 10秒更新间隔
-        locationRequest.setFastestInterval(5000); // 最快5秒
+        locationRequest.setInterval(2000); // 2 second update interval for more responsive updates
+        locationRequest.setFastestInterval(500); // Fastest 0.5 second
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         
-        // 位置回调
+        // Location callback
         locationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
@@ -172,27 +207,42 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
             }
         };
         
-        // 获取当前位置
+        // Get current location
         getCurrentLocation();
         
-        Log.d(TAG, "位置服务初始化完成");
+        Log.d(TAG, "Location service initialization completed");
     }
 
     private void initializeCompass() {
         enhancedCompass = new EnhancedCompass(requireContext());
         enhancedCompass.setListener(this);
         
-        Log.d(TAG, "增强型罗盘初始化完成");
-        Log.d(TAG, "支持旋转向量传感器: " + enhancedCompass.isRotationVectorAvailable());
+        Log.d(TAG, "Enhanced compass initialization completed");
+        Log.d(TAG, "Rotation vector sensor supported: " + enhancedCompass.isRotationVectorAvailable());
     }
 
     private void initializeCompassList() {
-        // 简化实现 - 暂时隐藏RecyclerView直到修复CompassAdapter
         if (rcvCompass != null) {
-            rcvCompass.setVisibility(View.GONE);
+            rcvCompass.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
+            
+            compassAdapter = new CompassAdapter(requireContext()) {
+                @Override
+                public void OnItemClick(int compassIndex, int compassKIndex) {
+                    // Update compass skin
+                    if (imgCompass != null) {
+                        imgCompass.setImageResource(compassIndex);
+                    }
+                    if (imgCompassK != null) {
+                        imgCompassK.setImageResource(compassKIndex);
+                    }
+                    Log.d(TAG, "Compass skin changed: " + compassIndex);
+                }
+            };
+            
+            rcvCompass.setAdapter(compassAdapter);
+            rcvCompass.setVisibility(View.VISIBLE);
         }
-        
-        Log.d(TAG, "罗盘方向列表初始化完成（简化版）");
+        Log.d(TAG, "Compass skin selector initialized");
     }
 
     @SuppressLint("MissingPermission")
@@ -209,8 +259,8 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
                         if (task.isSuccessful() && task.getResult() != null) {
                             updateLocation(task.getResult());
                         } else {
-                            Log.w(TAG, "无法获取当前位置");
-                            // 使用保存的位置作为备用
+                            Log.w(TAG, "Unable to get current location");
+                            // Use saved location as backup
                             loadSavedLocation();
                         }
             }
@@ -221,15 +271,22 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
         currentLocation = location;
         isLocationReady = true;
         
-        Log.d(TAG, "位置更新: " + location.getLatitude() + ", " + location.getLongitude());
+        Log.d(TAG, "Location updated: " + location.getLatitude() + ", " + location.getLongitude() + ", isLocationReady: " + isLocationReady);
         
-        // 保存位置
+        // Save location
         LocationSave.putLocation(location.getLatitude(), location.getLongitude());
         
-        // 计算Qibla方向
+        // Calculate Qibla direction
         calculateQiblaDirection();
         
-        // 获取地址信息
+        // Force immediate UI update
+        if (requireActivity() != null) {
+            requireActivity().runOnUiThread(() -> {
+                updateQiblaUI();
+            });
+        }
+        
+        // Get address information
         AddressHelper.getAddress(location.getLatitude(), location.getLongitude());
     }
 
@@ -243,17 +300,36 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
             savedLocation.setLongitude(savedLon);
             updateLocation(savedLocation);
             
-            Log.d(TAG, "使用保存的位置: " + savedLat + ", " + savedLon);
+            Log.d(TAG, "Using saved location: " + savedLat + ", " + savedLon);
         }
+    }
+    
+    private void simulateLocationChange() {
+        if (currentLocation == null) {
+            Log.w(TAG, "No current location to simulate change");
+            return;
+        }
+        
+        // Simulate moving 1 degree in latitude and longitude
+        Location newLocation = new Location("simulated");
+        newLocation.setLatitude(currentLocation.getLatitude() + 1.0);
+        newLocation.setLongitude(currentLocation.getLongitude() + 1.0);
+        
+        Log.d(TAG, "Simulating location change from: " + currentLocation.getLatitude() + ", " + currentLocation.getLongitude() + 
+              " to: " + newLocation.getLatitude() + ", " + newLocation.getLongitude());
+        
+        updateLocation(newLocation);
     }
 
     private void calculateQiblaDirection() {
         if (currentLocation == null) {
-            Log.w(TAG, "当前位置为空，无法计算Qibla方向");
+            Log.w(TAG, "Current location is null, unable to calculate Qibla direction");
             return;
         }
         
-        // 使用大圆航线公式计算Qibla方向
+        Log.d(TAG, "Calculating Qibla direction for location: " + currentLocation.getLatitude() + ", " + currentLocation.getLongitude());
+        
+        // Calculate Qibla direction using great circle formula
         double lat1 = Math.toRadians(currentLocation.getLatitude());
         double lon1 = Math.toRadians(currentLocation.getLongitude());
         double lat2 = Math.toRadians(KAABA_LATITUDE);
@@ -264,23 +340,29 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
         double y = Math.sin(deltaLon) * Math.cos(lat2);
         double x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(deltaLon);
         
-        qiblaDirection = Math.toDegrees(Math.atan2(y, x));
-        qiblaDirection = (qiblaDirection + 360) % 360; // 确保在0-360度范围内
+        double newQiblaDirection = Math.toDegrees(Math.atan2(y, x));
+        newQiblaDirection = (newQiblaDirection + 360) % 360; // Ensure within 0-360 degree range
         
-        Log.d(TAG, "Qibla方向计算完成: " + qiblaDirection + "°");
+        // Check if direction actually changed
+        if (Math.abs(newQiblaDirection - qiblaDirection) > 0.1) {
+            Log.d(TAG, "Qibla direction changed from " + qiblaDirection + "° to " + newQiblaDirection + "°");
+            qiblaDirection = newQiblaDirection;
+        } else {
+            Log.d(TAG, "Qibla direction unchanged: " + qiblaDirection + "°");
+        }
         
-        // 计算距离
+        // Calculate distance
         calculateDistanceToKaaba();
         
-        // 更新UI
+        // Update UI
         updateQiblaUI();
     }
 
-    private void calculateDistanceToKaaba() {
-        if (currentLocation == null) return;
+    private double calculateDistanceToKaaba() {
+        if (currentLocation == null) return 0.0;
         
-        // 使用球面余弦定理计算距离
-        double R = 6371; // 地球半径 (km)
+        // Calculate distance using spherical law of cosines
+        double R = 6371; // Earth radius (km)
         double lat1 = Math.toRadians(currentLocation.getLatitude());
         double lon1 = Math.toRadians(currentLocation.getLongitude());
         double lat2 = Math.toRadians(KAABA_LATITUDE);
@@ -295,55 +377,105 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         double distance = R * c;
         
-        // 更新距离显示
-        if (tvDistance != null) {
-            if (distance < 1.0) {
-                tvDistance.setText("You are within the range of Qibla");
-            } else {
-                tvDistance.setText(String.format(Locale.ENGLISH, "Distance to Kaaba %.1f KM", distance));
-            }
+        return distance;
+    }
+    
+    private void updateDistanceDisplay() {
+        Log.d(TAG, "updateDistanceDisplay called - currentLocation: " + (currentLocation != null));
+        
+        if (currentLocation == null) {
+            Log.w(TAG, "Current location is null, skipping distance update");
+            return;
         }
         
-        Log.d(TAG, "距离天房: " + distance + " km");
+        double distance = calculateDistanceToKaaba();
+        
+        // Update distance display - show only values and units
+        if (tvDistance != null) {
+            String distanceText;
+            if (distance < 1.0) {
+                distanceText = "< 1 km";
+            } else {
+                distanceText = String.format(Locale.ENGLISH, "%.1f kms", distance);
+            }
+            tvDistance.setText(distanceText);
+            Log.d(TAG, "Updated distance text to: " + distanceText);
+        }
+        
+        Log.d(TAG, "Distance to Kaaba: " + distance + " km");
     }
 
     private void updateQiblaUI() {
-        if (!isLocationReady) return;
+        Log.d(TAG, "updateQiblaUI called - isLocationReady: " + isLocationReady + ", currentLocation: " + (currentLocation != null));
         
-        // 计算相对于当前方向的Qibla方向
+        if (!isLocationReady) {
+            Log.w(TAG, "Location not ready, skipping UI update");
+            return;
+        }
+        
+        // Calculate Qibla direction relative to current direction
         double relativeQiblaDirection = qiblaDirection - currentAzimuth;
         relativeQiblaDirection = (relativeQiblaDirection + 360) % 360;
         
-        // 更新罗盘指针方向
+        // Update compass pointer direction
         if (imgCompassK != null) {
             imgCompassK.setRotation((float) relativeQiblaDirection);
         }
         
-        // 更新方向文本
+        // Update direction text - show absolute Qibla direction from North
         if (tvHeading != null) {
-            String directionText = String.format(Locale.ENGLISH, "%.0f° %s", 
-                qiblaDirection, CompassUtils.getDirectionString((float) qiblaDirection));
-            tvHeading.setText(directionText);
+            tvHeading.setText(String.format(Locale.ENGLISH, "%.1f°", qiblaDirection));
+            Log.d(TAG, "Updated heading text to: " + String.format(Locale.ENGLISH, "%.1f°", qiblaDirection));
+        }
+        
+        // Update distance display
+        updateDistanceDisplay();
+        
+        Log.d(TAG, "Qibla UI updated - Direction: " + qiblaDirection + "°, Azimuth: " + currentAzimuth + "°, Relative: " + relativeQiblaDirection + "°");
+    }
+
+    // Location update method
+    public void onLocationUpdate(Location location) {
+        if (location != null) {
+            currentLocation = location;
+            isLocationReady = true;
+            Log.d(TAG, "Location updated: " + location.getLatitude() + ", " + location.getLongitude());
+            
+            // Recalculate Qibla direction
+            calculateQiblaDirection();
         }
     }
 
-    // EnhancedCompass.EnhancedCompassListener 实现
+    // EnhancedCompass.EnhancedCompassListener implementation
     @Override
     public void onAzimuthChanged(float azimuth) {
         currentAzimuth = azimuth;
         
-        // 更新罗盘旋转
+        // Update compass rotation
         if (imgCompass != null) {
             imgCompass.setRotation(-azimuth);
         }
         
-        // 更新Qibla UI
+        // Update Qibla UI with real-time data
         updateQiblaUI();
         
-        // 更新罗盘适配器（暂时禁用）
-        // if (compassAdapter != null) {
-        //     compassAdapter.updateAzimuth(azimuth);
-        // }
+        // Force UI update on main thread
+        if (requireActivity() != null) {
+            requireActivity().runOnUiThread(() -> {
+                // Update direction display with current azimuth
+                if (tvHeading != null && isLocationReady) {
+                    // Show the absolute Qibla direction from North
+                    tvHeading.setText(String.format(Locale.ENGLISH, "%.1f°", qiblaDirection));
+                }
+                
+                // Update distance display
+                if (tvDistance != null && currentLocation != null) {
+                    updateDistanceDisplay();
+            }
+        });
+    }
+
+        Log.d(TAG, "Azimuth changed to: " + azimuth + "°, Qibla direction: " + qiblaDirection + "°");
     }
 
     @Override
@@ -354,34 +486,34 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
             
             switch (status) {
                 case NORMAL:
-                    statusText = "正常";
+                    statusText = "Normal";
                     statusColor = getResources().getColor(R.color.colorPrimary);
                     hideMagneticWarning();
-                    // 磁场正常时，根据当前传感器精度更新校准状态
+                    // When magnetic field is normal, update calibration status based on sensor accuracy
                     if (compassAccuracy == android.hardware.SensorManager.SENSOR_STATUS_ACCURACY_HIGH) {
                         updateCalibrationIndicator(CalibrationStatus.CALIBRATED);
                     }
                     break;
                 case WEAK:
-                    statusText = "较弱";
+                    statusText = "Weak";
                     statusColor = getResources().getColor(R.color.orange);
-                    showMagneticWarning("磁场信号较弱");
+                    showMagneticWarning("Weak magnetic field signal");
                     updateCalibrationIndicator(CalibrationStatus.CALIBRATING);
                     break;
                 case STRONG:
-                    statusText = "过强";
+                    statusText = "Strong";
                     statusColor = getResources().getColor(R.color.red);
-                    showMagneticWarning("磁场信号过强");
+                    showMagneticWarning("Strong magnetic field interference");
                     updateCalibrationIndicator(CalibrationStatus.UNCALIBRATED);
                     break;
                 case DISTURBED:
-                    statusText = "干扰";
+                    statusText = "Disturbed";
                     statusColor = getResources().getColor(R.color.red);
-                    showMagneticWarning("检测到磁场干扰");
+                    showMagneticWarning("Magnetic interference detected");
                     updateCalibrationIndicator(CalibrationStatus.UNCALIBRATED);
                     break;
                 default:
-                    statusText = "未知";
+                    statusText = "Unknown";
                     statusColor = getResources().getColor(R.color.grey);
                     updateCalibrationIndicator(CalibrationStatus.UNCALIBRATED);
                     break;
@@ -391,7 +523,30 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
             tvMagneticStrength.setTextColor(statusColor);
         }
         
-        Log.d(TAG, "磁场状态: " + status + " (" + strength + " μT)");
+        // Update calibration status text
+        if (tvCalibrationStatus != null) {
+            String statusDisplayText;
+            switch (status) {
+                case NORMAL:
+                    statusDisplayText = "Field";
+                    break;
+                case WEAK:
+                    statusDisplayText = "Field\nWeak";
+                    break;
+                case STRONG:
+                    statusDisplayText = "Field\nStrong";
+                    break;
+                case DISTURBED:
+                    statusDisplayText = "Field\nDisturbed";
+                    break;
+                default:
+                    statusDisplayText = "Field";
+                    break;
+            }
+            tvCalibrationStatus.setText(statusDisplayText);
+        }
+        
+        Log.d(TAG, "Magnetic field status: " + status + " (" + strength + " μT)");
     }
 
     @Override
@@ -399,43 +554,29 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
         if (tvTiltWarning != null) {
             if (isDeviceLevel) {
                 tvTiltWarning.setVisibility(View.GONE);
-            } else {
+                    } else {
                 tvTiltWarning.setVisibility(View.VISIBLE);
-                tvTiltWarning.setText(String.format(Locale.ENGLISH, "设备倾斜 %.1f°，请保持水平", tiltAngle));
+                tvTiltWarning.setText(String.format(Locale.ENGLISH, "Device tilted %.1f°, keep level", tiltAngle));
             }
         }
         
-        Log.v(TAG, "设备倾斜: " + tiltAngle + "° (水平: " + isDeviceLevel + ")");
+        Log.v(TAG, "Device tilt: " + tiltAngle + "° (level: " + isDeviceLevel + ")");
     }
 
     @Override
     public void onCalibrationNeeded(String reason) {
         showMagneticWarning(reason);
-        Log.w(TAG, "需要校准: " + reason);
-    }
-
-    @Override
-    public void onAccuracyChanged(String sensorName, int accuracy) {
-        Log.d(TAG, sensorName + " 精度变化: " + accuracy);
-        
-        // 更新校准指示器状态
-        updateCalibrationIndicator(accuracy);
-        
-        // 如果传感器精度不可靠，显示校准建议
-        if (accuracy == android.hardware.SensorManager.SENSOR_STATUS_UNRELIABLE) {
-            showMagneticWarning("传感器精度不可靠，建议校准设备");
-        }
+        Log.w(TAG, "Calibration needed: " + reason);
     }
 
     private void showMagneticWarning(String message) {
         if (calibrationWarning != null) {
             calibrationWarning.setVisibility(View.VISIBLE);
-            
-            // 更新警告消息 - 直接使用LinearLayout中的TextView
+            // Update the warning text
             for (int i = 0; i < calibrationWarning.getChildCount(); i++) {
                 View child = calibrationWarning.getChildAt(i);
                 if (child instanceof TextView && child.getId() != R.id.btn_calibrate) {
-                    ((TextView) child).setText("⚠️ " + message + "，请校准罗盘以获得准确方向");
+                    ((TextView) child).setText("⚠️ " + message);
                     break;
                 }
             }
@@ -448,36 +589,51 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
         }
     }
 
+    @Override
+    public void onAccuracyChanged(String sensorName, int accuracy) {
+        Log.d(TAG, sensorName + " accuracy changed: " + accuracy);
+        
+        // Update calibration indicator status
+        updateCalibrationIndicator(accuracy);
+        
+        // If sensor accuracy is unreliable, show calibration suggestion
+        if (accuracy == android.hardware.SensorManager.SENSOR_STATUS_UNRELIABLE) {
+            showMagneticWarning("Sensor accuracy unreliable, device calibration recommended");
+        }
+    }
+
+
+
     /**
      * 更新校准状态指示器
      * @param accuracy 传感器精度值
      */
     private void updateCalibrationIndicator(int accuracy) {
-        // 在主线程中更新UI
+        // Update UI in main thread
         if (requireActivity() != null) {
             requireActivity().runOnUiThread(() -> {
                 CalibrationStatus newStatus = determineCalibrationStatus(accuracy);
                 
-                // 只有状态变化时才更新UI
+                // Only update UI when status changes
                 if (newStatus != currentCalibrationStatus) {
                     currentCalibrationStatus = newStatus;
                     compassAccuracy = accuracy;
                     
                     if (calibrationIndicator != null) {
-                        switch (newStatus) {
-                            case UNCALIBRATED:
-                                calibrationIndicator.setBackgroundResource(R.drawable.calibration_status_red);
-                                Log.d(TAG, "校准状态: 未校准 (红色)");
-                                break;
-                            case CALIBRATING:
-                                calibrationIndicator.setBackgroundResource(R.drawable.calibration_status_yellow);
-                                Log.d(TAG, "校准状态: 校准中 (黄色)");
-                                break;
-                            case CALIBRATED:
-                                calibrationIndicator.setBackgroundResource(R.drawable.calibration_status_green);
-                                Log.d(TAG, "校准状态: 已校准 (绿色)");
-                                break;
-                        }
+                                            switch (newStatus) {
+                        case UNCALIBRATED:
+                            calibrationIndicator.setBackgroundResource(R.drawable.calibration_status_ring_red);
+                            Log.d(TAG, "Calibration status: Uncalibrated (red ring)");
+                            break;
+                        case CALIBRATING:
+                            calibrationIndicator.setBackgroundResource(R.drawable.calibration_status_ring_yellow);
+                            Log.d(TAG, "Calibration status: Calibrating (yellow ring)");
+                            break;
+                        case CALIBRATED:
+                            calibrationIndicator.setBackgroundResource(R.drawable.calibration_status_ring_green);
+                            Log.d(TAG, "Calibration status: Calibrated (red ring with green center)");
+                            break;
+                    }
                     }
                 }
             });
@@ -488,7 +644,7 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
      * 基于传感器精度值的重载方法
      */
     private void updateCalibrationIndicator(CalibrationStatus status) {
-        // 直接更新状态的重载方法
+        // Overloaded method to directly update status
         if (requireActivity() != null) {
             requireActivity().runOnUiThread(() -> {
                 currentCalibrationStatus = status;
@@ -496,13 +652,13 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
                 if (calibrationIndicator != null) {
                     switch (status) {
                         case UNCALIBRATED:
-                            calibrationIndicator.setBackgroundResource(R.drawable.calibration_status_red);
+                            calibrationIndicator.setBackgroundResource(R.drawable.calibration_status_ring_red);
                             break;
                         case CALIBRATING:
-                            calibrationIndicator.setBackgroundResource(R.drawable.calibration_status_yellow);
+                            calibrationIndicator.setBackgroundResource(R.drawable.calibration_status_ring_yellow);
                             break;
                         case CALIBRATED:
-                            calibrationIndicator.setBackgroundResource(R.drawable.calibration_status_green);
+                            calibrationIndicator.setBackgroundResource(R.drawable.calibration_status_ring_green);
                             break;
                     }
                 }
@@ -531,10 +687,10 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
 
     private void showCalibrationDialog() {
         try {
-            new CalibrateCompassDialog(requireActivity(), "为了获得最准确的Qibla方向，请校准您的设备罗盘").show();
+            new CalibrateCompassDialog(requireActivity(), "For the most accurate Qibla direction, please calibrate your device compass").show();
         } catch (Exception e) {
-            Log.e(TAG, "显示校准对话框出错: " + e.getMessage());
-            Toast.makeText(requireContext(), "请手动校准设备罗盘", Toast.LENGTH_LONG).show();
+            Log.e(TAG, "Error showing calibration dialog: " + e.getMessage());
+            Toast.makeText(requireContext(), "Please manually calibrate device compass", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -544,39 +700,49 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
     }
 
     private void requestLocationPermission() {
-        // 这里应该实现权限请求逻辑
-        // 为简化起见，显示提示信息
-        Toast.makeText(requireContext(), "需要位置权限来计算Qibla方向", Toast.LENGTH_LONG).show();
+        // TODO: Implement permission request logic
+        // For simplicity, show a message
+                    Toast.makeText(requireContext(), "Location permission required to calculate Qibla direction", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG, "Fragment恢复，启动传感器");
+        Log.d(TAG, "Fragment resumed, start sensors");
         
         if (enhancedCompass != null) {
             enhancedCompass.start();
         }
         
         startLocationUpdates();
+        
+        // Start periodic updates
+        if (updateHandler != null && updateRunnable != null) {
+            updateHandler.post(updateRunnable);
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(TAG, "Fragment暂停，停止传感器");
+        Log.d(TAG, "Fragment paused, stop sensors");
         
         if (enhancedCompass != null) {
             enhancedCompass.stop();
         }
         
         stopLocationUpdates();
+        
+        // Stop periodic updates
+        if (updateHandler != null && updateRunnable != null) {
+            updateHandler.removeCallbacks(updateRunnable);
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "Fragment销毁");
+        Log.d(TAG, "Fragment destroyed");
         
         if (enhancedCompass != null) {
             enhancedCompass.stop();
@@ -591,14 +757,14 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
     private void startLocationUpdates() {
         if (hasLocationPermission() && mFusedLocationClient != null && locationCallback != null) {
             mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
-            Log.d(TAG, "开始位置更新");
+            Log.d(TAG, "Start location updates");
         }
     }
 
     private void stopLocationUpdates() {
         if (mFusedLocationClient != null && locationCallback != null) {
             mFusedLocationClient.removeLocationUpdates(locationCallback);
-            Log.d(TAG, "停止位置更新");
+            Log.d(TAG, "Stop location updates");
         }
     }
 }

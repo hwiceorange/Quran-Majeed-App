@@ -8,39 +8,39 @@ import android.hardware.SensorManager;
 import android.util.Log;
 
 /**
- * 增强型罗盘类
- * 功能：
- * 1. 融合磁力计和加速计数据
- * 2. 使用旋转向量传感器获取更稳定的方向数据
- * 3. 检测磁场异常和设备倾斜
- * 4. 提供罗盘校准建议
+ * Enhanced Compass Class
+ * Features:
+ * 1. Fuse magnetometer and accelerometer data
+ * 2. Use rotation vector sensor for more stable orientation data
+ * 3. Detect magnetic field anomalies and device tilt
+ * 4. Provide compass calibration recommendations
  */
 public class EnhancedCompass implements SensorEventListener {
     private static final String TAG = "EnhancedCompass";
     
-    // 传感器相关
+    // Sensor related
     private SensorManager sensorManager;
     private Sensor accelerometer;
     private Sensor magnetometer;
     private Sensor rotationVectorSensor;
     
-    // 传感器数据
+    // Sensor data
     private float[] accelerometerData = new float[3];
     private float[] magnetometerData = new float[3];
     private float[] rotationMatrix = new float[9];
     private float[] orientationAngles = new float[3];
     
-    // 滤波器参数
-    private static final float ALPHA = 0.8f; // 低通滤波器参数
+    // Filter parameters
+    private static final float ALPHA = 0.8f; // Low-pass filter parameter
     private float[] filteredAccel = new float[3];
     private float[] filteredMagnetic = new float[3];
     
-    // 磁场检测参数
-    private static final float MAGNETIC_FIELD_NORMAL_MIN = 25f; // 正常磁场强度最小值 (μT)
-    private static final float MAGNETIC_FIELD_NORMAL_MAX = 65f; // 正常磁场强度最大值 (μT)
-    private static final float TILT_THRESHOLD = 25f; // 倾斜角度阈值 (度)
+    // Magnetic field detection parameters
+    private static final float MAGNETIC_FIELD_NORMAL_MIN = 25f; // Normal magnetic field strength minimum (μT)
+    private static final float MAGNETIC_FIELD_NORMAL_MAX = 65f; // Normal magnetic field strength maximum (μT)
+    private static final float TILT_THRESHOLD = 25f; // Tilt angle threshold (degrees)
     
-    // 状态变量
+    // State variables
     private boolean isAccelerometerReady = false;
     private boolean isMagnetometerReady = false;
     private boolean isRotationVectorReady = false;
@@ -48,7 +48,7 @@ public class EnhancedCompass implements SensorEventListener {
     private float currentTiltAngle = 0f;
     private float currentAzimuth = 0f;
     
-    // 回调接口
+    // Callback interface
     private EnhancedCompassListener listener;
     
     public interface EnhancedCompassListener {
@@ -60,28 +60,28 @@ public class EnhancedCompass implements SensorEventListener {
     }
     
     public enum MagneticFieldStatus {
-        NORMAL,     // 正常
-        WEAK,       // 弱磁场
-        STRONG,     // 强磁场  
-        DISTURBED   // 磁场干扰
+        NORMAL,     // Normal
+        WEAK,       // Weak magnetic field
+        STRONG,     // Strong magnetic field  
+        DISTURBED   // Magnetic interference
     }
     
     public EnhancedCompass(Context context) {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         
-        // 初始化传感器
+        // Initialize sensors
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         rotationVectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
         
-        Log.d(TAG, "传感器初始化:");
-        Log.d(TAG, "加速计: " + (accelerometer != null ? "可用" : "不可用"));
-        Log.d(TAG, "磁力计: " + (magnetometer != null ? "可用" : "不可用"));
-        Log.d(TAG, "旋转向量: " + (rotationVectorSensor != null ? "可用" : "不可用"));
+        Log.d(TAG, "Sensor initialization:");
+        Log.d(TAG, "Accelerometer: " + (accelerometer != null ? "Available" : "Not available"));
+        Log.d(TAG, "Magnetometer: " + (magnetometer != null ? "Available" : "Not available"));
+        Log.d(TAG, "Rotation vector: " + (rotationVectorSensor != null ? "Available" : "Not available"));
     }
     
     public void start() {
-        Log.d(TAG, "启动增强型罗盘");
+        Log.d(TAG, "Start enhanced compass");
         
         if (accelerometer != null) {
             sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
@@ -91,15 +91,15 @@ public class EnhancedCompass implements SensorEventListener {
             sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI);
         }
         
-        // 优先使用旋转向量传感器（如果可用）
+        // Prefer rotation vector sensor (if available)
         if (rotationVectorSensor != null) {
             sensorManager.registerListener(this, rotationVectorSensor, SensorManager.SENSOR_DELAY_UI);
-            Log.d(TAG, "使用旋转向量传感器获取更稳定的方向数据");
+            Log.d(TAG, "Using rotation vector sensor for more stable orientation data");
         }
     }
     
     public void stop() {
-        Log.d(TAG, "停止增强型罗盘");
+        Log.d(TAG, "Stop enhanced compass");
         sensorManager.unregisterListener(this);
         isAccelerometerReady = false;
         isMagnetometerReady = false;
@@ -128,7 +128,7 @@ public class EnhancedCompass implements SensorEventListener {
     }
     
     private void handleAccelerometerData(float[] values) {
-        // 应用低通滤波器减少噪音
+        // Apply low-pass filter to reduce noise
         filteredAccel[0] = ALPHA * filteredAccel[0] + (1 - ALPHA) * values[0];
         filteredAccel[1] = ALPHA * filteredAccel[1] + (1 - ALPHA) * values[1];
         filteredAccel[2] = ALPHA * filteredAccel[2] + (1 - ALPHA) * values[2];
@@ -136,10 +136,10 @@ public class EnhancedCompass implements SensorEventListener {
         System.arraycopy(filteredAccel, 0, accelerometerData, 0, 3);
         isAccelerometerReady = true;
         
-        // 计算设备倾斜角度
+        // Calculate device tilt angle
         calculateTiltAngle();
         
-        // 如果磁力计数据也准备好了，计算方位角
+        // If magnetometer data is also ready, calculate azimuth
         if (isMagnetometerReady && !isRotationVectorReady) {
             calculateAzimuthFromAccelMagnetic();
         }
@@ -154,7 +154,7 @@ public class EnhancedCompass implements SensorEventListener {
         System.arraycopy(filteredMagnetic, 0, magnetometerData, 0, 3);
         isMagnetometerReady = true;
         
-        // 计算磁场强度
+        // Calculate magnetic field strength
         calculateMagneticFieldStrength();
         
         // 如果加速计数据也准备好了，计算方位角
@@ -171,7 +171,7 @@ public class EnhancedCompass implements SensorEventListener {
         float[] orientationAngles = new float[3];
         SensorManager.getOrientation(rotationMatrix, orientationAngles);
         
-        // 获取方位角并转换为度数
+        // Get azimuth and convert to degrees
         float azimuth = (float) Math.toDegrees(orientationAngles[0]);
         azimuth = (azimuth + 360) % 360; // 确保结果在0-360度之间
         
@@ -197,7 +197,7 @@ public class EnhancedCompass implements SensorEventListener {
         
         SensorManager.getOrientation(rotationMatrix, orientationAngles);
         
-        // 获取方位角并转换为度数
+        // Get azimuth and convert to degrees
         float azimuth = (float) Math.toDegrees(orientationAngles[0]);
         azimuth = (azimuth + 360) % 360;
         
@@ -233,7 +233,7 @@ public class EnhancedCompass implements SensorEventListener {
     }
     
     private void calculateMagneticFieldStrength() {
-        // 计算磁场强度 (μT)
+        // Calculate magnetic field strength (μT)
         float x = magnetometerData[0];
         float y = magnetometerData[1];
         float z = magnetometerData[2];
@@ -279,13 +279,13 @@ public class EnhancedCompass implements SensorEventListener {
     private String getCalibrationReason(MagneticFieldStatus status) {
         switch (status) {
             case WEAK:
-                return "磁场信号较弱，建议远离金属物体";
+                return "Weak magnetic field signal, please stay away from metal objects";
             case STRONG:
-                return "磁场信号过强，建议远离磁性设备";
+                return "Strong magnetic field signal, please stay away from magnetic devices";
             case DISTURBED:
-                return "检测到磁场干扰，建议校准罗盘";
+                return "Magnetic interference detected, please calibrate compass for accuracy";
             default:
-                return "建议校准罗盘以获得更准确的方向";
+                return "Please calibrate compass for more accurate direction";
         }
     }
     

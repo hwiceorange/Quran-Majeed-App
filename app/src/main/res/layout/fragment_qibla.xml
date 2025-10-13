@@ -1,77 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res/auto"
     android:id="@+id/qibla_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="10"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:background="#f5f5f5">
 
-    <!-- Google地图已移除，专注于罗盘显示 -->
-
+    <!-- Main compass area -->
     <FrameLayout
         android:id="@+id/compass_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="9"
+        android:layout_weight="7"
         android:background="#f5f5f5">
 
-        <androidx.appcompat.widget.AppCompatImageView
+        <ImageView
             android:id="@+id/compass"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="50dp"
-            app:srcCompat="@drawable/compass_1" />
+            android:src="@drawable/compass_1" />
 
-        <androidx.appcompat.widget.AppCompatImageView
+        <ImageView
             android:id="@+id/compass_k"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="10dp"
-            app:srcCompat="@drawable/compass_1_k" />
+            android:src="@drawable/compass_1_k" />
 
-        <!-- 校准状态指示Icon -->
-        <View
-            android:id="@+id/calibration_indicator"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+        <!-- Calibration status indicator -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="top|end"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
-            android:background="@drawable/calibration_status_red"
-            android:elevation="8dp" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:elevation="8dp">
+            
+            <TextView
+                android:id="@+id/tv_calibration_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Field"
+                android:textSize="12sp"
+                android:textColor="#666666"
+                android:layout_marginEnd="4dp" />
+            
+            <View
+                android:id="@+id/calibration_indicator"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/calibration_status_red" />
+        </LinearLayout>
 
-        <!-- 距离信息 -->
-        <TextView
-            android:id="@+id/tv_distance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|bottom"
-            android:layout_marginBottom="80dp"
-            android:background="@drawable/circle_shape"
-            android:gravity="center"
-            android:padding="8dp"
-            android:text="You are within the range of Qibla"
-            android:textColor="#555"
-            android:textSize="12sp" />
 
-        <!-- 方向信息 -->
-        <TextView
-            android:id="@+id/tv_heading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|top"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/circle_shape"
-            android:gravity="center"
-            android:padding="8dp"
-            android:text="284° NW"
-            android:textColor="#555"
-            android:textSize="14sp"
-            android:textStyle="bold" />
 
-        <!-- 磁场强度指示器 -->
+        <!-- Magnetic field strength indicator -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -82,24 +70,24 @@
             android:orientation="vertical"
             android:padding="8dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="磁场强度"
-                android:textSize="10sp"
-                android:textColor="#888" />
+                               <TextView
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="Field"
+                       android:textSize="10sp"
+                       android:textColor="#888" />
 
-            <TextView
-                android:id="@+id/tv_magnetic_strength"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="正常"
-                android:textSize="12sp"
-                android:textColor="#4CAF50"
-                android:textStyle="bold" />
+                   <TextView
+                       android:id="@+id/tv_magnetic_strength"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="Normal"
+                       android:textSize="12sp"
+                       android:textColor="#4CAF50"
+                       android:textStyle="bold" />
         </LinearLayout>
 
-        <!-- 校准提示（默认隐藏） -->
+        <!-- Calibration prompt (hidden by default) -->
         <LinearLayout
             android:id="@+id/calibration_warning"
             android:layout_width="match_parent"
@@ -114,28 +102,28 @@
             android:visibility="gone"
             android:gravity="center">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="⚠️ 检测到磁场干扰，请校准罗盘以获得准确方向"
-                android:textColor="@android:color/white"
-                android:textSize="12sp" />
+                               <TextView
+                       android:layout_width="0dp"
+                       android:layout_height="wrap_content"
+                       android:layout_weight="1"
+                       android:text="⚠️ Magnetic interference detected, calibrate compass for accuracy"
+                       android:textColor="@android:color/white"
+                       android:textSize="12sp" />
 
-            <TextView
-                android:id="@+id/btn_calibrate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/white"
-                android:text="校准"
-                android:textColor="@color/orange"
-                android:padding="8dp"
-                android:layout_marginStart="8dp"
-                android:textStyle="bold"
-                android:textSize="12sp" />
+                   <TextView
+                       android:id="@+id/btn_calibrate"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:background="@android:color/white"
+                       android:text="Calibrate"
+                       android:textColor="@color/orange"
+                       android:padding="8dp"
+                       android:layout_marginStart="8dp"
+                       android:textStyle="bold"
+                       android:textSize="12sp" />
         </LinearLayout>
 
-        <!-- 设备倾斜警告 -->
+        <!-- Device tilt warning -->
         <TextView
             android:id="@+id/tv_tilt_warning"
             android:layout_width="wrap_content"
@@ -143,22 +131,75 @@
             android:layout_gravity="center"
             android:background="#FFEB3B"
             android:padding="8dp"
-            android:text="请保持设备水平"
+            android:text="Keep device level"
             android:textColor="#F57F17"
             android:textSize="12sp"
             android:visibility="gone" />
     </FrameLayout>
 
-    <androidx.cardview.widget.CardView
+    <!-- Direction and Distance Info Area -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="16dp"
+        android:background="@android:color/white">
+
+        <!-- Direction text -->
+        <TextView
+            android:id="@+id/tv_direction_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="QIBLAH FROM THE NORTH"
+            android:textSize="14sp"
+            android:textColor="#666"
+            android:layout_marginBottom="4dp" />
+
+        <!-- Direction degree -->
+        <TextView
+            android:id="@+id/tv_heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-81.2°"
+            android:textSize="24sp"
+            android:textColor="#000"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Distance label -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DISTANCE"
+            android:textSize="14sp"
+            android:textColor="#666"
+            android:layout_marginBottom="4dp" />
+
+        <!-- Distance value -->
+        <TextView
+            android:id="@+id/tv_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="7383.5 kms"
+            android:textSize="18sp"
+            android:textColor="#000"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <!-- Compass skin selector -->
+    <LinearLayout
         android:id="@+id/list_compass_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        app:cardCornerRadius="0dp">
+        android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcv_compass"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-    </androidx.cardview.widget.CardView>
+    </LinearLayout>
 </LinearLayout>
