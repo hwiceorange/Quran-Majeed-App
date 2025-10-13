@@ -9,6 +9,9 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.fragment.app.Fragment;
 
 import com.github.kayvannj.permission_utils.PermissionUtil;
@@ -24,6 +27,10 @@ public class QiblaDirectionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // Configure status bar before setContentView for better visual effect
+        setupStatusBar();
+        
         setContentView(R.layout.activity_qibla_direction);
         loadFragment(new QiblaFragment()); // 使用增强版Fragment，移除地图依赖
 
@@ -36,12 +43,33 @@ public class QiblaDirectionActivity extends AppCompatActivity {
                 QiblaDirectionActivity.this.finish();
             }
         });
-
-        if (Build.VERSION.SDK_INT >= 21) {
-            Window window = this.getWindow();
+    }
+    
+    /**
+     * Configure status bar to ensure system icons are visible
+     * Status bar color matches the toolbar color (colorAccent/green)
+     */
+    private void setupStatusBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(android.graphics.Color.TRANSPARENT);
+            
+            // Set status bar color to match toolbar (colorAccent - green)
+            window.setStatusBarColor(ContextCompat.getColor(this, R.color.colorAccent));
+            
+            // For API 23+, set light/dark status bar icons based on background color
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                WindowCompat.setDecorFitsSystemWindows(window, true);
+                WindowInsetsControllerCompat insetsController = 
+                    WindowCompat.getInsetsController(window, window.getDecorView());
+                if (insetsController != null) {
+                    // Use light status bar icons (dark icons) for light backgrounds
+                    // Use dark status bar icons (light icons) for dark backgrounds
+                    // Since colorAccent is green (dark), we want light icons
+                    insetsController.setAppearanceLightStatusBars(false);
+                }
+            }
         }
     }
 
