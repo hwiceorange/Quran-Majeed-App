@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/hadith_card_lite"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Step Title (English) -->
+        <TextView
+            android:id="@+id/step_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="4dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:text="1. Intention (Niyyah)"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Step Title (Arabic) -->
+        <TextView
+            android:id="@+id/step_title_arabic"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:fontFamily="@font/arab"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="النية"
+            app:layout_constraintTop_toBottomOf="@id/step_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Content Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/content_card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="12dp"
+            app:cardBackgroundColor="@color/surfaceColor1"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="3dp"
+            app:cardMaxElevation="3dp"
+            app:layout_constraintTop_toBottomOf="@id/step_title_arabic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/colorBGQuranPageHeader">
+
+                <!-- Step Image -->
+                <ImageView
+                    android:id="@+id/step_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:maxHeight="400dp"
+                    android:contentDescription="Wudu step illustration" />
+
+                <!-- Divider after image -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="?android:attr/listDivider" />
+
+                <!-- Description (Arabic) -->
+                <TextView
+                    android:id="@+id/step_description_arabic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="8dp"
+                    android:fontFamily="@font/arab"
+                    android:textColor="@color/onPrimary1"
+                    android:textSize="18sp"
+                    android:lineSpacingExtra="4dp"
+                    android:text="النية في القلب لأداء الوضوء لوجه الله" />
+
+                <!-- Divider -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="?android:attr/listDivider" />
+
+                <!-- Description (English) -->
+                <TextView
+                    android:id="@+id/step_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="12dp"
+                    android:textColor="@color/dark_grey"
+                    android:textSize="15sp"
+                    android:lineSpacingExtra="2dp"
+                    android:text="Make the intention in your heart..." />
+
+                <!-- Dua Container (Only visible if step has dua) -->
+                <LinearLayout
+                    android:id="@+id/dua_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="#F0F8F5"
+                    android:padding="12dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Dua:"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:paddingBottom="6dp" />
+
+                    <!-- Dua Arabic -->
+                    <TextView
+                        android:id="@+id/dua_arabic"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:fontFamily="@font/arab"
+                        android:textColor="@color/onPrimary1"
+                        android:textSize="20sp"
+                        android:lineSpacingExtra="4dp"
+                        android:paddingBottom="4dp"
+                        android:text="بسم الله" />
+
+                    <!-- Dua Transliteration -->
+                    <TextView
+                        android:id="@+id/dua_transliteration"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="@color/dark_grey"
+                        android:textSize="14sp"
+                        android:textStyle="italic"
+                        android:paddingBottom="4dp"
+                        android:text="Bismillah" />
+
+                    <!-- Dua English -->
+                    <TextView
+                        android:id="@+id/dua_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="@color/dark_grey"
+                        android:textSize="14sp"
+                        android:text="In the name of Allah" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

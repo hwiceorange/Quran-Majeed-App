@@ -21,9 +21,12 @@ import com.quran.quranaudio.online.App;
 import com.quran.quranaudio.online.Utils.GifImageView;
 import com.quran.quranaudio.online.prayertimes.job.WorkCreator;
 import com.quran.quranaudio.online.prayertimes.preferences.PreferencesHelper;
+import com.quran.quranaudio.online.prayertimes.ui.home.HomeViewModel;
 import com.quran.quranaudio.online.R;
 
 import javax.inject.Inject;
+
+import androidx.lifecycle.ViewModelProvider;
 
 
 public class MainActivity extends BaseActivity {
@@ -34,11 +37,20 @@ public class MainActivity extends BaseActivity {
     @Inject
     PreferencesHelper preferencesHelper;
 
+    private PrayerDataPreloader prayerDataPreloader;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ((App) getApplicationContext())
                 .defaultComponent
                 .inject(this);
+
+        // Inject PrayerDataPreloader from HomeComponent
+        prayerDataPreloader = ((App) getApplicationContext())
+                .appComponent
+                .homeComponent()
+                .create()
+                .getPrayerDataPreloader();
 
         super.onCreate(savedInstanceState);
 
@@ -63,19 +75,59 @@ public class MainActivity extends BaseActivity {
 
         NavController navController = Navigation.findNavController(this, R.id.home_host_fragment);
         NavigationUI.setupWithNavController(navView, navController);
+        
+        // Add navigation item selection listener with logging
+        navView.setOnItemSelectedListener(item -> {
+            android.util.Log.d("MainActivity", "Bottom nav item clicked: " + item.getTitle() + " (ID: " + item.getItemId() + ")");
+            
+            // Let NavigationUI handle the navigation
+            boolean handled = NavigationUI.onNavDestinationSelected(item, navController);
+            
+            if (handled) {
+                android.util.Log.d("MainActivity", "Navigation handled by NavigationUI");
+            } else {
+                android.util.Log.w("MainActivity", "Navigation NOT handled by NavigationUI, trying manual navigation");
+                // Fallback: manually navigate
+                try {
+                    navController.navigate(item.getItemId());
+                    android.util.Log.d("MainActivity", "Manual navigation successful");
+                    return true;
+                } catch (Exception e) {
+                    android.util.Log.e("MainActivity", "Manual navigation failed", e);
+                    return false;
+                }
+            }
+            
+            return handled;
+        });
 
         NavGraph navGraph = navController.getNavInflater().inflate(R.navigation.nav_graphmain);
 
+        // Set correct start destination: Home page for normal launch
         if (displaySettingsScreenFirst()) {
-            navGraph.setStartDestination(R.id.nav_name_99);
+            navGraph.setStartDestination(R.id.navigation_settings);
         } else {
-            navGraph.setStartDestination(R.id.nav_name_99);
+            navGraph.setStartDestination(R.id.nav_home);  // Fixed: Start at Home page, not Learn page
         }
 
         navController.setGraph(navGraph);
         preferencesHelper.setFirstTimeLaunch(false);
 
         WorkCreator.schedulePeriodicPrayerUpdater(this);
+
+        // Preload HomeViewModel at app startup to fetch prayer data in background
+        // This ensures data is ready when user navigates to Home page
+        preloadPrayerData();
+    }
+
+    /**
+     * Preload prayer data at app startup for faster Home page display
+     * Delegates to PrayerDataPreloader which creates HomeViewModel in background
+     */
+    private void preloadPrayerData() {
+        if (prayerDataPreloader != null && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            prayerDataPreloader.preloadPrayerData(this);
+        }
     }
 /*
     private void requestPermission(){
@@ -98,11 +150,10 @@ public class MainActivity extends BaseActivity {
 */
 
     private boolean displaySettingsScreenFirst() {
-        return (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_DENIED) &&
-                (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                        == PackageManager.PERMISSION_DENIED) &&
-                preferencesHelper.isFirstLaunch();
+        // Always start at Home page for new users
+        // The Welcome dialog will guide them to grant location permission
+        // Only show Settings first if explicitly needed (currently never)
+        return false;
     }
 
     public void onBackPressed() {

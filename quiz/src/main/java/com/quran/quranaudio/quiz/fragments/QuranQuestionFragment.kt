@@ -213,6 +213,12 @@ class QuranQuestionFragment :
         }
 
         RxBus.INSTANCE().register(this, QuestionFail::class.java) {
+            // 🔧 双重保护: 只在 Fragment 可见且已添加时处理事件
+            if (!isAdded || !isVisible || view == null || !userVisibleHint) {
+                logd("QuestionFail event ignored: Fragment not visible")
+                return@register
+            }
+            
             if (it.failStatus == QuestionFail.SKIP_QUESTION) {
                 if (viewModel.isLastQuestionInLevel()) {
                     val currentLevel = SPTools.getInt(Constants.KEY_LAST_QUESTION_LEVEL, 1)
@@ -244,10 +250,14 @@ class QuranQuestionFragment :
         )
 
         RxBus.INSTANCE().register(this, QuizGemChange::class.java) {
+            // 🔧 双重保护: 只在 Fragment 可见时更新 UI
+            if (!isAdded || view == null) return@register
             binding.quizGemCountTv.text = QuizGemManager.getGemCount().toString()
         }
 
         RxBus.INSTANCE().register(this, QuizPropChange::class.java) {
+            // 🔧 双重保护: 只在 Fragment 可见时更新 UI
+            if (!isAdded || view == null) return@register
             updatePropCount()
         }
         binding.timeCountPb.post {
@@ -457,6 +467,7 @@ class QuranQuestionFragment :
 
     override fun onPause() {
         super.onPause()
+        isSelected = false  // 🔧 离开页面时重置状态，防止误触发
         timePause()
     }
 
@@ -482,7 +493,14 @@ class QuranQuestionFragment :
             timeStart()
             isSelected=true
         }
+    }
 
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        // 🔧 重要修复: RxBus 会在 onDestroy 时自动解绑（LifecycleObserver）
+        // 但我们仍需手动清理动画和状态，防止内存泄漏
+        isSelected = false
+        countValueAnimator?.cancel()
+        countValueAnimator = null
     }
 }

@@ -123,6 +123,37 @@ public class App extends BaseApp {
     @Override
     public void onCreate() {
         super.onCreate();
+        
+        // 🚨 关键修复：必须在最开始进行 WebView 多进程隔离
+        // 这必须在任何可能使用 WebView 的代码（如广告SDK）之前执行
+        if (Build.VERSION.SDK_INT >= 28) {
+            try {
+                String currentProcess = Application.getProcessName();
+                String mainProcess = this.getPackageName();
+                
+                android.util.Log.d("App", "🔍 Process Check - Current: " + currentProcess + ", Main: " + mainProcess);
+                
+                // 为非主进程设置独立的 WebView 数据目录后缀
+                if (currentProcess != null && !currentProcess.equals(mainProcess)) {
+                    // 提取进程后缀，例如 "com.quran.quranaudio.online:error_activity" -> "error_activity"
+                    String suffix = currentProcess.replace(mainProcess, "").replace(":", "");
+                    if (!suffix.isEmpty()) {
+                        WebView.setDataDirectorySuffix(suffix);
+                        android.util.Log.d("App", "✅ WebView data directory suffix set for CHILD process: [" + suffix + "]");
+                    } else {
+                        android.util.Log.w("App", "⚠️ Child process but suffix is empty");
+                    }
+                } else {
+                    android.util.Log.d("App", "✅ MAIN process - using default WebView data directory");
+                }
+            } catch (IllegalStateException e) {
+                // WebView 已经被初始化（这不应该在 onCreate 开始时发生）
+                android.util.Log.e("App", "❌ WebView already initialized before onCreate!", e);
+            } catch (Exception e) {
+                android.util.Log.e("App", "❌ Failed to configure WebView isolation", e);
+            }
+        }
+        
         AdFactory.INSTANCE.init(this,BuildConfig.DEBUG);
         //Ads
         if (!Constant.FORCE_TO_SHOW_APP_OPEN_AD_ON_START) {
@@ -155,12 +186,6 @@ public class App extends BaseApp {
         //QM
 
         NotificationUtils.INSTANCE.createNotificationChannels((Context)this);
-        if (Build.VERSION.SDK_INT >= 28) {
-            String process = Application.getProcessName();
-            if (Intrinsics.areEqual(this.getPackageName(), process) ^ true) {
-                WebView.setDataDirectorySuffix(process);
-            }
-        }
 
         //QM*
     }

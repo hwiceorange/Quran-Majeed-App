@@ -51,22 +51,41 @@ public class AddressHelper {
 
                 Address lastKnownAddress = preferencesHelper.getLastKnownAddress();
 
-                if (!isAddressObsolete(lastKnownAddress, latitude, longitude)) {
+                // CRITICAL FIX: Check if cached address is valid and not obsolete
+                if (lastKnownAddress != null && !isAddressObsolete(lastKnownAddress, latitude, longitude)) {
+                    Log.d("ADDRESS_HELPER", "Using cached address: " + lastKnownAddress.getLocality());
                     emitter.onSuccess(lastKnownAddress);
                 } else {
-                    Thread thread = new Thread(() -> {
+                    Log.d("ADDRESS_HELPER", "Cached address obsolete or null, fetching new address");
 
-                        Address geocoderAddresses = getGeocoderAddresses(latitude, longitude, context);
-                        if (geocoderAddresses != null) {
-                            Log.i(AddressHelper.class.getName(), "Geocoder address");
-                            emitter.onSuccess(geocoderAddresses);
-                        } else if (getNominatimAddress(latitude, longitude) != null) {
-                            Log.i(AddressHelper.class.getName(), "Nominatim address");
-                            emitter.onSuccess(getNominatimAddress(latitude, longitude));
-                        } else {
-                            Log.i(AddressHelper.class.getName(), "Unknown address");
-                            emitter.onSuccess(getOfflineAddress(latitude, longitude));
+                    // CRITICAL FIX: Geocoding must be done in background thread, but ensure proper callback
+                    Thread thread = new Thread(() -> {
+                        Log.d("ADDRESS_HELPER", "Starting address lookup for: " + latitude + ", " + longitude);
+                        
+                        // Try Geocoder first (works in most countries, but may fail in China)
+                        Address geocoderAddress = getGeocoderAddresses(latitude, longitude, context);
+                        if (geocoderAddress != null) {
+                            Log.i(AddressHelper.class.getName(), "✅ Got address from Geocoder: " + geocoderAddress.getLocality());
+                            emitter.onSuccess(geocoderAddress);
+                            return;
                         }
+                        
+                        Log.d("ADDRESS_HELPER", "Geocoder failed, trying Nominatim...");
+                        
+                        // Try Nominatim API as fallback (requires internet)
+                        Address nominatimAddress = getNominatimAddress(latitude, longitude);
+                        if (nominatimAddress != null) {
+                            Log.i(AddressHelper.class.getName(), "✅ Got address from Nominatim: " + nominatimAddress.getLocality());
+                            emitter.onSuccess(nominatimAddress);
+                            return;
+                        }
+                        
+                        Log.d("ADDRESS_HELPER", "Nominatim failed, using offline address");
+                        
+                        // Fallback: offline address (coordinates only)
+                        Address offlineAddress = getOfflineAddress(latitude, longitude);
+                        Log.i(AddressHelper.class.getName(), "✅ Using offline address: " + offlineAddress.getLatitude() + ", " + offlineAddress.getLongitude());
+                        emitter.onSuccess(offlineAddress);
                     });
                     thread.start();
                 }
@@ -128,6 +147,17 @@ public class AddressHelper {
         Address address = new Address(Locale.getDefault());
         address.setLatitude(latitude);
         address.setLongitude(longitude);
+        
+        // CRITICAL FIX: Set locality to coordinates for display (instead of showing "Offline")
+        // Format: "40.05°N, 116.26°E" for better user experience
+        String latDirection = latitude >= 0 ? "N" : "S";
+        String lonDirection = longitude >= 0 ? "E" : "W";
+        String coordinatesText = String.format(Locale.US, "%.2f°%s, %.2f°%s", 
+            Math.abs(latitude), latDirection, 
+            Math.abs(longitude), lonDirection);
+        address.setLocality(coordinatesText);
+        
+        Log.d("ADDRESS_HELPER", "Created offline address with coordinates: " + coordinatesText);
 
         preferencesHelper.updateAddressPreferences(address);
 
@@ -135,6 +165,11 @@ public class AddressHelper {
     }
 
     private boolean isAddressObsolete(Address lastKnownAddress, double latitude, double longitude) {
+        // CRITICAL FIX: Always check for null first
+        if (lastKnownAddress == null) {
+            return true;  // Null address is obsolete
+        }
+        
         if (lastKnownAddress.getLocality() != null && lastKnownAddress.getCountryName() != null) {
 
             Location LastKnownLocation = new Location("");

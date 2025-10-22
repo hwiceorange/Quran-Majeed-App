@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
     app:startDestination="@id/nav_home">
+    
+    <!-- Home Fragment (Main landing page) -->
 
     <!-- "com.quran.quranaudio.online.Allah.names99.fragments.Names99Fragment" -->
  <fragment
@@ -14,10 +16,24 @@
     <fragment
         android:id="@+id/nav_home"
         android:name="com.quran.quranaudio.online.quran_module.frags.main.FragMain"
-        android:label="HomeFragment" />
-
-
-
+        android:label="HomeFragment">
+        
+        <!-- Action to navigate to Learning Plan Setup -->
+        <action
+            android:id="@+id/action_nav_home_to_learning_plan_setup"
+            app:destination="@id/nav_learning_plan_setup"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+            
+    </fragment>
+    
+    <!-- Learning Plan Setup Fragment -->
+    <fragment
+        android:id="@+id/nav_learning_plan_setup"
+        android:name="com.quran.quranaudio.online.quests.ui.LearningPlanSetupFragment"
+        android:label="Learning Plan Setup" />
 
    <fragment
         android:id="@+id/nav_namaz"

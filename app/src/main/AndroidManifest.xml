@@ -79,12 +79,24 @@
             android:theme="@style/AppTheme" />
 
         <activity
+            android:name="com.quran.quranaudio.online.wudu.WuduGuideActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false" />
+
+        <activity
             android:name="com.quran.quranaudio.online.compass.QiblaDirectionActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
         <activity
             android:name="com.quran.quranaudio.online.activities.ZakatCalculatorActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+
+        <activity
+            android:name="com.quran.quranaudio.online.quests.ui.TajweedTimerActivity"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
@@ -384,6 +396,13 @@
                 android:value="androidx.startup"
                 tools:node="remove" />
         </provider>
+
+        <!-- Listening Timer Service for Quran Listening Task -->
+        <service
+            android:name="com.quran.quranaudio.online.quests.service.ListeningTimerService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback" />
 
     </application>
 

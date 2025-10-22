@@ -5,23 +5,83 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
-    android:overScrollMode="never">
+    android:overScrollMode="never"
+    android:fillViewport="true"
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
-    <LinearLayout
-        android:id="@+id/container"
+    <!-- 使用 FrameLayout 实现 Z-轴叠层效果 -->
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:animateLayoutChanges="true"
-        android:orientation="vertical"
-        android:paddingBottom="10dp" >
+        android:layout_height="wrap_content">
 
-        <FrameLayout
-            android:id="@+id/appUpdateContainer"
+        <!-- 底层：完整的内容布局（Header + 其他内容） -->
+        <LinearLayout
+            android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone" />
+            android:animateLayoutChanges="true"
+            android:orientation="vertical"
+            android:paddingBottom="10dp">
 
-        <!-- 广告视图已移除 -->
+            <!-- New Home Header (240dp height) -->
+            <include
+                android:id="@+id/home_header"
+                layout="@layout/layout_home_header" />
+
+            <!-- 占位空间：为 Prayer Card 下半部分预留位置 -->
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="145dp" />
+
+            <!-- Daily Quests Feature - Create Card Container -->
+            <include
+                android:id="@+id/daily_quests_create_card"
+                layout="@layout/layout_daily_quests_create_card"
+                android:visibility="gone" />
+
+            <!-- Daily Quests Feature - Quests Cards Container (Streak + Today's Quests) -->
+            <LinearLayout
+                android:id="@+id/daily_quests_cards_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <!-- Streak Card -->
+                <include
+                    android:id="@+id/streak_card"
+                    layout="@layout/layout_streak_card" />
+
+                <!-- Today's Quests Card -->
+                <include
+                    android:id="@+id/today_quests_card"
+                    layout="@layout/layout_today_quests_card" />
+
+            </LinearLayout>
+
+            <!-- Verse of The Day Card - 放在 Daily Quests Card 下方 -->
+            <include
+                android:id="@+id/verse_of_day_card"
+                layout="@layout/layout_verse_of_day_card" />
+
+            <!-- Mecca Live Card - 放在 Verse of The Day Card 下方 -->
+            <include
+                android:id="@+id/mecca_live_card"
+                layout="@layout/layout_mecca_live_card" />
+
+            <!-- Medina Live Card - 放在 Mecca Live Card 下方 -->
+            <include
+                android:id="@+id/medina_live_card"
+                layout="@layout/layout_medina_live_card" />
+
+            <FrameLayout
+                android:id="@+id/appUpdateContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+        <!-- 原有功能卡片自动向下移动 -->
 
         <LinearLayout
             android:id="@+id/menu_one"
@@ -469,7 +529,18 @@
 
         </LinearLayout>
 
-    </LinearLayout>
+        </LinearLayout>
 
+        <!-- 顶层：Prayer Card - 使用绝对定位实现叠压效果 -->
+        <include
+            android:id="@+id/prayer_card"
+            layout="@layout/layout_prayer_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="130dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp" />
+
+    </FrameLayout>
 
 </androidx.core.widget.NestedScrollView>

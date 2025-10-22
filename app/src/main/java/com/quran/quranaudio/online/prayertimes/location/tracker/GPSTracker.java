@@ -49,32 +49,38 @@ public class GPSTracker extends Service implements LocationListener {
                 Log.d(TAG, "No provider enabled");
             } else {
                 this.canGetLocation = true;
+                // CRITICAL FIX: Use getLastKnownLocation() instead of requestLocationUpdates()
+                // getLastKnownLocation() can be safely called from any thread (no Handler needed)
+                // requestLocationUpdates() requires Main/Looper thread (crashes on RxJava background threads)
+                
                 if (isNetworkEnabled) {
                     if (locationManager != null) {
-                        locationManager.requestLocationUpdates(
-                                LocationManager.NETWORK_PROVIDER,
-                                MIN_TIME_BW_UPDATES,
-                                MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                        Log.d(TAG, "Network Enabled");
-                        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                        if (location != null) {
-                            latitude = location.getLatitude();
-                            longitude = location.getLongitude();
+                        try {
+                            Log.d(TAG, "Network Enabled - getting last known location");
+                            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                            if (location != null) {
+                                latitude = location.getLatitude();
+                                longitude = location.getLongitude();
+                                Log.d(TAG, "Got location from NETWORK: " + latitude + ", " + longitude);
+                            } else {
+                                Log.d(TAG, "Network provider returned null location");
+                            }
+                        } catch (SecurityException e) {
+                            Log.d(TAG, "Cannot get location from NETWORK provider: No permission found!", e);
                         }
                     }
                 }
                 if (isGPSEnabled && location == null) {
                     if (locationManager != null) {
                         try {
-                            locationManager.requestLocationUpdates(
-                                    LocationManager.GPS_PROVIDER,
-                                    MIN_TIME_BW_UPDATES,
-                                    MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                            Log.d(TAG, "GPS Enabled");
+                            Log.d(TAG, "GPS Enabled - getting last known location");
                             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                             if (location != null) {
                                 latitude = location.getLatitude();
                                 longitude = location.getLongitude();
+                                Log.d(TAG, "Got location from GPS: " + latitude + ", " + longitude);
+                            } else {
+                                Log.d(TAG, "GPS provider returned null location");
                             }
                         } catch (SecurityException e) {
                             Log.d(TAG, "Cannot get location from providers : No permission found !", e);

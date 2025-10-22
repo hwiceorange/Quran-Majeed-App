@@ -112,6 +112,31 @@ public class BoldHeader extends AppBarLayout {
             mBinding.search.searchBox.getPaddingEnd(),
             mBinding.search.searchBox.getPaddingBottom()
         );
+        
+        // 🔥 添加状态栏高度的padding，避免与系统状态栏重叠
+        addStatusBarPadding();
+    }
+    
+    /**
+     * 为Header添加状态栏高度的padding
+     */
+    private void addStatusBarPadding() {
+        // 获取状态栏高度
+        int statusBarHeight = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            statusBarHeight = getResources().getDimensionPixelSize(resourceId);
+        }
+        
+        // 为整个Header添加顶部padding
+        if (statusBarHeight > 0) {
+            setPadding(
+                getPaddingLeft(),
+                getPaddingTop() + statusBarHeight,
+                getPaddingRight(),
+                getPaddingBottom()
+            );
+        }
     }
 
     private void toggleSearchBox(LytSimpleSearchBoxBinding searchBoxBinding, boolean showSearch) {

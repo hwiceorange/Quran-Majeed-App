@@ -66,6 +66,7 @@ import com.quran.quranaudio.online.quran_module.components.quran.subcomponents.T
 import com.quran.quranaudio.online.quran_module.components.reader.ChapterVersePair;
 import com.quran.quranaudio.online.databinding.ActivityReaderBinding;
 import com.quran.quranaudio.online.quran_module.db.readHistory.ReadHistoryDBHelper;
+import com.quran.quranaudio.online.quests.helper.QuranReadingTracker;
 
 import com.quran.quranaudio.online.quran_module.utils.quran.QuranUtils;
 import com.quran.quranaudio.online.quran_module.utils.reader.factory.ReaderFactory;
@@ -161,6 +162,17 @@ public class ActivityReader extends ReaderPossessingActivity {
         }
     };
     private ReadHistoryDBHelper mReadHistoryDBHelper;
+    
+    // Daily Quest: Quran Reading Tracker
+    private QuranReadingTracker quranReadingTracker;
+    private long sessionStartTime = 0;
+    private int sessionStartPage = -1;  // 阅读会话的起始页码
+    private int sessionEndPage = -1;    // 阅读会话的结束页码
+    
+    // Daily Quest: Quran Listening Tracker
+    private com.quran.quranaudio.online.quests.helper.QuranListeningTracker quranListeningTracker;
+    private boolean isListeningMode = false;
+    private int listeningTargetMinutes = 0;
 
 
     @Override
@@ -179,6 +191,43 @@ public class ActivityReader extends ReaderPossessingActivity {
         if (mPlayerService != null) {
             mPlayerService.setRecitationPlayer(null, this);
         }
+        
+        // Daily Quest: Track reading session
+        if (quranReadingTracker != null && sessionStartTime > 0 && !isListeningMode) {
+            // 🔥 优先使用实际页码追踪（如果可用）
+            if (sessionStartPage > 0 && sessionEndPage > 0) {
+                quranReadingTracker.recordPageRange(sessionStartPage, sessionEndPage);
+                android.util.Log.d("ActivityReader", "✅ 使用实际页码追踪: " + sessionStartPage + "-" + sessionEndPage);
+            } else {
+                // 回退到时间估算（兼容旧逻辑）
+                long sessionDuration = System.currentTimeMillis() - sessionStartTime;
+                int pagesRead = Math.max(1, (int) (sessionDuration / 120000));
+                quranReadingTracker.recordPagesRead(pagesRead);
+                android.util.Log.d("ActivityReader", "⚠️ 使用时间估算追踪: " + pagesRead + " pages");
+            }
+            
+            // 检查任务完成状态
+            quranReadingTracker.checkAndMarkCompleteAsync();
+            
+            // 重置会话数据
+            sessionStartTime = 0;
+            sessionStartPage = -1;
+            sessionEndPage = -1;
+        }
+        
+        // 🔥 Daily Quest: Track listening session
+        if (quranListeningTracker != null && isListeningMode) {
+            // 停止追踪并记录时长
+            quranListeningTracker.stopListening();
+            
+            // 检查是否完成任务
+            if (listeningTargetMinutes > 0) {
+                quranListeningTracker.checkAndMarkComplete(listeningTargetMinutes);
+            }
+            
+            android.util.Log.d("ActivityReader", "🎧 Listening session ended");
+        }
+        
         super.onPause();
     }
 
@@ -198,6 +247,63 @@ public class ActivityReader extends ReaderPossessingActivity {
 
         if (mPlayerService != null) {
             mPlayerService.setRecitationPlayer(mPlayer, this);
+        }
+        
+        // Daily Quest: Initialize trackers and record session start
+        if (quranReadingTracker == null) {
+            quranReadingTracker = new QuranReadingTracker(this);
+        }
+        sessionStartTime = System.currentTimeMillis();
+        
+        // 🔥 记录起始页码（从LayoutManager获取）
+        updateCurrentPageNumber();
+        
+        // 🔥 Daily Quest: Initialize listening tracker if in listening mode
+        if (isListeningMode) {
+            if (quranListeningTracker == null) {
+                quranListeningTracker = new com.quran.quranaudio.online.quests.helper.QuranListeningTracker(this);
+            }
+            // 如果播放器正在播放，开始追踪
+            if (mPlayerService != null && mPlayerService.isPlaying()) {
+                quranListeningTracker.startListening();
+                android.util.Log.d("ActivityReader", "🎧 Listening tracking started (player already playing)");
+            }
+        }
+    }
+    
+    /**
+     * 更新当前阅读的页码（用于Daily Quest追踪）
+     */
+    private void updateCurrentPageNumber() {
+        try {
+            if (mLayoutManager != null && mBinding.readerVerses.getAdapter() instanceof ADPQuranPages) {
+                int firstVisiblePosition = mLayoutManager.findFirstVisibleItemPosition();
+                int lastVisiblePosition = mLayoutManager.findLastVisibleItemPosition();
+                
+                if (firstVisiblePosition >= 0) {
+                    ADPQuranPages adapter = (ADPQuranPages) mBinding.readerVerses.getAdapter();
+                    QuranPageModel firstPage = adapter.getPageModel(firstVisiblePosition);
+                    
+                    if (firstPage != null) {
+                        // 如果是会话开始，记录起始页
+                        if (sessionStartPage == -1) {
+                            sessionStartPage = firstPage.getPageNo();
+                            android.util.Log.d("ActivityReader", "📖 会话起始页: " + sessionStartPage);
+                        }
+                        
+                        // 持续更新结束页（用户可能滚动）
+                        if (lastVisiblePosition >= 0) {
+                            QuranPageModel lastPage = adapter.getPageModel(lastVisiblePosition);
+                            if (lastPage != null) {
+                                sessionEndPage = lastPage.getPageNo();
+                                // 不打印过多日志，避免刷屏
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            android.util.Log.e("ActivityReader", "Failed to update page number", e);
         }
     }
 
@@ -332,6 +438,15 @@ public class ActivityReader extends ReaderPossessingActivity {
         mBinding = ActivityReaderBinding.bind(activityView);
         mNavigator = new Navigator(this);
         initDummyBars();
+        
+        // 🔥 Daily Quest: 接收听力模式参数
+        isListeningMode = intent.getBooleanExtra("LISTENING_MODE", false);
+        listeningTargetMinutes = intent.getIntExtra("TARGET_MINUTES", 0);
+        boolean autoPlayAudio = intent.getBooleanExtra("AUTO_PLAY_AUDIO", false);
+        
+        if (isListeningMode) {
+            android.util.Log.d("ActivityReader", "🎧 Listening Mode activated: target " + listeningTargetMinutes + " minutes");
+        }
     }
 
 
@@ -467,6 +582,18 @@ public class ActivityReader extends ReaderPossessingActivity {
     private void initReader() {
         mLayoutManager = new ReaderLayoutManager(this, RecyclerView.VERTICAL, false);
         mBinding.readerVerses.setItemAnimator(null);
+        
+        // 🔥 添加滚动监听器以追踪阅读页码
+        mBinding.readerVerses.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                // 当滚动停止时更新页码
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    updateCurrentPageNumber();
+                }
+            }
+        });
     }
 
     private void resetAdapter(RecyclerView.Adapter<?> adapter) {
@@ -1116,6 +1243,24 @@ public class ActivityReader extends ReaderPossessingActivity {
     public void onVerseRecite(int chapterNo, int verseNo, boolean reciting) {
         mActionController.onVerseRecite(chapterNo, verseNo, reciting);
         updateVerseNumber(chapterNo, verseNo);
+        
+        // 🔥 Daily Quest: Handle listening tracking
+        if (isListeningMode && quranListeningTracker != null) {
+            if (reciting) {
+                // 开始播放时，恢复或开始追踪
+                if (quranListeningTracker.getCurrentSessionSeconds() > 0) {
+                    quranListeningTracker.resumeListening();
+                } else {
+                    quranListeningTracker.startListening();
+                }
+                android.util.Log.d("ActivityReader", "🎧 Listening tracking: " + 
+                    (quranListeningTracker.getCurrentSessionSeconds() > 0 ? "resumed" : "started"));
+            } else {
+                // 暂停播放时，暂停追踪
+                quranListeningTracker.pauseListening();
+                android.util.Log.d("ActivityReader", "🎧 Listening tracking paused");
+            }
+        }
 
         if (mReaderParams.isSingleVerse()) {
             mNavigator.jumpToVerse(chapterNo, verseNo, false);

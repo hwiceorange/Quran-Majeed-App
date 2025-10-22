@@ -193,4 +193,10 @@ public class Activity_Quran_Settings extends BaseActivity {
     public BoldHeader getHeader() {
         return mBinding.header;
     }
+    
+    @Override
+    protected int getStatusBarBG() {
+        // 使用透明状态栏，让BoldHeader可以延伸到状态栏下方
+        return android.graphics.Color.TRANSPARENT;
+    }
 }

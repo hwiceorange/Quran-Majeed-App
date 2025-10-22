@@ -4,6 +4,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.Build;
@@ -125,7 +126,10 @@ public class PrayersFragment extends Fragment {
         int navigationBackgroundEndColor = typedArray.getColor(R.styleable.mainStyles_navigationBackgroundEndColor, ContextCompat.getColor(requireContext(), R.color.alabaster));
         typedArray.recycle();
 
-        HomeViewModel homeViewModel = viewModelFactory.create(HomeViewModel.class);
+        // Use Activity scope to share ViewModel with MainActivity preload and other fragments
+        // This ensures data is loaded once and shared across all fragments
+        HomeViewModel homeViewModel = new ViewModelProvider(requireActivity(), viewModelFactory)
+                .get(HomeViewModel.class);
 
         View rootView = inflater.inflate(R.layout.fragment_prayers, container, false);
 
@@ -228,6 +232,15 @@ public class PrayersFragment extends Fragment {
         asrLabel = rootView.findViewById(R.id.asr_label_text_view);
         maghribLabel = rootView.findViewById(R.id.maghrib_label_text_view);
         ichaLabel = rootView.findViewById(R.id.icha_label_text_view);
+        
+        // Feature buttons click listeners
+        rootView.findViewById(R.id.btn_qibla_direction).setOnClickListener(v -> {
+            startActivity(new Intent(requireContext(), com.quran.quranaudio.online.compass.QiblaDirectionActivity.class));
+        });
+        
+        rootView.findViewById(R.id.btn_wudu_guide).setOnClickListener(v -> {
+            startActivity(new Intent(requireContext(), com.quran.quranaudio.online.wudu.WuduGuideActivity.class));
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

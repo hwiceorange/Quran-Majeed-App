@@ -54,8 +54,8 @@ android {
         applicationId "com.quran.quranaudio.online"
         minSdkVersion 26
         targetSdkVersion 35
-        versionCode 32
-        versionName "1.4.0"
+        versionCode 36
+        versionName "1.4.4"
         multiDexEnabled true
         
         // Support for 16 KB page sizes (Google Play requirement)
@@ -394,6 +394,11 @@ dependencies {
     implementation libs.retrofit
     implementation libs.kotlinxSerialization
     implementation libs.kotlinxRetrofit
+
+    /* Kotlin Coroutines */
+    implementation libs.kotlinx.coroutines.core
+    implementation libs.kotlinx.coroutines.android
+    implementation libs.kotlinx.coroutines.play.services
 
     /* SmoothRefreshLayout */
     implementation libs.srlCore

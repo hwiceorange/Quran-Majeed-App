@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/titleHeader"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dmnAppBarHeight"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/dmnAppBarHeight"
     android:gravity="center_vertical"
     android:orientation="horizontal">
 

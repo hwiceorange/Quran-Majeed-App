@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fafafa"
-    android:clickable="true"
-    android:focusable="true"
+    android:clickable="false"
+    android:focusable="false"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -15,13 +15,15 @@
         android:background="@color/colorPrimary">
 
         <ImageView
-            android:visibility="invisible"
+            android:visibility="visible"
             android:id="@+id/bt_previous"
             android:layout_width="60dp"
             android:layout_height="?attr/actionBarSize"
             android:background="?android:attr/selectableItemBackground"
             android:contentDescription="@string/app_name"
             android:padding="18dp"
+            android:clickable="true"
+            android:focusable="true"
             app:srcCompat="@drawable/ic_back"
             app:tint="#fff" />
 

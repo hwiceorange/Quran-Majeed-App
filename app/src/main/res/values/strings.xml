@@ -15,6 +15,7 @@
     <string name="names99">Discover</string>
     <string name="names_of_allah">99 Names of Allah</string>
     <string name="qibla_direction">Qibla Direction</string>
+    <string name="wudu_guide">Wudu Guide</string>
     <string name="tasbih">Tasbih</string>
     <string name="time_settings">Salat  Time Settings</string>
     <string name="set_location">Location</string>
@@ -1124,6 +1125,36 @@
     <string name="warning_enable_location">Enable Location</string>
     <string name="warning_welcome">Welcome</string>
     <string name="warning_use_location">Get accurate prayer times and qibla directions</string>
+
+    <!-- Home Header -->
+    <string name="search">Search</string>
+    <string name="login">Login</string>
+    <string name="profile">Profile</string>
+    <string name="assalamualaikum">Assalamualaikum</string>
+    <string name="login_with_google">Login with Google</string>
+    <string name="logout">Logout</string>
+
+    <!-- Prayer Card & Navigation -->
+    <string name="time">Time</string>
+    <string name="learn">Learn</string>
+    <string name="tools">Tools</string>
+    <string name="remaining">Remaining</string>
+    <string name="tools_menu">Tools Menu</string>
+
+    <!-- Verse of the Day Card -->
+    <string name="verse_of_day">Verse of the Day</string>
+    <string name="verse_info_format">Surah %1$s %2$d:%3$d</string>
+
+    <!-- Live Stream Cards -->
+    <string name="live_stream">Live Stream</string>
+    <string name="mecca_live_description">24/7 Live stream from the Holy Mosque in Mecca</string>
+    <string name="medina_live_description">24/7 Live stream from the Prophet\'s Mosque in Medina</string>
+    <string name="play">Play</string>
+
+    <!-- Daily Quests Card -->
+    <string name="daily_quests">Daily Quests</string>
+    <string name="daily_quests_description">Start your Quran journey! Set a goal, form a habit.</string>
+    <string name="create_learning_plan">Create My Learning Plan Now</string>
 
 
 </resources>

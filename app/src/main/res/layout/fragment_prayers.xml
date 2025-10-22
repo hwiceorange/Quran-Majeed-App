@@ -21,9 +21,7 @@
             android:layout_height="wrap_content"
             android:elevation="5dp"
             android:outlineProvider="bounds"
-            app:layout_constraintBottom_toTopOf="@+id/tmings_constraint_container"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.35"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -37,6 +35,50 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <!-- Feature Buttons Container -->
+        <LinearLayout
+            android:id="@+id/feature_buttons_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/next_prayer_constraint_container"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <!-- Qibla Direction Button -->
+            <ImageView
+                android:id="@+id/btn_qibla_direction"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                android:src="@drawable/qibladirection"
+                android:contentDescription="@string/qibla_direction"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <!-- Wudu Guide Button -->
+            <ImageView
+                android:id="@+id/btn_wudu_guide"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:src="@drawable/wuduguide"
+                android:contentDescription="@string/wudu_guide"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:focusable="true" />
+
+        </LinearLayout>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/tmings_constraint_container"
             android:layout_width="match_parent"
@@ -44,9 +86,8 @@
             android:layout_marginTop="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.65"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/next_prayer_constraint_container">
+            app:layout_constraintTop_toBottomOf="@+id/feature_buttons_container">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/timings_first_row_constraint_layout"
