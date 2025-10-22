@@ -1,0 +1,66 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ========================================
+    // Daily Quests - User Quest Configurations
+    // ========================================
+    match /users/{userId}/userQuestConfig/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // ========================================
+    // Daily Quests - Daily Progress
+    // ========================================
+    match /users/{userId}/dailyProgress/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // ========================================
+    // Daily Quests - Streak Stats
+    // ========================================
+    match /users/{userId}/streakStats/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // ========================================
+    // Daily Quests - User Learning State
+    // ========================================
+    match /users/{userId}/userLearningState/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // ========================================
+    // 📿 Salah Records (Prayer Tracking) - NEW!
+    // ========================================
+    match /users/{userId}/salahRecords/{dateId} {
+      // Allow read and write only if the user is authenticated and accessing their own data
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      
+      // Validate data structure for writes
+      allow create: if request.auth != null 
+                    && request.auth.uid == userId
+                    && request.resource.data.keys().hasAll(['userId', 'dateId', 'fajr', 'dhuhr', 'asr', 'maghrib', 'isha'])
+                    && request.resource.data.userId == userId
+                    && request.resource.data.dateId is string
+                    && request.resource.data.fajr is bool
+                    && request.resource.data.dhuhr is bool
+                    && request.resource.data.asr is bool
+                    && request.resource.data.maghrib is bool
+                    && request.resource.data.isha is bool;
+      
+      allow update: if request.auth != null 
+                    && request.auth.uid == userId
+                    && request.resource.data.userId == userId;
+    }
+    
+    // ========================================
+    // Default Deny All Other Collections
+    // ========================================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
+

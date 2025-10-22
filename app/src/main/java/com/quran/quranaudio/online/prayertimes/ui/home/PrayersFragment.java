@@ -3,9 +3,11 @@ package com.quran.quranaudio.online.prayertimes.ui.home;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,8 +19,16 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.material.button.MaterialButton;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import com.quran.quranaudio.online.Utils.GoogleAuthManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,6 +39,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.faltenreich.skeletonlayout.Skeleton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.quran.quranaudio.online.App;
 import com.quran.quranaudio.online.prayertimes.common.ComplementaryTimingEnum;
 import com.quran.quranaudio.online.prayertimes.common.PrayerEnum;
@@ -40,6 +51,8 @@ import com.quran.quranaudio.online.prayertimes.utils.PrayerUtils;
 import com.quran.quranaudio.online.prayertimes.utils.TimingUtils;
 import com.quran.quranaudio.online.prayertimes.utils.UiUtils;
 import com.quran.quranaudio.online.R;
+import com.quran.quranaudio.online.quests.data.SalahName;
+import com.quran.quranaudio.online.quests.viewmodel.SalahViewModel;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
 import org.apache.commons.lang3.StringUtils;
@@ -65,7 +78,16 @@ public class PrayersFragment extends Fragment {
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
-
+    private SalahViewModel salahViewModel;
+    private GoogleAuthManager googleAuthManager;
+    private ActivityResultLauncher<Intent> signInLauncher;
+    
+    // Salah track buttons
+    private MaterialButton fajrTrackButton;
+    private MaterialButton dhuhrTrackButton;
+    private MaterialButton asrTrackButton;
+    private MaterialButton maghribTrackButton;
+    private MaterialButton ishaTrackButton;
 
     private LocalDateTime todayDate;
     private CountDownTimer TimeRemainingCTimer;
@@ -110,6 +132,41 @@ public class PrayersFragment extends Fragment {
         super.onAttach(context);
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        
+        // Initialize Google Auth Manager for login support
+        try {
+            googleAuthManager = new GoogleAuthManager(requireContext());
+            Log.d("PrayersFragment", "GoogleAuthManager initialized successfully");
+        } catch (Exception e) {
+            Log.e("PrayersFragment", "Failed to initialize GoogleAuthManager", e);
+        }
+        
+        // Initialize Sign-In Launcher
+        signInLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                try {
+                    if (!isAdded() || getContext() == null) {
+                        Log.w("PrayersFragment", "Fragment not attached, ignoring sign-in result");
+                        return;
+                    }
+                    
+                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                        handleSignInResult(result.getData());
+                    } else {
+                        Log.w("PrayersFragment", "Sign-in canceled or failed");
+                        Toast.makeText(requireContext(), "Login cancelled", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    Log.e("PrayersFragment", "Error handling sign-in result", e);
+                }
+            }
+        );
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Nullable
     @Override
@@ -131,9 +188,13 @@ public class PrayersFragment extends Fragment {
         HomeViewModel homeViewModel = new ViewModelProvider(requireActivity(), viewModelFactory)
                 .get(HomeViewModel.class);
 
+        // Initialize SalahViewModel for prayer tracking
+        salahViewModel = new ViewModelProvider(this).get(SalahViewModel.class);
+
         View rootView = inflater.inflate(R.layout.fragment_prayers, container, false);
 
         initializeViews(rootView);
+        initializeSalahRecording();
 
 
         homeViewModel
@@ -180,6 +241,17 @@ public class PrayersFragment extends Fragment {
     @Override
     public void onDestroy() {
         cancelTimer();
+        
+        // Clean up Google Auth Manager
+        try {
+            if (googleAuthManager != null) {
+                googleAuthManager = null;
+                Log.d("PrayersFragment", "GoogleAuthManager cleaned up");
+            }
+        } catch (Exception e) {
+            Log.e("PrayersFragment", "Error cleaning up GoogleAuthManager", e);
+        }
+        
         super.onDestroy();
     }
 
@@ -241,6 +313,229 @@ public class PrayersFragment extends Fragment {
         rootView.findViewById(R.id.btn_wudu_guide).setOnClickListener(v -> {
             startActivity(new Intent(requireContext(), com.quran.quranaudio.online.wudu.WuduGuideActivity.class));
         });
+        
+        // Initialize Salah track buttons
+        fajrTrackButton = rootView.findViewById(R.id.fajr_track_button);
+        dhuhrTrackButton = rootView.findViewById(R.id.dhuhr_track_button);
+        asrTrackButton = rootView.findViewById(R.id.asr_track_button);
+        maghribTrackButton = rootView.findViewById(R.id.maghrib_track_button);
+        ishaTrackButton = rootView.findViewById(R.id.isha_track_button);
+    }
+    
+    /**
+     * Initializes Salah recording feature.
+     * Sets up click listeners and observes status updates.
+     * Buttons are visible immediately (from XML) and update asynchronously.
+     * 
+     * KEY: XML已设置默认可见状态和"Track"样式，此处只负责：
+     * 1. 设置点击监听器（始终显示按钮，未登录时点击触发登录）
+     * 2. 观察Firebase数据并更新状态（仅限登录用户）
+     */
+    private void initializeSalahRecording() {
+        Log.d("PrayersFragment", "🔧 Initializing Salah recording feature");
+        
+        // ✅ 按钮始终可见，登录状态在点击时检查
+        if (fajrTrackButton != null) {
+            fajrTrackButton.setOnClickListener(v -> onSalahTrackClicked(SalahName.FAJR, fajrTrackButton));
+        }
+        if (dhuhrTrackButton != null) {
+            dhuhrTrackButton.setOnClickListener(v -> onSalahTrackClicked(SalahName.DHUHR, dhuhrTrackButton));
+        }
+        if (asrTrackButton != null) {
+            asrTrackButton.setOnClickListener(v -> onSalahTrackClicked(SalahName.ASR, asrTrackButton));
+        }
+        if (maghribTrackButton != null) {
+            maghribTrackButton.setOnClickListener(v -> onSalahTrackClicked(SalahName.MAGHRIB, maghribTrackButton));
+        }
+        if (ishaTrackButton != null) {
+            ishaTrackButton.setOnClickListener(v -> onSalahTrackClicked(SalahName.ISHA, ishaTrackButton));
+        }
+        
+        // ✅ 只在登录时观察Firebase数据
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            Log.d("PrayersFragment", "✅ User logged in, starting to observe Salah records");
+            startObservingSalahRecords();
+        } else {
+            Log.d("PrayersFragment", "ℹ️ User not logged in, buttons will show login dialog on click");
+        }
+    }
+    
+    /**
+     * Handles click on a salah track button.
+     * 未登录用户点击时触发Google登录，登录后自动保存状态
+     */
+    private void onSalahTrackClicked(SalahName salahName, MaterialButton button) {
+        Log.d("PrayersFragment", "🔘 Track button clicked: " + salahName.getDisplayName());
+        
+        // Check if user is logged in
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            Log.d("PrayersFragment", "❌ User not logged in, showing login dialog");
+            // Show login dialog for unauthenticated users
+            showLoginDialog(salahName, button);
+            return;
+        }
+        
+        // User is logged in, proceed with toggle
+        Log.d("PrayersFragment", "✅ User logged in, toggling status for: " + salahName.getDisplayName());
+        
+        // Disable button temporarily to prevent double-clicks
+        button.setEnabled(false);
+        
+        salahViewModel.toggleSalahStatus(salahName);
+        
+        // Re-enable after a short delay
+        button.postDelayed(() -> {
+            button.setEnabled(true);
+            Log.d("PrayersFragment", "🔓 Button re-enabled for: " + salahName.getDisplayName());
+        }, 500);
+    }
+    
+    /**
+     * Shows login dialog when unauthenticated user clicks Track button
+     */
+    private void showLoginDialog(SalahName salahName, MaterialButton button) {
+        new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setTitle("Login Required")
+            .setMessage("Please login with your Google account to track your prayers and sync across devices.")
+            .setPositiveButton("Login with Google", (dialog, which) -> {
+                dialog.dismiss();
+                initiateGoogleSignIn();
+            })
+            .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+            .setCancelable(true)
+            .show();
+    }
+    
+    /**
+     * Initiates Google Sign-In flow
+     */
+    private void initiateGoogleSignIn() {
+        try {
+            if (!isAdded() || getContext() == null) {
+                Log.w("PrayersFragment", "Fragment not attached, cannot initiate sign-in");
+                return;
+            }
+            
+            if (googleAuthManager == null) {
+                Log.e("PrayersFragment", "GoogleAuthManager is null!");
+                Toast.makeText(requireContext(), "Login is not available", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            
+            if (signInLauncher == null) {
+                Log.e("PrayersFragment", "SignInLauncher is null!");
+                Toast.makeText(requireContext(), "Login is not available", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            
+            Intent signInIntent = googleAuthManager.getSignInIntent();
+            if (signInIntent == null) {
+                Log.e("PrayersFragment", "Sign-in intent is null!");
+                Toast.makeText(requireContext(), "Failed to create sign-in intent", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            
+            signInLauncher.launch(signInIntent);
+            Log.d("PrayersFragment", "Google Sign-In intent launched successfully");
+        } catch (Exception e) {
+            Log.e("PrayersFragment", "Failed to launch Google Sign-In", e);
+            if (isAdded() && getContext() != null) {
+                Toast.makeText(requireContext(), "Failed to launch sign-in: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    
+    /**
+     * Handles the result from Google Sign-In
+     */
+    private void handleSignInResult(Intent data) {
+        if (!isAdded() || getContext() == null) {
+            Log.w("PrayersFragment", "Fragment not attached, cannot handle sign-in result");
+            return;
+        }
+        
+        if (googleAuthManager == null) {
+            Log.e("PrayersFragment", "GoogleAuthManager is null, cannot handle sign-in result");
+            Toast.makeText(requireContext(), "Login system unavailable", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        
+        if (data == null) {
+            Log.w("PrayersFragment", "Sign-in data is null");
+            Toast.makeText(requireContext(), "Login failed: No data received", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        
+        googleAuthManager.handleSignInResult(data, new GoogleAuthManager.AuthCallback() {
+            @Override
+            public void onSuccess(com.google.firebase.auth.FirebaseUser user) {
+                Log.d("PrayersFragment", "Firebase authentication successful: " + (user != null ? user.getEmail() : "unknown"));
+                if (isAdded() && getContext() != null) {
+                    Toast.makeText(requireContext(), "Login successful! ✅", Toast.LENGTH_SHORT).show();
+                    
+                    // Start observing salah records now that user is logged in
+                    startObservingSalahRecords();
+                }
+            }
+            
+            @Override
+            public void onFailure(String error) {
+                Log.e("PrayersFragment", "Firebase authentication failed: " + error);
+                if (isAdded() && getContext() != null) {
+                    Toast.makeText(requireContext(), "Login failed: " + error, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+    
+    /**
+     * Starts observing salah records from Firebase.
+     * Called after successful login or when fragment is created for logged-in users.
+     */
+    private void startObservingSalahRecords() {
+        if (salahViewModel == null) return;
+        
+        // Observe salah record changes and update button states
+        salahViewModel.getTodaySalahRecord().observe(getViewLifecycleOwner(), record -> {
+            Log.d("PrayersFragment", "📝 Salah record received: " + (record != null ? record.getTotalCompleted() + "/5 completed" : "null"));
+            
+            if (record != null) {
+                // Update all button states
+                updateTrackButton(fajrTrackButton, record.getFajr());
+                updateTrackButton(dhuhrTrackButton, record.getDhuhr());
+                updateTrackButton(asrTrackButton, record.getAsr());
+                updateTrackButton(maghribTrackButton, record.getMaghrib());
+                updateTrackButton(ishaTrackButton, record.getIsha());
+            } else {
+                // Record is null (no data yet), keep default Track state
+                Log.d("PrayersFragment", "📝 No salah record found, keeping default Track state");
+            }
+        });
+    }
+    
+    /**
+     * Updates the track button appearance based on completion status.
+     */
+    private void updateTrackButton(MaterialButton button, boolean isCompleted) {
+        if (button == null) {
+            Log.w("PrayersFragment", "⚠️ Button is null, cannot update");
+            return;
+        }
+        
+        String buttonId = getResources().getResourceEntryName(button.getId());
+        Log.d("PrayersFragment", "🎨 Updating button " + buttonId + " to " + (isCompleted ? "✓ (completed)" : "Track (uncompleted)"));
+        
+        if (isCompleted) {
+            button.setText("✓");
+            button.setBackgroundTintList(ColorStateList.valueOf(
+                ContextCompat.getColor(requireContext(), R.color.green)
+            ));
+        } else {
+            button.setText("Track");
+            button.setBackgroundTintList(ColorStateList.valueOf(
+                ContextCompat.getColor(requireContext(), R.color.salah_track_button)
+            ));
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

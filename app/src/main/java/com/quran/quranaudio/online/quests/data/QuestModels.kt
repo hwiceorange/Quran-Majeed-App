@@ -179,7 +179,88 @@ data class QuestTask(
     val targetClass: Class<*>? = null
 )
 
+/**
+ * Daily Salah (Prayer) Record Model.
+ * Stored at: users/{userId}/salahRecords/{YYYY-MM-DD}
+ * 
+ * Tracks which prayers the user has completed each day.
+ * This is separate from the daily quests system and focuses on tracking
+ * the 5 daily prayers.
+ */
+data class SalahRecord(
+    @PropertyName("userId")
+    val userId: String = "",
+    
+    @PropertyName("dateId")
+    val dateId: String = LocalDate.now().toString(), // YYYY-MM-DD
+    
+    @PropertyName("fajr")
+    val fajr: Boolean = false,
+    
+    @PropertyName("dhuhr")
+    val dhuhr: Boolean = false,
+    
+    @PropertyName("asr")
+    val asr: Boolean = false,
+    
+    @PropertyName("maghrib")
+    val maghrib: Boolean = false,
+    
+    @PropertyName("isha")
+    val isha: Boolean = false,
+    
+    @PropertyName("lastUpdatedUtc")
+    val lastUpdatedUtc: Timestamp = Timestamp.now(),
+    
+    @PropertyName("createdAt")
+    val createdAt: Timestamp = Timestamp.now()
+) {
+    // No-argument constructor required for Firestore deserialization
+    constructor() : this(
+        userId = "",
+        dateId = LocalDate.now().toString(),
+        fajr = false,
+        dhuhr = false,
+        asr = false,
+        maghrib = false,
+        isha = false,
+        lastUpdatedUtc = Timestamp.now(),
+        createdAt = Timestamp.now()
+    )
+    
+    /**
+     * Returns the total number of prayers completed today.
+     */
+    fun getTotalCompleted(): Int {
+        return listOf(fajr, dhuhr, asr, maghrib, isha).count { it }
+    }
+    
+    /**
+     * Returns true if all 5 prayers are completed.
+     */
+    fun areAllCompleted(): Boolean {
+        return fajr && dhuhr && asr && maghrib && isha
+    }
+}
 
-
-
+/**
+ * Enum for prayer names.
+ */
+enum class SalahName {
+    FAJR,
+    DHUHR,
+    ASR,
+    MAGHRIB,
+    ISHA;
+    
+    fun getDisplayName(): String {
+        return when(this) {
+            FAJR -> "Fajr"
+            DHUHR -> "Dhuhr"
+            ASR -> "Asr"
+            MAGHRIB -> "Maghrib"
+            ISHA -> "Isha"
+        }
+    }
+}
 

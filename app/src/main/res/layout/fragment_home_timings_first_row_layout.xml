@@ -37,85 +37,100 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <!-- Left: Icon + Prayer Name + Time (Vertical) -->
                 <LinearLayout
+                    android:id="@+id/fajr_left_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
-
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/symbol_fajr" />
 
-                    <TextView
-                        android:id="@+id/fajr_label_text_view"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:text="@string/FAJR"
-                        android:textAppearance="@style/prayer_name"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:layout_marginStart="12dp"
+                        android:orientation="vertical"
+                        android:gravity="start">
+
+                        <TextView
+                            android:id="@+id/fajr_label_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/FAJR"
+                            android:textAppearance="@style/prayer_name"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/fajr_timing_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="04:54 AM"
+                            android:textSize="12sp"
+                            android:textAppearance="@style/prayer_name" />
+                    </LinearLayout>
                 </LinearLayout>
 
+                <!-- Right: Track Button + Reminder Icon -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="2dp"
-                    android:layout_weight="1"
+                    android:orientation="horizontal"
                     android:gravity="center"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <TextView
-                        android:id="@+id/fajr_timing_text_view"
+                    <!-- Track Button -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/fajr_track_button"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
-                        android:textSize="13dp"
-                        android:text="04:20"
-                        android:textAppearance="@style/prayer_name"
+                        android:layout_height="32dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="Track"
+                        android:textSize="11sp"
+                        android:textColor="@android:color/white"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:minWidth="0dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:visibility="visible"
+                        app:cornerRadius="16dp"
+                        app:backgroundTint="@color/salah_track_button"
+                        style="@style/Widget.MaterialComponents.Button" />
 
-                        />
-
+                    <!-- Reminder Icon -->
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/fajr_call_constraint_layout"
                         android:layout_width="38dp"
                         android:layout_height="38dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginLeft="8dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        android:layout_marginStart="4dp">
 
                         <ImageView
                             android:id="@+id/fajr_call_image_view"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal|center_vertical"
+                            android:layout_gravity="center"
                             android:contentDescription="@string/title_adhan"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             android:src="@drawable/symbol_notification" />
-
                     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
                 </LinearLayout>
-
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -139,82 +154,95 @@
                 android:layout_height="match_parent">
 
                 <LinearLayout
+                    android:id="@+id/dhuhr_left_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
-
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/symbol_dhuhr" />
 
-                    <TextView
-                        android:id="@+id/dohr_label_text_view"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:text="@string/DHOHR"
-                        android:textAppearance="@style/prayer_name"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:layout_marginStart="12dp"
+                        android:orientation="vertical"
+                        android:gravity="start">
+
+                        <TextView
+                            android:id="@+id/dohr_label_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/DHOHR"
+                            android:textAppearance="@style/prayer_name"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/dohr_timing_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="11:57 AM"
+                            android:textSize="12sp"
+                            android:textAppearance="@style/prayer_name" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="2dp"
-                    android:layout_weight="1"
+                    android:orientation="horizontal"
                     android:gravity="center"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <TextView
-                        android:id="@+id/dohr_timing_text_view"
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/dhuhr_track_button"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
-                        android:text="13:30"
-                        android:textSize="13dp"
-                        android:textAppearance="@style/prayer_name" />
+                        android:layout_height="32dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="Track"
+                        android:textSize="11sp"
+                        android:textColor="@android:color/white"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:minWidth="0dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:visibility="visible"
+                        app:cornerRadius="16dp"
+                        app:backgroundTint="@color/salah_track_button"
+                        style="@style/Widget.MaterialComponents.Button" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/dohr_call_constraint_layout"
                         android:layout_width="38dp"
                         android:layout_height="38dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginLeft="8dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-
+                        android:layout_marginStart="4dp">
 
                         <ImageView
                             android:id="@+id/dohr_call_image_view"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/symbol_notification"
-                            android:layout_gravity="center_horizontal|center_vertical"
+                            android:layout_gravity="center"
                             android:contentDescription="@string/title_adhan"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"/>
-
                     </androidx.constraintlayout.widget.ConstraintLayout>
-
                 </LinearLayout>
-
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -237,82 +265,95 @@
                 android:layout_height="match_parent">
 
                 <LinearLayout
+                    android:id="@+id/asr_left_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
-
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/symbol_asr" />
 
-                    <TextView
-                        android:id="@+id/asr_label_text_view"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:text="@string/ASR"
-                        android:textAppearance="@style/prayer_name"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:layout_marginStart="12dp"
+                        android:orientation="vertical"
+                        android:gravity="start">
+
+                        <TextView
+                            android:id="@+id/asr_label_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/ASR"
+                            android:textAppearance="@style/prayer_name"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/asr_timing_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="3:04 PM"
+                            android:textSize="12sp"
+                            android:textAppearance="@style/prayer_name" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="2dp"
-                    android:layout_weight="1"
+                    android:orientation="horizontal"
                     android:gravity="center"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <TextView
-                        android:id="@+id/asr_timing_text_view"
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/asr_track_button"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
-                        android:text="17:30"
-                        android:textSize="13dp"
-                        android:textAppearance="@style/prayer_name" />
+                        android:layout_height="32dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="Track"
+                        android:textSize="11sp"
+                        android:textColor="@android:color/white"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:minWidth="0dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:visibility="visible"
+                        app:cornerRadius="16dp"
+                        app:backgroundTint="@color/salah_track_button"
+                        style="@style/Widget.MaterialComponents.Button" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/asr_call_constraint_layout"
                         android:layout_width="38dp"
                         android:layout_height="38dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginLeft="8dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-
+                        android:layout_marginStart="4dp">
 
                         <ImageView
                             android:id="@+id/asr_call_image_view"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/symbol_notification"
-                            android:layout_gravity="center_horizontal|center_vertical"
+                            android:layout_gravity="center"
                             android:contentDescription="@string/title_adhan"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"/>
-
                     </androidx.constraintlayout.widget.ConstraintLayout>
-
                 </LinearLayout>
-
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -335,84 +376,95 @@
                 android:layout_height="match_parent">
 
                 <LinearLayout
+                    android:id="@+id/maghrib_left_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
-
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/symbol_maghrib"  />
 
-                    <TextView
-                        android:id="@+id/maghrib_label_text_view"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:text="@string/MAGHRIB"
-                        android:textAppearance="@style/prayer_name"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:layout_marginStart="12dp"
+                        android:orientation="vertical"
+                        android:gravity="start">
+
+                        <TextView
+                            android:id="@+id/maghrib_label_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/MAGHRIB"
+                            android:textAppearance="@style/prayer_name"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/maghreb_timing_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="5:30 PM"
+                            android:textSize="12sp"
+                            android:textAppearance="@style/prayer_name" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="2dp"
-                    android:layout_weight="1"
+                    android:orientation="horizontal"
                     android:gravity="center"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <TextView
-                        android:id="@+id/maghreb_timing_text_view"
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/maghrib_track_button"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
-                        android:textSize="13dp"
-                        android:text="20:30"
-                        android:textAppearance="@style/prayer_name"
-
-                        />
+                        android:layout_height="32dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="Track"
+                        android:textSize="11sp"
+                        android:textColor="@android:color/white"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:minWidth="0dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:visibility="visible"
+                        app:cornerRadius="16dp"
+                        app:backgroundTint="@color/salah_track_button"
+                        style="@style/Widget.MaterialComponents.Button" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/maghreb_call_constraint_layout"
                         android:layout_width="38dp"
                         android:layout_height="38dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginLeft="8dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        android:layout_marginStart="4dp">
 
                         <ImageView
                             android:id="@+id/maghreb_call_image_view"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal|center_vertical"
+                            android:layout_gravity="center"
                             android:contentDescription="@string/title_adhan"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             android:src="@drawable/symbol_notification" />
-
                     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
                 </LinearLayout>
-
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -435,82 +487,95 @@
                 android:layout_height="match_parent">
 
                 <LinearLayout
+                    android:id="@+id/isha_left_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
-
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/symbol_ishaa"/>
 
-                    <TextView
-                        android:id="@+id/icha_label_text_view"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:text="@string/ICHA"
-                        android:textAppearance="@style/prayer_name"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:layout_marginStart="12dp"
+                        android:orientation="vertical"
+                        android:gravity="start">
+
+                        <TextView
+                            android:id="@+id/icha_label_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/ICHA"
+                            android:textAppearance="@style/prayer_name"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/icha_timing_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="6:54 PM"
+                            android:textSize="12sp"
+                            android:textAppearance="@style/prayer_name" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="2dp"
-                    android:layout_weight="1"
+                    android:orientation="horizontal"
                     android:gravity="center"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <TextView
-                        android:id="@+id/icha_timing_text_view"
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/isha_track_button"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
-                        android:text="23:30"
-                        android:textSize="13dp"
-                        android:textAppearance="@style/prayer_name" />
+                        android:layout_height="32dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="Track"
+                        android:textSize="11sp"
+                        android:textColor="@android:color/white"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:minWidth="0dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:visibility="visible"
+                        app:cornerRadius="16dp"
+                        app:backgroundTint="@color/salah_track_button"
+                        style="@style/Widget.MaterialComponents.Button" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/icha_call_constraint_layout"
                         android:layout_width="38dp"
                         android:layout_height="38dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginLeft="8dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-
+                        android:layout_marginStart="4dp">
 
                         <ImageView
                             android:id="@+id/icha_call_image_view"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/symbol_notification"
-                            android:layout_gravity="center_horizontal|center_vertical"
+                            android:layout_gravity="center"
                             android:contentDescription="@string/title_adhan"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"/>
-
                     </androidx.constraintlayout.widget.ConstraintLayout>
-
                 </LinearLayout>
-
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
