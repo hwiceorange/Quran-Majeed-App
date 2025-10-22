@@ -106,15 +106,19 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     Handler handler=new Handler(Looper.getMainLooper());
     int count=0;
+    private boolean hasJumpedToMain = false; // 防止重复跳转
+    
     Runnable r=new Runnable() {
         @Override public void run() {
+            if(hasJumpedToMain) {
+                return; // 已经跳转，不再处理
+            }
+            
             if(AdFactory.INSTANCE.hasAppOpenAd(AdConfig.AD_APPOPEN)){
                AdFactory.INSTANCE.showAppOpenAd(SplashScreenActivity.this, AdConfig.AD_APPOPEN, new AdShowCallback() {
                    @Override public void onAdImpression(@Nullable AdItem adItem) {
-
                        progressBarRunning=false;
                        pbView.setProgress(100);
-
                    }
 
                    @Override public void onAdClicked(@Nullable AdItem adItem) {
@@ -137,7 +141,8 @@ public class SplashScreenActivity extends AppCompatActivity {
 
                    }
                });
-            } else if(count>=8){
+            } else if(count>=5){ // 🔥 修改：8秒 → 5秒
+                android.util.Log.d(TAG, "⏱️ Timeout reached (5s), jumping to main activity");
                 startMainActivity();
             } else {
                 count++;
@@ -217,6 +222,19 @@ public class SplashScreenActivity extends AppCompatActivity {
     }
 
     public void startMainActivity() {
+        if(hasJumpedToMain) {
+            return; // 防止重复跳转
+        }
+        hasJumpedToMain = true;
+        progressBarRunning = false;
+        
+        // 清理所有定时器
+        handler.removeCallbacks(r);
+        handler.removeCallbacks(updateProgress);
+        handler.removeCallbacks(absoluteTimeoutRunnable);
+        
+        android.util.Log.d(TAG, "✅ Jumping to MainActivity");
+        
         new Handler().postDelayed(() -> {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
@@ -225,33 +243,98 @@ public class SplashScreenActivity extends AppCompatActivity {
     }
 
     boolean progressBarRunning=true;
+    int progressStage=1; // 阶段：1=前2秒，2=后3秒
     int progressCount=0;
+    long progressStartTime=0;
+    
+    // 🔥 新进度条逻辑：前2秒到85%，后3秒到100%
     Runnable updateProgress=new Runnable() {
         @Override public void run() {
-            if(progressCount<80 && progressBarRunning){
-                progressCount++;
-                pbView.setProgress(progressCount*100/80);
-                handler.removeCallbacks(updateProgress);
-                handler.postDelayed(this,100);
+            if(!progressBarRunning){
+                return;
             }
+            
+            long elapsedTime = System.currentTimeMillis() - progressStartTime;
+            int targetProgress = 0;
+            long nextDelay = 0;
+            
+            if (elapsedTime < 2000) {
+                // 阶段1：前2秒快速到85%
+                // 2000ms达到85%，每约23.5ms更新1%
+                targetProgress = (int)(elapsedTime * 85 / 2000);
+                if(targetProgress > 85) targetProgress = 85;
+                nextDelay = 25; // 每25ms更新一次
+                progressStage = 1;
+            } else if (elapsedTime < 5000) {
+                // 阶段2：后3秒匀速从85%到100%
+                // 3000ms从85%到100%（增加15%），每200ms更新1%
+                long stage2Time = elapsedTime - 2000;
+                int stage2Progress = (int)(stage2Time * 15 / 3000);
+                targetProgress = 85 + stage2Progress;
+                if(targetProgress > 100) targetProgress = 100;
+                nextDelay = 200; // 每200ms更新一次
+                progressStage = 2;
+            } else {
+                // 5秒后，确保到100%
+                targetProgress = 100;
+                progressBarRunning = false;
+            }
+            
+            pbView.setProgress(targetProgress);
+            
+            if(progressBarRunning && targetProgress < 100) {
+                handler.removeCallbacks(updateProgress);
+                handler.postDelayed(this, nextDelay);
+            }
+        }
+    };
+    
+    // 🔥 绝对超时保护：5秒后强制跳转
+    Runnable absoluteTimeoutRunnable = new Runnable() {
+        @Override
+        public void run() {
+            android.util.Log.w(TAG, "⚠️ Absolute timeout (5s) reached, force jumping to main");
+            pbView.setProgress(100);
+            startMainActivity();
         }
     };
     @Override
     public void onResume(){
         super.onResume();
-        if(progressBarRunning) {
+        if(progressBarRunning && !hasJumpedToMain) {
+            // 重置进度条
             pbView.setProgress(0);
+            progressStartTime = System.currentTimeMillis();
+            
+            // 启动进度条动画
             handler.removeCallbacks(updateProgress);
-            handler.postDelayed(updateProgress, 100);
+            handler.postDelayed(updateProgress, 25);
+            
+            // 🔥 启动绝对超时保护：5秒后强制跳转
+            handler.removeCallbacks(absoluteTimeoutRunnable);
+            handler.postDelayed(absoluteTimeoutRunnable, 5000);
+            
+            android.util.Log.d(TAG, "📊 Progress bar started with 5s timeout protection");
         }
-
     }
 
     @Override
     public void onPause(){
         super.onPause();
-
+        
+        // 清理所有定时器
         handler.removeCallbacks(updateProgress);
-
+        handler.removeCallbacks(r);
+        handler.removeCallbacks(absoluteTimeoutRunnable);
+    }
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        
+        // 清理所有定时器，防止内存泄漏
+        handler.removeCallbacks(updateProgress);
+        handler.removeCallbacks(r);
+        handler.removeCallbacks(absoluteTimeoutRunnable);
     }
 }
