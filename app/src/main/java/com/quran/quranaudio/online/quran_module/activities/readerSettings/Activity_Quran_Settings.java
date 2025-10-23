@@ -109,6 +109,19 @@ public class Activity_Quran_Settings extends BaseActivity {
     @Override
     protected void onActivityInflated(@NonNull View activityView, @Nullable Bundle savedInstanceState) {
         mBinding = ActivityQuranSettingsBinding.bind(activityView);
+        
+        // 为header添加状态栏高度的顶部padding
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(mBinding.header, (v, insets) -> {
+            int statusBarHeight = insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.systemBars()).top;
+            v.setPadding(
+                v.getPaddingLeft(),
+                statusBarHeight,
+                v.getPaddingRight(),
+                v.getPaddingBottom()
+            );
+            return insets;
+        });
+        
         if (savedInstanceState == null) {
             initIntent(getIntent(), false);
         } else {

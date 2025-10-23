@@ -1133,6 +1133,10 @@
     <string name="assalamualaikum">Assalamualaikum</string>
     <string name="login_with_google">Login with Google</string>
     <string name="logout">Logout</string>
+    <string name="logout_message">Do you want to logout from your Google account?</string>
+    <string name="logged_out_successfully">Logged out successfully</string>
+    <string name="close">Close</string>
+    <string name="navigate">Navigate</string>
 
     <!-- Prayer Card & Navigation -->
     <string name="time">Time</string>

@@ -75,17 +75,39 @@ public class CalendarActivity extends BaseActivity {
                 .inject(this);
 
         super.onCreate(savedInstanceState);
+        
+        // 设置状态栏透明，并使用统一的主题色
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            android.view.Window window = getWindow();
+            window.addFlags(android.view.WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+            
+            // 设置状态栏图标为亮色（白色）
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                window.getDecorView().setSystemUiVisibility(0);
+            }
+        }
 
         setContentView(R.layout.activity_calendar);
 
+        // 为工具栏添加状态栏高度的顶部padding
+        android.widget.FrameLayout calendarToolbar = findViewById(R.id.calendar_toolbar);
+        if (calendarToolbar != null) {
+            androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(calendarToolbar, (v, insets) -> {
+                int statusBarHeight = insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.systemBars()).top;
+                v.setPadding(
+                    v.getPaddingLeft(),
+                    statusBarHeight,
+                    v.getPaddingRight(),
+                    v.getPaddingBottom()
+                );
+                return insets;
+            });
+        }
 
         ImageView imgFavorite = (ImageView) findViewById(R.id.back);
-        imgFavorite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CalendarActivity.this.finish();
-            }
-        });
+        imgFavorite.setOnClickListener(v -> finish());
 
         selectedDateTextView = findViewById(R.id.selected_date_text_view);
         calendarToolbarTitle = findViewById(R.id.calendar_toolbar_title);

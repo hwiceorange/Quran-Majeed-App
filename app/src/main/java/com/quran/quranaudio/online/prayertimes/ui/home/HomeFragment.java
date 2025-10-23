@@ -304,6 +304,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         Button enable=dialogWarning.findViewById(R.id.btn_enable_location);
         skip.setOnClickListener(dialogListener);
         enable.setOnClickListener(dialogListener);
+        
+        // Set transparent background for modern card design
+        if (dialogWarning.getWindow() != null) {
+            dialogWarning.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+        
         dialogWarning.show();
     }
     private void requestPermission(){
@@ -759,10 +765,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private void showLogoutDialog() {
         new AlertDialog.Builder(requireContext())
                 .setTitle(R.string.logout)
-                .setMessage("Are you sure you want to logout?")
+                .setMessage(R.string.logout_message)
                 .setPositiveButton(R.string.yes, (dialog, which) -> {
                     googleAuthManager.signOut(() -> {
                         updateHeaderUI();
+                        if (getContext() != null) {
+                            android.widget.Toast.makeText(getContext(), 
+                                getString(R.string.logged_out_successfully), 
+                                android.widget.Toast.LENGTH_SHORT).show();
+                        }
                     });
                 })
                 .setNegativeButton(R.string.no, null)

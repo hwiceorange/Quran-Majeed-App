@@ -1,52 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:gravity="center_horizontal">
-  <TextView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="16dp"
-      android:textSize="32sp"
-      android:textStyle="bold"
-      android:text="@string/warning_welcome"
-      />
-    <ImageView
-        android:layout_width="wrap_content"
+    android:background="@android:color/transparent"
+    android:padding="24dp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/location_warning"/>
-  <TextView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="16dp"
-      android:layout_marginLeft="16dp"
-      android:layout_marginRight="16dp"
+        android:layout_gravity="center"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="@android:color/white">
 
-      android:textSize="20sp"
-      android:textStyle="bold"
-      android:text="@string/warning_use_location"
-      />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:paddingTop="40dp"
+            android:paddingBottom="32dp">
 
-  <TextView android:id="@+id/btn_skip"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="32dp"
-      android:layout_marginLeft="8dp"
-      android:layout_marginRight="8dp"
+            <!-- Welcome Title -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/warning_welcome"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:textColor="#1E1E1E"
+                android:layout_marginBottom="24dp"/>
 
-      android:textColor="#8888"
-      android:textSize="20sp"
-      android:textStyle="bold"
-      android:text="@string/warning_skip"
-      />
+            <!-- Icon in Circle Background -->
+            <FrameLayout
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginBottom="24dp">
 
-  <Button android:id="@+id/btn_enable_location"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:textAllCaps="false"
-      android:textSize="24sp"
-      android:layout_marginTop="8dp"
-      android:text="@string/warning_enable_location"/>
-</LinearLayout>
+                <!-- Circle Background -->
+                <View
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:background="@drawable/circle_background_primary"/>
+
+                <!-- Qibla Direction Icon -->
+                <ImageView
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_qibla_white"
+                    android:contentDescription="@null" />
+            </FrameLayout>
+
+            <!-- Description Text -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/warning_use_location"
+                android:textSize="16sp"
+                android:textColor="#666666"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:lineSpacingExtra="4dp"
+                android:layout_marginBottom="32dp"/>
+
+            <!-- Enable Location Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_enable_location"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="@string/warning_enable_location"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:textAllCaps="false"
+                app:cornerRadius="16dp"
+                app:backgroundTint="#41966F"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Skip Button -->
+            <TextView
+                android:id="@+id/btn_skip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/warning_skip"
+                android:textSize="16sp"
+                android:textColor="#999999"
+                android:padding="8dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</FrameLayout>

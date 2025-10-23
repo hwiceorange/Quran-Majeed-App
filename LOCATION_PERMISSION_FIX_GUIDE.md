@@ -125,7 +125,7 @@ if (getActivity() != null) {
 
 ### 方法 2: 手动过滤日志
 ```bash
-adb logcat -v time | grep -E "(FragMain|HomeViewModel|forceRefresh|dialogWarning|Permission)"
+adb logcat -v time | grep -E "(FragMain|HomeViewModel|forceRefresh|dia  帮给仔细u路logWarning|Permission)"
 ```
 
 ### 方法 3: 查看完整日志

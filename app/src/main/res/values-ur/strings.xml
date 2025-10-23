@@ -1959,13 +1959,13 @@
         QuranApp\n\nBest free app to read the Noble Qur\'an with translations. This app has nice and clean look and many other features. \n\nDOWNLOAD NOW:\n%s
     </string>
 
-    <string name="warning_skip">Skip</string>
+    <string name="warning_skip">چھوڑ دیں</string>
 
-    <string name="warning_enable_location">Enable Location</string>
+    <string name="warning_enable_location">مقام فعال کریں</string>
 
-    <string name="warning_welcome">Welcome</string>
+    <string name="warning_welcome">خوش آمدید</string>
 
-    <string name="warning_use_location">Get accurate prayer times and qibla directions</string>
+    <string name="warning_use_location">درست نماز کے اوقات اور قبلہ کی سمت حاصل کریں</string>
 
     <string name="search">تلاش کریں</string>
 
@@ -1978,6 +1978,10 @@
     <string name="login_with_google">Google سے لاگ ان کریں</string>
 
     <string name="logout">لاگ آؤٹ</string>
+    <string name="logout_message">کیا آپ اپنے Google اکاؤنٹ سے لاگ آؤٹ کرنا چاہتے ہیں؟</string>
+    <string name="logged_out_successfully">کامیابی سے لاگ آؤٹ ہو گئے</string>
+    <string name="close">بند کریں</string>
+    <string name="navigate">نیویگیٹ</string>
 
     <string name="time">وقت</string>
 

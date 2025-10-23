@@ -35,6 +35,10 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -235,6 +239,7 @@ public class PrayersFragment extends Fragment {
         prayersFragment.setArguments(bundle);
         return prayersFragment;
     }
+
 
 
 
@@ -693,8 +698,11 @@ public class PrayersFragment extends Fragment {
         circularProgressBar.setProgressWithAnimation(getProgressBarPercentage(timeRemaining, timeBetween), 1000L);
         TimeRemainingCTimer = new CountDownTimer(timeRemaining, 1000L) {
             public void onTick(long millisUntilFinished) {
-                timeRemainingTextView.setText(getString(R.string.remaining) + ": " + UiUtils.formatTimeForTimer(millisUntilFinished));
-                circularProgressBar.setProgress(getProgressBarPercentage(timeRemaining, timeBetween));
+                // 检查Fragment是否还attached，避免崩溃
+                if (isAdded() && getContext() != null) {
+                    timeRemainingTextView.setText(getString(R.string.remaining) + ": " + UiUtils.formatTimeForTimer(millisUntilFinished));
+                    circularProgressBar.setProgress(getProgressBarPercentage(timeRemaining, timeBetween));
+                }
             }
 
             @RequiresApi(api = Build.VERSION_CODES.O)

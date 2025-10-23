@@ -1131,6 +1131,10 @@ seperti: Waktu Sholat Global, metode perhitungan yang berbeda, notifikasi, memba
     <string name="assalamualaikum">Assalamualaikum</string>
     <string name="login_with_google">Masuk dengan Google</string>
     <string name="logout">Keluar</string>
+    <string name="logout_message">Apakah Anda ingin keluar dari akun Google Anda?</string>
+    <string name="logged_out_successfully">Berhasil keluar</string>
+    <string name="close">Tutup</string>
+    <string name="navigate">Navigasi</string>
 
     <!-- Prayer Card & Navigation -->
     <string name="time">Waktu</string>

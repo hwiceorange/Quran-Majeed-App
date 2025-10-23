@@ -1127,6 +1127,10 @@
   <string name="assalamualaikum">السلام عليكم</string>
   <string name="login_with_google">تسجيل الدخول بواسطة Google</string>
   <string name="logout">تسجيل الخروج</string>
+  <string name="logout_message">هل تريد تسجيل الخروج من حسابك في Google؟</string>
+  <string name="logged_out_successfully">تم تسجيل الخروج بنجاح</string>
+  <string name="close">إغلاق</string>
+  <string name="navigate">التنقل</string>
 
   <!-- Prayer Card & Navigation -->
   <string name="time">الوقت</string>

@@ -18,12 +18,10 @@
         <item name="android:windowDisablePreview">true</item>
         <item name="playbutton">@color/colorPrimary</item>
         
-        <!-- Android 35 specific fixes -->
+        <!-- Android 35 specific fixes - 统一白色状态栏 -->
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@color/colorPrimary</item>
-        <item name="android:windowLightStatusBar">false</item>
-        <item name="android:enforceStatusBarContrast">true</item>
-        <item name="android:enforceNavigationBarContrast">true</item>
+        <item name="android:statusBarColor">@android:color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="LaunchTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -31,11 +29,10 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorSecondaryVariant">@color/colorPrimaryDark</item>
         
-        <!-- Android 35 specific fixes -->
+        <!-- Android 35 specific fixes - 统一白色状态栏 -->
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@color/colorPrimary</item>
-        <item name="android:windowLightStatusBar">false</item>
-        <item name="android:enforceStatusBarContrast">true</item>
+        <item name="android:statusBarColor">@android:color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="Theme.QuranApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -53,11 +50,10 @@
 
         <item name="android:windowBackground">@color/colorBGPage</item>
         
-        <!-- Android 35 specific fixes -->
+        <!-- Android 35 specific fixes - 统一白色状态栏 -->
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@color/colorPrimary</item>
-        <item name="android:windowLightStatusBar">false</item>
-        <item name="android:enforceStatusBarContrast">true</item>
+        <item name="android:statusBarColor">@android:color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
 
         <item name="android:textSize">@dimen/dmnCommonSize</item>
         <item name="android:textColor">@color/colorText</item>
@@ -94,11 +90,10 @@
         <item name="colorOnSurface">#151D2C</item>
         <item name="colorError">#FF1611</item>
         
-        <!-- Android 35 specific fixes -->
+        <!-- Android 35 specific fixes - 统一白色状态栏 -->
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@color/colorPrimary</item>
-        <item name="android:windowLightStatusBar">false</item>
-        <item name="android:enforceStatusBarContrast">true</item>
+        <item name="android:statusBarColor">@android:color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
 </resources>

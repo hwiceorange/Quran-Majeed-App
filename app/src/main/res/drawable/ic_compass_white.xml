@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+    
+    <!-- 外圆 -->
+    <path
+        android:pathData="M32,8 A24,24 0 1,1 32,56 A24,24 0 1,1 32,8"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="3"
+        android:fillColor="@android:color/transparent"/>
+    
+    <!-- 北方指针（上方三角形） -->
+    <path
+        android:pathData="M32,16 L28,28 L36,28 Z"
+        android:fillColor="#FFFFFF"/>
+    
+    <!-- 南方指针（下方三角形，稍小） -->
+    <path
+        android:pathData="M32,48 L28,36 L36,36 Z"
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.6"/>
+    
+    <!-- 东西方向标记 -->
+    <path
+        android:pathData="M20,30 L20,34 L16,34 L16,30 Z"
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.6"/>
+    
+    <path
+        android:pathData="M44,30 L44,34 L48,34 L48,30 Z"
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.6"/>
+    
+    <!-- 中心点 -->
+    <path
+        android:pathData="M32,32 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0"
+        android:fillColor="#FFFFFF"/>
+</vector>
+
+

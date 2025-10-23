@@ -246,3 +246,4 @@ public class TajweedTimerActivity extends AppCompatActivity {
 
 
 
+

@@ -5,12 +5,17 @@ import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 
 import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.NavGraph;
 import androidx.navigation.Navigation;
@@ -75,6 +80,10 @@ public class MainActivity extends BaseActivity {
 
         NavController navController = Navigation.findNavController(this, R.id.home_host_fragment);
         NavigationUI.setupWithNavController(navView, navController);
+        
+        // 设置统一的白色状态栏 + 深色图标（所有页面统一效果）
+        setupUnifiedStatusBar();
+        android.util.Log.e("MainActivity", "✅ 初始化：设置统一白色状态栏");
         
         // Add navigation item selection listener with logging
         navView.setOnItemSelectedListener(item -> {
@@ -154,6 +163,31 @@ public class MainActivity extends BaseActivity {
         // The Welcome dialog will guide them to grant location permission
         // Only show Settings first if explicitly needed (currently never)
         return false;
+    }
+    
+    /**
+     * 设置统一的白色状态栏（所有页面统一效果）
+     * 白色背景 + 深色图标 + 内容不延伸到状态栏下方
+     */
+    private void setupUnifiedStatusBar() {
+        try {
+            Window window = getWindow();
+            View decorView = window.getDecorView();
+            
+            // 确保内容不延伸到状态栏下方（非沉浸式）
+            WindowCompat.setDecorFitsSystemWindows(window, true);
+            
+            // 设置状态栏为白色
+            window.setStatusBarColor(0xFFFFFFFF);
+            
+            // 设置图标为深色（lightStatusBar = true 表示浅色背景需要深色图标）
+            WindowInsetsControllerCompat wic = new WindowInsetsControllerCompat(window, decorView);
+            wic.setAppearanceLightStatusBars(true);
+            
+            android.util.Log.e("MainActivity", "✅ 统一状态栏设置: 白色背景 + 深色图标");
+        } catch (Exception e) {
+            android.util.Log.e("MainActivity", "❌ 设置统一状态栏失败", e);
+        }
     }
 
     public void onBackPressed() {

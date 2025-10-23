@@ -22,7 +22,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Tools"
+            android:text="@string/tools"
             android:textColor="#333333"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -33,7 +33,7 @@
             android:layout_height="32dp"
             android:src="@drawable/ic_close_24dp"
             android:padding="6dp"
-            android:contentDescription="Close"
+            android:contentDescription="@string/close"
             app:tint="#666666"
             android:clickable="true"
             android:focusable="true"
@@ -76,14 +76,14 @@
                 android:layout_height="32dp"
                 android:src="@drawable/ic_book_24dp"
                 app:tint="#4B9B76"
-                android:contentDescription="Hadith Books" />
+                android:contentDescription="@string/hadith" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="16dp"
-                android:text="Hadith Books"
+                android:text="@string/hadith"
                 android:textColor="#333333"
                 android:textSize="16sp" />
 
@@ -92,7 +92,7 @@
                 android:layout_height="20dp"
                 android:src="@drawable/ic_right_arrow"
                 app:tint="#999999"
-                android:contentDescription="Navigate" />
+                android:contentDescription="@string/navigate" />
 
         </LinearLayout>
 
@@ -116,14 +116,14 @@
                 android:layout_height="32dp"
                 android:src="@drawable/ic_navigation"
                 app:tint="#4B9B76"
-                android:contentDescription="Qibla Direction" />
+                android:contentDescription="@string/qibla_direction" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="16dp"
-                android:text="Qibla Direction"
+                android:text="@string/qibla_direction"
                 android:textColor="#333333"
                 android:textSize="16sp" />
 
@@ -132,7 +132,7 @@
                 android:layout_height="20dp"
                 android:src="@drawable/ic_right_arrow"
                 app:tint="#999999"
-                android:contentDescription="Navigate" />
+                android:contentDescription="@string/navigate" />
 
         </LinearLayout>
 
@@ -156,14 +156,14 @@
                 android:layout_height="32dp"
                 android:src="@drawable/ic_calendar_24dp"
                 app:tint="#4B9B76"
-                android:contentDescription="Calendar" />
+                android:contentDescription="@string/calendar" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="16dp"
-                android:text="Islamic Calendar"
+                android:text="@string/calendar"
                 android:textColor="#333333"
                 android:textSize="16sp" />
 
@@ -172,7 +172,7 @@
                 android:layout_height="20dp"
                 android:src="@drawable/ic_right_arrow"
                 app:tint="#999999"
-                android:contentDescription="Navigate" />
+                android:contentDescription="@string/navigate" />
 
         </LinearLayout>
 
@@ -196,14 +196,14 @@
                 android:layout_height="32dp"
                 android:src="@drawable/ic_dua"
                 app:tint="#4B9B76"
-                android:contentDescription="Six Kalmas" />
+                android:contentDescription="@string/six_kalmas" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="16dp"
-                android:text="Six Kalmas"
+                android:text="@string/six_kalmas"
                 android:textColor="#333333"
                 android:textSize="16sp" />
 
@@ -212,7 +212,7 @@
                 android:layout_height="20dp"
                 android:src="@drawable/ic_right_arrow"
                 app:tint="#999999"
-                android:contentDescription="Navigate" />
+                android:contentDescription="@string/navigate" />
 
         </LinearLayout>
 
@@ -236,14 +236,14 @@
                 android:layout_height="32dp"
                 android:src="@drawable/ic_calculator_24dp"
                 app:tint="#4B9B76"
-                android:contentDescription="Zakat Calculator" />
+                android:contentDescription="@string/zakat_calculator" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="16dp"
-                android:text="Zakat Calculator"
+                android:text="@string/zakat_calculator"
                 android:textColor="#333333"
                 android:textSize="16sp" />
 
@@ -252,7 +252,7 @@
                 android:layout_height="20dp"
                 android:src="@drawable/ic_right_arrow"
                 app:tint="#999999"
-                android:contentDescription="Navigate" />
+                android:contentDescription="@string/navigate" />
 
         </LinearLayout>
 

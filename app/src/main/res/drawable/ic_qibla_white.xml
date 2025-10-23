@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+    
+    <!-- Kaaba (simplified) at top -->
+    <group
+        android:translateX="32"
+        android:translateY="12">
+        <!-- Kaaba body -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M-6,-6 L6,-6 L6,6 L-6,6 Z" />
+        
+        <!-- Gold band (top) -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:fillAlpha="0.9"
+            android:pathData="M-6,-2 L6,-2 L6,0 L-6,0 Z" />
+        
+        <!-- Gold band (middle) -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:fillAlpha="0.9"
+            android:pathData="M-6,2 L6,2 L6,4 L-6,4 Z" />
+        
+        <!-- Door -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:fillAlpha="0.7"
+            android:pathData="M-2,-6 L2,-6 L2,0 L-2,0 Z" />
+    </group>
+    
+    <!-- Pointer/Arrow pointing from bottom to Kaaba -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M32,52 L32,24 L28,28 M32,24 L36,28" 
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"/>
+    
+    <!-- Arrow head (triangle) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M32,20 L28,26 L36,26 Z" />
+    
+    <!-- Location dot at bottom -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M32,56 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0" />
+    
+    <!-- Small circle inside location dot -->
+    <path
+        android:fillColor="#41966F"
+        android:pathData="M32,56 m-2,0 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" />
+    
+</vector>
+

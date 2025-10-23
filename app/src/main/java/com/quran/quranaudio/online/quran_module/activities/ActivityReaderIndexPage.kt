@@ -1,6 +1,7 @@
 package com.quran.quranaudio.online.quran_module.activities
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,8 +26,31 @@ class ActivityReaderIndexPage : com.quran.quranaudio.online.quran_module.activit
         return R.layout.activity_reader_index_page
     }
 
+    // 设置状态栏为白色背景
+    override fun getStatusBarBG(): Int {
+        return Color.WHITE
+    }
+
+    // 设置状态栏图标为深色
+    override fun isStatusBarLight(): Boolean {
+        return true
+    }
+
     override fun onActivityInflated(activityView: View, savedInstanceState: Bundle?) {
         binding = ActivityReaderIndexPageBinding.bind(activityView)
+        
+        // 为header添加状态栏高度的顶部padding
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(binding.header.root) { v, insets ->
+            val statusBarHeight = insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.systemBars()).top
+            v.setPadding(
+                v.paddingLeft,
+                statusBarHeight,
+                v.paddingRight,
+                v.paddingBottom
+            )
+            insets
+        }
+        
         activityView.post { init() }
     }
 

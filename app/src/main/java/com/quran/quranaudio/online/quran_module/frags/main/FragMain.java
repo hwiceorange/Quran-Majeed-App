@@ -657,6 +657,12 @@ public class FragMain extends BaseFragment {
         skip.setOnClickListener(dialogListener);
         enable.setOnClickListener(dialogListener);
         dialogWarning.setCanceledOnTouchOutside(false);
+        
+        // Set transparent background for modern card design
+        if (dialogWarning.getWindow() != null) {
+            dialogWarning.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+        
         dialogWarning.show();
         
         Log.d(TAG, "✅ Permission warning dialog displayed");
@@ -1014,22 +1020,22 @@ public class FragMain extends BaseFragment {
         if (getContext() == null) return;
 
         new AlertDialog.Builder(getContext())
-                .setTitle("Logout")
-                .setMessage("Do you want to logout from your Google account?")
-                .setPositiveButton("Yes", (dialog, which) -> {
+                .setTitle(R.string.logout)
+                .setMessage(R.string.logout_message)
+                .setPositiveButton(R.string.yes, (dialog, which) -> {
                     if (googleAuthManager != null) {
                         googleAuthManager.signOut(() -> {
                             // Update UI after logout
                             updateHeaderUI();
                             if (getContext() != null) {
                                 android.widget.Toast.makeText(getContext(), 
-                                    "Logged out successfully", 
+                                    getString(R.string.logged_out_successfully), 
                                     android.widget.Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
                 })
-                .setNegativeButton("No", null)
+                .setNegativeButton(R.string.no, null)
                 .show();
     }
 
