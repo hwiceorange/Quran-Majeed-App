@@ -1,0 +1,561 @@
+#!/usr/bin/env python3
+"""
+多语言strings.xml生成工具
+基于英语版本生成乌尔都语、马来语、土耳其语、孟加拉语翻译
+"""
+
+import xml.etree.ElementTree as ET
+from pathlib import Path
+
+# 核心UI翻译映射 - 最重要的150个字符串
+CORE_TRANSLATIONS = {
+    'ur': {  # 乌尔都语 - RTL
+        'app_name': 'قرآن مجید',
+        'actionbar_name': 'قرآن مجید',
+        'the_holy_quran': 'قرآن کریم',
+        'listen_quran': 'قرآن سنیں',
+        'read_quran_arabic': 'قرآن پڑھیں',
+        'hadith_btn': 'حدیث کی کتابیں',
+        'hadith': 'حدیث کی کتابیں',
+        'quran_reader': 'قرآن پڑھیں',
+        'surah_index': 'سورتوں کی فہرست',
+        'juz_index': 'پاروں کی فہرست',
+        'bookmark': 'بک مارک',
+        'names_of_allah': 'اللہ کے 99 نام',
+        'qibla_direction': 'قبلہ کی سمت',
+        'wudu_guide': 'وضو کی رہنمائی',
+        'tasbih': 'تسبیح',
+        'time_settings': 'نماز کے اوقات کی ترتیبات',
+        'set_location': 'مقام',
+        'cancel': 'منسوخ کریں',
+        'ok': 'ٹھیک ہے',
+        'yes': 'ہاں',
+        'no': 'نہیں',
+        'home': 'ہوم',
+        'settings': 'ترتیبات',
+        'search': 'تلاش کریں',
+        'login': 'لاگ ان',
+        'logout': 'لاگ آؤٹ',
+        'profile': 'پروفائل',
+        'time': 'وقت',
+        'learn': 'سیکھیں',
+        'tools': 'ٹولز',
+        'remaining': 'باقی',
+        'play': 'چلائیں',
+        'pause': 'روکیں',
+        'loading': 'لوڈ ہو رہا ہے…',
+        'error': 'خرابی',
+        'success': 'کامیاب',
+        'FAJR': 'فجر',
+        'DHOHR': 'ظہر',
+        'ASR': 'عصر',
+        'MAGHRIB': 'مغرب',
+        'ICHA': 'عشاء',
+        'daily_quests': 'روزانہ کی کوششیں',
+        'verse_of_day': 'آج کی آیت',
+        'assalamualaikum': 'السلام علیکم',
+        'login_with_google': 'Google سے لاگ ان کریں',
+        'tools_menu': 'ٹولز مینو',
+        'verse_info_format': 'سورت %1$s %2$d:%3$d',
+        'live_stream': 'لائیو سٹریم',
+        'mecca_live_description': 'مکہ مکرمہ کی مسجد الحرام سے 24/7 لائیو سٹریم',
+        'medina_live_description': 'مدینہ منورہ کی مسجد نبوی سے 24/7 لائیو سٹریم',
+        'daily_quests_description': 'اپنا قرآنی سفر شروع کریں! ایک ہدف مقرر کریں، ایک عادت بنائیں۔',
+        'create_learning_plan': 'اپنا سیکھنے کا منصوبہ ابھی بنائیں',
+        'share': 'شیئر کریں',
+        'download': 'ڈاؤن لوڈ کریں',
+        'refresh': 'تازہ کریں',
+        'skip': 'چھوڑ دیں',
+        'later': 'بعد میں',
+        'not_now': 'ابھی نہیں',
+        'next': 'اگلا',
+        'previous': 'پچھلا',
+        'close': 'بند کریں',
+        'done': 'مکمل',
+        'apply': 'لاگو کریں',
+        'back': 'واپس',
+        'network_error_message': 'براہ کرم اپنا انٹرنیٹ کنکشن چیک کریں اور دوبارہ کوشش کریں۔',
+        'internet_msg': 'اس کارروائی کو انجام دینے کے لیے آپ کو انٹرنیٹ کی ضرورت ہے',
+        'pleaseBeConnectedToInternet': 'براہ کرم انٹرنیٹ سے منسلک ہوں',
+        'no_internet': 'کوئی انٹرنیٹ نہیں',
+        'location_permission_not_granted': 'مقام کی اجازت نہیں دی گئی',
+        'location_alert_title': 'مقام میں خرابی',
+        'location_service_unavailable': 'آپ کا مقام تلاش کرنے میں ناکام',
+        'default_error_message': 'ایک خرابی واقع ہوئی، براہ کرم دوبارہ کوشش کریں۔',
+        'something_went_wrong': 'کچھ غلط ہو گیا!',
+        'try_again_later': 'براہ کرم بعد میں دوبارہ کوشش کریں۔',
+        'copied': 'کامیابی سے کاپی ہو گیا',
+        'please_wait': 'براہ کرم انتظار کریں۔',
+        'buffering': 'بفرنگ',
+        'language': 'زبان',
+        'title_app_language': 'ایپ کی زبان',
+        'title_theme': 'تھیم',
+        'theme_light': 'روشن',
+        'theme_dark': 'تاریک',
+        'system_default': 'سسٹم ڈیفالٹ',
+        'location': 'مقام',
+        'set_location': 'مقام مقرر کریں',
+        'zakat_calculator': 'زکوٰۃ کیلکولیٹر',
+        'six_kalmas': 'چھ کلمے',
+        'azkar': 'اذکار',
+        'calendar': 'کیلنڈر',
+        'mecca_live': 'مکہ لائیو',
+        'madina_live': 'مدینہ لائیو',
+        'about_us': 'ہمارے بارے میں',
+        'privacy': 'رازداری کی پالیسی',
+        'rate_app': 'ایپ کی درجہ بندی کریں',
+        'share_app': 'ایپ شیئر کریں',
+        'feedback': 'کوئی رائے ہے؟',
+        'contact': 'ہم سے رابطہ کریں',
+        'SHORT_FAJR': 'فجر',
+        'SHORT_DHOHR': 'ظہر',
+        'SHORT_ASR': 'عصر',
+        'SHORT_MAGHRIB': 'مغرب',
+        'SHORT_ICHA': 'عشاء',
+        'SUNRISE': 'طلوع آفتاب',
+        'DOHA': 'چاشت',
+        'next_prayer': 'اگلی نماز',
+        'title_home': 'ہوم',
+        'salat_time': 'نماز',
+        'title_salat': 'نماز',
+        'discover': 'دریافت کریں',
+        'menu_menu': 'مینو',
+        'names99': 'دریافت کریں',
+    },
+    'ms': {  # 马来语 - LTR
+        'app_name': 'Al-Quran Majeed',
+        'actionbar_name': 'Al-Quran Majeed',
+        'the_holy_quran': 'Al-Quran Al-Karim',
+        'listen_quran': 'Dengar Al-Quran',
+        'read_quran_arabic': 'Baca Al-Quran',
+        'hadith_btn': 'Kitab Hadis',
+        'hadith': 'Kitab Hadis',
+        'quran_reader': 'Baca Al-Quran',
+        'surah_index': 'Indeks Surah',
+        'juz_index': 'Indeks Juzuk',
+        'bookmark': 'Tandabuku',
+        'names_of_allah': '99 Nama Allah',
+        'qibla_direction': 'Arah Kiblat',
+        'wudu_guide': 'Panduan Wudhu',
+        'tasbih': 'Tasbih',
+        'time_settings': 'Tetapan Waktu Solat',
+        'set_location': 'Lokasi',
+        'cancel': 'Batal',
+        'ok': 'OK',
+        'yes': 'YA',
+        'no': 'TIDAK',
+        'home': 'Utama',
+        'settings': 'Tetapan',
+        'search': 'Cari',
+        'login': 'Log Masuk',
+        'logout': 'Log Keluar',
+        'profile': 'Profil',
+        'time': 'Masa',
+        'learn': 'Belajar',
+        'tools': 'Alatan',
+        'remaining': 'Berbaki',
+        'play': 'Main',
+        'pause': 'Jeda',
+        'loading': 'Memuatkan…',
+        'error': 'Ralat',
+        'success': 'Berjaya',
+        'FAJR': 'Subuh',
+        'DHOHR': 'Zohor',
+        'ASR': 'Asar',
+        'MAGHRIB': 'Maghrib',
+        'ICHA': 'Isyak',
+        'daily_quests': 'Misi Harian',
+        'verse_of_day': 'Ayat Hari Ini',
+        'assalamualaikum': 'Assalamualaikum',
+        'login_with_google': 'Log Masuk dengan Google',
+        'tools_menu': 'Menu Alatan',
+        'verse_info_format': 'Surah %1$s %2$d:%3$d',
+        'live_stream': 'Siaran Langsung',
+        'mecca_live_description': 'Siaran langsung 24/7 dari Masjidil Haram di Mekah',
+        'medina_live_description': 'Siaran langsung 24/7 dari Masjid Nabawi di Madinah',
+        'daily_quests_description': 'Mulakan perjalanan Al-Quran anda! Tetapkan matlamat, bentuk tabiat.',
+        'create_learning_plan': 'Cipta Pelan Pembelajaran Saya Sekarang',
+        'share': 'Kongsi',
+        'download': 'Muat Turun',
+        'refresh': 'Muat Semula',
+        'skip': 'Langkau',
+        'later': 'Kemudian',
+        'not_now': 'Tidak Sekarang',
+        'next': 'Seterusnya',
+        'previous': 'Sebelumnya',
+        'close': 'Tutup',
+        'done': 'Selesai',
+        'apply': 'Gunakan',
+        'back': 'Kembali',
+        'network_error_message': 'Sila periksa sambungan internet anda dan cuba lagi.',
+        'internet_msg': 'Anda memerlukan internet untuk melakukan tindakan ini',
+        'pleaseBeConnectedToInternet': 'sila sambung ke internet',
+        'no_internet': 'Tiada Internet',
+        'location_permission_not_granted': 'Kebenaran lokasi tidak diberikan',
+        'location_alert_title': 'Ralat Lokasi',
+        'location_service_unavailable': 'Tidak dapat mencari lokasi anda',
+        'default_error_message': 'Ralat berlaku, sila cuba lagi.',
+        'something_went_wrong': 'Ada yang tidak kena!',
+        'try_again_later': 'Sila cuba lagi kemudian.',
+        'copied': 'Berjaya disalin',
+        'please_wait': 'Sila tunggu.',
+        'buffering': 'Pemuatan',
+        'language': 'Bahasa',
+        'title_app_language': 'Bahasa Aplikasi',
+        'title_theme': 'Tema',
+        'theme_light': 'Cerah',
+        'theme_dark': 'Gelap',
+        'system_default': 'Lalai Sistem',
+        'location': 'Lokasi',
+        'set_location': 'Tetapkan Lokasi',
+        'zakat_calculator': 'Kalkulator Zakat',
+        'six_kalmas': 'Enam Kalimah',
+        'azkar': 'Azkar',
+        'calendar': 'Kalendar',
+        'mecca_live': 'Mekah Live',
+        'madina_live': 'Madinah Live',
+        'about_us': 'Tentang Kami',
+        'privacy': 'Dasar Privasi',
+        'rate_app': 'Nilaikan Aplikasi',
+        'share_app': 'Kongsi Aplikasi',
+        'feedback': 'Ada maklum balas?',
+        'contact': 'Hubungi Kami',
+        'SHORT_FAJR': 'Subuh',
+        'SHORT_DHOHR': 'Zohor',
+        'SHORT_ASR': 'Asar',
+        'SHORT_MAGHRIB': 'Maghrib',
+        'SHORT_ICHA': 'Isyak',
+        'SUNRISE': 'Matahari Terbit',
+        'DOHA': 'Dhuha',
+        'next_prayer': 'Solat Seterusnya',
+        'title_home': 'Utama',
+        'salat_time': 'Solat',
+        'title_salat': 'Solat',
+        'discover': 'Terokai',
+        'menu_menu': 'Menu',
+        'names99': 'Terokai',
+    },
+    'tr': {  # 土耳其语 - LTR
+        'app_name': 'Kur\'an-ı Kerim',
+        'actionbar_name': 'Kur\'an-ı Kerim',
+        'the_holy_quran': 'Kur\'an-ı Kerim',
+        'listen_quran': 'Kur\'an Dinle',
+        'read_quran_arabic': 'Kur\'an Oku',
+        'hadith_btn': 'Hadis Kitapları',
+        'hadith': 'Hadis Kitapları',
+        'quran_reader': 'Kur\'an Oku',
+        'surah_index': 'Sure Dizini',
+        'juz_index': 'Cüz Dizini',
+        'bookmark': 'Yer İmi',
+        'names_of_allah': 'Allah\'ın 99 İsmi',
+        'qibla_direction': 'Kıble Yönü',
+        'wudu_guide': 'Abdest Rehberi',
+        'tasbih': 'Tesbih',
+        'time_settings': 'Namaz Vakitleri Ayarları',
+        'set_location': 'Konum',
+        'cancel': 'İptal',
+        'ok': 'Tamam',
+        'yes': 'EVET',
+        'no': 'HAYIR',
+        'home': 'Ana Sayfa',
+        'settings': 'Ayarlar',
+        'search': 'Ara',
+        'login': 'Giriş',
+        'logout': 'Çıkış',
+        'profile': 'Profil',
+        'time': 'Zaman',
+        'learn': 'Öğren',
+        'tools': 'Araçlar',
+        'remaining': 'Kalan',
+        'play': 'Oynat',
+        'pause': 'Duraklat',
+        'loading': 'Yükleniyor…',
+        'error': 'Hata',
+        'success': 'Başarılı',
+        'FAJR': 'Sabah',
+        'DHOHR': 'Öğle',
+        'ASR': 'İkindi',
+        'MAGHRIB': 'Akşam',
+        'ICHA': 'Yatsı',
+        'daily_quests': 'Günlük Görevler',
+        'verse_of_day': 'Günün Ayeti',
+        'assalamualaikum': 'Esselamü Aleyküm',
+        'login_with_google': 'Google ile Giriş Yap',
+        'tools_menu': 'Araçlar Menüsü',
+        'verse_info_format': 'Sure %1$s %2$d:%3$d',
+        'live_stream': 'Canlı Yayın',
+        'mecca_live_description': 'Mekke\'deki Mescid-i Haram\'dan 24/7 canlı yayın',
+        'medina_live_description': 'Medine\'deki Mescid-i Nebevi\'den 24/7 canlı yayın',
+        'daily_quests_description': 'Kur\'an yolculuğunuza başlayın! Bir hedef belirleyin, bir alışkanlık oluşturun.',
+        'create_learning_plan': 'Şimdi Öğrenme Planımı Oluştur',
+        'share': 'Paylaş',
+        'download': 'İndir',
+        'refresh': 'Yenile',
+        'skip': 'Atla',
+        'later': 'Sonra',
+        'not_now': 'Şimdi Değil',
+        'next': 'İleri',
+        'previous': 'Geri',
+        'close': 'Kapat',
+        'done': 'Tamam',
+        'apply': 'Uygula',
+        'back': 'Geri',
+        'network_error_message': 'Lütfen internet bağlantınızı kontrol edin ve tekrar deneyin.',
+        'internet_msg': 'Bu işlemi gerçekleştirmek için internete ihtiyacınız var',
+        'pleaseBeConnectedToInternet': 'lütfen internete bağlı olun',
+        'no_internet': 'İnternet Yok',
+        'location_permission_not_granted': 'Konum izni verilmedi',
+        'location_alert_title': 'Konum Hatası',
+        'location_service_unavailable': 'Konumunuz bulunamadı',
+        'default_error_message': 'Bir hata oluştu, lütfen tekrar deneyin.',
+        'something_went_wrong': 'Bir şeyler yanlış gitti!',
+        'try_again_later': 'Lütfen daha sonra tekrar deneyin.',
+        'copied': 'Başarıyla kopyalandı',
+        'please_wait': 'Lütfen bekleyin.',
+        'buffering': 'Yükleniyor',
+        'language': 'Dil',
+        'title_app_language': 'Uygulama Dili',
+        'title_theme': 'Tema',
+        'theme_light': 'Açık',
+        'theme_dark': 'Koyu',
+        'system_default': 'Sistem Varsayılanı',
+        'location': 'Konum',
+        'set_location': 'Konum Ayarla',
+        'zakat_calculator': 'Zekat Hesaplayıcı',
+        'six_kalmas': 'Altı Kelime',
+        'azkar': 'Zikirler',
+        'calendar': 'Takvim',
+        'mecca_live': 'Mekke Canlı',
+        'madina_live': 'Medine Canlı',
+        'about_us': 'Hakkımızda',
+        'privacy': 'Gizlilik Politikası',
+        'rate_app': 'Uygulamayı Değerlendir',
+        'share_app': 'Uygulamayı Paylaş',
+        'feedback': 'Geri bildiriminiz var mı?',
+        'contact': 'Bize Ulaşın',
+        'SHORT_FAJR': 'Sabah',
+        'SHORT_DHOHR': 'Öğle',
+        'SHORT_ASR': 'İkindi',
+        'SHORT_MAGHRIB': 'Akşam',
+        'SHORT_ICHA': 'Yatsı',
+        'SUNRISE': 'Güneş Doğuşu',
+        'DOHA': 'Kuşluk',
+        'next_prayer': 'Sonraki Namaz',
+        'title_home': 'Ana Sayfa',
+        'salat_time': 'Namaz',
+        'title_salat': 'Namaz',
+        'discover': 'Keşfet',
+        'menu_menu': 'Menü',
+        'names99': 'Keşfet',
+    },
+    'bn': {  # 孟加拉语 - LTR
+        'app_name': 'কুরআন মাজীদ',
+        'actionbar_name': 'কুরআন মাজীদ',
+        'the_holy_quran': 'পবিত্র কুরআন',
+        'listen_quran': 'কুরআন শুনুন',
+        'read_quran_arabic': 'কুরআন পড়ুন',
+        'hadith_btn': 'হাদিস গ্রন্থ',
+        'hadith': 'হাদিস গ্রন্থ',
+        'quran_reader': 'কুরআন পড়ুন',
+        'surah_index': 'সূরা সূচী',
+        'juz_index': 'পারা সূচী',
+        'bookmark': 'বুকমার্ক',
+        'names_of_allah': 'আল্লাহর ৯৯ নাম',
+        'qibla_direction': 'ক্বিবলার দিক',
+        'wudu_guide': 'ওজুর নির্দেশিকা',
+        'tasbih': 'তাসবীহ',
+        'time_settings': 'নামাজের সময় সেটিংস',
+        'set_location': 'অবস্থান',
+        'cancel': 'বাতিল',
+        'ok': 'ঠিক আছে',
+        'yes': 'হ্যাঁ',
+        'no': 'না',
+        'home': 'হোম',
+        'settings': 'সেটিংস',
+        'search': 'খুঁজুন',
+        'login': 'লগইন',
+        'logout': 'লগআউট',
+        'profile': 'প্রোফাইল',
+        'time': 'সময়',
+        'learn': 'শিখুন',
+        'tools': 'সরঞ্জাম',
+        'remaining': 'অবশিষ্ট',
+        'play': 'প্লে',
+        'pause': 'বিরতি',
+        'loading': 'লোড হচ্ছে…',
+        'error': 'ত্রুটি',
+        'success': 'সফল',
+        'FAJR': 'ফজর',
+        'DHOHR': 'যোহর',
+        'ASR': 'আসর',
+        'MAGHRIB': 'মাগরিব',
+        'ICHA': 'ইশা',
+        'daily_quests': 'দৈনিক কাজ',
+        'verse_of_day': 'আজকের আয়াত',
+        'assalamualaikum': 'আসসালামু আলাইকুম',
+        'login_with_google': 'Google দিয়ে লগইন করুন',
+        'tools_menu': 'সরঞ্জাম মেনু',
+        'verse_info_format': 'সূরা %1$s %2$d:%3$d',
+        'live_stream': 'লাইভ স্ট্রিম',
+        'mecca_live_description': 'মক্কার মসজিদ আল-হারাম থেকে ২৪/৭ লাইভ স্ট্রিম',
+        'medina_live_description': 'মদিনার মসজিদ আন-নববী থেকে ২৪/৭ লাইভ স্ট্রিম',
+        'daily_quests_description': 'আপনার কুরআন যাত্রা শুরু করুন! একটি লক্ষ্য নির্ধারণ করুন, একটি অভ্যাস গড়ুন।',
+        'create_learning_plan': 'এখনই আমার শেখার পরিকল্পনা তৈরি করুন',
+        'share': 'শেয়ার করুন',
+        'download': 'ডাউনলোড করুন',
+        'refresh': 'রিফ্রেশ করুন',
+        'skip': 'এড়িয়ে যান',
+        'later': 'পরে',
+        'not_now': 'এখন নয়',
+        'next': 'পরবর্তী',
+        'previous': 'পূর্ববর্তী',
+        'close': 'বন্ধ করুন',
+        'done': 'সম্পন্ন',
+        'apply': 'প্রয়োগ করুন',
+        'back': 'পিছনে',
+        'network_error_message': 'অনুগ্রহ করে আপনার ইন্টারনেট সংযোগ পরীক্ষা করুন এবং আবার চেষ্টা করুন।',
+        'internet_msg': 'এই কাজটি সম্পাদন করতে আপনার ইন্টারনেট প্রয়োজন',
+        'pleaseBeConnectedToInternet': 'অনুগ্রহ করে ইন্টারনেটে সংযুক্ত হন',
+        'no_internet': 'কোন ইন্টারনেট নেই',
+        'location_permission_not_granted': 'অবস্থান অনুমতি দেওয়া হয়নি',
+        'location_alert_title': 'অবস্থান ত্রুটি',
+        'location_service_unavailable': 'আপনার অবস্থান খুঁজে পাওয়া যায়নি',
+        'default_error_message': 'একটি ত্রুটি ঘটেছে, অনুগ্রহ করে আবার চেষ্টা করুন।',
+        'something_went_wrong': 'কিছু ভুল হয়েছে!',
+        'try_again_later': 'অনুগ্রহ করে পরে আবার চেষ্টা করুন।',
+        'copied': 'সফলভাবে কপি হয়েছে',
+        'please_wait': 'অনুগ্রহ করে অপেক্ষা করুন।',
+        'buffering': 'বাফারিং',
+        'language': 'ভাষা',
+        'title_app_language': 'অ্যাপের ভাষা',
+        'title_theme': 'থিম',
+        'theme_light': 'উজ্জ্বল',
+        'theme_dark': 'অন্ধকার',
+        'system_default': 'সিস্টেম ডিফল্ট',
+        'location': 'অবস্থান',
+        'set_location': 'অবস্থান সেট করুন',
+        'zakat_calculator': 'যাকাত ক্যালকুলেটর',
+        'six_kalmas': 'ছয় কালেমা',
+        'azkar': 'আযকার',
+        'calendar': 'ক্যালেন্ডার',
+        'mecca_live': 'মক্কা লাইভ',
+        'madina_live': 'মদিনা লাইভ',
+        'about_us': 'আমাদের সম্পর্কে',
+        'privacy': 'গোপনীয়তা নীতি',
+        'rate_app': 'অ্যাপ রেট করুন',
+        'share_app': 'অ্যাপ শেয়ার করুন',
+        'feedback': 'কোন মতামত আছে?',
+        'contact': 'যোগাযোগ করুন',
+        'SHORT_FAJR': 'ফজর',
+        'SHORT_DHOHR': 'যোহর',
+        'SHORT_ASR': 'আসর',
+        'SHORT_MAGHRIB': 'মাগরিব',
+        'SHORT_ICHA': 'ইশা',
+        'SUNRISE': 'সূর্যোদয়',
+        'DOHA': 'দোহা',
+        'next_prayer': 'পরবর্তী নামাজ',
+        'title_home': 'হোম',
+        'salat_time': 'নামাজ',
+        'title_salat': 'নামাজ',
+        'discover': 'আবিষ্কার করুন',
+        'menu_menu': 'মেনু',
+        'names99': 'আবিষ্কার করুন',
+    }
+}
+
+def generate_strings_xml(lang_code, base_file):
+    """为指定语言生成strings.xml文件"""
+    print(f"正在为 {lang_code} 生成翻译...")
+    
+    # 解析英语版本
+    tree = ET.parse(base_file)
+    root = tree.getroot()
+    
+    # 创建新的XML
+    new_root = ET.Element('resources')
+    comment = ET.Comment(f'\n    Generated translations for {lang_code.upper()}\n    Based on English version\n    ')
+    new_root.append(comment)
+    
+    translations = CORE_TRANSLATIONS.get(lang_code, {})
+    translated_count = 0
+    kept_count = 0
+    
+    for string_elem in root.findall('string'):
+        name = string_elem.get('name')
+        translatable = string_elem.get('translatable')
+        formatted = string_elem.get('formatted')
+        
+        # 创建新元素
+        new_elem = ET.SubElement(new_root, 'string')
+        new_elem.set('name', name)
+        
+        if translatable == 'false':
+            new_elem.set('translatable', 'false')
+        if formatted:
+            new_elem.set('formatted', formatted)
+        
+        # 如果有核心翻译，使用翻译
+        if name in translations:
+            new_elem.text = translations[name]
+            translated_count += 1
+        elif translatable == 'false':
+            # 技术性字符串保持原文
+            new_elem.text = string_elem.text
+            kept_count += 1
+        else:
+            # 暂时保持英文，标记需要翻译
+            new_elem.text = string_elem.text
+            kept_count += 1
+    
+    print(f"  ✅ 专业翻译: {translated_count} 个")
+    print(f"  📝 保留原文: {kept_count} 个")
+    
+    return new_root
+
+def write_xml(root, output_file):
+    """写入XML文件"""
+    # 创建格式化的XML字符串
+    xml_str = '<?xml version="1.0" encoding="utf-8"?>\n'
+    xml_str += ET.tostring(root, encoding='unicode')
+    
+    # 基本格式化
+    xml_str = xml_str.replace('><', '>\n    <')
+    xml_str = xml_str.replace('</string>', '</string>\n')
+    
+    with open(output_file, 'w', encoding='utf-8') as f:
+        f.write(xml_str)
+
+def main():
+    base_path = Path('app/src/main/res')
+    base_file = base_path / 'values' / 'strings.xml'
+    
+    languages = {
+        'ur': '乌尔都语 (RTL)',
+        'ms': '马来语',
+        'tr': '土耳其语',
+        'bn': '孟加拉语'
+    }
+    
+    print("="*60)
+    print("多语言strings.xml生成工具")
+    print("="*60)
+    
+    for lang_code, lang_name in languages.items():
+        print(f"\n🌐 {lang_name} ({lang_code})")
+        output_dir = base_path / f'values-{lang_code}'
+        output_file = output_dir / 'strings.xml'
+        
+        # 生成翻译
+        new_root = generate_strings_xml(lang_code, base_file)
+        
+        # 写入文件
+        write_xml(new_root, output_file)
+        print(f"  💾 已保存到: {output_file}")
+    
+    print("\n" + "="*60)
+    print("✅ 所有语言文件生成完成！")
+    print("="*60)
+
+if __name__ == '__main__':
+    main()
+

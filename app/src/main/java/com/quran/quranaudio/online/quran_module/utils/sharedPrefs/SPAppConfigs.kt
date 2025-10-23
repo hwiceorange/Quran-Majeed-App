@@ -45,7 +45,37 @@ object SPAppConfigs {
     }
 
     @JvmStatic
-    fun getLocale(ctx: Context): String = sp(ctx).getString(KEY_APP_LANGUAGE, LOCALE_DEFAULT) ?: LOCALE_DEFAULT
+    fun getLocale(ctx: Context): String {
+        val sp = sp(ctx)
+        val savedLanguage = sp.getString(KEY_APP_LANGUAGE, null)
+        
+        // 如果已保存语言偏好，直接返回
+        if (!savedLanguage.isNullOrEmpty()) {
+            return savedLanguage
+        }
+        
+        // 首次启动：检测设备语言
+        var deviceLanguage = java.util.Locale.getDefault().language
+        
+        // 语言代码映射：印尼语 "id" (新标准) -> "in" (Android资源使用的旧标准)
+        if (deviceLanguage == "id") {
+            deviceLanguage = "in"
+        }
+        
+        val supportedLanguages = listOf("en", "in", "ar", "ur", "ms", "tr", "bn")
+        
+        // 如果设备语言在支持列表中，使用设备语言；否则使用英语
+        val selectedLanguage = if (deviceLanguage in supportedLanguages) {
+            deviceLanguage
+        } else {
+            LOCALE_DEFAULT  // "en"
+        }
+        
+        // 保存检测到的语言（避免每次都检测）
+        setLocale(ctx, selectedLanguage)
+        
+        return selectedLanguage
+    }
 
     fun getUrlsVersion(ctx: Context): Long = sp(ctx).getLong(KEY_URLS_VERSION, 0)
 

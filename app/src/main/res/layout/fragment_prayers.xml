@@ -49,33 +49,83 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <!-- Qibla Direction Button -->
-            <ImageView
+            <!-- Qibla Direction Card -->
+            <LinearLayout
                 android:id="@+id/btn_qibla_direction"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="6dp"
-                android:src="@drawable/qibladirection"
-                android:contentDescription="@string/qibla_direction"
-                android:scaleType="fitCenter"
-                android:adjustViewBounds="true"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/bg_feature_card"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:clickable="true"
-                android:focusable="true" />
+                android:focusable="true"
+                android:contentDescription="@string/qibla_direction">
+                
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_qibla"
+                    android:scaleType="fitCenter"
+                    android:contentDescription="@null" />
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="@string/qibla_direction"
+                    android:textColor="@android:color/white"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:maxLines="2"
+                    android:ellipsize="end" />
+                
+            </LinearLayout>
 
-            <!-- Wudu Guide Button -->
-            <ImageView
+            <!-- Wudu Guide Card -->
+            <LinearLayout
                 android:id="@+id/btn_wudu_guide"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="6dp"
-                android:src="@drawable/wuduguide"
-                android:contentDescription="@string/wudu_guide"
-                android:scaleType="fitCenter"
-                android:adjustViewBounds="true"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/bg_feature_card"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:clickable="true"
-                android:focusable="true" />
+                android:focusable="true"
+                android:contentDescription="@string/wudu_guide">
+                
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_wudu"
+                    android:scaleType="fitCenter"
+                    android:contentDescription="@null" />
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="@string/wudu_guide"
+                    android:textColor="@android:color/white"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:maxLines="2"
+                    android:ellipsize="end" />
+                
+            </LinearLayout>
 
         </LinearLayout>
 

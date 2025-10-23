@@ -87,6 +87,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private LocalDateTime todayDate;
     private CountDownTimer TimeRemainingCTimer;
+    private CountDownTimer prayerCardTimer;
 
     private TextView locationTextView;
     private TextView todayDateTextView;
@@ -486,6 +487,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             btnNavQuran = prayerCardView.findViewById(R.id.btn_nav_quran);
             btnNavLearn = prayerCardView.findViewById(R.id.btn_nav_learn);
             btnNavTools = prayerCardView.findViewById(R.id.btn_nav_tools);
+            
+            android.util.Log.d("HomeFragment", "Prayer Card initialized - tvTimeRemaining is " + (tvTimeRemaining == null ? "NULL" : "NOT NULL"));
+        } else {
+            android.util.Log.e("HomeFragment", "Prayer Card View is NULL!");
         }
 
         // Initialize Verse of the Day Card Views (using correct IDs from layout_verse_of_day_card.xml)
@@ -565,9 +570,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         String prayerName = requireContext().getResources().getString(
                 getResources().getIdentifier(nextPrayerKey.toString(), "string", requireContext().getPackageName()));
 
-        prayerNametextView.setText ("Next: " + prayerName);
+        prayerNametextView.setText (getString(R.string.intro_next) + ": " + prayerName);
         prayerTimetextView.setText(UiUtils.formatTiming(Objects.requireNonNull(timings.get(nextPrayerKey))));
-        timeRemainingTextView.setText(UiUtils.formatTimeForTimer(timeRemaining));
+        timeRemainingTextView.setText(getString(R.string.remaining) + ": " + UiUtils.formatTimeForTimer(timeRemaining));
 
         startAnimationTimer(timeRemaining, timeBetween, dayPrayer);
     }
@@ -631,7 +636,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         circularProgressBar.setProgressWithAnimation(getProgressBarPercentage(timeRemaining, timeBetween), 1000L);
         TimeRemainingCTimer = new CountDownTimer(timeRemaining, 1000L) {
             public void onTick(long millisUntilFinished) {
-                timeRemainingTextView.setText(UiUtils.formatTimeForTimer(millisUntilFinished));
+                timeRemainingTextView.setText(getString(R.string.remaining) + ": " + UiUtils.formatTimeForTimer(millisUntilFinished));
                 circularProgressBar.setProgress(getProgressBarPercentage(timeRemaining, timeBetween));
             }
 
@@ -646,11 +651,37 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private void cancelTimer() {
         if (TimeRemainingCTimer != null)
             TimeRemainingCTimer.cancel();
+        if (prayerCardTimer != null)
+            prayerCardTimer.cancel();
     }
 
 
     private void startPrayerSchedulerWork(DayPrayer dayPrayer) {
         WorkCreator.scheduleOneTimePrayerUpdater(requireContext(), dayPrayer);
+    }
+
+    /**
+     * Start countdown timer for Prayer Card
+     */
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void startPrayerCardTimer(final long timeRemaining, final DayPrayer dayPrayer) {
+        if (prayerCardTimer != null) {
+            prayerCardTimer.cancel();
+        }
+        
+        prayerCardTimer = new CountDownTimer(timeRemaining, 1000L) {
+            public void onTick(long millisUntilFinished) {
+                if (tvTimeRemaining != null) {
+                    tvTimeRemaining.setText(getString(R.string.remaining) + ": " + UiUtils.formatTimeForTimer(millisUntilFinished));
+                }
+            }
+
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            public void onFinish() {
+                updatePrayerCard(dayPrayer);
+            }
+        };
+        prayerCardTimer.start();
     }
 
     /**
@@ -861,7 +892,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void updatePrayerCard(DayPrayer dayPrayer) {
+        android.util.Log.d("HomeFragment", "updatePrayerCard called");
+        android.util.Log.d("HomeFragment", "tvTimeRemaining is " + (tvTimeRemaining == null ? "NULL" : "NOT NULL"));
+        
         if (tvNextPrayerName == null || tvNextPrayerTimeCard == null || tvLocationPrayer == null) {
+            android.util.Log.e("HomeFragment", "Prayer Card views are null, skipping update");
             return;
         }
 
@@ -873,7 +908,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             // Update prayer name
             String prayerName = requireContext().getResources().getString(
                     getResources().getIdentifier(nextPrayerKey.toString(), "string", requireContext().getPackageName()));
-            tvNextPrayerName.setText("Shalat " + prayerName);
+            tvNextPrayerName.setText(getString(R.string.prayer_label) + " " + prayerName);
 
             // Update prayer time
             LocalDateTime nextPrayerTime = timings.get(nextPrayerKey);
@@ -882,8 +917,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
                 // Calculate and update remaining time
                 long timeRemaining = TimingUtils.getTimeBetweenTwoPrayer(LocalDateTime.now(), nextPrayerTime);
+                android.util.Log.d("HomeFragment", "Time remaining: " + timeRemaining + "ms");
+                
                 if (tvTimeRemaining != null) {
-                    tvTimeRemaining.setText(getString(R.string.remaining) + ": " + UiUtils.formatTimeForTimer(timeRemaining));
+                    tvTimeRemaining.setVisibility(View.VISIBLE);
+                    String remainingText = getString(R.string.remaining) + ": " + UiUtils.formatTimeForTimer(timeRemaining);
+                    tvTimeRemaining.setText(remainingText);
+                    android.util.Log.d("HomeFragment", "Set tvTimeRemaining text to: " + remainingText);
+                    
+                    // Start countdown timer for Prayer Card
+                    startPrayerCardTimer(timeRemaining, dayPrayer);
+                } else {
+                    android.util.Log.e("HomeFragment", "tvTimeRemaining is NULL - cannot update!");
                 }
             }
         }

@@ -1139,6 +1139,7 @@
     <string name="learn">Learn</string>
     <string name="tools">Tools</string>
     <string name="remaining">Remaining</string>
+    <string name="calculating">Calculating...</string>
     <string name="tools_menu">Tools Menu</string>
 
     <!-- Verse of the Day Card -->
@@ -1155,6 +1156,50 @@
     <string name="daily_quests">Daily Quests</string>
     <string name="daily_quests_description">Start your Quran journey! Set a goal, form a habit.</string>
     <string name="create_learning_plan">Create My Learning Plan Now</string>
+    <string name="button_track">Track</string>
+    <string name="button_completed">✓</string>
+    <string name="prayer_label">Prayer</string>
 
-
+    <!-- Learning Plan Setup Page -->
+    <string name="learning_plan_setup">Learning Plan Setup</string>
+    <string name="daily_reading_goal">Daily Reading Goal</string>
+    <string name="verses">Verses</string>
+    <string name="recitation_tajweed_practice">Recitation &amp; Tajweed Practice</string>
+    <string name="practice_recitation">Practice Recitation</string>
+    <string name="minutes_daily_15">15 minutes daily</string>
+    <string name="extra_dhikr">Extra Dhikr</string>
+    <string name="dua_reminder">Dua Reminder</string>
+    <string name="tasbih_reminder">Tasbih Reminder</string>
+    <string name="estimated_challenge_duration">Estimated Challenge Duration</string>
+    <string name="days_format">%d Days</string>
+    <string name="save_start_challenge">✓ SAVE AND START MY CHALLENGE</string>
+    <string name="saving">Saving...</string>
+    <!-- Today's Quests Card -->
+    <string name="todays_quests">Today\'s Quests</string>
+    <string name="quran_reading">Quran Reading</string>
+    <string name="tajweed_practice">Tajweed Practice</string>
+    <string name="read_x_verses">Read %d verses</string>
+    <string name="listen_x_minutes">Listen for %d minutes</string>
+    <string name="practice_x_minutes">Practice %d minutes</string>
+    <string name="go">GO</string>
+    <string name="completed">Completed</string>
+    <string name="dhikr">Dhikr</string>
+    <string name="complete_x_dhikr">Complete %d Dhikr</string>
+    
+    <!-- Streak Card -->
+    <string name="streak">Streak</string>
+    <string name="x_days">%d Days</string>
+    <string name="monthly_goal">Monthly Goal</string>
+    <string name="progress_format">%d / %d</string>
+    
+    <!-- Reading Units -->
+    <string name="unit_pages">Pages</string>
+    <string name="unit_verses">Verses</string>
+    <string name="unit_juz">Juz\'</string>
+    
+    <!-- Recitation Duration Options -->
+    <string name="minutes_15">15 minutes daily</string>
+    <string name="minutes_30">30 minutes daily</string>
+    <string name="minutes_45">45 minutes daily</string>
+    <string name="minutes_60">60 minutes daily</string>
 </resources>

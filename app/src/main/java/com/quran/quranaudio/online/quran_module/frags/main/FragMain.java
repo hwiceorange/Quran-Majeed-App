@@ -1064,7 +1064,7 @@ public class FragMain extends BaseFragment {
                     tvLocationPrayer.setAlpha(0.6f);
                 }
                 if (tvTimeRemaining != null) {
-                    tvTimeRemaining.setText("Calculating...");
+                    tvTimeRemaining.setText(getString(R.string.calculating));
                     tvTimeRemaining.setAlpha(0.6f);
                 }
                 
@@ -1352,8 +1352,8 @@ public class FragMain extends BaseFragment {
                         );
                         
                         if (timeRemaining > 0) {
-                            // Display only the countdown time without "Remaining:" prefix
-                            String remainingText = UiUtils.formatTimeForTimer(timeRemaining);
+                            // Display countdown time with "Remaining:" prefix (localized)
+                            String remainingText = getString(R.string.remaining) + ": " + UiUtils.formatTimeForTimer(timeRemaining);
                             tvTimeRemaining.setText(remainingText);
                             tvTimeRemaining.setAlpha(1.0f); // Restore full opacity
                             tvTimeRemaining.setVisibility(View.VISIBLE);

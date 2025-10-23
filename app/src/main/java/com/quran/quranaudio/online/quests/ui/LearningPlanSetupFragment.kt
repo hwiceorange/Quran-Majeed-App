@@ -65,7 +65,6 @@ class LearningPlanSetupFragment : Fragment() {
     private lateinit var signInLauncher: ActivityResultLauncher<Intent>
 
     // Recitation minutes options
-    private val recitationOptions = arrayOf("15 minutes daily", "30 minutes daily", "45 minutes daily", "60 minutes daily")
     private val recitationValues = arrayOf(15, 30, 45, 60)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -270,7 +269,11 @@ class LearningPlanSetupFragment : Fragment() {
         val unitAdapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_item,
-            arrayOf("Pages", "Verses", "Juz'")
+            arrayOf(
+                getString(R.string.unit_pages),
+                getString(R.string.unit_verses),
+                getString(R.string.unit_juz)
+            )
         )
         unitAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spReadingUnit.adapter = unitAdapter
@@ -295,6 +298,12 @@ class LearningPlanSetupFragment : Fragment() {
         }
         
         // Setup Recitation Minutes Spinner
+        val recitationOptions = arrayOf(
+            getString(R.string.minutes_15),
+            getString(R.string.minutes_30),
+            getString(R.string.minutes_45),
+            getString(R.string.minutes_60)
+        )
         val recitationAdapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_item,
@@ -530,7 +539,10 @@ class LearningPlanSetupFragment : Fragment() {
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             Log.d(TAG, "Loading state changed: $isLoading")
             binding.btnSaveChallenge.isEnabled = !isLoading
-            binding.btnSaveChallenge.text = if (isLoading) "Saving..." else "✓ Save and Start My Challenge"
+            binding.btnSaveChallenge.text = if (isLoading) 
+                getString(R.string.saving) 
+            else 
+                getString(R.string.save_start_challenge)
         }
         
         Log.d(TAG, "✅ ViewModel observation setup completed")

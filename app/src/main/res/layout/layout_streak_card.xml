@@ -44,7 +44,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Streak"
+                    android:text="@string/streak"
                     android:textColor="@android:color/white"
                     android:textSize="16sp"
                     android:alpha="0.9" />
@@ -86,7 +86,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Monthly Goal"
+                    android:text="@string/monthly_goal"
                     android:textColor="@android:color/white"
                     android:textSize="16sp"
                     android:alpha="0.9" />

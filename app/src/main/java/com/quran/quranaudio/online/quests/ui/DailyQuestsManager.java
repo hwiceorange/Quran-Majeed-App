@@ -539,11 +539,14 @@ public class DailyQuestsManager {
      */
     private void updateStreakCard(StreakStats stats) {
         if (tvStreakDays != null) {
-            tvStreakDays.setText(stats.getCurrentStreak() + " Days");
+            String daysText = fragment.getString(R.string.x_days, stats.getCurrentStreak());
+            tvStreakDays.setText(daysText);
         }
         
         if (tvMonthlyProgress != null) {
-            tvMonthlyProgress.setText(stats.getMonthlyProgress() + " / " + stats.getMonthlyGoal());
+            String progressText = fragment.getString(R.string.progress_format, 
+                stats.getMonthlyProgress(), stats.getMonthlyGoal());
+            tvMonthlyProgress.setText(progressText);
         }
         
         if (pbMonthlyProgress != null) {
@@ -567,7 +570,11 @@ public class DailyQuestsManager {
         // Task 1: Quran Reading - 根据readingGoalUnit动态显示单位
         if (tvTask1Description != null) {
             String unitName = getReadingUnitDisplayName(config.getReadingGoalUnit());
-            String task1Desc = "Read " + config.getDailyReadingGoal() + " " + unitName;
+            String task1Desc = fragment.getString(R.string.read_x_verses, config.getDailyReadingGoal());
+            // 如果unitName不是"verses"，则需要替换
+            if (!config.getReadingGoalUnit().equals("verses")) {
+                task1Desc = fragment.getString(R.string.practice_x_minutes, config.getDailyReadingGoal()) + " " + unitName;
+            }
             tvTask1Description.setText(task1Desc);
             Log.d(TAG, "Task 1 description updated: " + task1Desc);
         }
@@ -582,7 +589,7 @@ public class DailyQuestsManager {
             if (config.getRecitationEnabled() && config.getRecitationMinutes() > 0) {
                 questTask2Card.setVisibility(View.VISIBLE);
                 if (tvTask2Description != null) {
-                    String task2Desc = "Listen for " + config.getRecitationMinutes() + " minutes";
+                    String task2Desc = fragment.getString(R.string.listen_x_minutes, config.getRecitationMinutes());
                     tvTask2Description.setText(task2Desc);
                     Log.d(TAG, "Task 2 description updated: " + task2Desc);
                 }

@@ -40,7 +40,8 @@ public class BaseActivity extends AppCompatActivity {
     private Context updateBaseContextLocale(Context context) {
         String language = SPAppConfigs.getLocale(context);
 
-        if (SPAppConfigs.LOCALE_DEFAULT.equals(language)) {
+        // 只检查空值，不再跳过默认语言的处理
+        if (language == null || language.isEmpty()) {
             return context;
         }
 

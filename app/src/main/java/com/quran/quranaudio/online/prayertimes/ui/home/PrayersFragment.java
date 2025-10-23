@@ -526,12 +526,12 @@ public class PrayersFragment extends Fragment {
         Log.d("PrayersFragment", "🎨 Updating button " + buttonId + " to " + (isCompleted ? "✓ (completed)" : "Track (uncompleted)"));
         
         if (isCompleted) {
-            button.setText("✓");
+            button.setText(getString(R.string.button_completed));
             button.setBackgroundTintList(ColorStateList.valueOf(
                 ContextCompat.getColor(requireContext(), R.color.green)
             ));
         } else {
-            button.setText("Track");
+            button.setText(getString(R.string.button_track));
             button.setBackgroundTintList(ColorStateList.valueOf(
                 ContextCompat.getColor(requireContext(), R.color.salah_track_button)
             ));
@@ -584,7 +584,7 @@ public class PrayersFragment extends Fragment {
 
         prayerNametextView.setText(prayerName);
         prayerTimetextView.setText(UiUtils.formatTiming(Objects.requireNonNull(timings.get(nextPrayerKey))));
-        timeRemainingTextView.setText(UiUtils.formatTimeForTimer(timeRemaining));
+        timeRemainingTextView.setText(getString(R.string.remaining) + ": " + UiUtils.formatTimeForTimer(timeRemaining));
 
         startAnimationTimer(timeRemaining, timeBetween, dayPrayer);
     }
@@ -693,7 +693,7 @@ public class PrayersFragment extends Fragment {
         circularProgressBar.setProgressWithAnimation(getProgressBarPercentage(timeRemaining, timeBetween), 1000L);
         TimeRemainingCTimer = new CountDownTimer(timeRemaining, 1000L) {
             public void onTick(long millisUntilFinished) {
-                timeRemainingTextView.setText(UiUtils.formatTimeForTimer(millisUntilFinished));
+                timeRemainingTextView.setText(getString(R.string.remaining) + ": " + UiUtils.formatTimeForTimer(millisUntilFinished));
                 circularProgressBar.setProgress(getProgressBarPercentage(timeRemaining, timeBetween));
             }
 

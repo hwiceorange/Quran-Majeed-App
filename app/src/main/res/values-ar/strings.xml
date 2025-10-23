@@ -1117,4 +1117,66 @@
   <string name="warning_welcome">مرحبا</string>
   <string name="warning_use_location">احصل على أوقات الصلاة واتجاه القبلة بدقة</string>
 
+  <!-- App Name -->
+  <string name="app_name">القرآن المجيد</string>
+
+  <!-- Home Header -->
+  <string name="search">بحث</string>
+  <string name="login">تسجيل الدخول</string>
+  <string name="profile">الملف الشخصي</string>
+  <string name="assalamualaikum">السلام عليكم</string>
+  <string name="login_with_google">تسجيل الدخول بواسطة Google</string>
+  <string name="logout">تسجيل الخروج</string>
+
+  <!-- Prayer Card & Navigation -->
+  <string name="time">الوقت</string>
+  <string name="learn">تعلم</string>
+  <string name="tools">الأدوات</string>
+  <string name="remaining">المتبقي</string>
+  <string name="tools_menu">قائمة الأدوات</string>
+
+  <!-- Wudu Guide -->
+  <string name="wudu_guide">دليل الوضوء</string>
+
+  <!-- Verse of the Day Card -->
+  <string name="verse_of_day">آية اليوم</string>
+  <string name="verse_info_format">سورة %1$s %2$d:%3$d</string>
+
+  <!-- Live Stream Cards -->
+  <string name="live_stream">البث المباشر</string>
+  <string name="mecca_live_description">بث مباشر 24/7 من المسجد الحرام في مكة</string>
+  <string name="medina_live_description">بث مباشر 24/7 من المسجد النبوي في المدينة</string>
+  <string name="play">تشغيل</string>
+
+  <!-- Daily Quests Card -->
+  <string name="daily_quests">المهام اليومية</string>
+  <string name="daily_quests_description">ابدأ رحلتك مع القرآن! حدد هدفًا، وكوّن عادة.</string>
+  <string name="create_learning_plan">إنشاء خطة التعلم الخاصة بي الآن</string>
+  <string name="button_track">تسجيل</string>
+  <string name="button_completed">✓</string>
+  <string name="prayer_label">صلاة</string>
+
+  <!-- Technical strings (non-translatable, keeping original) -->
+  <string name="codecanyon" translatable="false">codecanyon</string>
+  <string name="kalma_server_link" translatable="false">https://github.com/octalops/MyDis/raw/main/kalmas/kalma_</string>
+  <string name="rDua_server_link" translatable="false">https://github.com/octalops/MyDis/raw/main/ramadan/</string>
+  <string name="rabbana_dua_server_link" translatable="false">https://github.com/octalops/MyDis/raw/main/rabbana/</string>
+  <string name="strBismillahEntity" translatable="false">﷽</string>
+  <string name="strMsgShareApp" formatted="false" translatable="false">
+        QuranApp\n\nBest free app to read the Noble Qur\'an with translations. This app has nice and clean look and many other features. \n\nDOWNLOAD NOW:\n%s
+    </string>
+  <string name="strNotifChannelRecitation" translatable="false">Recitation Player</string>
+  <string name="strNotifChannelIdRecitation" translatable="false">recitation_player</string>
+  <string name="strNotifChannelDefault" translatable="false">Default Channel</string>
+  <string name="strNotifChannelIdDefault" translatable="false">default</string>
+  <string name="strNotifChannelVOTD" translatable="false">@string/strTitleVOTD</string>
+  <string name="strNotifChannelIdVOTD" translatable="false">votd</string>
+  <string name="strNotifChannelDownloads" translatable="false">Downloads</string>
+  <string name="strNotifChannelIdDownloads" translatable="false">downloads</string>
+  <string name="strShortcutIdVOTD" translatable="false">@string/strNotifChannelIdVOTD</string>
+  <string name="strShortcutIdLastVerses" translatable="false">last_verses</string>
+  <string name="strScriptPreviewIndopak" translatable="false">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِیْمِ </string>
+  <string name="strScriptPreviewUthmani" translatable="false">بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ ١</string>
+  <string name="strScriptPreviewKFQPC_V1" translatable="false">ﭑ ﭒ ﭓ ﭔ ﭕ</string>
+
 </resources>

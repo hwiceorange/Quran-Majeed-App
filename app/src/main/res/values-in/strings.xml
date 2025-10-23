@@ -421,21 +421,21 @@ seperti: Waktu Sholat Global, metode perhitungan yang berbeda, notifikasi, memba
     <string name="title_calendar">Kalender Sholat</string>
     <string name="desc_calendar_view_title">Tabel Bulanan Sholat</string>
 
-    <string name="FAJR">Fajr</string>
-    <string name="SUNRISE">Sunrise</string>
-    <string name="DOHA">Dhuha</string>
-    <string name="DHOHR">Dhuhr</string>
-    <string name="ASR">Asr</string>
-    <string name="MAGHRIB">Maghrib</string>
-    <string name="ICHA">Isha</string>
-    <string name="LAST_THIRD_OF_THE_NIGHT">Last third of the Night</string>
+    <string name="FAJR">Subuh</string>
+    <string name="SUNRISE">Matahari Terbit</string>
+    <string name="DOHA">Duha</string>
+    <string name="DHOHR">Zuhur</string>
+    <string name="ASR">Ashar</string>
+    <string name="MAGHRIB">Magrib</string>
+    <string name="ICHA">Isya</string>
+    <string name="LAST_THIRD_OF_THE_NIGHT">Sepertiga Malam Terakhir</string>
 
-    <string name="SHORT_FAJR">Fajr</string>
-    <string name="SHORT_SUNRISE">Sunrise</string>
-    <string name="SHORT_DHOHR">Dohr</string>
-    <string name="SHORT_ASR">Asr</string>
-    <string name="SHORT_MAGHRIB">Maghreb</string>
-    <string name="SHORT_ICHA">Ichaa</string>
+    <string name="SHORT_FAJR">Subuh</string>
+    <string name="SHORT_SUNRISE">Terbit</string>
+    <string name="SHORT_DHOHR">Zuhur</string>
+    <string name="SHORT_ASR">Ashar</string>
+    <string name="SHORT_MAGHRIB">Magrib</string>
+    <string name="SHORT_ICHA">Isya</string>
 
     <string name="FIRST_DAY_OF_YEAR">Tahun Baru Hijriah</string>
     <string name="YAWM_ASHURA">Yawm Ashura</string>
@@ -1124,5 +1124,80 @@ seperti: Waktu Sholat Global, metode perhitungan yang berbeda, notifikasi, memba
     <string name="warning_welcome">Selamat Datang</string>
     <string name="warning_use_location">Dapatkan waktu sholat dan arah kiblat yang akurat</string>
 
+    <!-- Home Header -->
+    <string name="search">Cari</string>
+    <string name="login">Masuk</string>
+    <string name="profile">Profil</string>
+    <string name="assalamualaikum">Assalamualaikum</string>
+    <string name="login_with_google">Masuk dengan Google</string>
+    <string name="logout">Keluar</string>
 
-</resources>
+    <!-- Prayer Card & Navigation -->
+    <string name="time">Waktu</string>
+    <string name="learn">Belajar</string>
+    <string name="tools">Alat</string>
+    <string name="remaining">Tersisa</string>
+    <string name="calculating">Menghitung...</string>
+    <string name="tools_menu">Menu Alat</string>
+
+    <!-- Wudu Guide -->
+    <string name="wudu_guide">Panduan Wudhu</string>
+
+    <!-- Verse of the Day Card -->
+    <string name="verse_of_day">Ayat Hari Ini</string>
+    <string name="verse_info_format">Surah %1$s %2$d:%3$d</string>
+
+    <!-- Live Stream Cards -->
+    <string name="live_stream">Siaran Langsung</string>
+    <string name="mecca_live_description">Siaran langsung 24/7 dari Masjidil Haram di Mekkah</string>
+    <string name="medina_live_description">Siaran langsung 24/7 dari Masjid Nabawi di Madinah</string>
+    <string name="play">Putar</string>
+
+    <!-- Daily Quests Card -->
+    <string name="daily_quests">Misi Harian</string>
+    <string name="daily_quests_description">Mulai perjalanan Quran Anda! Tetapkan tujuan, bentuk kebiasaan.</string>
+    <string name="button_track">Catat</string>
+    <string name="button_completed">✓</string>
+    <string name="prayer_label">Sholat</string>
+    <string name="create_learning_plan">Buat Rencana Belajar Saya Sekarang</string>
+    <!-- Learning Plan Setup -->
+    <string name="learning_plan_setup">Pengaturan Rencana Belajar</string>
+    <string name="daily_reading_goal">Target Bacaan Harian</string>
+    <string name="verses">Ayat</string>
+    <string name="recitation_tajweed_practice">Latihan Bacaan &amp; Tajwid</string>
+    <string name="practice_recitation">Latihan Bacaan</string>
+    <string name="minutes_daily_15">15 menit sehari</string>
+    <string name="extra_dhikr">Dzikir Tambahan</string>
+    <string name="dua_reminder">Pengingat Doa</string>
+    <string name="tasbih_reminder">Pengingat Tasbih</string>
+    <string name="estimated_challenge_duration">Perkiraan Durasi Tantangan</string>
+    <string name="days_format">%d Hari</string>
+    <string name="save_start_challenge">✓ SIMPAN DAN MULAI TANTANGAN SAYA</string>
+    <string name="saving">Menyimpan...</string>
+    <string name="quran_reading">Bacaan Al-Quran</string>
+    <string name="tajweed_practice">Latihan Tajwid</string>
+    <string name="read_x_verses">Baca %d ayat</string>
+    <string name="listen_x_minutes">Dengarkan selama %d menit</string>
+    <string name="practice_x_minutes">Latihan %d menit</string>
+    <string name="go">MULAI</string>
+    <string name="completed">Selesai</string>
+    <string name="dhikr">Dzikir</string>
+    <string name="complete_x_dhikr">Selesaikan %d Dzikir</string>
+    
+    <!-- Streak Card -->
+    <string name="streak">Beruntun</string>
+    <string name="x_days">%d Hari</string>
+    <string name="monthly_goal">Target Bulanan</string>
+    <string name="progress_format">%d / %d</string>
+    
+    <!-- Reading Units -->
+    <string name="unit_pages">Halaman</string>
+    <string name="unit_verses">Ayat</string>
+    <string name="unit_juz">Juz</string>
+    
+    <!-- Recitation Duration Options -->
+    <string name="minutes_15">15 menit sehari</string>
+    <string name="minutes_30">30 menit sehari</string>
+    <string name="minutes_45">45 menit sehari</string>
+    <string name="minutes_60">60 menit sehari</string>
+    </resources>

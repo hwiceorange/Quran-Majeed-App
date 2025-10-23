@@ -47,8 +47,9 @@ public class UiUtils {
         long minutes = seconds / 60;
         long hours = minutes / 60;
 
-        return "Remaining: "
-                + String.format(Locale.getDefault(), "%1$02d", Math.abs(hours)).replaceFirst("^[0٠]+(?!$)", "") + ":"
+        // Return only the time format without "Remaining:" prefix
+        // Callers should add localized prefix using getString(R.string.remaining) if needed
+        return String.format(Locale.getDefault(), "%1$02d", Math.abs(hours)).replaceFirst("^[0٠]+(?!$)", "") + ":"
 
                 + String.format(Locale.getDefault(), "%1$02d", Math.abs(minutes % 60)).replaceFirst("^[0٠]+(?!$)", "")
 

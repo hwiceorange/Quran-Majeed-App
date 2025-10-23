@@ -136,7 +136,7 @@
             android:textSize="18sp"
             android:textStyle="bold"
             android:letterSpacing="0.05"
-            android:visibility="gone"
+            android:visibility="visible"
             tools:text="2:43:8" />
 
         <!-- Divider -->
@@ -181,7 +181,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="Prayer"
+                    android:text="@string/prayer"
                     android:textColor="#4B9B76"
                     android:textSize="12sp"
                     android:textStyle="normal" />
@@ -214,7 +214,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="Quran"
+                    android:text="@string/quran"
                     android:textColor="#4B9B76"
                     android:textSize="12sp"
                     android:textStyle="normal" />
@@ -247,7 +247,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="Learn"
+                    android:text="@string/learn"
                     android:textColor="#4B9B76"
                     android:textSize="12sp"
                     android:textStyle="normal" />
@@ -279,7 +279,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="Tools"
+                    android:text="@string/tools"
                     android:textColor="#4B9B76"
                     android:textSize="12sp"
                     android:textStyle="normal" />
