@@ -34,27 +34,14 @@
                 android:textColor="#1E1E1E"
                 android:layout_marginBottom="24dp"/>
 
-            <!-- Icon in Circle Background -->
-            <FrameLayout
+            <!-- Qibla Guide Icon -->
+            <ImageView
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                android:layout_marginBottom="24dp">
-
-                <!-- Circle Background -->
-                <View
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:background="@drawable/circle_background_primary"/>
-
-                <!-- Qibla Direction Icon -->
-                <ImageView
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_gravity="center"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_qibla_white"
-                    android:contentDescription="@null" />
-            </FrameLayout>
+                android:layout_marginBottom="24dp"
+                android:src="@drawable/ic_qiblaguide"
+                android:scaleType="fitXY"
+                android:contentDescription="@null" />
 
             <!-- Description Text -->
             <TextView
