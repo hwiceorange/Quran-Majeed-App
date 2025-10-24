@@ -12,7 +12,7 @@ import retrofit2.http.Url;
 public interface ApiInterface {
 
     String CACHE = "Cache-Control: max-age=0";
-    String AGENT = "Data-Agent: ShaheenDevelopers";
+    String AGENT = "Data-Agent: QuranMajeed";
 
     @Headers({CACHE, AGENT})
     @GET

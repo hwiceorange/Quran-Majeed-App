@@ -63,6 +63,13 @@
             </intent-filter>
         </activity>
 
+        <!-- Onboarding Login Activity - First time user login screen -->
+        <activity
+            android:name="com.quran.quranaudio.online.activities.OnboardingLoginActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="false" />
+
         <activity
             android:name="com.quran.quranaudio.online.prayertimes.ui.DefaultActivity"
             android:exported="true">

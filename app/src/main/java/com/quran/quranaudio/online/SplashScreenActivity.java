@@ -31,6 +31,9 @@ import com.quran.quranaudio.online.ads.rest.RestAdapter;
 import com.quran.quranaudio.online.BuildConfig;
 import com.quran.quranaudio.online.prayertimes.ui.MainActivity;
 import com.quran.quranaudio.online.quran_module.utils.Log;
+import com.quran.quranaudio.quiz.utils.UserInfoUtils;
+import com.quran.quranaudio.quiz.utils.AppConfig;
+import com.quran.quranaudio.online.activities.OnboardingLoginActivity;
 
 import java.util.Arrays;
 import java.util.List;
@@ -60,7 +63,23 @@ public class SplashScreenActivity extends AppCompatActivity {
       //  initAds();
 
         pbView=findViewById(R.id.progressbar);
-        AdFactory.INSTANCE.loadAppOpenAd(this, AdConfig.AD_APPOPEN,null);
+        
+        // ⭐ 新用户首日不加载开屏广告（避免浪费和展示率异常）
+        boolean isNewUserFirstDay = UserInfoUtils.INSTANCE.isNewUser() && AppConfig.INSTANCE.isInstallFirstDay();
+        if (!isNewUserFirstDay) {
+            String adId = AdConfig.INSTANCE.getAdIdByPosition(AdConfig.AD_APPOPEN);
+            boolean isTestAd = adId.contains("3940256099942544"); // Google测试广告ID
+            android.util.Log.d(TAG, "✅ Loading AppOpen Ad (not new user's first day)");
+            android.util.Log.d(TAG, "📱 Ad ID: " + adId);
+            android.util.Log.d(TAG, "🧪 Is Test Ad: " + isTestAd);
+            if (isTestAd) {
+                android.util.Log.w(TAG, "⚠️ Using TEST Ad - test ads may auto-close quickly. Use Release build for production ads.");
+            }
+            AdFactory.INSTANCE.loadAppOpenAd(this, AdConfig.AD_APPOPEN,null);
+        } else {
+            android.util.Log.d(TAG, "🚫 Skipping AppOpen Ad load (new user's first day)");
+        }
+        
         /*
         if (Constant.AD_STATUS.equals(AD_STATUS_ON) && Constant.OPEN_ADS_ON_START) {
             if (!Constant.FORCE_TO_SHOW_APP_OPEN_AD_ON_START) {
@@ -114,15 +133,45 @@ public class SplashScreenActivity extends AppCompatActivity {
                 return; // 已经跳转，不再处理
             }
             
-            if(AdFactory.INSTANCE.hasAppOpenAd(AdConfig.AD_APPOPEN)){
+            // ⭐ 新用户首日不展示开屏广告，等待进度条到100%后跳转
+            boolean isNewUserFirstDay = UserInfoUtils.INSTANCE.isNewUser() && AppConfig.INSTANCE.isInstallFirstDay();
+            if (isNewUserFirstDay) {
+                int currentProgress = pbView.getProgress();
+                if (currentProgress >= 100) {
+                    android.util.Log.d(TAG, "✅ New user first day - progress 100%, jumping to main");
+                    startMainActivity();
+                } else {
+                    android.util.Log.d(TAG, "⏳ New user first day - waiting for progress (current: " + currentProgress + "%)");
+                    handler.removeCallbacks(r);
+                    handler.postDelayed(r, 100); // 每100ms检查一次进度
+                }
+                return;
+            }
+            
+            if (AdFactory.INSTANCE.hasAppOpenAd(AdConfig.AD_APPOPEN)){
+               final long showRequestTime = System.currentTimeMillis();
+               android.util.Log.d(TAG, "✅ AppOpen Ad is ready, requesting to show...");
                AdFactory.INSTANCE.showAppOpenAd(SplashScreenActivity.this, AdConfig.AD_APPOPEN, new AdShowCallback() {
+                   private long impressionTime = 0;
+                   
                    @Override public void onAdImpression(@Nullable AdItem adItem) {
+                       impressionTime = System.currentTimeMillis();
                        progressBarRunning=false;
                        pbView.setProgress(100);
+                       
+                       // 🔥 关键修复：广告开始展示时，取消所有超时定时器
+                       handler.removeCallbacks(absoluteTimeoutRunnable);
+                       handler.removeCallbacks(r);
+                       
+                       android.util.Log.d(TAG, "📊 [AppOpen] onAdImpression - Ad displayed to user");
+                       android.util.Log.d(TAG, "📊 [AppOpen] Time from show request to impression: " + (impressionTime - showRequestTime) + "ms");
+                       android.util.Log.d(TAG, "✅ [AppOpen] All timeout timers cancelled - ad will only close by user action");
                    }
 
                    @Override public void onAdClicked(@Nullable AdItem adItem) {
-
+                       long clickTime = System.currentTimeMillis();
+                       android.util.Log.d(TAG, "👆 [AppOpen] onAdClicked - User clicked on ad");
+                       android.util.Log.d(TAG, "👆 [AppOpen] Time from impression to click: " + (clickTime - impressionTime) + "ms");
                    }
 
                    @Override public void onUserEarnedReward(@Nullable AdItem adItem, @Nullable RewardItem rewardItem) {
@@ -130,15 +179,31 @@ public class SplashScreenActivity extends AppCompatActivity {
                    }
 
                    @Override public void onAdClosed(@Nullable AdItem adItem) {
+                       long closeTime = System.currentTimeMillis();
+                       long displayDuration = closeTime - impressionTime;
+                       // ⭐ 广告只能由用户手动关闭，不会自动关闭
+                       // 如果广告快速关闭(<1秒)，可能是测试广告或广告素材问题
+                       android.util.Log.d(TAG, "🔔 [AppOpen] onAdClosed - Ad closed");
+                       android.util.Log.d(TAG, "🔔 [AppOpen] Display duration: " + displayDuration + "ms");
+                       if (displayDuration < 1000 && impressionTime > 0) {
+                           android.util.Log.w(TAG, "⚠️ [AppOpen] Ad closed very quickly (" + displayDuration + "ms)!");
+                           android.util.Log.w(TAG, "⚠️ [AppOpen] This may be a TEST AD or the ad creative is very short");
+                           android.util.Log.w(TAG, "⚠️ [AppOpen] Production ads should require user to manually close");
+                       }
                        startMainActivity();
                    }
 
                    @Override public void onShow(@Nullable AdItem adItem) {
-
+                       android.util.Log.d(TAG, "📱 [AppOpen] onShow - Ad show callback triggered");
+                       // 🔥 额外保护：在onShow时也取消超时定时器（防止onAdImpression延迟）
+                       handler.removeCallbacks(absoluteTimeoutRunnable);
+                       handler.removeCallbacks(r);
+                       android.util.Log.d(TAG, "✅ [AppOpen] Timeout timers cancelled at onShow");
                    }
 
                    @Override public void onShowFail() {
-
+                       android.util.Log.w(TAG, "❌ [AppOpen] onShowFail - Ad failed to show, jumping to main");
+                       startMainActivity();
                    }
                });
             } else if(count>=5){ // 🔥 修改：8秒 → 5秒
@@ -233,21 +298,34 @@ public class SplashScreenActivity extends AppCompatActivity {
         handler.removeCallbacks(updateProgress);
         handler.removeCallbacks(absoluteTimeoutRunnable);
         
-        android.util.Log.d(TAG, "✅ Jumping to MainActivity");
+        // ⭐ 新用户首次启动：跳转到登录页面（只依赖hasShownLogin判断）
+        // 老用户或已展示过登录页：直接跳转到主界面
+        boolean hasShownLogin = OnboardingLoginActivity.hasShownLoginScreen(this);
         
-        new Handler().postDelayed(() -> {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        }, DELAY_PROGRESS);
+        if (!hasShownLogin) {
+            android.util.Log.d(TAG, "🎯 New user (hasShownLogin=false) - Jumping to OnboardingLoginActivity");
+            new Handler().postDelayed(() -> {
+                Intent intent = new Intent(this, OnboardingLoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            }, DELAY_PROGRESS);
+        } else {
+            android.util.Log.d(TAG, "✅ Existing user (hasShownLogin=true) - Jumping to MainActivity");
+            new Handler().postDelayed(() -> {
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }, DELAY_PROGRESS);
+        }
     }
 
     boolean progressBarRunning=true;
-    int progressStage=1; // 阶段：1=前2秒，2=后3秒
+    int progressStage=1; // 阶段：1=前2秒，2=后1秒
     int progressCount=0;
     long progressStartTime=0;
     
-    // 🔥 新进度条逻辑：前2秒到85%，后3秒到100%
+    // 🔥 新进度条逻辑：3秒到100%（前2秒到85%，后1秒到100%）
     Runnable updateProgress=new Runnable() {
         @Override public void run() {
             if(!progressBarRunning){
@@ -265,17 +343,17 @@ public class SplashScreenActivity extends AppCompatActivity {
                 if(targetProgress > 85) targetProgress = 85;
                 nextDelay = 25; // 每25ms更新一次
                 progressStage = 1;
-            } else if (elapsedTime < 5000) {
-                // 阶段2：后3秒匀速从85%到100%
-                // 3000ms从85%到100%（增加15%），每200ms更新1%
+            } else if (elapsedTime < 3000) {
+                // 阶段2：后1秒匀速从85%到100%
+                // 1000ms从85%到100%（增加15%），每约67ms更新1%
                 long stage2Time = elapsedTime - 2000;
-                int stage2Progress = (int)(stage2Time * 15 / 3000);
+                int stage2Progress = (int)(stage2Time * 15 / 1000);
                 targetProgress = 85 + stage2Progress;
                 if(targetProgress > 100) targetProgress = 100;
-                nextDelay = 200; // 每200ms更新一次
+                nextDelay = 70; // 每70ms更新一次
                 progressStage = 2;
             } else {
-                // 5秒后，确保到100%
+                // 3秒后，确保到100%
                 targetProgress = 100;
                 progressBarRunning = false;
             }
@@ -289,11 +367,11 @@ public class SplashScreenActivity extends AppCompatActivity {
         }
     };
     
-    // 🔥 绝对超时保护：5秒后强制跳转
+    // 🔥 绝对超时保护：新用户3秒，老用户5秒后强制跳转
     Runnable absoluteTimeoutRunnable = new Runnable() {
         @Override
         public void run() {
-            android.util.Log.w(TAG, "⚠️ Absolute timeout (5s) reached, force jumping to main");
+            android.util.Log.w(TAG, "⚠️ Absolute timeout reached, force jumping to main");
             pbView.setProgress(100);
             startMainActivity();
         }
@@ -310,11 +388,13 @@ public class SplashScreenActivity extends AppCompatActivity {
             handler.removeCallbacks(updateProgress);
             handler.postDelayed(updateProgress, 25);
             
-            // 🔥 启动绝对超时保护：5秒后强制跳转
+            // 🔥 启动绝对超时保护：新用户3秒，老用户5秒
+            boolean isNewUserFirstDay = UserInfoUtils.INSTANCE.isNewUser() && AppConfig.INSTANCE.isInstallFirstDay();
+            int timeoutDuration = isNewUserFirstDay ? 3000 : 5000;
             handler.removeCallbacks(absoluteTimeoutRunnable);
-            handler.postDelayed(absoluteTimeoutRunnable, 5000);
+            handler.postDelayed(absoluteTimeoutRunnable, timeoutDuration);
             
-            android.util.Log.d(TAG, "📊 Progress bar started with 5s timeout protection");
+            android.util.Log.d(TAG, "📊 Progress bar started with " + (timeoutDuration/1000) + "s timeout protection");
         }
     }
 

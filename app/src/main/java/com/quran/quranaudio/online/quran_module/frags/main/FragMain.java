@@ -84,13 +84,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
-
 public class FragMain extends BaseFragment {
     private FragMainBinding mBinding;
     private AsyncLayoutInflater mAsyncInflater;
@@ -151,6 +144,11 @@ public class FragMain extends BaseFragment {
     // This flag is set to true once permission is granted (either via system dialog or Settings)
     // and prevents any code path (onViewCreated, onResume, error observers) from showing the dialog again
     private boolean hasPermissionBeenGrantedThisSession = false;
+    
+    // 🔥 权限请求计数器：最多弹2次
+    private static final String PREFS_NAME = "LocationPermissionPrefs";
+    private static final String KEY_PERMISSION_REQUEST_COUNT = "permission_request_count";
+    private static final int MAX_PERMISSION_REQUESTS = 2;
     
     // CRITICAL FLAG: Track if user is currently in Settings page
     // Prevents onResume() from interfering while user is granting permission in Settings
@@ -468,22 +466,28 @@ public class FragMain extends BaseFragment {
 
         //PermissionStart
         // Permission launcher is now registered in onCreate() (see above)
-        // Check and show permission dialog if needed
-        // CRITICAL: Check both permission status AND session flag to prevent re-showing dialog
-        if(!checkLocationPermission() && !hasPermissionBeenGrantedThisSession){
-            Log.d(TAG, "🚪 onViewCreated: No permission and flag is false, showing permission dialog");
-            showPermissionWarning();
-        } else if (checkLocationPermission()) {
-            // User has already granted permission (not first time)
-            // Set flags to prevent any dialog from being shown
+        // ⭐ 优化：新用户首次进入主页时弹出权限请求，最多弹2次
+        if (checkLocationPermission()) {
+            // User has already granted permission
             userHasRespondedToLocationPermission = true;
             hasPermissionBeenGrantedThisSession = true;
-            Log.d(TAG, "✅ onViewCreated: Permission already granted, flags set");
-        } else if (hasPermissionBeenGrantedThisSession) {
-            // Permission was granted this session, do not show dialog again
-            Log.d(TAG, "🔒 onViewCreated: Permission granted this session, skipping dialog");
+            Log.d(TAG, "✅ onViewCreated: Location permission already granted");
+        } else if (!userHasRespondedToLocationPermission && !hasPermissionBeenGrantedThisSession) {
+            // 检查权限请求次数
+            int requestCount = getPermissionRequestCount();
+            if (requestCount < MAX_PERMISSION_REQUESTS) {
+                // 未超过最大次数，弹出权限请求
+                Log.d(TAG, "🚪 onViewCreated: Showing permission dialog (count: " + (requestCount + 1) + "/" + MAX_PERMISSION_REQUESTS + ")");
+                showPermissionWarningAndIncrementCount();
+            } else {
+                // 已达到最大次数，不再弹出
+                Log.d(TAG, "⚠️ onViewCreated: Max permission requests reached (" + requestCount + "), skipping dialog");
+                userHasRespondedToLocationPermission = true;
+            }
+        } else {
+            // 用户已经拒绝过，不再弹出
+            Log.d(TAG, "ℹ️ onViewCreated: User already responded, skipping dialog");
         }
-        //requestPermission();
         //Permission End
 
 
@@ -510,8 +514,27 @@ public class FragMain extends BaseFragment {
         mBinding.qiblaDirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), QiblaDirectionActivity.class));
-                // Ad calls removed
+                // ⭐ 优化：点击Qibla功能时才检查位置权限
+                if (checkLocationPermission()) {
+                    // 有权限，直接打开Qibla页面
+                    Log.d(TAG, "✅ Location permission granted, launching Qibla Direction");
+                    startActivity(new Intent(getActivity(), QiblaDirectionActivity.class));
+                } else {
+                    // 没有权限，检查是否还能弹出权限请求
+                    int requestCount = getPermissionRequestCount();
+                    if (requestCount < MAX_PERMISSION_REQUESTS) {
+                        Log.d(TAG, "⚠️ No location permission, showing permission dialog for Qibla feature (count: " + (requestCount + 1) + "/" + MAX_PERMISSION_REQUESTS + ")");
+                        android.widget.Toast.makeText(getActivity(), 
+                            "Location permission is required to use Qibla Direction", 
+                            android.widget.Toast.LENGTH_SHORT).show();
+                        showPermissionWarningAndIncrementCount();
+                    } else {
+                        Log.d(TAG, "⚠️ Max permission requests reached, cannot show dialog");
+                        android.widget.Toast.makeText(getActivity(), 
+                            "Please enable location permission in Settings to use Qibla Direction", 
+                            android.widget.Toast.LENGTH_LONG).show();
+                    }
+                }
             }
         });
         mBinding.prayerCalender.setOnClickListener(new View.OnClickListener() {
@@ -640,6 +663,37 @@ public class FragMain extends BaseFragment {
         ) == PackageManager.PERMISSION_GRANTED;
         return isLocationPermissionGranted;
     }
+    /**
+     * 获取权限请求次数
+     */
+    private int getPermissionRequestCount() {
+        if (getActivity() == null) return 0;
+        android.content.SharedPreferences prefs = getActivity().getSharedPreferences(PREFS_NAME, android.content.Context.MODE_PRIVATE);
+        int count = prefs.getInt(KEY_PERMISSION_REQUEST_COUNT, 0);
+        Log.d(TAG, "📊 Current permission request count: " + count);
+        return count;
+    }
+    
+    /**
+     * 增加权限请求次数
+     */
+    private void incrementPermissionRequestCount() {
+        if (getActivity() == null) return;
+        android.content.SharedPreferences prefs = getActivity().getSharedPreferences(PREFS_NAME, android.content.Context.MODE_PRIVATE);
+        int currentCount = prefs.getInt(KEY_PERMISSION_REQUEST_COUNT, 0);
+        int newCount = currentCount + 1;
+        prefs.edit().putInt(KEY_PERMISSION_REQUEST_COUNT, newCount).apply();
+        Log.d(TAG, "📈 Permission request count incremented: " + currentCount + " → " + newCount);
+    }
+    
+    /**
+     * 显示权限弹窗并增加计数
+     */
+    private void showPermissionWarningAndIncrementCount() {
+        incrementPermissionRequestCount();
+        showPermissionWarning();
+    }
+    
     private void showPermissionWarning(){
         Log.d(TAG, "========================================");
         Log.d(TAG, "🚪 showPermissionWarning() called");
@@ -818,6 +872,12 @@ public class FragMain extends BaseFragment {
                                                 try {
                                                     updateHeaderUI();
                                                     Log.d(TAG, "Header UI updated successfully");
+                                                    
+                                                    // 🔥 关键修复：登录成功后立即刷新今日任务状态
+                                                    if (dailyQuestsManager != null) {
+                                                        dailyQuestsManager.initialize();
+                                                        Log.d(TAG, "✅ Daily Quests refreshed after login");
+                                                    }
                                                     
                                                     // Show success toast
                                                     if (getContext() != null) {

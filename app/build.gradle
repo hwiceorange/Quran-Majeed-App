@@ -54,8 +54,8 @@ android {
         applicationId "com.quran.quranaudio.online"
         minSdkVersion 26
         targetSdkVersion 35
-        versionCode 42
-        versionName "1.5.0"
+        versionCode 43
+        versionName "1.5.1"
         multiDexEnabled true
         
         // Support for 16 KB page sizes (Google Play requirement)
@@ -190,6 +190,11 @@ android {
 }
 
 dependencies {
+    // Exclude deprecated SafetyNet API to fix Google Play warning
+    configurations.all {
+        exclude group: 'com.google.android.gms', module: 'play-services-safetynet'
+    }
+    
     implementation project(path: ':adlib')
     implementation project(path: ':quiz')
 
@@ -348,7 +353,7 @@ dependencies {
     implementation 'com.github.Cutta:GifView:1.4'
     implementation 'com.github.travijuu:numberpicker:1.0.7'
     implementation 'com.github.kizitonwose:CalendarView:1.0.4'
-    implementation 'org.greenrobot:eventbus:3.2.0'
+    implementation 'org.greenrobot:eventbus:3.3.1'
     implementation 'com.github.AppIntro:AppIntro:6.2.0'
     implementation 'cat.ereza:customactivityoncrash:2.3.0'
     implementation 'com.yarolegovich:lovely-dialog:1.1.1'

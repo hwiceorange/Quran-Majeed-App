@@ -4,8 +4,10 @@ import android.app.Activity
 import com.quran.quranaudio.quiz.ad.ExternalAdConfig
 import com.quran.quranaudio.quiz.base.CloudManager
 import com.quranaudio.quiz.quiz.QuizGemManager
+import com.quran.quranaudio.quiz.utils.AppConfig
 import com.quran.quranaudio.quiz.utils.LoadingDialog
 import com.quran.quranaudio.quiz.utils.Tasks
+import com.quran.quranaudio.quiz.utils.UserInfoUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.quranaudio.common.ad.AdConfig
 import com.quranaudio.common.ad.AdFactory
@@ -110,6 +112,15 @@ fun Activity.showInterAdByPoolNew(
     callbacks: Function1<Boolean, Unit>,
     showCallback: (() -> Unit)? = null
 ) {
+    // ⭐ 新用户首日不展示广告（避免浪费和展示率异常）
+    val isNewUserFirstDay = UserInfoUtils.isNewUser() && AppConfig.isInstallFirstDay
+    if (isNewUserFirstDay) {
+        android.util.Log.d("AdExtension", "🚫 New user first day - skipping interstitial ad")
+        beforeShowCallbacks?.invoke(false)
+        callbacks.invoke(false)
+        return
+    }
+    
     var canShow = CloudManager.adShowPercent(level)
     //在原有百分比基础上额外添加控制逻辑，shenghe控制和organic控制
     if (canShow) {
@@ -180,6 +191,15 @@ fun Activity.showRewardAd(
     showCallback: (() -> Unit)? = null,
     rewardCallback: (() -> Unit)? = null,
 ) {
+    // ⭐ 新用户首日不展示激励广告（避免浪费和展示率异常）
+    val isNewUserFirstDay = UserInfoUtils.isNewUser() && AppConfig.isInstallFirstDay
+    if (isNewUserFirstDay) {
+        android.util.Log.d("AdExtension", "🚫 New user first day - skipping reward ad")
+        beforeShowCallbacks?.invoke(false)
+        callbacks.invoke(false)
+        return
+    }
+    
     var canShow = CloudManager.adShowPercent(level)
     //在原有百分比基础上额外添加控制逻辑，shenghe控制和organic控制
     if (canShow) {

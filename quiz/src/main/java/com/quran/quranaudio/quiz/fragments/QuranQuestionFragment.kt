@@ -50,7 +50,10 @@ import com.quran.quranaudio.quiz.utils.AnimatorUtils
 import com.quran.quranaudio.quiz.utils.RxBus
 import com.quran.quranaudio.quiz.utils.Tasks
 import com.quran.quranaudio.quiz.utils.isDebug
+import com.quran.quranaudio.quiz.utils.UserInfoUtils
+import com.quran.quranaudio.quiz.utils.AppConfig
 import com.quranaudio.common.ad.AdConfig
+import com.quranaudio.common.ad.AdFactory
 import com.quran.quranaudio.quiz.QuestionBean
 import com.quran.quranaudio.quiz.databinding.FragmentQuestionBinding
 import kotlinx.coroutines.launch
@@ -434,6 +437,20 @@ class QuranQuestionFragment :
 
     override fun onResume() {
         super.onResume()
+        
+        // ⭐ 用户进入Discover模块后，标记为老用户，后续可以展示广告
+        if (UserInfoUtils.isNewUser()) {
+            android.util.Log.d(TAG, "🎯 New user entered Discover - marking as old user and preloading ads")
+            UserInfoUtils.setOldUser()
+            
+            // 预加载广告，供下次使用（但本次会话不展示）
+            activity?.let { act ->
+                AdFactory.loadInterstitialAd(act, AdConfig.AD_INTERS, null)
+                AdFactory.loadAppOpenAd(act, AdConfig.AD_APPOPEN, null)
+                android.util.Log.d(TAG, "✅ Ads preloaded for future sessions")
+            }
+        }
+        
         isSelected=true
         if (isSelected && this.userVisibleHint && !isSkipNextLevel && !isShowDailyRewardDialog()) {
             timeStart()

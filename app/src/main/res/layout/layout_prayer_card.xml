@@ -131,6 +131,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:layout_marginStart="26dp"
             android:text="2:43:8"
             android:textColor="#FFA726"
             android:textSize="18sp"
@@ -183,8 +184,11 @@
                     android:layout_marginTop="6dp"
                     android:text="@string/prayer"
                     android:textColor="#4B9B76"
-                    android:textSize="12sp"
-                    android:textStyle="normal" />
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:maxLines="2"
+                    android:gravity="center"
+                    android:ellipsize="end" />
 
             </LinearLayout>
 
@@ -216,8 +220,11 @@
                     android:layout_marginTop="6dp"
                     android:text="@string/quran"
                     android:textColor="#4B9B76"
-                    android:textSize="12sp"
-                    android:textStyle="normal" />
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:maxLines="2"
+                    android:gravity="center"
+                    android:ellipsize="end" />
 
             </LinearLayout>
 
@@ -249,8 +256,11 @@
                     android:layout_marginTop="6dp"
                     android:text="@string/learn"
                     android:textColor="#4B9B76"
-                    android:textSize="12sp"
-                    android:textStyle="normal" />
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:maxLines="2"
+                    android:gravity="center"
+                    android:ellipsize="end" />
 
             </LinearLayout>
 
@@ -281,8 +291,11 @@
                     android:layout_marginTop="6dp"
                     android:text="@string/tools"
                     android:textColor="#4B9B76"
-                    android:textSize="12sp"
-                    android:textStyle="normal" />
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:maxLines="2"
+                    android:gravity="center"
+                    android:ellipsize="end" />
 
             </LinearLayout>
 

@@ -21,7 +21,7 @@
     <string name="set_location">Lokasi</string>
 
     <string name="about_me">Tentang saya</string>
-    <string name="about_me_text">Saya Rai Adnan, seorang pengembang Android dan mahasiswa sarjana. Apakah Anda menyukai aplikasi ini dan bersedia memberikan dukungan untuk membangun konten yang lebih bermanfaat? Ikuti saya di Envato</string>
+    <string name="about_me_text">Quran Majeed - Aplikasi pendamping Islam yang komprehensif. Untuk dukungan, hubungi kami di lecheng2019@gmail.com</string>
     <string name="cancel">Batal</string>
     <string name="pleaseBeConnectedToInternet">harap terhubung ke internet</string>
     <string name="buffering">memuat</string>
@@ -260,7 +260,7 @@
     <string name="message_copy_error">Tidak Ada yang Disalin</string>
 
     <!-- Copy text -->
-    <string name="copyright">Disalin dari Hadith Pro (Unduh aplikasi kami dari https://github.com/unkn4wn/hadith-pro/releases/tag/Latest)</string>
+    <string name="copyright">Aplikasi Quran Majeed</string>
 
     <!-- Bookmark -->
     <!-- Bookmark message -->

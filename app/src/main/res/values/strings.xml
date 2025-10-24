@@ -21,7 +21,7 @@
     <string name="set_location">Location</string>
 
     <string name="about_me">About me</string>
-    <string name="about_me_text">I am Rai Adnan, an Android developer and undergraduate. Do you love this app and willing to give support in other to build more useful content? Follow me on Envato</string>
+    <string name="about_me_text">Quran Majeed - Your comprehensive Islamic companion app. For support, contact us at lecheng2019@gmail.com</string>
     <string name="cancel">Cancel</string>
     <string name="pleaseBeConnectedToInternet">please be connected to internet</string>
     <string name="buffering">buffering</string>
@@ -261,7 +261,7 @@
     <string name="message_copy_error">Nothing copied</string>
 
     <!-- Copy text -->
-    <string name="copyright">Copied from Hadith Pro (Download our app from https://github.com/unkn4wn/hadith-pro/releases/tag/Latest)</string>
+    <string name="copyright">Quran Majeed App</string>
 
     <!-- Bookmark -->
     <!-- Bookmark message -->

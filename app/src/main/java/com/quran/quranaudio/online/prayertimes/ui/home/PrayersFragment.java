@@ -92,6 +92,11 @@ public class PrayersFragment extends Fragment {
     private MaterialButton asrTrackButton;
     private MaterialButton maghribTrackButton;
     private MaterialButton ishaTrackButton;
+    
+    // ⭐ Location permission tracking
+    private static final String PREFS_NAME = "LocationPermissionPrefs";
+    private static final String KEY_PERMISSION_REQUEST_COUNT = "permission_request_count";
+    private static final int MAX_PERMISSION_REQUESTS = 2;
 
     private LocalDateTime todayDate;
     private CountDownTimer TimeRemainingCTimer;
@@ -312,7 +317,27 @@ public class PrayersFragment extends Fragment {
         
         // Feature buttons click listeners
         rootView.findViewById(R.id.btn_qibla_direction).setOnClickListener(v -> {
-            startActivity(new Intent(requireContext(), com.quran.quranaudio.online.compass.QiblaDirectionActivity.class));
+            // ⭐ 点击Qibla功能时检查位置权限
+            if (checkLocationPermission()) {
+                // 有权限，直接打开Qibla页面
+                Log.d("PrayersFragment", "✅ Location permission granted, launching Qibla Direction");
+                startActivity(new Intent(requireContext(), com.quran.quranaudio.online.compass.QiblaDirectionActivity.class));
+            } else {
+                // 没有权限，检查是否还能弹出权限请求
+                int requestCount = getPermissionRequestCount();
+                if (requestCount < MAX_PERMISSION_REQUESTS) {
+                    Log.d("PrayersFragment", "⚠️ No location permission, showing permission dialog for Qibla feature (count: " + (requestCount + 1) + "/" + MAX_PERMISSION_REQUESTS + ")");
+                    Toast.makeText(requireContext(), 
+                        "Location permission is required to use Qibla Direction", 
+                        Toast.LENGTH_SHORT).show();
+                    showPermissionWarningAndIncrementCount();
+                } else {
+                    Log.d("PrayersFragment", "⚠️ Max permission requests reached, cannot show dialog");
+                    Toast.makeText(requireContext(), 
+                        "Please enable location permission in Settings to use Qibla Direction", 
+                        Toast.LENGTH_LONG).show();
+                }
+            }
         });
         
         rootView.findViewById(R.id.btn_wudu_guide).setOnClickListener(v -> {
@@ -784,5 +809,70 @@ public class PrayersFragment extends Fragment {
                 .append(isAngleInMinute ? " " + requireContext().getString(R.string.common_minutes) : "°");
 
         return stringBuilder.toString();
+    }
+    
+    // ⭐ Location permission helper methods
+    
+    /**
+     * Check if location permission is granted
+     */
+    private boolean checkLocationPermission() {
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            android.Manifest.permission.ACCESS_FINE_LOCATION
+        ) == android.content.pm.PackageManager.PERMISSION_GRANTED;
+    }
+    
+    /**
+     * Get the number of times permission has been requested
+     */
+    private int getPermissionRequestCount() {
+        if (getActivity() == null) return 0;
+        SharedPreferences prefs = getActivity().getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        int count = prefs.getInt(KEY_PERMISSION_REQUEST_COUNT, 0);
+        Log.d("PrayersFragment", "📊 Current permission request count: " + count);
+        return count;
+    }
+    
+    /**
+     * Increment the permission request count
+     */
+    private void incrementPermissionRequestCount() {
+        if (getActivity() == null) return;
+        SharedPreferences prefs = getActivity().getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        int currentCount = prefs.getInt(KEY_PERMISSION_REQUEST_COUNT, 0);
+        int newCount = currentCount + 1;
+        prefs.edit().putInt(KEY_PERMISSION_REQUEST_COUNT, newCount).apply();
+        Log.d("PrayersFragment", "📈 Permission request count incremented: " + currentCount + " → " + newCount);
+    }
+    
+    /**
+     * Show permission warning dialog and increment count
+     */
+    private void showPermissionWarningAndIncrementCount() {
+        incrementPermissionRequestCount();
+        showPermissionWarning();
+    }
+    
+    /**
+     * Show permission warning dialog
+     */
+    private void showPermissionWarning() {
+        if (getActivity() == null) return;
+        
+        new android.app.AlertDialog.Builder(getActivity())
+            .setTitle("Location Permission Required")
+            .setMessage("This app needs location permission to show accurate prayer times and Qibla direction for your area.")
+            .setPositiveButton("Grant Permission", (dialog, which) -> {
+                requestPermissions(
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    1001
+                );
+            })
+            .setNegativeButton("Not Now", (dialog, which) -> {
+                dialog.dismiss();
+            })
+            .create()
+            .show();
     }
 }

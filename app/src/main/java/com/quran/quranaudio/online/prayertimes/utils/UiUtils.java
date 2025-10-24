@@ -31,12 +31,6 @@ import java.time.format.DecimalStyle;
 import java.time.format.FormatStyle;
 import java.util.Locale;
 
-/**
- * Author: Rai Adnan
- * Whatsapp: +923002375907
- * Email: officialshaheendevelopers@gmail.com
- * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
- */
 public class UiUtils {
 
     public static final String GREGORIAN_MONTH_YEAR_FORMAT = "MMMM yyyy";

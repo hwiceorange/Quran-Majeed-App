@@ -61,9 +61,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         @Override
         public boolean onPreferenceTreeClick(@NonNull Preference preference) {
-            if (preference.getKey().equals("updates")) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/unkn4wn/hadith-pro/releases")));
-            }
+            // Updates functionality removed
             return super.onPreferenceTreeClick(preference);
 
         }
