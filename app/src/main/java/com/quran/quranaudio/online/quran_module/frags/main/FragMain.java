@@ -721,6 +721,47 @@ public class FragMain extends BaseFragment {
         
         Log.d(TAG, "✅ Permission warning dialog displayed");
     }
+    /**
+     * Set random background image for Verse of the Day card with blur effect
+     * 随机选择背景图并应用高斯模糊，低透明度作为氛围衬托，保持绿色主色调
+     */
+    private void setVotdRandomBackground(ImageView backgroundImageView) {
+        if (backgroundImageView == null || getContext() == null) {
+            return;
+        }
+        
+        try {
+            // Array of background images
+            int[] backgroundImages = {
+                R.drawable.img_prayer,
+                R.drawable.prayer_bg2,
+                R.drawable.today_header,
+                R.drawable.tasbih_bg
+            };
+            
+            // Select random image
+            int randomIndex = new java.util.Random().nextInt(backgroundImages.length);
+            int selectedImage = backgroundImages[randomIndex];
+            
+            // Load image without blur, 30% opacity for subtle atmosphere
+            // 无模糊 + 30%透明度，清晰的背景氛围效果
+            com.bumptech.glide.Glide.with(this)
+                .load(selectedImage)
+                .transform(new com.bumptech.glide.load.resource.bitmap.CenterCrop())
+                .into(backgroundImageView);
+            
+            // Set 30% alpha for subtle background atmosphere
+            backgroundImageView.setAlpha(0.3f);
+            
+            Log.d(TAG, "✅ VOTD background set without blur at 30% opacity: " + selectedImage);
+            
+        } catch (Exception e) {
+            Log.e(TAG, "❌ Error setting VOTD background", e);
+            // Fallback: keep transparent
+            backgroundImageView.setAlpha(0f);
+        }
+    }
+    
     private void requestPermission(){
         List<String> permissionRequest = new ArrayList<String>();
 
@@ -1588,11 +1629,15 @@ public class FragMain extends BaseFragment {
             ivVotdShare = verseCard.findViewById(R.id.votd_share);
             ivVotdBookmark = verseCard.findViewById(R.id.votd_bookmark);
             votdViewEmbedded = verseCard.findViewById(R.id.votd_view_embedded);
+            ImageView votdBackgroundImage = verseCard.findViewById(R.id.votd_background_image);
             
             if (votdViewEmbedded == null) {
                 Log.w(TAG, "VOTDView embedded not found");
                 return;
             }
+            
+            // Set random background image with blur effect
+            setVotdRandomBackground(votdBackgroundImage);
             
             // Load QuranMeta and initialize VOTD
             QuranMeta.prepareInstance(requireContext(), quranMeta -> {

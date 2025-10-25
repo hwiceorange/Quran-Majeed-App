@@ -132,7 +132,7 @@
                             android:padding="12dp"
                             android:src="@drawable/dr_icon_user"
                             android:contentDescription="@string/login"
-                            app:tint="#9E9E9E" />
+                            app:tint="#676666" />
 
                         <!-- User Profile Image (Logged In - Hidden by default) -->
                         <ImageView

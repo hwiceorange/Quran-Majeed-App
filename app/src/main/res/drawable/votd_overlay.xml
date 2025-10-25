@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Semi-transparent green overlay to maintain primary color while providing text contrast -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 50% opacity green overlay (#4B9B76) to balance green theme and background visibility -->
+    <solid android:color="#804B9B76" />
+</shape>
+

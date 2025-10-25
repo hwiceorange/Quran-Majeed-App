@@ -93,6 +93,13 @@ public class PrayersFragment extends Fragment {
     private MaterialButton maghribTrackButton;
     private MaterialButton ishaTrackButton;
     
+    // Completed icons (ImageView) for displaying ic_correct.png
+    private ImageView fajrCompletedIcon;
+    private ImageView dhuhrCompletedIcon;
+    private ImageView asrCompletedIcon;
+    private ImageView maghribCompletedIcon;
+    private ImageView ishaCompletedIcon;
+    
     // ⭐ Location permission tracking
     private static final String PREFS_NAME = "LocationPermissionPrefs";
     private static final String KEY_PERMISSION_REQUEST_COUNT = "permission_request_count";
@@ -350,6 +357,13 @@ public class PrayersFragment extends Fragment {
         asrTrackButton = rootView.findViewById(R.id.asr_track_button);
         maghribTrackButton = rootView.findViewById(R.id.maghrib_track_button);
         ishaTrackButton = rootView.findViewById(R.id.isha_track_button);
+        
+        // Initialize completed icons (ImageView)
+        fajrCompletedIcon = rootView.findViewById(R.id.fajr_completed_icon);
+        dhuhrCompletedIcon = rootView.findViewById(R.id.dhuhr_completed_icon);
+        asrCompletedIcon = rootView.findViewById(R.id.asr_completed_icon);
+        maghribCompletedIcon = rootView.findViewById(R.id.maghrib_completed_icon);
+        ishaCompletedIcon = rootView.findViewById(R.id.isha_completed_icon);
     }
     
     /**
@@ -530,12 +544,12 @@ public class PrayersFragment extends Fragment {
             Log.d("PrayersFragment", "📝 Salah record received: " + (record != null ? record.getTotalCompleted() + "/5 completed" : "null"));
             
             if (record != null) {
-                // Update all button states
-                updateTrackButton(fajrTrackButton, record.getFajr());
-                updateTrackButton(dhuhrTrackButton, record.getDhuhr());
-                updateTrackButton(asrTrackButton, record.getAsr());
-                updateTrackButton(maghribTrackButton, record.getMaghrib());
-                updateTrackButton(ishaTrackButton, record.getIsha());
+                // Update all button states and completed icons
+                updateTrackButton(fajrTrackButton, fajrCompletedIcon, record.getFajr());
+                updateTrackButton(dhuhrTrackButton, dhuhrCompletedIcon, record.getDhuhr());
+                updateTrackButton(asrTrackButton, asrCompletedIcon, record.getAsr());
+                updateTrackButton(maghribTrackButton, maghribCompletedIcon, record.getMaghrib());
+                updateTrackButton(ishaTrackButton, ishaCompletedIcon, record.getIsha());
             } else {
                 // Record is null (no data yet), keep default Track state
                 Log.d("PrayersFragment", "📝 No salah record found, keeping default Track state");
@@ -544,11 +558,13 @@ public class PrayersFragment extends Fragment {
     }
     
     /**
-     * Updates the track button appearance based on completion status.
+     * Updates the track button and completed icon visibility based on completion status.
+     * ✅ Completed: Hide Track button, show ic_correct.png ImageView
+     * ⭕ Not completed: Show "Track" button, hide completed icon
      */
-    private void updateTrackButton(MaterialButton button, boolean isCompleted) {
-        if (button == null) {
-            Log.w("PrayersFragment", "⚠️ Button is null, cannot update");
+    private void updateTrackButton(MaterialButton button, ImageView completedIcon, boolean isCompleted) {
+        if (button == null || completedIcon == null) {
+            Log.w("PrayersFragment", "⚠️ Button or icon is null, cannot update");
             return;
         }
         
@@ -556,15 +572,13 @@ public class PrayersFragment extends Fragment {
         Log.d("PrayersFragment", "🎨 Updating button " + buttonId + " to " + (isCompleted ? "✓ (completed)" : "Track (uncompleted)"));
         
         if (isCompleted) {
-            button.setText(getString(R.string.button_completed));
-            button.setBackgroundTintList(ColorStateList.valueOf(
-                ContextCompat.getColor(requireContext(), R.color.green)
-            ));
+            // Hide Track button, show completed icon (ic_correct.png)
+            button.setVisibility(android.view.View.GONE);
+            completedIcon.setVisibility(android.view.View.VISIBLE);
         } else {
-            button.setText(getString(R.string.button_track));
-            button.setBackgroundTintList(ColorStateList.valueOf(
-                ContextCompat.getColor(requireContext(), R.color.salah_track_button)
-            ));
+            // Show Track button, hide completed icon
+            button.setVisibility(android.view.View.VISIBLE);
+            completedIcon.setVisibility(android.view.View.GONE);
         }
     }
 

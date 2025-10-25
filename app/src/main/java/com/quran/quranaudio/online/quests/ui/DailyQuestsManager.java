@@ -455,13 +455,15 @@ public class DailyQuestsManager {
             Log.d(TAG, "Setting up click listener for Task 1 Go button");
             btnTask1Go.setOnClickListener(v -> {
                 try {
-                    Log.d(TAG, "Task 1 Go button clicked!");
+                    Log.d(TAG, "Task 1 (Quran Reading) Go button clicked!");
                     Context context = fragment.requireContext();
-                    ReaderFactory.startEmptyReader(context);
-                    Log.d(TAG, "Launching Quran Reader for Task 1");
+                    
+                    // 🔥 从 Firestore 获取上次阅读位置
+                    fetchUserLearningStateAndStartReaderForReading(context);
+                    
                 } catch (Exception e) {
-                    Log.e(TAG, "Failed to launch Quran Reader", e);
-                    Toast.makeText(fragment.requireContext(), "Failed to open Quran Reader: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "Failed to launch Quran Reader for reading", e);
+                    Toast.makeText(fragment.requireContext(), "Failed to start Quran reading: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
@@ -726,6 +728,50 @@ public class DailyQuestsManager {
             Log.e(TAG, "Failed to start Quran Reader", e);
             Toast.makeText(context, "Failed to start Quran Reader: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+    
+    /**
+     * 从 Firestore 获取用户学习状态并启动 Quran Reader (阅读模式)
+     * 🔥 修复 Task 1 (Quran Reading) 无法记录上次节点的问题
+     */
+    private void fetchUserLearningStateAndStartReaderForReading(Context context) {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) {
+            Log.w(TAG, "User not logged in, starting from default position (Surah 1, Ayah 1)");
+            ReaderFactory.startVerse(context, 1, 1);  // 启动到第1章第1节
+            return;
+        }
+        
+        String userId = currentUser.getUid();
+        Log.d(TAG, "Fetching UserLearningState from Firestore for Quran Reading - user: " + userId);
+        
+        // 从 Firestore 异步获取学习状态
+        com.google.firebase.firestore.FirebaseFirestore.getInstance()
+            .collection("users")
+            .document(userId)
+            .collection("learningState")
+            .document("current")
+            .get()
+            .addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                    // 解析学习状态
+                    Integer lastReadSurah = documentSnapshot.getLong("lastReadSurah") != null 
+                        ? documentSnapshot.getLong("lastReadSurah").intValue() : 1;
+                    Integer lastReadAyah = documentSnapshot.getLong("lastReadAyah") != null 
+                        ? documentSnapshot.getLong("lastReadAyah").intValue() : 1;
+                    
+                    Log.d(TAG, "✅ UserLearningState found for Reading: Surah " + lastReadSurah + ", Ayah " + lastReadAyah);
+                    ReaderFactory.startVerse(context, lastReadSurah, lastReadAyah);
+                } else {
+                    Log.d(TAG, "UserLearningState not found, starting from Surah 1, Ayah 1");
+                    ReaderFactory.startVerse(context, 1, 1);
+                }
+            })
+            .addOnFailureListener(e -> {
+                Log.e(TAG, "Failed to fetch UserLearningState for Reading", e);
+                Toast.makeText(context, "Failed to load reading position, starting from Surah 1", Toast.LENGTH_SHORT).show();
+                ReaderFactory.startVerse(context, 1, 1);
+            });
     }
     
     /**

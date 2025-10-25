@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Salah Completed Icon: Green circle with bold white checkmark -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="28dp"
+    android:height="28dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    
+    <!-- Green Circle Background (#4B9B76) -->
+    <path
+        android:fillColor="#4B9B76"
+        android:pathData="M12,2C6.48,2 2,6.48 2,12s4.48,10 10,10 10,-4.48 10,-10S17.52,2 12,2z"/>
+    
+    <!-- Bold White Checkmark (larger and thicker) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeWidth="0.5"
+        android:pathData="M9,16.2L4.8,12l-1.4,1.4L9,19 21,7l-1.4,-1.4L9,16.2z"/>
+</vector>
+
+

@@ -11,11 +11,30 @@
     app:cardCornerRadius="20dp"
     app:cardElevation="4dp">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp">
+        android:layout_height="wrap_content">
+
+        <!-- Background image (will be set randomly in code) -->
+        <ImageView
+            android:id="@+id/votd_background_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:contentDescription="Background pattern" />
+
+        <!-- Semi-transparent overlay for text contrast (WCAG 4.5:1) -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/votd_overlay" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:background="@android:color/transparent">
 
         <!-- Title -->
         <TextView
@@ -105,5 +124,7 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    </FrameLayout>
 
 </androidx.cardview.widget.CardView>

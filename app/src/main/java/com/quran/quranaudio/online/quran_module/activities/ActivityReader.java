@@ -136,10 +136,12 @@ public class ActivityReader extends ReaderPossessingActivity {
                         final int toVerse;
                         Pair<Integer, Integer> verseRange = mReaderParams.verseRange;
 
-                        if (QuranUtils.doesRangeDenoteSingle(verseRange)) {
+                        // 🔥 修复：只有 verseRange 为 null 时才播放整个章节
+                        if (verseRange == null) {
                             fromVerse = 1;
                             toVerse = currChapter.getVerseCount();
                         } else {
+                            // verseRange 不为 null，使用它的值（无论是单节还是范围）
                             fromVerse = verseRange.getFirst();
                             toVerse = verseRange.getSecond();
                         }
@@ -151,6 +153,29 @@ public class ActivityReader extends ReaderPossessingActivity {
                             mPlayerService.getP().getCurrentVerseNo()
                         );
                     }
+                }
+                
+                // 🔥 Daily Quest: 自动播放逻辑
+                if (autoPlayAudio && !mPlayerService.isPlaying()) {
+                    android.util.Log.d("ActivityReader", "🎧 AUTO_PLAY_AUDIO: Triggering automatic playback");
+                    
+                    autoPlayAudio = false;  // 只执行一次，避免重复触发
+                    
+                    // 延迟500ms后自动播放，确保UI已准备好
+                    new Handler().postDelayed(() -> {
+                        if (mPlayerService != null && mPlayer != null) {
+                            int currentChapter = mPlayerService.getP().getCurrentChapterNo();
+                            int currentVerse = mPlayerService.getP().getCurrentVerseNo();
+                            
+                            android.util.Log.d("ActivityReader", "🎧 Auto-playing from Surah " + currentChapter + ", Verse " + currentVerse);
+                            
+                            // 触发播放
+                            mPlayerService.reciteVerse(new com.quran.quranaudio.online.quran_module.components.reader.ChapterVersePair(currentChapter, currentVerse));
+                            
+                            // 播放控制按钮UI也需要更新
+                            mPlayer.reveal();
+                        }
+                    }, 500);
                 }
             }
         }
@@ -173,6 +198,7 @@ public class ActivityReader extends ReaderPossessingActivity {
     private com.quran.quranaudio.online.quests.helper.QuranListeningTracker quranListeningTracker;
     private boolean isListeningMode = false;
     private int listeningTargetMinutes = 0;
+    private boolean autoPlayAudio = false;  // 🔥 新增：自动播放标志
 
 
     @Override
@@ -209,6 +235,9 @@ public class ActivityReader extends ReaderPossessingActivity {
             // 检查任务完成状态
             quranReadingTracker.checkAndMarkCompleteAsync();
             
+            // ⭐ 新增：保存当前位置到 Firestore（Quran Reading 任务）
+            saveCurrentPositionToFirestore();
+            
             // 重置会话数据
             sessionStartTime = 0;
             sessionStartPage = -1;
@@ -225,7 +254,10 @@ public class ActivityReader extends ReaderPossessingActivity {
                 quranListeningTracker.checkAndMarkComplete(listeningTargetMinutes);
             }
             
-            android.util.Log.d("ActivityReader", "🎧 Listening session ended");
+            // ⭐ 新增：保存当前位置到 Firestore（Quran Listening 任务）
+            saveCurrentPositionToFirestore();
+            
+            android.util.Log.d("ActivityReader", "🎧 Listening session ended and position saved");
         }
         
         super.onPause();
@@ -442,10 +474,10 @@ public class ActivityReader extends ReaderPossessingActivity {
         // 🔥 Daily Quest: 接收听力模式参数
         isListeningMode = intent.getBooleanExtra("LISTENING_MODE", false);
         listeningTargetMinutes = intent.getIntExtra("TARGET_MINUTES", 0);
-        boolean autoPlayAudio = intent.getBooleanExtra("AUTO_PLAY_AUDIO", false);
+        autoPlayAudio = intent.getBooleanExtra("AUTO_PLAY_AUDIO", false);  // 保存到成员变量
         
         if (isListeningMode) {
-            android.util.Log.d("ActivityReader", "🎧 Listening Mode activated: target " + listeningTargetMinutes + " minutes");
+            android.util.Log.d("ActivityReader", "🎧 Listening Mode activated: target " + listeningTargetMinutes + " minutes, autoPlay=" + autoPlayAudio);
         }
     }
 
@@ -804,16 +836,9 @@ public class ActivityReader extends ReaderPossessingActivity {
 
         if (mPlayer != null) {
             if (!mProtectFromPlayerReset && (!chapter.equals(mReaderParams.currChapter))) {
-                final int fromVerse;
-                final int toVerse;
-
-                if (QuranUtils.doesRangeDenoteSingle(verseRange)) {
-                    fromVerse = 1;
-                    toVerse = chapter.getVerseCount();
-                } else {
-                    fromVerse = verseRange.getFirst();
-                    toVerse = verseRange.getSecond();
-                }
+                // 🔥 修复：直接使用 verseRange 的值，不要因为是单节就重置为整个章节
+                final int fromVerse = verseRange.getFirst();
+                final int toVerse = verseRange.getSecond();
 
                 mPlayer.onChapterChanged(
                     chapter.getChapterNumber(),
@@ -1629,5 +1654,86 @@ public class ActivityReader extends ReaderPossessingActivity {
 
 
         return super.dispatchTouchEvent(ev);
+    }
+    
+    /**
+     * 保存当前阅读位置到 Firestore（用于跨设备同步）
+     * 🔥 Daily Quest: 确保用户下次启动时能从正确位置继续
+     */
+    private void saveCurrentPositionToFirestore() {
+        try {
+            // 获取当前可见的第一个位置
+            if (mLayoutManager == null || mBinding == null || mBinding.readerVerses == null) {
+                android.util.Log.w("ActivityReader", "⚠️ Cannot save position: LayoutManager or RecyclerView is null");
+                return;
+            }
+            
+            int firstPos = mLayoutManager.findFirstVisibleItemPosition();
+            if (firstPos < 0) {
+                android.util.Log.w("ActivityReader", "⚠️ Cannot save position: Invalid first position");
+                return;
+            }
+            
+            RecyclerView.Adapter<?> adapter = mBinding.readerVerses.getAdapter();
+            int currentSurah = 1;
+            int currentAyah = 1;
+            
+            // 根据不同的 Adapter 类型获取当前位置
+            if (adapter instanceof com.quran.quranaudio.online.quran_module.adapters.ADPReader) {
+                com.quran.quranaudio.online.quran_module.adapters.ADPReader readerAdapter = 
+                    (com.quran.quranaudio.online.quran_module.adapters.ADPReader) adapter;
+                com.quran.quranaudio.online.quran_module.components.reader.ReaderRecyclerItemModel firstItem = readerAdapter.getItem(firstPos);
+                if (firstItem != null && firstItem.getVerse() != null) {
+                    currentSurah = firstItem.getVerse().chapterNo;
+                    currentAyah = firstItem.getVerse().verseNo;
+                }
+            } else if (adapter instanceof com.quran.quranaudio.online.quran_module.adapters.ADPQuranPages) {
+                com.quran.quranaudio.online.quran_module.adapters.ADPQuranPages pageAdapter = 
+                    (com.quran.quranaudio.online.quran_module.adapters.ADPQuranPages) adapter;
+                com.quran.quranaudio.online.quran_module.components.reader.QuranPageModel pageModel = pageAdapter.getPageModel(firstPos);
+                if (pageModel != null && pageModel.getSections() != null && !pageModel.getSections().isEmpty()) {
+                    com.quran.quranaudio.online.quran_module.components.reader.QuranPageSectionModel firstSection = pageModel.getSections().get(0);
+                    currentSurah = firstSection.getChapterNo();
+                    int[] verses = firstSection.getFromToVerses();
+                    if (verses != null && verses.length > 0) {
+                        currentAyah = verses[0];
+                    }
+                }
+            }
+            
+            // 保存到 Firestore
+            final int surah = currentSurah;
+            final int ayah = currentAyah;
+            
+            com.google.firebase.auth.FirebaseAuth auth = com.google.firebase.auth.FirebaseAuth.getInstance();
+            if (auth.getCurrentUser() == null) {
+                android.util.Log.w("ActivityReader", "⚠️ User not logged in, cannot save position to Firestore");
+                return;
+            }
+            
+            String userId = auth.getCurrentUser().getUid();
+            com.google.firebase.firestore.FirebaseFirestore firestore = 
+                com.google.firebase.firestore.FirebaseFirestore.getInstance();
+            
+            java.util.Map<String, Object> learningState = new java.util.HashMap<>();
+            learningState.put("lastReadSurah", surah);
+            learningState.put("lastReadAyah", ayah);
+            learningState.put("lastReadTimestamp", com.google.firebase.Timestamp.now());
+            
+            firestore.collection("users")
+                .document(userId)
+                .collection("learningState")
+                .document("current")
+                .set(learningState, com.google.firebase.firestore.SetOptions.merge())
+                .addOnSuccessListener(aVoid -> {
+                    android.util.Log.d("ActivityReader", "✅ Learning state saved to Firestore: Surah " + surah + ", Ayah " + ayah);
+                })
+                .addOnFailureListener(e -> {
+                    android.util.Log.e("ActivityReader", "❌ Failed to save learning state to Firestore", e);
+                });
+                
+        } catch (Exception e) {
+            android.util.Log.e("ActivityReader", "❌ Exception while saving position to Firestore", e);
+        }
     }
 }
