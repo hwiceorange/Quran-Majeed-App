@@ -202,7 +202,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginBottom="24dp">
+            android:layout_marginBottom="12dp">
 
             <TextView
                 android:layout_width="0dp"
@@ -221,6 +221,56 @@
                 app:trackTint="@color/switch_track_color" />
 
         </LinearLayout>
+
+        <!-- Tasbih Count Selection (只有当Tasbih Reminder打开时才启用) -->
+        <RadioGroup
+            android:id="@+id/rg_tasbih_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="24dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:background="@drawable/rounded_background_light">
+
+            <RadioButton
+                android:id="@+id/rb_tasbih_33"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="33"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:checked="true"
+                android:buttonTint="#4B9B76" />
+
+            <RadioButton
+                android:id="@+id/rb_tasbih_50"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="50"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:buttonTint="#4B9B76" />
+
+            <RadioButton
+                android:id="@+id/rb_tasbih_100"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="100"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:buttonTint="#4B9B76" />
+
+        </RadioGroup>
 
         <!-- Challenge Days Display -->
         <androidx.cardview.widget.CardView

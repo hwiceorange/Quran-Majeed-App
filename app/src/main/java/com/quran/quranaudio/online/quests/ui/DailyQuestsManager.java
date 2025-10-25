@@ -611,7 +611,12 @@ public class DailyQuestsManager {
         if (questTask3Card != null) {
             if (config.getTasbihReminderEnabled()) {
                 questTask3Card.setVisibility(View.VISIBLE);
-                Log.d(TAG, "Task 3 (Tasbih) visible - count: " + config.getTasbihCount());
+                // 🔥 动态更新Task 3的描述，显示Tasbih次数
+                if (tvTask3Description != null) {
+                    String task3Desc = fragment.getString(R.string.complete_x_tasbih, config.getTasbihCount());
+                    tvTask3Description.setText(task3Desc);
+                    Log.d(TAG, "Task 3 description updated: " + task3Desc + " (count: " + config.getTasbihCount() + ")");
+                }
                 updateTaskCompletionStatus(
                     btnTask3Go, 
                     ivTask3Completed, 

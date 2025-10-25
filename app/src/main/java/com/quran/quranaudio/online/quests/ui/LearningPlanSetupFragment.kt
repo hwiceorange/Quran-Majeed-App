@@ -335,6 +335,18 @@ class LearningPlanSetupFragment : Fragment() {
             override fun onNothingSelected(parent: android.widget.AdapterView<*>?) {}
         }
 
+        // 🔥 Setup Tasbih Reminder Switch and Count RadioGroup
+        // 初始状态：RadioGroup根据Tasbih开关状态启用/禁用
+        binding.rgTasbihCount.isEnabled = binding.swTasbihReminder.isChecked
+        updateTasbihCountRadioButtons(binding.swTasbihReminder.isChecked)
+        
+        binding.swTasbihReminder.setOnCheckedChangeListener { _, isChecked ->
+            // 当开关变化时，启用或禁用RadioGroup
+            binding.rgTasbihCount.isEnabled = isChecked
+            updateTasbihCountRadioButtons(isChecked)
+            Log.d(TAG, "Tasbih Reminder: ${if (isChecked) "Enabled" else "Disabled"}")
+        }
+
         // Setup Save Button
         binding.btnSaveChallenge.setOnClickListener {
             onSaveButtonClicked()
@@ -461,7 +473,18 @@ class LearningPlanSetupFragment : Fragment() {
                                 // 7. 回显 Tasbih Reminder (Switch)
                                 binding.swTasbihReminder.isChecked = it.tasbihReminderEnabled
                                 
-                                // 8. 计算并显示挑战天数
+                                // 8. 🔥 回显 Tasbih Count (RadioGroup)
+                                when (it.tasbihCount) {
+                                    33 -> binding.rbTasbih33.isChecked = true
+                                    50 -> binding.rbTasbih50.isChecked = true
+                                    100 -> binding.rbTasbih100.isChecked = true
+                                    else -> binding.rbTasbih33.isChecked = true // Default to 33
+                                }
+                                // 更新RadioButton的启用状态
+                                binding.rgTasbihCount.isEnabled = it.tasbihReminderEnabled
+                                updateTasbihCountRadioButtons(it.tasbihReminderEnabled)
+                                
+                                // 9. 计算并显示挑战天数
                                 viewModel.calculateChallengeDays(
                                     unit,
                                     it.dailyReadingGoal,
@@ -647,6 +670,15 @@ class LearningPlanSetupFragment : Fragment() {
         val recitationMinutes = recitationValues[binding.spRecitationMinutes.selectedItemPosition]
         val duaReminderEnabled = binding.swDuaReminder.isChecked
         val tasbihReminderEnabled = binding.swTasbihReminder.isChecked
+        
+        // 🔥 Get selected Tasbih count from RadioGroup
+        val tasbihCount = when (binding.rgTasbihCount.checkedRadioButtonId) {
+            R.id.rb_tasbih_33 -> 33
+            R.id.rb_tasbih_50 -> 50
+            R.id.rb_tasbih_100 -> 100
+            else -> 33 // Default to 33
+        }
+        
         val challengeDays = viewModel.challengeDays.value ?: QuranDataHelper.TOTAL_PAGES
         
         // Construct UserQuestConfig (包含新字段)
@@ -658,17 +690,30 @@ class LearningPlanSetupFragment : Fragment() {
             recitationMinutes = recitationMinutes,
             duaReminderEnabled = duaReminderEnabled,
             tasbihReminderEnabled = tasbihReminderEnabled,
-            tasbihCount = 50,
+            tasbihCount = tasbihCount, // 🔥 使用用户选择的值
             totalChallengeDays = challengeDays,
             startDate = LocalDate.now().toString(),
             createdAt = Timestamp.now(),
             updatedAt = Timestamp.now()
         )
         
-        Log.d(TAG, "Saving configuration: unit=${selectedUnit.displayName}, goal=$dailyGoal, days=$challengeDays")
+        Log.d(TAG, "Saving configuration: unit=${selectedUnit.displayName}, goal=$dailyGoal, tasbihCount=$tasbihCount, days=$challengeDays")
         
         // Save via ViewModel
         viewModel.saveUserQuest(config)
+    }
+    
+    /**
+     * 🔥 辅助函数：根据Tasbih开关状态启用或禁用RadioButton
+     */
+    private fun updateTasbihCountRadioButtons(enabled: Boolean) {
+        val alpha = if (enabled) 1.0f else 0.4f
+        binding.rbTasbih33.isEnabled = enabled
+        binding.rbTasbih33.alpha = alpha
+        binding.rbTasbih50.isEnabled = enabled
+        binding.rbTasbih50.alpha = alpha
+        binding.rbTasbih100.isEnabled = enabled
+        binding.rbTasbih100.alpha = alpha
     }
 
     override fun onDestroyView() {

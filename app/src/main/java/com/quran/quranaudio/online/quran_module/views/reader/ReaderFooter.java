@@ -213,14 +213,39 @@ public class ReaderFooter extends FrameLayout {
         }
 
         String verseNoFormat = getContext().getString(R.string.strLabelVerseNo);
+        int currentChapter = mNavigator.getCurrChapterNo();
+        int currentVerse = mNavigator.getCurrVerseNo();
+        int currentChapterVerseCount = quranMeta.getChapterVerseCount(currentChapter);
 
-        if (mNavigator.getCurrVerseNo() == 1) {
-            setPrevVerse(null);
+        // 🔥 Daily Quest: 支持跨章节导航 - 上一Verse按钮
+        if (currentVerse == 1) {
+            // 如果是第一节，检查是否可以跨章节到上一章的最后一节
+            if (currentChapter > 1) {
+                // 可以跨章节，显示上一章的最后一节号
+                int prevChapter = currentChapter - 1;
+                int lastVerseOfPrevChapter = quranMeta.getChapterVerseCount(prevChapter);
+                setPrevVerse(String.format(verseNoFormat, lastVerseOfPrevChapter));
+            } else {
+                // 第1章第1节，没有上一节
+                setPrevVerse(null);
+            }
         } else {
             setPrevVerse(String.format(verseNoFormat, mNavigator.getPrevVerseNo()));
         }
-        if (mNavigator.getCurrVerseNo() == quranMeta.getChapterVerseCount(mNavigator.getCurrChapterNo())) {
-            setNextVerse(null);
+        
+        // 🔥 Daily Quest: 支持跨章节导航 - 下一Verse按钮
+        if (currentVerse == currentChapterVerseCount) {
+            // 如果是章节最后一节，检查是否可以跨章节到下一章的第一节
+            if (currentChapter == 114 && currentVerse == 6) {
+                // 古兰经的最后一节，没有下一节
+                setNextVerse(null);
+            } else if (currentChapter < QuranMeta.totalChapters()) {
+                // 可以跨章节，显示"Verse 1"（下一章的第一节）
+                setNextVerse(String.format(verseNoFormat, 1));
+            } else {
+                // 理论上不应该到这里，但安全起见禁用
+                setNextVerse(null);
+            }
         } else {
             setNextVerse(String.format(verseNoFormat, mNavigator.getNextVerseNo()));
         }

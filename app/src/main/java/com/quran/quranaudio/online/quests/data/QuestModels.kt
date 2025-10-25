@@ -39,7 +39,7 @@ data class UserQuestConfig(
     val tasbihReminderEnabled: Boolean = true,
     
     @PropertyName("tasbihCount")
-    val tasbihCount: Int = 50,
+    val tasbihCount: Int = 33,
     
     @PropertyName("totalChallengeDays")
     val totalChallengeDays: Int = 0,
@@ -62,7 +62,7 @@ data class UserQuestConfig(
         recitationMinutes = 15,
         duaReminderEnabled = false,
         tasbihReminderEnabled = true,
-        tasbihCount = 50,
+        tasbihCount = 33,
         totalChallengeDays = 0,
         startDate = LocalDate.now().toString(),
         createdAt = Timestamp.now(),

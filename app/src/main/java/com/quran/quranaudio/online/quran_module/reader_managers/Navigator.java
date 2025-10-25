@@ -270,11 +270,109 @@ public class Navigator {
     }
 
     public void previousVerse() {
-        jumpToVerse(getCurrChapterNo(), getPrevVerseNo(), true);
+        // 🔥 Daily Quest: 支持跨章节导航（向前）
+        int currentChapter = getCurrChapterNo();
+        int currentVerse = getCurrVerseNo();
+        int prevVerse = getPrevVerseNo();
+        
+        QuranMeta quranMeta = mActivity.mQuranMetaRef.get();
+        
+        // 检查是否需要跨章节导航（当前是第1节，需要跳到上一章的最后一节）
+        if (prevVerse < 1 && currentChapter > 1) {
+            // 跳转到上一章的最后一节
+            int prevChapter = currentChapter - 1;
+            int lastVerseOfPrevChapter = quranMeta.getChapterVerseCount(prevChapter);
+            android.util.Log.d("Navigator", "🔄 跨章节导航（向前）: 从 Surah " + currentChapter + " Verse 1 → Surah " + prevChapter + " Verse " + lastVerseOfPrevChapter);
+            jumpToVerseAcrossChapter(prevChapter, lastVerseOfPrevChapter, true);
+        } else {
+            jumpToVerse(currentChapter, prevVerse, true);
+        }
     }
 
     public void nextVerse() {
-        jumpToVerse(getCurrChapterNo(), getNextVerseNo(), true);
+        // 🔥 Daily Quest: 支持跨章节导航（向后）
+        int currentChapter = getCurrChapterNo();
+        int currentVerse = getCurrVerseNo();
+        int nextVerse = getNextVerseNo();
+        
+        QuranMeta quranMeta = mActivity.mQuranMetaRef.get();
+        int maxVerseInCurrentChapter = quranMeta.getChapterVerseCount(currentChapter);
+        
+        // 检查是否需要跨章节导航（当前已经是最后一节）
+        if (nextVerse > maxVerseInCurrentChapter) {
+            // 检查是否是古兰经的最后一节（Surah 114, Ayat 6）
+            if (currentChapter == 114 && currentVerse == 6) {
+                android.util.Log.d("Navigator", "📖 已到达古兰经最后一节，无法继续");
+                // TODO: 可以显示完成提示对话框
+                return;
+            }
+            
+            // 跳转到下一章的第一节
+            int nextChapter = currentChapter + 1;
+            android.util.Log.d("Navigator", "🔄 跨章节导航（向后）: 从 Surah " + currentChapter + " Verse " + currentVerse + " → Surah " + nextChapter + " Verse 1");
+            jumpToVerseAcrossChapter(nextChapter, 1, true);
+        } else {
+            jumpToVerse(currentChapter, nextVerse, true);
+        }
+    }
+    
+    /**
+     * 🔥 Daily Quest: 跨章节跳转到指定的Verse
+     * 此方法会切换到新的章节，然后导航到指定的verse
+     */
+    private void jumpToVerseAcrossChapter(int targetChapter, int targetVerse, boolean invokePlayer) {
+        android.util.Log.d("Navigator", "🔄 jumpToVerseAcrossChapter called: targetChapter=" + targetChapter + ", targetVerse=" + targetVerse);
+        
+        if (mActivity.mQuranRef == null || mActivity.mQuranRef.get() == null) {
+            android.util.Log.e("Navigator", "❌ mActivity.mQuranRef is null");
+            return;
+        }
+        
+        QuranMeta quranMeta = mActivity.mQuranMetaRef.get();
+        if (!QuranMeta.isChapterValid(targetChapter)) {
+            android.util.Log.e("Navigator", "❌ 无效的章节: " + targetChapter);
+            return;
+        }
+        
+        if (!quranMeta.isVerseValid4Chapter(targetChapter, targetVerse)) {
+            android.util.Log.e("Navigator", "❌ 无效的节号: Surah " + targetChapter + " Verse " + targetVerse);
+            return;
+        }
+        
+        // 获取目标章节
+        var targetChapterObj = mActivity.mQuranRef.get().getChapter(targetChapter);
+        if (targetChapterObj == null) {
+            android.util.Log.e("Navigator", "❌ Cannot get chapter object for " + targetChapter);
+            return;
+        }
+        
+        android.util.Log.d("Navigator", "✅ Target chapter object obtained: " + targetChapterObj.getName());
+        android.util.Log.d("Navigator", "🔍 Current readType: " + mReaderParams.readType + " (VERSES=" + ReaderParams.READER_READ_TYPE_VERSES + ")");
+        
+        // 🔥 关键：在单Verse模式下(READER_READ_TYPE_VERSES)，切换章节时需要初始化新的单Verse范围
+        if (mReaderParams.readType == ReaderParams.READER_READ_TYPE_VERSES) {
+            // 使用单Verse模式初始化新章节的指定verse
+            android.util.Log.d("Navigator", "📖 使用单Verse模式初始化: Surah " + targetChapter + " Verse " + targetVerse);
+            
+            // 🔥 立即更新 currChapter 以防止后续操作使用旧的章节信息
+            mReaderParams.currChapter = targetChapterObj;
+            
+            mActivity.initVerseRange(targetChapterObj, new Pair<>(targetVerse, targetVerse));
+            
+            // 更新播放器（如果需要）
+            if (invokePlayer) {
+                mActivity.onVerseJump(targetChapter, targetVerse);
+            }
+            
+            // 更新Verse编号显示
+            mActivity.updateVerseNumber(targetChapter, targetVerse);
+            
+            android.util.Log.d("Navigator", "✅ 跨章节导航完成");
+        } else {
+            // 对于其他模式（章节模式、Juz模式），使用标准跳转
+            android.util.Log.d("Navigator", "📖 非单Verse模式，使用标准跳转");
+            jumpToVerse(targetChapter, targetVerse, invokePlayer);
+        }
     }
 
     public void jumpToVerse(int chapterNo, int verseNo, boolean invokePlayer) {
