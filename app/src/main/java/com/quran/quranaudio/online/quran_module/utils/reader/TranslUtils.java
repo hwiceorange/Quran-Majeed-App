@@ -62,14 +62,73 @@ public class TranslUtils {
 
     public static final int TRANSL_MAX_SELECTION_LIMIT = 6;
 
+    /**
+     * 🌐 获取默认译本：根据用户系统语言自动匹配对应的译本
+     * 
+     * 匹配规则：
+     * - 印尼语 (id/in) → Kompleks Al Quran Raja Fahd
+     * - 英语 (en) → Sahih International
+     * - 乌尔都语 (ur) → مولانا محمد جوناگڑهی
+     * - 其他语言 → Sahih International (英语作为默认)
+     * 
+     * @return 默认译本的 slug 集合
+     */
     public static Set<String> defaultTranslationSlugs() {
         Set<String> defTranslations = new HashSet<>();
-        if(AppConfig.INSTANCE.isIDLan()){
-            defTranslations.add(TRANSL_SLUG_IN);
-        } else {
-            defTranslations.add(TRANSL_SLUG_DEFAULT);
+        
+        // 获取系统语言
+        String systemLanguage = getSystemLanguage();
+        
+        // 根据系统语言自动选择对应的译本
+        switch (systemLanguage) {
+            case "id":  // 印尼语 (ISO 639-1 标准)
+            case "in":  // 印尼语 (Android 旧标准)
+                defTranslations.add(TRANSL_SLUG_IN);
+                android.util.Log.d("TranslUtils", "🌐 Auto-selected translation: Indonesian (Kompleks Al Quran)");
+                break;
+                
+            case "en":  // 英语
+                defTranslations.add(TRANSL_SLUG_EN_SAHIH_INTERNATIONAL);
+                android.util.Log.d("TranslUtils", "🌐 Auto-selected translation: English (Sahih International)");
+                break;
+                
+            case "ur":  // 乌尔都语
+                defTranslations.add(TRANSL_SLUG_UR_JUNAGARHI);
+                android.util.Log.d("TranslUtils", "🌐 Auto-selected translation: Urdu (Junagarhi)");
+                break;
+                
+            default:    // 其他语言：默认使用英语译本
+                defTranslations.add(TRANSL_SLUG_EN_SAHIH_INTERNATIONAL);
+                android.util.Log.d("TranslUtils", "🌐 Auto-selected translation: English (Sahih International) - Default for unsupported language: " + systemLanguage);
+                break;
         }
+        
         return defTranslations;
+    }
+    
+    /**
+     * 🌐 获取系统语言代码
+     * 
+     * @return 系统语言代码 (如: "en", "id", "ur", "zh", "de", 等)
+     */
+    private static String getSystemLanguage() {
+        try {
+            // 方法1：使用 Java Locale (最简单可靠)
+            String language = java.util.Locale.getDefault().getLanguage();
+            
+            // 处理 Android 旧标准的印尼语代码
+            if ("in".equals(language)) {
+                return "id";  // 转换为 ISO 639-1 标准
+            }
+            
+            android.util.Log.d("TranslUtils", "📱 Detected system language: " + language);
+            return language;
+        } catch (Exception e) {
+            android.util.Log.w("TranslUtils", "Failed to get system language: " + e.getMessage());
+        }
+        
+        // 默认返回英语
+        return "en";
     }
 
     public static List<QuranTranslBookInfo> preBuiltTranslBooksInfo() {
