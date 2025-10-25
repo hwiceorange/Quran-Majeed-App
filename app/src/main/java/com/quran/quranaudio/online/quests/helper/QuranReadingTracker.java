@@ -25,6 +25,7 @@ public class QuranReadingTracker {
     private static final String TAG = "QuranReadingTracker";
     private static final String PREFS_NAME = "QuranReadingQuestPrefs";
     private static final String KEY_PAGES_READ_TODAY = "pages_read_today";
+    private static final String KEY_VERSES_READ_TODAY = "verses_read_today";  // 🔥 新增：verses计数
     private static final String KEY_LAST_DATE = "last_date";
     private static final String KEY_TASK_COMPLETED_TODAY = "task_completed_today";
     
@@ -88,10 +89,34 @@ public class QuranReadingTracker {
             return;
         }
         
-        // 将verses转换为等效pages: 10 verses ≈ 1 page
+        String today = getTodayDateString();
+        int currentVerses = getTodayVersesRead();
+        int newTotal = currentVerses + versesRead;
+        
+        prefs.edit()
+            .putInt(KEY_VERSES_READ_TODAY, newTotal)
+            .putString(KEY_LAST_DATE, today)
+            .apply();
+        
+        Log.d(TAG, "✅ Recorded " + versesRead + " verses. Total today: " + newTotal);
+        
+        // 同时更新 pages（用于向后兼容）
         int equivalentPages = Math.max(1, versesRead / 10);
         recordPagesRead(equivalentPages);
-        Log.d(TAG, "Recorded " + versesRead + " verses (≈" + equivalentPages + " pages)");
+    }
+    
+    /**
+     * 获取今天已阅读的经文数量
+     */
+    private int getTodayVersesRead() {
+        String today = getTodayDateString();
+        String lastDate = prefs.getString(KEY_LAST_DATE, "");
+        
+        if (!today.equals(lastDate)) {
+            return 0;  // 新的一天，重置计数
+        }
+        
+        return prefs.getInt(KEY_VERSES_READ_TODAY, 0);
     }
     
     /**
@@ -188,19 +213,31 @@ public class QuranReadingTracker {
                 // 根据配置的阅读单位判断
                 int targetGoal = config.getDailyReadingGoal();
                 String unit = config.getReadingGoalUnit();
-                int currentProgress = getTodayPagesRead();
                 
-                // 🔥 修复：将目标转换为pages进行比较
-                int targetInPages = convertToPages(targetGoal, unit);
+                // 🔥 修复：根据配置单位选择正确的进度值进行比较
+                int currentProgress;
+                if ("VERSES".equalsIgnoreCase(unit) || "verses".equals(unit)) {
+                    currentProgress = getTodayVersesRead();
+                    Log.d(TAG, "📖 Checking completion: " + currentProgress + " verses read / " + targetGoal + " verses target");
+                } else if ("PAGES".equalsIgnoreCase(unit) || "pages".equals(unit)) {
+                    currentProgress = getTodayPagesRead();
+                    Log.d(TAG, "📖 Checking completion: " + currentProgress + " pages read / " + targetGoal + " pages target");
+                } else if ("JUZ".equalsIgnoreCase(unit) || "juz".equals(unit)) {
+                    // JUZ 目前还是转换为 pages 进行比较（1 Juz = 20 pages）
+                    currentProgress = getTodayPagesRead();
+                    targetGoal = targetGoal * 20;
+                    Log.d(TAG, "📖 Checking completion: " + currentProgress + " pages read / " + targetGoal + " pages (from Juz) target");
+                } else {
+                    // 默认使用 pages
+                    currentProgress = getTodayPagesRead();
+                    Log.d(TAG, "📖 Checking completion (default): " + currentProgress + " pages read / " + targetGoal + " target");
+                }
                 
-                Log.d(TAG, "📖 Checking completion: " + currentProgress + " pages read / " + 
-                      targetGoal + " " + unit + " target (≈" + targetInPages + " pages needed)");
-                
-                // 当前实现使用pages估算，比较时也使用pages
-                boolean isCompleted = currentProgress >= targetInPages;
+                // 直接比较，不再转换
+                boolean isCompleted = currentProgress >= targetGoal;
                 
                 if (isCompleted) {
-                    Log.d(TAG, "✅ Reading goal achieved! " + currentProgress + " >= " + targetInPages);
+                    Log.d(TAG, "✅ Reading goal achieved! " + currentProgress + " >= " + targetGoal);
                     // Check if already marked complete today
                     String today = getTodayDateString();
                     boolean alreadyCompleted = prefs.getBoolean(KEY_TASK_COMPLETED_TODAY, false);
@@ -223,7 +260,7 @@ public class QuranReadingTracker {
                     Log.d(TAG, "✅ Daily Quran Reading Quest completed! (" + 
                           currentProgress + " pages ≈ " + targetGoal + " " + unit + ")");
                 } else {
-                    Log.d(TAG, "📚 Keep reading: " + currentProgress + "/" + targetInPages + " pages completed");
+                    Log.d(TAG, "📚 Keep reading: " + currentProgress + "/" + targetGoal + " completed");
                 }
             } catch (Exception e) {
                 Log.e(TAG, "Failed to check quest completion", e);
@@ -260,6 +297,7 @@ public class QuranReadingTracker {
         String today = getTodayDateString();
         prefs.edit()
             .putInt(KEY_PAGES_READ_TODAY, 0)
+            .putInt(KEY_VERSES_READ_TODAY, 0)  // 🔥 新增：重置 verses 计数
             .putString(KEY_LAST_DATE, today)
             .putBoolean(KEY_TASK_COMPLETED_TODAY, false)
             .apply();

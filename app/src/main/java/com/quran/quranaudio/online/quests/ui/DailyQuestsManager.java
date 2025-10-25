@@ -28,6 +28,7 @@ import com.quran.quranaudio.online.quests.data.DailyProgressModel;
 import com.quran.quranaudio.online.quests.data.StreakStats;
 import com.quran.quranaudio.online.quests.data.UserQuestConfig;
 import com.quran.quranaudio.online.quests.repository.QuestRepository;
+import com.quran.quranaudio.online.quran_module.utils.univ.Keys;
 import com.quran.quranaudio.online.quests.viewmodel.HomeQuestsViewModel;
 import com.quran.quranaudio.online.quran_module.utils.reader.factory.ReaderFactory;
 
@@ -459,7 +460,7 @@ public class DailyQuestsManager {
                     Context context = fragment.requireContext();
                     
                     // 🔥 从 Firestore 获取上次阅读位置
-                    fetchUserLearningStateAndStartReaderForReading(context);
+                    fetchUserLearningStateAndStartReaderForReading(context, config);
                     
                 } catch (Exception e) {
                     Log.e(TAG, "Failed to launch Quran Reader for reading", e);
@@ -674,7 +675,7 @@ public class DailyQuestsManager {
         }
         
         String userId = currentUser.getUid();
-        Log.d(TAG, "Fetching UserLearningState from Firestore for user: " + userId);
+        Log.d(TAG, "🎧 Fetching LISTENING UserLearningState from Firestore for user: " + userId);
         
         // 从 Firestore 异步获取学习状态
         com.google.firebase.firestore.FirebaseFirestore.getInstance()
@@ -685,22 +686,22 @@ public class DailyQuestsManager {
             .get()
             .addOnSuccessListener(documentSnapshot -> {
                 if (documentSnapshot.exists()) {
-                    // 解析学习状态
-                    Integer lastReadSurah = documentSnapshot.getLong("lastReadSurah") != null 
-                        ? documentSnapshot.getLong("lastReadSurah").intValue() : 1;
-                    Integer lastReadAyah = documentSnapshot.getLong("lastReadAyah") != null 
-                        ? documentSnapshot.getLong("lastReadAyah").intValue() : 1;
+                    // 🔥 关键修复：听力模式应该读取 lastListenSurah 和 lastListenAyah，不是 lastReadSurah
+                    Integer lastListenSurah = documentSnapshot.getLong("lastListenSurah") != null 
+                        ? documentSnapshot.getLong("lastListenSurah").intValue() : 1;
+                    Integer lastListenAyah = documentSnapshot.getLong("lastListenAyah") != null 
+                        ? documentSnapshot.getLong("lastListenAyah").intValue() : 1;
                     
-                    Log.d(TAG, "UserLearningState found: Surah " + lastReadSurah + ", Ayah " + lastReadAyah);
-                    startQuranReaderWithAudio(context, lastReadSurah, lastReadAyah, config);
+                    Log.d(TAG, "🎧 Listening position found: Surah " + lastListenSurah + ", Ayah " + lastListenAyah);
+                    startQuranReaderWithAudio(context, lastListenSurah, lastListenAyah, config);
                 } else {
-                    Log.d(TAG, "UserLearningState not found, using default position (Surah 1, Ayah 1)");
+                    Log.d(TAG, "🎧 Listening position not found, using default (Surah 1, Ayah 1)");
                     startQuranReaderWithAudio(context, 1, 1, config);
                 }
             })
             .addOnFailureListener(e -> {
-                Log.e(TAG, "Failed to fetch UserLearningState", e);
-                Toast.makeText(context, "Failed to load reading position, starting from Surah 1", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "❌ Failed to fetch listening position from Firestore", e);
+                Toast.makeText(context, "Failed to load listening position, starting from Surah 1", Toast.LENGTH_SHORT).show();
                 startQuranReaderWithAudio(context, 1, 1, config);
             });
     }
@@ -710,22 +711,33 @@ public class DailyQuestsManager {
      */
     private void startQuranReaderWithAudio(Context context, int surah, int ayah, UserQuestConfig config) {
         try {
-            Log.d(TAG, "Starting Quran Reader for listening: Surah " + surah + ", Ayah " + ayah);
+            Log.d(TAG, "🔵 startQuranReaderWithAudio called: Surah " + surah + ", Ayah " + ayah);
             
-            // 使用 ReaderFactory 启动 Reader 并定位到指定位置
-            Intent intent = ReaderFactory.prepareSingleVerseIntent(surah, ayah);
+            // 🔥 关键修复：使用 prepareChapterIntent 启动整个章节（支持前进/后退）
+            // 并使用 READER_KEY_PENDING_SCROLL 指定滚动到哪个 verse
+            Intent intent = ReaderFactory.prepareChapterIntent(surah);
             intent.setClass(context, com.quran.quranaudio.online.quran_module.activities.ActivityReader.class);
+            
+            // 🔥 关键修复：使用 READER_KEY_PENDING_SCROLL 来指定初始滚动位置
+            // 这是 ActivityReader 识别的标准参数
+            intent.putExtra(Keys.READER_KEY_PENDING_SCROLL, new int[]{surah, ayah});
+            Log.d(TAG, "🔵 Intent extra set: READER_KEY_PENDING_SCROLL = [" + surah + ", " + ayah + "]");
+            
+            // 🔥 同时保留 START_VERSE 用于自动播放
+            intent.putExtra("START_VERSE", ayah);
+            Log.d(TAG, "🔵 Intent extra set: START_VERSE = " + ayah);
             
             // 传递自动播放参数
             intent.putExtra("AUTO_PLAY_AUDIO", true);
             intent.putExtra("LISTENING_MODE", true);
             intent.putExtra("TARGET_MINUTES", config.getRecitationMinutes());
+            Log.d(TAG, "🔵 Intent extras set: AUTO_PLAY_AUDIO=true, LISTENING_MODE=true, TARGET_MINUTES=" + config.getRecitationMinutes());
             
             context.startActivity(intent);
-            Log.d(TAG, "Quran Reader started successfully for Quran Listening task");
+            Log.d(TAG, "🔵 Quran Reader Activity started successfully");
             
         } catch (Exception e) {
-            Log.e(TAG, "Failed to start Quran Reader", e);
+            Log.e(TAG, "❌ Failed to start Quran Reader", e);
             Toast.makeText(context, "Failed to start Quran Reader: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
@@ -733,12 +745,13 @@ public class DailyQuestsManager {
     /**
      * 从 Firestore 获取用户学习状态并启动 Quran Reader (阅读模式)
      * 🔥 修复 Task 1 (Quran Reading) 无法记录上次节点的问题
+     * 🔥 Step 3: 支持 Juz 阅读模式
      */
-    private void fetchUserLearningStateAndStartReaderForReading(Context context) {
+    private void fetchUserLearningStateAndStartReaderForReading(Context context, UserQuestConfig config) {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser == null) {
-            Log.w(TAG, "User not logged in, starting from default position (Surah 1, Ayah 1)");
-            ReaderFactory.startVerse(context, 1, 1);  // 启动到第1章第1节
+            Log.w(TAG, "User not logged in, starting from default position");
+            startReaderBasedOnReadingUnit(context, 1, 1, 1, config);  // 默认: Surah 1, Ayah 1, Juz 1
             return;
         }
         
@@ -759,19 +772,78 @@ public class DailyQuestsManager {
                         ? documentSnapshot.getLong("lastReadSurah").intValue() : 1;
                     Integer lastReadAyah = documentSnapshot.getLong("lastReadAyah") != null 
                         ? documentSnapshot.getLong("lastReadAyah").intValue() : 1;
+                    Integer lastReadJuz = documentSnapshot.getLong("lastReadJuz") != null 
+                        ? documentSnapshot.getLong("lastReadJuz").intValue() : 1;
                     
-                    Log.d(TAG, "✅ UserLearningState found for Reading: Surah " + lastReadSurah + ", Ayah " + lastReadAyah);
-                    ReaderFactory.startVerse(context, lastReadSurah, lastReadAyah);
+                    Log.d(TAG, "✅ UserLearningState found: Surah " + lastReadSurah + ", Ayah " + lastReadAyah + ", Juz " + lastReadJuz);
+                    startReaderBasedOnReadingUnit(context, lastReadSurah, lastReadAyah, lastReadJuz, config);
                 } else {
-                    Log.d(TAG, "UserLearningState not found, starting from Surah 1, Ayah 1");
-                    ReaderFactory.startVerse(context, 1, 1);
+                    Log.d(TAG, "UserLearningState not found, starting from default position");
+                    startReaderBasedOnReadingUnit(context, 1, 1, 1, config);
                 }
             })
             .addOnFailureListener(e -> {
                 Log.e(TAG, "Failed to fetch UserLearningState for Reading", e);
-                Toast.makeText(context, "Failed to load reading position, starting from Surah 1", Toast.LENGTH_SHORT).show();
-                ReaderFactory.startVerse(context, 1, 1);
+                Toast.makeText(context, "Failed to load reading position, starting from beginning", Toast.LENGTH_SHORT).show();
+                startReaderBasedOnReadingUnit(context, 1, 1, 1, config);
             });
+    }
+    
+    /**
+     * 🔥 Step 3: 根据用户选择的阅读单位启动相应的阅读模式
+     * @param context Context
+     * @param surah 上次阅读的Surah
+     * @param ayah 上次阅读的Ayah
+     * @param juz 上次阅读的Juz
+     * @param config 用户的每日任务配置
+     */
+    private void startReaderBasedOnReadingUnit(Context context, int surah, int ayah, int juz, UserQuestConfig config) {
+        if (config == null) {
+            Log.w(TAG, "Config is null, using default single verse mode");
+            ReaderFactory.startVerse(context, surah, ayah);
+            return;
+        }
+        
+        String readingUnit = config.getReadingGoalUnit();
+        Log.d(TAG, "📖 Starting reader with unit: " + readingUnit + " (Surah " + surah + ", Ayah " + ayah + ", Juz " + juz + ")");
+        
+        if ("JUZ".equalsIgnoreCase(readingUnit)) {
+            // 🔥 Juz 模式：启动 Juz 滚动阅读
+            Log.d(TAG, "🕌 Starting Juz reading mode: Juz " + juz);
+            Intent intent = ReaderFactory.prepareJuzIntent(juz);
+            intent.setClass(context, com.quran.quranaudio.online.quran_module.activities.ActivityReader.class);
+            
+            // 传递起始位置（用于滚动到上次阅读位置）
+            intent.putExtra("PENDING_SCROLL_SURAH", surah);
+            intent.putExtra("PENDING_SCROLL_AYAH", ayah);
+            
+            // 传递任务追踪参数
+            intent.putExtra("READING_MODE", true);
+            intent.putExtra("TARGET_GOAL", config.getDailyReadingGoal());
+            intent.putExtra("TARGET_UNIT", readingUnit);
+            
+            context.startActivity(intent);
+            Log.d(TAG, "✅ Juz Reader started successfully (Juz " + juz + ", scroll to Surah " + surah + ":" + ayah + ")");
+            
+        } else if ("PAGES".equalsIgnoreCase(readingUnit)) {
+            // 🔥 Page 模式：启动章节滚动阅读（页面阅读）
+            Log.d(TAG, "📄 Starting Page reading mode: Chapter " + surah);
+            Intent intent = ReaderFactory.prepareChapterIntent(surah);
+            intent.setClass(context, com.quran.quranaudio.online.quran_module.activities.ActivityReader.class);
+            
+            // 传递任务追踪参数
+            intent.putExtra("READING_MODE", true);
+            intent.putExtra("TARGET_GOAL", config.getDailyReadingGoal());
+            intent.putExtra("TARGET_UNIT", readingUnit);
+            
+            context.startActivity(intent);
+            Log.d(TAG, "✅ Page Reader started successfully (Chapter " + surah + " from verse " + ayah + ")");
+            
+        } else {
+            // 🔥 Verse 模式：启动单节阅读（默认）
+            Log.d(TAG, "✍️ Starting Verse reading mode: Surah " + surah + ", Ayah " + ayah);
+            ReaderFactory.startVerse(context, surah, ayah);
+        }
     }
     
     /**

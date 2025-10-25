@@ -115,23 +115,37 @@ public class ActivityReader extends ReaderPossessingActivity {
     private final ServiceConnection mPlayerServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
+            android.util.Log.d("ActivityReader", "🔌 onServiceConnected: Service connected!");
+            
             if (service instanceof RecitationService.LocalBinder) {
                 mPlayerService = ((RecitationService.LocalBinder) service).getService();
+                android.util.Log.d("ActivityReader", "🔌 mPlayerService obtained successfully");
 
                 if (mPlayer != null) {
                     mPlayer.setService(mPlayerService);
+                    android.util.Log.d("ActivityReader", "🔌 mPlayer.setService() called");
                 }
 
                 mPlayerService.setRecitationPlayer(mPlayer, ActivityReader.this);
+                android.util.Log.d("ActivityReader", "🔌 setRecitationPlayer() called");
 
-                if (!mPlayerService.isPlaying()) {
+                boolean isPlaying = mPlayerService.isPlaying();
+                android.util.Log.d("ActivityReader", "🔌 mPlayerService.isPlaying() = " + isPlaying);
+                
+                if (!isPlaying) {
                     Chapter currChapter = mReaderParams.currChapter;
                     int currJuzNo = mReaderParams.currJuzNo;
                     QuranMeta quranMeta = mQuranMetaRef.get();
+                    
+                    android.util.Log.d("ActivityReader", "🔌 currChapter = " + (currChapter != null ? "Chapter " + currChapter.getChapterNumber() : "null"));
+                    android.util.Log.d("ActivityReader", "🔌 readType = " + mReaderParams.readType);
+                    android.util.Log.d("ActivityReader", "🔌 currJuzNo = " + currJuzNo);
 
                     if (mReaderParams.readType == ReaderParams.READER_READ_TYPE_JUZ && currJuzNo > 0 && quranMeta != null) {
+                        android.util.Log.d("ActivityReader", "🔌 Entering JUZ mode initialization");
                         mPlayerService.onJuzChanged(currJuzNo, quranMeta);
                     } else if (currChapter != null) {
+                        android.util.Log.d("ActivityReader", "🔌 Entering CHAPTER mode initialization");
                         final int fromVerse;
                         final int toVerse;
                         Pair<Integer, Integer> verseRange = mReaderParams.verseRange;
@@ -146,36 +160,69 @@ public class ActivityReader extends ReaderPossessingActivity {
                             toVerse = verseRange.getSecond();
                         }
 
+                        // 🔥 修复：如果指定了起始节号，使用它作为 currentVerse
+                        int currentVerse = (startVerseNo > 0) ? startVerseNo : mPlayerService.getP().getCurrentVerseNo();
+                        
+                        android.util.Log.d("ActivityReader", "🟡 onServiceConnected: startVerseNo = " + startVerseNo);
+                        android.util.Log.d("ActivityReader", "🟡 onServiceConnected: currentVerse (calculated) = " + currentVerse);
+                        android.util.Log.d("ActivityReader", "🟡 onServiceConnected: mPlayerService.getP().getCurrentVerseNo() = " + mPlayerService.getP().getCurrentVerseNo());
+                        
+                        // 🔥 保存 startVerseNo 用于自动播放，在重置之前保存
+                        final int savedStartVerse = startVerseNo;
+                        
+                        if (startVerseNo > 0) {
+                            android.util.Log.d("ActivityReader", "🔧 Using START_VERSE: " + startVerseNo + " for playback initialization");
+                            startVerseNo = -1;  // 使用后重置，避免影响后续逻辑
+                        }
+                        
+                        android.util.Log.d("ActivityReader", "🟡 Calling onChapterChanged:");
+                        android.util.Log.d("ActivityReader", "🟡   Chapter: " + currChapter.getChapterNumber());
+                        android.util.Log.d("ActivityReader", "🟡   fromVerse: " + fromVerse);
+                        android.util.Log.d("ActivityReader", "🟡   toVerse: " + toVerse);
+                        android.util.Log.d("ActivityReader", "🟡   currentVerse: " + currentVerse);
+                        
                         mPlayerService.onChapterChanged(
                             currChapter.getChapterNumber(),
                             fromVerse,
                             toVerse,
-                            mPlayerService.getP().getCurrentVerseNo()
+                            currentVerse
                         );
-                    }
-                }
-                
-                // 🔥 Daily Quest: 自动播放逻辑
-                if (autoPlayAudio && !mPlayerService.isPlaying()) {
-                    android.util.Log.d("ActivityReader", "🎧 AUTO_PLAY_AUDIO: Triggering automatic playback");
-                    
-                    autoPlayAudio = false;  // 只执行一次，避免重复触发
-                    
-                    // 延迟500ms后自动播放，确保UI已准备好
-                    new Handler().postDelayed(() -> {
-                        if (mPlayerService != null && mPlayer != null) {
-                            int currentChapter = mPlayerService.getP().getCurrentChapterNo();
-                            int currentVerse = mPlayerService.getP().getCurrentVerseNo();
+                        
+                        // 🔥 Daily Quest: 自动播放逻辑（移到这里，在 currChapter 作用域内）
+                        // 关键修复：检查 autoPlayAudio 或 savedStartVerse，确保一定触发自动播放
+                        if ((autoPlayAudio || savedStartVerse > 0) && !mPlayerService.isPlaying()) {
+                            android.util.Log.d("ActivityReader", "🎧 AUTO_PLAY_AUDIO: Triggering automatic playback (autoPlayAudio=" + autoPlayAudio + ", savedStartVerse=" + savedStartVerse + ")");
                             
-                            android.util.Log.d("ActivityReader", "🎧 Auto-playing from Surah " + currentChapter + ", Verse " + currentVerse);
+                            autoPlayAudio = false;  // 只执行一次，避免重复触发
                             
-                            // 触发播放
-                            mPlayerService.reciteVerse(new com.quran.quranaudio.online.quran_module.components.reader.ChapterVersePair(currentChapter, currentVerse));
+                            // 🔥 保存当前verse信息，用于自动播放
+                            final int targetChapter = currChapter.getChapterNumber();
+                            final int targetVerse = (savedStartVerse > 0) ? savedStartVerse : fromVerse;
                             
-                            // 播放控制按钮UI也需要更新
-                            mPlayer.reveal();
+                            android.util.Log.d("ActivityReader", "🎧 Preparing auto-play: Surah " + targetChapter + ", Verse " + targetVerse);
+                            
+                            // 延迟500ms后自动播放，确保UI已准备好
+                            new Handler().postDelayed(() -> {
+                                if (mPlayerService != null && mPlayer != null) {
+                                    android.util.Log.d("ActivityReader", "🎧 Executing auto-play: Surah " + targetChapter + ", Verse " + targetVerse);
+                                    
+                                    // 🔥 关键修复：直接使用我们保存的 targetChapter 和 targetVerse
+                                    // 不要从服务获取，因为服务的 currentVerse 可能还未正确初始化到播放器
+                                    mPlayerService.reciteVerse(new com.quran.quranaudio.online.quran_module.components.reader.ChapterVersePair(targetChapter, targetVerse));
+                                    
+                                    // 播放控制按钮UI也需要更新
+                                    mPlayer.reveal();
+                                    
+                                    // 重置 startVerseNo，避免在 onResume 中重复触发
+                                    startVerseNo = -1;
+                                }
+                            }, 500);
                         }
-                    }, 500);
+                    } else {
+                        android.util.Log.d("ActivityReader", "🔌 ❌ currChapter is null, cannot initialize player");
+                        android.util.Log.d("ActivityReader", "🔌 ❌ This means initQuran() hasn't been called yet");
+                        android.util.Log.d("ActivityReader", "🔌 ❌ Will need to rely on onResume() auto-play instead");
+                    }
                 }
             }
         }
@@ -193,12 +240,31 @@ public class ActivityReader extends ReaderPossessingActivity {
     private long sessionStartTime = 0;
     private int sessionStartPage = -1;  // 阅读会话的起始页码
     private int sessionEndPage = -1;    // 阅读会话的结束页码
+    private int sessionStartSurah = -1;  // 🔥 新增：阅读会话的起始章节
+    private int sessionStartAyah = -1;   // 🔥 新增：阅读会话的起始节号
+    private int sessionEndSurah = -1;    // 🔥 新增：阅读会话的结束章节
+    private int sessionEndAyah = -1;     // 🔥 新增：阅读会话的结束节号
+    
+    // 🔥 Daily Quest Step 2: 按Page阅读模式追踪
+    private int lastCompletedPage = -1;  // 上次已完成计数的页码
+    private int currentVisiblePage = -1;  // 当前可见的页码
+    private long pageViewStartTime = 0;   // 进入某页的时间戳
+    private static final long PAGE_VIEW_THRESHOLD_MS = 3000;  // 页面停留阈值：3秒
+    
+    // 🔥 Step 3: Juz 阅读模式追踪变量
+    private int lastCompletedAyatInJuz = -1;  // Juz 模式下已完成计数的最后一节经文的全局Ayat编号
+    private int currentJuzNo = -1;  // 当前正在阅读的Juz编号
+    private int currentJuzFirstAyatGlobal = -1;  // 当前Juz的第一节经文的全局Ayat编号
+    private int currentJuzLastAyatGlobal = -1;  // 当前Juz的最后一节经文的全局Ayat编号
+    private long juzAyatViewStartTime = 0;   // 进入某Ayat的时间戳
+    private static final long AYAT_VIEW_THRESHOLD_MS = 3000;  // Ayat停留阈值：3秒
     
     // Daily Quest: Quran Listening Tracker
     private com.quran.quranaudio.online.quests.helper.QuranListeningTracker quranListeningTracker;
     private boolean isListeningMode = false;
     private int listeningTargetMinutes = 0;
     private boolean autoPlayAudio = false;  // 🔥 新增：自动播放标志
+    private int startVerseNo = -1;  // 🔥 新增：起始节号，用于从指定位置开始播放
 
 
     @Override
@@ -220,16 +286,34 @@ public class ActivityReader extends ReaderPossessingActivity {
         
         // Daily Quest: Track reading session
         if (quranReadingTracker != null && sessionStartTime > 0 && !isListeningMode) {
-            // 🔥 优先使用实际页码追踪（如果可用）
-            if (sessionStartPage > 0 && sessionEndPage > 0) {
-                quranReadingTracker.recordPageRange(sessionStartPage, sessionEndPage);
-                android.util.Log.d("ActivityReader", "✅ 使用实际页码追踪: " + sessionStartPage + "-" + sessionEndPage);
-            } else {
-                // 回退到时间估算（兼容旧逻辑）
-                long sessionDuration = System.currentTimeMillis() - sessionStartTime;
-                int pagesRead = Math.max(1, (int) (sessionDuration / 120000));
-                quranReadingTracker.recordPagesRead(pagesRead);
-                android.util.Log.d("ActivityReader", "⚠️ 使用时间估算追踪: " + pagesRead + " pages");
+            // 🔥 修复：根据用户设置的阅读单位来追踪进度
+            try {
+                // 🔥 关键修复：在离开页面前，确保结束位置已更新
+                if (sessionEndSurah == -1 || sessionEndAyah == -1) {
+                    android.util.Log.w("ActivityReader", "⚠️ 结束位置未更新，尝试最后一次更新");
+                    updateCurrentPageNumber();
+                }
+                
+                // 计算实际阅读的 verses 数量
+                int versesRead = calculateVersesRead();
+                
+                if (versesRead > 0) {
+                    // 直接记录 verses 数量，让 Tracker 根据配置决定如何处理
+                    quranReadingTracker.recordVersesRead(versesRead);
+                    android.util.Log.d("ActivityReader", "✅ 记录阅读进度: " + versesRead + " verses");
+                } else if (sessionStartPage > 0 && sessionEndPage > 0) {
+                    // 回退到页码追踪
+                    quranReadingTracker.recordPageRange(sessionStartPage, sessionEndPage);
+                    android.util.Log.d("ActivityReader", "✅ 使用页码追踪: " + sessionStartPage + "-" + sessionEndPage);
+                } else {
+                    // 最后回退到时间估算
+                    long sessionDuration = System.currentTimeMillis() - sessionStartTime;
+                    int pagesRead = Math.max(1, (int) (sessionDuration / 120000));
+                    quranReadingTracker.recordPagesRead(pagesRead);
+                    android.util.Log.d("ActivityReader", "⚠️ 使用时间估算追踪: " + pagesRead + " pages");
+                }
+            } catch (Exception e) {
+                android.util.Log.e("ActivityReader", "Failed to track reading progress", e);
             }
             
             // 检查任务完成状态
@@ -242,6 +326,15 @@ public class ActivityReader extends ReaderPossessingActivity {
             sessionStartTime = 0;
             sessionStartPage = -1;
             sessionEndPage = -1;
+            sessionStartSurah = -1;
+            sessionStartAyah = -1;
+            sessionEndSurah = -1;
+            sessionEndAyah = -1;
+            
+            // 🔥 Daily Quest Step 2: 不重置lastCompletedPage，保留跨会话
+            // lastCompletedPage在整个应用生命周期内保持，直到新的一天或任务完成
+            currentVisiblePage = -1;
+            pageViewStartTime = 0;
         }
         
         // 🔥 Daily Quest: Track listening session
@@ -272,6 +365,11 @@ public class ActivityReader extends ReaderPossessingActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        
+        android.util.Log.d("ActivityReader", "🔄 onResume: Called");
+        android.util.Log.d("ActivityReader", "🔄 onResume: autoPlayAudio = " + autoPlayAudio);
+        android.util.Log.d("ActivityReader", "🔄 onResume: startVerseNo = " + startVerseNo);
+        android.util.Log.d("ActivityReader", "🔄 onResume: mPlayerService = " + (mPlayerService != null ? "connected" : "null"));
 
         if (mPlayer != null) {
             new Handler().postDelayed(() -> mPlayer.reveal(), 500);
@@ -279,6 +377,33 @@ public class ActivityReader extends ReaderPossessingActivity {
 
         if (mPlayerService != null) {
             mPlayerService.setRecitationPlayer(mPlayer, this);
+            android.util.Log.d("ActivityReader", "🔄 onResume: mPlayerService.isPlaying() = " + mPlayerService.isPlaying());
+            
+            // 🔥 关键修复：如果服务已经连接，但 onServiceConnected 没有被调用（Activity重启场景）
+            // 我们需要在这里触发自动播放
+            if (autoPlayAudio && !mPlayerService.isPlaying() && startVerseNo > 0) {
+                android.util.Log.d("ActivityReader", "🎧 onResume: Service already connected, triggering auto-play");
+                android.util.Log.d("ActivityReader", "🎧 onResume: startVerseNo = " + startVerseNo);
+                
+                final int targetChapter = mReaderParams.currChapter != null ? mReaderParams.currChapter.getChapterNumber() : 1;
+                final int targetVerse = startVerseNo;
+                
+                android.util.Log.d("ActivityReader", "🎧 onResume: Preparing auto-play: Surah " + targetChapter + ", Verse " + targetVerse);
+                
+                // 延迟500ms后自动播放，确保UI已准备好
+                new Handler().postDelayed(() -> {
+                    if (mPlayerService != null && mPlayer != null && !mPlayerService.isPlaying()) {
+                        android.util.Log.d("ActivityReader", "🎧 onResume: Executing auto-play: Surah " + targetChapter + ", Verse " + targetVerse);
+                        
+                        mPlayerService.reciteVerse(new com.quran.quranaudio.online.quran_module.components.reader.ChapterVersePair(targetChapter, targetVerse));
+                        mPlayer.reveal();
+                        
+                        // 自动播放后重置标志，避免重复触发
+                        autoPlayAudio = false;
+                        startVerseNo = -1;
+                    }
+                }, 500);
+            }
         }
         
         // Daily Quest: Initialize trackers and record session start
@@ -287,8 +412,17 @@ public class ActivityReader extends ReaderPossessingActivity {
         }
         sessionStartTime = System.currentTimeMillis();
         
+        // 🔥 Daily Quest Step 2: 初始化lastCompletedPage（从今天已完成的pages数开始）
+        if (lastCompletedPage == -1 && isPageReadingMode()) {
+            lastCompletedPage = quranReadingTracker.getTodayPagesRead();
+            android.util.Log.d("ActivityReader", "📄 初始化lastCompletedPage: " + lastCompletedPage);
+        }
+        
         // 🔥 记录起始页码（从LayoutManager获取）
         updateCurrentPageNumber();
+        
+        // 🔥 Daily Quest Step 2: 初始化当前可见页码
+        updateCurrentVisiblePage();
         
         // 🔥 Daily Quest: Initialize listening tracker if in listening mode
         if (isListeningMode) {
@@ -304,38 +438,403 @@ public class ActivityReader extends ReaderPossessingActivity {
     }
     
     /**
-     * 更新当前阅读的页码（用于Daily Quest追踪）
+     * 更新当前阅读的页码和经文位置（用于Daily Quest追踪）
      */
     private void updateCurrentPageNumber() {
         try {
-            if (mLayoutManager != null && mBinding.readerVerses.getAdapter() instanceof ADPQuranPages) {
-                int firstVisiblePosition = mLayoutManager.findFirstVisibleItemPosition();
-                int lastVisiblePosition = mLayoutManager.findLastVisibleItemPosition();
+            if (mLayoutManager == null || mBinding == null || mBinding.readerVerses == null) {
+                return;
+            }
+            
+            int firstVisiblePosition = mLayoutManager.findFirstVisibleItemPosition();
+            int lastVisiblePosition = mLayoutManager.findLastVisibleItemPosition();
+            
+            if (firstVisiblePosition < 0) {
+                return;
+            }
+            
+            RecyclerView.Adapter<?> adapter = mBinding.readerVerses.getAdapter();
+            
+            // 🔥 处理不同的 Adapter 类型
+            if (adapter instanceof ADPReader) {
+                // Translation/Verse view - 直接获取 verse 信息
+                ADPReader readerAdapter = (ADPReader) adapter;
+                com.quran.quranaudio.online.quran_module.components.reader.ReaderRecyclerItemModel firstItem = readerAdapter.getItem(firstVisiblePosition);
                 
-                if (firstVisiblePosition >= 0) {
-                    ADPQuranPages adapter = (ADPQuranPages) mBinding.readerVerses.getAdapter();
-                    QuranPageModel firstPage = adapter.getPageModel(firstVisiblePosition);
+                if (firstItem != null && firstItem.getVerse() != null) {
+                    // 记录起始位置（只在会话开始时）
+                    if (sessionStartSurah == -1) {
+                        sessionStartSurah = firstItem.getVerse().chapterNo;
+                        sessionStartAyah = firstItem.getVerse().verseNo;
+                        android.util.Log.d("ActivityReader", "📖 会话起始: Surah " + sessionStartSurah + ", Ayah " + sessionStartAyah);
+                    }
+                }
+                
+                // 🔥 修复：始终更新结束位置（即使 firstItem 为 null）
+                if (lastVisiblePosition >= 0) {
+                    com.quran.quranaudio.online.quran_module.components.reader.ReaderRecyclerItemModel lastItem = readerAdapter.getItem(lastVisiblePosition);
+                    if (lastItem != null && lastItem.getVerse() != null) {
+                        sessionEndSurah = lastItem.getVerse().chapterNo;
+                        sessionEndAyah = lastItem.getVerse().verseNo;
+                        android.util.Log.d("ActivityReader", "📖 会话结束更新: Surah " + sessionEndSurah + ", Ayah " + sessionEndAyah);
+                    }
+                }
+            } else if (adapter instanceof ADPQuranPages) {
+                // Page view - 获取 page 和 verse 信息
+                ADPQuranPages pageAdapter = (ADPQuranPages) adapter;
+                com.quran.quranaudio.online.quran_module.components.reader.QuranPageModel firstPage = pageAdapter.getPageModel(firstVisiblePosition);
+                
+                if (firstPage != null) {
+                    // 记录页码
+                    if (sessionStartPage == -1) {
+                        sessionStartPage = firstPage.getPageNo();
+                        android.util.Log.d("ActivityReader", "📖 会话起始页: " + sessionStartPage);
+                    }
                     
-                    if (firstPage != null) {
-                        // 如果是会话开始，记录起始页
-                        if (sessionStartPage == -1) {
-                            sessionStartPage = firstPage.getPageNo();
-                            android.util.Log.d("ActivityReader", "📖 会话起始页: " + sessionStartPage);
+                    // 记录第一节经文
+                    if (sessionStartSurah == -1 && firstPage.getSections() != null && !firstPage.getSections().isEmpty()) {
+                        com.quran.quranaudio.online.quran_module.components.reader.QuranPageSectionModel firstSection = firstPage.getSections().get(0);
+                        sessionStartSurah = firstSection.getChapterNo();
+                        // getFromToVerses() 返回 int[]{fromVerse, toVerse}
+                        int[] fromToVerses = firstSection.getFromToVerses();
+                        if (fromToVerses != null && fromToVerses.length >= 1) {
+                            sessionStartAyah = fromToVerses[0];  // 起始经文号
                         }
-                        
-                        // 持续更新结束页（用户可能滚动）
-                        if (lastVisiblePosition >= 0) {
-                            QuranPageModel lastPage = adapter.getPageModel(lastVisiblePosition);
-                            if (lastPage != null) {
-                                sessionEndPage = lastPage.getPageNo();
-                                // 不打印过多日志，避免刷屏
+                    }
+                    
+                    // 持续更新结束页和结束经文
+                    if (lastVisiblePosition >= 0) {
+                        com.quran.quranaudio.online.quran_module.components.reader.QuranPageModel lastPage = pageAdapter.getPageModel(lastVisiblePosition);
+                        if (lastPage != null) {
+                            sessionEndPage = lastPage.getPageNo();
+                            
+                            // 获取最后一节经文
+                            if (lastPage.getSections() != null && !lastPage.getSections().isEmpty()) {
+                                java.util.List<com.quran.quranaudio.online.quran_module.components.reader.QuranPageSectionModel> sections = lastPage.getSections();
+                                com.quran.quranaudio.online.quran_module.components.reader.QuranPageSectionModel lastSection = sections.get(sections.size() - 1);
+                                sessionEndSurah = lastSection.getChapterNo();
+                                // getFromToVerses() 返回 int[]{fromVerse, toVerse}
+                                int[] fromToVerses = lastSection.getFromToVerses();
+                                if (fromToVerses != null && fromToVerses.length >= 2) {
+                                    sessionEndAyah = fromToVerses[1];  // 结束经文号
+                                }
                             }
                         }
                     }
                 }
             }
         } catch (Exception e) {
-            android.util.Log.e("ActivityReader", "Failed to update page number", e);
+            android.util.Log.e("ActivityReader", "Failed to update page/verse tracking", e);
+        }
+    }
+    
+    /**
+     * 🔥 Daily Quest Step 2: 检查页面停留时间并计数
+     */
+    private void checkPageViewDuration() {
+        if (!isPageReadingMode() || quranReadingTracker == null || isListeningMode) {
+            return;
+        }
+        
+        try {
+            // 检查是否有有效的当前页码
+            if (currentVisiblePage <= 0) {
+                return;
+            }
+            
+            // 计算停留时间
+            long viewDuration = System.currentTimeMillis() - pageViewStartTime;
+            
+            // 🔥 关键逻辑：只有停留超过3秒 且 currentPage > lastCompletedPage 时才计数
+            if (viewDuration >= PAGE_VIEW_THRESHOLD_MS && currentVisiblePage > lastCompletedPage) {
+                // 计算阅读的页数（从lastCompletedPage+1到currentVisiblePage）
+                int pagesRead = currentVisiblePage - Math.max(lastCompletedPage, 0);
+                
+                if (pagesRead > 0) {
+                    quranReadingTracker.recordPagesRead(pagesRead);
+                    android.util.Log.d("ActivityReader", "📄 Page计数：+" + pagesRead + " pages (Page " + 
+                        (lastCompletedPage + 1) + " → " + currentVisiblePage + ")，停留时间：" + viewDuration + "ms");
+                    
+                    // 更新lastCompletedPage
+                    lastCompletedPage = currentVisiblePage;
+                    
+                    // 立即检查任务完成状态
+                    quranReadingTracker.checkAndMarkCompleteAsync();
+                }
+            }
+        } catch (Exception e) {
+            android.util.Log.e("ActivityReader", "Failed to check page view duration", e);
+        }
+    }
+    
+    /**
+     * 🔥 Daily Quest Step 2: 滚动时持续更新当前可见页码
+     */
+    private void updateCurrentVisiblePage() {
+        if (!isPageReadingMode() || mBinding == null || mBinding.readerVerses == null) {
+            return;
+        }
+        
+        try {
+            RecyclerView recyclerView = mBinding.readerVerses;
+            RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+            
+            if (layoutManager instanceof LinearLayoutManager) {
+                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;
+                
+                // 获取中间可见项的位置
+                int firstVisiblePos = linearLayoutManager.findFirstVisibleItemPosition();
+                int lastVisiblePos = linearLayoutManager.findLastVisibleItemPosition();
+                int middlePosition = (firstVisiblePos + lastVisiblePos) / 2;
+                
+                if (middlePosition >= 0 && middlePosition < recyclerView.getAdapter().getItemCount()) {
+                    // 从 Adapter 中获取对应的页码
+                    RecyclerView.Adapter<?> adapter = recyclerView.getAdapter();
+                    if (adapter instanceof ADPQuranPages) {
+                        ADPQuranPages pagesAdapter = (ADPQuranPages) adapter;
+                        if (middlePosition < pagesAdapter.getItemCount()) {
+                            com.quran.quranaudio.online.quran_module.components.reader.QuranPageModel pageModel = pagesAdapter.getPageModel(middlePosition);
+                            if (pageModel != null) {
+                                int newPage = pageModel.getPageNo();
+                                
+                                // 如果页码发生变化，重置计时器
+                                if (newPage != currentVisiblePage) {
+                                    currentVisiblePage = newPage;
+                                    pageViewStartTime = System.currentTimeMillis();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            android.util.Log.e("ActivityReader", "Failed to update current visible page", e);
+        }
+    }
+    
+    /**
+     * 🔥 Step 3: 滚动时持续更新当前可见的 Juz Ayat
+     */
+    private void updateCurrentVisibleJuzAyat() {
+        if (!isJuzReadingMode() || quranReadingTracker == null || isListeningMode) {
+            return;
+        }
+        
+        if (mBinding == null || mBinding.readerVerses == null) {
+            return;
+        }
+        
+        try {
+            RecyclerView recyclerView = mBinding.readerVerses;
+            RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+            
+            if (layoutManager instanceof LinearLayoutManager) {
+                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;
+                
+                // 获取中间可见项的位置
+                int firstVisiblePos = linearLayoutManager.findFirstVisibleItemPosition();
+                int lastVisiblePos = linearLayoutManager.findLastVisibleItemPosition();
+                int middlePosition = (firstVisiblePos + lastVisiblePos) / 2;
+                
+                if (middlePosition >= 0 && middlePosition < recyclerView.getAdapter().getItemCount()) {
+                    // 从 Adapter 中获取对应的 Ayat
+                    RecyclerView.Adapter<?> adapter = recyclerView.getAdapter();
+                    if (adapter instanceof ADPQuranPages) {
+                        ADPQuranPages pagesAdapter = (ADPQuranPages) adapter;
+                        if (middlePosition < pagesAdapter.getItemCount()) {
+                            com.quran.quranaudio.online.quran_module.components.reader.QuranPageModel pageModel = pagesAdapter.getPageModel(middlePosition);
+                            if (pageModel != null && pageModel.getSections() != null && !pageModel.getSections().isEmpty()) {
+                                // 获取页面第一个Section
+                                com.quran.quranaudio.online.quran_module.components.reader.QuranPageSectionModel firstSection = pageModel.getSections().get(0);
+                                int[] fromToVerses = firstSection.getFromToVerses();
+                                if (fromToVerses != null && fromToVerses.length >= 2) {
+                                    int surah = firstSection.getChapterNo();
+                                    int ayah = fromToVerses[0];  // from verse
+                                    
+                                    // 计算全局 Ayat 编号
+                                    int currentGlobalAyat = calculateGlobalAyatNumber(surah, ayah);
+                                    
+                                    // 如果 Ayat 发生变化，重置计时器
+                                    if (currentGlobalAyat != lastCompletedAyatInJuz) {
+                                        juzAyatViewStartTime = System.currentTimeMillis();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            android.util.Log.e("ActivityReader", "Failed to update current visible Juz Ayat", e);
+        }
+    }
+    
+    /**
+     * 🔥 Step 3: 检测 Juz Ayat 停留时间（用于Juz Ayat计数）
+     */
+    private void checkJuzAyatViewDuration() {
+        if (!isJuzReadingMode() || quranReadingTracker == null || isListeningMode) {
+            return;
+        }
+        
+        if (currentJuzNo <= 0 || currentJuzFirstAyatGlobal <= 0 || currentJuzLastAyatGlobal <= 0) {
+            return;
+        }
+        
+        try {
+            RecyclerView recyclerView = mBinding.readerVerses;
+            RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+            
+            if (layoutManager instanceof LinearLayoutManager) {
+                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;
+                
+                // 获取中间可见项的位置
+                int firstVisiblePos = linearLayoutManager.findFirstVisibleItemPosition();
+                int lastVisiblePos = linearLayoutManager.findLastVisibleItemPosition();
+                int middlePosition = (firstVisiblePos + lastVisiblePos) / 2;
+                
+                if (middlePosition >= 0) {
+                    RecyclerView.Adapter<?> adapter = recyclerView.getAdapter();
+                    if (adapter instanceof ADPQuranPages) {
+                        ADPQuranPages pagesAdapter = (ADPQuranPages) adapter;
+                        if (middlePosition < pagesAdapter.getItemCount()) {
+                            com.quran.quranaudio.online.quran_module.components.reader.QuranPageModel pageModel = pagesAdapter.getPageModel(middlePosition);
+                            if (pageModel != null && pageModel.getSections() != null && !pageModel.getSections().isEmpty()) {
+                                // 获取页面第一个Section
+                                com.quran.quranaudio.online.quran_module.components.reader.QuranPageSectionModel firstSection = pageModel.getSections().get(0);
+                                int[] fromToVerses = firstSection.getFromToVerses();
+                                if (fromToVerses != null && fromToVerses.length >= 2) {
+                                    int surah = firstSection.getChapterNo();
+                                    int ayah = fromToVerses[0];  // from verse
+                                    
+                                    // 计算全局 Ayat 编号
+                                    int currentGlobalAyat = calculateGlobalAyatNumber(surah, ayah);
+                                    
+                                    // 检查是否在当前 Juz 范围内
+                                    if (currentGlobalAyat < currentJuzFirstAyatGlobal || currentGlobalAyat > currentJuzLastAyatGlobal) {
+                                        android.util.Log.d("ActivityReader", String.format(
+                                            "⚠️ Juz boundary crossed: Current Ayat (Global %d) is outside Juz %d range (%d-%d)",
+                                            currentGlobalAyat, currentJuzNo, currentJuzFirstAyatGlobal, currentJuzLastAyatGlobal
+                                        ));
+                                        // TODO: Handle cross-Juz boundary transition
+                                        return;
+                                    }
+                                    
+                                    // 计算停留时间
+                                    long viewDuration = System.currentTimeMillis() - juzAyatViewStartTime;
+                                    
+                                    // 🔥 关键逻辑：只有停留超过3秒 且 currentGlobalAyat > lastCompletedAyatInJuz 时才计数
+                                    if (viewDuration >= AYAT_VIEW_THRESHOLD_MS && currentGlobalAyat > lastCompletedAyatInJuz) {
+                                        // 计算阅读的 Ayat 数量（从lastCompletedAyatInJuz+1到currentGlobalAyat）
+                                        int ayatRead = currentGlobalAyat - lastCompletedAyatInJuz;
+                                        
+                                        if (ayatRead > 0) {
+                                            quranReadingTracker.recordVersesRead(ayatRead);
+                                            android.util.Log.d("ActivityReader", String.format(
+                                                "🕌 Juz %d Ayat计数：+%d ayat (Surah %d:%d, Global %d)，停留时间：%dms",
+                                                currentJuzNo, ayatRead, surah, ayah, currentGlobalAyat, viewDuration
+                                            ));
+                                            
+                                            // 更新 lastCompletedAyatInJuz
+                                            lastCompletedAyatInJuz = currentGlobalAyat;
+                                            
+                                            // 立即检查任务完成状态
+                                            quranReadingTracker.checkAndMarkCompleteAsync();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            android.util.Log.e("ActivityReader", "Failed to check Juz Ayat view duration", e);
+        }
+    }
+    
+    /**
+     * 🔥 判断是否为Page阅读模式（章节滚动或Juz模式）
+     */
+    private boolean isPageReadingMode() {
+        return mReaderParams.readType == ReaderParams.READER_READ_TYPE_CHAPTER ||
+               mReaderParams.readType == ReaderParams.READER_READ_TYPE_JUZ;
+    }
+    
+    /**
+     * 🔥 Step 3: 检查是否为 Juz 阅读模式
+     */
+    private boolean isJuzReadingMode() {
+        return mReaderParams.readType == ReaderParams.READER_READ_TYPE_JUZ;
+    }
+    
+    /**
+     * 🔥 Step 3: 计算全局 Ayat 编号（从Surah 1, Ayah 1 开始累加）
+     * @param surah 章节号 (1-114)
+     * @param ayah 节号
+     * @return 全局 Ayat 编号
+     */
+    private int calculateGlobalAyatNumber(int surah, int ayah) {
+        if (mQuranMetaRef == null || mQuranMetaRef.get() == null) {
+            return -1;
+        }
+        
+        QuranMeta quranMeta = mQuranMetaRef.get();
+        int globalAyat = 0;
+        
+        // 累加前面所有章节的经文数
+        for (int i = 1; i < surah; i++) {
+            globalAyat += quranMeta.getChapterVerseCount(i);
+        }
+        
+        // 加上当前章节的节号
+        globalAyat += ayah;
+        
+        return globalAyat;
+    }
+    
+    /**
+     * 🔥 新方法：计算实际阅读的经文数量
+     */
+    private int calculateVersesRead() {
+        if (sessionStartSurah <= 0 || sessionEndSurah <= 0) {
+            return 0;
+        }
+        
+        try {
+            QuranMeta quranMeta = mQuranMetaRef.get();
+            if (quranMeta == null) {
+                return 0;
+            }
+            
+            int totalVerses = 0;
+            
+            if (sessionStartSurah == sessionEndSurah) {
+                // 同一章节内
+                totalVerses = Math.max(0, sessionEndAyah - sessionStartAyah + 1);
+            } else {
+                // 跨章节（这种情况较少，但需要处理）
+                // 起始章节的剩余经文
+                int versesInStartSurah = quranMeta.getChapterVerseCount(sessionStartSurah) - sessionStartAyah + 1;
+                
+                // 中间章节的所有经文
+                for (int surah = sessionStartSurah + 1; surah < sessionEndSurah; surah++) {
+                    versesInStartSurah += quranMeta.getChapterVerseCount(surah);
+                }
+                
+                // 结束章节的经文
+                versesInStartSurah += sessionEndAyah;
+                
+                totalVerses = versesInStartSurah;
+            }
+            
+            android.util.Log.d("ActivityReader", "📊 计算阅读量: Surah " + sessionStartSurah + ":" + sessionStartAyah + 
+                              " → Surah " + sessionEndSurah + ":" + sessionEndAyah + " = " + totalVerses + " verses");
+            
+            return totalVerses;
+        } catch (Exception e) {
+            android.util.Log.e("ActivityReader", "Failed to calculate verses read", e);
+            return 0;
         }
     }
 
@@ -475,9 +974,24 @@ public class ActivityReader extends ReaderPossessingActivity {
         isListeningMode = intent.getBooleanExtra("LISTENING_MODE", false);
         listeningTargetMinutes = intent.getIntExtra("TARGET_MINUTES", 0);
         autoPlayAudio = intent.getBooleanExtra("AUTO_PLAY_AUDIO", false);  // 保存到成员变量
+        startVerseNo = intent.getIntExtra("START_VERSE", -1);  // 🔥 接收起始节号
+        
+        android.util.Log.d("ActivityReader", "🟢 preReaderReady: Received intent extras:");
+        android.util.Log.d("ActivityReader", "🟢   LISTENING_MODE = " + isListeningMode);
+        android.util.Log.d("ActivityReader", "🟢   AUTO_PLAY_AUDIO = " + autoPlayAudio);
+        android.util.Log.d("ActivityReader", "🟢   START_VERSE = " + startVerseNo);
+        android.util.Log.d("ActivityReader", "🟢   TARGET_MINUTES = " + listeningTargetMinutes);
         
         if (isListeningMode) {
-            android.util.Log.d("ActivityReader", "🎧 Listening Mode activated: target " + listeningTargetMinutes + " minutes, autoPlay=" + autoPlayAudio);
+            android.util.Log.d("ActivityReader", "🎧 Listening Mode activated: target " + listeningTargetMinutes + " minutes");
+        }
+        
+        // 🔥 Step 3: 接收 Juz 阅读模式参数
+        boolean isReadingMode = intent.getBooleanExtra("READING_MODE", false);
+        if (isReadingMode) {
+            int targetGoal = intent.getIntExtra("TARGET_GOAL", 0);
+            String targetUnit = intent.getStringExtra("TARGET_UNIT");
+            android.util.Log.d("ActivityReader", "📖 Reading Mode activated: target " + targetGoal + " " + targetUnit);
         }
     }
 
@@ -615,7 +1129,7 @@ public class ActivityReader extends ReaderPossessingActivity {
         mLayoutManager = new ReaderLayoutManager(this, RecyclerView.VERTICAL, false);
         mBinding.readerVerses.setItemAnimator(null);
         
-        // 🔥 添加滚动监听器以追踪阅读页码
+        // 🔥 添加滚动监听器以追踪阅读页码和Juz Ayat
         mBinding.readerVerses.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -623,17 +1137,43 @@ public class ActivityReader extends ReaderPossessingActivity {
                 // 当滚动停止时更新页码
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     updateCurrentPageNumber();
+                    
+                    // 🔥 Daily Quest Step 2: 检测页面停留时间（用于Page计数）
+                    checkPageViewDuration();
+                    
+                    // 🔥 Step 3: 检测 Juz Ayat 停留时间（用于Juz Ayat计数）
+                    checkJuzAyatViewDuration();
                 }
+            }
+            
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                // 🔥 Daily Quest Step 2: 滚动时持续更新当前可见页码
+                updateCurrentVisiblePage();
+                
+                // 🔥 Step 3: 滚动时持续更新当前可见的 Juz Ayat
+                updateCurrentVisibleJuzAyat();
             }
         });
     }
 
     private void resetAdapter(RecyclerView.Adapter<?> adapter) {
+        // 🔍 日志 A0：在 resetAdapter 开始时检查 pendingScrollVerse
+        android.util.Log.d("🔍 SCROLL_DEBUG", "📍 日志 A0: resetAdapter() 开始 | pendingScrollVerse = [" + 
+                           mNavigator.pendingScrollVerse[0] + ", " + mNavigator.pendingScrollVerse[1] + "]");
+        
         mBinding.readerVerses.setAdapter(adapter);
         mBinding.readerVerses.setLayoutManager(mLayoutManager);
         mBinding.readerVerses.post(this::pendingScrollIfAny);
 
         saveToIntent();
+        
+        // 🔍 日志 A：resetAdapter 完成
+        int adapterItemCount = adapter != null ? adapter.getItemCount() : 0;
+        android.util.Log.d("🔍 SCROLL_DEBUG", "📍 日志 A: resetAdapter() 完成 | Adapter ItemCount = " + adapterItemCount + 
+                           " | pendingScrollIfAny 已 post() | pendingScrollVerse = [" + 
+                           mNavigator.pendingScrollVerse[0] + ", " + mNavigator.pendingScrollVerse[1] + "]");
     }
 
     private void initDummyBars() {
@@ -694,8 +1234,14 @@ public class ActivityReader extends ReaderPossessingActivity {
         Pair<Integer, Integer> initVerses = resolveIntentVerseRange(intent);
 
         int[] pendingScroll = intent.getIntArrayExtra(READER_KEY_PENDING_SCROLL);
+        android.util.Log.d("🔍 SCROLL_DEBUG", "📍 日志 X1: initQuran() 读取 READER_KEY_PENDING_SCROLL: " + 
+                           (pendingScroll != null ? "[" + pendingScroll[0] + ", " + pendingScroll[1] + "]" : "null"));
         if (pendingScroll != null) {
             mNavigator.pendingScrollVerse = pendingScroll;
+            android.util.Log.d("🔍 SCROLL_DEBUG", "📍 日志 X2: mNavigator.pendingScrollVerse 已设置为 [" + 
+                               pendingScroll[0] + ", " + pendingScroll[1] + "]");
+        } else {
+            android.util.Log.d("🔍 SCROLL_DEBUG", "📍 日志 X2: pendingScroll 为 null，未设置 mNavigator.pendingScrollVerse");
         }
 
         if (!QuranMeta.isChapterValid(initChapterNo)) {
@@ -809,6 +1355,46 @@ public class ActivityReader extends ReaderPossessingActivity {
         } else {
             initChapterTranslation(chapter);
         }
+        
+        // 🔥 Daily Quest: 如果服务已连接但播放器未初始化，立即初始化
+        // 这解决了 onServiceConnected 在 initChapter 之前被调用的竞争条件
+        if (mPlayerService != null && autoPlayAudio && startVerseNo > 0 && !mPlayerService.isPlaying()) {
+            android.util.Log.d("ActivityReader", "🔥 initChapter completed: Service already connected, initializing player now");
+            android.util.Log.d("ActivityReader", "🔥 startVerseNo = " + startVerseNo + ", Chapter = " + chapter.getChapterNumber());
+            
+            // 初始化播放器
+            final int targetChapter = chapter.getChapterNumber();
+            final int targetVerse = startVerseNo;
+            final int savedStartVerse = startVerseNo;
+            
+            // 重置 startVerseNo 避免重复触发
+            startVerseNo = -1;
+            
+            android.util.Log.d("ActivityReader", "🟡 Calling onChapterChanged (from initChapter):");
+            android.util.Log.d("ActivityReader", "🟡   Chapter: " + targetChapter);
+            android.util.Log.d("ActivityReader", "🟡   fromVerse: 1");
+            android.util.Log.d("ActivityReader", "🟡   toVerse: " + chapter.getVerseCount());
+            android.util.Log.d("ActivityReader", "🟡   currentVerse: " + targetVerse);
+            
+            mPlayerService.onChapterChanged(
+                targetChapter,
+                1,
+                chapter.getVerseCount(),
+                targetVerse
+            );
+            
+            // 延迟500ms自动播放
+            new Handler().postDelayed(() -> {
+                if (mPlayerService != null && mPlayer != null && !mPlayerService.isPlaying()) {
+                    android.util.Log.d("ActivityReader", "🎧 Executing auto-play (from initChapter): Surah " + targetChapter + ", Verse " + targetVerse);
+                    mPlayerService.reciteVerse(new com.quran.quranaudio.online.quran_module.components.reader.ChapterVersePair(targetChapter, targetVerse));
+                    mPlayer.reveal();
+                    
+                    // 重置自动播放标志
+                    autoPlayAudio = false;
+                }
+            }, 500);
+        }
     }
 
     private void initChapterReading(Chapter chapter) {
@@ -828,6 +1414,21 @@ public class ActivityReader extends ReaderPossessingActivity {
             verseRange.getSecond())) {
             initChapter(chapter);
             return;
+        }
+
+        // 🔥 Daily Quest Step 1: 单Verse模式下，每次切换verse时立即追踪阅读进度
+        if (quranReadingTracker != null && !isListeningMode) {
+            // 检查是否是单Verse切换（用于每日任务计数）
+            boolean isSingleVerseSwitch = QuranUtils.doesRangeDenoteSingle(verseRange);
+            if (isSingleVerseSwitch) {
+                // 用户点击了"下一Verse"按钮或首次进入单Verse模式，记录阅读进度+1
+                quranReadingTracker.recordVersesRead(1);
+                android.util.Log.d("ActivityReader", "📖 单Verse模式：记录阅读进度 +1 verse (Surah " + 
+                    chapter.getChapterNumber() + ", Verse " + verseRange.getFirst() + ")");
+                
+                // 立即检查任务完成状态
+                quranReadingTracker.checkAndMarkCompleteAsync();
+            }
         }
 
         mReaderParams.readType = ReaderParams.READER_READ_TYPE_VERSES;
@@ -972,6 +1573,47 @@ public class ActivityReader extends ReaderPossessingActivity {
         }
 
         makeVerseSpinnerJuzItems(juzNo, chaptersInJuz, quranMeta);
+        
+        // 🔥 Step 3: 初始化 Juz 阅读追踪
+        initJuzTracking(juzNo, quranMeta);
+    }
+    
+    /**
+     * 🔥 Step 3: 初始化 Juz 阅读追踪
+     * 计算当前 Juz 的 Ayat 范围（全局编号），用于追踪阅读进度
+     */
+    private void initJuzTracking(int juzNo, QuranMeta quranMeta) {
+        if (quranReadingTracker == null || !isJuzReadingMode()) {
+            return;
+        }
+        
+        currentJuzNo = juzNo;
+        
+        // 获取 Juz 中的章节范围
+        Pair<Integer, Integer> chaptersInJuz = quranMeta.getChaptersInJuz(juzNo);
+        int firstChapter = chaptersInJuz.getFirst();
+        int lastChapter = chaptersInJuz.getSecond();
+        
+        // 获取 Juz 中第一个章节的节号范围
+        Pair<Integer, Integer> firstChapterVerseRange = quranMeta.getVerseRangeOfChapterInJuz(juzNo, firstChapter);
+        int firstVerse = firstChapterVerseRange.getFirst();
+        
+        // 获取 Juz 中最后一个章节的节号范围
+        Pair<Integer, Integer> lastChapterVerseRange = quranMeta.getVerseRangeOfChapterInJuz(juzNo, lastChapter);
+        int lastVerse = lastChapterVerseRange.getSecond();
+        
+        // 计算全局 Ayat 编号
+        currentJuzFirstAyatGlobal = calculateGlobalAyatNumber(firstChapter, firstVerse);
+        currentJuzLastAyatGlobal = calculateGlobalAyatNumber(lastChapter, lastVerse);
+        
+        // 初始化 lastCompletedAyatInJuz（从已读取的进度恢复）
+        lastCompletedAyatInJuz = currentJuzFirstAyatGlobal - 1;  // 初始值设为Juz起始前一节
+        
+        android.util.Log.d("ActivityReader", String.format(
+            "🕌 Juz %d tracking initialized: First Ayat (Global) = %d, Last Ayat (Global) = %d, Total Ayat = %d",
+            juzNo, currentJuzFirstAyatGlobal, currentJuzLastAyatGlobal, 
+            quranMeta.getJuzVerseCount(juzNo)
+        ));
     }
 
     private void initJuzReading(int juzNo, QuranMeta quranMeta) {
@@ -1227,25 +1869,50 @@ public class ActivityReader extends ReaderPossessingActivity {
     }
 
     private void pendingScrollIfAny() {
+        // 🔍 日志 B：pendingScrollIfAny 开始执行
+        RecyclerView.Adapter<?> adapter = mBinding.readerVerses.getAdapter();
+        int adapterItemCount = adapter != null ? adapter.getItemCount() : 0;
+        android.util.Log.d("🔍 SCROLL_DEBUG", "📍 日志 B: pendingScrollIfAny() 开始执行 | Adapter ItemCount = " + adapterItemCount);
 
         int pendingChapterNo = mNavigator.pendingScrollVerse[0];
         int pendingVerseNo = mNavigator.pendingScrollVerse[1];
 
         boolean proceed = pendingChapterNo > 0 && pendingVerseNo > 0;
+        android.util.Log.d("🔍 SCROLL_DEBUG", "📍 日志 B1: pendingChapterNo=" + pendingChapterNo + ", pendingVerseNo=" + pendingVerseNo + ", proceed初始=" + proceed);
 
         QuranMeta quranMeta = mQuranMetaRef.get();
+        
+        android.util.Log.d("🔍 SCROLL_DEBUG", "📍 日志 B2: readType=" + mReaderParams.readType + 
+                           " (JUZ=" + ReaderParams.READER_READ_TYPE_JUZ + 
+                           ", CHAPTER=" + ReaderParams.READER_READ_TYPE_CHAPTER + 
+                           ", VERSES=" + ReaderParams.READER_READ_TYPE_VERSES + ")");
 
         if (mReaderParams.readType == ReaderParams.READER_READ_TYPE_JUZ) {
-            proceed &= quranMeta.isVerseValid4Juz(mReaderParams.currJuzNo, pendingChapterNo, pendingVerseNo);
+            boolean validJuz = quranMeta.isVerseValid4Juz(mReaderParams.currJuzNo, pendingChapterNo, pendingVerseNo);
+            proceed &= validJuz;
+            android.util.Log.d("🔍 SCROLL_DEBUG", "📍 日志 B3-JUZ: validJuz=" + validJuz + ", proceed=" + proceed);
         } else if (mReaderParams.readType == ReaderParams.READER_READ_TYPE_CHAPTER) {
-            proceed &= pendingChapterNo == mReaderParams.currChapter.getChapterNumber();
-            proceed &= quranMeta.isVerseValid4Chapter(pendingChapterNo, pendingVerseNo);
+            int currChapterNo = mReaderParams.currChapter != null ? mReaderParams.currChapter.getChapterNumber() : -1;
+            boolean chapterMatch = pendingChapterNo == currChapterNo;
+            boolean validChapter = quranMeta.isVerseValid4Chapter(pendingChapterNo, pendingVerseNo);
+            proceed &= chapterMatch;
+            proceed &= validChapter;
+            android.util.Log.d("🔍 SCROLL_DEBUG", "📍 日志 B3-CHAPTER: currChapter=" + currChapterNo + 
+                               ", chapterMatch=" + chapterMatch + ", validChapter=" + validChapter + ", proceed=" + proceed);
         } else if (mReaderParams.readType == ReaderParams.READER_READ_TYPE_VERSES) {
-            proceed &= pendingChapterNo == mReaderParams.currChapter.getChapterNumber();
-            proceed &= QuranUtils.isVerseInRange(pendingVerseNo, mReaderParams.verseRange);
+            int currChapterNo = mReaderParams.currChapter != null ? mReaderParams.currChapter.getChapterNumber() : -1;
+            boolean chapterMatch = pendingChapterNo == currChapterNo;
+            boolean verseInRange = QuranUtils.isVerseInRange(pendingVerseNo, mReaderParams.verseRange);
+            proceed &= chapterMatch;
+            proceed &= verseInRange;
+            android.util.Log.d("🔍 SCROLL_DEBUG", "📍 日志 B3-VERSES: currChapter=" + currChapterNo + 
+                               ", chapterMatch=" + chapterMatch + ", verseInRange=" + verseInRange + ", proceed=" + proceed);
         } else {
+            android.util.Log.d("🔍 SCROLL_DEBUG", "📍 日志 B3-UNKNOWN: readType 不匹配任何已知类型，proceed=false");
             proceed = false;
         }
+
+        android.util.Log.d("🔍 SCROLL_DEBUG", "📍 日志 B4: 最终 proceed=" + proceed + " → " + (proceed ? "调用 scrollToVerse()" : "跳过滚动"));
 
         if (proceed) {
             mNavigator.scrollToVerse(pendingChapterNo, pendingVerseNo, mNavigator.pendingScrollVerseHighlight);
@@ -1662,43 +2329,52 @@ public class ActivityReader extends ReaderPossessingActivity {
      */
     private void saveCurrentPositionToFirestore() {
         try {
-            // 获取当前可见的第一个位置
-            if (mLayoutManager == null || mBinding == null || mBinding.readerVerses == null) {
-                android.util.Log.w("ActivityReader", "⚠️ Cannot save position: LayoutManager or RecyclerView is null");
-                return;
-            }
-            
-            int firstPos = mLayoutManager.findFirstVisibleItemPosition();
-            if (firstPos < 0) {
-                android.util.Log.w("ActivityReader", "⚠️ Cannot save position: Invalid first position");
-                return;
-            }
-            
-            RecyclerView.Adapter<?> adapter = mBinding.readerVerses.getAdapter();
             int currentSurah = 1;
             int currentAyah = 1;
             
-            // 根据不同的 Adapter 类型获取当前位置
-            if (adapter instanceof com.quran.quranaudio.online.quran_module.adapters.ADPReader) {
-                com.quran.quranaudio.online.quran_module.adapters.ADPReader readerAdapter = 
-                    (com.quran.quranaudio.online.quran_module.adapters.ADPReader) adapter;
-                com.quran.quranaudio.online.quran_module.components.reader.ReaderRecyclerItemModel firstItem = readerAdapter.getItem(firstPos);
-                if (firstItem != null && firstItem.getVerse() != null) {
-                    currentSurah = firstItem.getVerse().chapterNo;
-                    currentAyah = firstItem.getVerse().verseNo;
+            // 🔥 关键修复：优先从播放器服务获取当前播放位置（听力模式）
+            if (isListeningMode && mPlayerService != null && mPlayerService.getP() != null) {
+                currentSurah = mPlayerService.getP().getCurrentChapterNo();
+                currentAyah = mPlayerService.getP().getCurrentVerseNo();
+                android.util.Log.d("ActivityReader", "🎧 Getting position from PLAYER service: Surah " + currentSurah + ", Ayah " + currentAyah);
+            } else {
+                // 非听力模式：从 UI (RecyclerView) 获取当前可见位置
+                if (mLayoutManager == null || mBinding == null || mBinding.readerVerses == null) {
+                    android.util.Log.w("ActivityReader", "⚠️ Cannot save position: LayoutManager or RecyclerView is null");
+                    return;
                 }
-            } else if (adapter instanceof com.quran.quranaudio.online.quran_module.adapters.ADPQuranPages) {
-                com.quran.quranaudio.online.quran_module.adapters.ADPQuranPages pageAdapter = 
-                    (com.quran.quranaudio.online.quran_module.adapters.ADPQuranPages) adapter;
-                com.quran.quranaudio.online.quran_module.components.reader.QuranPageModel pageModel = pageAdapter.getPageModel(firstPos);
-                if (pageModel != null && pageModel.getSections() != null && !pageModel.getSections().isEmpty()) {
-                    com.quran.quranaudio.online.quran_module.components.reader.QuranPageSectionModel firstSection = pageModel.getSections().get(0);
-                    currentSurah = firstSection.getChapterNo();
-                    int[] verses = firstSection.getFromToVerses();
-                    if (verses != null && verses.length > 0) {
-                        currentAyah = verses[0];
+                
+                int firstPos = mLayoutManager.findFirstVisibleItemPosition();
+                if (firstPos < 0) {
+                    android.util.Log.w("ActivityReader", "⚠️ Cannot save position: Invalid first position");
+                    return;
+                }
+                
+                RecyclerView.Adapter<?> adapter = mBinding.readerVerses.getAdapter();
+                
+                // 根据不同的 Adapter 类型获取当前位置
+                if (adapter instanceof com.quran.quranaudio.online.quran_module.adapters.ADPReader) {
+                    com.quran.quranaudio.online.quran_module.adapters.ADPReader readerAdapter = 
+                        (com.quran.quranaudio.online.quran_module.adapters.ADPReader) adapter;
+                    com.quran.quranaudio.online.quran_module.components.reader.ReaderRecyclerItemModel firstItem = readerAdapter.getItem(firstPos);
+                    if (firstItem != null && firstItem.getVerse() != null) {
+                        currentSurah = firstItem.getVerse().chapterNo;
+                        currentAyah = firstItem.getVerse().verseNo;
+                    }
+                } else if (adapter instanceof com.quran.quranaudio.online.quran_module.adapters.ADPQuranPages) {
+                    com.quran.quranaudio.online.quran_module.adapters.ADPQuranPages pageAdapter = 
+                        (com.quran.quranaudio.online.quran_module.adapters.ADPQuranPages) adapter;
+                    com.quran.quranaudio.online.quran_module.components.reader.QuranPageModel pageModel = pageAdapter.getPageModel(firstPos);
+                    if (pageModel != null && pageModel.getSections() != null && !pageModel.getSections().isEmpty()) {
+                        com.quran.quranaudio.online.quran_module.components.reader.QuranPageSectionModel firstSection = pageModel.getSections().get(0);
+                        currentSurah = firstSection.getChapterNo();
+                        int[] verses = firstSection.getFromToVerses();
+                        if (verses != null && verses.length > 0) {
+                            currentAyah = verses[0];
+                        }
                     }
                 }
+                android.util.Log.d("ActivityReader", "📖 Getting position from UI: Surah " + currentSurah + ", Ayah " + currentAyah);
             }
             
             // 保存到 Firestore
@@ -1716,9 +2392,27 @@ public class ActivityReader extends ReaderPossessingActivity {
                 com.google.firebase.firestore.FirebaseFirestore.getInstance();
             
             java.util.Map<String, Object> learningState = new java.util.HashMap<>();
-            learningState.put("lastReadSurah", surah);
-            learningState.put("lastReadAyah", ayah);
-            learningState.put("lastReadTimestamp", com.google.firebase.Timestamp.now());
+            
+            // 🔥 关键修复：区分听力模式和阅读模式，使用不同的字段
+            if (isListeningMode) {
+                // 听力模式：保存到 lastListenSurah 和 lastListenAyah
+                learningState.put("lastListenSurah", surah);
+                learningState.put("lastListenAyah", ayah);
+                learningState.put("lastListenTimestamp", com.google.firebase.Timestamp.now());
+                android.util.Log.d("ActivityReader", "🎧 Saving LISTENING position: Surah " + surah + ", Ayah " + ayah);
+            } else {
+                // 阅读模式：保存到 lastReadSurah 和 lastReadAyah
+                learningState.put("lastReadSurah", surah);
+                learningState.put("lastReadAyah", ayah);
+                learningState.put("lastReadTimestamp", com.google.firebase.Timestamp.now());
+                android.util.Log.d("ActivityReader", "📖 Saving READING position: Surah " + surah + ", Ayah " + ayah);
+            }
+            
+            // 🔥 Step 3: 保存当前 Juz 编号（如果在 Juz 阅读模式）
+            if (isJuzReadingMode() && mReaderParams != null && mReaderParams.currJuzNo > 0) {
+                learningState.put("lastReadJuz", mReaderParams.currJuzNo);
+                android.util.Log.d("ActivityReader", "🕌 Also saving Juz " + mReaderParams.currJuzNo + " to Firestore");
+            }
             
             firestore.collection("users")
                 .document(userId)
@@ -1726,7 +2420,11 @@ public class ActivityReader extends ReaderPossessingActivity {
                 .document("current")
                 .set(learningState, com.google.firebase.firestore.SetOptions.merge())
                 .addOnSuccessListener(aVoid -> {
-                    android.util.Log.d("ActivityReader", "✅ Learning state saved to Firestore: Surah " + surah + ", Ayah " + ayah);
+                    String logMsg = "✅ Learning state saved to Firestore: Surah " + surah + ", Ayah " + ayah;
+                    if (isJuzReadingMode() && mReaderParams != null && mReaderParams.currJuzNo > 0) {
+                        logMsg += ", Juz " + mReaderParams.currJuzNo;
+                    }
+                    android.util.Log.d("ActivityReader", logMsg);
                 })
                 .addOnFailureListener(e -> {
                     android.util.Log.e("ActivityReader", "❌ Failed to save learning state to Firestore", e);

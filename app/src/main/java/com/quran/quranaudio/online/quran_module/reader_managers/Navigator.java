@@ -328,6 +328,13 @@ public class Navigator {
 
     public void scrollToVerse(int chapterNo, int verseNo, boolean highlight) {
         final RecyclerView.Adapter<?> adp = mActivity.mBinding.readerVerses.getAdapter();
+        
+        // 🔍 日志 C：scrollToVerse 被调用
+        int adapterItemCount = adp != null ? adp.getItemCount() : 0;
+        String adapterType = adp != null ? adp.getClass().getSimpleName() : "null";
+        android.util.Log.d("🔍 SCROLL_DEBUG", "📍 日志 C: scrollToVerse() 被调用 | Surah " + chapterNo + ", Ayah " + verseNo + 
+                           " | Adapter类型 = " + adapterType + " | ItemCount = " + adapterItemCount);
+        
         if (adp instanceof ADPReader) {
             scrollToVerseWithOffset(chapterNo, verseNo, 0, highlight);
         } else if (adp instanceof ADPQuranPages) {
@@ -355,11 +362,19 @@ public class Navigator {
                 continue;
             }
 
+            // 🔍 日志 C2：找到目标 Verse，准备滚动
+            android.util.Log.d("🔍 SCROLL_DEBUG", "📍 日志 C2: 找到目标 Verse，准备滚动 RecyclerView | Position = " + i + 
+                               " | Surah " + chapterNo + ", Ayah " + verseNo);
+            
             mActivity.mLayoutManager.scrollToPositionWithOffset(i, offset);
 
             if (highlight) {
                 adapter.highlightVerseOnScroll(i);
             }
+            
+            // 🔍 日志 C3：滚动完成
+            android.util.Log.d("🔍 SCROLL_DEBUG", "📍 日志 C3: scrollToPositionWithOffset() 调用完成");
+            
 
             break;
         }
