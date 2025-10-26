@@ -5,6 +5,7 @@ package com.quran.quranaudio.online.activities
 import android.Manifest
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -84,8 +85,9 @@ class HomeActivity : BaseActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_settings -> {
-                val mFragment = com.quran.quranaudio.online.tasbih.fragments.TasbihFragment.newInstance()
-                replaceFragment(mFragment)
+                // 🌐 启动应用设置页面（包含语言设置）
+                android.util.Log.d("HomeActivity", "🌐 Launching App Settings (includes Language setting)")
+                startActivity(Intent(this, com.quran.quranaudio.online.quran_module.activities.readerSettings.Activity_Quran_Settings::class.java))
                 return@OnNavigationItemSelectedListener true
             }
         }

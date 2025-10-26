@@ -239,10 +239,17 @@ public class FragSettingsMain extends FragSettingsBase implements FragmentResult
     }
 
     private void initExplorers(Context ctx) {
+        // 🌐 调试日志：检查 mIsFromReader 状态
+        android.util.Log.d("FragSettingsMain", "🔍 initExplorers: mIsFromReader = " + mIsFromReader);
+        android.util.Log.d("FragSettingsMain", "🔍 initExplorers: appSettings visibility = " + (!mIsFromReader ? "VISIBLE" : "GONE"));
+        
         mBinding.appSettings.getRoot().setVisibility(!mIsFromReader ? VISIBLE : GONE); //RaiAdnan
 
         if (!mIsFromReader) {
+            android.util.Log.d("FragSettingsMain", "✅ Initializing App Settings (including Language)");
             iniAppSettings();
+        } else {
+            android.util.Log.d("FragSettingsMain", "⚠️ Skipping App Settings (mIsFromReader = true)");
         }
 
         initReaderSettings(ctx);
@@ -254,15 +261,21 @@ public class FragSettingsMain extends FragSettingsBase implements FragmentResult
     }
 
     private void initAppLanguage(LinearLayout parent) {
+        android.util.Log.d("FragSettingsMain", "🌐 initAppLanguage: 开始初始化语言设置入口");
+        
         LytReaderSettingsItemBinding appLangExplorerBinding = LytReaderSettingsItemBinding.inflate(mInflater, parent,
             false);
 
         setupLauncherParams(R.drawable.dr_icon_language, appLangExplorerBinding);
         setupAppLangTitle(appLangExplorerBinding);
 
-        appLangExplorerBinding.launcher.setOnClickListener(v -> launchFrag(FragSettingsLanguage.class, null));
+        appLangExplorerBinding.launcher.setOnClickListener(v -> {
+            android.util.Log.d("FragSettingsMain", "🌐 语言设置被点击，启动 FragSettingsLanguage");
+            launchFrag(FragSettingsLanguage.class, null);
+        });
 
         parent.addView(appLangExplorerBinding.getRoot());
+        android.util.Log.d("FragSettingsMain", "✅ initAppLanguage: 语言设置入口已添加到页面");
     }
 
     private void setupAppLangTitle(LytReaderSettingsItemBinding binding) {
