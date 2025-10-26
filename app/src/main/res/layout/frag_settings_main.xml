@@ -8,16 +8,20 @@
     android:paddingTop="10dp"
     android:paddingBottom="@dimen/dmnPadBig">
 
+    <!-- 🌐 App Settings 区域（包含应用语言设置） -->
     <include
         android:id="@+id/appSettings"
         layout="@layout/lyt_app_settings"
-        android:visibility="gone" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible" />
 
+    <!-- 📖 Reader Settings 区域（经文翻译等） -->
     <include
         android:id="@+id/readerSettings"
         layout="@layout/lyt_settings_reader"
-        android:visibility="gone" />
-
- \
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible" />
 
 </LinearLayout>

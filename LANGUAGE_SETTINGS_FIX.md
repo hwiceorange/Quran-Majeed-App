@@ -4,9 +4,15 @@
 
 用户在设置页面看不到多语言设置入口。
 
-### 问题原因
+### 问题原因（两个Bug）
+
+#### Bug 1: 底部导航栏加载错误的Fragment
 
 底部导航栏的 "Settings" 按钮（`R.id.navigation_settings`）加载了错误的Fragment。
+
+#### Bug 2: 布局文件默认隐藏 App Settings 区域
+
+`frag_settings_main.xml` 中 `appSettings` 的默认 visibility 是 `gone`，并且有XML语法错误。
 
 **错误代码**（`HomeActivity.kt` 第86-90行）：
 ```kotlin
@@ -46,7 +52,47 @@ import android.content.Intent
 
 ---
 
-### 2. 添加调试日志
+### 2. 修复布局文件的 visibility 问题
+
+**文件**：`frag_settings_main.xml`
+
+**问题代码**：
+```xml
+<include
+    android:id="@+id/appSettings"
+    layout="@layout/lyt_app_settings"
+    android:visibility="gone" />  <!-- ❌ 默认隐藏！ -->
+
+<include
+    android:id="@+id/readerSettings"
+    layout="@layout/lyt_settings_reader"
+    android:visibility="gone" />
+
+ \  <!-- ❌ XML语法错误！ -->
+```
+
+**修复后**：
+```xml
+<!-- 🌐 App Settings 区域（包含应用语言设置） -->
+<include
+    android:id="@+id/appSettings"
+    layout="@layout/lyt_app_settings"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:visibility="visible" />  <!-- ✅ 默认可见 -->
+
+<!-- 📖 Reader Settings 区域（经文翻译等） -->
+<include
+    android:id="@+id/readerSettings"
+    layout="@layout/lyt_settings_reader"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:visibility="visible" />  <!-- ✅ 默认可见 -->
+```
+
+---
+
+### 3. 添加调试日志
 
 **文件**：`FragSettingsMain.java`
 
@@ -258,6 +304,7 @@ FragSettingsMain: ⚠️ Skipping App Settings (mIsFromReader = true)
 | 文件 | 修改内容 | 状态 |
 |------|---------|------|
 | `HomeActivity.kt` | 修复底部导航栏Settings按钮 | ✅ |
+| `frag_settings_main.xml` | 修复 visibility 和 XML 语法错误 | ✅ |
 | `FragSettingsMain.java` | 添加调试日志 | ✅ |
 
 ---
