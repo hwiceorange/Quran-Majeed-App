@@ -302,6 +302,11 @@
     <string name="language_arabic">Arabic</string>
     <string name="language_urdu">Urdu</string>
     <string name="language_indonesian">Indonesian</string>
+    
+    <!-- 🌐 App Language Settings (v1.5.5) -->
+    <string name="setting_app_language_title">App Language</string>
+    <string name="setting_app_language_subtitle">Choose your preferred language</string>
+    <string name="setting_app_language_dialog_title">Select Language</string>
 
     <!-- Appearance Preferences -->
     <string name="display_arabic">Display Arabic Text</string>

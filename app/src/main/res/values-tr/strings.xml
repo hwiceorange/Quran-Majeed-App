@@ -2014,4 +2014,9 @@
   <string name="button_track">Kaydet</string>
   <string name="button_completed">✓</string>
   <string name="prayer_label">Namaz</string>
+  
+  <!-- 🌐 App Language Settings (v1.5.5) -->
+  <string name="setting_app_language_title">Uygulama Dili</string>
+  <string name="setting_app_language_subtitle">Tercih ettiğiniz dili seçin</string>
+  <string name="setting_app_language_dialog_title">Dil Seçin</string>
     </resources>

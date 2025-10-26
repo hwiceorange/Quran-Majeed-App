@@ -112,7 +112,13 @@ class FragSettingsLanguage : FragSettingsBase() {
     }
 
     private fun restartApp(ctx: Context, locale: String) {
-        SPAppConfigs.setLocale(ctx, Locale(locale).toLanguageTag())
+        // 🌐 保存语言配置并重启应用
+        android.util.Log.d("FragSettingsLanguage", "🌐 Switching language to: $locale")
+        
+        // 直接保存语言代码（不使用 toLanguageTag()）
+        SPAppConfigs.setLocale(ctx, locale)
+        
+        // 重启应用以应用新语言
         restartMainActivity(ctx)
     }
 }

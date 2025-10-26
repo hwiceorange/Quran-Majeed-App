@@ -2014,4 +2014,9 @@
   <string name="button_track">রেকর্ড</string>
   <string name="button_completed">✓</string>
   <string name="prayer_label">নামাজ</string>
+  
+  <!-- 🌐 App Language Settings (v1.5.5) -->
+  <string name="setting_app_language_title">অ্যাপের ভাষা</string>
+  <string name="setting_app_language_subtitle">আপনার পছন্দের ভাষা চয়ন করুন</string>
+  <string name="setting_app_language_dialog_title">ভাষা নির্বাচন করুন</string>
     </resources>
