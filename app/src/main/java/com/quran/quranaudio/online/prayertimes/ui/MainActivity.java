@@ -89,7 +89,21 @@ public class MainActivity extends BaseActivity {
         navView.setOnItemSelectedListener(item -> {
             android.util.Log.d("MainActivity", "Bottom nav item clicked: " + item.getTitle() + " (ID: " + item.getItemId() + ")");
             
-            // Let NavigationUI handle the navigation
+            // 🌐 Special handling for Settings: Launch Activity instead of Fragment navigation
+            if (item.getItemId() == R.id.nav_app_settings) {
+                android.util.Log.d("MainActivity", "🌐 Launching App Settings Activity (includes Language setting)");
+                try {
+                    Intent intent = new Intent(this, com.quran.quranaudio.online.quran_module.activities.readerSettings.Activity_Quran_Settings.class);
+                    startActivity(intent);
+                    android.util.Log.d("MainActivity", "✅ Successfully launched Activity_Quran_Settings");
+                    return true;  // Event handled, don't let NavigationUI process it
+                } catch (Exception e) {
+                    android.util.Log.e("MainActivity", "❌ Failed to launch Activity_Quran_Settings", e);
+                    return false;
+                }
+            }
+            
+            // Let NavigationUI handle other navigation items
             boolean handled = NavigationUI.onNavDestinationSelected(item, navController);
             
             if (handled) {
