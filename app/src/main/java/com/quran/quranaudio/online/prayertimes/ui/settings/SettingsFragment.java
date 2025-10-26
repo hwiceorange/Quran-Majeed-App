@@ -63,8 +63,64 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             preference.setEnabled(false);
         }
 
+        // 🌐 Setup App Language Preference
+        setupAppLanguagePreference();
+
         SharedPreferences sharedPreferences = getPreferenceScreen().getSharedPreferences();
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    /**
+     * 🌐 设置应用语言选择器
+     * 显示当前选中的语言，并在用户选择后切换语言并重启应用
+     */
+    private void setupAppLanguagePreference() {
+        androidx.preference.ListPreference appLanguagePref = getPreferenceScreen().findPreference("APP_LANGUAGE_PREFERENCE");
+        
+        if (appLanguagePref != null) {
+            // 获取当前语言代码
+            String currentLanguageCode = com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs.getLocale(requireContext());
+            
+            // 设置当前选中的值
+            appLanguagePref.setValue(currentLanguageCode);
+            
+            // 设置摘要显示当前语言名称
+            updateLanguageSummary(appLanguagePref, currentLanguageCode);
+            
+            // 监听语言选择变化
+            appLanguagePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    String newLanguageCode = (String) newValue;
+                    android.util.Log.d("SettingsFragment", "🌐 Language changed to: " + newLanguageCode);
+                    
+                    // 保存新语言
+                    com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs.setLocale(requireContext(), newLanguageCode);
+                    
+                    // 更新摘要
+                    updateLanguageSummary(appLanguagePref, newLanguageCode);
+                    
+                    // 重启应用以应用新语言
+                    requireActivity().recreate();
+                    
+                    return true;
+                }
+            });
+        }
+    }
+
+    /**
+     * 🌐 更新语言选择器的摘要文本
+     * 显示当前选中的语言名称
+     */
+    private void updateLanguageSummary(androidx.preference.ListPreference preference, String languageCode) {
+        // 从 LanguageManager 获取语言名称
+        String languageName = com.quran.quranaudio.online.quran_module.utils.LanguageManager.INSTANCE.getSUPPORTED_LANGUAGES().get(languageCode);
+        if (languageName != null) {
+            preference.setSummary(languageName);
+        } else {
+            preference.setSummary("English");
+        }
     }
 
     @Override

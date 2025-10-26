@@ -308,6 +308,27 @@
     <string name="setting_app_language_subtitle">Choose your preferred language</string>
     <string name="setting_app_language_dialog_title">Select Language</string>
 
+    <!-- 🌐 App Language Options (Only 7 supported languages) -->
+    <string-array name="app_language_names">
+        <item>English</item>
+        <item>Bahasa Indonesia</item>
+        <item>العربية</item>
+        <item>اردو</item>
+        <item>Bahasa Melayu</item>
+        <item>Türkçe</item>
+        <item>বাংলা</item>
+    </string-array>
+
+    <string-array name="app_language_codes">
+        <item>en</item>
+        <item>in</item>
+        <item>ar</item>
+        <item>ur</item>
+        <item>ms</item>
+        <item>tr</item>
+        <item>bn</item>
+    </string-array>
+
     <!-- Appearance Preferences -->
     <string name="display_arabic">Display Arabic Text</string>
     <string name="display_translation">Display Translation Text</string>

@@ -2,6 +2,23 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!-- 🌐 App Language Selection -->
+    <PreferenceCategory
+        android:icon="@drawable/dr_icon_language"
+        android:layout="@layout/custom_preference_category"
+        android:title="@string/setting_app_language_title">
+
+        <ListPreference
+            android:key="APP_LANGUAGE_PREFERENCE"
+            android:layout="@layout/custom_preference"
+            android:title="@string/setting_app_language_title"
+            android:summary="@string/setting_app_language_subtitle"
+            android:entries="@array/app_language_names"
+            android:entryValues="@array/app_language_codes"
+            android:dialogTitle="@string/setting_app_language_dialog_title" />
+
+    </PreferenceCategory>
+
     <PreferenceCategory
         app:isPreferenceVisible="false"
         android:icon="@drawable/ic_art_palette_15dp"

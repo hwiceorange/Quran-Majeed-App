@@ -54,9 +54,12 @@
         android:name="com.quran.quranaudio.online.tasbih.fragments.TasbihFragment"
         android:label="TasbihFragment" />
 
-    <!-- 🌐 Settings: nav_app_settings 不在 Navigation Graph 中定义 -->
-    <!-- 由 MainActivity.java 的 setOnItemSelectedListener 中手动处理 -->
-    <!-- 使用 startActivity 启动 Activity_Quran_Settings，不走 Fragment 导航 -->
+    <!-- 🌐 Settings: 祈祷时间设置页面（包含 Location、Notifications 等） -->
+    <!-- 将在此页面中添加 App Language 选项 -->
+    <fragment
+        android:id="@+id/nav_app_settings"
+        android:name="com.quran.quranaudio.online.prayertimes.ui.settings.SettingsFragment"
+        android:label="@string/title_settings" />
 
    <fragment
        android:id="@+id/fragMain"
