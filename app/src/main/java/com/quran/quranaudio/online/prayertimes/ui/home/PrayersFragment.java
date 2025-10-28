@@ -2,16 +2,20 @@ package com.quran.quranaudio.online.prayertimes.ui.home;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.view.LayoutInflater;
@@ -23,6 +27,8 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.lang.ref.WeakReference;
 
 import com.google.android.material.button.MaterialButton;
 
@@ -104,6 +110,14 @@ public class PrayersFragment extends Fragment {
     private static final String PREFS_NAME = "LocationPermissionPrefs";
     private static final String KEY_PERMISSION_REQUEST_COUNT = "permission_request_count";
     private static final int MAX_PERMISSION_REQUESTS = 2;
+    
+    // 🔔 Notification permission tracking
+    private static final String NOTIFICATION_PREFS_NAME = "NotificationPermissionPrefs";
+    private static final String KEY_FIRST_ENTRY_SHOWN = "notification_first_entry_shown";
+    private static final int NOTIFICATION_PERMISSION_DELAY_MS = 3000; // 3 seconds
+    private Handler notificationPermissionHandler;
+    private Runnable notificationPermissionRunnable;
+    private ActivityResultLauncher<String> notificationPermissionLauncher;
 
     private LocalDateTime todayDate;
     private CountDownTimer TimeRemainingCTimer;
@@ -181,6 +195,21 @@ public class PrayersFragment extends Fragment {
                 }
             }
         );
+        
+        // 🔔 Initialize Notification Permission Launcher (Android 13+)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            notificationPermissionLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                isGranted -> {
+                    if (isGranted) {
+                        Log.d("PrayersFragment", "✅ Notification permission granted");
+                        Toast.makeText(requireContext(), "Notification enabled", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.d("PrayersFragment", "❌ Notification permission denied");
+                    }
+                }
+            );
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -240,7 +269,9 @@ public class PrayersFragment extends Fragment {
                 rootView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
-
+        
+        // 🔔 延迟 3 秒请求通知权限（首次进入 Salat 页面）
+        scheduleNotificationPermissionRequest();
 
         return rootView;
     }
@@ -258,6 +289,9 @@ public class PrayersFragment extends Fragment {
     @Override
     public void onDestroy() {
         cancelTimer();
+        
+        // 🔔 Clean up notification permission handler
+        cleanupNotificationPermissionHandler();
         
         // Clean up Google Auth Manager
         try {
@@ -892,5 +926,114 @@ public class PrayersFragment extends Fragment {
             })
             .create()
             .show();
+    }
+    
+    // ============ 🔔 Notification Permission Methods ============
+    
+    /**
+     * 🔔 延迟请求通知权限（首次进入时）
+     * 低端机适配：使用 WeakReference 避免内存泄漏，延迟 3 秒后检查 Fragment 状态
+     */
+    private void scheduleNotificationPermissionRequest() {
+        // Only for Android 13+ (TIRAMISU)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            Log.d("PrayersFragment", "📱 Android version < 13, no need for notification permission");
+            return;
+        }
+        
+        // Check if already shown
+        if (hasShownNotificationPermission()) {
+            Log.d("PrayersFragment", "ℹ️ Notification permission already shown before");
+            return;
+        }
+        
+        // Check if already granted
+        if (checkNotificationPermission()) {
+            Log.d("PrayersFragment", "✅ Notification permission already granted");
+            markNotificationPermissionShown();
+            return;
+        }
+        
+        // 使用 WeakReference 避免内存泄漏（低端机适配）
+        final WeakReference<PrayersFragment> weakFragment = new WeakReference<>(this);
+        
+        // 延迟 3 秒后请求权限
+        notificationPermissionHandler = new Handler(Looper.getMainLooper());
+        notificationPermissionRunnable = () -> {
+            PrayersFragment fragment = weakFragment.get();
+            if (fragment != null && fragment.isAdded() && fragment.getContext() != null) {
+                Log.d("PrayersFragment", "🔔 Requesting notification permission after 3s delay");
+                requestNotificationPermission();
+            } else {
+                Log.d("PrayersFragment", "⚠️ Fragment not attached, skipping notification permission request");
+            }
+        };
+        
+        notificationPermissionHandler.postDelayed(
+            notificationPermissionRunnable, 
+            NOTIFICATION_PERMISSION_DELAY_MS
+        );
+        
+        Log.d("PrayersFragment", "⏱️ Notification permission scheduled in 3 seconds");
+    }
+    
+    /**
+     * 🔔 检查通知权限是否已授予
+     */
+    private boolean checkNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            return ContextCompat.checkSelfPermission(
+                requireContext(), 
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED;
+        }
+        return true; // Android 13 以下默认有权限
+    }
+    
+    /**
+     * 🔔 请求通知权限
+     */
+    private void requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (notificationPermissionLauncher != null) {
+                notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+                markNotificationPermissionShown();
+            }
+        }
+    }
+    
+    /**
+     * 🔔 检查是否已经显示过通知权限请求
+     */
+    private boolean hasShownNotificationPermission() {
+        if (getActivity() == null) return true;
+        SharedPreferences prefs = getActivity().getSharedPreferences(
+            NOTIFICATION_PREFS_NAME, MODE_PRIVATE
+        );
+        return prefs.getBoolean(KEY_FIRST_ENTRY_SHOWN, false);
+    }
+    
+    /**
+     * 🔔 标记已显示通知权限请求
+     */
+    private void markNotificationPermissionShown() {
+        if (getActivity() == null) return;
+        SharedPreferences prefs = getActivity().getSharedPreferences(
+            NOTIFICATION_PREFS_NAME, MODE_PRIVATE
+        );
+        prefs.edit().putBoolean(KEY_FIRST_ENTRY_SHOWN, true).apply();
+        Log.d("PrayersFragment", "✅ Marked notification permission as shown");
+    }
+    
+    /**
+     * 🔔 清理通知权限 Handler（避免内存泄漏）
+     */
+    private void cleanupNotificationPermissionHandler() {
+        if (notificationPermissionHandler != null && notificationPermissionRunnable != null) {
+            notificationPermissionHandler.removeCallbacks(notificationPermissionRunnable);
+            notificationPermissionHandler = null;
+            notificationPermissionRunnable = null;
+            Log.d("PrayersFragment", "🧹 Notification permission handler cleaned up");
+        }
     }
 }
