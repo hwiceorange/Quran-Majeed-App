@@ -300,7 +300,7 @@
                     android:id="@+id/tv_challenge_days_display"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="30 Days"
+                    android:text="@string/challenge_days_placeholder"
                     android:textColor="#4B9B76"
                     android:textSize="32sp"
                     android:textStyle="bold" />

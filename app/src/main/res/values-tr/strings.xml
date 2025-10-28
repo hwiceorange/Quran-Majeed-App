@@ -2070,4 +2070,23 @@
     <string name="tasbih_reminder">Tesbih Hatırlatıcısı</string>
     <string name="estimated_challenge_duration">Tahmini Meydan Okuma Süresi</string>
     <string name="save_start_challenge">✓ KAYDET VE MEYDAN OKUMAMI BAŞLAT</string>
+    
+    <!-- Reading Units -->
+    <string name="unit_pages">Sayfalar</string>
+    <string name="unit_verses">Ayetler</string>
+    <string name="unit_juz">Cüzler</string>
+    
+    <!-- Recitation Duration Options -->
+    <string name="minutes_15">Günde 15 dakika</string>
+    <string name="minutes_30">Günde 30 dakika</string>
+    <string name="minutes_45">Günde 45 dakika</string>
+    <string name="minutes_60">Günde 60 dakika</string>
+    
+    <!-- Prayer Card & Tasbih -->
+    <string name="your_location_label">Konumunuz</string>
+    <string name="tasbih_total">Toplam : </string>
+    
+    <!-- Challenge Days -->
+    <string name="challenge_days_placeholder">30 Gün</string>
+    <string name="challenge_days_format">%d Gün</string>
 </resources>

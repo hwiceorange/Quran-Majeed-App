@@ -519,7 +519,7 @@ class LearningPlanSetupFragment : Fragment() {
         
         // Observe challenge days
         viewModel.challengeDays.observe(viewLifecycleOwner) { days ->
-            binding.tvChallengeDaysDisplay.text = "$days Days"
+            binding.tvChallengeDaysDisplay.text = getString(R.string.challenge_days_format, days)
             Log.d(TAG, "Challenge days updated: $days")
         }
 

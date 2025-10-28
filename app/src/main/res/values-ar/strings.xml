@@ -1302,4 +1302,23 @@
     <string name="zakatDetailInfo">تطبق الزكاة 2.5% على ثروة سنة كاملة. باستثناء الزراعة. تنقسم الزراعة إلى 3 أجزاء للزكاة: من ماء المطر 10%، من ماء الري 5%، ومن كليهما (ماء المطر والري) 7.5%</string>
     <string name="goldValueRB">نقداً</string>
     <string name="goldWeightRB">بالوزن</string>
+    
+    <!-- Reading Units -->
+    <string name="unit_pages">صفحات</string>
+    <string name="unit_verses">آيات</string>
+    <string name="unit_juz">أجزاء</string>
+    
+    <!-- Recitation Duration Options -->
+    <string name="minutes_15">15 دقيقة يوميًا</string>
+    <string name="minutes_30">30 دقيقة يوميًا</string>
+    <string name="minutes_45">45 دقيقة يوميًا</string>
+    <string name="minutes_60">60 دقيقة يوميًا</string>
+    
+    <!-- Prayer Card & Tasbih -->
+    <string name="your_location_label">موقعك</string>
+    <string name="tasbih_total">المجموع : </string>
+    
+    <!-- Challenge Days -->
+    <string name="challenge_days_placeholder">30 يومًا</string>
+    <string name="challenge_days_format">%d يومًا</string>
 </resources>

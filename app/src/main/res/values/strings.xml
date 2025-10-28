@@ -1254,4 +1254,12 @@
     <string name="minutes_30">30 minutes daily</string>
     <string name="minutes_45">45 minutes daily</string>
     <string name="minutes_60">60 minutes daily</string>
+    
+    <!-- Prayer Card & Tasbih -->
+    <string name="your_location_label">Your Location</string>
+    <string name="tasbih_total">Total : </string>
+    
+    <!-- Challenge Days -->
+    <string name="challenge_days_placeholder">30 Days</string>
+    <string name="challenge_days_format">%d Days</string>
 </resources>

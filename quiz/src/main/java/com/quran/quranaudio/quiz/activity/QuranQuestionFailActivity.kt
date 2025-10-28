@@ -26,7 +26,15 @@ class QuranQuestionFailActivity :
         super.initView()
         BarUtils.setStatusBarLightMode(this, true)
         BarUtils.setStatusBarColor(this, Color.TRANSPARENT)
+        
+        // 🔧 发送 TRY_AGAIN 事件以清除错误反馈状态
+        // 这会让 Fragment 调用 updateQuestionUI(currentBean)，从而：
+        // 1. 清除 "Wrong" 显示 (answerResultTv.invisible())
+        // 2. 重置倒计时器（重新创建 countValueAnimator）
+        // 3. 重新显示当前题目，准备好接受用户的下一步操作
+        // 注意：题目会短暂显示一下，然后被失败界面遮挡，这是必要的状态清理过程
         RxBus.INSTANCE().post(QuestionFail(QuestionFail.TRY_AGAIN))
+        
         binding.skipQuestionTv.setOnClickListener {
             reportClickEvent("quiz_skip")
             if (hasInterAdByPool()) {
@@ -78,10 +86,11 @@ class QuranQuestionFailActivity :
 
     companion object {
         fun open(context: Context) {
-
-            if (QuranQuestionFragment.isSelected) {
-                context.startActivity(Intent(context, QuranQuestionFailActivity::class.java))
-            }
+            // 🔧 修复死循环：移除 isSelected 检查
+            // 原因：复活界面打开时，Fragment 进入 onPause，isSelected 变为 false
+            // 导致失败界面无法打开，复活界面 finish() 后 Fragment 重新 onResume
+            // isSelected 变为 true，倒计时重启后又打开复活界面，形成死循环
+            context.startActivity(Intent(context, QuranQuestionFailActivity::class.java))
         }
     }
 }

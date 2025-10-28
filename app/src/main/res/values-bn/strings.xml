@@ -2070,4 +2070,23 @@
     <string name="tasbih_reminder">তাসবিহ অনুস্মারক</string>
     <string name="estimated_challenge_duration">আনুমানিক চ্যালেঞ্জ সময়কাল</string>
     <string name="save_start_challenge">✓ সংরক্ষণ করুন এবং আমার চ্যালেঞ্জ শুরু করুন</string>
+    
+    <!-- Reading Units -->
+    <string name="unit_pages">পৃষ্ঠা</string>
+    <string name="unit_verses">আয়াত</string>
+    <string name="unit_juz">পারা</string>
+    
+    <!-- Recitation Duration Options -->
+    <string name="minutes_15">দৈনিক 15 মিনিট</string>
+    <string name="minutes_30">দৈনিক 30 মিনিট</string>
+    <string name="minutes_45">দৈনিক 45 মিনিট</string>
+    <string name="minutes_60">দৈনিক 60 মিনিট</string>
+    
+    <!-- Prayer Card & Tasbih -->
+    <string name="your_location_label">আপনার অবস্থান</string>
+    <string name="tasbih_total">মোট : </string>
+    
+    <!-- Challenge Days -->
+    <string name="challenge_days_placeholder">৩০ দিন</string>
+    <string name="challenge_days_format">%d দিন</string>
 </resources>

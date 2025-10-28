@@ -724,30 +724,6 @@
 
     <string name="hijri">Hijri</string>
 
-    <string name="hijri_month_1">Mouharram</string>
-
-    <string name="hijri_month_2">Safar</string>
-
-    <string name="hijri_month_3">Rabii Al Awal</string>
-
-    <string name="hijri_month_4">Rabii Ath`Thani</string>
-
-    <string name="hijri_month_5">Joumada Al Oula</string>
-
-    <string name="hijri_month_6">Joumada Ath`Thania</string>
-
-    <string name="hijri_month_7">Rajab</string>
-
-    <string name="hijri_month_8">Chaabane</string>
-
-    <string name="hijri_month_9">Ramadan</string>
-
-    <string name="hijri_month_10">Chawwal</string>
-
-    <string name="hijri_month_11">Dhou Al Qi`da</string>
-
-    <string name="hijri_month_12">Dhou Al Hijja</string>
-
     <string name="method_fajr_angle">Fajr angle</string>
 
     <string name="method_ichaa_angle">Ichaa angle</string>
@@ -2070,4 +2046,102 @@
     <string name="tasbih_reminder">تسبیح کی یاد دہانی</string>
     <string name="estimated_challenge_duration">متوقع چیلنج کی مدت</string>
     <string name="save_start_challenge">✓ محفوظ کریں اور میرا چیلنج شروع کریں</string>
+    
+    <!-- Reading Units -->
+    <string name="unit_pages">صفحات</string>
+    <string name="unit_verses">آیات</string>
+    <string name="unit_juz">پارے</string>
+    
+    <!-- Recitation Duration Options -->
+    <string name="minutes_15">روزانہ 15 منٹ</string>
+    <string name="minutes_30">روزانہ 30 منٹ</string>
+    <string name="minutes_45">روزانہ 45 منٹ</string>
+    <string name="minutes_60">روزانہ 60 منٹ</string>
+    
+    <!-- Prayer Card & Tasbih -->
+    <string name="your_location_label">آپ کا مقام</string>
+    <string name="tasbih_total">کل : </string>
+    
+    <!-- Challenge Days -->
+    <string name="challenge_days_placeholder">30 دن</string>
+    <string name="challenge_days_format">%d دن</string>
+    
+    <!-- Zakat Calculator -->
+    <string name="zakatMoneyTitle">رقم</string>
+    <string name="moneyCashInHandTitle">ہاتھ میں نقد رقم</string>
+    <string name="moneyCashInBankAccountTitle">بینک اکاؤنٹ میں نقد رقم</string>
+    <string name="zakatGoldTitle">سونا</string>
+    <string name="goldValuePriceTV">سونے کی قیمت</string>
+    <string name="goldWeight24caratPriceTV">سونے کی قیمت (24 قیراط)</string>
+    <string name="goldWeight24caratQuantityTV">سونے کی مقدار</string>
+    <string name="goldWeight24caratgiramTV">گرام</string>
+    <string name="gold24caratpriceTitleTV">24 قیراط سونے کی قیمت</string>
+    <string name="gold22caratpriceTitleTV">22 قیراط سونے کی قیمت</string>
+    <string name="gold21caratpriceTitleTV">21 قیراط سونے کی قیمت</string>
+    <string name="gold18caratpriceTitleTV">18 قیراط سونے کی قیمت</string>
+    <string name="silverHeadingTV">چاندی</string>
+    <string name="silverValueRB">نقد</string>
+    <string name="silverWeightRB">وزن میں</string>
+    <string name="silverValueTitle2TV">چاندی کی قیمت</string>
+    <string name="silverValuePriceTV">چاندی کی قیمت</string>
+    <string name="silverWeightQuentityTV">چاندی کی مقدار</string>
+    <string name="silverWeightQuantityTV">چاندی کی مقدار</string>
+    <string name="silverWeightUnitPriceET">چاندی کی یونٹ قیمت</string>
+    <string name="investmentHeadingTV">سرمایہ کاری</string>
+    <string name="sharesTV">حصص</string>
+    <string name="investSharesTV">حصص</string>
+    <string name="investBondsTV">بانڈز</string>
+    <string name="investPensionTV">پنشن</string>
+    <string name="investLoanOutTV">دیے گئے قرضے</string>
+    <string name="otherInvestmentTV">بینک اکاؤنٹ میں نقد رقم</string>
+    <string name="propertyHeadingTV">جائیداد</string>
+    <string name="rentTV">کرایہ کی آمدنی</string>
+    <string name="propertyTV">جائیداد</string>
+    <string name="businessHeadingTV">کاروبار</string>
+    <string name="businessCashTV">کاروباری نقد رقم</string>
+    <string name="businessGoodsTV">سامان / اسٹاک</string>
+    <string name="agricultureHeadingTV">زراعت</string>
+    <string name="agriPriceTitleTV">کل زرعی آمدنی</string>
+    <string name="agriRainHeadingTV">بارش کے پانی سے 10%</string>
+    <string name="agriIrrigationHeadingTV">آبپاشی سے 5%</string>
+    <string name="agriBothHeadingTV">دونوں سے 7.5%</string>
+    <string name="cattleHeadingTV">مویشی</string>
+    <string name="cattleCamelHeadingTV">اونٹ</string>
+    <string name="cattleCowHeadingTV">گائے</string>
+    <string name="cattleSheepHeadingTV">بھیڑ</string>
+    <string name="preciousStonesHeadingTV">قیمتی پتھر</string>
+    <string name="preciousStonesHeadingChildTV">قیمتی پتھر</string>
+    <string name="otherHeadingTV">دیگر</string>
+    <string name="otherPensionHeadingTV">پنشن</string>
+    <string name="otherLoanHeadingTV">خاندان اور دوسروں کو قرضے</string>
+    <string name="otherAssetsHeadingTV">دیگر اثاثے</string>
+    <string name="zakatPayablesTitle">ادائیگیاں</string>
+    <string name="zakatCreditCardPaymentHeadingTV">کریڈٹ کارڈ کی ادائیگی</string>
+    <string name="zakatHomeHeadingTV">گھر کی ادائیگی</string>
+    <string name="homePaymentET">گھر کی ادائیگی</string>
+    <string name="zakatCarHeadingTV">گاڑی کی ادائیگی</string>
+    <string name="zakatCarPaymentET">گاڑی کی ادائیگی</string>
+    <string name="zakatBusinessPaymentHeadingTV">کاروباری ادائیگی</string>
+    <string name="zakatFamilyDebtHeadingTV">خاندان کا قرض</string>
+    <string name="zakatOthersDebtHeadingTV">دوسروں کا قرض</string>
+    <string name="zakatTotalAssetsHeadingTV">کل اثاثے</string>
+    <string name="zakatDueHeadingTV">واجب زکوٰۃ</string>
+    <string name="zakatDetailTitle">زکوٰۃ کی تفصیلات</string>
+    <string name="zakatDetailInfo">زکوٰۃ سالانہ دولت پر 2.5% لاگو ہوتی ہے۔ زراعت کے علاوہ۔ زراعت 3 حصوں میں تقسیم ہے: بارش کے پانی سے 10%، آبپاشی سے 5%، اور دونوں سے 7.5%</string>
+    <string name="goldValueRB">نقد</string>
+    <string name="goldWeightRB">وزن میں</string>
+    
+    <!-- Islamic Months (Urdu) -->
+    <string name="hijri_month_1">محرم</string>
+    <string name="hijri_month_2">صفر</string>
+    <string name="hijri_month_3">ربیع الاول</string>
+    <string name="hijri_month_4">ربیع الثانی</string>
+    <string name="hijri_month_5">جمادی الاول</string>
+    <string name="hijri_month_6">جمادی الثانی</string>
+    <string name="hijri_month_7">رجب</string>
+    <string name="hijri_month_8">شعبان</string>
+    <string name="hijri_month_9">رمضان</string>
+    <string name="hijri_month_10">شوال</string>
+    <string name="hijri_month_11">ذوالقعدہ</string>
+    <string name="hijri_month_12">ذوالحجہ</string>
 </resources>

@@ -1226,6 +1226,14 @@ seperti: Waktu Sholat Global, metode perhitungan yang berbeda, notifikasi, memba
     <string name="minutes_45">45 menit sehari</string>
     <string name="minutes_60">60 menit sehari</string>
     
+    <!-- Prayer Card & Tasbih -->
+    <string name="your_location_label">Lokasi Anda</string>
+    <string name="tasbih_total">Total : </string>
+    
+    <!-- Challenge Days -->
+    <string name="challenge_days_placeholder">30 Hari</string>
+    <string name="challenge_days_format">%d Hari</string>
+    
     <!-- 🌐 App Language Settings (v1.5.5) -->
     <string name="setting_app_language_title">Bahasa Aplikasi</string>
     <string name="setting_app_language_subtitle">Pilih bahasa yang Anda inginkan</string>

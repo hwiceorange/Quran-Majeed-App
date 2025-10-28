@@ -2070,4 +2070,23 @@
     <string name="tasbih_reminder">Peringatan Tasbih</string>
     <string name="estimated_challenge_duration">Anggaran Tempoh Cabaran</string>
     <string name="save_start_challenge">✓ SIMPAN DAN MULAKAN CABARAN SAYA</string>
+    
+    <!-- Reading Units -->
+    <string name="unit_pages">Halaman</string>
+    <string name="unit_verses">Ayat</string>
+    <string name="unit_juz">Juzuk</string>
+    
+    <!-- Recitation Duration Options -->
+    <string name="minutes_15">15 minit sehari</string>
+    <string name="minutes_30">30 minit sehari</string>
+    <string name="minutes_45">45 minit sehari</string>
+    <string name="minutes_60">60 minit sehari</string>
+    
+    <!-- Prayer Card & Tasbih -->
+    <string name="your_location_label">Lokasi Anda</string>
+    <string name="tasbih_total">Jumlah : </string>
+    
+    <!-- Challenge Days -->
+    <string name="challenge_days_placeholder">30 Hari</string>
+    <string name="challenge_days_format">%d Hari</string>
 </resources>

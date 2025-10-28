@@ -3,6 +3,7 @@ package com.quran.quranaudio.quiz.extension
 import android.app.Activity
 import com.quran.quranaudio.quiz.ad.ExternalAdConfig
 import com.quran.quranaudio.quiz.base.CloudManager
+import com.quran.quranaudio.quiz.base.Constants
 import com.quranaudio.quiz.quiz.QuizGemManager
 import com.quran.quranaudio.quiz.utils.AppConfig
 import com.quran.quranaudio.quiz.utils.LoadingDialog
@@ -110,11 +111,13 @@ fun Activity.showInterAdByPoolNew(
     level: Int = 0,
     beforeShowCallbacks: ((Boolean) -> Unit)?,
     callbacks: Function1<Boolean, Unit>,
-    showCallback: (() -> Unit)? = null
+    showCallback: (() -> Unit)? = null,
+    skipNewUserCheck: Boolean = false  // 🎯 答题模块专用：跳过新用户检查
 ) {
     // ⭐ 新用户首日不展示广告（避免浪费和展示率异常）
+    // 🔧 答题模块例外：不受新老用户限制，直接展示广告
     val isNewUserFirstDay = UserInfoUtils.isNewUser() && AppConfig.isInstallFirstDay
-    if (isNewUserFirstDay) {
+    if (isNewUserFirstDay && !skipNewUserCheck) {
         android.util.Log.d("AdExtension", "🚫 New user first day - skipping interstitial ad")
         beforeShowCallbacks?.invoke(false)
         callbacks.invoke(false)
@@ -190,10 +193,12 @@ fun Activity.showRewardAd(
     callbacks: ((Boolean) -> Unit),
     showCallback: (() -> Unit)? = null,
     rewardCallback: (() -> Unit)? = null,
+    skipNewUserCheck: Boolean = false  // 🎯 答题模块专用：跳过新用户检查
 ) {
     // ⭐ 新用户首日不展示激励广告（避免浪费和展示率异常）
+    // 🔧 答题模块例外：不受新老用户限制，直接展示广告
     val isNewUserFirstDay = UserInfoUtils.isNewUser() && AppConfig.isInstallFirstDay
-    if (isNewUserFirstDay) {
+    if (isNewUserFirstDay && !skipNewUserCheck) {
         android.util.Log.d("AdExtension", "🚫 New user first day - skipping reward ad")
         beforeShowCallbacks?.invoke(false)
         callbacks.invoke(false)
@@ -263,41 +268,66 @@ fun Activity.showGemAd(
     fromPageName: String,
     nextSetup: (() -> Unit)? = null,
 ): Boolean {
-    if (CloudManager.isShowQuizUseInterAd()){
+    // 🎯 插屏广告限制：Level 10+ 才展示插屏广告
+    val currentLevel = SPTools.getInt(Constants.KEY_LAST_QUESTION_LEVEL, 1)
+    val shouldUseInterAd = CloudManager.isShowQuizUseInterAd() && currentLevel >= 10
+    
+    if (shouldUseInterAd){
+        android.util.Log.d("AdExtension", "✅ Using interstitial ad (Level: $currentLevel >= 10)")
         if (hasInterAdByPool(ExternalAdConfig.AD_QUIZ_INTERS)){
-            showInterAdByPoolNew(ExternalAdConfig.AD_QUIZ_INTERS, intersFunction, 0, {
-                reportEnterFunShowEvent(pageName, fromPageName, it, intersFunction, ExternalAdConfig.AD_QUIZ_INTERS)
-            }, {
-                if (it) {
-                    nextSetup?.invoke()
-                }else {
-                    ToastUtils.showLong(R.string.quran_no_ad_tips)
-                }
-            }, {
-                reportEvent(intersFunction,"quiz_reward_gem","$rewardGems")
-                if (rewardGems > 0) QuizGemManager.addCount(rewardGems)
-                reloadQuizInterstitial()
-            })
+            showInterAdByPoolNew(
+                adPosition = ExternalAdConfig.AD_QUIZ_INTERS,
+                functionTag = intersFunction,
+                level = 0,
+                beforeShowCallbacks = {
+                    reportEnterFunShowEvent(pageName, fromPageName, it, intersFunction, ExternalAdConfig.AD_QUIZ_INTERS)
+                },
+                callbacks = {
+                    if (it) {
+                        nextSetup?.invoke()
+                    }else {
+                        ToastUtils.showLong(R.string.quran_no_ad_tips)
+                    }
+                },
+                showCallback = {
+                    reportEvent(intersFunction,"quiz_reward_gem","$rewardGems")
+                    if (rewardGems > 0) QuizGemManager.addCount(rewardGems)
+                    reloadQuizInterstitial()
+                },
+                skipNewUserCheck = true  // 🎯 答题模块：不受新用户限制
+            )
         }else {
             ToastUtils.showLong(R.string.quran_no_ad_tips)
             reloadQuizInterstitial()
             return false
         }
     }else {
+        if (CloudManager.isShowQuizUseInterAd() && currentLevel < 10) {
+            android.util.Log.d("AdExtension", "🚫 Switching to reward ad - Level $currentLevel < 10")
+        }
         if (hasRewardAdByPool(ExternalAdConfig.AD_QUIZ_REWARD)) {
-            showRewardAd(ExternalAdConfig.AD_QUIZ_REWARD, rewardFunction, 0, {
-                reportEnterFunShowEvent(pageName, fromPageName, it, rewardFunction, ExternalAdConfig.AD_QUIZ_REWARD)
-            }, {
-                if (it) {
-                    nextSetup?.invoke()
-                }else {
-                    ToastUtils.showLong(R.string.quran_no_ad_tips)
-                }
-            }, {
-            }, {
-                reportEvent(rewardFunction,"quiz_reward_gem","$rewardGems")
-                if (rewardGems > 0) QuizGemManager.addCount(rewardGems)
-            })
+            showRewardAd(
+                adPosition = ExternalAdConfig.AD_QUIZ_REWARD,
+                functionTag = rewardFunction,
+                level = 0,
+                beforeShowCallbacks = {
+                    reportEnterFunShowEvent(pageName, fromPageName, it, rewardFunction, ExternalAdConfig.AD_QUIZ_REWARD)
+                },
+                callbacks = {
+                    if (it) {
+                        nextSetup?.invoke()
+                    }else {
+                        ToastUtils.showLong(R.string.quran_no_ad_tips)
+                    }
+                },
+                showCallback = {
+                },
+                rewardCallback = {
+                    reportEvent(rewardFunction,"quiz_reward_gem","$rewardGems")
+                    if (rewardGems > 0) QuizGemManager.addCount(rewardGems)
+                },
+                skipNewUserCheck = true  // 🎯 答题模块：不受新用户限制
+            )
         } else {
             ToastUtils.showLong(R.string.quran_no_ad_tips)
             reloadQuizRewardAd()

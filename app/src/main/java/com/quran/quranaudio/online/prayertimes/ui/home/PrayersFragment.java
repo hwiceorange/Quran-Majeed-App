@@ -638,8 +638,12 @@ public class PrayersFragment extends Fragment {
     private void updateDatesTextViews(DayPrayer dayPrayer) {
         //holidayIndicatorTextView.setVisibility(View.INVISIBLE);
 
+        // 🌐 使用应用设置的语言，而非系统语言
+        String appLanguageCode = com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs.getLocale(requireContext());
+        Locale appLocale = new Locale(appLanguageCode);
+        
         ZonedDateTime zonedDateTime = TimingUtils.getZonedDateTimeFromTimestamps(dayPrayer.getTimestamp(), dayPrayer.getTimezone());
-        String nameOfTheDay = zonedDateTime.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.getDefault());
+        String nameOfTheDay = zonedDateTime.getDayOfWeek().getDisplayName(TextStyle.FULL, appLocale);
 
         String hijriMonth = requireContext().getResources().getString(
                 getResources().getIdentifier("hijri_month_" + dayPrayer.getHijriMonthNumber(), "string", requireContext().getPackageName()));

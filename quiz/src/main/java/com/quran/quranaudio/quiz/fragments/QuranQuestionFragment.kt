@@ -129,11 +129,20 @@ class QuranQuestionFragment :
 
     override fun initData() {
         super.initData()
+        val currentLevel = SPTools.getInt(Constants.KEY_LAST_QUESTION_LEVEL, 1)
         val isShowQuizUseInterAd = CloudManager.isShowQuizUseInterAd()
-        if (!isShowQuizUseInterAd && !hasRewardAdByPool(ExternalAdConfig.AD_QUIZ_REWARD)) {
+        
+        // 🎯 插屏广告限制：Level 10+ 才请求插屏广告
+        val shouldUseInterAd = isShowQuizUseInterAd && currentLevel >= 10
+        
+        if (!shouldUseInterAd && !hasRewardAdByPool(ExternalAdConfig.AD_QUIZ_REWARD)) {
             activity?.reloadQuizRewardAd()
-        } else if (isShowQuizUseInterAd && !hasInterAdByPool(ExternalAdConfig.AD_QUIZ_INTERS)) {
+            android.util.Log.d(TAG, "✅ Preloading reward ad (Level: $currentLevel)")
+        } else if (shouldUseInterAd && !hasInterAdByPool(ExternalAdConfig.AD_QUIZ_INTERS)) {
             activity?.reloadQuizInterstitial()
+            android.util.Log.d(TAG, "✅ Preloading interstitial ad (Level: $currentLevel >= 10)")
+        } else if (isShowQuizUseInterAd && currentLevel < 10) {
+            android.util.Log.d(TAG, "🚫 Skipping interstitial ad - Level $currentLevel < 10")
         }
         lifecycleScope.launch {
             viewModel.currentQuestionBean.collect {
@@ -437,19 +446,6 @@ class QuranQuestionFragment :
 
     override fun onResume() {
         super.onResume()
-        
-        // ⭐ 用户进入Discover模块后，标记为老用户，后续可以展示广告
-        if (UserInfoUtils.isNewUser()) {
-            android.util.Log.d(TAG, "🎯 New user entered Discover - marking as old user and preloading ads")
-            UserInfoUtils.setOldUser()
-            
-            // 预加载广告，供下次使用（但本次会话不展示）
-            activity?.let { act ->
-                AdFactory.loadInterstitialAd(act, AdConfig.AD_INTERS, null)
-                AdFactory.loadAppOpenAd(act, AdConfig.AD_APPOPEN, null)
-                android.util.Log.d(TAG, "✅ Ads preloaded for future sessions")
-            }
-        }
         
         isSelected=true
         if (isSelected && this.userVisibleHint && !isSkipNextLevel && !isShowDailyRewardDialog()) {
