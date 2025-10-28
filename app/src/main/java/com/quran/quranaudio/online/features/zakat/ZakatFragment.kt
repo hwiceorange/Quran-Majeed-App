@@ -220,9 +220,7 @@ class ZakatFragment : BaseFragment<FragmentZakatBinding, ZakatViewModel>(){
             }
         }
 
-        binding.backBtn.setSafeOnClickListener {
-            findNavController().navigateUp()
-        }
+        // backBtn 已移除，导航由 Activity 的 Toolbar 处理
 
     }
 

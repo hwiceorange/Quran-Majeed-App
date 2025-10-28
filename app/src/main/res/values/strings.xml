@@ -616,6 +616,23 @@
     <string name="title_qibla_direction">Qibla Direction</string>
     <string name="desc_qibla_direction">Locate Qibla direction</string>
 
+    <!-- Qibla Compass Page -->
+    <string name="qibla_from_north">Qiblah From The North</string>
+    <string name="qibla_distance">Distance</string>
+    <string name="qibla_field">Field</string>
+    <string name="qibla_weak">Weak</string>
+    <string name="qibla_normal">Normal</string>
+    <string name="qibla_strong">Strong</string>
+    <string name="qibla_disturbed">Disturbed</string>
+    <string name="qibla_unknown">Unknown</string>
+    <string name="qibla_calibrate">Calibrate</string>
+    <string name="qibla_keep_level">Keep device level</string>
+    <string name="qibla_device_tilted">Device tilted %.1f°, keep level</string>
+    <string name="qibla_calibration_warning">⚠️ Magnetic interference detected, calibrate compass for accuracy</string>
+    <string name="qibla_weak_signal">Weak magnetic field signal</string>
+    <string name="qibla_strong_interference">Strong magnetic field interference</string>
+    <string name="qibla_magnetic_interference">Magnetic interference detected</string>
+
     <string name="school_adjustment_method_shafii">Shafii (Default)</string>
     <string name="school_adjustment_method_hanafi">Hanafi</string>
     <string name="title_school_adjustment_method">School</string>
@@ -698,6 +715,8 @@
     <string name="title_temperature_unit_imperial">Fahrenheit</string>
     <string name="mecca_live">Mecca Live</string>
     <string name="madina_live">Madina Live</string>
+    <string name="medina_live">Medina Live</string>
+    <string name="live_indicator">LIVE</string>
 
 
     <!-- Features -->
@@ -1175,6 +1194,8 @@
     <!-- Verse of the Day Card -->
     <string name="verse_of_day">Verse of the Day</string>
     <string name="verse_info_format">Surah %1$s %2$d:%3$d</string>
+    <string name="loading">Loading...</string>
+    <string name="track">Track</string>
 
     <!-- Live Stream Cards -->
     <string name="live_stream">Live Stream</string>

@@ -30,9 +30,10 @@
                 layout="@layout/layout_home_header" />
 
             <!-- 占位空间：为 Prayer Card 下半部分预留位置 -->
+            <!-- 增加高度以避免 RTL 模式下的叠压问题 -->
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="145dp" />
+                android:layout_height="165dp" />
 
             <!-- Daily Quests Feature - Create Card Container -->
             <include

@@ -57,7 +57,7 @@ class KalmaFragment : BaseFragment<ActivitySixKalmasBinding, KalmaViewModel>(),
         activity?.let {
             initUtils(it)
             getDataFromFile(it)
-            onClickEvent()
+            // onClickEvent() 删除，因为导航由 Activity 的 Toolbar 处理
             activity?.let {
                 setUpRecyclerView()
             }
@@ -71,11 +71,7 @@ class KalmaFragment : BaseFragment<ActivitySixKalmasBinding, KalmaViewModel>(),
         binding.kalmasRecyclerView.adapter = adapter
     }
 
-    private fun onClickEvent() {
-        binding.backBtn.setSafeOnClickListener {
-            findNavController().popBackStack()
-        }
-    }
+    // onClickEvent() 已删除，导航由 Activity 的 Toolbar 处理
 
 
     private fun getDataFromFile(context: Context) {
@@ -163,7 +159,7 @@ class KalmaFragment : BaseFragment<ActivitySixKalmasBinding, KalmaViewModel>(),
 
         kalmaNames =
             arrayOf("1st Kalma", "2nd Kalma", "3rd Kalma", "4th Kalma", "5th Kalma", "6th Kalma")
-        binding.txtTitle.text = getString(R.string.six_kalmas)
+        // txtTitle 已移至 Activity 的 Toolbar，由 activity_kalmas.xml 管理
     }
 
     private fun stopBtn(position: Int) {

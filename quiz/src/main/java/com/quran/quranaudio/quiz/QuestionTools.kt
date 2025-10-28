@@ -15,15 +15,27 @@ object QuestionTools {
     private const val BIBLE_QUIZ_ZIP_PW = "a2p2MjAyM3F1aXo="
 
     fun getQuestionStr(): String {
-        val planFileName = if (AppConfig.isIDLan()) {
+        val isIndonesian = AppConfig.isIDLan()
+        val planFileName = if (isIndonesian) {
             "quiz_all_id"
         }else {
             "quiz_all_en"
         }
         val readPath = "${saveRootPath}${File.separator}quiz${File.separator}$planFileName"
+        
+        android.util.Log.d("QuestionTools", "🔍 getQuestionStr:")
+        android.util.Log.d("QuestionTools", "  - 是否印尼语: $isIndonesian")
+        android.util.Log.d("QuestionTools", "  - 文件名: $planFileName")
+        android.util.Log.d("QuestionTools", "  - 完整路径: $readPath")
+        android.util.Log.d("QuestionTools", "  - 文件是否存在: ${FileUtils.isFileExists(readPath)}")
+        
         if (FileUtils.isFileExists(readPath)) {
-            return FileIOUtils.readFile2String(readPath)
+            val content = FileIOUtils.readFile2String(readPath)
+            android.util.Log.d("QuestionTools", "  ✅ 成功读取题目文件，内容长度: ${content.length}")
+            return content
         }
+        
+        android.util.Log.e("QuestionTools", "  ❌ 题目文件不存在！")
         return ""
     }
 

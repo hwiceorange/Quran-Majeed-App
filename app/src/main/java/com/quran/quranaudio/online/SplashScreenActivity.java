@@ -298,8 +298,17 @@ public class SplashScreenActivity extends AppCompatActivity {
         handler.removeCallbacks(updateProgress);
         handler.removeCallbacks(absoluteTimeoutRunnable);
         
-        // ⭐ 新用户首次启动：跳转到登录页面（只依赖hasShownLogin判断）
-        // 老用户或已展示过登录页：直接跳转到主界面
+        // ⭐ 隐藏 Google 登录页面 - 所有用户（包括新用户）直接跳转到主界面
+        // 原逻辑：新用户首次启动会先显示 OnboardingLoginActivity（Google 登录页面）
+        // 修改后：所有用户都直接进入 MainActivity
+        android.util.Log.d(TAG, "✅ Skipping login screen - Jumping directly to MainActivity");
+        new Handler().postDelayed(() -> {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }, DELAY_PROGRESS);
+        
+        /* 原登录页面逻辑（已隐藏）
         boolean hasShownLogin = OnboardingLoginActivity.hasShownLoginScreen(this);
         
         if (!hasShownLogin) {
@@ -318,6 +327,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 finish();
             }, DELAY_PROGRESS);
         }
+        */
     }
 
     boolean progressBarRunning=true;

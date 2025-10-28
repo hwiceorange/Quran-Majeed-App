@@ -591,6 +591,23 @@
     <string name="title_qibla_direction">اتجاه القبلة</string>
     <string name="desc_qibla_direction">تحديد اتجاه القبلة</string>
 
+    <!-- Qibla Compass Page -->
+    <string name="qibla_from_north">القبلة من الشمال</string>
+    <string name="qibla_distance">المسافة</string>
+    <string name="qibla_field">المجال</string>
+    <string name="qibla_weak">ضعيف</string>
+    <string name="qibla_normal">عادي</string>
+    <string name="qibla_strong">قوي</string>
+    <string name="qibla_disturbed">مضطرب</string>
+    <string name="qibla_unknown">غير معروف</string>
+    <string name="qibla_calibrate">معايرة</string>
+    <string name="qibla_keep_level">حافظ على الجهاز مستوياً</string>
+    <string name="qibla_device_tilted">الجهاز مائل %.1f°، حافظ عليه مستوياً</string>
+    <string name="qibla_calibration_warning">⚠️ تم اكتشاف تداخل مغناطيسي، قم بمعايرة البوصلة للحصول على دقة أفضل</string>
+    <string name="qibla_weak_signal">إشارة مجال مغناطيسي ضعيفة</string>
+    <string name="qibla_strong_interference">تداخل مجال مغناطيسي قوي</string>
+    <string name="qibla_magnetic_interference">تم اكتشاف تداخل مغناطيسي</string>
+
     <string name="school_adjustment_method_shafii">الشافعي (افتراضي)</string>
     <string name="school_adjustment_method_hanafi">الحنفي</string>
     <string name="title_school_adjustment_method">المدرسة</string>
@@ -672,6 +689,8 @@
     <string name="title_temperature_unit_metric">سليزيس</string>
     <string name="title_temperature_unit_imperial">فيهرينهايت</string>
     <string name="mecca_live">مكة لايف</string>
+  <string name="medina_live">المدينة لايف</string>
+  <string name="live_indicator">مباشر</string>
     <string name="madina_live">مدينة لايف</string>
 
 
@@ -681,7 +700,7 @@
 
     <string name="zakat_calculator">حاسبة الزكاة</string>
     <string name="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</string>
-    <string name="six_kalmas">Six Kalmas</string>
+    <string name="six_kalmas">الكلمات الست</string>
     <string name="kalmas" translatable="false">Kalmas</string>
     <string name="share_kalma" translatable="false">Share Kalma</string>
     <string name="downloading_failed">Downloading Failed</string>
@@ -1145,6 +1164,8 @@
   <!-- Verse of the Day Card -->
   <string name="verse_of_day">آية اليوم</string>
   <string name="verse_info_format">سورة %1$s %2$d:%3$d</string>
+  <string name="loading">جاري التحميل...</string>
+  <string name="track">تتبع</string>
 
   <!-- Live Stream Cards -->
   <string name="live_stream">البث المباشر</string>
@@ -1153,6 +1174,18 @@
   <string name="play">تشغيل</string>
 
   <!-- Daily Quests Card -->
+  <string name="streak">سلسلة متواصلة</string>
+  <string name="days_streak">%d أيام</string>
+  <string name="monthly_goal">الهدف الشهري</string>
+  <string name="todays_quests">مهام اليوم</string>
+  <string name="quran_reading">قراءة القرآن</string>
+  <string name="read_x_verses">اقرأ %d آيات</string>
+  <string name="tajweed_practice">تدريب التجويد</string>
+  <string name="listen_x_minutes">استمع لـ %d دقائق</string>
+  <string name="practice_x_minutes">تدرب لـ %d دقائق</string>
+  <string name="dhikr">الذكر</string>
+  <string name="complete_x_tasbih">أكمل %d تسبيحة</string>
+  <string name="go">انطلق</string>
   <string name="daily_quests">المهام اليومية</string>
   <string name="daily_quests_description">ابدأ رحلتك مع القرآن! حدد هدفًا، وكوّن عادة.</string>
   <string name="create_learning_plan">إنشاء خطة التعلم الخاصة بي الآن</string>
@@ -1188,4 +1221,85 @@
   <string name="setting_app_language_subtitle">اختر لغتك المفضلة</string>
   <string name="setting_app_language_dialog_title">اختر اللغة</string>
 
+
+
+  <!-- Daily Quests & Streak -->
+    <string name="x_days">%d أيام</string>
+    <string name="progress_format">%d / %d</string>
+
+    <!-- Learning Plan Setup -->
+    <string name="learning_plan_setup">إعداد خطة التعلم</string>
+    <string name="daily_reading_goal">هدف القراءة اليومية</string>
+    <string name="recitation_tajweed_practice">التلاوة وممارسة التجويد</string>
+    <string name="practice_recitation">ممارسة التلاوة</string>
+    <string name="extra_dhikr">ذكر إضافي</string>
+    <string name="dua_reminder">تذكير بالدعاء</string>
+    <string name="tasbih_reminder">تذكير بالتسبيح</string>
+    <string name="estimated_challenge_duration">مدة التحدي المقدرة</string>
+    <string name="save_start_challenge">✓ حفظ وبدء التحدي</string>
+
+    <!-- Zakat Calculator -->
+    <string name="zakatMoneyTitle">المال</string>
+    <string name="moneyCashInHandTitle">النقد في اليد</string>
+    <string name="moneyCashInBankAccountTitle">النقد في الحساب البنكي</string>
+    <string name="zakatGoldTitle">الذهب</string>
+    <string name="goldValuePriceTV">سعر الذهب</string>
+    <string name="goldWeight24caratPriceTV">سعر الذهب (عيار 24)</string>
+    <string name="goldWeight24caratQuantityTV">كمية الذهب</string>
+    <string name="goldWeight24caratgiramTV">جرام</string>
+    <string name="gold24caratpriceTitleTV">سعر الذهب عيار 24</string>
+    <string name="gold22caratpriceTitleTV">سعر الذهب عيار 22</string>
+    <string name="gold21caratpriceTitleTV">سعر الذهب عيار 21</string>
+    <string name="gold18caratpriceTitleTV">سعر الذهب عيار 18</string>
+    <string name="silverHeadingTV">الفضة</string>
+    <string name="silverValueRB">نقداً</string>
+    <string name="silverWeightRB">بالوزن</string>
+    <string name="silverValueTitle2TV">سعر الفضة</string>
+    <string name="silverValuePriceTV">سعر الفضة</string>
+    <string name="silverWeightQuentityTV">كمية الفضة</string>
+    <string name="silverWeightQuantityTV">كمية الفضة</string>
+    <string name="silverWeightUnitPriceET">سعر وحدة الفضة</string>
+    <string name="investmentHeadingTV">الاستثمار</string>
+    <string name="sharesTV">الأسهم</string>
+    <string name="investSharesTV">الأسهم</string>
+    <string name="investBondsTV">السندات</string>
+    <string name="investPensionTV">المعاش</string>
+    <string name="investLoanOutTV">القروض المقدمة</string>
+    <string name="otherInvestmentTV">النقد في الحساب البنكي</string>
+    <string name="propertyHeadingTV">العقارات</string>
+    <string name="rentTV">دخل الإيجار</string>
+    <string name="propertyTV">العقارات</string>
+    <string name="businessHeadingTV">الأعمال</string>
+    <string name="businessCashTV">النقد التجاري</string>
+    <string name="businessGoodsTV">البضائع / المخزون</string>
+    <string name="agricultureHeadingTV">الزراعة</string>
+    <string name="agriPriceTitleTV">إجمالي الدخل الزراعي</string>
+    <string name="agriRainHeadingTV">بمياه المطر 10%</string>
+    <string name="agriIrrigationHeadingTV">بالري 5%</string>
+    <string name="agriBothHeadingTV">بالاثنين 7.5%</string>
+    <string name="cattleHeadingTV">الماشية</string>
+    <string name="cattleCamelHeadingTV">الإبل</string>
+    <string name="cattleCowHeadingTV">البقر</string>
+    <string name="cattleSheepHeadingTV">الغنم</string>
+    <string name="preciousStonesHeadingTV">الأحجار الكريمة</string>
+    <string name="preciousStonesHeadingChildTV">الأحجار الكريمة</string>
+    <string name="otherHeadingTV">أخرى</string>
+    <string name="otherPensionHeadingTV">المعاش</string>
+    <string name="otherLoanHeadingTV">القروض للعائلة وغيرهم</string>
+    <string name="otherAssetsHeadingTV">أصول أخرى</string>
+    <string name="zakatPayablesTitle">المستحقات</string>
+    <string name="zakatCreditCardPaymentHeadingTV">دفع بطاقة الائتمان</string>
+    <string name="zakatHomeHeadingTV">دفع المنزل</string>
+    <string name="homePaymentET">دفع المنزل</string>
+    <string name="zakatCarHeadingTV">دفع السيارة</string>
+    <string name="zakatCarPaymentET">دفع السيارة</string>
+    <string name="zakatBusinessPaymentHeadingTV">دفع الأعمال</string>
+    <string name="zakatFamilyDebtHeadingTV">الدين للعائلة</string>
+    <string name="zakatOthersDebtHeadingTV">الدين للآخرين</string>
+    <string name="zakatTotalAssetsHeadingTV">إجمالي الأصول</string>
+    <string name="zakatDueHeadingTV">الزكاة المستحقة</string>
+    <string name="zakatDetailTitle">تفاصيل الزكاة</string>
+    <string name="zakatDetailInfo">تطبق الزكاة 2.5% على ثروة سنة كاملة. باستثناء الزراعة. تنقسم الزراعة إلى 3 أجزاء للزكاة: من ماء المطر 10%، من ماء الري 5%، ومن كليهما (ماء المطر والري) 7.5%</string>
+    <string name="goldValueRB">نقداً</string>
+    <string name="goldWeightRB">بالوزن</string>
 </resources>

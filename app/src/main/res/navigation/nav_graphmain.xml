@@ -33,7 +33,7 @@
     <fragment
         android:id="@+id/nav_learning_plan_setup"
         android:name="com.quran.quranaudio.online.quests.ui.LearningPlanSetupFragment"
-        android:label="Learning Plan Setup" />
+        android:label="@string/learning_plan_setup" />
 
    <fragment
         android:id="@+id/nav_namaz"

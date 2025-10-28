@@ -8,39 +8,16 @@
     android:focusable="false"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <!-- Toolbar (统一设计风格) -->
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/view_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#41966F">
-
-        <ImageView
-            android:visibility="visible"
-            android:id="@+id/bt_previous"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="8dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:contentDescription="@string/app_name"
-            android:padding="12dp"
-            android:clickable="true"
-            android:focusable="true"
-            app:srcCompat="@drawable/ic_back"
-            app:tint="#fff" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:fontFamily="@font/uthman"
-            android:text="@string/tasbih"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="#fff" />
-
-    </RelativeLayout>
+        android:background="#4B9B76"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:title="@string/tasbih"
+        app:titleTextColor="@android:color/white" />
 
     <LinearLayout
         android:id="@+id/tasbih"

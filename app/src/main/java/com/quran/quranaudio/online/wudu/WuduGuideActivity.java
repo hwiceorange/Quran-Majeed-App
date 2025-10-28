@@ -1,5 +1,8 @@
 package com.quran.quranaudio.online.wudu;
 
+import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -16,9 +19,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.quran.quranaudio.online.R;
+import com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Wudu Guide Activity
@@ -31,14 +36,46 @@ public class WuduGuideActivity extends AppCompatActivity {
     private List<WuduStep> wuduSteps;
 
     @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(updateBaseContextLocale(base));
+    }
+
+    private Context updateBaseContextLocale(Context context) {
+        String language = SPAppConfigs.getLocale(context);
+        if (language == null || language.isEmpty()) {
+            return context;
+        }
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return updateResourcesLocale(context, locale);
+        }
+        return updateResourcesLocaleLegacy(context, locale);
+    }
+
+    private Context updateResourcesLocale(Context context, Locale locale) {
+        Configuration configuration = new Configuration(context.getResources().getConfiguration());
+        configuration.setLocale(locale);
+        return context.createConfigurationContext(configuration);
+    }
+
+    private Context updateResourcesLocaleLegacy(Context context, Locale locale) {
+        Resources resources = context.getResources();
+        Configuration configuration = resources.getConfiguration();
+        configuration.locale = locale;
+        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+        return context;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        // Setup status bar
+        // 🔄 统一设计风格：状态栏颜色与 Toolbar 一致
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+            window.setStatusBarColor(0xFF4B9B76); // #4B9B76 - 与 Toolbar 背景色一致
         }
         
         setContentView(R.layout.activity_wudu_guide);
@@ -49,9 +86,15 @@ public class WuduGuideActivity extends AppCompatActivity {
     }
 
     private void setupToolbar() {
-        ImageView backBtn = findViewById(R.id.back_btn);
-        if (backBtn != null) {
-            backBtn.setOnClickListener(v -> finish());
+        // 🔄 统一设计风格：使用 Toolbar 的导航按钮
+        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setDisplayShowHomeEnabled(true);
+            }
+            toolbar.setNavigationOnClickListener(v -> finish());
         }
     }
 

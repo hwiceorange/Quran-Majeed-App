@@ -112,7 +112,7 @@
 
     <string name="_99_names_of_allah">99 Names of Allah</string>
 
-    <string name="quran">Quran</string>
+    <string name="quran">قرآن</string>
 
     <string name="get_to_know_the_99_names_of_allah">Get to know the 99 names of Allah</string>
 
@@ -177,7 +177,7 @@
 
     <string name="travel">Travel</string>
 
-    <string name="prayer">Prayer</string>
+    <string name="prayer">نماز</string>
 
     <string name="praising_allah">Praising Allah</string>
 
@@ -952,9 +952,25 @@
 
     <string name="dialog_message_sensor_not_calibrate">Please calibrate your sensors, by pointing your phone up toward the sky and move it in a figure 8 motion</string>
 
-    <string name="title_qibla_direction">Qibla Direction</string>
+    <string name="title_qibla_direction">قبلہ کی سمت</string>
+    <string name="desc_qibla_direction">قبلہ کی سمت تلاش کریں</string>
 
-    <string name="desc_qibla_direction">Locate Qibla direction</string>
+    <!-- Qibla Compass Page -->
+    <string name="qibla_from_north">شمال سے قبلہ کی سمت</string>
+    <string name="qibla_distance">فاصلہ</string>
+    <string name="qibla_field">میدان</string>
+    <string name="qibla_weak">کمزور</string>
+    <string name="qibla_normal">عام</string>
+    <string name="qibla_strong">مضبوط</string>
+    <string name="qibla_disturbed">پریشان</string>
+    <string name="qibla_unknown">نامعلوم</string>
+    <string name="qibla_calibrate">کیلیبریٹ کریں</string>
+    <string name="qibla_keep_level">آلہ کو برابر رکھیں</string>
+    <string name="qibla_device_tilted">آلہ %.1f° جھکا ہوا ہے، برابر رکھیں</string>
+    <string name="qibla_calibration_warning">⚠️ مقناطیسی مداخلت کا پتہ چلا، درستگی کے لیے کمپاس کو کیلیبریٹ کریں</string>
+    <string name="qibla_weak_signal">کمزور مقناطیسی میدان کا اشارہ</string>
+    <string name="qibla_strong_interference">مضبوط مقناطیسی میدان کی مداخلت</string>
+    <string name="qibla_magnetic_interference">مقناطیسی مداخلت کا پتہ چلا</string>
 
     <string name="school_adjustment_method_shafii">Shafii (Default)</string>
 
@@ -1089,6 +1105,8 @@
     <string name="title_temperature_unit_imperial">Fahrenheit</string>
 
     <string name="mecca_live">مکہ لائیو</string>
+    <string name="medina_live">مدینہ لائیو</string>
+    <string name="live_indicator">براہ راست</string>
 
     <string name="madina_live">مدینہ لائیو</string>
 
@@ -1996,6 +2014,8 @@
     <string name="verse_of_day">آج کی آیت</string>
 
     <string name="verse_info_format">سورت %1$s %2$d:%3$d</string>
+    <string name="loading">لوڈ ہو رہا ہے...</string>
+    <string name="track">ٹریک</string>
 
     <string name="live_stream">لائیو سٹریم</string>
 
@@ -2019,4 +2039,35 @@
   <string name="setting_app_language_title">ایپ کی زبان</string>
   <string name="setting_app_language_subtitle">اپنی پسندیدہ زبان منتخب کریں</string>
   <string name="setting_app_language_dialog_title">زبان منتخب کریں</string>
-    </resources>
+    
+
+  <!-- Daily Quests & Streak -->
+    <string name="streak">تسلسل</string>
+    <string name="days_streak">%d دن</string>
+    <string name="monthly_goal">ماہانہ ہدف</string>
+    <string name="todays_quests">آج کے کام</string>
+    <string name="quran_reading">قرآن کی تلاوت</string>
+    <string name="read_x_verses">%d آیات پڑھیں</string>
+    <string name="tajweed_practice">تجوید کی مشق</string>
+    <string name="listen_x_minutes">%d منٹ سنیں</string>
+    <string name="practice_x_minutes">%d منٹ مشق کریں</string>
+    <string name="dhikr">ذکر</string>
+    <string name="complete_x_tasbih">%d تسبیح مکمل کریں</string>
+    <string name="go">شروع کریں</string>
+
+
+  <!-- Daily Quests & Streak -->
+    <string name="x_days">%d دن</string>
+    <string name="progress_format">%d / %d</string>
+
+    <!-- Learning Plan Setup -->
+    <string name="learning_plan_setup">سیکھنے کا منصوبہ ترتیب</string>
+    <string name="daily_reading_goal">روزانہ پڑھنے کا ہدف</string>
+    <string name="recitation_tajweed_practice">تلاوت اور تجوید کی مشق</string>
+    <string name="practice_recitation">تلاوت کی مشق</string>
+    <string name="extra_dhikr">اضافی ذکر</string>
+    <string name="dua_reminder">دعا کی یاد دہانی</string>
+    <string name="tasbih_reminder">تسبیح کی یاد دہانی</string>
+    <string name="estimated_challenge_duration">متوقع چیلنج کی مدت</string>
+    <string name="save_start_challenge">✓ محفوظ کریں اور میرا چیلنج شروع کریں</string>
+</resources>

@@ -18,15 +18,19 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/praters365_timings_box"
         android:layout_width="match_parent"
-        android:layout_height="290dp"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:id="@+id/fajrCard"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
+            android:layout_height="wrap_content"
+            android:minHeight="68dp"
             android:layout_marginStart="1dp"
             android:layout_marginEnd="1dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="6dp"
+            android:orientation="vertical"
             app:cardBackgroundColor="?attr/backgroundColor"
             app:layout_constraintTop_toTopOf="parent"
             app:cardCornerRadius="0dp"
@@ -35,50 +39,44 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
-                <!-- Left: Icon + Prayer Name + Time (Vertical) -->
+                <!-- Left: Prayer Name + Time (Vertical) -->
                 <LinearLayout
                     android:id="@+id/fajr_left_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
+                    android:layout_marginStart="16dp"
+                    android:orientation="vertical"
+                    android:gravity="start"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <ImageView
+                    <!-- Prayer Name (Bold, Primary Color) -->
+                    <TextView
+                        android:id="@+id/fajr_label_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/symbol_fajr" />
+                        android:text="@string/FAJR"
+                        android:textAppearance="@style/prayer_name"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.01" />
 
-                    <LinearLayout
+                    <!-- Time (Secondary Color + Clock Icon) -->
+                    <TextView
+                        android:id="@+id/fajr_timing_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:orientation="vertical"
-                        android:gravity="start">
-
-                        <TextView
-                            android:id="@+id/fajr_label_text_view"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/FAJR"
-                            android:textAppearance="@style/prayer_name"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/fajr_timing_text_view"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="04:54 AM"
-                            android:textSize="12sp"
-                            android:textAppearance="@style/prayer_name" />
-                    </LinearLayout>
+                        android:layout_marginTop="4dp"
+                        android:text="04:54 AM"
+                        android:textSize="13sp"
+                        android:textColor="?attr/textColorSecondary"
+                        android:drawableStart="@drawable/ic_clock_simple"
+                        android:drawablePadding="4dp"
+                        android:drawableTint="?attr/textColorSecondary"
+                        android:gravity="center_vertical" />
                 </LinearLayout>
 
                 <!-- Right: Track Button + Reminder Icon -->
@@ -98,7 +96,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="32dp"
                         android:layout_marginEnd="8dp"
-                        android:text="Track"
+                        android:text="@string/track"
                         android:textSize="11sp"
                         android:textColor="@android:color/white"
                         android:paddingStart="12dp"
@@ -145,15 +143,29 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <!-- Bottom Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="?attr/textColorSecondary"
+                android:alpha="0.12" />
+
         </LinearLayout>
 
 
         <LinearLayout
             android:id="@+id/dhuhrCard"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
+            android:layout_height="wrap_content"
+            android:minHeight="68dp"
             android:layout_marginStart="1dp"
             android:layout_marginEnd="1dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="6dp"
+            android:orientation="vertical"
             app:cardBackgroundColor="?attr/backgroundColor"
             app:layout_constraintTop_toBottomOf="@+id/fajrCard"
             app:cardCornerRadius="0dp"
@@ -162,49 +174,41 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:id="@+id/dhuhr_left_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
+                    android:layout_marginStart="16dp"
+                    android:orientation="vertical"
+                    android:gravity="start"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <ImageView
+                    <TextView
+                        android:id="@+id/dohr_label_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/symbol_dhuhr" />
+                        android:text="@string/DHOHR"
+                        android:textAppearance="@style/prayer_name"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.01" />
 
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/dohr_timing_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:orientation="vertical"
-                        android:gravity="start">
-
-                        <TextView
-                            android:id="@+id/dohr_label_text_view"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/DHOHR"
-                            android:textAppearance="@style/prayer_name"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/dohr_timing_text_view"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="11:57 AM"
-                            android:textSize="12sp"
-                            android:textAppearance="@style/prayer_name" />
-                    </LinearLayout>
+                        android:layout_marginTop="4dp"
+                        android:text="11:57 AM"
+                        android:textSize="13sp"
+                        android:textColor="?attr/textColorSecondary"
+                        android:drawableStart="@drawable/ic_clock_simple"
+                        android:drawablePadding="4dp"
+                        android:drawableTint="?attr/textColorSecondary"
+                        android:gravity="center_vertical" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -222,7 +226,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="32dp"
                         android:layout_marginEnd="8dp"
-                        android:text="Track"
+                        android:text="@string/track"
                         android:textSize="11sp"
                         android:textColor="@android:color/white"
                         android:paddingStart="12dp"
@@ -268,14 +272,28 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <!-- Bottom Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="?attr/textColorSecondary"
+                android:alpha="0.12" />
+
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/asrCard"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
+            android:layout_height="wrap_content"
+            android:minHeight="68dp"
             android:layout_marginStart="1dp"
             android:layout_marginEnd="1dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="6dp"
+            android:orientation="vertical"
             app:cardBackgroundColor="?attr/backgroundColor"
             app:layout_constraintTop_toBottomOf="@+id/dhuhrCard"
             app:cardCornerRadius="0dp"
@@ -284,49 +302,41 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:id="@+id/asr_left_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
+                    android:layout_marginStart="16dp"
+                    android:orientation="vertical"
+                    android:gravity="start"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <ImageView
+                    <TextView
+                        android:id="@+id/asr_label_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/symbol_asr" />
+                        android:text="@string/ASR"
+                        android:textAppearance="@style/prayer_name"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.01" />
 
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/asr_timing_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:orientation="vertical"
-                        android:gravity="start">
-
-                        <TextView
-                            android:id="@+id/asr_label_text_view"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/ASR"
-                            android:textAppearance="@style/prayer_name"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/asr_timing_text_view"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="3:04 PM"
-                            android:textSize="12sp"
-                            android:textAppearance="@style/prayer_name" />
-                    </LinearLayout>
+                        android:layout_marginTop="4dp"
+                        android:text="3:04 PM"
+                        android:textSize="13sp"
+                        android:textColor="?attr/textColorSecondary"
+                        android:drawableStart="@drawable/ic_clock_simple"
+                        android:drawablePadding="4dp"
+                        android:drawableTint="?attr/textColorSecondary"
+                        android:gravity="center_vertical" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -344,7 +354,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="32dp"
                         android:layout_marginEnd="8dp"
-                        android:text="Track"
+                        android:text="@string/track"
                         android:textSize="11sp"
                         android:textColor="@android:color/white"
                         android:paddingStart="12dp"
@@ -390,14 +400,28 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <!-- Bottom Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="?attr/textColorSecondary"
+                android:alpha="0.12" />
+
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/maghribCard"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
+            android:layout_height="wrap_content"
+            android:minHeight="68dp"
             android:layout_marginStart="1dp"
             android:layout_marginEnd="1dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="6dp"
+            android:orientation="vertical"
             app:cardBackgroundColor="?attr/backgroundColor"
             app:layout_constraintTop_toBottomOf="@+id/asrCard"
             app:cardCornerRadius="0dp"
@@ -406,49 +430,41 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:id="@+id/maghrib_left_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
+                    android:layout_marginStart="16dp"
+                    android:orientation="vertical"
+                    android:gravity="start"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <ImageView
+                    <TextView
+                        android:id="@+id/maghrib_label_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/symbol_maghrib"  />
+                        android:text="@string/MAGHRIB"
+                        android:textAppearance="@style/prayer_name"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.01" />
 
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/maghreb_timing_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:orientation="vertical"
-                        android:gravity="start">
-
-                        <TextView
-                            android:id="@+id/maghrib_label_text_view"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/MAGHRIB"
-                            android:textAppearance="@style/prayer_name"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/maghreb_timing_text_view"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="5:30 PM"
-                            android:textSize="12sp"
-                            android:textAppearance="@style/prayer_name" />
-                    </LinearLayout>
+                        android:layout_marginTop="4dp"
+                        android:text="5:30 PM"
+                        android:textSize="13sp"
+                        android:textColor="?attr/textColorSecondary"
+                        android:drawableStart="@drawable/ic_clock_simple"
+                        android:drawablePadding="4dp"
+                        android:drawableTint="?attr/textColorSecondary"
+                        android:gravity="center_vertical" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -466,7 +482,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="32dp"
                         android:layout_marginEnd="8dp"
-                        android:text="Track"
+                        android:text="@string/track"
                         android:textSize="11sp"
                         android:textColor="@android:color/white"
                         android:paddingStart="12dp"
@@ -512,14 +528,28 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <!-- Bottom Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="?attr/textColorSecondary"
+                android:alpha="0.12" />
+
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ishaaCard"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
+            android:layout_height="wrap_content"
+            android:minHeight="68dp"
             android:layout_marginStart="1dp"
             android:layout_marginEnd="1dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="6dp"
+            android:orientation="vertical"
             app:cardBackgroundColor="?attr/backgroundColor"
             app:layout_constraintTop_toBottomOf="@+id/maghribCard"
             app:cardCornerRadius="0dp"
@@ -528,49 +558,41 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:id="@+id/isha_left_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
+                    android:layout_marginStart="16dp"
+                    android:orientation="vertical"
+                    android:gravity="start"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <ImageView
+                    <TextView
+                        android:id="@+id/icha_label_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/symbol_ishaa"/>
+                        android:text="@string/ICHA"
+                        android:textAppearance="@style/prayer_name"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.01" />
 
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/icha_timing_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:orientation="vertical"
-                        android:gravity="start">
-
-                        <TextView
-                            android:id="@+id/icha_label_text_view"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/ICHA"
-                            android:textAppearance="@style/prayer_name"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/icha_timing_text_view"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="6:54 PM"
-                            android:textSize="12sp"
-                            android:textAppearance="@style/prayer_name" />
-                    </LinearLayout>
+                        android:layout_marginTop="4dp"
+                        android:text="6:54 PM"
+                        android:textSize="13sp"
+                        android:textColor="?attr/textColorSecondary"
+                        android:drawableStart="@drawable/ic_clock_simple"
+                        android:drawablePadding="4dp"
+                        android:drawableTint="?attr/textColorSecondary"
+                        android:gravity="center_vertical" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -588,7 +610,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="32dp"
                         android:layout_marginEnd="8dp"
-                        android:text="Track"
+                        android:text="@string/track"
                         android:textSize="11sp"
                         android:textColor="@android:color/white"
                         android:paddingStart="12dp"
@@ -633,6 +655,16 @@
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Bottom Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="?attr/textColorSecondary"
+                android:alpha="0.12" />
 
         </LinearLayout>
 

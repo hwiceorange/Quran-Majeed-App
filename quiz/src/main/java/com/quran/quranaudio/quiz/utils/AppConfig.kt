@@ -27,17 +27,34 @@ object AppConfig {
     fun isIDLan() = "id" == lan
     fun isEsLan() = "es" == lan
     fun setLanguage() {
-        var locale = BaseApp.instance!!.resources.configuration.locale
-        if (locale == null) {
-            locale = Locale.getDefault()
+        // 🔧 修复：优先从用户设置的语言配置读取，而不是系统配置
+        // 主应用通过 SPAppConfigs 保存用户选择的语言到 SharedPreferences
+        val context = BaseApp.instance!!
+        val sp = context.getSharedPreferences("sp_app_configs", android.content.Context.MODE_PRIVATE)
+        val savedLanguage = sp.getString("key.app.language", null)
+        
+        if (!savedLanguage.isNullOrEmpty()) {
+            // 使用用户设置的语言
+            lan = savedLanguage
+            loge("📱 从用户设置读取语言: $lan", "lan_config")
+        } else {
+            // 回退到系统语言
+            var locale = context.resources.configuration.locale
+            if (locale == null) {
+                locale = Locale.getDefault()
+            }
+            lan = locale.language
+            loge("🌍 从系统配置读取语言: $lan", "lan_config")
         }
-        lan = locale.language
+        
+        // 语言代码标准化
         when(lan) {
-            "in" -> lan = "id"
+            "in" -> lan = "id"  // 印尼语标准化
             "ji"-> lan="yi"
             "he"-> lan="iw"
         }
-        loge("当前语言: " + lan, "lan_config")
+        
+        loge("✅ 最终使用语言: $lan (isID=${isIDLan()})", "lan_config")
         initAppConfigInfo()
     }
 

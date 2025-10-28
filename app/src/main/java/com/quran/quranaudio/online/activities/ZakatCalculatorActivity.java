@@ -1,5 +1,8 @@
 package com.quran.quranaudio.online.activities;
 
+import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -14,20 +17,55 @@ import androidx.fragment.app.Fragment;
 
 import com.quran.quranaudio.online.R;
 import com.quran.quranaudio.online.features.zakat.ZakatFragment;
+import com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs;
+
+import java.util.Locale;
 
 
 public class ZakatCalculatorActivity extends AppCompatActivity {
 
     @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(updateBaseContextLocale(base));
+    }
+
+    private Context updateBaseContextLocale(Context context) {
+        String language = SPAppConfigs.getLocale(context);
+        if (language == null || language.isEmpty()) {
+            return context;
+        }
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return updateResourcesLocale(context, locale);
+        }
+        return updateResourcesLocaleLegacy(context, locale);
+    }
+
+    private Context updateResourcesLocale(Context context, Locale locale) {
+        Configuration configuration = new Configuration(context.getResources().getConfiguration());
+        configuration.setLocale(locale);
+        return context.createConfigurationContext(configuration);
+    }
+
+    private Context updateResourcesLocaleLegacy(Context context, Locale locale) {
+        Resources resources = context.getResources();
+        Configuration configuration = resources.getConfiguration();
+        configuration.locale = locale;
+        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+        return context;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        // 设置状态栏透明，并使用统一的主题色
+        // 🔄 统一设计风格：状态栏颜色与 Toolbar 一致
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+            window.setStatusBarColor(0xFF4B9B76); // #4B9B76 - 与 Toolbar 背景色一致
             
             // 设置状态栏图标为亮色（白色）
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -38,21 +76,23 @@ public class ZakatCalculatorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_zakat_calculator);
         loadFragment(new ZakatFragment());
 
-        // 为工具栏添加状态栏高度的顶部padding
-        FrameLayout customToolbar = findViewById(R.id.custom_toolbar);
-        ViewCompat.setOnApplyWindowInsetsListener(customToolbar, (v, insets) -> {
-            int statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
-            v.setPadding(
-                v.getPaddingLeft(),
-                statusBarHeight,
-                v.getPaddingRight(),
-                v.getPaddingBottom()
-            );
-            return insets;
-        });
+        // 🔄 统一设计风格：使用 Toolbar 的导航按钮
+        setupToolbar();
+    }
 
-        ImageView imgFavorite = findViewById(R.id.back);
-        imgFavorite.setOnClickListener(v -> finish());
+    /**
+     * 🔄 统一设计风格：设置 Toolbar 和返回按钮
+     */
+    private void setupToolbar() {
+        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.custom_toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setDisplayShowHomeEnabled(true);
+            }
+            toolbar.setNavigationOnClickListener(v -> finish());
+        }
     }
 
     private boolean loadFragment(Fragment fragment) {

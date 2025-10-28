@@ -76,12 +76,12 @@ public class CalendarActivity extends BaseActivity {
 
         super.onCreate(savedInstanceState);
         
-        // 设置状态栏透明，并使用统一的主题色
+        // 🔄 统一设计风格：状态栏颜色与 Toolbar 一致
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             android.view.Window window = getWindow();
             window.addFlags(android.view.WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+            window.setStatusBarColor(0xFF4B9B76); // #4B9B76 - 与 Toolbar 背景色一致
             
             // 设置状态栏图标为亮色（白色）
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
@@ -91,23 +91,8 @@ public class CalendarActivity extends BaseActivity {
 
         setContentView(R.layout.activity_calendar);
 
-        // 为工具栏添加状态栏高度的顶部padding
-        android.widget.FrameLayout calendarToolbar = findViewById(R.id.calendar_toolbar);
-        if (calendarToolbar != null) {
-            androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(calendarToolbar, (v, insets) -> {
-                int statusBarHeight = insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.systemBars()).top;
-                v.setPadding(
-                    v.getPaddingLeft(),
-                    statusBarHeight,
-                    v.getPaddingRight(),
-                    v.getPaddingBottom()
-                );
-                return insets;
-            });
-        }
-
-        ImageView imgFavorite = (ImageView) findViewById(R.id.back);
-        imgFavorite.setOnClickListener(v -> finish());
+        // 🔄 统一设计风格：使用 Toolbar 的导航按钮
+        setupToolbar();
 
         selectedDateTextView = findViewById(R.id.selected_date_text_view);
         calendarToolbarTitle = findViewById(R.id.calendar_toolbar_title);
@@ -156,6 +141,21 @@ public class CalendarActivity extends BaseActivity {
             updateToolbarTitle(calendarMonth);
             return Unit.INSTANCE;
         });
+    }
+
+    /**
+     * 🔄 统一设计风格：设置 Toolbar 和返回按钮
+     */
+    private void setupToolbar() {
+        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.calendar_toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setDisplayShowHomeEnabled(true);
+            }
+            toolbar.setNavigationOnClickListener(v -> finish());
+        }
     }
 
     public static LocalDate getSelectedDate() {

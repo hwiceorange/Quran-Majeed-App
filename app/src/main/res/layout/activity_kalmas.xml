@@ -6,53 +6,32 @@
     android:background="@color/colorBGQuranPageHeader"
     android:layoutDirection="ltr"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
 
     <FrameLayout
         android:id="@+id/names99_fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:background="@color/colorBGQuranPageHeader"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/custom_toolbar"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-    <FrameLayout
+    <!-- Toolbar (统一设计风格) -->
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/custom_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="56dp"
-        android:layoutDirection="ltr"
-        android:paddingBottom="12dp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#4B9B76"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:title="@string/six_kalmas"
+        app:titleTextColor="@android:color/white"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:background="@color/colorPrimaryDark"
-        android:fitsSystemWindows="false">
-
-        <ImageView
-            android:id="@+id/back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="12dp"
-            app:tint="@color/white"
-            android:layout_gravity="center_vertical|start"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:src="@drawable/ic_back"
-            android:contentDescription="@string/strLabelBack"/>
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/six_kalmas"
-            android:textColor="@color/white"
-            android:fontFamily="@font/uthman"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_gravity="center"/>
-
-    </FrameLayout>
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

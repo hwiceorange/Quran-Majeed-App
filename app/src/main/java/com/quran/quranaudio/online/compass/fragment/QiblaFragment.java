@@ -485,7 +485,7 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
         
         switch (status) {
             case NORMAL:
-                statusText = "Normal";
+                statusText = getString(R.string.qibla_normal);
                 statusColor = getResources().getColor(R.color.colorPrimary);
                 hideMagneticWarning();
                 // When magnetic field is normal, update calibration status based on sensor accuracy
@@ -494,25 +494,25 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
                 }
                 break;
             case WEAK:
-                statusText = "Weak";
+                statusText = getString(R.string.qibla_weak);
                 statusColor = 0xFFFF4444; // Red color for weak signal
-                showMagneticWarning("Weak magnetic field signal");
+                showMagneticWarning(getString(R.string.qibla_weak_signal));
                 updateCalibrationIndicator(CalibrationStatus.CALIBRATING);
                 break;
             case STRONG:
-                statusText = "Strong";
+                statusText = getString(R.string.qibla_strong);
                 statusColor = 0xFFFFA726; // Orange color for strong interference
-                showMagneticWarning("Strong magnetic field interference");
+                showMagneticWarning(getString(R.string.qibla_strong_interference));
                 updateCalibrationIndicator(CalibrationStatus.UNCALIBRATED);
                 break;
             case DISTURBED:
-                statusText = "Disturbed";
+                statusText = getString(R.string.qibla_disturbed);
                 statusColor = 0xFFFF4444; // Red color for disturbance
-                showMagneticWarning("Magnetic interference detected");
+                showMagneticWarning(getString(R.string.qibla_magnetic_interference));
                 updateCalibrationIndicator(CalibrationStatus.UNCALIBRATED);
                 break;
             default:
-                statusText = "Unknown";
+                statusText = getString(R.string.qibla_unknown);
                 statusColor = 0xFF888888; // Grey color
                 updateCalibrationIndicator(CalibrationStatus.UNCALIBRATED);
                 break;
@@ -526,7 +526,7 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
         
         // Update calibration status label (always "Field")
         if (tvCalibrationStatus != null) {
-            tvCalibrationStatus.setText("Field");
+            tvCalibrationStatus.setText(getString(R.string.qibla_field));
             tvCalibrationStatus.setTextColor(0xFF888888); // Grey label color
         }
         
@@ -540,7 +540,7 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
                 tvTiltWarning.setVisibility(View.GONE);
                     } else {
                 tvTiltWarning.setVisibility(View.VISIBLE);
-                tvTiltWarning.setText(String.format(Locale.ENGLISH, "Device tilted %.1f°, keep level", tiltAngle));
+                tvTiltWarning.setText(String.format(getString(R.string.qibla_device_tilted), tiltAngle));
             }
         }
         

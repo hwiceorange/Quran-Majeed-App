@@ -277,7 +277,7 @@ public class TasbihFragment extends BaseFragment {
     }
 
     private void initView() {
-        this.btnPrevious = (ImageView) this.view.findViewById(R.id.bt_previous);
+        // Toolbar no longer has btnPrevious - using Toolbar's navigation icon instead
         this.btnSpeak = (ImageView) this.view.findViewById(R.id.bt_speak);
         this.btn33 = (ImageView) this.view.findViewById(R.id.bt_tasbih_count);
         this.btnRefresh = (ImageView) this.view.findViewById(R.id.bt_refresh);
@@ -288,9 +288,10 @@ public class TasbihFragment extends BaseFragment {
     }
 
     private void initToolbar() {
-        // Setup back button to navigate to home
-        if (this.btnPrevious != null) {
-            this.btnPrevious.setOnClickListener(new View.OnClickListener() {
+        // 🔄 统一设计风格：使用 Toolbar 的导航按钮
+        androidx.appcompat.widget.Toolbar toolbar = this.view.findViewById(R.id.view_toolbar);
+        if (toolbar != null) {
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     try {

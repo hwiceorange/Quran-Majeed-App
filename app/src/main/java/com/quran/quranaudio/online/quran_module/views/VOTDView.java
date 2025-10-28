@@ -245,18 +245,40 @@ public class VOTDView extends FrameLayout implements Destroyable, BookmarkCallba
     }
 
     private QuranTranslBookInfo obtainOptimalSlug(Context ctx, QuranTranslationFactory factory) {
-        Set<String> savedTranslations = SPReader.getSavedTranslations(ctx);
-
+        // 🌐 优先根据应用语言自动选择翻译
+        Set<String> autoSelectedTranslations = com.quran.quranaudio.online.quran_module.utils.reader.TranslUtils.defaultTranslationSlugs();
+        
         QuranTranslBookInfo bookInfo = null;
-        for (String savedSlug : savedTranslations) {
-            if (!TranslUtils.isTransliteration(savedSlug)) {
-                bookInfo = factory.getTranslationBookInfo(savedSlug);
-                break;
+        
+        // 🌐 首先尝试使用根据语言自动选择的翻译
+        for (String autoSlug : autoSelectedTranslations) {
+            if (!TranslUtils.isTransliteration(autoSlug)) {
+                bookInfo = factory.getTranslationBookInfo(autoSlug);
+                if (bookInfo != null) {
+                    android.util.Log.d("VOTDView", "🌐 Using auto-selected translation: " + autoSlug);
+                    break;
+                }
+            }
+        }
+        
+        // 🌐 如果自动选择失败，则使用用户保存的翻译偏好
+        if (bookInfo == null) {
+            Set<String> savedTranslations = SPReader.getSavedTranslations(ctx);
+            for (String savedSlug : savedTranslations) {
+                if (!TranslUtils.isTransliteration(savedSlug)) {
+                    bookInfo = factory.getTranslationBookInfo(savedSlug);
+                    if (bookInfo != null) {
+                        android.util.Log.d("VOTDView", "🌐 Using saved translation: " + savedSlug);
+                        break;
+                    }
+                }
             }
         }
 
+        // 🌐 最后回退到默认翻译
         if (bookInfo == null) {
             bookInfo = factory.getTranslationBookInfo(TranslUtils.TRANSL_SLUG_DEFAULT);
+            android.util.Log.d("VOTDView", "🌐 Using default translation: " + TranslUtils.TRANSL_SLUG_DEFAULT);
         }
 
         return bookInfo;

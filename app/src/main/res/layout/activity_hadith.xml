@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     tools:context=".hadith.HadithActivity"
     android:orientation="vertical"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:id="@+id/header_main"

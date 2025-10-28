@@ -177,7 +177,7 @@
 
     <string name="travel">Travel</string>
 
-    <string name="prayer">Prayer</string>
+    <string name="prayer">Solat</string>
 
     <string name="praising_allah">Praising Allah</string>
 
@@ -952,9 +952,25 @@
 
     <string name="dialog_message_sensor_not_calibrate">Please calibrate your sensors, by pointing your phone up toward the sky and move it in a figure 8 motion</string>
 
-    <string name="title_qibla_direction">Qibla Direction</string>
+    <string name="title_qibla_direction">Arah Kiblat</string>
+    <string name="desc_qibla_direction">Cari arah Kiblat</string>
 
-    <string name="desc_qibla_direction">Locate Qibla direction</string>
+    <!-- Qibla Compass Page -->
+    <string name="qibla_from_north">Kiblat Dari Utara</string>
+    <string name="qibla_distance">Jarak</string>
+    <string name="qibla_field">Medan</string>
+    <string name="qibla_weak">Lemah</string>
+    <string name="qibla_normal">Normal</string>
+    <string name="qibla_strong">Kuat</string>
+    <string name="qibla_disturbed">Terganggu</string>
+    <string name="qibla_unknown">Tidak Diketahui</string>
+    <string name="qibla_calibrate">Kalibrasi</string>
+    <string name="qibla_keep_level">Pastikan peranti mendatar</string>
+    <string name="qibla_device_tilted">Peranti condong %.1f°, pastikan mendatar</string>
+    <string name="qibla_calibration_warning">⚠️ Gangguan magnetik dikesan, kalibrasi kompas untuk ketepatan</string>
+    <string name="qibla_weak_signal">Isyarat medan magnet lemah</string>
+    <string name="qibla_strong_interference">Gangguan medan magnet kuat</string>
+    <string name="qibla_magnetic_interference">Gangguan magnetik dikesan</string>
 
     <string name="school_adjustment_method_shafii">Shafii (Default)</string>
 
@@ -1089,6 +1105,8 @@
     <string name="title_temperature_unit_imperial">Fahrenheit</string>
 
     <string name="mecca_live">Mekah Live</string>
+    <string name="medina_live">Madinah Live</string>
+    <string name="live_indicator">LANGSUNG</string>
 
     <string name="madina_live">Madinah Live</string>
 
@@ -1996,6 +2014,8 @@
     <string name="verse_of_day">Ayat Hari Ini</string>
 
     <string name="verse_info_format">Surah %1$s %2$d:%3$d</string>
+    <string name="loading">Memuatkan...</string>
+    <string name="track">Jejak</string>
 
     <string name="live_stream">Siaran Langsung</string>
 
@@ -2019,4 +2039,35 @@
   <string name="setting_app_language_title">Bahasa Aplikasi</string>
   <string name="setting_app_language_subtitle">Pilih bahasa pilihan anda</string>
   <string name="setting_app_language_dialog_title">Pilih Bahasa</string>
-    </resources>
+    
+
+  <!-- Daily Quests & Streak -->
+    <string name="streak">Konsistensi</string>
+    <string name="days_streak">%d Hari</string>
+    <string name="monthly_goal">Sasaran Bulanan</string>
+    <string name="todays_quests">Tugas Hari Ini</string>
+    <string name="quran_reading">Membaca Al-Quran</string>
+    <string name="read_x_verses">Baca %d ayat</string>
+    <string name="tajweed_practice">Latihan Tajwid</string>
+    <string name="listen_x_minutes">Dengar selama %d minit</string>
+    <string name="practice_x_minutes">Latihan %d minit</string>
+    <string name="dhikr">Zikir</string>
+    <string name="complete_x_tasbih">Selesaikan %d Tasbih</string>
+    <string name="go">Mula</string>
+
+
+  <!-- Daily Quests & Streak -->
+    <string name="x_days">%d Hari</string>
+    <string name="progress_format">%d / %d</string>
+
+    <!-- Learning Plan Setup -->
+    <string name="learning_plan_setup">Persediaan Rancangan Pembelajaran</string>
+    <string name="daily_reading_goal">Sasaran Bacaan Harian</string>
+    <string name="recitation_tajweed_practice">Amalan Bacaan &amp; Tajwid</string>
+    <string name="practice_recitation">Amalan Bacaan</string>
+    <string name="extra_dhikr">Zikir Tambahan</string>
+    <string name="dua_reminder">Peringatan Doa</string>
+    <string name="tasbih_reminder">Peringatan Tasbih</string>
+    <string name="estimated_challenge_duration">Anggaran Tempoh Cabaran</string>
+    <string name="save_start_challenge">✓ SIMPAN DAN MULAKAN CABARAN SAYA</string>
+</resources>

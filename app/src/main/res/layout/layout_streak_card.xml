@@ -2,6 +2,7 @@
 <!-- Streak Card showing user's learning streak and monthly progress -->
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/streak_card_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -79,11 +80,11 @@
                 android:id="@+id/tv_streak_days"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0 Days"
                 android:textColor="@android:color/white"
                 android:textSize="36sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginBottom="16dp"
+                tools:text="0 Days" /><!-- Placeholder for preview only -->
 
             <!-- Monthly Goal Section -->
             <LinearLayout
@@ -107,10 +108,10 @@
                     android:id="@+id/tv_monthly_progress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0 / 31"
                     android:textColor="@android:color/white"
                     android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:text="0 / 31" /><!-- Placeholder for preview only -->
 
             </LinearLayout>
 

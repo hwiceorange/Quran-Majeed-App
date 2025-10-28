@@ -14,7 +14,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Medina Live"
+        android:text="@string/medina_live"
         android:textColor="#000000"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -66,7 +66,7 @@
                 android:paddingEnd="12dp"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
-                android:text="🔴 LIVE"
+                android:text="@string/live_indicator"
                 android:textColor="@android:color/white"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -100,7 +100,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="🔴Medina TV Live Online 24/7 | بث مباشر || قناة السنة النبوية Madinah Live Today HD"
+                android:text="@string/medina_live_description"
                 android:textColor="@android:color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"

@@ -11,6 +11,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -29,12 +31,47 @@ import com.quran.quranaudio.online.hadith.search.Hadith_SearchActivity;
 import com.quran.quranaudio.online.hadith.settings.SettingsActivity;
 import com.quran.quranaudio.online.R;
 // import com.quran.quranaudio.online.ads.data.Constant; // 广告常量导入已移除
+import com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs;
+
+import java.util.Locale;
 
 public class HadithActivity extends AppCompatActivity {
 
     ActionBarDrawerToggle drawerToggle;
 
     // 广告相关变量已移除
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(updateBaseContextLocale(base));
+    }
+
+    private Context updateBaseContextLocale(Context context) {
+        String language = SPAppConfigs.getLocale(context);
+        if (language == null || language.isEmpty()) {
+            return context;
+        }
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return updateResourcesLocale(context, locale);
+        }
+        return updateResourcesLocaleLegacy(context, locale);
+    }
+
+    private Context updateResourcesLocale(Context context, Locale locale) {
+        Configuration configuration = new Configuration(context.getResources().getConfiguration());
+        configuration.setLocale(locale);
+        return context.createConfigurationContext(configuration);
+    }
+
+    private Context updateResourcesLocaleLegacy(Context context, Locale locale) {
+        Resources resources = context.getResources();
+        Configuration configuration = resources.getConfiguration();
+        configuration.locale = locale;
+        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+        return context;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

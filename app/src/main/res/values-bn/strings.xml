@@ -112,7 +112,7 @@
 
     <string name="_99_names_of_allah">99 Names of Allah</string>
 
-    <string name="quran">Quran</string>
+    <string name="quran">কুরআন</string>
 
     <string name="get_to_know_the_99_names_of_allah">Get to know the 99 names of Allah</string>
 
@@ -177,7 +177,7 @@
 
     <string name="travel">Travel</string>
 
-    <string name="prayer">Prayer</string>
+    <string name="prayer">নামাজ</string>
 
     <string name="praising_allah">Praising Allah</string>
 
@@ -952,9 +952,25 @@
 
     <string name="dialog_message_sensor_not_calibrate">Please calibrate your sensors, by pointing your phone up toward the sky and move it in a figure 8 motion</string>
 
-    <string name="title_qibla_direction">Qibla Direction</string>
+    <string name="title_qibla_direction">কিবলার দিক</string>
+    <string name="desc_qibla_direction">কিবলার দিক সনাক্ত করুন</string>
 
-    <string name="desc_qibla_direction">Locate Qibla direction</string>
+    <!-- Qibla Compass Page -->
+    <string name="qibla_from_north">উত্তর থেকে কিবলা</string>
+    <string name="qibla_distance">দূরত্ব</string>
+    <string name="qibla_field">ক্ষেত্র</string>
+    <string name="qibla_weak">দুর্বল</string>
+    <string name="qibla_normal">স্বাভাবিক</string>
+    <string name="qibla_strong">শক্তিশালী</string>
+    <string name="qibla_disturbed">বিঘ্নিত</string>
+    <string name="qibla_unknown">অজানা</string>
+    <string name="qibla_calibrate">ক্যালিব্রেট করুন</string>
+    <string name="qibla_keep_level">ডিভাইসটি সমতল রাখুন</string>
+    <string name="qibla_device_tilted">ডিভাইস %.1f° হেলে আছে, সমতল রাখুন</string>
+    <string name="qibla_calibration_warning">⚠️ চৌম্বকীয় হস্তক্ষেপ সনাক্ত করা হয়েছে, নির্ভুলতার জন্য কম্পাস ক্যালিব্রেট করুন</string>
+    <string name="qibla_weak_signal">দুর্বল চৌম্বক ক্ষেত্র সংকেত</string>
+    <string name="qibla_strong_interference">শক্তিশালী চৌম্বক ক্ষেত্র হস্তক্ষেপ</string>
+    <string name="qibla_magnetic_interference">চৌম্বকীয় হস্তক্ষেপ সনাক্ত করা হয়েছে</string>
 
     <string name="school_adjustment_method_shafii">Shafii (Default)</string>
 
@@ -1089,6 +1105,8 @@
     <string name="title_temperature_unit_imperial">Fahrenheit</string>
 
     <string name="mecca_live">মক্কা লাইভ</string>
+    <string name="medina_live">মদিনা লাইভ</string>
+    <string name="live_indicator">সরাসরি</string>
 
     <string name="madina_live">মদিনা লাইভ</string>
 
@@ -1996,6 +2014,8 @@
     <string name="verse_of_day">আজকের আয়াত</string>
 
     <string name="verse_info_format">সূরা %1$s %2$d:%3$d</string>
+    <string name="loading">লোড হচ্ছে...</string>
+    <string name="track">ট্র্যাক</string>
 
     <string name="live_stream">লাইভ স্ট্রিম</string>
 
@@ -2019,4 +2039,35 @@
   <string name="setting_app_language_title">অ্যাপের ভাষা</string>
   <string name="setting_app_language_subtitle">আপনার পছন্দের ভাষা চয়ন করুন</string>
   <string name="setting_app_language_dialog_title">ভাষা নির্বাচন করুন</string>
-    </resources>
+    
+
+  <!-- Daily Quests & Streak -->
+    <string name="streak">ধারাবাহিকতা</string>
+    <string name="days_streak">%d দিন</string>
+    <string name="monthly_goal">মাসিক লক্ষ্য</string>
+    <string name="todays_quests">আজকের কাজ</string>
+    <string name="quran_reading">কুরআন পাঠ</string>
+    <string name="read_x_verses">%d আয়াত পড়ুন</string>
+    <string name="tajweed_practice">তাজবীদ অনুশীলন</string>
+    <string name="listen_x_minutes">%d মিনিট শুনুন</string>
+    <string name="practice_x_minutes">%d মিনিট অনুশীলন করুন</string>
+    <string name="dhikr">জিকির</string>
+    <string name="complete_x_tasbih">%d তাসবিহ সম্পূর্ণ করুন</string>
+    <string name="go">শুরু করুন</string>
+
+
+  <!-- Daily Quests & Streak -->
+    <string name="x_days">%d দিন</string>
+    <string name="progress_format">%d / %d</string>
+
+    <!-- Learning Plan Setup -->
+    <string name="learning_plan_setup">শিক্ষা পরিকল্পনা সেটআপ</string>
+    <string name="daily_reading_goal">দৈনিক পাঠের লক্ষ্য</string>
+    <string name="recitation_tajweed_practice">তেলাওয়াত ও তাজবীদ অনুশীলন</string>
+    <string name="practice_recitation">তেলাওয়াত অনুশীলন</string>
+    <string name="extra_dhikr">অতিরিক্ত জিকির</string>
+    <string name="dua_reminder">দোয়া অনুস্মারক</string>
+    <string name="tasbih_reminder">তাসবিহ অনুস্মারক</string>
+    <string name="estimated_challenge_duration">আনুমানিক চ্যালেঞ্জ সময়কাল</string>
+    <string name="save_start_challenge">✓ সংরক্ষণ করুন এবং আমার চ্যালেঞ্জ শুরু করুন</string>
+</resources>
