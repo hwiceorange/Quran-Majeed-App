@@ -84,6 +84,32 @@
 
     <string name="rate_later">Later</string>
 
+    <string name="rate_prompt_title">Elhamdülillah! Deneyiminiz nasıldı?</string>
+
+    <string name="rate_prompt_message">Quran Majeed uygulamasını seviyor musunuz?</string>
+
+    <string name="rate_prompt_submit">Değerlendirmeyi Gönder</string>
+
+    <string name="rate_prompt_maybe_later">Belki Daha Sonra</string>
+
+    <string name="rate_prompt_sorry_title">Gerçekten Üzgünüz</string>
+
+    <string name="rate_prompt_sorry_message">Geri bildiriminiz çok değerli. Lütfen nasıl gelişebileceğimizi söyleyin:</string>
+
+    <string name="rate_prompt_feedback_title">Geri bildiriminizi paylaşın</string>
+
+    <string name="rate_prompt_feedback_hint">Uygulamayı nasıl geliştirebileceğimizi söyleyin</string>
+
+    <string name="rate_prompt_feedback_send">Gönder</string>
+
+    <string name="rate_prompt_feedback_cancel">Daha sonra</string>
+
+    <string name="rate_prompt_close_content">Kapat</string>
+
+    <string name="rate_prompt_email_subject">Kuran Uygulaması hakkında geri bildirim</string>
+
+    <string name="rate_prompt_feedback_email_error">Geri bildirim göndermek için e-posta uygulaması bulunamadı.</string>
+
     <string name="are_you_sure_you_want_to_exit">Are You Sure You Want To Exit ?</string>
 
     <string name="privacy">Gizlilik Politikası</string>
@@ -1334,13 +1360,13 @@
 
     <string name="noFootnotesForThisVerse">There are no footnotes for this verse.</string>
 
-    <string name="strTitleReaderChapters">Surah</string>
+    <string name="strTitleReaderChapters">Sure</string>
 
-    <string name="strTitleReaderJuz">Juz</string>
+    <string name="strTitleReaderJuz">Cüz</string>
 
-    <string name="strTitleReaderChapters2">Surah</string>
+    <string name="strTitleReaderChapters2">Sure</string>
 
-    <string name="strTitleReaderJuz2">Juz</string>
+    <string name="strTitleReaderJuz2">Cüz</string>
 
     <string name="strTitleReaderVerses">Verses</string>
 
@@ -2089,4 +2115,39 @@
     <!-- Challenge Days -->
     <string name="challenge_days_placeholder">30 Gün</string>
     <string name="challenge_days_format">%d Gün</string>
+    
+    <!-- Prayer Notification Settings -->
+    <string name="notification_settings">Bildirim Ayarları</string>
+    <string name="notification_type_none">Yok</string>
+    <string name="notification_type_azan">Ezan</string>
+    <string name="notification_type_vibrate">Titreşim</string>
+    <string name="notification_type_silent">Sessiz Bildirim</string>
+    <string name="notification_type_text_tone">Standart Metin Tonu</string>
+    <string name="notification_type_clock">Saat Sesi</string>
+    <string name="azan_name">Ezan Adı</string>
+    <string name="notification_volume">Bildirim Ses Düzeyi</string>
+    <string name="pre_prayer_reminder">Namaz öncesi hatırlatma ayarla</string>
+    <string name="reminder_minutes_format">%d dakika</string>
+    <string name="random_azan">Rastgele Ezan</string>
+    <string name="volume_percentage_format">%d%%</string>
+    <string name="default_volume_display">80%</string>
+    <string name="default_minutes_display">5 dakika</string>
+    <string name="content_desc_none">Yok</string>
+    <string name="content_desc_azan">Ezan</string>
+    <string name="content_desc_vibrate">Titreşim</string>
+    <string name="content_desc_silent">Sessiz</string>
+    <string name="content_desc_text_tone">Metin Tonu</string>
+    <string name="content_desc_clock">Saat</string>
+    <string name="content_desc_decrease">Azalt</string>
+    <string name="content_desc_increase">Artır</string>
+
+    <!-- Last Read Card -->
+    <string name="last_read">Son Okunan:</string>
+    <string name="continue_reading">Devam Et</string>
+    <string name="continue_reading_arrow">Devam Et →</string>
+    <string name="verse_no_format">Ayet No: %d</string>
+    <string name="surah_format">%d. %s</string>
+    <string name="juz_format">Cüz %d</string>
+    <string name="page_format">Sayfa %d</string>
+
 </resources>

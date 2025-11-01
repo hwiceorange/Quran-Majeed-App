@@ -45,6 +45,7 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
 import static android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
 
+import com.quran.quranaudio.online.common.rate.RatePromptManager;
 import com.quran.quranaudio.online.quran_module.components.quran.Quran;
 import com.quran.quranaudio.online.quran_module.components.quran.QuranMeta;
 import com.quran.quranaudio.online.quran_module.components.quran.subcomponents.Chapter;
@@ -67,6 +68,7 @@ import com.quran.quranaudio.online.quran_module.components.reader.ChapterVersePa
 import com.quran.quranaudio.online.databinding.ActivityReaderBinding;
 import com.quran.quranaudio.online.quran_module.db.readHistory.ReadHistoryDBHelper;
 import com.quran.quranaudio.online.quests.helper.QuranReadingTracker;
+import com.quran.quranaudio.online.features.Helper.LastSurahAndAyahHelper;
 
 import com.quran.quranaudio.online.quran_module.utils.quran.QuranUtils;
 import com.quran.quranaudio.online.quran_module.utils.reader.factory.ReaderFactory;
@@ -301,6 +303,8 @@ public class ActivityReader extends ReaderPossessingActivity {
                     // 直接记录 verses 数量，让 Tracker 根据配置决定如何处理
                     quranReadingTracker.recordVersesRead(versesRead);
                     android.util.Log.d("ActivityReader", "✅ 记录阅读进度: " + versesRead + " verses");
+
+                    maybeTriggerSurahCompletion(versesRead);
                 } else if (sessionStartPage > 0 && sessionEndPage > 0) {
                     // 回退到页码追踪
                     quranReadingTracker.recordPageRange(sessionStartPage, sessionEndPage);
@@ -366,6 +370,8 @@ public class ActivityReader extends ReaderPossessingActivity {
     protected void onResume() {
         super.onResume();
         
+        RatePromptManager.onReaderUsage(this);
+
         android.util.Log.d("ActivityReader", "🔄 onResume: Called");
         android.util.Log.d("ActivityReader", "🔄 onResume: autoPlayAudio = " + autoPlayAudio);
         android.util.Log.d("ActivityReader", "🔄 onResume: startVerseNo = " + startVerseNo);
@@ -838,6 +844,40 @@ public class ActivityReader extends ReaderPossessingActivity {
         }
     }
 
+    private void maybeTriggerSurahCompletion(int versesRead) {
+        if (sessionStartSurah <= 0 || sessionEndSurah <= 0) {
+            return;
+        }
+
+        try {
+            QuranMeta quranMeta = mQuranMetaRef.get();
+            if (quranMeta == null) {
+                return;
+            }
+
+            if (sessionStartSurah != sessionEndSurah) {
+                return;
+            }
+
+            int surahNo = sessionEndSurah;
+            int totalVersesInSurah = quranMeta.getChapterVerseCount(surahNo);
+            if (totalVersesInSurah <= 0) {
+                return;
+            }
+
+            boolean startedFromBeginning = sessionStartAyah <= 1;
+            boolean reachedEnd = sessionEndAyah >= totalVersesInSurah;
+            boolean readAll = versesRead >= totalVersesInSurah;
+
+            if (startedFromBeginning && reachedEnd && readAll) {
+                android.util.Log.d("ActivityReader", "🌟 Full Surah completed: " + surahNo + ", triggering rate prompt");
+                RatePromptManager.onSurahCompleted(this);
+            }
+        } catch (Exception e) {
+            android.util.Log.e("ActivityReader", "Failed to evaluate surah completion", e);
+        }
+    }
+
     @Override
     protected void onDestroy() {
         unbindPlayerService();
@@ -849,6 +889,8 @@ public class ActivityReader extends ReaderPossessingActivity {
         if (mReadHistoryDBHelper != null) {
             mReadHistoryDBHelper.close();
         }
+
+        RatePromptManager.cancelScheduledPrompt(this);
         super.onDestroy();
     }
 
@@ -2377,14 +2419,23 @@ public class ActivityReader extends ReaderPossessingActivity {
                 android.util.Log.d("ActivityReader", "📖 Getting position from UI: Surah " + currentSurah + ", Ayah " + currentAyah);
             }
             
-            // 保存到 Firestore
+            // 保存到本地和 Firestore
             final int surah = currentSurah;
             final int ayah = currentAyah;
             
+            // 🔥 Step 1: 始终保存到本地 SharedPreferences（无论是否登录）
+            if (!isListeningMode) {
+                // 阅读模式：保存到本地
+                LastSurahAndAyahHelper.storeLastSurah(this, surah);
+                LastSurahAndAyahHelper.storeLastAyah(this, ayah);
+                android.util.Log.d("ActivityReader", "💾 Saved to local storage: Surah " + surah + ", Ayah " + ayah);
+            }
+            
+            // 🔥 Step 2: 如果用户已登录，同时保存到 Firestore
             com.google.firebase.auth.FirebaseAuth auth = com.google.firebase.auth.FirebaseAuth.getInstance();
             if (auth.getCurrentUser() == null) {
-                android.util.Log.w("ActivityReader", "⚠️ User not logged in, cannot save position to Firestore");
-                return;
+                android.util.Log.w("ActivityReader", "⚠️ User not logged in, saved to local storage only");
+                return;  // 已保存到本地，直接返回
             }
             
             String userId = auth.getCurrentUser().getUid();
@@ -2412,6 +2463,32 @@ public class ActivityReader extends ReaderPossessingActivity {
             if (isJuzReadingMode() && mReaderParams != null && mReaderParams.currJuzNo > 0) {
                 learningState.put("lastReadJuz", mReaderParams.currJuzNo);
                 android.util.Log.d("ActivityReader", "🕌 Also saving Juz " + mReaderParams.currJuzNo + " to Firestore");
+            }
+            
+            // 🔥 Step 4: 保存阅读模式（SURAH/JUZ/VERSES）
+            if (mReaderParams != null) {
+                String readMode = "";
+                android.util.Log.d("ActivityReader", "🔍 DEBUG: mReaderParams.readType = " + mReaderParams.readType + 
+                    ", currJuzNo = " + mReaderParams.currJuzNo +
+                    ", CHAPTER=" + com.quran.quranaudio.online.quran_module.reader_managers.ReaderParams.READER_READ_TYPE_CHAPTER +
+                    ", JUZ=" + com.quran.quranaudio.online.quran_module.reader_managers.ReaderParams.READER_READ_TYPE_JUZ +
+                    ", VERSES=" + com.quran.quranaudio.online.quran_module.reader_managers.ReaderParams.READER_READ_TYPE_VERSES);
+                    
+                if (mReaderParams.readType == com.quran.quranaudio.online.quran_module.reader_managers.ReaderParams.READER_READ_TYPE_CHAPTER) {
+                    readMode = "SURAH";
+                } else if (mReaderParams.readType == com.quran.quranaudio.online.quran_module.reader_managers.ReaderParams.READER_READ_TYPE_JUZ) {
+                    readMode = "JUZ";
+                } else if (mReaderParams.readType == com.quran.quranaudio.online.quran_module.reader_managers.ReaderParams.READER_READ_TYPE_VERSES) {
+                    readMode = "VERSES";
+                }
+                if (!readMode.isEmpty()) {
+                    learningState.put("lastReadMode", readMode);
+                    android.util.Log.d("ActivityReader", "📚 Saving reading mode: " + readMode);
+                } else {
+                    android.util.Log.w("ActivityReader", "⚠️ WARNING: readMode is empty! readType=" + mReaderParams.readType);
+                }
+            } else {
+                android.util.Log.w("ActivityReader", "⚠️ WARNING: mReaderParams is null!");
             }
             
             firestore.collection("users")

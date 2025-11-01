@@ -11,16 +11,14 @@
         android:title="@string/salat_time" />
 
     <item
+        android:id="@+id/nav_quran"
+        android:icon="@drawable/ic_quran"
+        android:title="@string/strTitleQuran" />
+
+    <item
         android:id="@+id/nav_name_99"
         android:icon="@drawable/ic_name_99"
         android:title="@string/names99" />
-
-
-    <item
-        android:id="@+id/nav_tasbih"
-        android:icon="@drawable/ic_tasbih"
-        android:title="@string/tasbih" />
-
 
     <item
         android:id="@+id/nav_app_settings"

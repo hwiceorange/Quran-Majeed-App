@@ -28,6 +28,8 @@ import com.quran.quranaudio.online.prayertimes.job.WorkCreator;
 import com.quran.quranaudio.online.prayertimes.preferences.PreferencesHelper;
 import com.quran.quranaudio.online.prayertimes.ui.home.HomeViewModel;
 import com.quran.quranaudio.online.R;
+import com.quran.quranaudio.quiz.utils.RxBus;
+import com.quran.quranaudio.quiz.base.MainTabChangeEvent;
 
 import javax.inject.Inject;
 
@@ -43,6 +45,8 @@ public class MainActivity extends BaseActivity {
     PreferencesHelper preferencesHelper;
 
     private PrayerDataPreloader prayerDataPreloader;
+    private NavController navController;
+    private BottomNavigationView navView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +64,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView = findViewById(R.id.nav_view);
 
      /*   //PermissionStart
 
@@ -78,7 +82,7 @@ public class MainActivity extends BaseActivity {
      //   requestPermission();
 
 
-        NavController navController = Navigation.findNavController(this, R.id.home_host_fragment);
+        navController = Navigation.findNavController(this, R.id.home_host_fragment);
         NavigationUI.setupWithNavController(navView, navController);
         
         // 设置统一的白色状态栏 + 深色图标（所有页面统一效果）
@@ -89,7 +93,7 @@ public class MainActivity extends BaseActivity {
         navView.setOnItemSelectedListener(item -> {
             android.util.Log.d("MainActivity", "Bottom nav item clicked: " + item.getTitle() + " (ID: " + item.getItemId() + ")");
             
-            // Let NavigationUI handle all navigation items (including Settings)
+            // Let NavigationUI handle all navigation items (including Quran)
             boolean handled = NavigationUI.onNavDestinationSelected(item, navController);
             
             if (handled) {
@@ -127,6 +131,9 @@ public class MainActivity extends BaseActivity {
         // Preload HomeViewModel at app startup to fetch prayer data in background
         // This ensures data is ready when user navigates to Home page
         preloadPrayerData();
+        
+        // Register RxBus listener for MainTabChangeEvent (from quiz result page)
+        registerQuizResultListener();
     }
 
     /**
@@ -137,6 +144,29 @@ public class MainActivity extends BaseActivity {
         if (prayerDataPreloader != null && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             prayerDataPreloader.preloadPrayerData(this);
         }
+    }
+
+    /**
+     * Register RxBus listener to handle navigation from quiz result page to Discover tab
+     */
+    private void registerQuizResultListener() {
+        RxBus.INSTANCE().register(this, MainTabChangeEvent.class, event -> {
+            if (MainTabChangeEvent.TO_QUIZ.equals(event.toType)) {
+                android.util.Log.d("MainActivity", "📱 Received MainTabChangeEvent.TO_QUIZ - navigating to Discover tab");
+                
+                // Navigate to Discover tab (nav_name_99)
+                if (navController != null && navView != null) {
+                    try {
+                        navController.navigate(R.id.nav_name_99);
+                        navView.setSelectedItemId(R.id.nav_name_99);
+                        android.util.Log.d("MainActivity", "✅ Successfully navigated to Discover tab");
+                    } catch (Exception e) {
+                        android.util.Log.e("MainActivity", "❌ Failed to navigate to Discover tab", e);
+                    }
+                }
+            }
+        });
+        android.util.Log.d("MainActivity", "✅ Quiz result listener registered");
     }
 /*
     private void requestPermission(){
@@ -191,34 +221,8 @@ public class MainActivity extends BaseActivity {
     }
 
     public void onBackPressed() {
-
-        final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.adview_layout_exit);
-        ((GifImageView) dialog.findViewById(R.id.GifImageView)).setGifImageResource(R.drawable.rate);
-        ((Button) dialog.findViewById(R.id.btnno)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {dialog.dismiss();}
-        });
-        ((Button) dialog.findViewById(R.id.btnrate)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                try {
-                    MainActivity mainActivity = MainActivity.this;
-                    mainActivity.startActivity(new Intent("android.intent.action.VIEW", Uri.parse("market://details?id=" + MainActivity.this.getPackageName())));
-                } catch (ActivityNotFoundException unused) {
-                    MainActivity mainActivity2 = MainActivity.this;
-                    mainActivity2.startActivity(new Intent("android.intent.action.VIEW", Uri.parse("https://play.google.com/store/apps/details?id=" + MainActivity.this.getPackageName())));
-                }
-            }
-        });
-        ((Button) dialog.findViewById(R.id.btnyes)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-
-                finish();
-             //   System.exit(0);
-
-
-            }
-        });
-        dialog.show();
+        // Rate us dialog removed - directly finish the app
+        finish();
     }
 
 }

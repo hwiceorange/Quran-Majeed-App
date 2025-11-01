@@ -52,6 +52,19 @@
   <string name="RateAppTitle">هل يعجبك تطبيقنا؟</string>
   <string name="RateApp">ساهم معنا بنشر التطبيق بتقييم 5 نجوم على المتجر</string>
   <string name="rate_later">لاحقا</string>
+  <string name="rate_prompt_title">الحمد لله! كيف كانت تجربتك؟</string>
+  <string name="rate_prompt_message">هل تحب استخدام قرآن مجيد؟</string>
+  <string name="rate_prompt_submit">إرسال التقييم</string>
+  <string name="rate_prompt_maybe_later">ربما لاحقًا</string>
+  <string name="rate_prompt_sorry_title">نحن آسفون حقًا</string>
+  <string name="rate_prompt_sorry_message">ملاحظاتك مهمة جدًا. يرجى إخبارنا كيف يمكننا التحسين:</string>
+  <string name="rate_prompt_feedback_title">شاركنا ملاحظاتك</string>
+  <string name="rate_prompt_feedback_hint">أخبرنا كيف يمكننا التحسين</string>
+  <string name="rate_prompt_feedback_send">إرسال</string>
+  <string name="rate_prompt_feedback_cancel">ربما لاحقًا</string>
+  <string name="rate_prompt_close_content">إغلاق</string>
+  <string name="rate_prompt_email_subject">ملاحظات حول تطبيق القرآن</string>
+  <string name="rate_prompt_feedback_email_error">لم يتم العثور على تطبيق بريد لإرسال الملاحظات.</string>
   <string name="are_you_sure_you_want_to_exit">هل أنت متأكد أنك تريد الخروج؟</string>
 
 
@@ -1321,4 +1334,39 @@
     <!-- Challenge Days -->
     <string name="challenge_days_placeholder">30 يومًا</string>
     <string name="challenge_days_format">%d يومًا</string>
+    
+    <!-- Prayer Notification Settings -->
+    <string name="notification_settings">إعدادات الإشعارات</string>
+    <string name="notification_type_none">بدون</string>
+    <string name="notification_type_azan">الأذان</string>
+    <string name="notification_type_vibrate">اهتزاز</string>
+    <string name="notification_type_silent">إشعار صامت</string>
+    <string name="notification_type_text_tone">نغمة نصية قياسية</string>
+    <string name="notification_type_clock">صوت الساعة</string>
+    <string name="azan_name">اسم الأذان</string>
+    <string name="notification_volume">مستوى صوت الإشعار</string>
+    <string name="pre_prayer_reminder">تعيين تذكير قبل الصلاة</string>
+    <string name="reminder_minutes_format">%d دقيقة</string>
+    <string name="random_azan">أذان عشوائي</string>
+    <string name="volume_percentage_format">%d%%</string>
+    <string name="default_volume_display">80%</string>
+    <string name="default_minutes_display">5 دقيقة</string>
+    <string name="content_desc_none">بدون</string>
+    <string name="content_desc_azan">الأذان</string>
+    <string name="content_desc_vibrate">اهتزاز</string>
+    <string name="content_desc_silent">صامت</string>
+    <string name="content_desc_text_tone">نغمة نصية</string>
+    <string name="content_desc_clock">ساعة</string>
+    <string name="content_desc_decrease">تقليل</string>
+    <string name="content_desc_increase">زيادة</string>
+
+    <!-- Last Read Card -->
+    <string name="last_read">آخر قراءة:</string>
+    <string name="continue_reading">متابعة</string>
+    <string name="continue_reading_arrow">متابعة ←</string>
+    <string name="verse_no_format">الآية رقم: %d</string>
+    <string name="surah_format">%d. %s</string>
+    <string name="juz_format">الجزء %d</string>
+    <string name="page_format">الصفحة %d</string>
+
 </resources>

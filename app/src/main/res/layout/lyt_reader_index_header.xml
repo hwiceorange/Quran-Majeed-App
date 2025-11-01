@@ -58,12 +58,12 @@
         android:adjustViewBounds="true"
         android:contentDescription="@string/strTitleHolyQuran"
         android:src="@drawable/quran_kareem"
-        app:layout_constraintBottom_toTopOf="@id/titleTransl"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/colorPrimary" />
 
+    <!-- 英文标题已隐藏，节省空间 -->
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/titleTransl"
         android:layout_width="wrap_content"
@@ -74,24 +74,53 @@
         android:text="@string/strTitleHolyQuran"
         android:textSize="11sp"
         android:textStyle="bold"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@id/readerTabLayout"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleAr" />
+
+    <!-- Last Read 标题（在卡片外面左上显示） -->
+    <TextView
+        android:id="@+id/tv_last_read_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/last_read"
+        android:textColor="@color/colorText"
+        android:textSize="13sp"
+        android:textStyle="normal"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleAr" />
+    
+    <!-- Last Read Card (放在标题和标签页之间) -->
+    <include
+        android:id="@+id/last_read_card"
+        layout="@layout/layout_last_read_card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginTop="4dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_last_read_title"
+        app:layout_constraintBottom_toTopOf="@id/readerTabLayout" />
 
     <com.quran.quranaudio.online.quran_module.views.helper.TabLayout2
         android:id="@+id/readerTabLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/dr_bg_reader_tab_layout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleTransl"
+        app:layout_constraintTop_toBottomOf="@+id/last_read_card"
         app:tabGravity="fill"
         app:tabIndicator="@drawable/dr_bg_reader_index_tab_indicator"
         app:tabIndicatorGravity="stretch"

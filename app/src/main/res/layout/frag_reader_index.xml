@@ -13,8 +13,9 @@
         android:nestedScrollingEnabled="false"
         android:paddingHorizontal="5dp"
         android:paddingTop="5dp"
-        android:paddingBottom="@dimen/dmnPadHuge"
-        android:requiresFadingEdge="vertical"
+        android:paddingBottom="16dp"
+        android:clipToPadding="false"
+        android:requiresFadingEdge="none"
         android:scrollbars="none" />
 
     <ProgressBar

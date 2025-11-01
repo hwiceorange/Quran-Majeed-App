@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_last_read"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_last_read_card_border"
+    android:elevation="2dp"
+    android:foreground="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:padding="12dp">
+
+    <!-- Quran 图标 (使用主页图标 ic_quran_home.png，调小尺寸) -->
+    <ImageView
+        android:id="@+id/iv_last_read_icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/ic_quran_home"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:contentDescription="@string/last_read" />
+
+    <!-- 章节名称（加粗加大） -->
+    <TextView
+        android:id="@+id/tv_last_read_info"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        tools:text="1. Al-Fâtihah"
+        android:textColor="@color/colorText"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:layout_marginStart="12dp"
+        app:layout_constraintStart_toEndOf="@id/iv_last_read_icon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btn_continue" />
+
+    <!-- 节号（小字不加粗） -->
+    <TextView
+        android:id="@+id/tv_verse_number"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        tools:text="Verse No: 1"
+        android:textColor="@color/colorText2"
+        android:textSize="12sp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="2dp"
+        app:layout_constraintStart_toEndOf="@id/iv_last_read_icon"
+        app:layout_constraintTop_toBottomOf="@id/tv_last_read_info"
+        app:layout_constraintEnd_toStartOf="@id/btn_continue"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <!-- "Continue →" 按钮 (加粗) -->
+    <TextView
+        android:id="@+id/btn_continue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/continue_reading_arrow"
+        android:textSize="14sp"
+        android:textColor="#429971"
+        android:textStyle="bold"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:textDirection="locale"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

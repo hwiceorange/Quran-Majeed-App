@@ -15,6 +15,7 @@ import com.google.common.collect.ImmutableList;
 import com.quran.quranaudio.online.quran_module.components.quran.QuranMeta;
 import com.quran.quranaudio.online.R;
 import com.quran.quranaudio.online.quran_module.frags.readerindex.BaseFragReaderIndex;
+import com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs;
 import com.quran.quranaudio.online.quran_module.utils.reader.factory.ReaderFactory;
 import com.quran.quranaudio.online.quran_module.widgets.chapterCard.ChapterCardJuz;
 
@@ -73,7 +74,9 @@ public class ADPJuzListChapterList extends RecyclerView.Adapter<ADPJuzListChapte
 
             ChapterCardJuz chapterCard = (ChapterCardJuz) itemView;
             chapterCard.setChapterNumber(chapterMeta.chapterNo);
-            chapterCard.setName(chapterMeta.getName(), chapterMeta.getNameTranslation());
+            String language = SPAppConfigs.getLocale(itemView.getContext());
+            String normalizedLang = QuranMeta.normalizeLanguageCode(language);
+            chapterCard.setName(chapterMeta.getName(normalizedLang), chapterMeta.getNameTranslation(normalizedLang));
 
             Pair<Integer, Integer> versesInJuz = mFragment.getQuranMeta().getVerseRangeOfChapterInJuz(mJuzNo,
                 chapterMeta.chapterNo);

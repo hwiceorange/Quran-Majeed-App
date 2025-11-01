@@ -84,6 +84,32 @@
 
     <string name="rate_later">Later</string>
 
+    <string name="rate_prompt_title">الحمد للہ! آپ کا تجربہ کیسا رہا؟</string>
+
+    <string name="rate_prompt_message">کیا آپ کو قرآن مجید ایپ پسند ہے؟</string>
+
+    <string name="rate_prompt_submit">درجہ بندی جمع کروائیں</string>
+
+    <string name="rate_prompt_maybe_later">بعد میں</string>
+
+    <string name="rate_prompt_sorry_title">ہمیں واقعی افسوس ہے</string>
+
+    <string name="rate_prompt_sorry_message">آپ کی رائے بہت اہم ہے۔ براہ کرم ہمیں بتائیں کہ ہم کیسے بہتر ہو سکتے ہیں:</string>
+
+    <string name="rate_prompt_feedback_title">اپنی رائے ہمارے ساتھ شیئر کریں</string>
+
+    <string name="rate_prompt_feedback_hint">ہمیں بتائیں کہ ہم کیسے بہتر ہو سکتے ہیں</string>
+
+    <string name="rate_prompt_feedback_send">جمع کروائیں</string>
+
+    <string name="rate_prompt_feedback_cancel">بعد میں</string>
+
+    <string name="rate_prompt_close_content">بند کریں</string>
+
+    <string name="rate_prompt_email_subject">قرآن ایپ کے بارے میں رائے</string>
+
+    <string name="rate_prompt_feedback_email_error">فیڈبیک بھیجنے کے لیے کوئی ای میل ایپ نہیں ملی۔</string>
+
     <string name="are_you_sure_you_want_to_exit">Are You Sure You Want To Exit ?</string>
 
     <string name="privacy">رازداری کی پالیسی</string>
@@ -1310,13 +1336,13 @@
 
     <string name="noFootnotesForThisVerse">There are no footnotes for this verse.</string>
 
-    <string name="strTitleReaderChapters">Surah</string>
+    <string name="strTitleReaderChapters">سورتیں</string>
 
-    <string name="strTitleReaderJuz">Juz</string>
+    <string name="strTitleReaderJuz">پارے</string>
 
-    <string name="strTitleReaderChapters2">Surah</string>
+    <string name="strTitleReaderChapters2">سورت</string>
 
-    <string name="strTitleReaderJuz2">Juz</string>
+    <string name="strTitleReaderJuz2">پارہ</string>
 
     <string name="strTitleReaderVerses">Verses</string>
 
@@ -2066,6 +2092,31 @@
     <string name="challenge_days_placeholder">30 دن</string>
     <string name="challenge_days_format">%d دن</string>
     
+    <!-- Prayer Notification Settings -->
+    <string name="notification_settings">اطلاعات کی ترتیبات</string>
+    <string name="notification_type_none">کوئی نہیں</string>
+    <string name="notification_type_azan">اذان</string>
+    <string name="notification_type_vibrate">وائبریٹ</string>
+    <string name="notification_type_silent">خاموش اطلاع</string>
+    <string name="notification_type_text_tone">معیاری ٹیکسٹ ٹون</string>
+    <string name="notification_type_clock">گھڑی کی آواز</string>
+    <string name="azan_name">اذان کا نام</string>
+    <string name="notification_volume">اطلاع کا حجم</string>
+    <string name="pre_prayer_reminder">نماز سے پہلے یاددہانی مقرر کریں</string>
+    <string name="reminder_minutes_format">%d منٹ</string>
+    <string name="random_azan">بے ترتیب اذان</string>
+    <string name="volume_percentage_format">%d%%</string>
+    <string name="default_volume_display">80%</string>
+    <string name="default_minutes_display">5 منٹ</string>
+    <string name="content_desc_none">کوئی نہیں</string>
+    <string name="content_desc_azan">اذان</string>
+    <string name="content_desc_vibrate">وائبریٹ</string>
+    <string name="content_desc_silent">خاموش</string>
+    <string name="content_desc_text_tone">ٹیکسٹ ٹون</string>
+    <string name="content_desc_clock">گھڑی</string>
+    <string name="content_desc_decrease">کم کریں</string>
+    <string name="content_desc_increase">بڑھائیں</string>
+    
     <!-- Zakat Calculator -->
     <string name="zakatMoneyTitle">رقم</string>
     <string name="moneyCashInHandTitle">ہاتھ میں نقد رقم</string>
@@ -2144,4 +2195,14 @@
     <string name="hijri_month_10">شوال</string>
     <string name="hijri_month_11">ذوالقعدہ</string>
     <string name="hijri_month_12">ذوالحجہ</string>
+
+    <!-- Last Read Card -->
+    <string name="last_read">آخری پڑھا:</string>
+    <string name="continue_reading">جاری رکھیں</string>
+    <string name="continue_reading_arrow">جاری رکھیں ←</string>
+    <string name="verse_no_format">آیت نمبر: %d</string>
+    <string name="surah_format">%d. %s</string>
+    <string name="juz_format">پارہ %d</string>
+    <string name="page_format">صفحہ %d</string>
+
 </resources>

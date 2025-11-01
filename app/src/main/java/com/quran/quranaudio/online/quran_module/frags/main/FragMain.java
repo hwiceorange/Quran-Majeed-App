@@ -14,6 +14,7 @@ import android.provider.Settings;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,9 +55,15 @@ import com.quran.quranaudio.online.prayertimes.utils.AlertHelper;
 import com.quran.quranaudio.online.quests.ui.DailyQuestsManager;
 import com.quran.quranaudio.online.quests.repository.QuestRepository;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.quran.quranaudio.online.home.quiz.QuizRepository;
+import com.quran.quranaudio.online.home.quiz.QuizQuestion;
+import com.quran.quranaudio.quiz.QuestionBean;
+import com.quran.quranaudio.quiz.base.Constants;
+import com.quranaudio.quiz.quiz.QuranQuizNotifyResultActivity;
 import org.apache.commons.lang3.StringUtils;
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.TreeMap;
 
 // Ad imports removed
 // import com.raiadnan.ads.sdk.format.BannerAd;
@@ -130,6 +137,14 @@ public class FragMain extends BaseFragment {
     // Daily Quests Manager
     private DailyQuestsManager dailyQuestsManager;
     private QuestRepository questRepository;
+    
+    // Quiz Module Views
+    private View quizEntryView;
+    private TextView quizQuestionTextView;
+    private List<com.google.android.material.button.MaterialButton> quizOptionButtons;
+    private QuizRepository quizRepository;
+    private QuizQuestion currentQuizQuestion;
+    private static final String[] QUIZ_OPTION_KEYS = {"A", "B", "C", "D"};
     
     // Dagger injected ViewModelFactory for creating HomeViewModel with dependencies
     @Inject
@@ -454,6 +469,10 @@ public class FragMain extends BaseFragment {
         
         // Initialize Verse of The Day Card
         initializeVerseOfDayCard();
+        
+        // Initialize Quiz Module
+        // Quiz module temporarily disabled
+        // initializeQuizModule();
         
         // Initialize Mecca Live Card
         initializeMeccaLiveCard();
@@ -1942,6 +1961,258 @@ public class FragMain extends BaseFragment {
             
         } catch (Exception e) {
             Log.e(TAG, "Error initializing Medina Live card", e);
+        }
+    }
+    
+    /**
+     * Initialize Quiz Module
+     * Shows daily Quran quiz card below Verse of the Day
+     */
+    private void initializeQuizModule() {
+        try {
+            // Initialize Quiz Repository
+            quizRepository = new QuizRepository(requireContext());
+            
+            // Find Quiz Entry View
+            quizEntryView = mBinding.getRoot().findViewById(R.id.quiz_entry_view);
+            if (quizEntryView == null) {
+                Log.w(TAG, "Quiz entry view not found");
+                return;
+            }
+            
+            // Find Quiz Views
+            quizQuestionTextView = quizEntryView.findViewById(R.id.tv_question_text);
+            
+            com.google.android.material.button.MaterialButton optionA = quizEntryView.findViewById(R.id.btn_option_a);
+            com.google.android.material.button.MaterialButton optionB = quizEntryView.findViewById(R.id.btn_option_b);
+            com.google.android.material.button.MaterialButton optionC = quizEntryView.findViewById(R.id.btn_option_c);
+            com.google.android.material.button.MaterialButton optionD = quizEntryView.findViewById(R.id.btn_option_d);
+            
+            quizOptionButtons = java.util.Arrays.asList(optionA, optionB, optionC, optionD);
+            
+            // Bind current quiz question
+            bindCurrentQuizQuestion();
+            
+            Log.d(TAG, "Quiz module initialized successfully");
+            
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to initialize Quiz module", e);
+        }
+    }
+    
+    /**
+     * Bind current quiz question to the UI
+     */
+    private void bindCurrentQuizQuestion() {
+        try {
+            if (quizEntryView == null || quizRepository == null) {
+                Log.w(TAG, "Quiz view or repository is null");
+                return;
+            }
+            
+            // Check if quiz is supported for current language
+            if (!isQuizSupportedLanguage()) {
+                quizEntryView.setVisibility(View.GONE);
+                Log.d(TAG, "Quiz not supported for current language");
+                return;
+            }
+            
+            // Get current quiz question
+            currentQuizQuestion = quizRepository.getCurrentQuestion();
+            
+            if (currentQuizQuestion == null) {
+                quizEntryView.setVisibility(View.GONE);
+                Log.w(TAG, "No quiz question available");
+                return;
+            }
+            
+            // Show quiz view
+            quizEntryView.setVisibility(View.VISIBLE);
+            
+            // Set question text
+            if (quizQuestionTextView != null) {
+                quizQuestionTextView.setText(currentQuizQuestion.getQuestionText());
+                int quizColor = ContextCompat.getColor(requireContext(), R.color.quran_quiz_green_dark);
+                quizQuestionTextView.setTextColor(quizColor);
+            }
+            
+            // Set options
+            if (quizOptionButtons != null && !quizOptionButtons.isEmpty()) {
+                List<String> options = currentQuizQuestion.getOptions();
+                for (int i = 0; i < quizOptionButtons.size() && i < options.size(); i++) {
+                    final int selectedIndex = i;
+                    com.google.android.material.button.MaterialButton button = quizOptionButtons.get(i);
+                    String optionPrefix = getQuizOptionPrefix(i);
+                    button.setText(optionPrefix + " " + options.get(i));
+                    button.setOnClickListener(v -> handleQuizOptionSelected(selectedIndex));
+                }
+            }
+            
+            Log.d(TAG, "Quiz question bound successfully: " + currentQuizQuestion.getQuestionText());
+            
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to bind quiz question", e);
+            if (quizEntryView != null) {
+                quizEntryView.setVisibility(View.GONE);
+            }
+        }
+    }
+    
+    /**
+     * Check if quiz is supported for current language
+     * Currently supports English (en) and Indonesian (in/id)
+     */
+    private boolean isQuizSupportedLanguage() {
+        try {
+            java.util.Locale activeLocale;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                activeLocale = requireContext().getResources().getConfiguration().getLocales().get(0);
+            } else {
+                activeLocale = requireContext().getResources().getConfiguration().locale;
+            }
+            
+            String languageCode = activeLocale != null ? activeLocale.getLanguage() : null;
+            
+            if (TextUtils.isEmpty(languageCode)) {
+                languageCode = java.util.Locale.getDefault().getLanguage();
+            }
+            
+            if (TextUtils.isEmpty(languageCode)) {
+                return false;
+            }
+            
+            languageCode = languageCode.toLowerCase(java.util.Locale.US);
+            
+            boolean isSupported = "en".equals(languageCode) || "in".equals(languageCode) || "id".equals(languageCode);
+            Log.d(TAG, "Quiz language check: " + languageCode + " -> " + (isSupported ? "supported" : "not supported"));
+            
+            return isSupported;
+            
+        } catch (Exception e) {
+            Log.e(TAG, "Error checking quiz language support", e);
+            return false;
+        }
+    }
+    
+    /**
+     * Get option prefix (A, B, C, D)
+     */
+    private String getQuizOptionPrefix(int index) {
+        switch (index) {
+            case 0: return "A";
+            case 1: return "B";
+            case 2: return "C";
+            case 3: return "D";
+            default: return "";
+        }
+    }
+    
+    /**
+     * Handle quiz option selection - Launch QuranQuizNotifyResultActivity (result page) directly
+     * This allows the user to see the result immediately and continue to Discover quiz module
+     */
+    private void handleQuizOptionSelected(int selectedIndex) {
+        try {
+            if (currentQuizQuestion == null) {
+                Log.w(TAG, "Current quiz question is null");
+                return;
+            }
+            
+            // Mark question as answered
+            quizRepository.markQuestionAnswered(currentQuizQuestion.getId());
+            
+            // Launch result page directly with the user's selected answer
+            launchQuizResultPage(selectedIndex);
+            
+            Log.d(TAG, "Launching quiz result page for option: " + getQuizOptionPrefix(selectedIndex));
+            
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to launch quiz result page", e);
+            Toast.makeText(requireContext(), "Failed to start quiz", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Launch QuranQuizNotifyResultActivity (Discover-style result page) directly
+     * This shows the correct/incorrect feedback and allows user to continue in Discover quiz module
+     */
+    private void launchQuizResultPage(int selectedIndex) {
+        try {
+            if (currentQuizQuestion == null) {
+                Log.w(TAG, "Cannot launch quiz result page - question is null");
+                return;
+            }
+
+            QuestionBean questionBean = buildQuestionBean(currentQuizQuestion);
+            if (questionBean == null) {
+                Log.w(TAG, "Failed to build QuestionBean");
+                return;
+            }
+
+            // Get the selected answer key (A, B, C, or D)
+            String selectedAnswerKey = getQuizOptionPrefix(selectedIndex);
+            
+            // Get correct answer for logging
+            String correctAnswerKey = getQuizOptionPrefix(currentQuizQuestion.getCorrectAnswerIndex());
+
+            Log.d(TAG, "========================================");
+            Log.d(TAG, "Quiz Answer Debug Info:");
+            Log.d(TAG, "Question: " + currentQuizQuestion.getQuestionText());
+            Log.d(TAG, "Selected Index: " + selectedIndex + " (Key: " + selectedAnswerKey + ")");
+            Log.d(TAG, "Correct Index: " + currentQuizQuestion.getCorrectAnswerIndex() + " (Key: " + correctAnswerKey + ")");
+            Log.d(TAG, "Options: " + currentQuizQuestion.getOptions());
+            Log.d(TAG, "Is Correct: " + (selectedIndex == currentQuizQuestion.getCorrectAnswerIndex()));
+            Log.d(TAG, "========================================");
+
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(Constants.INTENT_NOTIFY_QUIZ_BEAN, questionBean);
+            bundle.putString(Constants.INTENT_NOTIFY_QUIZ_SELECT_ANSWER, selectedAnswerKey);
+
+            com.quranaudio.quiz.quiz.QuranQuizNotifyResultActivity.Companion.open(requireContext(), bundle);
+
+            Log.d(TAG, "Quiz result page launched with answer: " + selectedAnswerKey);
+
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to launch quiz result page", e);
+            Toast.makeText(requireContext(), "Unable to open quiz result", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private QuestionBean buildQuestionBean(QuizQuestion quizQuestion) {
+        try {
+            if (quizQuestion == null) {
+                return null;
+            }
+
+            List<String> options = quizQuestion.getOptions();
+            if (options == null || options.isEmpty()) {
+                Log.w(TAG, "Quiz question options are empty");
+                return null;
+            }
+
+            TreeMap<String, String> optionMap = new TreeMap<>();
+            int optionCount = Math.min(options.size(), QUIZ_OPTION_KEYS.length);
+            for (int i = 0; i < optionCount; i++) {
+                optionMap.put(QUIZ_OPTION_KEYS[i], options.get(i));
+            }
+
+            String correctKey = getQuizOptionPrefix(quizQuestion.getCorrectAnswerIndex());
+            if (!optionMap.containsKey(correctKey)) {
+                Log.w(TAG, "Correct option key not found in option map: " + correctKey);
+                return null;
+            }
+
+            return new QuestionBean(
+                quizQuestion.getId(),
+                quizQuestion.getQuestionText(),
+                optionMap,
+                0,
+                correctKey
+            );
+
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to build QuestionBean", e);
+            return null;
         }
     }
     

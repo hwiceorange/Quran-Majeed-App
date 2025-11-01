@@ -41,6 +41,13 @@
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
+    <!-- Quran Index Fragment (for bottom navigation) -->
+    <fragment
+        android:id="@+id/nav_quran"
+        android:name="com.quran.quranaudio.online.quran_module.frags.QuranIndexFragment"
+        android:label="@string/strTitleQuran"
+        tools:layout="@layout/fragment_quran_index" />
+
     <!-- "com.quran.quranaudio.online.prayertimes.ui.dashboard.DashbozrdFragment" -->
     <fragment
         android:id="@+id/navigation_dashboard"

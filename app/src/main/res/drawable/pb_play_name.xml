@@ -10,7 +10,7 @@
         <clip>
             <shape android:shape="rectangle">
                 <corners android:radius="5dp"/>
-                <gradient android:startColor="@color/colorPrimary" android:endColor="@color/colorPrimary" android:angle="270"/>
+                <gradient android:startColor="#C4C4C4" android:endColor="#C4C4C4" android:angle="270"/>
             </shape>
         </clip>
     </item>
@@ -18,7 +18,7 @@
         <clip>
             <shape android:shape="rectangle">
                 <corners android:radius="5dp"/>
-                <gradient android:startColor="@color/colorPrimary" android:endColor="@color/colorPrimary" android:angle="270"/>
+                <gradient android:startColor="#F5AC1C" android:endColor="#F5AC1C" android:angle="270"/>
             </shape>
         </clip>
     </item>

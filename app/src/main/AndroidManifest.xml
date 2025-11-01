@@ -97,6 +97,12 @@
             android:theme="@style/AppTheme" />
 
         <activity
+            android:name="com.quran.quranaudio.online.prayertimes.ui.PrayerNotificationSettingsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false" />
+
+        <activity
             android:name="com.quran.quranaudio.online.activities.ZakatCalculatorActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
@@ -112,7 +118,6 @@
             android:exported="true"
         android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
 
         <service
             android:name="com.quran.quranaudio.online.MyFirebaseMessagingService"

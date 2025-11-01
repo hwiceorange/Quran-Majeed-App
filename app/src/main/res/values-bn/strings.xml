@@ -84,6 +84,32 @@
 
     <string name="rate_later">Later</string>
 
+    <string name="rate_prompt_title">আলহামদুলিল্লাহ! আপনার অভিজ্ঞতা কেমন ছিল?</string>
+
+    <string name="rate_prompt_message">আপনি কি Quran Majeed ব্যবহার করতে ভালোবাসেন?</string>
+
+    <string name="rate_prompt_submit">রেটিং জমা দিন</string>
+
+    <string name="rate_prompt_maybe_later">হয়তো পরে</string>
+
+    <string name="rate_prompt_sorry_title">আমরা সত্যিই দুঃখিত</string>
+
+    <string name="rate_prompt_sorry_message">আপনার মতামত অত্যন্ত গুরুত্বপূর্ণ। অনুগ্রহ করে জানান আমরা কীভাবে উন্নতি করতে পারি:</string>
+
+    <string name="rate_prompt_feedback_title">আপনার মতামত আমাদের জানান</string>
+
+    <string name="rate_prompt_feedback_hint">অ্যাপটি কীভাবে উন্নত করা যায় জানান</string>
+
+    <string name="rate_prompt_feedback_send">জমা দিন</string>
+
+    <string name="rate_prompt_feedback_cancel">পরে</string>
+
+    <string name="rate_prompt_close_content">বন্ধ করুন</string>
+
+    <string name="rate_prompt_email_subject">কোরআন অ্যাপ সম্পর্কে মতামত</string>
+
+    <string name="rate_prompt_feedback_email_error">মতামত পাঠাতে কোনো ইমেইল অ্যাপ পাওয়া যায়নি।</string>
+
     <string name="are_you_sure_you_want_to_exit">Are You Sure You Want To Exit ?</string>
 
     <string name="privacy">গোপনীয়তা নীতি</string>
@@ -1334,13 +1360,13 @@
 
     <string name="noFootnotesForThisVerse">There are no footnotes for this verse.</string>
 
-    <string name="strTitleReaderChapters">Surah</string>
+    <string name="strTitleReaderChapters">সূরা</string>
 
-    <string name="strTitleReaderJuz">Juz</string>
+    <string name="strTitleReaderJuz">জুয</string>
 
-    <string name="strTitleReaderChapters2">Surah</string>
+    <string name="strTitleReaderChapters2">সূরা</string>
 
-    <string name="strTitleReaderJuz2">Juz</string>
+    <string name="strTitleReaderJuz2">জুয</string>
 
     <string name="strTitleReaderVerses">Verses</string>
 
@@ -2089,4 +2115,39 @@
     <!-- Challenge Days -->
     <string name="challenge_days_placeholder">৩০ দিন</string>
     <string name="challenge_days_format">%d দিন</string>
+    
+    <!-- Prayer Notification Settings -->
+    <string name="notification_settings">বিজ্ঞপ্তি সেটিংস</string>
+    <string name="notification_type_none">কিছু নয়</string>
+    <string name="notification_type_azan">আযান</string>
+    <string name="notification_type_vibrate">কম্পন</string>
+    <string name="notification_type_silent">নীরব বিজ্ঞপ্তি</string>
+    <string name="notification_type_text_tone">স্ট্যান্ডার্ড টেক্সট টোন</string>
+    <string name="notification_type_clock">ঘড়ির শব্দ</string>
+    <string name="azan_name">আযানের নাম</string>
+    <string name="notification_volume">বিজ্ঞপ্তি ভলিউম</string>
+    <string name="pre_prayer_reminder">নামাজের আগে মনে করিয়ে দেওয়া সেট করুন</string>
+    <string name="reminder_minutes_format">%d মিনিট</string>
+    <string name="random_azan">এলোমেলো আযান</string>
+    <string name="volume_percentage_format">%d%%</string>
+    <string name="default_volume_display">80%</string>
+    <string name="default_minutes_display">5 মিনিট</string>
+    <string name="content_desc_none">কিছু নয়</string>
+    <string name="content_desc_azan">আযান</string>
+    <string name="content_desc_vibrate">কম্পন</string>
+    <string name="content_desc_silent">নীরব</string>
+    <string name="content_desc_text_tone">টেক্সট টোন</string>
+    <string name="content_desc_clock">ঘড়ি</string>
+    <string name="content_desc_decrease">কমান</string>
+    <string name="content_desc_increase">বাড়ান</string>
+
+    <!-- Last Read Card -->
+    <string name="last_read">সর্বশেষ পড়া:</string>
+    <string name="continue_reading">চালিয়ে যান</string>
+    <string name="continue_reading_arrow">চালিয়ে যান →</string>
+    <string name="verse_no_format">আয়াত নং: %d</string>
+    <string name="surah_format">%d. %s</string>
+    <string name="juz_format">পারা %d</string>
+    <string name="page_format">পৃষ্ঠা %d</string>
+
 </resources>

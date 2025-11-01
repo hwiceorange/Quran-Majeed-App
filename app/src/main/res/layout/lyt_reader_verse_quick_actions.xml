@@ -41,7 +41,6 @@
             android:src="@drawable/dr_icon_play2" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:visibility="gone"
             android:id="@+id/btnTafsir"
             android:layout_width="@dimen/dmnActionButtonSmall"
             android:layout_height="@dimen/dmnActionButtonSmall"
@@ -51,7 +50,8 @@
             android:contentDescription="@string/strTitleTafsir"
             android:focusable="true"
             android:padding="6dp"
-            android:src="@drawable/dr_icon_tafsir" />
+            android:src="@drawable/dr_icon_tafsir"
+            android:visibility="visible" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@id/btnBookmark"

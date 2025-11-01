@@ -1,5 +1,6 @@
 package com.quran.quranaudio.online.quran_module.api
 
+import com.quran.quranaudio.online.quran_module.api.models.tafsir.QuranTafsirsResponse
 import com.quran.quranaudio.online.quran_module.api.models.tafsir.TafsirModel
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -10,4 +11,7 @@ interface QuranApi {
         @Path("slug") slug: String,
         @Path("verseKey") verseKey: String
     ): Map<String, TafsirModel>
+
+    @GET("api/v4/resources/tafsirs")
+    suspend fun getAvailableTafsirs(): QuranTafsirsResponse
 }

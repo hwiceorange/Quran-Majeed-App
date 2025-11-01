@@ -47,7 +47,25 @@
     <string name="RateAppTitle">Like this app?</string>
     <string name="RateApp">Share the love by rating 5 stars in Play Store.</string>
     <string name="rate_later">Later</string>
+    <string name="rate_prompt_title">Alhamdulillah! How Was Your Experience?</string>
+    <string name="rate_prompt_message">Do you love using Quran Majeed?</string>
+    <string name="rate_prompt_submit">Submit Rating</string>
+    <string name="rate_prompt_maybe_later">Maybe Later</string>
+    <string name="rate_prompt_sorry_title">We Are Truly Sorry</string>
+    <string name="rate_prompt_sorry_message">Your feedback is vital. Please tell us how we can improve:</string>
+    <string name="rate_prompt_feedback_title">Share Your Feedback</string>
+    <string name="rate_prompt_feedback_hint">Let us know how we can improve</string>
+    <string name="rate_prompt_feedback_send">Submit</string>
+    <string name="rate_prompt_feedback_cancel">Maybe later</string>
+    <string name="rate_prompt_close_content">Close</string>
+    <string name="rate_prompt_email_subject">Feedback about Quran App</string>
+    <string name="rate_prompt_feedback_email_error">No email app found to send feedback.</string>
     <string name="are_you_sure_you_want_to_exit">Are You Sure You Want To Exit ?</string>
+
+    <string name="quiz_result_correct">Great job! You selected the correct answer.</string>
+    <string name="quiz_result_incorrect">Thanks for playing! Review the correct answer inside the quiz module.</string>
+    <string name="quiz_result_default">Daily Quran Quiz</string>
+    <string name="quiz_result_close">Continue</string>
 
 
     <!--    privacy policy url-->
@@ -1262,4 +1280,45 @@
     <!-- Challenge Days -->
     <string name="challenge_days_placeholder">30 Days</string>
     <string name="challenge_days_format">%d Days</string>
+    
+    <!-- Last Read Card -->
+    <string name="last_read">Last Read:</string>
+    <string name="continue_reading">Continue</string>
+    <string name="continue_reading_arrow">Continue →</string>
+    <string name="verse_no_format">Verse No: %d</string>
+    <string name="surah_format">%d. %s</string>
+    <string name="juz_format">Juz\' %d</string>
+    <string name="page_format">Page %d</string>
+    
+    <!-- Tasbih Counter Card -->
+    <string name="remember_allah">Remember Allah</string>
+    <string name="start_tasbih_counter">Start Tasbih\nCounter</string>
+    <string name="get_start_now">Get Start Now</string>
+    <string name="start_tasbih_line1">Start Tasbih</string>
+    <string name="start_tasbih_line2">Counter</string>
+    
+    <!-- Prayer Notification Settings -->
+    <string name="notification_settings">Notification Settings</string>
+    <string name="notification_type_none">None</string>
+    <string name="notification_type_azan">Azan</string>
+    <string name="notification_type_vibrate">Vibrate</string>
+    <string name="notification_type_silent">Silent Notification</string>
+    <string name="notification_type_text_tone">Standard Text Tone</string>
+    <string name="notification_type_clock">Clock sound</string>
+    <string name="azan_name">Azan Name</string>
+    <string name="notification_volume">Notification Volume</string>
+    <string name="pre_prayer_reminder">Set Pre-Prayer reminder</string>
+    <string name="reminder_minutes_format">%d minutes</string>
+    <string name="random_azan">Random Azan</string>
+    <string name="volume_percentage_format">%d%%</string>
+    <string name="default_volume_display">80%</string>
+    <string name="default_minutes_display">5 minutes</string>
+    <string name="content_desc_none">None</string>
+    <string name="content_desc_azan">Azan</string>
+    <string name="content_desc_vibrate">Vibrate</string>
+    <string name="content_desc_silent">Silent</string>
+    <string name="content_desc_text_tone">Text Tone</string>
+    <string name="content_desc_clock">Clock</string>
+    <string name="content_desc_decrease">Decrease</string>
+    <string name="content_desc_increase">Increase</string>
 </resources>

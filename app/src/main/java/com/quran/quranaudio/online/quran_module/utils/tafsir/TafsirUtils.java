@@ -1,10 +1,13 @@
 package com.quran.quranaudio.online.quran_module.utils.tafsir;
 
+import android.content.Context;
+
 import androidx.annotation.Nullable;
 
 import com.quran.quranaudio.online.quran_module.api.models.tafsir.TafsirInfoModel;
-import com.quran.quranaudio.online.quran_module.utils.reader.tafsir.TafsirManager;
 import com.quran.quranaudio.online.quran_module.utils.app.AppUtils;
+import com.quran.quranaudio.online.quran_module.utils.reader.tafsir.TafsirManager;
+import com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs;
 import com.quran.quranaudio.online.quran_module.utils.univ.FileUtils;
 
 import java.util.List;
@@ -38,6 +41,7 @@ public class TafsirUtils {
         return model.getSlug();
     }
 
+    @Deprecated
     public static String getDefaultTafsirKey() {
         Map<String, List<TafsirInfoModel>> models = TafsirManager.getModels();
         if (models == null) {
@@ -51,6 +55,21 @@ public class TafsirUtils {
         }
 
         return tafsirs.get(0).getKey();
+    }
+
+    @Nullable
+    public static String getPreferredTafsirKey(Context context) {
+        if (context == null) {
+            return getDefaultTafsirKey();
+        }
+
+        String language = SPAppConfigs.getLocale(context);
+        Map<String, List<TafsirInfoModel>> models = TafsirManager.getModels();
+        String key = TafsirLanguageMapper.INSTANCE.pickBestTafsirKey(language, models);
+        if (key != null) {
+            return key;
+        }
+        return getDefaultTafsirKey();
     }
 
     public static boolean isUrdu(String key) {

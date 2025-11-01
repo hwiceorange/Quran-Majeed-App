@@ -17,6 +17,8 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.widget.SeekBar
 import android.widget.TextView
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.activity.result.ActivityResult
 import com.peacedesign.android.utils.DrawableUtils
 import com.peacedesign.android.utils.WindowUtils
@@ -25,6 +27,7 @@ import com.quran.quranaudio.online.quran_module.api.JsonHelper
 import com.quran.quranaudio.online.quran_module.api.RetrofitInstance
 import com.quran.quranaudio.online.quran_module.api.models.tafsir.TafsirInfoModel
 import com.quran.quranaudio.online.quran_module.api.models.tafsir.TafsirModel
+import com.quran.quranaudio.online.quran_module.activities.readerSettings.Activity_Quran_Settings
 import com.quran.quranaudio.online.databinding.ActivityTafsirBinding
 import com.quran.quranaudio.online.databinding.LytTafsirHeaderBinding
 import com.quran.quranaudio.online.databinding.LytTafsirTextSizeBinding
@@ -35,6 +38,7 @@ import com.quran.quranaudio.online.quran_module.utils.reader.tafsir.TafsirManage
 import com.quran.quranaudio.online.quran_module.utils.receivers.NetworkStateReceiver
 import com.quran.quranaudio.online.quran_module.utils.simplified.SimpleSeekbarChangeListener
 import com.quran.quranaudio.online.quran_module.utils.tafsir.TafsirJsInterface
+import com.quran.quranaudio.online.quran_module.utils.tafsir.TafsirLanguageMapper
 import com.quran.quranaudio.online.quran_module.utils.tafsir.TafsirWebViewClient
 import com.quran.quranaudio.online.quran_module.utils.univ.Codes
 import com.quran.quranaudio.online.quran_module.utils.univ.Keys
@@ -86,6 +90,12 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
                 startActivity4Result(intent, null)
             }
             it.fontSize.setOnClickListener { showFontSizeDialog() }
+
+            ViewCompat.setOnApplyWindowInsetsListener(it.appBar) { view, insets ->
+                val topInset = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
+                view.setPadding(view.paddingLeft, topInset, view.paddingRight, view.paddingBottom)
+                insets
+            }
         }
     }
 
@@ -146,7 +156,11 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
 
         initWebView()
 
-        TafsirManager.prepare(this, false) {
+        // 首次使用时强制下载Tafsirs资源
+        val forceDownload = TafsirManager.getModels() == null
+        
+        TafsirManager.prepare(this, forceDownload) {
+            android.util.Log.d("ActivityTafsir", "✅ TafsirManager prepared, models available: ${TafsirManager.getModels() != null}")
             initContent(intent)
         }
     }
@@ -201,18 +215,21 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
         }
 
         if (key == null) {
-            key = com.quran.quranaudio.online.quran_module.utils.tafsir.TafsirUtils.getDefaultTafsirKey()
+            key = com.quran.quranaudio.online.quran_module.utils.tafsir.TafsirUtils.getPreferredTafsirKey(this)
         }
 
         if (key == null) {
-            fail("Failed to load tafsir.", false)
+            android.util.Log.e("ActivityTafsir", "❌ Tafsir key is null")
+            showTafsirSetupDialog()
             return
         }
 
         val model = TafsirManager.getModel(key)
 
         if (model == null) {
-            fail("Failed to load tafsir.", false)
+            android.util.Log.e("ActivityTafsir", "❌ Tafsir model not found for key: $key")
+            android.util.Log.e("ActivityTafsir", "❌ Available models: ${TafsirManager.getModels()}")
+            showTafsirSetupDialog()
             return
         }
 
@@ -337,13 +354,118 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
         }
     }
 
+    /**
+     * 显示Tafsir设置引导对话框
+     * 提供自动下载和手动设置两个选项
+     */
+    private fun showTafsirSetupDialog() {
+        runOnUiThread {
+            binding.loader.visibility = View.GONE
+            
+            // 获取当前语言
+            val userLanguage = com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs.getLocale(this)
+            val systemLanguage = java.util.Locale.getDefault().language
+            val targetLanguage = if (!userLanguage.isNullOrEmpty()) userLanguage else systemLanguage
+            
+            val languageName = when(targetLanguage) {
+                "ar" -> "Arabic"
+                "en" -> "English"
+                "ur" -> "Urdu"
+                "id", "in" -> "Indonesian"
+                else -> "English"
+            }
+            
+            androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Tafsir Not Available")
+                .setMessage("No Tafsir is currently selected. Would you like to:\n\n1. Auto-download Tafsir for your language ($languageName)\n2. Go to Settings to choose from all available Tafsirs")
+                .setPositiveButton("Auto Download") { dialog, _ ->
+                    dialog.dismiss()
+                    autoDownloadDefaultTafsir()
+                }
+                .setNegativeButton("Go to Settings") { dialog, _ ->
+                    dialog.dismiss()
+                    openTafsirSettings()
+                }
+                .setNeutralButton("Cancel") { dialog, _ ->
+                    dialog.dismiss()
+                    finish()
+                }
+                .setCancelable(false)
+                .show()
+        }
+    }
+    
+    /**
+     * 自动下载默认Tafsir并重新加载
+     * 智能匹配用户设置的应用语言或系统语言
+     */
+    private fun autoDownloadDefaultTafsir() {
+        binding.loader.visibility = View.VISIBLE
+        
+        TafsirManager.prepare(this, true) {
+            android.util.Log.d("ActivityTafsir", "✅ Auto-downloaded tafsirs")
+            
+            // 获取用户设置的语言或系统语言
+            val userLanguage = com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs.getLocale(this)
+            val systemLanguage = java.util.Locale.getDefault().language
+            val targetLanguage = if (!userLanguage.isNullOrEmpty()) userLanguage else systemLanguage
+            
+            android.util.Log.d("ActivityTafsir", "🌍 User language: $userLanguage, System language: $systemLanguage, Target: $targetLanguage")
+            
+            val tafsirModels = TafsirManager.getModels()
+            val selectedKey = TafsirLanguageMapper.pickBestTafsirKey(targetLanguage, tafsirModels)
+            android.util.Log.d(
+                "ActivityTafsir",
+                "📖 Preferred tafsir for '$targetLanguage': ${selectedKey ?: "not found"}"
+            )
+            
+            if (selectedKey != null) {
+                com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPReader.setSavedTafsirKey(this, selectedKey)
+                android.util.Log.d("ActivityTafsir", "✅ Saved tafsir key: $selectedKey")
+                
+                // 重新加载内容
+                initContent(intent)
+            } else {
+                fail("Failed to download tafsirs. Please check internet connection.", true)
+            }
+        }
+    }
+    
+    /**
+     * 打开Settings的Tafsirs页面
+     */
+    private fun openTafsirSettings() {
+        try {
+            val intent = Intent(this, Activity_Quran_Settings::class.java).apply {
+                putExtra(Activity_Quran_Settings.KEY_SETTINGS_DESTINATION, Activity_Quran_Settings.SETTINGS_TAFSIR)
+            }
+            startActivity(intent)
+            finish()
+        } catch (e: Exception) {
+            android.util.Log.e("ActivityTafsir", "❌ Failed to open settings", e)
+            finish()
+        }
+    }
+
+    override fun getStatusBarBG(): Int {
+        return Color.WHITE
+    }
+
+    override fun isStatusBarLight(): Boolean {
+        return true
+    }
+    
     private fun fail(msg: String, showRetry: Boolean) {
+        android.util.Log.e("ActivityTafsir", "❌ fail() called: $msg, showRetry=$showRetry")
         binding.loader.visibility = View.GONE
 
         pageAlert.let {
             it.setMessage(msg, null)
             if (showRetry) {
-                it.setActionButton(R.string.strLabelRetry) { loadContent() }
+                it.setActionButton(R.string.strLabelRetry) { 
+                    android.util.Log.d("ActivityTafsir", "🔄 Retry clicked, reloading...")
+                    initContent(intent)
+                }
             } else {
                 it.setActionButton(null, null)
             }

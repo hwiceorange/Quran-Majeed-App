@@ -46,6 +46,19 @@
     <string name="RateAppTitle">Suka dengan aplikasi ini?</string>
     <string name="RateApp">Bagikan cinta Anda dengan memberikan rating 5 bintang di Play Store.</string>
     <string name="rate_later">Nanti</string>
+    <string name="rate_prompt_title">Alhamdulillah! Bagaimana pengalaman Anda?</string>
+    <string name="rate_prompt_message">Apakah Anda menyukai Quran Majeed?</string>
+    <string name="rate_prompt_submit">Kirim Penilaian</string>
+    <string name="rate_prompt_maybe_later">Nanti Saja</string>
+    <string name="rate_prompt_sorry_title">Kami Sangat Menyesal</string>
+    <string name="rate_prompt_sorry_message">Masukan Anda sangat penting. Tolong beritahu kami bagaimana kami bisa meningkatkan:</string>
+    <string name="rate_prompt_feedback_title">Bagikan Masukan Anda</string>
+    <string name="rate_prompt_feedback_hint">Beritahu kami cara meningkatkan aplikasi</string>
+    <string name="rate_prompt_feedback_send">Kirim</string>
+    <string name="rate_prompt_feedback_cancel">Nanti saja</string>
+    <string name="rate_prompt_close_content">Tutup</string>
+    <string name="rate_prompt_email_subject">Masukan untuk Aplikasi Quran</string>
+    <string name="rate_prompt_feedback_email_error">Tidak ada aplikasi email untuk mengirim masukan.</string>
     <string name="are_you_sure_you_want_to_exit">Apakah Anda Yakin Ingin Keluar?</string>
 
     <!-- privacy policy url -->
@@ -812,9 +825,9 @@ seperti: Waktu Sholat Global, metode perhitungan yang berbeda, notifikasi, memba
     <string name="strTitleFootnote">Catatan Kaki</string>
     <string name="strTitleFootnotes">Catatan Kaki</string>
     <string name="noFootnotesForThisVerse">Tidak ada catatan kaki untuk ayat ini.</string>
-    <string name="strTitleReaderChapters">Surah</string>
+    <string name="strTitleReaderChapters">Surat</string>
     <string name="strTitleReaderJuz">Juz</string>
-    <string name="strTitleReaderChapters2">Surah</string>
+    <string name="strTitleReaderChapters2">Surat</string>
     <string name="strTitleReaderJuz2">Juz</string>
     <string name="strTitleReaderVerses">Ayat</string>
     <string name="strTitleReaderJumpToVerse">Lompat ke ayat</string>
@@ -1234,6 +1247,31 @@ seperti: Waktu Sholat Global, metode perhitungan yang berbeda, notifikasi, memba
     <string name="challenge_days_placeholder">30 Hari</string>
     <string name="challenge_days_format">%d Hari</string>
     
+    <!-- Prayer Notification Settings -->
+    <string name="notification_settings">Pengaturan Notifikasi</string>
+    <string name="notification_type_none">Tidak Ada</string>
+    <string name="notification_type_azan">Azan</string>
+    <string name="notification_type_vibrate">Getar</string>
+    <string name="notification_type_silent">Notifikasi Senyap</string>
+    <string name="notification_type_text_tone">Nada Teks Standar</string>
+    <string name="notification_type_clock">Suara Jam</string>
+    <string name="azan_name">Nama Azan</string>
+    <string name="notification_volume">Volume Notifikasi</string>
+    <string name="pre_prayer_reminder">Atur pengingat sebelum sholat</string>
+    <string name="reminder_minutes_format">%d menit</string>
+    <string name="random_azan">Azan Acak</string>
+    <string name="volume_percentage_format">%d%%</string>
+    <string name="default_volume_display">80%</string>
+    <string name="default_minutes_display">5 menit</string>
+    <string name="content_desc_none">Tidak Ada</string>
+    <string name="content_desc_azan">Azan</string>
+    <string name="content_desc_vibrate">Getar</string>
+    <string name="content_desc_silent">Senyap</string>
+    <string name="content_desc_text_tone">Nada Teks</string>
+    <string name="content_desc_clock">Jam</string>
+    <string name="content_desc_decrease">Kurangi</string>
+    <string name="content_desc_increase">Tambah</string>
+    
     <!-- 🌐 App Language Settings (v1.5.5) -->
     <string name="setting_app_language_title">Bahasa Aplikasi</string>
     <string name="setting_app_language_subtitle">Pilih bahasa yang Anda inginkan</string>
@@ -1244,4 +1282,14 @@ seperti: Waktu Sholat Global, metode perhitungan yang berbeda, notifikasi, memba
     <string name="days_streak">%d Hari</string>
     <string name="todays_quests">Tugas Hari Ini</string>
     <string name="complete_x_tasbih">Selesaikan %d Tasbih</string>
+
+    <!-- Last Read Card -->
+    <string name="last_read">Terakhir Dibaca:</string>
+    <string name="continue_reading">Lanjutkan</string>
+    <string name="continue_reading_arrow">Lanjutkan →</string>
+    <string name="verse_no_format">Ayat No: %d</string>
+    <string name="surah_format">%d. %s</string>
+    <string name="juz_format">Juz %d</string>
+    <string name="page_format">Halaman %d</string>
+
 </resources>

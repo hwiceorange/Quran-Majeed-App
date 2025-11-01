@@ -15,14 +15,14 @@ import static android.view.ViewGroup.LayoutParams;
 import static android.view.ViewGroup.MarginLayoutParams;
 
 import com.peacedesign.android.utils.Dimen;
-import com.quran.quranaudio.online.quran_module.components.quran.QuranMeta;
-import com.quran.quranaudio.online.quran_module.viewModels.FavChaptersViewModel;
 import com.quran.quranaudio.online.R;
 import com.quran.quranaudio.online.quran_module.frags.readerindex.BaseFragReaderIndex;
 import com.quran.quranaudio.online.quran_module.utils.extensions.LayoutParamsKt;
 import com.quran.quranaudio.online.quran_module.utils.reader.factory.ReaderFactory;
 import com.quran.quranaudio.online.quran_module.viewModels.FavChaptersViewModel;
 import com.quran.quranaudio.online.quran_module.widgets.chapterCard.ChapterCard;
+import com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs;
+import com.quran.quranaudio.online.quran_module.components.quran.QuranMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,8 +103,12 @@ public class ADPChaptersList extends ADPReaderIndexBase<ADPChaptersList.VHChapte
         public void bind(int chapterNo) {
             mChapterCard.setChapterNumber(chapterNo);
 
-            String chapterName = mFragment.getQuranMeta().getChapterName(itemView.getContext(), chapterNo);
-            String nameTranslation = mFragment.getQuranMeta().getChapterNameTranslation(chapterNo);
+            String language = SPAppConfigs.getLocale(itemView.getContext());
+            String normalizedLang = QuranMeta.normalizeLanguageCode(language);
+
+            String chapterName = mFragment.getQuranMeta().getChapterName(itemView.getContext(), chapterNo, normalizedLang);
+            String nameTranslation = mFragment.getQuranMeta().getChapterMeta(chapterNo).getNameTranslation(normalizedLang);
+
             mChapterCard.setName(chapterName, nameTranslation);
 
             mChapterCard.setOnClickListener(v -> ReaderFactory.startChapter(v.getContext(), chapterNo));

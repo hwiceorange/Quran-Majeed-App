@@ -12,12 +12,12 @@ import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -37,6 +37,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.faltenreich.skeletonlayout.Skeleton;
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseUser;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 import com.quran.quranaudio.online.App;
@@ -61,13 +62,20 @@ import com.quran.quranaudio.online.R;
 import com.quran.quranaudio.online.activities.HomeActivity;
 import com.quran.quranaudio.online.prayertimes.ui.MainActivity;
 import com.quran.quranaudio.online.Utils.GoogleAuthManager;
+import com.quran.quranaudio.online.home.quiz.QuizQuestion;
+import com.quran.quranaudio.online.home.quiz.QuizRepository;
+import com.quran.quranaudio.quiz.QuestionBean;
+import com.quran.quranaudio.quiz.base.Constants;
+import com.quranaudio.quiz.quiz.QuranQuizNotifyResultActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import java.util.TreeMap;
 
 import org.apache.commons.lang3.StringUtils;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -141,6 +149,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private TextView tvMedinaTitle;
     private TextView tvMedinaDescription;
 
+    // Daily Quran Quiz Views
+    private View quizEntryView;
+    private TextView quizQuestionTextView;
+    private List<MaterialButton> quizOptionButtons;
+    private QuizRepository quizRepository;
+    private QuizQuestion currentQuizQuestion;
+
     private GoogleAuthManager googleAuthManager;
     private ActivityResultLauncher<Intent> googleSignInLauncher;
 
@@ -178,6 +193,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
+        quizRepository = new QuizRepository(requireContext());
+
         // Initialize Google Auth Manager
         googleAuthManager = new GoogleAuthManager(requireContext());
         
@@ -202,6 +219,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         );
 
         initializeViews(rootView);
+        initializeQuizEntry(rootView);
         initializeHeaderListeners();
         initializePrayerCardListeners();
         initializeVerseOfDayCard();
@@ -301,7 +319,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private void showPermissionWarning(){
         dialogWarning=new AlertDialog.Builder(getActivity()).setView(R.layout.layout_dialog_location_warning).create();
         TextView skip=dialogWarning.findViewById(R.id.btn_skip);
-        Button enable=dialogWarning.findViewById(R.id.btn_enable_location);
+        MaterialButton enable=dialogWarning.findViewById(R.id.btn_enable_location);
         skip.setOnClickListener(dialogListener);
         enable.setOnClickListener(dialogListener);
         
@@ -457,6 +475,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             allowRefresh=false;
             //call your initialization code here
         }
+        bindCurrentQuizQuestion();
     }
 
     @Override
@@ -464,6 +483,24 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         super.onPause();
         if (!allowRefresh)
             allowRefresh = true;
+    }
+
+    private void initializeQuizEntry(View rootView) {
+        quizEntryView = rootView.findViewById(R.id.quiz_entry_view);
+        if (quizEntryView == null) {
+            return;
+        }
+
+        quizQuestionTextView = quizEntryView.findViewById(R.id.tv_question_text);
+
+        MaterialButton optionA = quizEntryView.findViewById(R.id.btn_option_a);
+        MaterialButton optionB = quizEntryView.findViewById(R.id.btn_option_b);
+        MaterialButton optionC = quizEntryView.findViewById(R.id.btn_option_c);
+        MaterialButton optionD = quizEntryView.findViewById(R.id.btn_option_d);
+
+        quizOptionButtons = Arrays.asList(optionA, optionB, optionC, optionD);
+
+        bindCurrentQuizQuestion();
     }
 
     private void initializeViews(View rootView) {
@@ -544,6 +581,159 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         sunriseTimingTextView = rootView.findViewById(R.id.sunrise_timing_text_view);
         sunsetTimingTextView = rootView.findViewById(R.id.sunset_timing_text_view);
 
+        bindCurrentQuizQuestion();
+
+    }
+
+    private void bindCurrentQuizQuestion() {
+        if (quizEntryView == null || quizRepository == null) {
+            return;
+        }
+
+        if (!isQuizSupportedLanguage()) {
+            quizEntryView.setVisibility(View.GONE);
+            return;
+        }
+
+        currentQuizQuestion = quizRepository.getCurrentQuestion();
+
+        if (currentQuizQuestion == null) {
+            quizEntryView.setVisibility(View.GONE);
+            return;
+        }
+
+        quizEntryView.setVisibility(View.VISIBLE);
+
+        if (quizQuestionTextView != null) {
+            quizQuestionTextView.setText(currentQuizQuestion.getQuestionText());
+            int quizColor = ContextCompat.getColor(requireContext(), R.color.quran_quiz_green_dark);
+            quizQuestionTextView.setTextColor(quizColor);
+        }
+
+        if (quizOptionButtons == null || quizOptionButtons.isEmpty()) {
+            return;
+        }
+
+        List<String> options = currentQuizQuestion.getOptions();
+        for (int i = 0; i < quizOptionButtons.size(); i++) {
+            MaterialButton button = quizOptionButtons.get(i);
+            if (i < options.size()) {
+                button.setVisibility(View.VISIBLE);
+                button.setText(getOptionPrefix(i) + " " + options.get(i));
+                final int index = i;
+                button.setOnClickListener(v -> handleQuizOptionSelected(index));
+            } else {
+                button.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    private boolean isQuizSupportedLanguage() {
+        Locale activeLocale;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            activeLocale = requireContext().getResources().getConfiguration().getLocales().get(0);
+        } else {
+            activeLocale = requireContext().getResources().getConfiguration().locale;
+        }
+
+        String languageCode = activeLocale != null ? activeLocale.getLanguage() : null;
+
+        if (TextUtils.isEmpty(languageCode)) {
+            languageCode = Locale.getDefault().getLanguage();
+        }
+
+        if (TextUtils.isEmpty(languageCode)) {
+            return false;
+        }
+
+        languageCode = languageCode.toLowerCase(Locale.US);
+
+        return "en".equals(languageCode) || "in".equals(languageCode) || "id".equals(languageCode);
+    }
+
+    private String getOptionPrefix(int index) {
+        switch (index) {
+            case 0:
+                return "A";
+            case 1:
+                return "B";
+            case 2:
+                return "C";
+            case 3:
+                return "D";
+            default:
+                return "";
+        }
+    }
+
+    private void handleQuizOptionSelected(int selectedIndex) {
+        if (currentQuizQuestion == null) {
+            return;
+        }
+
+        quizRepository.markQuestionAnswered(currentQuizQuestion.getId());
+
+        // Launch QuranQuizNotifyResultActivity (result page) directly
+        launchQuizResultPage(selectedIndex);
+    }
+
+    private void launchQuizResultPage(int selectedIndex) {
+        try {
+            if (currentQuizQuestion == null) {
+                return;
+            }
+
+            QuestionBean questionBean = buildQuestionBeanForQuiz(currentQuizQuestion);
+            if (questionBean == null) {
+                return;
+            }
+
+            // Get the selected answer key (A, B, C, or D)
+            String selectedAnswerKey = getOptionPrefix(selectedIndex);
+
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(Constants.INTENT_NOTIFY_QUIZ_BEAN, questionBean);
+            bundle.putString(Constants.INTENT_NOTIFY_QUIZ_SELECT_ANSWER, selectedAnswerKey);
+
+            QuranQuizNotifyResultActivity.Companion.open(requireContext(), bundle);
+
+        } catch (Exception e) {
+            android.util.Log.e("HomeFragment", "Failed to launch quiz result page", e);
+        }
+    }
+
+    private QuestionBean buildQuestionBeanForQuiz(QuizQuestion quizQuestion) {
+        try {
+            if (quizQuestion == null) {
+                return null;
+            }
+
+            java.util.List<String> options = quizQuestion.getOptions();
+            if (options == null || options.isEmpty()) {
+                return null;
+            }
+
+            TreeMap<String, String> optionMap = new TreeMap<>();
+            String[] keys = {"A", "B", "C", "D"};
+            int count = Math.min(options.size(), keys.length);
+            for (int i = 0; i < count; i++) {
+                optionMap.put(keys[i], options.get(i));
+            }
+
+            String correctKey = getOptionPrefix(quizQuestion.getCorrectAnswerIndex());
+
+            return new QuestionBean(
+                quizQuestion.getId(),
+                quizQuestion.getQuestionText(),
+                optionMap,
+                0,
+                correctKey
+            );
+
+        } catch (Exception e) {
+            android.util.Log.e("HomeFragment", "Failed to build QuestionBean", e);
+            return null;
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

@@ -66,7 +66,13 @@
                 android:id="@+id/verse_of_day_card"
                 layout="@layout/layout_verse_of_day_card" />
 
-            <!-- Mecca Live Card - 放在 Verse of The Day Card 下方 -->
+            <!-- Daily Quran Quiz Card - 放在 Verse of The Day Card 下方 -->
+            <include
+                android:id="@+id/quiz_entry_view"
+                layout="@layout/view_daily_quran_quiz"
+                android:visibility="gone" />
+
+            <!-- Mecca Live Card - 放在 Quiz Card 下方 -->
             <include
                 android:id="@+id/mecca_live_card"
                 layout="@layout/layout_mecca_live_card" />

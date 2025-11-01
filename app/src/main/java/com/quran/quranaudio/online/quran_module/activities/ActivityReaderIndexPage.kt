@@ -17,6 +17,7 @@ import com.quran.quranaudio.online.quran_module.frags.readerindex.FragReaderInde
 import com.quran.quranaudio.online.quran_module.frags.readerindex.FragReaderIndexJuz
 import com.quran.quranaudio.online.quran_module.interfaceUtils.readerIndex.FragReaderIndexCallback
 import com.quran.quranaudio.online.quran_module.utils.simplified.SimpleTabSelectorListener
+import com.quran.quranaudio.online.common.rate.RatePromptManager
 
 class ActivityReaderIndexPage : com.quran.quranaudio.online.quran_module.activities.base.BaseActivity() {
     private val fragCallbacks: MutableList<FragReaderIndexCallback> = ArrayList()
@@ -131,5 +132,10 @@ class ActivityReaderIndexPage : com.quran.quranaudio.online.quran_module.activit
 
     fun addToCallbacks(callback: FragReaderIndexCallback) {
         fragCallbacks.add(callback)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        RatePromptManager.onReaderUsage(this)
     }
 }

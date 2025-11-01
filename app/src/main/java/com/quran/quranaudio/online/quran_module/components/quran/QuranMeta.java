@@ -116,7 +116,7 @@ public class QuranMeta implements Serializable {
     }
 
     public String getChapterName(Context ctx, int chapterNo, String langCode, boolean withPrefix) {
-        String name = getChapterMeta(chapterNo).getName(langCode);
+        String name = getChapterMeta(chapterNo).getName(normalizeLanguageCode(langCode));
         if (withPrefix) {
             name = ctx.getString(R.string.strLabelSurah, name);
         }
@@ -310,6 +310,27 @@ public class QuranMeta implements Serializable {
         return juz;
     }
 
+    public static String normalizeLanguageCode(String langCode) {
+        if (langCode == null || langCode.isEmpty()) {
+            return "en";
+        }
+
+        String lower = langCode.toLowerCase(Locale.ROOT);
+        int dashIndex = lower.indexOf('-');
+        if (dashIndex > 0) {
+            lower = lower.substring(0, dashIndex);
+        }
+
+        switch (lower) {
+            case "id":
+            case "in":
+            case "bahasa":
+                return "in";
+            default:
+                return lower;
+        }
+    }
+
     public static class ChapterMeta implements Serializable {
         public int chapterNo;
 
@@ -336,15 +357,16 @@ public class QuranMeta implements Serializable {
         public String tags = "";
 
         public void addName(String langCode, String name) {
-            nameMap.put(langCode, name);
+            nameMap.put(QuranMeta.normalizeLanguageCode(langCode), name);
         }
 
         public String getName() {
-            return getName(Locale.getDefault().getLanguage());
+            return getName(QuranMeta.normalizeLanguageCode(Locale.getDefault().getLanguage()));
         }
 
         public String getName(String langCode) {
-            String name = nameMap.get(langCode);
+            String normalized = QuranMeta.normalizeLanguageCode(langCode);
+            String name = nameMap.get(normalized);
             if (name == null) {
                 name = nameMap.get("en");
             }
@@ -356,15 +378,16 @@ public class QuranMeta implements Serializable {
         }
 
         public void addNameTranslation(String langCode, String translation) {
-            translationMap.put(langCode, translation);
+            translationMap.put(QuranMeta.normalizeLanguageCode(langCode), translation);
         }
 
         public String getNameTranslation() {
-            return getNameTranslation(Locale.getDefault().getLanguage());
+            return getNameTranslation(QuranMeta.normalizeLanguageCode(Locale.getDefault().getLanguage()));
         }
 
         public String getNameTranslation(String langCode) {
-            String transl = translationMap.get(langCode);
+            String normalized = QuranMeta.normalizeLanguageCode(langCode);
+            String transl = translationMap.get(normalized);
             if (transl == null) {
                 transl = translationMap.get("en");
             }

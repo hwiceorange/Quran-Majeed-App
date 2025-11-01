@@ -199,6 +199,11 @@
 
     <dimen name="dmnReaderTextSizeTransl">16sp</dimen>
 
+    <!-- Daily Quran Quiz -->
+    <dimen name="quiz_question_margin">16dp</dimen>
+    <dimen name="quiz_option_height">38dp</dimen>
+    <dimen name="quiz_title_height">40dp</dimen>
+
     <dimen name="dmnReaderTextSizeArIndoPakMedium">28sp</dimen>
     <dimen name="dmnReaderTextSizeArIndoPakSmall">23sp</dimen>
 

@@ -35,6 +35,7 @@ import com.google.android.material.button.MaterialButton;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import com.quran.quranaudio.online.Utils.GoogleAuthManager;
+import com.quran.quranaudio.online.common.rate.RatePromptManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -105,6 +106,13 @@ public class PrayersFragment extends Fragment {
     private ImageView asrCompletedIcon;
     private ImageView maghribCompletedIcon;
     private ImageView ishaCompletedIcon;
+
+    private boolean fajrCompletedLast;
+    private boolean dhuhrCompletedLast;
+    private boolean asrCompletedLast;
+    private boolean maghribCompletedLast;
+    private boolean ishaCompletedLast;
+    private boolean completionStatesInitialized;
     
     // ⭐ Location permission tracking
     private static final String PREFS_NAME = "LocationPermissionPrefs";
@@ -212,6 +220,43 @@ public class PrayersFragment extends Fragment {
         }
     }
 
+    private boolean getPreviousCompletionState(SalahName salahName) {
+        switch (salahName) {
+            case FAJR:
+                return fajrCompletedLast;
+            case DHUHR:
+                return dhuhrCompletedLast;
+            case ASR:
+                return asrCompletedLast;
+            case MAGHRIB:
+                return maghribCompletedLast;
+            case ISHA:
+                return ishaCompletedLast;
+            default:
+                return false;
+        }
+    }
+
+    private void setPreviousCompletionState(SalahName salahName, boolean value) {
+        switch (salahName) {
+            case FAJR:
+                fajrCompletedLast = value;
+                break;
+            case DHUHR:
+                dhuhrCompletedLast = value;
+                break;
+            case ASR:
+                asrCompletedLast = value;
+                break;
+            case MAGHRIB:
+                maghribCompletedLast = value;
+                break;
+            case ISHA:
+                ishaCompletedLast = value;
+                break;
+        }
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Nullable
     @Override
@@ -305,6 +350,51 @@ public class PrayersFragment extends Fragment {
         
         super.onDestroy();
     }
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        
+        // 刷新所有祷告时间的通知图标（用户可能从通知设置页面返回）
+        refreshAllNotificationIcons();
+        
+        // 延迟3秒后检查通知权限
+        scheduleNotificationPermissionRequest();
+    }
+    
+    /**
+     * Refreshes all prayer notification icons based on current settings
+     * Called when returning from notification settings page
+     */
+    private void refreshAllNotificationIcons() {
+        if (getView() != null) {
+            // Get all ImageView references again and update them
+            ImageView fajrCallImageView = getView().findViewById(R.id.fajr_call_image_view);
+            ImageView dohrCallImageView = getView().findViewById(R.id.dohr_call_image_view);
+            ImageView asrCallImageView = getView().findViewById(R.id.asr_call_image_view);
+            ImageView maghrebCallImageView = getView().findViewById(R.id.maghreb_call_image_view);
+            ImageView ichaCallImageView = getView().findViewById(R.id.icha_call_image_view);
+            
+            // Update each icon based on current notification settings
+            if (fajrCallImageView != null) updateNotificationIcon(fajrCallImageView, PrayerEnum.FAJR);
+            if (dohrCallImageView != null) updateNotificationIcon(dohrCallImageView, PrayerEnum.DHOHR);
+            if (asrCallImageView != null) updateNotificationIcon(asrCallImageView, PrayerEnum.ASR);
+            if (maghrebCallImageView != null) updateNotificationIcon(maghrebCallImageView, PrayerEnum.MAGHRIB);
+            if (ichaCallImageView != null) updateNotificationIcon(ichaCallImageView, PrayerEnum.ICHA);
+        }
+    }
+    
+    /**
+     * Updates a single notification icon based on current settings
+     */
+    private void updateNotificationIcon(ImageView imageView, PrayerEnum prayerEnum) {
+        SharedPreferences notificationPrefs = requireContext().getSharedPreferences(PreferencesConstants.ADTHAN_CALLS_SHARED_PREFERENCES, MODE_PRIVATE);
+        String notificationTypeKey = prayerEnum.toString() + "_NOTIFICATION_TYPE";
+        String notificationType = notificationPrefs.getString(notificationTypeKey, "none");
+        
+        int iconResource = getNotificationIconForType(notificationType);
+        imageView.setImageResource(iconResource);
+    }
 
     private void initializeViews(View rootView) {
         skeleton = rootView.findViewById(R.id.skeletonLayout);
@@ -384,6 +474,28 @@ public class PrayersFragment extends Fragment {
         rootView.findViewById(R.id.btn_wudu_guide).setOnClickListener(v -> {
             startActivity(new Intent(requireContext(), com.quran.quranaudio.online.wudu.WuduGuideActivity.class));
         });
+        
+        // Tasbih Counter Card click listener
+        View tasbihCard = rootView.findViewById(R.id.tasbih_counter_card);
+        com.google.android.material.button.MaterialButton btnGetStart = rootView.findViewById(R.id.btn_get_start);
+        
+        if (tasbihCard != null) {
+            tasbihCard.setOnClickListener(v -> {
+                Log.d("PrayersFragment", "📿 Tasbih card clicked");
+                navigateToTasbihPage();
+            });
+        } else {
+            Log.w("PrayersFragment", "⚠️ Tasbih card not found");
+        }
+        
+        if (btnGetStart != null) {
+            btnGetStart.setOnClickListener(v -> {
+                Log.d("PrayersFragment", "📿 Get Start Now button clicked");
+                navigateToTasbihPage();
+            });
+        } else {
+            Log.w("PrayersFragment", "⚠️ Get Start Now button not found");
+        }
         
         // Initialize Salah track buttons
         fajrTrackButton = rootView.findViewById(R.id.fajr_track_button);
@@ -579,11 +691,13 @@ public class PrayersFragment extends Fragment {
             
             if (record != null) {
                 // Update all button states and completed icons
-                updateTrackButton(fajrTrackButton, fajrCompletedIcon, record.getFajr());
-                updateTrackButton(dhuhrTrackButton, dhuhrCompletedIcon, record.getDhuhr());
-                updateTrackButton(asrTrackButton, asrCompletedIcon, record.getAsr());
-                updateTrackButton(maghribTrackButton, maghribCompletedIcon, record.getMaghrib());
-                updateTrackButton(ishaTrackButton, ishaCompletedIcon, record.getIsha());
+                updateTrackButton(SalahName.FAJR, fajrTrackButton, fajrCompletedIcon, record.getFajr());
+                updateTrackButton(SalahName.DHUHR, dhuhrTrackButton, dhuhrCompletedIcon, record.getDhuhr());
+                updateTrackButton(SalahName.ASR, asrTrackButton, asrCompletedIcon, record.getAsr());
+                updateTrackButton(SalahName.MAGHRIB, maghribTrackButton, maghribCompletedIcon, record.getMaghrib());
+                updateTrackButton(SalahName.ISHA, ishaTrackButton, ishaCompletedIcon, record.getIsha());
+
+                completionStatesInitialized = true;
             } else {
                 // Record is null (no data yet), keep default Track state
                 Log.d("PrayersFragment", "📝 No salah record found, keeping default Track state");
@@ -596,7 +710,7 @@ public class PrayersFragment extends Fragment {
      * ✅ Completed: Hide Track button, show ic_correct.png ImageView
      * ⭕ Not completed: Show "Track" button, hide completed icon
      */
-    private void updateTrackButton(MaterialButton button, ImageView completedIcon, boolean isCompleted) {
+    private void updateTrackButton(SalahName salahName, MaterialButton button, ImageView completedIcon, boolean isCompleted) {
         if (button == null || completedIcon == null) {
             Log.w("PrayersFragment", "⚠️ Button or icon is null, cannot update");
             return;
@@ -605,6 +719,18 @@ public class PrayersFragment extends Fragment {
         String buttonId = getResources().getResourceEntryName(button.getId());
         Log.d("PrayersFragment", "🎨 Updating button " + buttonId + " to " + (isCompleted ? "✓ (completed)" : "Track (uncompleted)"));
         
+        boolean previouslyCompleted = getPreviousCompletionState(salahName);
+
+        if (completionStatesInitialized && isCompleted && !previouslyCompleted && isAdded()) {
+            try {
+                RatePromptManager.onPrayerTracked(requireActivity());
+            } catch (IllegalStateException e) {
+                Log.w("PrayersFragment", "Fragment not attached when triggering rate prompt", e);
+            }
+        }
+
+        setPreviousCompletionState(salahName, isCompleted);
+
         if (isCompleted) {
             // Hide Track button, show completed icon (ic_correct.png)
             button.setVisibility(android.view.View.GONE);
@@ -796,37 +922,68 @@ public class PrayersFragment extends Fragment {
     }
 
     private void initializeImageViewIcon(ConstraintLayout adhanCallConstraintLayout, ImageView adhanCallImageView, PrayerEnum prayerEnum) {
-        SharedPreferences sharedPreferences = requireContext().getSharedPreferences(adhanCallsPreferences, MODE_PRIVATE);
-        String callPreferenceKey = prayerEnum.toString() + adhanCallKeyPart;
+        // Read notification type from our new notification settings
+        SharedPreferences notificationPrefs = requireContext().getSharedPreferences(PreferencesConstants.ADTHAN_CALLS_SHARED_PREFERENCES, MODE_PRIVATE);
+        String notificationTypeKey = prayerEnum.toString() + "_NOTIFICATION_TYPE";
+        String notificationType = notificationPrefs.getString(notificationTypeKey, "none");
+        
+        // Set icon based on notification type
+        int iconResource = getNotificationIconForType(notificationType);
+        adhanCallImageView.setImageResource(iconResource);
 
-        boolean adhanCallEnabled = sharedPreferences.getBoolean(callPreferenceKey, false);
-
-        adhanCallImageView.setImageResource(adhanCallEnabled ? R.drawable.ic_notifications_on_24dp : R.drawable.ic_notifications_off_24dp);
-
-        setNotifImgOnClickListener(adhanCallConstraintLayout, adhanCallImageView, callPreferenceKey);
+        setNotifImgOnClickListener(adhanCallConstraintLayout, adhanCallImageView, prayerEnum);
+    }
+    
+    /**
+     * Returns the appropriate icon resource for each notification type
+     */
+    private int getNotificationIconForType(String notificationType) {
+        switch (notificationType) {
+            case "none":
+                return R.drawable.ic_notifications_off_24dp;
+            case "azan":
+                return R.drawable.ic_volume;
+            case "vibrate":
+                return R.drawable.ic_vibration;
+            case "silent":
+                return R.drawable.ic_notifications_on_24dp;
+            case "text_tone":
+                return R.drawable.ic_volume;
+            case "clock":
+                return R.drawable.ic_alarm_clock;
+            default:
+                return R.drawable.ic_notifications_off_24dp;
+        }
     }
 
-    private void setNotifImgOnClickListener(ConstraintLayout adhanCallConstraintLayout, ImageView imageView, String callPreferenceKey) {
+    private void setNotifImgOnClickListener(ConstraintLayout adhanCallConstraintLayout, ImageView imageView, PrayerEnum prayerEnum) {
         adhanCallConstraintLayout.setOnClickListener(view -> {
-            SharedPreferences sharedPreferences = requireContext().getSharedPreferences(adhanCallsPreferences, MODE_PRIVATE);
-
-            Vibrator vibe = (Vibrator) requireContext().getSystemService(Context.VIBRATOR_SERVICE);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                vibe.vibrate(VibrationEffect.createOneShot(10, VibrationEffect.DEFAULT_AMPLITUDE));
-            } else {
-                vibe.vibrate(10);
-            }
-
-            boolean adhanCallEnabled = sharedPreferences.getBoolean(callPreferenceKey, false);
-
-            imageView.setImageResource(adhanCallEnabled ? R.drawable.ic_notifications_off_24dp : R.drawable.ic_notifications_on_24dp);
-
-            SharedPreferences.Editor edit = sharedPreferences.edit();
-
-            edit.putBoolean(callPreferenceKey, !adhanCallEnabled);
-            edit.apply();
+            // Get prayer name string resource
+            String prayerName = getPrayerNameString(prayerEnum);
+            
+            // Launch notification settings activity
+            Intent intent = new Intent(requireContext(), com.quran.quranaudio.online.prayertimes.ui.PrayerNotificationSettingsActivity.class);
+            intent.putExtra(com.quran.quranaudio.online.prayertimes.ui.PrayerNotificationSettingsActivity.EXTRA_PRAYER_NAME, prayerName);
+            intent.putExtra(com.quran.quranaudio.online.prayertimes.ui.PrayerNotificationSettingsActivity.EXTRA_PRAYER_ENUM, prayerEnum.toString());
+            startActivity(intent);
         });
+    }
+    
+    private String getPrayerNameString(PrayerEnum prayerEnum) {
+        switch (prayerEnum) {
+            case FAJR:
+                return getString(R.string.FAJR);
+            case DHOHR:
+                return getString(R.string.DHOHR);
+            case ASR:
+                return getString(R.string.ASR);
+            case MAGHRIB:
+                return getString(R.string.MAGHRIB);
+            case ICHA:
+                return getString(R.string.ICHA);
+            default:
+                return "Prayer";
+        }
     }
 
     private void startPrayerSchedulerWork(DayPrayer dayPrayer) {
@@ -1034,6 +1191,46 @@ public class PrayersFragment extends Fragment {
             notificationPermissionHandler = null;
             notificationPermissionRunnable = null;
             Log.d("PrayersFragment", "🧹 Notification permission handler cleaned up");
+        }
+    }
+    
+    /**
+     * 📿 Navigate to Tasbih page
+     */
+    private void navigateToTasbihPage() {
+        try {
+            // 方法1：尝试通过 NavController 导航
+            androidx.navigation.NavController navController = androidx.navigation.Navigation.findNavController(requireView());
+            if (navController != null) {
+                navController.navigate(R.id.nav_tasbih);
+                Log.d("PrayersFragment", "📿 Navigating to Tasbih via NavController");
+                return;
+            }
+        } catch (Exception e) {
+            Log.w("PrayersFragment", "⚠️ NavController navigation failed, trying BottomNav", e);
+        }
+        
+        try {
+            // 方法2：通过 BottomNavigationView 导航（兼容方案）
+            if (getActivity() != null) {
+                com.google.android.material.bottomnavigation.BottomNavigationView bottomNav = 
+                    getActivity().findViewById(R.id.bottom_nav);
+                if (bottomNav != null) {
+                    bottomNav.setSelectedItemId(R.id.nav_tasbih);
+                    Log.d("PrayersFragment", "📿 Navigating to Tasbih via BottomNav");
+                } else {
+                    // 方法3：通过 nav_view（MainActivity 中的另一个可能 ID）
+                    bottomNav = getActivity().findViewById(R.id.nav_view);
+                    if (bottomNav != null) {
+                        bottomNav.setSelectedItemId(R.id.nav_tasbih);
+                        Log.d("PrayersFragment", "📿 Navigating to Tasbih via nav_view");
+                    } else {
+                        Log.e("PrayersFragment", "❌ BottomNavigationView not found (tried both IDs)");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Log.e("PrayersFragment", "❌ Error navigating to Tasbih page", e);
         }
     }
 }

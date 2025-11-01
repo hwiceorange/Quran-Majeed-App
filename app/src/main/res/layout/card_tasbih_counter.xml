@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tasbih_counter_card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#52BF95"
+        android:paddingStart="24dp"
+        android:paddingEnd="0dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp">
+
+        <!-- 背景图片（扩大比例，紧贴右边，不溢出卡片） -->
+        <ImageView
+            android:id="@+id/iv_tasbih_bg"
+            android:layout_width="120dp"
+            android:layout_height="0dp"
+            android:src="@drawable/starttasbihcounter"
+            android:scaleType="centerCrop"
+            android:alpha="0.35"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:contentDescription="@null" />
+
+        <!-- 左上方小字 "Remember Allah" -->
+        <TextView
+            android:id="@+id/tv_remember_allah"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/remember_allah"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- 左边大字 "Start Tasbih Counter" -->
+        <TextView
+            android:id="@+id/tv_start_tasbih"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/start_tasbih_counter"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:lineSpacingExtra="0dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_remember_allah"
+            app:layout_constraintEnd_toStartOf="@id/btn_get_start"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <!-- 右边白色按钮 "Get Start Now" -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_get_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/get_start_now"
+            android:textColor="#52BF95"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:backgroundTint="@android:color/white"
+            android:paddingStart="18dp"
+            android:paddingEnd="18dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            app:cornerRadius="20dp"
+            app:elevation="8dp"
+            android:translationZ="4dp"
+            android:stateListAnimator="@null"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
+
