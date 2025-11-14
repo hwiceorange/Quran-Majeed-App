@@ -339,13 +339,62 @@
 
     <string-array name="app_language_codes">
         <item>en</item>
-        <item>in</item>
+        <item>id</item>
         <item>ar</item>
         <item>ur</item>
         <item>ms</item>
         <item>tr</item>
         <item>bn</item>
     </string-array>
+
+    <!-- 🌐 Onboarding Language Selection Strings -->
+    <string name="onboarding_language_title">Which language do you prefer?</string>
+    <string name="onboarding_language_subtitle">We will carefully select the Quran translation and learning resources to match your preference.</string>
+    <string name="onboarding_continue">Continue</string>
+    <string name="selected">Selected</string>
+    <string name="strTitleQuranTranslation">Quran Translation</string>
+    <string name="onboardDescQuranTranslation">Select your preferred Quran translation version</string>
+    <string name="strTitleIstiqamah">Istiqamah</string>
+    <string name="onboardDescIstiqamah">Consistency in Worship</string>
+    <string name="strTitleNotificationPermission">Notifications</string>
+    <string name="onboardDescNotificationPermission">Stay consistent with prayer alerts</string>
+    <string name="strTitleFreeTrial">Free Trial</string>
+    <string name="onboardDescFreeTrial">7 days free to be inspired</string>
+    
+    <!-- Quran Version Selection Onboarding Page -->
+    <string name="onboard_quran_title">What is your preferred Quran translation?</string>
+    <string name="onboard_quran_subtitle">We will use this version for all primary reading, study, and quiz contexts.</string>
+    <string name="onboard_continue">Continue</string>
+    
+    <!-- Istiqamah Onboarding Page -->
+    <string name="onboard_istiqamah_title">Istiqamah:\nConsistency in\nWorship</string>
+    <string name="onboard_istiqamah_subtitle">Our journey to Jannah (Paradise) is built on\ndaily, consistent effort.</string>
+    <string name="onboard_istiqamah_chart_title">TIME DEVOTED TO QURAN &amp; SALAH</string>
+    <string name="onboard_istiqamah_description">With consistent tracking, you will build better habits, reduce your outstanding Qada\' prayers, and find more peace in your daily life. Insha\'Allah.</string>
+    <string name="onboard_istiqamah_month_jan">Jan</string>
+    <string name="onboard_istiqamah_month_feb">Feb</string>
+    <string name="onboard_istiqamah_month_mar">Mar</string>
+    <string name="onboard_istiqamah_month_apr">Apr</string>
+    <string name="onboard_istiqamah_month_may">May</string>
+    <string name="onboard_istiqamah_month_jun">Jun</string>
+    
+    <!-- Notification Permission Onboarding Page -->
+    <string name="onboard_notification_title">Stay Consistent with\nYour Salah</string>
+    <string name="onboard_notification_subtitle">Never miss a prayer. Our timely alerts help you\nfulfil your obligations wherever you are.</string>
+    <string name="onboard_notification_dialog_title">QuranApp Would Like to Send\nYou Prayer &amp; Learning\nNotifications</string>
+    <string name="onboard_notification_dialog_desc">Notifications include Adhan, Salah time\nreminders, and daily Quranic\nmotivation.</string>
+    <string name="onboard_notification_allow">ALLOW</string>
+    <string name="onboard_notification_dont_allow">DON\'T ALLOW</string>
+    <string name="onboard_notification_review">"Alhamdulillah! This app is essential. The prayer time alerts are always spot-on and help me stay consistent with my Qada\' tracking."</string>
+    <string name="onboard_notification_review_name">Aisha K.</string>
+    <string name="onboard_notification_review_verified">(Verified User)</string>
+    
+    <!-- Free Trial Onboarding Page -->
+    <string name="onboard_trial_line1">You got</string>
+    <string name="onboard_trial_line2">7 days free</string>
+    <string name="onboard_trial_line3">to be inspired by</string>
+    <string name="onboard_trial_line4">God\'s Word!</string>
+    <string name="onboard_trial_button">Try for Free</string>
 
     <!-- Appearance Preferences -->
     <string name="display_arabic">Display Arabic Text</string>
@@ -852,6 +901,44 @@
     <string name="strTitleAppUser">QuranApp user</string>
     <string name="strTitleHolyQuran">The Holy Quran</string>
     <string name="strTitleQuran">Quran</string>
+    <string name="go_premium">Go Premium</string>
+    <string name="unlock_premium_features">Unlock all premium features</string>
+    <string name="subscription_heading">Unlock Your Personal\nQuranic Mentor</string>
+    <string name="subscription_feature_ai">AI-Powered Learning Paths</string>
+    <string name="subscription_feature_ad_free">Ad-Free Devotion</string>
+    <string name="subscription_feature_tafsir">Deep Tafsir &amp; Context</string>
+    <string name="subscription_feature_quiz">Full Quiz Library</string>
+    <string name="subscription_enable_trial">I want to try free</string>
+    <string name="subscription_best_value">Best Value!</string>
+    <string name="subscription_price_yearly">$17.99 / year</string>
+    <string name="subscription_save_vs_monthly">You save 50%% vs. Monthly</string>
+    <string name="subscription_price_monthly">$2.99 / Month</string>
+    <string name="subscription_free_trial_badge">7-day free trial</string>
+    <string name="subscription_monthly_sub_text">Then %1$s per month. No payment now</string>
+    <string name="subscription_yearly_sub_text">Then %1$s per year</string>
+    <string name="subscription_info_trial_monthly">Cancel before the 7-day trial ends to avoid the monthly subscription charge.</string>
+    <string name="subscription_info_trial_yearly">Cancel before the 7-day trial ends to avoid the annual subscription charge.</string>
+    <string name="subscription_info_autorenew_yearly">Your subscription auto-renews annually unless canceled.</string>
+    <string name="subscription_info_autorenew_monthly">Your subscription auto-renews monthly unless canceled.</string>
+    <string name="subscription_cta_trial">Start trial &amp; plan</string>
+    <string name="subscription_cta_premium">Go Premium Now</string>
+    <string name="subscription_loading">Loading...</string>
+    <string name="subscription_no_payment_now">NO PAYMENT NOW</string>
+    <string name="subscription_legal_info">By continuing to use the app, you accept our Terms of use and Privacy policy</string>
+    <string name="subscription_error_billing_title">Billing Connection Failed</string>
+    <string name="subscription_error_billing_message">Unable to connect to Google Play Billing.\n\nPossible reasons:\n- Google Play Store is not installed or updated\n- Network connection issue\n- Google Play services are disabled\n\nPlease check and try again.</string>
+    <string name="subscription_error_no_products_title">No Subscription Plans Available</string>
+    <string name="subscription_error_no_products_message">Unable to load subscription plans.\n\nRequired Product IDs:\n- Monthly: %1$s\n- Yearly: %2$s\n\nSetup Required:\n1. Create these products in Google Play Console\n2. Set them to Active status\n3. Publish the app to a test track (internal/closed)\n4. Add a test account in Google Play Console\n5. Wait 1-2 hours for propagation\n\nFor testing, use a signed release build.</string>
+    <string name="subscription_error_plan_title">Plan Not Available</string>
+    <string name="subscription_error_plan_message">The selected %1$s plan is not available.\n\nProduct ID: %2$s\n\nTroubleshooting:\n1. Check if the product exists in Google Play Console\n2. Verify the product ID matches exactly\n3. Ensure the product is set to Active\n4. Confirm the app is published to a test track\n\nTry selecting the other plan or contact support.</string>
+    <string name="subscription_plan_yearly">Yearly</string>
+    <string name="subscription_plan_monthly">Monthly</string>
+    <string name="subscription_message_success">Subscription activated successfully!</string>
+    <string name="subscription_message_already_owned">You already own this subscription</string>
+    <string name="subscription_message_canceled">Purchase canceled</string>
+    <string name="subscription_message_failed">Purchase failed: %1$s</string>
+    <string name="subscription_message_already_subscribed">You are already subscribed!</string>
+    <string name="subscription_message_no_offer">No valid offer available</string>
     <string name="strTitleMakki">Meccan</string>
     <string name="strTitleMadani">Medinan</string>
     <string name="strTitleFootnote">Footnote</string>
@@ -1321,4 +1408,53 @@
     <string name="content_desc_clock">Clock</string>
     <string name="content_desc_decrease">Decrease</string>
     <string name="content_desc_increase">Increase</string>
+    <string name="total_outstanding_qada">Total Outstanding Qada</string>
+    <string name="qada_count_zero">0 Prayers · Alhamdulillah ></string>
+    <string name="qada_count_prayers">%1$s Prayers ></string>
+    <string name="qada_login_required_title">Login Required</string>
+    <string name="qada_login_required_message">Please login with your Google account to track your Qada\' and view your prayer history.</string>
+    
+    <!-- Qada Onboarding -->
+    <string name="qada_onboarding_title">Manage Your Salah Obligations</string>
+    <string name="qada_onboarding_description">Before we begin tracking your Qada\' (missed prayers), please specify when you wish to start counting your obligations.</string>
+    <string name="qada_option_today_title">Start from Today (Recommended)</string>
+    <string name="qada_option_today_subtitle">Recommended for new practice</string>
+    <string name="qada_option_custom_title">Start from:</string>
+    <string name="qada_option_custom_subtitle">Tap to select a date</string>
+    <string name="qada_confirm_button">Confirm and Start Tracking</string>
+    <string name="qada_date_format">%1$s</string>
+    
+    <!-- Qada Tracker Activity -->
+    <string name="your_activity">Your Activity</string>
+    <string name="salah_history_qada_tracker">Salah History &amp; Qada\' Tracker</string>
+    <string name="weekly">Weekly</string>
+    <string name="monthly">Monthly</string>
+    <string name="previous_date">Previous</string>
+    <string name="next_date">Next</string>
+    <string name="this_week_progress">This Week</string>
+    <string name="this_month_progress">This Month</string>
+    <string name="prayer_breakdown">Prayer Breakdown</string>
+    <string name="monthly_prayer_log">Monthly Prayer Log</string>
+    <string name="ada_on_time">Ada\' (On-time)</string>
+    <string name="qada_made_up">Qada\' (Made-up)</string>
+    <string name="missed">Missed</string>
+    <string name="great_consistency">Great Consistency!</string>
+    <string name="keep_up_the_good_work">Keep up the good work</string>
+    <string name="achievement_star">Achievement Star</string>
+    
+    <!-- Week days abbreviations -->
+    <string name="day_mon">Mon</string>
+    <string name="day_tue">Tue</string>
+    <string name="day_wed">Wed</string>
+    <string name="day_thu">Thu</string>
+    <string name="day_fri">Fri</string>
+    <string name="day_sat">Sat</string>
+    <string name="day_sun">Sun</string>
+    
+    <!-- Prayer names -->
+    <string name="prayer_fajr">Fajr</string>
+    <string name="prayer_dhuhr">Dhuhr</string>
+    <string name="prayer_asr">Asr</string>
+    <string name="prayer_maghrib">Maghrib</string>
+    <string name="prayer_isha">Isha</string>
 </resources>

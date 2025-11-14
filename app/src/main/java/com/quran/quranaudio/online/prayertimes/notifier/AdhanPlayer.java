@@ -14,6 +14,7 @@ import androidx.media.VolumeProviderCompat;
 
 import com.quran.quranaudio.online.prayertimes.preferences.PreferencesConstants;
 import com.quran.quranaudio.online.prayertimes.preferences.PreferencesHelper;
+import com.quran.quranaudio.online.prayertimes.common.PrayerEnum;
 import com.quran.quranaudio.online.R;
 import com.quran.quranaudio.online.prayertimes.utils.UiUtils;
 
@@ -39,13 +40,18 @@ public class AdhanPlayer {
         douaMediaPlayer = new MediaPlayer();
     }
 
-    public void playAdhan(boolean fajr) {
+    public void playAdhan(PrayerEnum prayerEnum) {
+        if (prayerEnum == null) {
+            prayerEnum = PrayerEnum.FAJR; // Fallback
+        }
+
         if (!adhanMediaPlayer.isPlaying() || !douaMediaPlayer.isPlaying()) {
             try {
-                initializeAdhanMediaPlayer(fajr);
-                initializeDouaeMediaPlayer();
+                initializeAdhanMediaPlayer(prayerEnum);
+                initializeDouaeMediaPlayer(prayerEnum);
             } catch (IOException e) {
                 Log.e("AdhanPlayer", "Cannot play Adhan", e);
+                return;
             }
 
             adhanMediaPlayer.start();
@@ -79,20 +85,22 @@ public class AdhanPlayer {
         douaMediaPlayer.setOnCompletionListener(mp -> douaeMediaSession.release());
     }
 
-    private void initializeAdhanMediaPlayer(boolean fajr) throws IOException {
+    private void initializeAdhanMediaPlayer(PrayerEnum prayerEnum) throws IOException {
         adhanMediaPlayer.reset();
-        adhanMediaPlayer.setDataSource(context, getAdhanUri(fajr));
+        adhanMediaPlayer.setDataSource(context, getAdhanUri(prayerEnum));
         setAudioAttribute(adhanMediaPlayer);
         adhanMediaPlayer.setLooping(false);
         adhanMediaPlayer.prepare();
+        applyVolume(adhanMediaPlayer, prayerEnum);
     }
 
-    private void initializeDouaeMediaPlayer() throws IOException {
+    private void initializeDouaeMediaPlayer(PrayerEnum prayerEnum) throws IOException {
         douaMediaPlayer.reset();
         douaMediaPlayer.setDataSource(context, getDouaeUri(context));
         setAudioAttribute(douaMediaPlayer);
         douaMediaPlayer.setLooping(false);
         douaMediaPlayer.prepare();
+        applyVolume(douaMediaPlayer, prayerEnum);
     }
 
     private void setAudioAttribute(MediaPlayer mediaPlayer) {
@@ -108,8 +116,8 @@ public class AdhanPlayer {
         }
     }
 
-    private Uri getAdhanUri(boolean fajr) {
-        if (fajr) {
+    private Uri getAdhanUri(PrayerEnum prayerEnum) {
+        if (prayerEnum == PrayerEnum.FAJR) {
             return Uri.parse(preferencesHelper.getFajrAdhanCaller());
         }
         return Uri.parse(preferencesHelper.getAdhanCaller());
@@ -139,5 +147,12 @@ public class AdhanPlayer {
         mediaSession.setActive(true);
 
         return mediaSession;
+    }
+
+    private void applyVolume(MediaPlayer mediaPlayer, PrayerEnum prayerEnum) {
+        int volumePercent = preferencesHelper.getVolumeForPrayer(prayerEnum);
+        float volumeScalar = Math.max(0f, Math.min(1f, volumePercent / 100f));
+        mediaPlayer.setVolume(volumeScalar, volumeScalar);
+        Log.d("AdhanPlayer", "🔊 Applying volume " + volumePercent + "% for " + prayerEnum + " (scalar=" + volumeScalar + ")");
     }
 }

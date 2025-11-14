@@ -230,22 +230,55 @@ class QuranIndexPageHelper(
     
     /**
      * 根据阅读模式启动阅读器（完全复用 BaseFragReaderIndex 的逻辑）
+     * 支持三种模式：
+     * - MODE_SURAH: 章节模式（分页滚动）
+     * - MODE_JUZ: Juz 模式（分页滚动）
+     * - MODE_VERSES: 单节模式（单 Verse 显示）
      */
     private fun launchReaderByMode(record: LastReadRecord, mode: String) {
-        when (mode) {
-            LastReadRecord.MODE_SURAH, LastReadRecord.MODE_VERSES -> {
-                ReaderFactory.startVerse(context, record.lastReadSurah, record.lastReadAyah)
-            }
-            LastReadRecord.MODE_JUZ -> {
-                if (record.lastReadJuz > 0) {
-                    ReaderFactory.startJuz(context, record.lastReadJuz)
-                } else {
+        try {
+            android.util.Log.d("QuranIndexPageHelper", "📖 launchReaderByMode: mode=$mode, Surah=${record.lastReadSurah}, Ayah=${record.lastReadAyah}, Juz=${record.lastReadJuz}")
+            
+            when (mode) {
+                LastReadRecord.MODE_SURAH -> {
+                    // 章节模式：启动章节阅读（分页滚动），并滚动到指定的节号
+                    android.util.Log.d("QuranIndexPageHelper", "📄 Launching SURAH mode (Chapter reading): Chapter ${record.lastReadSurah}, scrolling to Ayah ${record.lastReadAyah}")
+                    val intent = ReaderFactory.prepareChapterIntent(record.lastReadSurah)
+                    // 添加滚动位置
+                    intent.putExtra(com.quran.quranaudio.online.quran_module.utils.univ.Keys.READER_KEY_PENDING_SCROLL, 
+                        intArrayOf(record.lastReadSurah, record.lastReadAyah))
+                    context.startActivity(intent.setClass(context, com.quran.quranaudio.online.quran_module.activities.ActivityReader::class.java))
+                }
+                LastReadRecord.MODE_JUZ -> {
+                    // Juz 模式：启动 Juz 阅读，并滚动到指定的节号
+                    val juzNo = if (record.lastReadJuz > 0) {
+                        record.lastReadJuz
+                    } else {
+                        // 如果没有保存 Juz 编号，使用 Surah 1（回退逻辑）
+                        android.util.Log.w("QuranIndexPageHelper", "⚠️ Juz number not saved, using Juz 1 as fallback")
+                        1
+                    }
+                    android.util.Log.d("QuranIndexPageHelper", "🕌 Launching JUZ mode: Juz $juzNo, scrolling to Chapter ${record.lastReadSurah}, Ayah ${record.lastReadAyah}")
+                    val intent = ReaderFactory.prepareJuzIntent(juzNo)
+                    intent.putExtra(com.quran.quranaudio.online.quran_module.utils.univ.Keys.READER_KEY_PENDING_SCROLL, 
+                        intArrayOf(record.lastReadSurah, record.lastReadAyah))
+                    context.startActivity(intent.setClass(context, com.quran.quranaudio.online.quran_module.activities.ActivityReader::class.java))
+                }
+                LastReadRecord.MODE_VERSES -> {
+                    // 单节模式：启动单节阅读（用户上次使用单 Verse 模式）
+                    android.util.Log.d("QuranIndexPageHelper", "✍️ Launching VERSES mode (Single verse): Chapter ${record.lastReadSurah}, Ayah ${record.lastReadAyah}")
+                    ReaderFactory.startVerse(context, record.lastReadSurah, record.lastReadAyah)
+                }
+                else -> {
+                    // 默认：启动单节阅读（向后兼容）
+                    android.util.Log.d("QuranIndexPageHelper", "🔄 Launching default mode (fallback to VERSES): Chapter ${record.lastReadSurah}, Ayah ${record.lastReadAyah}")
                     ReaderFactory.startVerse(context, record.lastReadSurah, record.lastReadAyah)
                 }
             }
-            else -> {
-                ReaderFactory.startVerse(context, record.lastReadSurah, record.lastReadAyah)
-            }
+        } catch (e: Exception) {
+            android.util.Log.e("QuranIndexPageHelper", "❌ Error launching reader by mode: $mode", e)
+            // 回退到默认的单节阅读
+            ReaderFactory.startVerse(context, record.lastReadSurah, record.lastReadAyah)
         }
     }
 

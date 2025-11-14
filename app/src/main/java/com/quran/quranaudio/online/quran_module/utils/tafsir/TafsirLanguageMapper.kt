@@ -9,8 +9,8 @@ object TafsirLanguageMapper {
     private const val TAG = "TafsirLanguageMapper"
 
     private val languageAliases = mapOf(
-        "id" to "in",
-        "bahasa" to "in",
+        "in" to "id",  // 将旧代码 "in" 映射到新代码 "id"
+        "bahasa" to "id",
         "ms" to "ms",
         "tr" to "tr",
         "fa" to "fa",
@@ -28,7 +28,7 @@ object TafsirLanguageMapper {
     )
 
     private val fallbackLanguages = mapOf(
-        "in" to listOf("en"),
+        "id" to listOf("en"),  // 统一使用 "id" 表示印尼语
         "ms" to listOf("en"),
         "tr" to listOf("ar", "en"),
         "fa" to listOf("ar", "en"),

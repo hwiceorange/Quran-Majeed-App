@@ -86,6 +86,9 @@ public class PrayerNotificationSettingsActivity extends AppCompatActivity {
     
     // 闹钟权限请求码
     private static final int ALARM_PERMISSION_REQUEST_CODE = 1001;
+    
+    // 标记设置是否已更改（用于触发重新调度）
+    private boolean settingsChanged = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +124,34 @@ public class PrayerNotificationSettingsActivity extends AppCompatActivity {
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(updateBaseContextLocale(newBase));
+    }
+    
+    @Override
+    public void onBackPressed() {
+        // 🔔 返回前设置结果，告知父级需要重新调度
+        finishWithResult();
+        super.onBackPressed();
+    }
+    
+    @Override
+    public void finish() {
+        // 🔔 退出前设置结果，告知父级需要重新调度
+        finishWithResult();
+        super.finish();
+    }
+    
+    /**
+     * 完成并设置返回结果
+     * 如果设置已更改，返回 RESULT_OK 触发父级重新调度闹钟
+     */
+    private void finishWithResult() {
+        if (settingsChanged) {
+            android.util.Log.d("PrayerNotificationSettings", "🔔 Settings changed, notifying parent to reschedule alarms");
+            setResult(RESULT_OK);
+        } else {
+            android.util.Log.d("PrayerNotificationSettings", "ℹ️ No settings changed, returning RESULT_CANCELED");
+            setResult(RESULT_CANCELED);
+        }
     }
 
     private Context updateBaseContextLocale(Context context) {
@@ -489,11 +520,15 @@ public class PrayerNotificationSettingsActivity extends AppCompatActivity {
         editor.putString(prayerEnum + PREF_NOTIFICATION_TYPE_SUFFIX, type);
         
         // Also update the old simple boolean for backward compatibility
-        boolean enabled = !TYPE_NONE.equals(type);
+        boolean enabled = TYPE_AZAN.equals(type);
         String callPreferenceKey = prayerEnum.toString() + PreferencesConstants.ADTHAN_CALL_ENABLED_KEY;
         editor.putBoolean(callPreferenceKey, enabled);
         
         editor.apply();
+        
+        // 标记设置已更改
+        settingsChanged = true;
+        android.util.Log.d("PrayerNotificationSettings", "✅ Notification type changed, marked for rescheduling");
     }
 
     private void saveVolume(int volume) {
@@ -504,6 +539,9 @@ public class PrayerNotificationSettingsActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt(prayerEnum + PREF_VOLUME_SUFFIX, volume);
         editor.apply();
+        
+        // 音量变化不需要重新调度闹钟，只标记为需要通知
+        settingsChanged = true;
     }
 
     private void savePreReminder(boolean enabled) {
@@ -514,6 +552,10 @@ public class PrayerNotificationSettingsActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(prayerEnum + PREF_PRE_REMINDER_SUFFIX, enabled);
         editor.apply();
+        
+        // 🔔 预提醒开关变化，需要重新调度闹钟
+        settingsChanged = true;
+        android.util.Log.d("PrayerNotificationSettings", "✅ Pre-reminder changed, marked for rescheduling");
     }
 
     private void saveReminderMinutes(int minutes) {
@@ -524,6 +566,10 @@ public class PrayerNotificationSettingsActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt(prayerEnum + PREF_PRE_REMINDER_MINUTES_SUFFIX, minutes);
         editor.apply();
+        
+        // 🔔 预提醒时间变化，需要重新调度闹钟
+        settingsChanged = true;
+        android.util.Log.d("PrayerNotificationSettings", "✅ Reminder minutes changed, marked for rescheduling");
     }
 
     private void updateMinutesDisplay() {

@@ -9,6 +9,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
@@ -67,6 +71,27 @@ class PrayerNotification extends BaseNotification {
         String prayerKey = intent.getStringExtra("prayerKey");
         String prayerCity = intent.getStringExtra("prayerCity");
 
+        PrayerEnum prayerEnum = null;
+        String notificationType = null;
+        try {
+            if (prayerKey != null) {
+                prayerEnum = PrayerEnum.valueOf(prayerKey);
+                notificationType = preferencesHelper.getNotificationTypeForPrayer(prayerEnum);
+            }
+        } catch (IllegalArgumentException e) {
+            android.util.Log.e("PrayerNotification", "❌ Invalid prayer key for notification: " + prayerKey, e);
+        }
+
+        if (notificationType == null) {
+            notificationType = PreferencesHelper.TYPE_AZAN; // fallback to Azan behaviour
+        }
+
+        if (PreferencesHelper.TYPE_NONE.equals(notificationType)) {
+            android.util.Log.d("PrayerNotification", "⏭️ Notification type 'none' for " + prayerKey + ", skipping notification.");
+            NotificationManagerCompat.from(context).cancel(notificationId);
+            return;
+        }
+
         String prayerName = context.getResources().getString(
                 context.getResources().getIdentifier(prayerKey,
                         "string", context.getPackageName()));
@@ -103,11 +128,54 @@ class PrayerNotification extends BaseNotification {
 
         notificationManager.notify(notificationId, builder.build());
 
-        if (preferencesHelper.isVibrationActivated()) {
-            createVibration();
+        boolean shouldPlayAdhan = false;
+
+        if (prayerEnum != null) {
+            android.util.Log.d("PrayerNotification", "📳 " + prayerKey + " notification type: " + notificationType);
+            switch (notificationType) {
+                case PreferencesHelper.TYPE_AZAN:
+                    shouldPlayAdhan = true;
+                    if (preferencesHelper.isVibrationEnabledForPrayer(prayerEnum)) {
+                        createVibration();
+                    }
+                    break;
+                case PreferencesHelper.TYPE_VIBRATE:
+                    createVibration();
+                    break;
+                case PreferencesHelper.TYPE_SILENT:
+                    android.util.Log.d("PrayerNotification", "🔕 Silent notification for " + prayerKey);
+                    break;
+                case PreferencesHelper.TYPE_TEXT_TONE:
+                    playTone(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), AudioManager.STREAM_NOTIFICATION, prayerEnum);
+                    break;
+                case PreferencesHelper.TYPE_CLOCK:
+                    Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+                    if (alarmUri == null) {
+                        alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                    }
+                    playTone(alarmUri, AudioManager.STREAM_ALARM, prayerEnum);
+                    break;
+                default:
+                    android.util.Log.w("PrayerNotification", "⚠️ Unknown notification type " + notificationType + " for " + prayerKey + ", falling back to Adhan.");
+                    shouldPlayAdhan = true;
+                    if (preferencesHelper.isVibrationActivated()) {
+                        createVibration();
+                    }
+                    break;
+            }
+        } else {
+            android.util.Log.w("PrayerNotification", "⚠️ Unable to resolve PrayerEnum for " + prayerKey + ", falling back to Adhan playback.");
+            shouldPlayAdhan = true;
+            if (preferencesHelper.isVibrationActivated()) {
+                createVibration();
+            }
         }
 
-        setupAdhanCall(prayerKey);
+        if (shouldPlayAdhan) {
+            setupAdhanCall(prayerEnum, prayerKey);
+        } else {
+            android.util.Log.d("PrayerNotification", "🔕 Adhan playback skipped for " + prayerKey + " (type=" + notificationType + ")");
+        }
     }
 
     private PendingIntent getNotificationIntent() {
@@ -129,7 +197,7 @@ class PrayerNotification extends BaseNotification {
                 notificationId, intent, PendingIntent.FLAG_ONE_SHOT);
     }
 
-    private void setupAdhanCall(String prayerKey) {
+    private void setupAdhanCall(PrayerEnum prayerEnum, String prayerKey) {
         String adhanCallKeyPart = PreferencesConstants.ADTHAN_CALL_ENABLED_KEY;
         String callPreferenceKey = prayerKey + adhanCallKeyPart;
 
@@ -137,7 +205,15 @@ class PrayerNotification extends BaseNotification {
         boolean callEnabled = sharedPreferences.getBoolean(callPreferenceKey, false);
 
         if (callEnabled) {
-            adhanPlayer.playAdhan(PrayerEnum.FAJR.toString().equals(prayerKey));
+            if (prayerEnum == null) {
+                try {
+                    prayerEnum = PrayerEnum.valueOf(prayerKey);
+                } catch (IllegalArgumentException e) {
+                    android.util.Log.w("PrayerNotification", "⚠️ Unable to parse prayer enum for " + prayerKey + ", defaulting to FAJR", e);
+                    prayerEnum = PrayerEnum.FAJR;
+                }
+            }
+            adhanPlayer.playAdhan(prayerEnum);
         }
     }
 
@@ -164,5 +240,40 @@ class PrayerNotification extends BaseNotification {
         intentAction.setClass(context, NotifierActionReceiver.class);
 
         return PendingIntentCreator.getBroadcast(context, 1, intentAction, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    private void playTone(Uri toneUri, int streamType, PrayerEnum prayerEnum) {
+        if (toneUri == null) {
+            android.util.Log.w("PrayerNotification", "⚠️ Tone URI is null, skipping playback");
+            return;
+        }
+
+        try {
+            Ringtone ringtone = RingtoneManager.getRingtone(context.getApplicationContext(), toneUri);
+            if (ringtone == null) {
+                android.util.Log.w("PrayerNotification", "⚠️ Unable to obtain ringtone for URI: " + toneUri);
+                return;
+            }
+
+            int volumePercent = prayerEnum != null ? preferencesHelper.getVolumeForPrayer(prayerEnum) : 100;
+            float volumeScalar = Math.max(0f, Math.min(1f, volumePercent / 100f));
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                int usage = streamType == AudioManager.STREAM_ALARM ? AudioAttributes.USAGE_ALARM : AudioAttributes.USAGE_NOTIFICATION_EVENT;
+                ringtone.setAudioAttributes(new AudioAttributes.Builder()
+                        .setUsage(usage)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .build());
+                ringtone.setVolume(volumeScalar);
+            } else {
+                ringtone.setStreamType(streamType);
+                android.util.Log.w("PrayerNotification", "⚠️ Cannot adjust ringtone volume on Android versions below 9 (P); using system volume.");
+            }
+
+            ringtone.play();
+            android.util.Log.d("PrayerNotification", "🔊 Playing tone for " + prayerEnum + " at volume " + volumePercent + "%");
+        } catch (Exception e) {
+            android.util.Log.e("PrayerNotification", "❌ Failed to play tone for URI: " + toneUri, e);
+        }
     }
 }

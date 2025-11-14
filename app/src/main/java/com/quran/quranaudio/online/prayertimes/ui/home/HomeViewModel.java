@@ -68,6 +68,8 @@ public class HomeViewModel extends AndroidViewModel {
         this.timingServiceFactory = timingServiceFactory;
         this.preferencesHelper = preferencesHelper;
 
+        this.preferencesHelper.ensureDefaultCalculationMethod();
+
         todayDate = LocalDate.now();
         mDayPrayers = new MutableLiveData<>();
         mErrorMessage = new MutableLiveData<>();

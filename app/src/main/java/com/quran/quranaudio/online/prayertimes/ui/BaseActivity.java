@@ -45,7 +45,10 @@ public class BaseActivity extends AppCompatActivity {
             return context;
         }
 
-        Locale locale = new Locale(language);
+        // 🔄 资源目录映射：应用使用 "id"，但 Android 资源使用 "in"
+        String resourceLanguage = "id".equals(language) ? "in" : language;
+        
+        Locale locale = new Locale(resourceLanguage);
         Locale.setDefault(locale);
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N) {
             return updateResourcesLocale(context, locale);

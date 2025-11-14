@@ -27,6 +27,7 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ProgressBar;
 
 import java.lang.ref.WeakReference;
 
@@ -64,17 +65,25 @@ import com.quran.quranaudio.online.prayertimes.utils.UiUtils;
 import com.quran.quranaudio.online.R;
 import com.quran.quranaudio.online.quests.data.SalahName;
 import com.quran.quranaudio.online.quests.viewmodel.SalahViewModel;
+import com.quran.quranaudio.online.prayertimes.repository.PrayerLogRepository;
+import com.quran.quranaudio.online.prayertimes.models.PrayerLog;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.TextStyle;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -84,7 +93,7 @@ import cl.jesualex.stooltip.Position;
 import cl.jesualex.stooltip.Tooltip;
 
 
-public class PrayersFragment extends Fragment {
+public class PrayersFragment extends Fragment implements com.quran.quranaudio.online.prayertimes.ui.PrayerLogBottomSheet.OnPrayerLoggedListener {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -92,6 +101,10 @@ public class PrayersFragment extends Fragment {
     private SalahViewModel salahViewModel;
     private GoogleAuthManager googleAuthManager;
     private ActivityResultLauncher<Intent> signInLauncher;
+    private PrayerLogRepository prayerLogRepository;
+    
+    // 🔔 用于接收通知设置页面的返回结果
+    private ActivityResultLauncher<Intent> notificationSettingsLauncher;
     
     // Salah track buttons
     private MaterialButton fajrTrackButton;
@@ -100,12 +113,24 @@ public class PrayersFragment extends Fragment {
     private MaterialButton maghribTrackButton;
     private MaterialButton ishaTrackButton;
     
-    // Completed icons (ImageView) for displaying ic_correct.png
-    private ImageView fajrCompletedIcon;
-    private ImageView dhuhrCompletedIcon;
-    private ImageView asrCompletedIcon;
-    private ImageView maghribCompletedIcon;
-    private ImageView ishaCompletedIcon;
+    // Status icons (ImageView) for displaying different states
+    private ImageView fajrStatusIcon;
+    private ImageView dhuhrStatusIcon;
+    private ImageView asrStatusIcon;
+    private ImageView maghribStatusIcon;
+    private ImageView ishaStatusIcon;
+    
+    // Store current prayer log status and IDs for each prayer
+    private java.util.Map<String, PrayerLog> todayPrayerLogs = new java.util.HashMap<>();
+    
+    // Store today's prayer times for comparison
+    private DayPrayer currentDayPrayer = null;
+    private final Set<String> autoMissInProgress = new HashSet<>();
+
+    // Qada summary UI
+    private View qadaSummaryCard;
+    private TextView qadaCountTextView;
+    private ProgressBar qadaProgressBar;
 
     private boolean fajrCompletedLast;
     private boolean dhuhrCompletedLast;
@@ -174,6 +199,29 @@ public class PrayersFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
+        // 🔔 初始化通知设置页面返回结果监听器
+        notificationSettingsLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Log.d("PrayersFragment", "🔔 Notification settings changed, rescheduling alarms");
+                    
+                    // 重新调度闹钟（复用现有的调度逻辑）
+                    if (currentDayPrayer != null) {
+                        startPrayerSchedulerWork(currentDayPrayer);
+                        Log.d("PrayersFragment", "✅ Alarms rescheduled successfully");
+                    } else {
+                        Log.w("PrayersFragment", "⚠️ currentDayPrayer is null, cannot reschedule");
+                    }
+                    
+                    // 刷新通知图标
+                    refreshAllNotificationIcons();
+                } else {
+                    Log.d("PrayersFragment", "ℹ️ Notification settings not changed");
+                }
+            }
+        );
+        
         // Initialize Google Auth Manager for login support
         try {
             googleAuthManager = new GoogleAuthManager(requireContext());
@@ -196,6 +244,9 @@ public class PrayersFragment extends Fragment {
                         handleSignInResult(result.getData());
                     } else {
                         Log.w("PrayersFragment", "Sign-in canceled or failed");
+                        if (googleAuthManager != null) {
+                            googleAuthManager.logSignInDiagnostics(result.getData(), "PrayersFragment-CANCELLED");
+                        }
                         Toast.makeText(requireContext(), "Login cancelled", Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
@@ -296,6 +347,9 @@ public class PrayersFragment extends Fragment {
                                 error));
 
         homeViewModel.getDayPrayers().observe(getViewLifecycleOwner(), dayPrayer -> {
+            // Store the day prayer for time checking
+            currentDayPrayer = dayPrayer;
+            
             updateDatesTextViews(dayPrayer);
             updateNextPrayerViews(dayPrayer);
             updateTimingsTextViews(dayPrayer);
@@ -355,6 +409,12 @@ public class PrayersFragment extends Fragment {
     public void onResume() {
         super.onResume();
         
+        // 🔄 刷新祷告状态（用户可能在其他页面记录了祷告）
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            Log.d("PrayersFragment", "🔄 onResume: Reloading prayer logs");
+            loadTodayPrayerLogs();
+        }
+        
         // 刷新所有祷告时间的通知图标（用户可能从通知设置页面返回）
         refreshAllNotificationIcons();
         
@@ -407,6 +467,16 @@ public class PrayersFragment extends Fragment {
         timeRemainingTextView = rootView.findViewById(R.id.timeRemainingTextView);
         circularProgressBar = rootView.findViewById(R.id.circularProgressBar);
         calculationMethodTextView = rootView.findViewById(R.id.calculation_method_text_view);
+
+        qadaSummaryCard = rootView.findViewById(R.id.card_qada_summary);
+        qadaCountTextView = rootView.findViewById(R.id.tv_total_qada_count);
+        qadaProgressBar = rootView.findViewById(R.id.progress_qada_summary);
+
+        if (qadaSummaryCard != null) {
+            qadaSummaryCard.setOnClickListener(v -> onOutstandingQadaClicked());
+        }
+
+        applyDefaultQadaSummary();
 
 
         fajrTimingTextView = rootView.findViewById(R.id.fajr_timing_text_view);
@@ -504,12 +574,37 @@ public class PrayersFragment extends Fragment {
         maghribTrackButton = rootView.findViewById(R.id.maghrib_track_button);
         ishaTrackButton = rootView.findViewById(R.id.isha_track_button);
         
-        // Initialize completed icons (ImageView)
-        fajrCompletedIcon = rootView.findViewById(R.id.fajr_completed_icon);
-        dhuhrCompletedIcon = rootView.findViewById(R.id.dhuhr_completed_icon);
-        asrCompletedIcon = rootView.findViewById(R.id.asr_completed_icon);
-        maghribCompletedIcon = rootView.findViewById(R.id.maghrib_completed_icon);
-        ishaCompletedIcon = rootView.findViewById(R.id.isha_completed_icon);
+        // Initialize status icons (ImageView) - using completed icon views for now
+        fajrStatusIcon = rootView.findViewById(R.id.fajr_completed_icon);
+        dhuhrStatusIcon = rootView.findViewById(R.id.dhuhr_completed_icon);
+        asrStatusIcon = rootView.findViewById(R.id.asr_completed_icon);
+        maghribStatusIcon = rootView.findViewById(R.id.maghrib_completed_icon);
+        ishaStatusIcon = rootView.findViewById(R.id.isha_completed_icon);
+        
+        // Make status icons clickable
+        if (fajrStatusIcon != null) {
+            fajrStatusIcon.setClickable(true);
+            fajrStatusIcon.setOnClickListener(v -> onSalahTrackClicked(SalahName.FAJR, fajrTrackButton));
+        }
+        if (dhuhrStatusIcon != null) {
+            dhuhrStatusIcon.setClickable(true);
+            dhuhrStatusIcon.setOnClickListener(v -> onSalahTrackClicked(SalahName.DHUHR, dhuhrTrackButton));
+        }
+        if (asrStatusIcon != null) {
+            asrStatusIcon.setClickable(true);
+            asrStatusIcon.setOnClickListener(v -> onSalahTrackClicked(SalahName.ASR, asrTrackButton));
+        }
+        if (maghribStatusIcon != null) {
+            maghribStatusIcon.setClickable(true);
+            maghribStatusIcon.setOnClickListener(v -> onSalahTrackClicked(SalahName.MAGHRIB, maghribTrackButton));
+        }
+        if (ishaStatusIcon != null) {
+            ishaStatusIcon.setClickable(true);
+            ishaStatusIcon.setOnClickListener(v -> onSalahTrackClicked(SalahName.ISHA, ishaTrackButton));
+        }
+        
+        // Initialize PrayerLogRepository
+        prayerLogRepository = new PrayerLogRepository();
     }
     
     /**
@@ -551,33 +646,63 @@ public class PrayersFragment extends Fragment {
     }
     
     /**
-     * Handles click on a salah track button.
-     * 未登录用户点击时触发Google登录，登录后自动保存状态
+     * Handles click on a salah track button or status icon.
+     * 根据当前状态执行不同操作
      */
     private void onSalahTrackClicked(SalahName salahName, MaterialButton button) {
-        Log.d("PrayersFragment", "🔘 Track button clicked: " + salahName.getDisplayName());
+        Log.d("PrayersFragment", "🔘 Prayer clicked: " + salahName.getDisplayName());
         
         // Check if user is logged in
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             Log.d("PrayersFragment", "❌ User not logged in, showing login dialog");
-            // Show login dialog for unauthenticated users
             showLoginDialog(salahName, button);
             return;
         }
         
-        // User is logged in, proceed with toggle
-        Log.d("PrayersFragment", "✅ User logged in, toggling status for: " + salahName.getDisplayName());
+        String prayerName = salahName.getDisplayName();
+        PrayerLog existingLog = todayPrayerLogs.get(prayerName);
         
-        // Disable button temporarily to prevent double-clicks
-        button.setEnabled(false);
+        if (existingLog == null) {
+            // Pending state: Show new log dialog (default to Ada')
+            Log.d("PrayersFragment", "📝 Pending state - showing new log dialog (default: Ada')");
+            showPrayerLogBottomSheet(prayerName, null, PrayerLog.PrayerStatus.ADA);
+        } else {
+            // Has existing log: Check status
+            PrayerLog.PrayerStatus status = existingLog.getStatus();
+            if (status == PrayerLog.PrayerStatus.ADA) {
+                // Ada': Edit mode (can change to Qada')
+                Log.d("PrayersFragment", "✅ Ada' state - showing edit dialog");
+                showPrayerLogBottomSheet(prayerName, existingLog.getId(), null);
+            } else if (status == PrayerLog.PrayerStatus.QADA) {
+                // Qada': Edit mode (can modify time/notes)
+                Log.d("PrayersFragment", "⚠️ Qada' state - showing edit dialog");
+                showPrayerLogBottomSheet(prayerName, existingLog.getId(), null);
+            } else if (status == PrayerLog.PrayerStatus.MISSED) {
+                // Missed: Create Qada' log (default to Qada' status)
+                Log.d("PrayersFragment", "❌ Missed state - showing Qada' log dialog");
+                showPrayerLogBottomSheet(prayerName, null, PrayerLog.PrayerStatus.QADA);
+            }
+        }
+    }
+    
+    /**
+     * 显示祷告记录 Bottom Sheet
+     * @param prayerName 祷告名称
+     * @param existingLogId 现有记录 ID（编辑模式），null 表示新建
+     * @param initialStatus 初始状态（用于 Missed -> Qada 转换）
+     */
+    private void showPrayerLogBottomSheet(String prayerName, String existingLogId, PrayerLog.PrayerStatus initialStatus) {
+        com.quran.quranaudio.online.prayertimes.ui.PrayerLogBottomSheet bottomSheet;
         
-        salahViewModel.toggleSalahStatus(salahName);
+        if (existingLogId != null) {
+            // Edit mode
+            bottomSheet = com.quran.quranaudio.online.prayertimes.ui.PrayerLogBottomSheet.Companion.newInstanceForEdit(prayerName, existingLogId);
+        } else {
+            // New mode
+            bottomSheet = com.quran.quranaudio.online.prayertimes.ui.PrayerLogBottomSheet.Companion.newInstance(prayerName, initialStatus, null);
+        }
         
-        // Re-enable after a short delay
-        button.postDelayed(() -> {
-            button.setEnabled(true);
-            Log.d("PrayersFragment", "🔓 Button re-enabled for: " + salahName.getDisplayName());
-        }, 500);
+        bottomSheet.show(getChildFragmentManager(), "PrayerLogBottomSheet");
     }
     
     /**
@@ -585,13 +710,29 @@ public class PrayersFragment extends Fragment {
      */
     private void showLoginDialog(SalahName salahName, MaterialButton button) {
         new androidx.appcompat.app.AlertDialog.Builder(requireContext())
-            .setTitle("Login Required")
-            .setMessage("Please login with your Google account to track your prayers and sync across devices.")
-            .setPositiveButton("Login with Google", (dialog, which) -> {
+            .setTitle(getString(R.string.qada_login_required_title))
+            .setMessage(getString(R.string.qada_login_required_message))
+            .setPositiveButton(getString(R.string.login_with_google), (dialog, which) -> {
                 dialog.dismiss();
                 initiateGoogleSignIn();
             })
-            .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+            .setNegativeButton(getString(R.string.cancel), (dialog, which) -> dialog.dismiss())
+            .setCancelable(true)
+            .show();
+    }
+    
+    /**
+     * Shows generic login dialog (for Qada tracker access)
+     */
+    private void showGenericLoginDialog() {
+        new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.qada_login_required_title))
+            .setMessage(getString(R.string.qada_login_required_message))
+            .setPositiveButton(getString(R.string.login_with_google), (dialog, which) -> {
+                dialog.dismiss();
+                initiateGoogleSignIn();
+            })
+            .setNegativeButton(getString(R.string.cancel), (dialog, which) -> dialog.dismiss())
             .setCancelable(true)
             .show();
     }
@@ -683,60 +824,525 @@ public class PrayersFragment extends Fragment {
      * Called after successful login or when fragment is created for logged-in users.
      */
     private void startObservingSalahRecords() {
-        if (salahViewModel == null) return;
+        if (salahViewModel == null || prayerLogRepository == null) return;
         
-        // Observe salah record changes and update button states
+        // Load prayer logs and update UI
+        loadTodayPrayerLogs();
+        
+        // Still observe salah records for backwards compatibility
         salahViewModel.getTodaySalahRecord().observe(getViewLifecycleOwner(), record -> {
             Log.d("PrayersFragment", "📝 Salah record received: " + (record != null ? record.getTotalCompleted() + "/5 completed" : "null"));
-            
-            if (record != null) {
-                // Update all button states and completed icons
-                updateTrackButton(SalahName.FAJR, fajrTrackButton, fajrCompletedIcon, record.getFajr());
-                updateTrackButton(SalahName.DHUHR, dhuhrTrackButton, dhuhrCompletedIcon, record.getDhuhr());
-                updateTrackButton(SalahName.ASR, asrTrackButton, asrCompletedIcon, record.getAsr());
-                updateTrackButton(SalahName.MAGHRIB, maghribTrackButton, maghribCompletedIcon, record.getMaghrib());
-                updateTrackButton(SalahName.ISHA, ishaTrackButton, ishaCompletedIcon, record.getIsha());
+            // Note: We now use prayer_logs collection instead
+        });
+    }
+    
+    /**
+     * Load today's prayer logs and update UI
+     */
+    private void loadTodayPrayerLogs() {
+        Log.d("PrayersFragment", "🔍 loadTodayPrayerLogs() called");
+        
+        if (prayerLogRepository == null) {
+            Log.e("PrayersFragment", "❌ PrayerLogRepository is null!");
+            return;
+        }
+        
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            Log.d("PrayersFragment", "ℹ️ User not logged in, resetting to Pending");
+            resetAllPrayersToPending();
+            applyDefaultQadaSummary();
+            return;
+        }
+        
+        Log.d("PrayersFragment", "📡 Querying prayer logs from Firestore...");
+        
+        // Load all prayer logs at once using callback
+        prayerLogRepository.getTodayPrayerLogsAsync(new PrayerLogRepository.PrayerLogsCallback() {
+            @Override
+            public void onResult(java.util.Map<String, PrayerLog> logs) {
+                Log.d("PrayersFragment", "📥 Callback received with " + logs.size() + " logs");
+                
+                if (getActivity() == null) {
+                    Log.w("PrayersFragment", "⚠️ Activity is null, cannot update UI");
+                    return;
+                }
+                
+                getActivity().runOnUiThread(() -> {
+                    Log.d("PrayersFragment", "🔄 Updating UI on main thread");
+                    todayPrayerLogs.clear();
+                    todayPrayerLogs.putAll(logs);
+                    
+                    // Log all received logs
+                    for (java.util.Map.Entry<String, PrayerLog> entry : logs.entrySet()) {
+                        Log.d("PrayersFragment", "  📝 " + entry.getKey() + " -> " + entry.getValue().getStatus());
+                    }
+                    
+                    // Update UI for each prayer
+                    updatePrayerStatusUI(SalahName.FAJR, logs.get("Fajr"));
+                    updatePrayerStatusUI(SalahName.DHUHR, logs.get("Dhuhr"));
+                    updatePrayerStatusUI(SalahName.ASR, logs.get("Asr"));
+                    updatePrayerStatusUI(SalahName.MAGHRIB, logs.get("Maghrib"));
+                    updatePrayerStatusUI(SalahName.ISHA, logs.get("Isha"));
+                    
+                    Log.d("PrayersFragment", "✅ UI update completed");
 
-                completionStatesInitialized = true;
-            } else {
-                // Record is null (no data yet), keep default Track state
-                Log.d("PrayersFragment", "📝 No salah record found, keeping default Track state");
+                    loadQadaSummary();
+                });
             }
         });
+    }
+    
+    /**
+     * Reset all prayers to Pending state (show Track buttons)
+     */
+    private void resetAllPrayersToPending() {
+        if (getActivity() == null) return;
+        getActivity().runOnUiThread(() -> {
+            updatePrayerStatusUI(SalahName.FAJR, null);
+            updatePrayerStatusUI(SalahName.DHUHR, null);
+            updatePrayerStatusUI(SalahName.ASR, null);
+            updatePrayerStatusUI(SalahName.MAGHRIB, null);
+            updatePrayerStatusUI(SalahName.ISHA, null);
+        });
+    }
+
+    private void loadQadaSummary() {
+        if (!isAdded()) {
+            return;
+        }
+
+        if (prayerLogRepository == null) {
+            Log.e("PrayersFragment", "❌ PrayerLogRepository is null when loading Qada summary");
+            return;
+        }
+
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            applyDefaultQadaSummary();
+            return;
+        }
+
+        Log.d("PrayersFragment", "📊 Loading Qada summary");
+        prayerLogRepository.getQadaSummaryAsync(new PrayerLogRepository.QadaSummaryCallback() {
+            @Override
+            public void onResult(PrayerLogRepository.QadaSummary summary) {
+                if (!isAdded() || getActivity() == null) {
+                    return;
+                }
+
+                getActivity().runOnUiThread(() -> updateQadaSummaryUI(summary));
+            }
+        });
+    }
+
+    private void updateQadaSummaryUI(PrayerLogRepository.QadaSummary summary) {
+        if (!isAdded()) {
+            return;
+        }
+
+        if (qadaCountTextView == null || qadaProgressBar == null) {
+            return;
+        }
+
+        int outstanding = 0;
+        int completed = 0;
+
+        if (summary != null) {
+            outstanding = Math.max(0, summary.getOutstandingCount());
+            completed = Math.max(0, summary.getCompletedCount());
+        }
+
+        int total = Math.max(outstanding + completed, 0);
+
+        if (outstanding > 0) {
+            String formatted = NumberFormat.getIntegerInstance().format(outstanding);
+            String displayText = getString(R.string.qada_count_prayers, formatted);
+            qadaCountTextView.setText(displayText);
+            qadaCountTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.qada_alert_red));
+        } else {
+            qadaCountTextView.setText(getString(R.string.qada_count_zero));
+            qadaCountTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.bottom_nav_selected));
+        }
+
+        int progressValue = 0;
+        if (outstanding == 0 && total > 0) {
+            // Qada' 总数为 0 时，显示 100% 绿色进度条 (Alhamdulillah!)
+            progressValue = 100;
+            qadaProgressBar.setProgressTintList(android.content.res.ColorStateList.valueOf(
+                ContextCompat.getColor(requireContext(), R.color.qada_progress_complete)
+            ));
+        } else if (total > 0) {
+            progressValue = Math.round((completed * 100f) / total);
+            progressValue = Math.max(0, Math.min(100, progressValue));
+            qadaProgressBar.setProgressTintList(android.content.res.ColorStateList.valueOf(
+                ContextCompat.getColor(requireContext(), R.color.qada_progress_fill)
+            ));
+        } else {
+            // No qada start date configured or no prayers yet
+            qadaProgressBar.setProgressTintList(android.content.res.ColorStateList.valueOf(
+                ContextCompat.getColor(requireContext(), R.color.qada_progress_fill)
+            ));
+        }
+
+        qadaProgressBar.setProgress(progressValue);
+    }
+
+    private void applyDefaultQadaSummary() {
+        if (qadaCountTextView != null) {
+            CharSequence zeroText = qadaCountTextView.getResources().getString(R.string.qada_count_zero);
+            qadaCountTextView.setText(zeroText);
+            Context context = qadaCountTextView.getContext();
+            if (context != null) {
+                qadaCountTextView.setTextColor(ContextCompat.getColor(context, R.color.bottom_nav_selected));
+            }
+        }
+
+        if (qadaProgressBar != null) {
+            qadaProgressBar.setProgress(0);
+        }
+    }
+
+    private void onOutstandingQadaClicked() {
+        if (!isAdded()) {
+            return;
+        }
+
+        Log.d("PrayersFragment", "📊 Outstanding Qada card clicked");
+
+        // Check if user is logged in
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            Log.d("PrayersFragment", "❌ User not logged in, showing login dialog");
+            showGenericLoginDialog();
+            return;
+        }
+
+        // Check if user has configured Qada start date
+        checkAndShowQadaOnboarding();
+    }
+    
+    /**
+     * Check if user has configured Qada start date
+     * If not, show onboarding dialog
+     */
+    private void checkAndShowQadaOnboarding() {
+        if (prayerLogRepository == null) {
+            return;
+        }
+        
+        kotlinx.coroutines.CoroutineScope scope = kotlinx.coroutines.CoroutineScopeKt.CoroutineScope(
+            kotlinx.coroutines.Dispatchers.getIO()
+        );
+        
+        prayerLogRepository.getQadaStartDateAsync(new PrayerLogRepository.QadaStartDateCallback() {
+            @Override
+            public void onSuccess(String startDate) {
+                if (getActivity() == null) return;
+                
+                getActivity().runOnUiThread(() -> {
+                    if (startDate == null || startDate.isEmpty()) {
+                        // Show onboarding dialog
+                        Log.d("PrayersFragment", "📅 No Qada start date configured, showing onboarding");
+                        showQadaOnboardingDialog();
+                    } else {
+                        // Already configured, open Qada Tracker Activity
+                        Log.d("PrayersFragment", "📅 Qada start date already configured: " + startDate);
+                        openQadaTrackerActivity();
+                    }
+                });
+            }
+            
+            @Override
+            public void onError(Exception e) {
+                Log.e("PrayersFragment", "Error checking Qada start date", e);
+            }
+        });
+    }
+    
+    /**
+     * Open Qada Tracker Activity
+     */
+    private void openQadaTrackerActivity() {
+        Intent intent = new Intent(requireContext(), com.quran.quranaudio.online.prayertimes.ui.QadaTrackerActivity.class);
+        startActivity(intent);
+    }
+    
+    /**
+     * Show Qada onboarding dialog
+     */
+    private void showQadaOnboardingDialog() {
+        if (!isAdded() || getContext() == null) {
+            return;
+        }
+        
+        com.quran.quranaudio.online.prayertimes.ui.QadaOnboardingDialog dialog = 
+            new com.quran.quranaudio.online.prayertimes.ui.QadaOnboardingDialog(
+                requireContext(),
+                startDate -> {
+                    Log.d("PrayersFragment", "✅ Qada start date configured: " + startDate);
+                    // Reload Qada summary
+                    loadQadaSummary();
+                    // Open Qada Tracker Activity
+                    openQadaTrackerActivity();
+                    return null;
+                }
+            );
+        
+        dialog.show();
+    }
+    
+    /**
+     * Updates prayer status UI based on prayer log
+     * @param salahName The prayer name
+     * @param log The prayer log (null means Pending)
+     */
+    private void updatePrayerStatusUI(SalahName salahName, PrayerLog log) {
+        Log.d("PrayersFragment", "🎨 updatePrayerStatusUI called for " + salahName + ", log=" + (log != null ? log.getStatus() : "null"));
+        
+        MaterialButton button = getTrackButton(salahName);
+        ImageView statusIcon = getStatusIcon(salahName);
+        
+        if (button == null || statusIcon == null) {
+            Log.e("PrayersFragment", "❌ Button or icon is null for " + salahName + " (button=" + button + ", icon=" + statusIcon + ")");
+            return;
+        }
+        
+        Log.d("PrayersFragment", "  📍 Button visibility before: " + (button.getVisibility() == android.view.View.VISIBLE ? "VISIBLE" : "GONE"));
+        Log.d("PrayersFragment", "  📍 Icon visibility before: " + (statusIcon.getVisibility() == android.view.View.VISIBLE ? "VISIBLE" : "GONE"));
+        
+        if (log == null) {
+            // No log: Check if prayer time has passed
+            boolean isPrayerTimePassed = isPrayerTimePassed(salahName);
+            
+            if (isPrayerTimePassed) {
+                ensureMissedLogRecorded(salahName);
+                // Prayer time has passed without logging: Show as Missed ❌
+                button.setVisibility(android.view.View.GONE);
+                statusIcon.setVisibility(android.view.View.VISIBLE);
+                statusIcon.setImageResource(R.drawable.ic_error);
+                statusIcon.setColorFilter(0xFFF44336, android.graphics.PorterDuff.Mode.SRC_IN); // Red
+                Log.d("PrayersFragment", "❌ " + salahName + ": Missed (time passed, no log) - UPDATED");
+            } else {
+                // Prayer time not yet passed: Show Track button (Pending)
+                button.setVisibility(android.view.View.VISIBLE);
+                statusIcon.setVisibility(android.view.View.GONE);
+                Log.d("PrayersFragment", "📝 " + salahName + ": Pending (Track button) - UPDATED");
+            }
+        } else {
+            // Has log: Hide button, show appropriate icon
+            button.setVisibility(android.view.View.GONE);
+            statusIcon.setVisibility(android.view.View.VISIBLE);
+            
+            // Set icon based on status
+            PrayerLog.PrayerStatus status = log.getStatus();
+            if (status == PrayerLog.PrayerStatus.ADA) {
+                // Ada' (准时完成): Green check circle ✅
+                statusIcon.setImageResource(R.drawable.ic_check_circle);
+                statusIcon.setColorFilter(null); // Clear any color filter (icon has built-in color)
+                Log.d("PrayersFragment", "✅ " + salahName + ": Ada' (green check circle) - UPDATED");
+            } else if (status == PrayerLog.PrayerStatus.QADA) {
+                // Qada' (已弥补): Orange warning ⚠️
+                statusIcon.setImageResource(R.drawable.ic_warning);
+                statusIcon.setColorFilter(0xFFFF9800, android.graphics.PorterDuff.Mode.SRC_IN); // Orange
+                Log.d("PrayersFragment", "⚠️ " + salahName + ": Qada' (orange warning) - UPDATED");
+            } else if (status == PrayerLog.PrayerStatus.MISSED) {
+                // Missed (错过): Red error ❌
+                statusIcon.setImageResource(R.drawable.ic_error);
+                statusIcon.setColorFilter(0xFFF44336, android.graphics.PorterDuff.Mode.SRC_IN); // Red
+                Log.d("PrayersFragment", "❌ " + salahName + ": Missed (red error) - UPDATED");
+            }
+            
+            // Log icon resource for debugging
+            try {
+                String resourceName = getResources().getResourceEntryName(statusIcon.getDrawable().getConstantState().hashCode());
+                Log.d("PrayersFragment", "  🎨 Icon resource: " + resourceName);
+            } catch (Exception e) {
+                Log.d("PrayersFragment", "  🎨 Icon resource: [unable to determine]");
+            }
+        }
+        
+        Log.d("PrayersFragment", "  📍 Button visibility after: " + (button.getVisibility() == android.view.View.VISIBLE ? "VISIBLE" : "GONE"));
+        Log.d("PrayersFragment", "  📍 Icon visibility after: " + (statusIcon.getVisibility() == android.view.View.VISIBLE ? "VISIBLE" : "GONE"));
+    }
+    
+    /**
+     * Check if prayer time has passed
+     * Returns true if the prayer time has passed and the next prayer's time has also passed
+     */
+    private boolean isPrayerTimePassed(SalahName salahName) {
+        if (currentDayPrayer == null) {
+            Log.d("PrayersFragment", "⚠️ isPrayerTimePassed(" + salahName + "): currentDayPrayer is null, returning false");
+            return false;
+        }
+        
+        try {
+            LocalDateTime prayerTime = getPrayerTime(salahName);
+            if (prayerTime == null) {
+                Log.d("PrayersFragment", "⚠️ isPrayerTimePassed(" + salahName + "): prayerTime is null, returning false");
+                return false;
+            }
+
+            ZoneId zoneId = resolveZoneId();
+            ZonedDateTime now = ZonedDateTime.now(zoneId);
+            ZonedDateTime prayerDateTime = prayerTime.atZone(zoneId);
+
+            boolean hasPassed = !now.isBefore(prayerDateTime);
+
+            Log.d(
+                "PrayersFragment",
+                "✅ isPrayerTimePassed(" + salahName + "): " + hasPassed +
+                    " (now=" + now + ", prayer=" + prayerDateTime + ")"
+            );
+
+            return hasPassed;
+            
+        } catch (Exception e) {
+            Log.e("PrayersFragment", "❌ Error in isPrayerTimePassed: " + e.getMessage(), e);
+            return false;
+        }
+    }
+    
+    /**
+     * Get the LocalDateTime for a specific prayer
+     */
+    private LocalDateTime getPrayerTime(SalahName salahName) {
+        if (currentDayPrayer == null || currentDayPrayer.getTimings() == null) {
+            return null;
+        }
+        
+        Map<PrayerEnum, LocalDateTime> timings = currentDayPrayer.getTimings();
+        
+        switch (salahName) {
+            case FAJR:
+                return timings.get(PrayerEnum.FAJR);
+            case DHUHR:
+                return timings.get(PrayerEnum.DHOHR);
+            case ASR:
+                return timings.get(PrayerEnum.ASR);
+            case MAGHRIB:
+                return timings.get(PrayerEnum.MAGHRIB);
+            case ISHA:
+                return timings.get(PrayerEnum.ICHA);
+            default:
+                return null;
+        }
+    }
+
+    private ZoneId resolveZoneId() {
+        if (currentDayPrayer != null && currentDayPrayer.getTimezone() != null) {
+            try {
+                return ZoneId.of(currentDayPrayer.getTimezone());
+            } catch (Exception ignored) {
+                Log.w("PrayersFragment", "⚠️ Invalid timezone from DayPrayer: " + currentDayPrayer.getTimezone());
+            }
+        }
+        return ZoneId.systemDefault();
+    }
+
+    private void ensureMissedLogRecorded(SalahName salahName) {
+        if (prayerLogRepository == null || FirebaseAuth.getInstance().getCurrentUser() == null) {
+            return;
+        }
+
+        String prayerName = salahName.getDisplayName();
+        if (autoMissInProgress.contains(prayerName)) {
+            return;
+        }
+
+        autoMissInProgress.add(prayerName);
+
+        String todayDate = getTodayDateString();
+        prayerLogRepository.markPrayerAsMissedIfNeededAsync(prayerName, todayDate, new PrayerLogRepository.MarkMissedCallback() {
+            @Override
+            public void onComplete(boolean created) {
+                autoMissInProgress.remove(prayerName);
+                Log.d("PrayersFragment", "markPrayerAsMissedIfNeededAsync completed for " + prayerName + ", created=" + created);
+                if (created) {
+                    loadTodayPrayerLogs();
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+                autoMissInProgress.remove(prayerName);
+                Log.e("PrayersFragment", "Failed to auto-mark " + prayerName + " as Missed", e);
+            }
+        });
+    }
+
+    private String getTodayDateString() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return java.time.LocalDate.now().toString();
+        } else {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            return formatter.format(new Date());
+        }
+    }
+    
+    /**
+     * Get the next prayer after the given prayer
+     */
+    private SalahName getNextPrayer(SalahName current) {
+        switch (current) {
+            case FAJR:
+                return SalahName.DHUHR;
+            case DHUHR:
+                return SalahName.ASR;
+            case ASR:
+                return SalahName.MAGHRIB;
+            case MAGHRIB:
+                return SalahName.ISHA;
+            case ISHA:
+                return null; // Last prayer of the day
+            default:
+                return null;
+        }
+    }
+    
+    /**
+     * Get track button for a prayer
+     */
+    private MaterialButton getTrackButton(SalahName salahName) {
+        switch (salahName) {
+            case FAJR: return fajrTrackButton;
+            case DHUHR: return dhuhrTrackButton;
+            case ASR: return asrTrackButton;
+            case MAGHRIB: return maghribTrackButton;
+            case ISHA: return ishaTrackButton;
+            default: return null;
+        }
+    }
+    
+    /**
+     * Get status icon for a prayer
+     */
+    private ImageView getStatusIcon(SalahName salahName) {
+        switch (salahName) {
+            case FAJR: return fajrStatusIcon;
+            case DHUHR: return dhuhrStatusIcon;
+            case ASR: return asrStatusIcon;
+            case MAGHRIB: return maghribStatusIcon;
+            case ISHA: return ishaStatusIcon;
+            default: return null;
+        }
     }
     
     /**
      * Updates the track button and completed icon visibility based on completion status.
      * ✅ Completed: Hide Track button, show ic_correct.png ImageView
      * ⭕ Not completed: Show "Track" button, hide completed icon
+     * @deprecated Use updatePrayerStatusUI instead
      */
+    @Deprecated
     private void updateTrackButton(SalahName salahName, MaterialButton button, ImageView completedIcon, boolean isCompleted) {
+        // Legacy method - kept for backwards compatibility
         if (button == null || completedIcon == null) {
             Log.w("PrayersFragment", "⚠️ Button or icon is null, cannot update");
             return;
         }
-        
-        String buttonId = getResources().getResourceEntryName(button.getId());
-        Log.d("PrayersFragment", "🎨 Updating button " + buttonId + " to " + (isCompleted ? "✓ (completed)" : "Track (uncompleted)"));
-        
-        boolean previouslyCompleted = getPreviousCompletionState(salahName);
-
-        if (completionStatesInitialized && isCompleted && !previouslyCompleted && isAdded()) {
-            try {
-                RatePromptManager.onPrayerTracked(requireActivity());
-            } catch (IllegalStateException e) {
-                Log.w("PrayersFragment", "Fragment not attached when triggering rate prompt", e);
-            }
-        }
-
-        setPreviousCompletionState(salahName, isCompleted);
 
         if (isCompleted) {
-            // Hide Track button, show completed icon (ic_correct.png)
             button.setVisibility(android.view.View.GONE);
             completedIcon.setVisibility(android.view.View.VISIBLE);
         } else {
-            // Show Track button, hide completed icon
             button.setVisibility(android.view.View.VISIBLE);
             completedIcon.setVisibility(android.view.View.GONE);
         }
@@ -961,11 +1567,11 @@ public class PrayersFragment extends Fragment {
             // Get prayer name string resource
             String prayerName = getPrayerNameString(prayerEnum);
             
-            // Launch notification settings activity
+            // 🔔 使用 ActivityResultLauncher 启动通知设置页面，以接收返回结果
             Intent intent = new Intent(requireContext(), com.quran.quranaudio.online.prayertimes.ui.PrayerNotificationSettingsActivity.class);
             intent.putExtra(com.quran.quranaudio.online.prayertimes.ui.PrayerNotificationSettingsActivity.EXTRA_PRAYER_NAME, prayerName);
             intent.putExtra(com.quran.quranaudio.online.prayertimes.ui.PrayerNotificationSettingsActivity.EXTRA_PRAYER_ENUM, prayerEnum.toString());
-            startActivity(intent);
+            notificationSettingsLauncher.launch(intent);
         });
     }
     
@@ -1232,5 +1838,42 @@ public class PrayersFragment extends Fragment {
         } catch (Exception e) {
             Log.e("PrayersFragment", "❌ Error navigating to Tasbih page", e);
         }
+    }
+    
+    /**
+     * Callback from PrayerLogBottomSheet when prayer is successfully logged
+     * Reloads prayer logs to update UI
+     */
+    @Override
+    public void onPrayerLogged(String prayerName) {
+        Log.d("PrayersFragment", "📝 onPrayerLogged callback received: " + prayerName);
+        
+        // Reload prayer logs to refresh UI
+        loadTodayPrayerLogs();
+        
+        // Reload Qada summary to reflect changes
+        loadQadaSummary();
+        
+        // Also update SalahRecord for backwards compatibility
+        if (salahViewModel != null) {
+            try {
+                SalahName salahName = SalahName.valueOf(prayerName.toUpperCase(Locale.US));
+                // Mark as completed if status is ADA or QADA (not MISSED)
+                PrayerLog log = todayPrayerLogs.get(prayerName);
+                if (log != null && (log.getStatus() == PrayerLog.PrayerStatus.ADA || log.getStatus() == PrayerLog.PrayerStatus.QADA)) {
+                    salahViewModel.setSalahStatus(salahName, true);
+                }
+            } catch (IllegalArgumentException e) {
+                Log.e("PrayersFragment", "❌ Invalid prayer name: " + prayerName, e);
+            }
+        }
+    }
+    
+    @Override
+    public void onQadaCountChanged(int delta) {
+        Log.d("PrayersFragment", "🔢 onQadaCountChanged callback received: delta=" + delta);
+        
+        // Reload Qada summary immediately to reflect changes
+        loadQadaSummary();
     }
 }

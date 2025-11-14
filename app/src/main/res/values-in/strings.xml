@@ -46,19 +46,6 @@
     <string name="RateAppTitle">Suka dengan aplikasi ini?</string>
     <string name="RateApp">Bagikan cinta Anda dengan memberikan rating 5 bintang di Play Store.</string>
     <string name="rate_later">Nanti</string>
-    <string name="rate_prompt_title">Alhamdulillah! Bagaimana pengalaman Anda?</string>
-    <string name="rate_prompt_message">Apakah Anda menyukai Quran Majeed?</string>
-    <string name="rate_prompt_submit">Kirim Penilaian</string>
-    <string name="rate_prompt_maybe_later">Nanti Saja</string>
-    <string name="rate_prompt_sorry_title">Kami Sangat Menyesal</string>
-    <string name="rate_prompt_sorry_message">Masukan Anda sangat penting. Tolong beritahu kami bagaimana kami bisa meningkatkan:</string>
-    <string name="rate_prompt_feedback_title">Bagikan Masukan Anda</string>
-    <string name="rate_prompt_feedback_hint">Beritahu kami cara meningkatkan aplikasi</string>
-    <string name="rate_prompt_feedback_send">Kirim</string>
-    <string name="rate_prompt_feedback_cancel">Nanti saja</string>
-    <string name="rate_prompt_close_content">Tutup</string>
-    <string name="rate_prompt_email_subject">Masukan untuk Aplikasi Quran</string>
-    <string name="rate_prompt_feedback_email_error">Tidak ada aplikasi email untuk mengirim masukan.</string>
     <string name="are_you_sure_you_want_to_exit">Apakah Anda Yakin Ingin Keluar?</string>
 
     <!-- privacy policy url -->
@@ -825,9 +812,9 @@ seperti: Waktu Sholat Global, metode perhitungan yang berbeda, notifikasi, memba
     <string name="strTitleFootnote">Catatan Kaki</string>
     <string name="strTitleFootnotes">Catatan Kaki</string>
     <string name="noFootnotesForThisVerse">Tidak ada catatan kaki untuk ayat ini.</string>
-    <string name="strTitleReaderChapters">Surat</string>
+    <string name="strTitleReaderChapters">Surah</string>
     <string name="strTitleReaderJuz">Juz</string>
-    <string name="strTitleReaderChapters2">Surat</string>
+    <string name="strTitleReaderChapters2">Surah</string>
     <string name="strTitleReaderJuz2">Juz</string>
     <string name="strTitleReaderVerses">Ayat</string>
     <string name="strTitleReaderJumpToVerse">Lompat ke ayat</string>
@@ -1239,39 +1226,6 @@ seperti: Waktu Sholat Global, metode perhitungan yang berbeda, notifikasi, memba
     <string name="minutes_45">45 menit sehari</string>
     <string name="minutes_60">60 menit sehari</string>
     
-    <!-- Prayer Card & Tasbih -->
-    <string name="your_location_label">Lokasi Anda</string>
-    <string name="tasbih_total">Total : </string>
-    
-    <!-- Challenge Days -->
-    <string name="challenge_days_placeholder">30 Hari</string>
-    <string name="challenge_days_format">%d Hari</string>
-    
-    <!-- Prayer Notification Settings -->
-    <string name="notification_settings">Pengaturan Notifikasi</string>
-    <string name="notification_type_none">Tidak Ada</string>
-    <string name="notification_type_azan">Azan</string>
-    <string name="notification_type_vibrate">Getar</string>
-    <string name="notification_type_silent">Notifikasi Senyap</string>
-    <string name="notification_type_text_tone">Nada Teks Standar</string>
-    <string name="notification_type_clock">Suara Jam</string>
-    <string name="azan_name">Nama Azan</string>
-    <string name="notification_volume">Volume Notifikasi</string>
-    <string name="pre_prayer_reminder">Atur pengingat sebelum sholat</string>
-    <string name="reminder_minutes_format">%d menit</string>
-    <string name="random_azan">Azan Acak</string>
-    <string name="volume_percentage_format">%d%%</string>
-    <string name="default_volume_display">80%</string>
-    <string name="default_minutes_display">5 menit</string>
-    <string name="content_desc_none">Tidak Ada</string>
-    <string name="content_desc_azan">Azan</string>
-    <string name="content_desc_vibrate">Getar</string>
-    <string name="content_desc_silent">Senyap</string>
-    <string name="content_desc_text_tone">Nada Teks</string>
-    <string name="content_desc_clock">Jam</string>
-    <string name="content_desc_decrease">Kurangi</string>
-    <string name="content_desc_increase">Tambah</string>
-    
     <!-- 🌐 App Language Settings (v1.5.5) -->
     <string name="setting_app_language_title">Bahasa Aplikasi</string>
     <string name="setting_app_language_subtitle">Pilih bahasa yang Anda inginkan</string>
@@ -1283,13 +1237,128 @@ seperti: Waktu Sholat Global, metode perhitungan yang berbeda, notifikasi, memba
     <string name="todays_quests">Tugas Hari Ini</string>
     <string name="complete_x_tasbih">Selesaikan %d Tasbih</string>
 
-    <!-- Last Read Card -->
-    <string name="last_read">Terakhir Dibaca:</string>
-    <string name="continue_reading">Lanjutkan</string>
-    <string name="continue_reading_arrow">Lanjutkan →</string>
-    <string name="verse_no_format">Ayat No: %d</string>
-    <string name="surah_format">%d. %s</string>
-    <string name="juz_format">Juz %d</string>
-    <string name="page_format">Halaman %d</string>
+    <!-- Qada Tracker -->
+    <string name="total_outstanding_qada">Total Qada yang Tertunda</string>
+    <string name="qada_count_zero">0 Salat · Alhamdulillah &gt;</string>
+    <string name="qada_count_prayers">%1$s Salat &gt;</string>
+    <string name="qada_login_required_title">Login Diperlukan</string>
+    <string name="qada_login_required_message">Silakan login dengan akun Google Anda untuk melacak Qada\' dan melihat riwayat salat Anda.</string>
+    <string name="qada_onboarding_title">Kelola Kewajiban Salat Anda</string>
+    <string name="qada_onboarding_description">Sebelum kita mulai melacak salat qada (shalat yang terlewat), silakan tentukan dari kapan Anda ingin mulai menghitung kewajiban.</string>
+    <string name="qada_option_today_title">Mulai dari Hari Ini (Disarankan)</string>
+    <string name="qada_option_today_subtitle">Disarankan untuk memulai kebiasaan baru</string>
+    <string name="qada_option_custom_title">Mulai dari:</string>
+    <string name="qada_option_custom_subtitle">Ketuk untuk memilih tanggal</string>
+    <string name="qada_confirm_button">Konfirmasi dan Mulai Pelacakan</string>
+    <string name="your_activity">Aktivitas Anda</string>
+    <string name="salah_history_qada_tracker">Riwayat Salat &amp; Pelacak Qada</string>
+    <string name="weekly">Mingguan</string>
+    <string name="monthly">Bulanan</string>
+    
+    <!-- Week days abbreviations -->
+    <string name="day_mon">Sen</string>
+    <string name="day_tue">Sel</string>
+    <string name="day_wed">Rab</string>
+    <string name="day_thu">Kam</string>
+    <string name="day_fri">Jum</string>
+    <string name="day_sat">Sab</string>
+    <string name="day_sun">Min</string>
+    
+    <!-- Prayer names -->
+    <string name="prayer_fajr">Subuh</string>
+    <string name="prayer_dhuhr">Dzuhur</string>
+    <string name="prayer_asr">Ashar</string>
+    <string name="prayer_maghrib">Maghrib</string>
+    <string name="prayer_isha">Isya</string>
 
+    <!-- Onboarding Pages -->
+    <string name="strTitleIstiqamah">Istiqamah</string>
+    <string name="onboardDescIstiqamah">Konsistensi dalam Ibadah</string>
+    <string name="strTitleNotificationPermission">Notifikasi</string>
+    <string name="onboardDescNotificationPermission">Tetap konsisten dengan pengingat salat</string>
+    <string name="strTitleFreeTrial">Uji Coba Gratis</string>
+    <string name="onboardDescFreeTrial">7 hari gratis untuk terinspirasi</string>
+    
+    <!-- Quran Version Selection Onboarding Page -->
+    <string name="onboard_quran_title">Apa terjemahan Al-Quran pilihan Anda?</string>
+    <string name="onboard_quran_subtitle">Kami akan menggunakan versi ini untuk semua konteks membaca, belajar, dan kuis utama.</string>
+    <string name="onboard_continue">Lanjutkan</string>
+    
+    <!-- Istiqamah Onboarding Page -->
+    <string name="onboard_istiqamah_title">Istiqamah:\nKonsistensi dalam\nIbadah</string>
+    <string name="onboard_istiqamah_subtitle">Perjalanan kita ke Jannah (Surga) dibangun atas\nusaha yang konsisten setiap hari.</string>
+    <string name="onboard_istiqamah_chart_title">WAKTU YANG DIABDIKAN UNTUK AL-QURAN &amp; SALAT</string>
+    <string name="onboard_istiqamah_description">Dengan pelacakan yang konsisten, Anda akan membangun kebiasaan yang lebih baik, mengurangi salat Qada\' yang tertunda, dan menemukan lebih banyak kedamaian dalam kehidupan sehari-hari. Insya Allah.</string>
+    <string name="onboard_istiqamah_month_jan">Jan</string>
+    <string name="onboard_istiqamah_month_feb">Feb</string>
+    <string name="onboard_istiqamah_month_mar">Mar</string>
+    <string name="onboard_istiqamah_month_apr">Apr</string>
+    <string name="onboard_istiqamah_month_may">Mei</string>
+    <string name="onboard_istiqamah_month_jun">Jun</string>
+    
+    <!-- Notification Permission Onboarding Page -->
+    <string name="onboard_notification_title">Tetap Konsisten dengan\nSalat Anda</string>
+    <string name="onboard_notification_subtitle">Jangan pernah melewatkan salat. Pengingat tepat waktu kami membantu Anda\nmemenuhi kewajiban di mana pun Anda berada.</string>
+    <string name="onboard_notification_dialog_title">QuranApp Ingin Mengirimkan\nNotifikasi Salat &amp; Pembelajaran\nkepada Anda</string>
+    <string name="onboard_notification_dialog_desc">Notifikasi termasuk Adzan, pengingat waktu Salat,\ndan motivasi Qurani harian.</string>
+    <string name="onboard_notification_allow">IZINKAN</string>
+    <string name="onboard_notification_dont_allow">JANGAN IZINKAN</string>
+    <string name="onboard_notification_review">"Alhamdulillah! Aplikasi ini sangat penting. Pengingat waktu salat selalu tepat dan membantu saya tetap konsisten dengan pelacakan Qada\' saya."</string>
+    <string name="onboard_notification_review_name">Aisha K.</string>
+    <string name="onboard_notification_review_verified">(Pengguna Terverifikasi)</string>
+    
+    <!-- Free Trial Onboarding Page -->
+    <string name="onboard_trial_line1">Anda mendapatkan</string>
+    <string name="onboard_trial_line2">7 hari gratis</string>
+    <string name="onboard_trial_line3">untuk terinspirasi oleh</string>
+    <string name="onboard_trial_line4">Firman Allah!</string>
+    <string name="onboard_trial_button">Coba Gratis</string>
+
+    <!-- Subscription -->
+    <string name="go_premium">Tingkatkan ke Premium</string>
+    <string name="unlock_premium_features">Buka semua fitur premium</string>
+    <string name="subscription_heading">Buka Mentor Qurani Pribadi\nAnda</string>
+    <string name="subscription_feature_ai">Jalur Pembelajaran berbasis AI</string>
+    <string name="subscription_feature_ad_free">Ibadah Bebas Iklan</string>
+    <string name="subscription_feature_tafsir">Tafsir &amp; Konteks Mendalam</string>
+    <string name="subscription_feature_quiz">Perpustakaan Kuis Lengkap</string>
+    <string name="subscription_enable_trial">Saya ingin mencoba gratis</string>
+    <string name="subscription_best_value">Nilai Terbaik!</string>
+    <string name="subscription_price_yearly">$17.99 / tahun</string>
+    <string name="subscription_save_vs_monthly">Hemat 50%% dibanding Bulanan</string>
+    <string name="subscription_price_monthly">$2.99 / bulan</string>
+    <string name="subscription_free_trial_badge">Uji coba 7 hari gratis</string>
+    <string name="subscription_monthly_sub_text">Lalu %1$s per bulan. Tidak ada pembayaran sekarang</string>
+    <string name="subscription_yearly_sub_text">Lalu %1$s per tahun</string>
+    <string name="subscription_info_trial_monthly">Jika Anda tidak membatalkan sebelum uji coba 7 hari berakhir, Anda akan dikenakan harga langganan bulanan.</string>
+    <string name="subscription_info_trial_yearly">Jika Anda tidak membatalkan sebelum uji coba 7 hari berakhir, Anda akan dikenakan harga langganan tahunan.</string>
+    <string name="subscription_info_autorenew_yearly">Langganan Anda akan diperpanjang otomatis setiap tahun kecuali dibatalkan.</string>
+    <string name="subscription_info_autorenew_monthly">Langganan Anda akan diperpanjang otomatis setiap bulan kecuali dibatalkan.</string>
+    <string name="subscription_cta_trial">Mulai uji coba &amp; paket</string>
+    <string name="subscription_cta_premium">Pergi Premium Sekarang</string>
+    <string name="subscription_loading">Memuat...</string>
+    <string name="subscription_no_payment_now">TIDAK ADA PEMBAYARAN SEKARANG</string>
+    <string name="subscription_legal_info">Dengan terus menggunakan aplikasi, Anda menerima Ketentuan Penggunaan dan Kebijakan Privasi kami</string>
+    <string name="subscription_error_billing_title">Gagal Terhubung ke Penagihan</string>
+    <string name="subscription_error_billing_message">Tidak dapat terhubung ke Google Play Billing.\n\nKemungkinan penyebab:\n- Google Play Store tidak terinstal atau tidak diperbarui\n- Masalah koneksi jaringan\n- Layanan Google Play dinonaktifkan\n\nSilakan periksa dan coba lagi.</string>
+    <string name="subscription_error_no_products_title">Tidak Ada Paket Langganan Tersedia</string>
+    <string name="subscription_error_no_products_message">Tidak dapat memuat paket langganan.\n\nID produk yang diperlukan:\n- Bulanan: %1$s\n- Tahunan: %2$s\n\nLangkah penyiapan:\n1. Buat produk ini di Google Play Console\n2. Setel statusnya ke status Aktif\n3. Publikasikan aplikasi ke jalur uji (internal/tertutup)\n4. Tambahkan akun uji di Google Play Console\n5. Tunggu 1-2 jam hingga propagasi\n\nUntuk pengujian, gunakan build rilis yang ditandatangani.</string>
+    <string name="subscription_error_plan_title">Paket Tidak Tersedia</string>
+    <string name="subscription_error_plan_message">Paket %1$s yang dipilih tidak tersedia.\n\nID produk: %2$s\n\nPemecahan masalah:\n1. Periksa apakah produk ada di Google Play Console\n2. Pastikan ID produk benar-benar cocok\n3. Pastikan produk disetel ke status Aktif\n4. Pastikan aplikasi dipublikasikan ke jalur uji\n\nCoba pilih paket lain atau hubungi dukungan.</string>
+    <string name="subscription_plan_yearly">Tahunan</string>
+    <string name="subscription_plan_monthly">Bulanan</string>
+    <string name="subscription_message_success">Langganan berhasil diaktifkan!</string>
+    <string name="subscription_message_already_owned">Anda sudah memiliki langganan ini</string>
+    <string name="subscription_message_canceled">Pembelian dibatalkan</string>
+    <string name="subscription_message_failed">Pembelian gagal: %1$s</string>
+    <string name="subscription_message_already_subscribed">Anda sudah berlangganan!</string>
+    <string name="subscription_message_no_offer">Tidak ada penawaran yang tersedia</string>
+    
+    <string name="this_week_progress">Minggu Ini</string>
+    <string name="prayer_breakdown">Rincian Salat</string>
+    <string name="ada_on_time">Ada\' (Tepat Waktu)</string>
+    <string name="qada_made_up">Qada\' (Diganti)</string>
+    <string name="missed">Terlewat</string>
+    <string name="great_consistency">Konsistensi Hebat!</string>
+    <string name="keep_up_the_good_work">Pertahankan kerja bagus Anda</string>
 </resources>

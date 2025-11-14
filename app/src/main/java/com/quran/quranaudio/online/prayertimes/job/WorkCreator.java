@@ -49,10 +49,12 @@ public final class WorkCreator {
                 .setInputData(data)
                 .build();
 
+        // 🔔 使用 REPLACE 策略，确保每次设置更改都会立即重新调度
+        // KEEP 会忽略新的工作，导致设置更改无法生效
         WorkManager.getInstance(context)
                 .enqueueUniqueWork(
                         "ONE_TIME_QURAN_READER_UPDATER",
-                        ExistingWorkPolicy.KEEP,
+                        ExistingWorkPolicy.REPLACE,
                         oneTimeWorkRequest
                 );
     }

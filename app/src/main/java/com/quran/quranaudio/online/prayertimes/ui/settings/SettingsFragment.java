@@ -1,12 +1,15 @@
 package com.quran.quranaudio.online.prayertimes.ui.settings;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,6 +32,7 @@ import com.quran.quranaudio.online.prayertimes.ui.settings.timings.MultipleNumbe
 import com.quran.quranaudio.online.prayertimes.utils.LocaleHelper;
 import com.quran.quranaudio.online.R;
 import com.quran.quranaudio.online.prayertimes.ui.BaseActivity;
+import com.quran.quranaudio.online.subscription.SubscriptionActivity;
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 
 import javax.inject.Inject;
@@ -65,6 +69,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
         // 🌐 Setup App Language Preference
         setupAppLanguagePreference();
+        
+        // 🌟 Setup Premium Subscription Preference
+        setupPremiumSubscriptionPreference();
 
         SharedPreferences sharedPreferences = getPreferenceScreen().getSharedPreferences();
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
@@ -123,12 +130,69 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         }
     }
 
+    /**
+     * 🌟 设置订阅入口点击事件
+     */
+    private void setupPremiumSubscriptionPreference() {
+        Preference premiumPref = getPreferenceScreen().findPreference("PREMIUM_SUBSCRIPTION_PREFERENCE");
+        
+        if (premiumPref != null) {
+            premiumPref.setOnPreferenceClickListener(preference -> {
+                android.util.Log.d("SettingsFragment", "🌟 Premium subscription clicked");
+                Intent intent = new Intent(getContext(), SubscriptionActivity.class);
+                startActivity(intent);
+                return true;
+            });
+        } else {
+            android.util.Log.w("SettingsFragment", "⚠️ Premium subscription preference not found");
+        }
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+        
+        // 🌟 添加订阅入口点击事件
+        if (getActivity() != null) {
+            View rootView = getActivity().findViewById(R.id.container);
+            if (rootView != null) {
+                View premiumButton = rootView.findViewById(R.id.btn_premium_subscription);
+                if (premiumButton != null) {
+                    premiumButton.setOnClickListener(v -> {
+                        android.util.Log.d("SettingsFragment", "🌟 Premium subscription button clicked");
+                        Intent intent = new Intent(getContext(), SubscriptionActivity.class);
+                        startActivity(intent);
+                    });
+                }
+            }
+        }
+        
+        return view;
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         setDivider(new ColorDrawable(Color.TRANSPARENT));
         setDividerHeight(0);
+        
+        // 🌟 设置订阅按钮点击事件（延迟执行，确保布局已加载）
+        view.postDelayed(() -> {
+            View rootView = getActivity() != null ? getActivity().findViewById(R.id.container) : null;
+            if (rootView != null) {
+                View premiumButton = rootView.findViewById(R.id.btn_premium_subscription);
+                if (premiumButton != null) {
+                    premiumButton.setOnClickListener(v -> {
+                        android.util.Log.d("SettingsFragment", "🌟 Premium subscription button clicked");
+                        Intent intent = new Intent(getContext(), SubscriptionActivity.class);
+                        startActivity(intent);
+                    });
+                } else {
+                    android.util.Log.w("SettingsFragment", "⚠️ Premium button not found");
+                }
+            }
+        }, 300);
     }
 
     @Override
@@ -152,8 +216,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         }
 
         if (dialogFragment != null) {
-            dialogFragment.setTargetFragment(this, 0);
-
+            // Note: setTargetFragment() is deprecated in newer Android versions.
+            // PreferenceDialogFragmentCompat automatically finds the parent fragment,
+            // so we don't need to set it explicitly.
             dialogFragment.show(getParentFragmentManager(), DIALOG_FRAGMENT_TAG);
         } else {
             super.onDisplayPreferenceDialog(preference);

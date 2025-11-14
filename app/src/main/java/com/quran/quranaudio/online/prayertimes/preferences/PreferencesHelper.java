@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
 import com.quran.quranaudio.online.R;
+import com.quran.quranaudio.online.prayertimes.common.PrayerEnum;
 import com.quran.quranaudio.online.prayertimes.timings.calculations.CalculationMethodEnum;
 import com.quran.quranaudio.online.prayertimes.timings.calculations.CountryCalculationMethod;
 import com.quran.quranaudio.online.prayertimes.timings.calculations.LatitudeAdjustmentMethod;
@@ -30,6 +31,13 @@ import javax.inject.Singleton;
 
 @Singleton
 public class PreferencesHelper {
+
+    public static final String TYPE_NONE = "none";
+    public static final String TYPE_AZAN = "azan";
+    public static final String TYPE_VIBRATE = "vibrate";
+    public static final String TYPE_SILENT = "silent";
+    public static final String TYPE_TEXT_TONE = "text_tone";
+    public static final String TYPE_CLOCK = "clock";
 
     private final Context context;
 
@@ -180,6 +188,33 @@ public class PreferencesHelper {
         defaultEditor.apply();
     }
 
+    public void ensureDefaultCalculationMethod() {
+        if (isCalculationPreferenceInitialized()) {
+            return;
+        }
+
+        SharedPreferences locationPrefs = context.getSharedPreferences(PreferencesConstants.LOCATION, MODE_PRIVATE);
+        String countryCode = locationPrefs.getString(PreferencesConstants.LAST_KNOWN_COUNTRY_CODE, null);
+
+        if (countryCode == null || countryCode.trim().isEmpty()) {
+            countryCode = Locale.getDefault().getCountry();
+        }
+
+        if (countryCode == null || countryCode.trim().isEmpty()) {
+            return;
+        }
+
+        CalculationMethodEnum calculationMethodEnum = CountryCalculationMethod.getCalculationMethodByCountryCode(countryCode);
+
+        updateCalculationMethodPreferenceByAddress(calculationMethodEnum.name());
+        updateTimingAdjustmentPreference(calculationMethodEnum.name());
+
+        SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        defaultSharedPreferences.edit()
+                .putBoolean(PreferencesConstants.CALCULATION_PREFERENCES_INITIALIZED, true)
+                .apply();
+    }
+
     public boolean isLocationSetManually() {
         final SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         return defaultSharedPreferences.getBoolean(PreferencesConstants.LOCATION_SET_MANUALLY_PREFERENCE, false);
@@ -317,6 +352,116 @@ public class PreferencesHelper {
     public boolean isNotificationsEnabled() {
         final SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         return defaultSharedPreferences.getBoolean(PreferencesConstants.NOTIFICATIONS_ENABLED, true);
+    }
+
+    // ========================================
+    // 🆕 每个祷告独立配置的读取方法（支持新通知设置页面）
+    // ========================================
+
+    /**
+     * 获取祷告的通知类型（每个祷告独立配置）
+     * @param prayer 祷告枚举
+     * @return 通知类型："none", "azan", "vibrate", "silent", "text_tone", "clock"
+     */
+    public String getNotificationTypeForPrayer(PrayerEnum prayer) {
+        final SharedPreferences prayerPrefs = context.getSharedPreferences(
+                PreferencesConstants.ADTHAN_CALLS_SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        
+        // 读取独立配置
+        String notificationType = prayerPrefs.getString(prayer + "_NOTIFICATION_TYPE", null);
+        
+        if (notificationType != null) {
+            android.util.Log.d("PreferencesHelper", "✅ " + prayer + " notification type: " + notificationType);
+            return notificationType;
+        }
+        
+        // 回退：检查旧的开关配置
+        boolean callEnabled = prayerPrefs.getBoolean(
+                prayer + PreferencesConstants.ADTHAN_CALL_ENABLED_KEY, false);
+        
+        android.util.Log.d("PreferencesHelper", "⚠️ " + prayer + " using legacy config, callEnabled: " + callEnabled);
+        return callEnabled ? TYPE_AZAN : TYPE_NONE;
+    }
+
+    /**
+     * 检查祷告是否启用震动（每个祷告独立配置）
+     * @param prayer 祷告枚举
+     * @return true 如果该祷告应该震动
+     */
+    public boolean isVibrationEnabledForPrayer(PrayerEnum prayer) {
+        String notificationType = getNotificationTypeForPrayer(prayer);
+        
+        // 震动类型直接返回 true
+        if (TYPE_VIBRATE.equals(notificationType)) {
+            android.util.Log.d("PreferencesHelper", "✅ " + prayer + " vibration enabled (type=vibrate)");
+            return true;
+        }
+        
+        // 其他类型：回退到全局震动配置
+        boolean globalVibration = isVibrationActivated();
+        android.util.Log.d("PreferencesHelper", "⚠️ " + prayer + " using global vibration: " + globalVibration);
+        return globalVibration;
+    }
+
+    /**
+     * 检查祷告是否启用预提醒（每个祷告独立配置）
+     * @param prayer 祷告枚举
+     * @return true 如果该祷告启用了预提醒
+     */
+    public boolean isPreReminderEnabledForPrayer(PrayerEnum prayer) {
+        final SharedPreferences prayerPrefs = context.getSharedPreferences(
+                PreferencesConstants.ADTHAN_CALLS_SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        
+        // 读取独立配置
+        boolean preReminderEnabled = prayerPrefs.getBoolean(prayer + "_PRE_REMINDER", false);
+
+        // 如果通知类型为 none，则认为预提醒关闭
+        if (TYPE_NONE.equals(getNotificationTypeForPrayer(prayer))) {
+            android.util.Log.d("PreferencesHelper", "📅 " + prayer + " pre-reminder disabled because notification type is none");
+            return false;
+        }
+
+        android.util.Log.d("PreferencesHelper", "📅 " + prayer + " pre-reminder enabled: " + preReminderEnabled);
+        return preReminderEnabled;
+    }
+
+    /**
+     * 获取祷告的预提醒时间（分钟）（每个祷告独立配置）
+     * @param prayer 祷告枚举
+     * @return 预提醒分钟数（1-30），如果未配置则回退到全局配置
+     */
+    public int getPreReminderMinutesForPrayer(PrayerEnum prayer) {
+        final SharedPreferences prayerPrefs = context.getSharedPreferences(
+                PreferencesConstants.ADTHAN_CALLS_SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        
+        // 读取独立配置
+        int minutes = prayerPrefs.getInt(prayer + "_PRE_REMINDER_MINUTES", 0);
+        
+        // 如果没有独立配置，回退到全局配置
+        if (minutes == 0) {
+            minutes = getReminderInterval();
+            android.util.Log.d("PreferencesHelper", "⚠️ " + prayer + " using global reminder interval: " + minutes + " minutes");
+        } else {
+            android.util.Log.d("PreferencesHelper", "✅ " + prayer + " pre-reminder minutes: " + minutes);
+        }
+        
+        return minutes;
+    }
+
+    /**
+     * 获取祷告的音量（每个祷告独立配置）
+     * @param prayer 祷告枚举
+     * @return 音量（0-100）
+     */
+    public int getVolumeForPrayer(PrayerEnum prayer) {
+        final SharedPreferences prayerPrefs = context.getSharedPreferences(
+                PreferencesConstants.ADTHAN_CALLS_SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        
+        // 读取独立配置，默认 80
+        int volume = prayerPrefs.getInt(prayer + "_VOLUME", 80);
+        
+        android.util.Log.d("PreferencesHelper", "🔊 " + prayer + " volume: " + volume);
+        return volume;
     }
 
 }

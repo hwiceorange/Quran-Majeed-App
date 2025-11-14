@@ -17,3 +17,7 @@
 /app/src/release/res/values/google_maps_api.xml
 /app/src/debug/res/values/google_maps_api.xml
 /app/release/app-release.aab
+
+# Firebase Service Account Keys (IMPORTANT: Do not commit)
+serviceAccountKey.json
+*-firebase-adminsdk-*.json

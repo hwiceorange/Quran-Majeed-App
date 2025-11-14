@@ -84,32 +84,6 @@
 
     <string name="rate_later">Later</string>
 
-    <string name="rate_prompt_title">আলহামদুলিল্লাহ! আপনার অভিজ্ঞতা কেমন ছিল?</string>
-
-    <string name="rate_prompt_message">আপনি কি Quran Majeed ব্যবহার করতে ভালোবাসেন?</string>
-
-    <string name="rate_prompt_submit">রেটিং জমা দিন</string>
-
-    <string name="rate_prompt_maybe_later">হয়তো পরে</string>
-
-    <string name="rate_prompt_sorry_title">আমরা সত্যিই দুঃখিত</string>
-
-    <string name="rate_prompt_sorry_message">আপনার মতামত অত্যন্ত গুরুত্বপূর্ণ। অনুগ্রহ করে জানান আমরা কীভাবে উন্নতি করতে পারি:</string>
-
-    <string name="rate_prompt_feedback_title">আপনার মতামত আমাদের জানান</string>
-
-    <string name="rate_prompt_feedback_hint">অ্যাপটি কীভাবে উন্নত করা যায় জানান</string>
-
-    <string name="rate_prompt_feedback_send">জমা দিন</string>
-
-    <string name="rate_prompt_feedback_cancel">পরে</string>
-
-    <string name="rate_prompt_close_content">বন্ধ করুন</string>
-
-    <string name="rate_prompt_email_subject">কোরআন অ্যাপ সম্পর্কে মতামত</string>
-
-    <string name="rate_prompt_feedback_email_error">মতামত পাঠাতে কোনো ইমেইল অ্যাপ পাওয়া যায়নি।</string>
-
     <string name="are_you_sure_you_want_to_exit">Are You Sure You Want To Exit ?</string>
 
     <string name="privacy">গোপনীয়তা নীতি</string>
@@ -1360,13 +1334,13 @@
 
     <string name="noFootnotesForThisVerse">There are no footnotes for this verse.</string>
 
-    <string name="strTitleReaderChapters">সূরা</string>
+    <string name="strTitleReaderChapters">Surah</string>
 
-    <string name="strTitleReaderJuz">জুয</string>
+    <string name="strTitleReaderJuz">Juz</string>
 
-    <string name="strTitleReaderChapters2">সূরা</string>
+    <string name="strTitleReaderChapters2">Surah</string>
 
-    <string name="strTitleReaderJuz2">জুয</string>
+    <string name="strTitleReaderJuz2">Juz</string>
 
     <string name="strTitleReaderVerses">Verses</string>
 
@@ -2096,58 +2070,124 @@
     <string name="tasbih_reminder">তাসবিহ অনুস্মারক</string>
     <string name="estimated_challenge_duration">আনুমানিক চ্যালেঞ্জ সময়কাল</string>
     <string name="save_start_challenge">✓ সংরক্ষণ করুন এবং আমার চ্যালেঞ্জ শুরু করুন</string>
-    
-    <!-- Reading Units -->
-    <string name="unit_pages">পৃষ্ঠা</string>
-    <string name="unit_verses">আয়াত</string>
-    <string name="unit_juz">পারা</string>
-    
-    <!-- Recitation Duration Options -->
-    <string name="minutes_15">দৈনিক 15 মিনিট</string>
-    <string name="minutes_30">দৈনিক 30 মিনিট</string>
-    <string name="minutes_45">দৈনিক 45 মিনিট</string>
-    <string name="minutes_60">দৈনিক 60 মিনিট</string>
-    
-    <!-- Prayer Card & Tasbih -->
-    <string name="your_location_label">আপনার অবস্থান</string>
-    <string name="tasbih_total">মোট : </string>
-    
-    <!-- Challenge Days -->
-    <string name="challenge_days_placeholder">৩০ দিন</string>
-    <string name="challenge_days_format">%d দিন</string>
-    
-    <!-- Prayer Notification Settings -->
-    <string name="notification_settings">বিজ্ঞপ্তি সেটিংস</string>
-    <string name="notification_type_none">কিছু নয়</string>
-    <string name="notification_type_azan">আযান</string>
-    <string name="notification_type_vibrate">কম্পন</string>
-    <string name="notification_type_silent">নীরব বিজ্ঞপ্তি</string>
-    <string name="notification_type_text_tone">স্ট্যান্ডার্ড টেক্সট টোন</string>
-    <string name="notification_type_clock">ঘড়ির শব্দ</string>
-    <string name="azan_name">আযানের নাম</string>
-    <string name="notification_volume">বিজ্ঞপ্তি ভলিউম</string>
-    <string name="pre_prayer_reminder">নামাজের আগে মনে করিয়ে দেওয়া সেট করুন</string>
-    <string name="reminder_minutes_format">%d মিনিট</string>
-    <string name="random_azan">এলোমেলো আযান</string>
-    <string name="volume_percentage_format">%d%%</string>
-    <string name="default_volume_display">80%</string>
-    <string name="default_minutes_display">5 মিনিট</string>
-    <string name="content_desc_none">কিছু নয়</string>
-    <string name="content_desc_azan">আযান</string>
-    <string name="content_desc_vibrate">কম্পন</string>
-    <string name="content_desc_silent">নীরব</string>
-    <string name="content_desc_text_tone">টেক্সট টোন</string>
-    <string name="content_desc_clock">ঘড়ি</string>
-    <string name="content_desc_decrease">কমান</string>
-    <string name="content_desc_increase">বাড়ান</string>
 
-    <!-- Last Read Card -->
-    <string name="last_read">সর্বশেষ পড়া:</string>
-    <string name="continue_reading">চালিয়ে যান</string>
-    <string name="continue_reading_arrow">চালিয়ে যান →</string>
-    <string name="verse_no_format">আয়াত নং: %d</string>
-    <string name="surah_format">%d. %s</string>
-    <string name="juz_format">পারা %d</string>
-    <string name="page_format">পৃষ্ঠা %d</string>
+    <!-- Qada Tracker -->
+    <string name="total_outstanding_qada">মোট বাকি থাকা ক্বযা</string>
+    <string name="qada_count_zero">০ নামাজ · আলহামদুলিল্লাহ &gt;</string>
+    <string name="qada_count_prayers">%1$s নামাজ &gt;</string>
+    <string name="qada_login_required_title">লগইন প্রয়োজন</string>
+    <string name="qada_login_required_message">আপনার কাজা ট্র্যাক করতে এবং নামাজের ইতিহাস দেখতে আপনার Google অ্যাকাউন্ট দিয়ে লগইন করুন।</string>
+    <string name="qada_onboarding_title">আপনার সালাতের দায়িত্বগুলো পরিচালনা করুন</string>
+    <string name="qada_onboarding_description">আমরা ক্বযা (ছাড়া হয়ে যাওয়া) নামাজের নথি রাখা শুরু করার আগে, দয়া করে নির্ধারণ করুন কোন তারিখ থেকে আপনি গণনা শুরু করতে চান।</string>
+    <string name="qada_option_today_title">আজ থেকেই শুরু করুন (প্রস্তাবিত)</string>
+    <string name="qada_option_today_subtitle">নতুন অভ্যাস শুরু করার জন্য উপযোগী</string>
+    <string name="qada_option_custom_title">শুরু করুন:</string>
+    <string name="qada_option_custom_subtitle">তারিখ নির্বাচন করতে ট্যাপ করুন</string>
+    <string name="qada_confirm_button">নিশ্চিত করুন এবং ট্র্যাকিং শুরু করুন</string>
+    <string name="your_activity">আপনার কার্যকলাপ</string>
+    <string name="salah_history_qada_tracker">সালাত ইতিহাস ও ক্বযা ট্র্যাকার</string>
+    <string name="weekly">সাপ্তাহিক</string>
+    <string name="monthly">মাসিক</string>
+    
+    <!-- Week days abbreviations -->
+    <string name="day_mon">সোম</string>
+    <string name="day_tue">মঙ্গল</string>
+    <string name="day_wed">বুধ</string>
+    <string name="day_thu">বৃহ</string>
+    <string name="day_fri">শুক্র</string>
+    <string name="day_sat">শনি</string>
+    <string name="day_sun">রবি</string>
+    
+    <!-- Prayer names -->
+    <string name="prayer_fajr">ফজর</string>
+    <string name="prayer_dhuhr">যোহর</string>
+    <string name="prayer_asr">আসর</string>
+    <string name="prayer_maghrib">মাগরিব</string>
+    <string name="prayer_isha">ইশা</string>
 
+    <!-- Subscription -->
+    <string name="go_premium">প্রিমিয়ামে আপগ্রেড করুন</string>
+    <string name="unlock_premium_features">সব প্রিমিয়াম বৈশিষ্ট্য আনলক করুন</string>
+    <string name="subscription_heading">আপনার ব্যক্তিগত কোরআনিক\nপরামর্শদাতা আনলক করুন</string>
+    <string name="subscription_feature_ai">এআই-চালিত শেখার পথ</string>
+    <string name="subscription_feature_ad_free">বিজ্ঞাপনমুক্ত ইবাদত</string>
+    <string name="subscription_feature_tafsir">গভীর তাফসির ও প্রেক্ষাপট</string>
+    <string name="subscription_feature_quiz">সম্পূর্ণ কুইজ লাইব্রেরি</string>
+    <string name="subscription_enable_trial">আমি বিনামূল্যে চেষ্টা করতে চাই</string>
+    <string name="subscription_best_value">সেরা মূল্য!</string>
+    <string name="subscription_price_yearly">$17.99 / বছরে</string>
+    <string name="subscription_save_vs_monthly">মাসিকের তুলনায় ৫০%% সাশ্রয় করুন</string>
+    <string name="subscription_price_monthly">$2.99 / মাসে</string>
+    <string name="subscription_free_trial_badge">৭ দিনের ফ্রি ট্রায়াল</string>
+    <string name="subscription_monthly_sub_text">তারপর %1$s প্রতি মাসে। এখন কোনো পেমেন্ট নেই</string>
+    <string name="subscription_yearly_sub_text">তারপর %1$s প্রতি বছর</string>
+    <string name="subscription_info_trial_monthly">আপনি যদি ৭ দিনের ট্রায়াল শেষ হওয়ার আগে বাতিল না করেন, তবে মাসিক সাবস্ক্রিপশনের মূল্য নেওয়া হবে।</string>
+    <string name="subscription_info_trial_yearly">আপনি যদি ৭ দিনের ট্রায়াল শেষ হওয়ার আগে বাতিল না করেন, তবে বার্ষিক সাবস্ক্রিপশনের মূল্য নেওয়া হবে।</string>
+    <string name="subscription_info_autorenew_yearly">আপনার সাবস্ক্রিপশন বাতিল না করলে প্রতি বছর স্বয়ংক্রিয়ভাবে নবায়ন হবে।</string>
+    <string name="subscription_info_autorenew_monthly">আপনার সাবস্ক্রিপশন বাতিল না করলে প্রতি মাসে স্বয়ংক্রিয়ভাবে নবায়ন হবে।</string>
+    <string name="subscription_cta_trial">ট্রায়াল ও প্ল্যান শুরু করুন</string>
+    <string name="subscription_cta_premium">এখনই প্রিমিয়াম নিন</string>
+    <string name="subscription_loading">লোড হচ্ছে...</string>
+    <string name="subscription_no_payment_now">এখন কোনো পেমেন্ট নেই</string>
+    <string name="subscription_legal_info">অ্যাপ ব্যবহার চালিয়ে গেলে আপনি আমাদের ব্যবহার বিধি ও গোপনীয়তা নীতিতে সম্মতি দিচ্ছেন</string>
+    <string name="subscription_error_billing_title">বিলিং সংযোগ ব্যর্থ হয়েছে</string>
+    <string name="subscription_error_billing_message">Google Play বিলিংয়ের সাথে সংযোগ করা যায়নি।\n\nসম্ভাব্য কারণ:\n- Google Play Store ইনস্টল বা আপডেট করা নেই\n- নেটওয়ার্ক সংযোগ সমস্যা\n- Google Play সেবা নিষ্ক্রিয়\n\nদয়া করে পরীক্ষা করে আবার চেষ্টা করুন।</string>
+    <string name="subscription_error_no_products_title">কোনো সাবস্ক্রিপশন প্ল্যান উপলভ্য নয়</string>
+    <string name="subscription_error_no_products_message">সাবস্ক্রিপশন প্ল্যান লোড করা যায়নি।\n\nপ্রয়োজনীয় পণ্য আইডি:\n- মাসিক: %1$s\n- বার্ষিক: %2$s\n\nসেটআপ ধাপ:\n1. এই পণ্যগুলো Google Play Console-এ তৈরি করুন\n2. তাদের অবস্থা Active করুন\n3. অ্যাপকে একটি টেস্ট ট্র্যাকে (অভ্যন্তরীণ/বন্ধ) প্রকাশ করুন\n4. Google Play Console-এ টেস্ট অ্যাকাউন্ট যোগ করুন\n5. সক্রিয় হতে ১-২ ঘণ্টা অপেক্ষা করুন\n\nপরীক্ষার জন্য সাইন করা রিলিজ বিল্ড ব্যবহার করুন।</string>
+    <string name="subscription_error_plan_title">প্ল্যান উপলভ্য নয়</string>
+    <string name="subscription_message_success">সাবস্ক্রিপশন সফলভাবে সক্রিয় হয়েছে!</string>
+    <string name="subscription_message_already_owned">আপনি ইতিমধ্যেই এই সাবস্ক্রিপশনটি মালিকানাধীন</string>
+    <string name="subscription_message_canceled">ক্রয় বাতিল হয়েছে</string>
+    <string name="subscription_message_failed">ক্রয় ব্যর্থ: %1$s</string>
+    <string name="subscription_message_already_subscribed">আপনি ইতিমধ্যেই সাবস্ক্রাইব করেছেন!</string>
+    <string name="subscription_error_plan_message">নির্বাচিত %1$s প্ল্যানটি উপলভ্য নয়।\n\nপণ্য আইডি: %2$s\n\nসমাধানের ধাপ:\n1. Google Play Console-এ পণ্যটি আছে কিনা যাচাই করুন\n2. পণ্য আইডি ঠিক একই কিনা নিশ্চিত করুন\n3. পণ্যটি Active অবস্থায় আছে কিনা নিশ্চিত করুন\n4. অ্যাপটি একটি টেস্ট ট্র্যাকে প্রকাশিত কিনা নিশ্চিত করুন\n\nঅন্য প্ল্যান নির্বাচন করুন অথবা সহায়তার সাথে যোগাযোগ করুন।</string>
+    <string name="subscription_message_no_offer">কোনো বৈধ অফার উপলভ্য নয়</string>
+    <string name="subscription_plan_yearly">বার্ষিক</string>
+    <string name="subscription_plan_monthly">মাসিক</string>
+
+
+    <!-- Onboarding Pages -->
+    <string name="strTitleIstiqamah">ইস্তিকামাহ</string>
+    <string name="onboardDescIstiqamah">ইবাদতে ধারাবাহিকতা</string>
+    <string name="strTitleNotificationPermission">বিজ্ঞপ্তি</string>
+    <string name="onboardDescNotificationPermission">নামাজের সতর্কতার সাথে ধারাবাহিক থাকুন</string>
+    <string name="strTitleFreeTrial">বিনামূল্যে ট্রায়াল</string>
+    <string name="onboardDescFreeTrial">অনুপ্রাণিত হতে 7 দিন বিনামূল্যে</string>
+    
+    <!-- Istiqamah Onboarding Page -->
+    <string name="onboard_istiqamah_title">ইস্তিকামাহ:\nইবাদতে\nধারাবাহিকতা</string>
+    <string name="onboard_istiqamah_subtitle">জান্নাতের (স্বর্গ) দিকে আমাদের যাত্রা\nপ্রতিদিনের ধারাবাহিক প্রচেষ্টার উপর নির্মিত।</string>
+    <string name="onboard_istiqamah_chart_title">কুরআন এবং নামাজের জন্য নিবেদিত সময়</string>
+    <string name="onboard_istiqamah_description">ধারাবাহিক ট্র্যাকিংয়ের সাথে, আপনি আরও ভাল অভ্যাস তৈরি করবেন, আপনার বাকি কাজা নামাজ কমিয়ে ফেলবেন এবং আপনার দৈনন্দিন জীবনে আরও শান্তি পাবেন। ইনশা আল্লাহ।</string>
+    <string name="onboard_istiqamah_month_jan">জানু</string>
+    <string name="onboard_istiqamah_month_feb">ফেব</string>
+    <string name="onboard_istiqamah_month_mar">মার্চ</string>
+    <string name="onboard_istiqamah_month_apr">এপ্রি</string>
+    
+    <!-- Notification Permission Onboarding Page -->
+    <string name="onboard_notification_title">আপনার নামাজের সাথে\nধারাবাহিক থাকুন</string>
+    <string name="onboard_notification_subtitle">কোনও নামাজ মিস করবেন না। আমাদের সময়মত সতর্কতা আপনাকে\nযেখানেই থাকুন না কেন আপনার দায়িত্ব পালন করতে সাহায্য করে।</string>
+    <string name="onboard_notification_dialog_title">QuranApp আপনাকে নামাজ এবং শেখার\nবিজ্ঞপ্তি পাঠাতে চায়</string>
+    <string name="onboard_notification_dialog_desc">বিজ্ঞপ্তিতে আজান, নামাজের সময় স্মরণকারী,\nএবং দৈনিক কুরআনিক অনুপ্রেরণা অন্তর্ভুক্ত।</string>
+    <string name="onboard_notification_allow">অনুমতি দিন</string>
+    <string name="onboard_notification_dont_allow">অনুমতি দেবেন না</string>
+    <string name="onboard_notification_review">"আলহামদুলিল্লাহ! এই অ্যাপটি অপরিহার্য। নামাজের সময় সতর্কতা সর্বদা সঠিক এবং আমাকে আমার কাজা ট্র্যাকিংয়ে ধারাবাহিক থাকতে সাহায্য করে।"</string>
+    <string name="onboard_notification_review_name">আয়েশা কে.</string>
+    <string name="onboard_notification_review_verified">(যাচাইকৃত ব্যবহারকারী)</string>
+    
+    <!-- Free Trial Onboarding Page -->
+    <string name="onboard_trial_line1">আপনি পেয়েছেন</string>
+    <string name="onboard_trial_line2">7 দিন বিনামূল্যে</string>
+    <string name="onboard_trial_line3">অনুপ্রাণিত হতে</string>
+    <string name="onboard_trial_line4">আল্লাহর বাণী!</string>
+    <string name="onboard_trial_button">বিনামূল্যে চেষ্টা করুন</string>
+    
+    <string name="completed">সম্পন্ন</string>
+    <string name="this_week_progress">এই সপ্তাহ</string>
+    <string name="prayer_breakdown">নামাজের বিবরণ</string>
+    <string name="ada_on_time">আদা\' (সময়মতো)</string>
+    <string name="qada_made_up">কাজা (পূরণ করা)</string>
+    <string name="missed">মিস</string>
+    <string name="great_consistency">দুর্দান্ত ধারাবাহিকতা!</string>
+    <string name="keep_up_the_good_work">ভালো কাজ চালিয়ে যান</string>
 </resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Time Picker Dialog Background - Rounded Corners -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    
+    <!-- White background -->
+    <solid android:color="#FFFFFF" />
+    
+    <!-- Rounded corners - 24dp -->
+    <corners android:radius="24dp" />
+    
+</shape>
+
+

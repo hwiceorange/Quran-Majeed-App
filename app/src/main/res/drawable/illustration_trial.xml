@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="300dp"
+    android:height="300dp"
+    android:viewportWidth="300"
+    android:viewportHeight="300">
+
+    <!-- 背景圆形（夜空） -->
+    <path
+        android:fillColor="#4A5D4A"
+        android:pathData="M150,150m-140,0a140,140 0,1 1,280 0a140,140 0,1 1,-280 0" />
+
+    <!-- 云朵1（左上） -->
+    <path
+        android:fillColor="#7A8A7A"
+        android:pathData="M60,80 Q50,75 45,80 Q40,85 45,90 Q50,95 60,90 Q70,85 65,80 Q60,75 60,80 Z" />
+    
+    <!-- 云朵2（右上） -->
+    <path
+        android:fillColor="#9AA89A"
+        android:pathData="M240,100 Q230,95 225,100 Q220,105 225,110 Q230,115 240,110 Q250,105 245,100 Q240,95 240,100 Z" />
+
+    <!-- 月亮（金黄色圆形 + 光晕） -->
+    <path
+        android:fillColor="#D4AF37"
+        android:pathData="M200,90 m-35,0 a35,35 0,1 1,70 0 a35,35 0,1 1,-70 0"
+        android:alpha="0.3" />
+    
+    <path
+        android:fillColor="#E8C547"
+        android:pathData="M200,90 m-28,0 a28,28 0,1 1,56 0 a28,28 0,1 1,-56 0" />
+
+    <!-- 月亮上的星星图案 -->
+    <path
+        android:fillColor="#F5D95F"
+        android:pathData="M200,75 L202,82 L210,82 L203,87 L206,95 L200,90 L194,95 L197,87 L190,82 L198,82 Z" />
+
+    <!-- 白鸽身体（主体） -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M150,140 Q120,145 110,160 Q105,175 115,185 Q125,195 145,190 Q155,188 160,180 Q165,172 160,165 Q155,158 150,140 Z" />
+    
+    <!-- 白鸽头部 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M145,135 Q140,130 135,132 Q130,135 132,140 Q135,145 140,143 Q145,141 145,135 Z" />
+    
+    <!-- 白鸽翅膀（展开） -->
+    <path
+        android:fillColor="#F0F0F0"
+        android:pathData="M145,155 Q120,145 95,150 Q70,155 60,165 Q55,170 60,175 Q65,180 80,175 Q100,170 120,165 Q135,162 145,160 Z" />
+    
+    <!-- 白鸽翅膀羽毛细节 -->
+    <path
+        android:fillColor="#E8E8E8"
+        android:pathData="M140,157 Q115,152 90,157 Q75,160 70,167 Q68,170 70,173 Q75,176 90,172 Q110,168 135,163 Z" />
+    
+    <!-- 白鸽尾羽 -->
+    <path
+        android:fillColor="#F5F5F5"
+        android:pathData="M160,175 Q165,185 175,190 Q185,195 195,188 Q200,183 195,178 Q185,173 175,175 Q168,177 160,175 Z" />
+    
+    <!-- 白鸽喙（小橙色） -->
+    <path
+        android:fillColor="#FFA500"
+        android:pathData="M132,137 L128,138 L132,140 Z" />
+    
+    <!-- 白鸽眼睛 -->
+    <path
+        android:fillColor="#333333"
+        android:pathData="M137,136 m-2,0 a2,2 0,1 1,4 0 a2,2 0,1 1,-4 0" />
+
+    <!-- 云朵3（左下） -->
+    <path
+        android:fillColor="#7A8A7A"
+        android:pathData="M50,220 Q40,215 35,220 Q30,225 35,230 Q40,235 50,230 Q60,225 55,220 Q50,215 50,220 Z" />
+
+</vector>
+

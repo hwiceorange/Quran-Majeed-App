@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#429971">
+
+    <!-- 标题：Istiqamah: Consistency in Worship -->
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="32dp"
+        android:text="@string/onboard_istiqamah_title"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-medium"
+        android:lineSpacingExtra="4dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- 副标题 -->
+    <TextView
+        android:id="@+id/tv_subtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:text="@string/onboard_istiqamah_subtitle"
+        android:textAlignment="center"
+        android:textColor="#E0FFFFFF"
+        android:textSize="16sp"
+        android:fontFamily="sans-serif"
+        android:lineSpacingExtra="2dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- 图表区域 -->
+    <LinearLayout
+        android:id="@+id/chart_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="32dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/tv_subtitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- 图表标题 -->
+        <TextView
+            android:id="@+id/tv_chart_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/onboard_istiqamah_chart_title"
+            android:textColor="#B3FFFFFF"
+            android:textSize="11sp"
+            android:letterSpacing="0.1"
+            android:fontFamily="sans-serif-medium"
+            android:layout_marginBottom="16dp" />
+
+        <!-- 图表占位符 - 使用自定义View -->
+        <com.quran.quranaudio.online.quran_module.views.IstiqamahChartView
+            android:id="@+id/chart_view"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+
+        <!-- 月份标签 (6个月: Jan - Jun) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/onboard_istiqamah_month_jan"
+                android:textColor="#B3FFFFFF"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/onboard_istiqamah_month_feb"
+                android:textAlignment="center"
+                android:textColor="#B3FFFFFF"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/onboard_istiqamah_month_mar"
+                android:textAlignment="center"
+                android:textColor="#B3FFFFFF"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/onboard_istiqamah_month_apr"
+                android:textAlignment="center"
+                android:textColor="#B3FFFFFF"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/onboard_istiqamah_month_may"
+                android:textAlignment="center"
+                android:textColor="#B3FFFFFF"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/onboard_istiqamah_month_jun"
+                android:textAlignment="textEnd"
+                android:textColor="#B3FFFFFF"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 底部说明文本 -->
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="24dp"
+        android:text="@string/onboard_istiqamah_description"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:fontFamily="sans-serif"
+        android:lineSpacingExtra="4dp"
+        app:layout_constraintTop_toBottomOf="@id/chart_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_continue" />
+
+    <!-- Continue 按钮 -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_continue"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:text="@string/onboard_continue"
+        android:textColor="#429971"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-medium"
+        app:backgroundTint="@android:color/white"
+        app:cornerRadius="30dp"
+        app:icon="@drawable/ic_arrow_forward"
+        app:iconGravity="end"
+        app:iconTint="#429971"
+        android:stateListAnimator="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

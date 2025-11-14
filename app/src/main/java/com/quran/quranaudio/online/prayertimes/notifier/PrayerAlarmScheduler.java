@@ -96,6 +96,12 @@ public class PrayerAlarmScheduler {
 
             LocalDateTime prayerTiming = timings.get(key);
 
+            String notificationType = preferencesHelper.getNotificationTypeForPrayer(key);
+            if (PreferencesHelper.TYPE_NONE.equals(notificationType)) {
+                Log.i(TAG, "⏭️ Skipping " + key.toString() + " Alarm (notification type = none)");
+                continue;
+            }
+
             if (prayerTiming != null && LocalDateTime.now().isBefore(prayerTiming)) {
                 Log.i(TAG, "Scheduling " + key.toString() + " Alarm at : " + TimingUtils.formatTiming(prayerTiming));
 
@@ -111,21 +117,38 @@ public class PrayerAlarmScheduler {
         Log.i(TAG, "Start scheduling Reminders for: " + dayPrayer.getDate());
 
         Map<PrayerEnum, LocalDateTime> timings = dayPrayer.getTimings();
-        int reminderInterval = preferencesHelper.getReminderInterval();
 
         int index = 10;
         for (PrayerEnum key : timings.keySet()) {
             index++;
+
+            String notificationType = preferencesHelper.getNotificationTypeForPrayer(key);
+            if (PreferencesHelper.TYPE_NONE.equals(notificationType)) {
+                Log.i(TAG, "⏭️ Skipping " + key.toString() + " Reminder (notification type = none)");
+                continue;
+            }
+
+            // ✅ 检查该祷告是否启用了预提醒（独立配置）
+            boolean preReminderEnabled = preferencesHelper.isPreReminderEnabledForPrayer(key);
+            if (!preReminderEnabled) {
+                Log.i(TAG, "⏭️ Skipping " + key.toString() + " Reminder (disabled in independent config)");
+                continue;  // 跳过未启用预提醒的祷告
+            }
+
+            // ✅ 获取该祷告的预提醒间隔（独立配置）
+            int reminderInterval = preferencesHelper.getPreReminderMinutesForPrayer(key);
 
             LocalDateTime prayerTiming = timings.get(key);
             LocalDateTime reminderTiming = Objects.requireNonNull(prayerTiming).minusMinutes(reminderInterval);
 
             if (LocalDateTime.now().isBefore(reminderTiming)) {
 
-                Log.i(TAG, "Scheduling " + key.toString() + " Reminder at : " + TimingUtils.formatTiming(reminderTiming));
+                Log.i(TAG, "✅ Scheduling " + key.toString() + " Reminder at : " + TimingUtils.formatTiming(reminderTiming) + " (" + reminderInterval + " minutes before)");
 
                 scheduleNotifications(dayPrayer, prayerTiming, TimingType.STANDARD, key.toString(),
                         2000, index, reminderTiming, ReminderReceiver.class);
+            } else {
+                Log.i(TAG, "⏭️ Skipping " + key.toString() + " Reminder (time already passed)");
             }
         }
 

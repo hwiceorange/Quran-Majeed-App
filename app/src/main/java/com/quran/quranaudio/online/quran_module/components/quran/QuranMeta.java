@@ -325,7 +325,7 @@ public class QuranMeta implements Serializable {
             case "id":
             case "in":
             case "bahasa":
-                return "in";
+                return "id";  // 统一使用 "id" 表示印尼语
             default:
                 return lower;
         }

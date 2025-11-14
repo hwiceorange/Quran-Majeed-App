@@ -29,7 +29,7 @@ object LanguageManager {
      */
     val SUPPORTED_LANGUAGES = linkedMapOf(
         "en" to "English",
-        "in" to "Bahasa Indonesia",
+        "id" to "Bahasa Indonesia",  // 统一使用 "id" 表示印尼语
         "ar" to "العربية",
         "ur" to "اردو",
         "ms" to "Bahasa Melayu",
@@ -41,7 +41,7 @@ object LanguageManager {
      * 📱 获取当前应用使用的语言代码
      * 
      * @param context Android Context
-     * @return 语言代码 (如: "en", "in", "ar", "ur", 等)
+     * @return 语言代码 (如: "en", "id", "ar", "ur", 等)
      */
     fun getCurrentLanguageCode(context: Context): String {
         return SPAppConfigs.getLocale(context)
@@ -74,7 +74,7 @@ object LanguageManager {
      * - 新语言会在整个应用中生效
      * 
      * @param activity 当前Activity
-     * @param languageCode 新的语言代码 (如: "en", "in", "ar", 等)
+     * @param languageCode 新的语言代码 (如: "en", "id", "ar", 等)
      */
     fun setLanguageAndRestart(activity: Activity, languageCode: String) {
         android.util.Log.d("LanguageManager", "🌐 Switching language to: $languageCode (${SUPPORTED_LANGUAGES[languageCode]})")
@@ -107,7 +107,7 @@ object LanguageManager {
     /**
      * 📋 获取支持的语言代码列表
      * 
-     * @return 语言代码列表 (如: ["en", "in", "ar", "ur", ...])
+     * @return 语言代码列表 (如: ["en", "id", "ar", "ur", ...])
      */
     fun getSupportedLanguageCodes(): List<String> {
         return SUPPORTED_LANGUAGES.keys.toList()

@@ -47,22 +47,27 @@ object SPAppConfigs {
     @JvmStatic
     fun getLocale(ctx: Context): String {
         val sp = sp(ctx)
-        val savedLanguage = sp.getString(KEY_APP_LANGUAGE, null)
+        var savedLanguage = sp.getString(KEY_APP_LANGUAGE, null)
         
-        // 如果已保存语言偏好，直接返回
+        // 如果已保存语言偏好，返回（并进行旧代码迁移）
         if (!savedLanguage.isNullOrEmpty()) {
+            // 🔄 迁移：将旧的 "in" 转换为新的 "id"
+            if (savedLanguage == "in") {
+                savedLanguage = "id"
+                setLocale(ctx, savedLanguage)  // 保存迁移后的代码
+            }
             return savedLanguage
         }
         
         // 首次启动：检测设备语言
         var deviceLanguage = java.util.Locale.getDefault().language
         
-        // 语言代码映射：印尼语 "id" (新标准) -> "in" (Android资源使用的旧标准)
-        if (deviceLanguage == "id") {
-            deviceLanguage = "in"
+        // 语言代码统一：印尼语统一使用 "id"（设备可能返回 "in" 或 "id"）
+        if (deviceLanguage == "in") {
+            deviceLanguage = "id"
         }
         
-        val supportedLanguages = listOf("en", "in", "ar", "ur", "ms", "tr", "bn")
+        val supportedLanguages = listOf("en", "id", "ar", "ur", "ms", "tr", "bn")
         
         // 如果设备语言在支持列表中，使用设备语言；否则使用英语
         val selectedLanguage = if (deviceLanguage in supportedLanguages) {

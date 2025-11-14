@@ -231,7 +231,7 @@ abstract class BaseFragReaderIndex : BaseFragment(), FragReaderIndexCallback {
             
             when (mode) {
                 LastReadRecord.MODE_SURAH -> {
-                    // 章节模式：启动章节阅读，并滚动到指定的节号
+                    // 章节模式：启动章节阅读（分页滚动），并滚动到指定的节号
                     Log.d("BaseFragReaderIndex", "Launching SURAH mode: Chapter ${record.lastReadSurah}, scrolling to Ayah ${record.lastReadAyah}")
                     val intent = ReaderFactory.prepareChapterIntent(record.lastReadSurah)
                     // 添加滚动位置（READER_KEY_PENDING_SCROLL 在 ReaderFactory 中已支持）
@@ -260,9 +260,14 @@ abstract class BaseFragReaderIndex : BaseFragment(), FragReaderIndexCallback {
                         intArrayOf(record.lastReadSurah, record.lastReadAyah))
                     context.startActivity(intent.setClass(context, com.quran.quranaudio.online.quran_module.activities.ActivityReader::class.java))
                 }
+                LastReadRecord.MODE_VERSES -> {
+                    // 单节模式：启动单节阅读
+                    Log.d("BaseFragReaderIndex", "Launching VERSES mode: Chapter ${record.lastReadSurah}, Ayah ${record.lastReadAyah}")
+                    ReaderFactory.startVerse(context, record.lastReadSurah, record.lastReadAyah)
+                }
                 else -> {
                     // 默认：启动单节阅读（向后兼容）
-                    Log.d("BaseFragReaderIndex", "Launching default mode (VERSES): Chapter ${record.lastReadSurah}, Ayah ${record.lastReadAyah}")
+                    Log.d("BaseFragReaderIndex", "Launching default mode: Chapter ${record.lastReadSurah}, Ayah ${record.lastReadAyah}")
                     ReaderFactory.startVerse(context, record.lastReadSurah, record.lastReadAyah)
                 }
             }

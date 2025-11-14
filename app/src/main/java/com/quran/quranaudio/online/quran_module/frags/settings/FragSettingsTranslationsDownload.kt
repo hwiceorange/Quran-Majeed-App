@@ -14,6 +14,7 @@ import com.peacedesign.android.widget.dialog.base.PeaceDialog
 import com.quran.quranaudio.online.R
 import com.quran.quranaudio.online.quran_module.adapters.transl.ADPDownloadTranslations
 import com.quran.quranaudio.online.quran_module.adapters.transl.ADPDownloadTranslationsGroup
+import com.quran.quranaudio.online.quran_module.api.ApiConfig
 import com.quran.quranaudio.online.quran_module.api.JsonHelper
 import com.quran.quranaudio.online.quran_module.api.RetrofitInstance
 import com.quran.quranaudio.online.quran_module.components.quran.subcomponents.QuranTranslBookInfo
@@ -197,8 +198,10 @@ class FragSettingsTranslationsDownload :
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
+                android.util.Log.d("TranslDownload", "🔄 开始获取翻译列表...")
                 val responseBody = RetrofitInstance.github.getAvailableTranslations()
                 responseBody.string().let { data ->
+                    android.util.Log.d("TranslDownload", "✅ 成功获取翻译数据，大小: ${data.length} 字节")
                     fileUtils.createFile(storedAvailableDownloadsFile)
                     storedAvailableDownloadsFile.writeText(data)
 
@@ -208,6 +211,10 @@ class FragSettingsTranslationsDownload :
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+                android.util.Log.e("TranslDownload", "❌ 翻译列表加载失败", e)
+                android.util.Log.e("TranslDownload", "   错误类型: ${e.javaClass.simpleName}")
+                android.util.Log.e("TranslDownload", "   错误信息: ${e.message}")
+                android.util.Log.e("TranslDownload", "   API 端点: ${ApiConfig.SHAHEEN_DEVELOPERS_URL}apis/translations/available_translations_info.json")
 
                 runOnUIThread {
                     showAlert(

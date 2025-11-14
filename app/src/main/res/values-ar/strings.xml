@@ -52,19 +52,6 @@
   <string name="RateAppTitle">هل يعجبك تطبيقنا؟</string>
   <string name="RateApp">ساهم معنا بنشر التطبيق بتقييم 5 نجوم على المتجر</string>
   <string name="rate_later">لاحقا</string>
-  <string name="rate_prompt_title">الحمد لله! كيف كانت تجربتك؟</string>
-  <string name="rate_prompt_message">هل تحب استخدام قرآن مجيد؟</string>
-  <string name="rate_prompt_submit">إرسال التقييم</string>
-  <string name="rate_prompt_maybe_later">ربما لاحقًا</string>
-  <string name="rate_prompt_sorry_title">نحن آسفون حقًا</string>
-  <string name="rate_prompt_sorry_message">ملاحظاتك مهمة جدًا. يرجى إخبارنا كيف يمكننا التحسين:</string>
-  <string name="rate_prompt_feedback_title">شاركنا ملاحظاتك</string>
-  <string name="rate_prompt_feedback_hint">أخبرنا كيف يمكننا التحسين</string>
-  <string name="rate_prompt_feedback_send">إرسال</string>
-  <string name="rate_prompt_feedback_cancel">ربما لاحقًا</string>
-  <string name="rate_prompt_close_content">إغلاق</string>
-  <string name="rate_prompt_email_subject">ملاحظات حول تطبيق القرآن</string>
-  <string name="rate_prompt_feedback_email_error">لم يتم العثور على تطبيق بريد لإرسال الملاحظات.</string>
   <string name="are_you_sure_you_want_to_exit">هل أنت متأكد أنك تريد الخروج؟</string>
 
 
@@ -1315,58 +1302,128 @@
     <string name="zakatDetailInfo">تطبق الزكاة 2.5% على ثروة سنة كاملة. باستثناء الزراعة. تنقسم الزراعة إلى 3 أجزاء للزكاة: من ماء المطر 10%، من ماء الري 5%، ومن كليهما (ماء المطر والري) 7.5%</string>
     <string name="goldValueRB">نقداً</string>
     <string name="goldWeightRB">بالوزن</string>
-    
-    <!-- Reading Units -->
-    <string name="unit_pages">صفحات</string>
-    <string name="unit_verses">آيات</string>
-    <string name="unit_juz">أجزاء</string>
-    
-    <!-- Recitation Duration Options -->
-    <string name="minutes_15">15 دقيقة يوميًا</string>
-    <string name="minutes_30">30 دقيقة يوميًا</string>
-    <string name="minutes_45">45 دقيقة يوميًا</string>
-    <string name="minutes_60">60 دقيقة يوميًا</string>
-    
-    <!-- Prayer Card & Tasbih -->
-    <string name="your_location_label">موقعك</string>
-    <string name="tasbih_total">المجموع : </string>
-    
-    <!-- Challenge Days -->
-    <string name="challenge_days_placeholder">30 يومًا</string>
-    <string name="challenge_days_format">%d يومًا</string>
-    
-    <!-- Prayer Notification Settings -->
-    <string name="notification_settings">إعدادات الإشعارات</string>
-    <string name="notification_type_none">بدون</string>
-    <string name="notification_type_azan">الأذان</string>
-    <string name="notification_type_vibrate">اهتزاز</string>
-    <string name="notification_type_silent">إشعار صامت</string>
-    <string name="notification_type_text_tone">نغمة نصية قياسية</string>
-    <string name="notification_type_clock">صوت الساعة</string>
-    <string name="azan_name">اسم الأذان</string>
-    <string name="notification_volume">مستوى صوت الإشعار</string>
-    <string name="pre_prayer_reminder">تعيين تذكير قبل الصلاة</string>
-    <string name="reminder_minutes_format">%d دقيقة</string>
-    <string name="random_azan">أذان عشوائي</string>
-    <string name="volume_percentage_format">%d%%</string>
-    <string name="default_volume_display">80%</string>
-    <string name="default_minutes_display">5 دقيقة</string>
-    <string name="content_desc_none">بدون</string>
-    <string name="content_desc_azan">الأذان</string>
-    <string name="content_desc_vibrate">اهتزاز</string>
-    <string name="content_desc_silent">صامت</string>
-    <string name="content_desc_text_tone">نغمة نصية</string>
-    <string name="content_desc_clock">ساعة</string>
-    <string name="content_desc_decrease">تقليل</string>
-    <string name="content_desc_increase">زيادة</string>
 
-    <!-- Last Read Card -->
-    <string name="last_read">آخر قراءة:</string>
-    <string name="continue_reading">متابعة</string>
-    <string name="continue_reading_arrow">متابعة ←</string>
-    <string name="verse_no_format">الآية رقم: %d</string>
-    <string name="surah_format">%d. %s</string>
-    <string name="juz_format">الجزء %d</string>
-    <string name="page_format">الصفحة %d</string>
+    <!-- Qada Tracker -->
+    <string name="total_outstanding_qada">إجمالي صلوات القضاء المتبقية</string>
+    <string name="qada_count_zero">٠ صلوات · الحمد لله &gt;</string>
+    <string name="qada_count_prayers">%1$s صلوات &gt;</string>
+    <string name="qada_login_required_title">تسجيل الدخول مطلوب</string>
+    <string name="qada_login_required_message">يرجى تسجيل الدخول باستخدام حساب Google الخاص بك لتتبع القضاء ومشاهدة سجل صلواتك.</string>
+    <string name="qada_onboarding_title">أدِر التزاماتك في الصلاة</string>
+    <string name="qada_onboarding_description">قبل أن نبدأ في تتبع صلوات القضاء، يرجى تحديد التاريخ الذي ترغب أن نبدأ منه حساب التزاماتك.</string>
+    <string name="qada_option_today_title">ابدأ من اليوم (موصى به)</string>
+    <string name="qada_option_today_subtitle">موصى به لبداية ممارسة جديدة</string>
+    <string name="qada_option_custom_title">ابدأ من:</string>
+    <string name="qada_option_custom_subtitle">اضغط لاختيار تاريخ</string>
+    <string name="qada_confirm_button">تأكيد وبدء التتبع</string>
+    <string name="your_activity">نشاطك</string>
+    <string name="salah_history_qada_tracker">سجل الصلاة وتعقب القضاء</string>
+    <string name="weekly">أسبوعي</string>
+    <string name="monthly">شهري</string>
+    
+    <!-- Week days abbreviations -->
+    <string name="day_mon">الإثنين</string>
+    <string name="day_tue">الثلاثاء</string>
+    <string name="day_wed">الأربعاء</string>
+    <string name="day_thu">الخميس</string>
+    <string name="day_fri">الجمعة</string>
+    <string name="day_sat">السبت</string>
+    <string name="day_sun">الأحد</string>
+    
+    <!-- Prayer names -->
+    <string name="prayer_fajr">الفجر</string>
+    <string name="prayer_dhuhr">الظهر</string>
+    <string name="prayer_asr">العصر</string>
+    <string name="prayer_maghrib">المغرب</string>
+    <string name="prayer_isha">العشاء</string>
+
+    <!-- Subscription -->
+    <string name="go_premium">الترقية إلى بريميوم</string>
+    <string name="unlock_premium_features">افتح جميع المزايا المميزة</string>
+    <string name="subscription_heading">افتح مرشدك القرآني\nالشخصي</string>
+    <string name="subscription_feature_ai">مسارات تعليمية مدعومة بالذكاء الاصطناعي</string>
+    <string name="subscription_feature_ad_free">عبادة خالية من الإعلانات</string>
+    <string name="subscription_feature_tafsir">تفسير عميق وسياق</string>
+    <string name="subscription_feature_quiz">مكتبة اختبارات كاملة</string>
+    <string name="subscription_enable_trial">أريد التجربة مجاناً</string>
+    <string name="subscription_best_value">أفضل قيمة!</string>
+    <string name="subscription_price_yearly">$17.99 / سنويًا</string>
+    <string name="subscription_save_vs_monthly">وفر ‎50‎٪ مقارنة بالخطة الشهرية</string>
+    <string name="subscription_price_monthly">$2.99 / شهريًا</string>
+    <string name="subscription_free_trial_badge">تجربة مجانية لمدة 7 أيام</string>
+    <string name="subscription_monthly_sub_text">ثم %1$s شهريًا. لا دفع الآن</string>
+    <string name="subscription_yearly_sub_text">ثم %1$s سنويًا</string>
+    <string name="subscription_info_trial_monthly">إذا لم تلغِ قبل نهاية التجربة لمدة 7 أيام، فسيتم خصم سعر الاشتراك الشهري.</string>
+    <string name="subscription_info_trial_yearly">إذا لم تلغِ قبل نهاية التجربة لمدة 7 أيام، فسيتم خصم سعر الاشتراك السنوي.</string>
+    <string name="subscription_info_autorenew_yearly">سيُجدد اشتراكك تلقائيًا سنويًا ما لم يتم إلغاؤه.</string>
+    <string name="subscription_info_autorenew_monthly">سيُجدد اشتراكك تلقائيًا شهريًا ما لم يتم إلغاؤه.</string>
+    <string name="subscription_cta_trial">ابدأ التجربة والخطة</string>
+    <string name="subscription_cta_premium">الترقية إلى بريميوم الآن</string>
+    <string name="subscription_loading">جارٍ التحميل...</string>
+    <string name="subscription_no_payment_now">لا يوجد دفع الآن</string>
+    <string name="subscription_legal_info">بمتابعة استخدام التطبيق، فإنك توافق على شروط الاستخدام وسياسة الخصوصية الخاصة بنا</string>
+    <string name="subscription_error_billing_title">فشل الاتصال بالفوترة</string>
+    <string name="subscription_error_billing_message">تعذّر الاتصال بخدمة فوترة Google Play.\n\nالأسباب المحتملة:\n- لم يتم تثبيت متجر Google Play أو تحديثه\n- مشكلة في اتصال الشبكة\n- تم تعطيل خدمات Google Play\n\nيرجى التحقق والمحاولة مرة أخرى.</string>
+    <string name="subscription_error_no_products_title">لا تتوفر خطط اشتراك</string>
+    <string name="subscription_error_no_products_message">تعذّر تحميل خطط الاشتراك.\n\nمعرّفات المنتجات المطلوبة:\n- الشهري: %1$s\n- السنوي: %2$s\n\nخطوات الإعداد:\n1. أنشئ هذه المنتجات في Google Play Console\n2. اضبط حالتها على «نشط»\n3. انشر التطبيق في مسار تجريبي (داخلي/مغلق)\n4. أضف حساب اختبار في Google Play Console\n5. انتظر 1-2 ساعة حتى يتم التفعيل\n\nللاختبار، استخدم نسخة إصدار موقعة.</string>
+    <string name="subscription_error_plan_title">الخطة غير متوفرة</string>
+    <string name="subscription_error_plan_message">الخطة %1$s المحددة غير متوفرة.\n\nمعرّف المنتج: %2$s\n\nخطوات الاستكشاف:\n1. تحقق من وجود المنتج في Google Play Console\n2. تأكد من تطابق معرّف المنتج تمامًا\n3. تأكد من ضبط المنتج على «نشط»\n4. تأكد من نشر التطبيق في مسار تجريبي\n\nجرّب اختيار خطة أخرى أو تواصل مع الدعم.</string>
+    <string name="subscription_plan_yearly">سنوي</string>
+    <string name="subscription_plan_monthly">شهري</string>
+    <string name="subscription_message_success">تم تفعيل الاشتراك بنجاح!</string>
+    <string name="subscription_message_already_owned">لديك هذا الاشتراك بالفعل</string>
+    <string name="subscription_message_canceled">تم إلغاء الشراء</string>
+    <string name="subscription_message_failed">فشل الشراء: %1$s</string>
+    <string name="subscription_message_already_subscribed">أنت مشترك بالفعل!</string>
+    <string name="subscription_message_no_offer">لا يتوفر عرض صالح</string>
+
+  <!-- Onboarding Pages -->
+  <string name="strTitleIstiqamah">الاستقامة</string>
+    <string name="onboardDescIstiqamah">الاستمرارية في العبادة</string>
+    <string name="strTitleNotificationPermission">الإشعارات</string>
+    <string name="onboardDescNotificationPermission">حافظ على تنبيهات الصلاة</string>
+  <string name="strTitleFreeTrial">تجربة مجانية</string>
+    <string name="onboardDescFreeTrial">7 أيام مجانية للإلهام</string>
+
+  <!-- Istiqamah Onboarding Page -->
+    <string name="onboard_istiqamah_title">الاستقامة:\nالاستمرارية في\nالعبادة</string>
+    <string name="onboard_istiqamah_subtitle">رحلتنا إلى الجنة تُبنى على\nجهد يومي متسق.</string>
+    <string name="onboard_istiqamah_chart_title">الوقت المكرس للقرآن والصلاة</string>
+    <string name="onboard_istiqamah_description">مع التتبع المستمر، ستبني عادات أفضل، وتقلل من صلواتك القضاء المتأخرة، وتجد المزيد من السلام في حياتك اليومية. إن شاء الله.</string>
+    <string name="onboard_istiqamah_month_jan">يناير</string>
+    <string name="onboard_istiqamah_month_feb">فبراير</string>
+    <string name="onboard_istiqamah_month_mar">مارس</string>
+    <string name="onboard_istiqamah_month_apr">أبريل</string>
+
+      <!-- Notification Permission Onboarding Page -->
+    <string name="onboard_notification_title">حافظ على الاستمرارية\nمع صلاتك</string>
+    <string name="onboard_notification_subtitle">لا تفوت أي صلاة. تساعدك تنبيهاتنا في الوقت المناسب\nعلى أداء واجباتك أينما كنت.</string>
+    <string name="onboard_notification_dialog_title">QuranApp يود إرسال\nإشعارات الصلاة والتعلم\nإليك</string>
+    <string name="onboard_notification_dialog_desc">تتضمن الإشعارات الأذان، تذكيرات أوقات الصلاة،\nوالتحفيز القرآني اليومي.</string>
+    <string name="onboard_notification_allow">السماح</string>
+    <string name="onboard_notification_dont_allow">عدم السماح</string>
+    <string name="onboard_notification_review">"الحمد لله! هذا التطبيق ضروري. تنبيهات أوقات الصلاة دقيقة دائمًا وتساعدني على الاستمرار في تتبع القضاء."</string>
+    <string name="onboard_notification_review_name">عائشة ك.</string>
+    <string name="onboard_notification_review_verified">(مستخدم موثق)</string>
+
+  <!-- Free Trial Onboarding Page -->
+  <string name="onboard_trial_line1">لديك</string>
+    <string name="onboard_trial_line2">7 أيام مجانية</string>
+  <string name="onboard_trial_line3">للإلهام من</string>
+  <string name="onboard_trial_line4">كلام الله!</string>
+  <string name="onboard_trial_button">جرب مجانًا</string>
+
+
+    <string name="completed">مُكتمل</string>
+    <string name="this_week_progress">هذا الأسبوع</string>
+    <string name="prayer_breakdown">تفصيل الصلوات</string>
+    <string name="ada_on_time">أداء (في الوقت)</string>
+    <string name="qada_made_up">قضاء (تم القضاء)</string>
+    <string name="missed">فائتة</string>
+    <string name="great_consistency">استمرارية رائعة!</string>
+    <string name="keep_up_the_good_work">استمر في العمل الجيد</string>
 
 </resources>
+
+
+

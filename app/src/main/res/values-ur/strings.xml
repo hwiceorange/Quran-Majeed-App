@@ -84,32 +84,6 @@
 
     <string name="rate_later">Later</string>
 
-    <string name="rate_prompt_title">الحمد للہ! آپ کا تجربہ کیسا رہا؟</string>
-
-    <string name="rate_prompt_message">کیا آپ کو قرآن مجید ایپ پسند ہے؟</string>
-
-    <string name="rate_prompt_submit">درجہ بندی جمع کروائیں</string>
-
-    <string name="rate_prompt_maybe_later">بعد میں</string>
-
-    <string name="rate_prompt_sorry_title">ہمیں واقعی افسوس ہے</string>
-
-    <string name="rate_prompt_sorry_message">آپ کی رائے بہت اہم ہے۔ براہ کرم ہمیں بتائیں کہ ہم کیسے بہتر ہو سکتے ہیں:</string>
-
-    <string name="rate_prompt_feedback_title">اپنی رائے ہمارے ساتھ شیئر کریں</string>
-
-    <string name="rate_prompt_feedback_hint">ہمیں بتائیں کہ ہم کیسے بہتر ہو سکتے ہیں</string>
-
-    <string name="rate_prompt_feedback_send">جمع کروائیں</string>
-
-    <string name="rate_prompt_feedback_cancel">بعد میں</string>
-
-    <string name="rate_prompt_close_content">بند کریں</string>
-
-    <string name="rate_prompt_email_subject">قرآن ایپ کے بارے میں رائے</string>
-
-    <string name="rate_prompt_feedback_email_error">فیڈبیک بھیجنے کے لیے کوئی ای میل ایپ نہیں ملی۔</string>
-
     <string name="are_you_sure_you_want_to_exit">Are You Sure You Want To Exit ?</string>
 
     <string name="privacy">رازداری کی پالیسی</string>
@@ -750,6 +724,30 @@
 
     <string name="hijri">Hijri</string>
 
+    <string name="hijri_month_1">Mouharram</string>
+
+    <string name="hijri_month_2">Safar</string>
+
+    <string name="hijri_month_3">Rabii Al Awal</string>
+
+    <string name="hijri_month_4">Rabii Ath`Thani</string>
+
+    <string name="hijri_month_5">Joumada Al Oula</string>
+
+    <string name="hijri_month_6">Joumada Ath`Thania</string>
+
+    <string name="hijri_month_7">Rajab</string>
+
+    <string name="hijri_month_8">Chaabane</string>
+
+    <string name="hijri_month_9">Ramadan</string>
+
+    <string name="hijri_month_10">Chawwal</string>
+
+    <string name="hijri_month_11">Dhou Al Qi`da</string>
+
+    <string name="hijri_month_12">Dhou Al Hijja</string>
+
     <string name="method_fajr_angle">Fajr angle</string>
 
     <string name="method_ichaa_angle">Ichaa angle</string>
@@ -1336,13 +1334,13 @@
 
     <string name="noFootnotesForThisVerse">There are no footnotes for this verse.</string>
 
-    <string name="strTitleReaderChapters">سورتیں</string>
+    <string name="strTitleReaderChapters">Surah</string>
 
-    <string name="strTitleReaderJuz">پارے</string>
+    <string name="strTitleReaderJuz">Juz</string>
 
-    <string name="strTitleReaderChapters2">سورت</string>
+    <string name="strTitleReaderChapters2">Surah</string>
 
-    <string name="strTitleReaderJuz2">پارہ</string>
+    <string name="strTitleReaderJuz2">Juz</string>
 
     <string name="strTitleReaderVerses">Verses</string>
 
@@ -2072,137 +2070,124 @@
     <string name="tasbih_reminder">تسبیح کی یاد دہانی</string>
     <string name="estimated_challenge_duration">متوقع چیلنج کی مدت</string>
     <string name="save_start_challenge">✓ محفوظ کریں اور میرا چیلنج شروع کریں</string>
-    
-    <!-- Reading Units -->
-    <string name="unit_pages">صفحات</string>
-    <string name="unit_verses">آیات</string>
-    <string name="unit_juz">پارے</string>
-    
-    <!-- Recitation Duration Options -->
-    <string name="minutes_15">روزانہ 15 منٹ</string>
-    <string name="minutes_30">روزانہ 30 منٹ</string>
-    <string name="minutes_45">روزانہ 45 منٹ</string>
-    <string name="minutes_60">روزانہ 60 منٹ</string>
-    
-    <!-- Prayer Card & Tasbih -->
-    <string name="your_location_label">آپ کا مقام</string>
-    <string name="tasbih_total">کل : </string>
-    
-    <!-- Challenge Days -->
-    <string name="challenge_days_placeholder">30 دن</string>
-    <string name="challenge_days_format">%d دن</string>
-    
-    <!-- Prayer Notification Settings -->
-    <string name="notification_settings">اطلاعات کی ترتیبات</string>
-    <string name="notification_type_none">کوئی نہیں</string>
-    <string name="notification_type_azan">اذان</string>
-    <string name="notification_type_vibrate">وائبریٹ</string>
-    <string name="notification_type_silent">خاموش اطلاع</string>
-    <string name="notification_type_text_tone">معیاری ٹیکسٹ ٹون</string>
-    <string name="notification_type_clock">گھڑی کی آواز</string>
-    <string name="azan_name">اذان کا نام</string>
-    <string name="notification_volume">اطلاع کا حجم</string>
-    <string name="pre_prayer_reminder">نماز سے پہلے یاددہانی مقرر کریں</string>
-    <string name="reminder_minutes_format">%d منٹ</string>
-    <string name="random_azan">بے ترتیب اذان</string>
-    <string name="volume_percentage_format">%d%%</string>
-    <string name="default_volume_display">80%</string>
-    <string name="default_minutes_display">5 منٹ</string>
-    <string name="content_desc_none">کوئی نہیں</string>
-    <string name="content_desc_azan">اذان</string>
-    <string name="content_desc_vibrate">وائبریٹ</string>
-    <string name="content_desc_silent">خاموش</string>
-    <string name="content_desc_text_tone">ٹیکسٹ ٹون</string>
-    <string name="content_desc_clock">گھڑی</string>
-    <string name="content_desc_decrease">کم کریں</string>
-    <string name="content_desc_increase">بڑھائیں</string>
-    
-    <!-- Zakat Calculator -->
-    <string name="zakatMoneyTitle">رقم</string>
-    <string name="moneyCashInHandTitle">ہاتھ میں نقد رقم</string>
-    <string name="moneyCashInBankAccountTitle">بینک اکاؤنٹ میں نقد رقم</string>
-    <string name="zakatGoldTitle">سونا</string>
-    <string name="goldValuePriceTV">سونے کی قیمت</string>
-    <string name="goldWeight24caratPriceTV">سونے کی قیمت (24 قیراط)</string>
-    <string name="goldWeight24caratQuantityTV">سونے کی مقدار</string>
-    <string name="goldWeight24caratgiramTV">گرام</string>
-    <string name="gold24caratpriceTitleTV">24 قیراط سونے کی قیمت</string>
-    <string name="gold22caratpriceTitleTV">22 قیراط سونے کی قیمت</string>
-    <string name="gold21caratpriceTitleTV">21 قیراط سونے کی قیمت</string>
-    <string name="gold18caratpriceTitleTV">18 قیراط سونے کی قیمت</string>
-    <string name="silverHeadingTV">چاندی</string>
-    <string name="silverValueRB">نقد</string>
-    <string name="silverWeightRB">وزن میں</string>
-    <string name="silverValueTitle2TV">چاندی کی قیمت</string>
-    <string name="silverValuePriceTV">چاندی کی قیمت</string>
-    <string name="silverWeightQuentityTV">چاندی کی مقدار</string>
-    <string name="silverWeightQuantityTV">چاندی کی مقدار</string>
-    <string name="silverWeightUnitPriceET">چاندی کی یونٹ قیمت</string>
-    <string name="investmentHeadingTV">سرمایہ کاری</string>
-    <string name="sharesTV">حصص</string>
-    <string name="investSharesTV">حصص</string>
-    <string name="investBondsTV">بانڈز</string>
-    <string name="investPensionTV">پنشن</string>
-    <string name="investLoanOutTV">دیے گئے قرضے</string>
-    <string name="otherInvestmentTV">بینک اکاؤنٹ میں نقد رقم</string>
-    <string name="propertyHeadingTV">جائیداد</string>
-    <string name="rentTV">کرایہ کی آمدنی</string>
-    <string name="propertyTV">جائیداد</string>
-    <string name="businessHeadingTV">کاروبار</string>
-    <string name="businessCashTV">کاروباری نقد رقم</string>
-    <string name="businessGoodsTV">سامان / اسٹاک</string>
-    <string name="agricultureHeadingTV">زراعت</string>
-    <string name="agriPriceTitleTV">کل زرعی آمدنی</string>
-    <string name="agriRainHeadingTV">بارش کے پانی سے 10%</string>
-    <string name="agriIrrigationHeadingTV">آبپاشی سے 5%</string>
-    <string name="agriBothHeadingTV">دونوں سے 7.5%</string>
-    <string name="cattleHeadingTV">مویشی</string>
-    <string name="cattleCamelHeadingTV">اونٹ</string>
-    <string name="cattleCowHeadingTV">گائے</string>
-    <string name="cattleSheepHeadingTV">بھیڑ</string>
-    <string name="preciousStonesHeadingTV">قیمتی پتھر</string>
-    <string name="preciousStonesHeadingChildTV">قیمتی پتھر</string>
-    <string name="otherHeadingTV">دیگر</string>
-    <string name="otherPensionHeadingTV">پنشن</string>
-    <string name="otherLoanHeadingTV">خاندان اور دوسروں کو قرضے</string>
-    <string name="otherAssetsHeadingTV">دیگر اثاثے</string>
-    <string name="zakatPayablesTitle">ادائیگیاں</string>
-    <string name="zakatCreditCardPaymentHeadingTV">کریڈٹ کارڈ کی ادائیگی</string>
-    <string name="zakatHomeHeadingTV">گھر کی ادائیگی</string>
-    <string name="homePaymentET">گھر کی ادائیگی</string>
-    <string name="zakatCarHeadingTV">گاڑی کی ادائیگی</string>
-    <string name="zakatCarPaymentET">گاڑی کی ادائیگی</string>
-    <string name="zakatBusinessPaymentHeadingTV">کاروباری ادائیگی</string>
-    <string name="zakatFamilyDebtHeadingTV">خاندان کا قرض</string>
-    <string name="zakatOthersDebtHeadingTV">دوسروں کا قرض</string>
-    <string name="zakatTotalAssetsHeadingTV">کل اثاثے</string>
-    <string name="zakatDueHeadingTV">واجب زکوٰۃ</string>
-    <string name="zakatDetailTitle">زکوٰۃ کی تفصیلات</string>
-    <string name="zakatDetailInfo">زکوٰۃ سالانہ دولت پر 2.5% لاگو ہوتی ہے۔ زراعت کے علاوہ۔ زراعت 3 حصوں میں تقسیم ہے: بارش کے پانی سے 10%، آبپاشی سے 5%، اور دونوں سے 7.5%</string>
-    <string name="goldValueRB">نقد</string>
-    <string name="goldWeightRB">وزن میں</string>
-    
-    <!-- Islamic Months (Urdu) -->
-    <string name="hijri_month_1">محرم</string>
-    <string name="hijri_month_2">صفر</string>
-    <string name="hijri_month_3">ربیع الاول</string>
-    <string name="hijri_month_4">ربیع الثانی</string>
-    <string name="hijri_month_5">جمادی الاول</string>
-    <string name="hijri_month_6">جمادی الثانی</string>
-    <string name="hijri_month_7">رجب</string>
-    <string name="hijri_month_8">شعبان</string>
-    <string name="hijri_month_9">رمضان</string>
-    <string name="hijri_month_10">شوال</string>
-    <string name="hijri_month_11">ذوالقعدہ</string>
-    <string name="hijri_month_12">ذوالحجہ</string>
 
-    <!-- Last Read Card -->
-    <string name="last_read">آخری پڑھا:</string>
-    <string name="continue_reading">جاری رکھیں</string>
-    <string name="continue_reading_arrow">جاری رکھیں ←</string>
-    <string name="verse_no_format">آیت نمبر: %d</string>
-    <string name="surah_format">%d. %s</string>
-    <string name="juz_format">پارہ %d</string>
-    <string name="page_format">صفحہ %d</string>
+    <!-- Qada Tracker -->
+    <string name="total_outstanding_qada">باقی رہ جانے والی قضا کی کل تعداد</string>
+    <string name="qada_count_zero">۰ نمازیں · الحمد للہ &gt;</string>
+    <string name="qada_count_prayers">%1$s نمازیں &gt;</string>
+    <string name="qada_login_required_title">لاگ ان ضروری ہے</string>
+    <string name="qada_login_required_message">اپنی قضا کو ٹریک کرنے اور نماز کی تاریخ دیکھنے کے لیے براہ کرم اپنے Google اکاؤنٹ سے لاگ ان کریں۔</string>
+    <string name="qada_onboarding_title">اپنی نمازوں کی ذمہ داریوں کو منظم کریں</string>
+    <string name="qada_onboarding_description">قضا (چھوٹی ہوئی) نمازوں کا ریکارڈ شروع کرنے سے پہلے، براہ کرم وہ تاریخ منتخب کریں جہاں سے آپ گنتی شروع کرنا چاہتے ہیں۔</string>
+    <string name="qada_option_today_title">آج سے شروع کریں (سفارش کردہ)</string>
+    <string name="qada_option_today_subtitle">نئی مشق کے آغاز کے لیے بہترین</string>
+    <string name="qada_option_custom_title">شروع کریں از:</string>
+    <string name="qada_option_custom_subtitle">تاریخ منتخب کرنے کے لیے دبائیں</string>
+    <string name="qada_confirm_button">تصدیق کریں اور ٹریکنگ شروع کریں</string>
+    <string name="your_activity">آپ کی سرگرمی</string>
+    <string name="salah_history_qada_tracker">نماز کا ریکارڈ اور قضا ٹریکر</string>
+    <string name="weekly">ہفتہ وار</string>
+    <string name="monthly">ماہانہ</string>
+    
+    <!-- Week days abbreviations -->
+    <string name="day_mon">پیر</string>
+    <string name="day_tue">منگل</string>
+    <string name="day_wed">بدھ</string>
+    <string name="day_thu">جمعرات</string>
+    <string name="day_fri">جمعہ</string>
+    <string name="day_sat">ہفتہ</string>
+    <string name="day_sun">اتوار</string>
+    
+    <!-- Prayer names -->
+    <string name="prayer_fajr">فجر</string>
+    <string name="prayer_dhuhr">ظہر</string>
+    <string name="prayer_asr">عصر</string>
+    <string name="prayer_maghrib">مغرب</string>
+    <string name="prayer_isha">عشاء</string>
+
+    <!-- Subscription -->
+    <string name="go_premium">پریمیم حاصل کریں</string>
+    <string name="unlock_premium_features">تمام پریمیم خصوصیات انلاک کریں</string>
+    <string name="subscription_heading">اپنا ذاتی قرآنی رہنما\nحاصل کریں</string>
+    <string name="subscription_feature_ai">اے آئی سے معاون تعلیمی راستے</string>
+    <string name="subscription_feature_ad_free">اشتہار سے پاک عبادت</string>
+    <string name="subscription_feature_tafsir">گہری تفسیر اور سیاق</string>
+    <string name="subscription_feature_quiz">مکمل کوئز لائبریری</string>
+    <string name="subscription_enable_trial">میں مفت آزمانا چاہتا ہوں</string>
+    <string name="subscription_best_value">بہترین قدر!</string>
+    <string name="subscription_price_yearly">$17.99 / سالانہ</string>
+    <string name="subscription_save_vs_monthly">ماہانہ کے مقابلے میں 50٪ بچت کریں</string>
+    <string name="subscription_price_monthly">$2.99 / ماہانہ</string>
+    <string name="subscription_free_trial_badge">7 دن کی مفت آزمائش</string>
+    <string name="subscription_monthly_sub_text">پھر %1$s ماہانہ۔ ابھی کوئی ادائیگی نہیں</string>
+    <string name="subscription_yearly_sub_text">پھر %1$s سالانہ</string>
+    <string name="subscription_info_trial_monthly">اگر آپ نے 7 دن کی آزمائش ختم ہونے سے پہلے منسوخ نہ کیا تو ماہانہ سبسکرپشن کی قیمت وصول کی جائے گی۔</string>
+    <string name="subscription_info_trial_yearly">اگر آپ نے 7 دن کی آزمائش ختم ہونے سے پہلے منسوخ نہ کیا تو سالانہ سبسکرپشن کی قیمت وصول کی جائے گی۔</string>
+    <string name="subscription_info_autorenew_yearly">آپ کی سبسکرپشن ہر سال خود بخود تجدید ہو جائے گی جب تک منسوخ نہ کی جائے۔</string>
+    <string name="subscription_info_autorenew_monthly">آپ کی سبسکرپشن ہر ماہ خود بخود تجدید ہو جائے گی جب تک منسوخ نہ کی جائے۔</string>
+    <string name="subscription_cta_trial">آزمائش اور منصوبہ شروع کریں</string>
+    <string name="subscription_cta_premium">فوراً پریمیم حاصل کریں</string>
+    <string name="subscription_loading">لوڈ ہو رہا ہے...</string>
+    <string name="subscription_no_payment_now">فی الحال ادائیگی نہیں</string>
+    <string name="subscription_legal_info">ایپ کا استعمال جاری رکھنے سے آپ ہماری شرائطِ استعمال اور رازداری کی پالیسی کو قبول کرتے ہیں</string>
+    <string name="subscription_error_billing_title">بلنگ کنکشن ناکام</string>
+    <string name="subscription_error_billing_message">Google Play بلنگ سے کنکشن قائم نہیں ہو سکا۔\n\nممکنہ وجوہات:\n- Google Play Store انسٹال یا اپ ڈیٹ نہیں ہے\n- نیٹ ورک کنکشن میں مسئلہ\n- Google Play سروسز غیر فعال ہیں\n\nبراہ کرم چیک کریں اور دوبارہ کوشش کریں۔</string>
+    <string name="subscription_error_no_products_title">کوئی سبسکرپشن پلان دستیاب نہیں</string>
+    <string name="subscription_error_no_products_message">سبسکرپشن پلانز لوڈ نہیں ہو سکے۔\n\nدرکار پراڈکٹ آئی ڈیز:\n- ماہانہ: %1$s\n- سالانہ: %2$s\n\nترتیب کے اقدامات:\n1. ان پراڈکٹس کو Google Play Console میں بنائیں\n2. انہیں فعال حیثیت پر سیٹ کریں\n3. ایپ کو کسی ٹیسٹ ٹریک (اندرونی/بند) پر شائع کریں\n4. Google Play Console میں ٹیسٹ اکاؤنٹ شامل کریں\n5. فعال ہونے کے لیے 1-2 گھنٹے انتظار کریں\n\nٹیسٹنگ کے لیے دستخط شدہ ریلیز بلڈ استعمال کریں۔</string>
+    <string name="subscription_error_plan_title">پلان دستیاب نہیں</string>
+    <string name="subscription_error_plan_message">منتخب کردہ %1$s پلان دستیاب نہیں ہے۔\n\nپراڈکٹ آئی ڈی: %2$s\n\nمسئلہ حل کرنے کے اقدامات:\n1. چیک کریں کہ پراڈکٹ Google Play Console میں موجود ہے\n2. یقینی بنائیں کہ پراڈکٹ آئی ڈی بالکل مماثل ہے\n3. تصدیق کریں کہ پراڈکٹ کو فعال پر سیٹ کیا گیا ہے\n4. یقینی بنائیں کہ ایپ ٹیسٹ ٹریک پر شائع کی گئی ہے\n\nکوئی دوسرا پلان منتخب کریں یا سپورٹ سے رابطہ کریں۔</string>
+    <string name="subscription_plan_yearly">سالانہ</string>
+    <string name="subscription_plan_monthly">ماہانہ</string>
+    <string name="subscription_message_success">سبسکرپشن کامیابی سے فعال ہو گئی!</string>
+    <string name="subscription_message_already_owned">آپ کے پاس یہ سبسکرپشن پہلے سے موجود ہے</string>
+    <string name="subscription_message_canceled">خریداری منسوخ ہو گئی</string>
+    <string name="subscription_message_failed">خریداری ناکام: %1$s</string>
+    <string name="subscription_message_already_subscribed">آپ پہلے ہی سبسکرائب کر چکے ہیں!</string>
+    <string name="subscription_message_no_offer">کوئی موزوں آفر دستیاب نہیں</string>
+
+    <!-- Onboarding Pages -->
+    <string name="strTitleIstiqamah">استقامت</string>
+    <string name="onboardDescIstiqamah">عبادت میں مستقل مزاجی</string>
+    <string name="strTitleNotificationPermission">اطلاعات</string>
+    <string name="onboardDescNotificationPermission">نماز کی یاد دہانیوں کے ساتھ مستقل رہیں</string>
+    <string name="strTitleFreeTrial">مفت آزمائش</string>
+    <string name="onboardDescFreeTrial">متاثر ہونے کے لیے 7 دن مفت</string>
+
+        <!-- Istiqamah Onboarding Page -->
+    <string name="onboard_istiqamah_title">استقامت:\nعبادت میں\nمستقل مزاجی</string>
+    <string name="onboard_istiqamah_subtitle">جنت کا ہمارا سفر روزانہ،\nمسلسل کوششوں پر بنایا گیا ہے۔</string>
+    <string name="onboard_istiqamah_chart_title">قرآن اور نماز کے لیے وقف وقت</string>
+    <string name="onboard_istiqamah_description">مسلسل ٹریکنگ سے، آپ بہتر عادات بنائیں گے، اپنی قضا نمازیں کم کریں گے، اور اپنی روزمرہ زندگی میں مزید سکون پائیں گے۔ ان شاء اللہ۔</string>
+    <string name="onboard_istiqamah_month_jan">جنوری</string>
+    <string name="onboard_istiqamah_month_feb">فروری</string>
+    <string name="onboard_istiqamah_month_mar">مارچ</string>
+    <string name="onboard_istiqamah_month_apr">اپریل</string>
+
+    <!-- Notification Permission Onboarding Page -->
+    <string name="onboard_notification_title">اپنی نماز کے ساتھ\nمستقل رہیں</string>
+    <string name="onboard_notification_subtitle">کوئی نماز نہ چھوٹے۔ ہماری بروقت یاد دہانیاں آپ کو\nجہاں بھی ہوں اپنی ذمہ داریاں پوری کرنے میں مدد کرتی ہیں۔</string>
+    <string name="onboard_notification_dialog_title">QuranApp آپ کو نماز اور تعلیمی\nاطلاعات بھیجنا چاہتی ہے</string>
+    <string name="onboard_notification_dialog_desc">اطلاعات میں اذان، نماز کے وقت کی یاد دہانیاں،\nاور روزانہ قرآنی حوصلہ افزائی شامل ہے۔</string>
+    <string name="onboard_notification_allow">اجازت دیں</string>
+    <string name="onboard_notification_dont_allow">اجازت نہ دیں</string>
+    <string name="onboard_notification_review">"الحمد للہ! یہ ایپ ضروری ہے۔ نماز کے وقت کی الرٹس ہمیشہ درست ہوتی ہیں اور مجھے اپنی قضا ٹریکنگ میں مستقل رہنے میں مدد کرتی ہیں۔"</string>
+    <string name="onboard_notification_review_name">عائشہ ک۔</string>
+    <string name="onboard_notification_review_verified">(تصدیق شدہ صارف)</string>
+
+    <!-- Free Trial Onboarding Page -->
+    <string name="onboard_trial_line1">آپ کو ملے</string>
+    <string name="onboard_trial_line2">7 دن مفت</string>
+    <string name="onboard_trial_line3">متاثر ہونے کے لیے</string>
+    <string name="onboard_trial_line4">اللہ کا کلام!</string>
+    <string name="onboard_trial_button">مفت آزمائیں</string>
+    
+    <string name="completed">مکمل</string>
+    <string name="this_week_progress">اس ہفتے</string>
+    <string name="prayer_breakdown">نماز کی تفصیل</string>
+    <string name="ada_on_time">ادا (وقت پر)</string>
+    <string name="qada_made_up">قضا (پوری کر لی)</string>
+    <string name="missed">چھوٹ گئی</string>
+    <string name="great_consistency">بہترین استقامت!</string>
+    <string name="keep_up_the_good_work">اچھا کام جاری رکھیں</string>
 
 </resources>

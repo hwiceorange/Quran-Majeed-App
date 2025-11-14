@@ -7,6 +7,7 @@ import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 import retrofit2.http.Streaming
 
 interface GithubApi {
@@ -19,7 +20,7 @@ interface GithubApi {
     @GET("apis/other/urls.json")
     suspend fun getAppUrls(): AppUrls
 
-    @GET("api/translations/available_translations_info.json")
+    @GET("apis/translations/available_translations_info.json")
     suspend fun getAvailableTranslations(): ResponseBody
 
     @GET("{path}")
@@ -45,4 +46,24 @@ interface GithubApi {
 
     @GET("apis/tafsirs/available_tafsirs_info.json")
     suspend fun getAvailableTafsirs(): ResponseBody
+}
+
+/**
+ * 🌐 Quran Foundation API (备用API)
+ * 用于获取古兰经翻译版本和经文内容
+ */
+interface QuranFoundationApi {
+    /**
+     * 获取所有可用的翻译版本
+     * https://api.quran.com/api/v4/resources/translations
+     */
+    @GET("api/v4/resources/translations")
+    suspend fun getTranslations(@Query("language") language: String? = null): ResponseBody
+    
+    /**
+     * 获取特定翻译版本的经文
+     * https://api.quran.com/api/v4/quran/translations/{translation_id}
+     */
+    @GET("api/v4/quran/translations/{translation_id}")
+    suspend fun getQuranTranslation(@Path("translation_id") translationId: Int): ResponseBody
 }

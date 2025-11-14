@@ -12,8 +12,17 @@ import retrofit2.Retrofit
 object RetrofitInstance {
     private val client: OkHttpClient = OkHttpClient.Builder()
         .addInterceptor { chain ->
-            Log.d(chain.request().url)
-            return@addInterceptor chain.proceed(chain.request())
+            val request = chain.request()
+            Log.d("🌐 API_REQUEST: ${request.method} ${request.url}")
+            
+            try {
+                val response = chain.proceed(request)
+                Log.d("✅ API_RESPONSE: ${response.code} ${request.url}")
+                return@addInterceptor response
+            } catch (ex: Exception) {
+                android.util.Log.e("API_ERROR", "❌ ${ex.message}", ex)
+                throw ex
+            }
         }
         .build()
 
@@ -23,7 +32,7 @@ object RetrofitInstance {
             .addConverterFactory(
                 JsonHelper.json.asConverterFactory("application/json".toMediaType())
             )
-//            .client(client)
+            .client(client)  // ✅ 启用日志拦截器
             .build()
             .create(GithubApi::class.java)
     }
@@ -37,5 +46,20 @@ object RetrofitInstance {
 //            .client(client)
             .build()
             .create(QuranApi::class.java)
+    }
+    
+    /**
+     * 🌐 Quran Foundation API (备用API)
+     * 用于获取古兰经翻译版本和经文内容
+     */
+    val quranFoundation: QuranFoundationApi by lazy {
+        Retrofit.Builder()
+            .baseUrl("https://api.quran.com/")
+            .addConverterFactory(
+                JsonHelper.json.asConverterFactory("application/json".toMediaType())
+            )
+            .client(client)
+            .build()
+            .create(QuranFoundationApi::class.java)
     }
 }

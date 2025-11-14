@@ -211,7 +211,7 @@ object TafsirManager {
         "english" to "en",
         "urdu" to "ur",
         "bengali" to "bn",
-        "indonesian" to "in",
+        "indonesian" to "id",  // 统一使用 "id" 表示印尼语
         "malay" to "ms",
         "turkish" to "tr",
         "persian" to "fa",

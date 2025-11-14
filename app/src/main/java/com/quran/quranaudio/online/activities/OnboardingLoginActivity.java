@@ -111,6 +111,9 @@ public class OnboardingLoginActivity extends AppCompatActivity {
                 } else {
                     isLoggingIn = false;
                     Log.d(TAG, "Google Sign-In cancelled by user");
+                    if (googleAuthManager != null) {
+                        googleAuthManager.logSignInDiagnostics(result.getData(), "OnboardingLogin-CANCELLED");
+                    }
                 }
             }
         );

@@ -110,7 +110,6 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:src="@drawable/ic_check_circle"
-                    app:tint="@android:color/white"
                     android:visibility="gone"
                     android:contentDescription="Completed" />
 
@@ -206,7 +205,6 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:src="@drawable/ic_check_circle"
-                    app:tint="@android:color/white"
                     android:visibility="gone"
                     android:contentDescription="Completed" />
 
@@ -302,7 +300,6 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:src="@drawable/ic_check_circle"
-                    app:tint="@android:color/white"
                     android:visibility="gone"
                     android:contentDescription="Completed" />
 

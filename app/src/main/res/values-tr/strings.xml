@@ -84,32 +84,6 @@
 
     <string name="rate_later">Later</string>
 
-    <string name="rate_prompt_title">Elhamdülillah! Deneyiminiz nasıldı?</string>
-
-    <string name="rate_prompt_message">Quran Majeed uygulamasını seviyor musunuz?</string>
-
-    <string name="rate_prompt_submit">Değerlendirmeyi Gönder</string>
-
-    <string name="rate_prompt_maybe_later">Belki Daha Sonra</string>
-
-    <string name="rate_prompt_sorry_title">Gerçekten Üzgünüz</string>
-
-    <string name="rate_prompt_sorry_message">Geri bildiriminiz çok değerli. Lütfen nasıl gelişebileceğimizi söyleyin:</string>
-
-    <string name="rate_prompt_feedback_title">Geri bildiriminizi paylaşın</string>
-
-    <string name="rate_prompt_feedback_hint">Uygulamayı nasıl geliştirebileceğimizi söyleyin</string>
-
-    <string name="rate_prompt_feedback_send">Gönder</string>
-
-    <string name="rate_prompt_feedback_cancel">Daha sonra</string>
-
-    <string name="rate_prompt_close_content">Kapat</string>
-
-    <string name="rate_prompt_email_subject">Kuran Uygulaması hakkında geri bildirim</string>
-
-    <string name="rate_prompt_feedback_email_error">Geri bildirim göndermek için e-posta uygulaması bulunamadı.</string>
-
     <string name="are_you_sure_you_want_to_exit">Are You Sure You Want To Exit ?</string>
 
     <string name="privacy">Gizlilik Politikası</string>
@@ -1360,13 +1334,13 @@
 
     <string name="noFootnotesForThisVerse">There are no footnotes for this verse.</string>
 
-    <string name="strTitleReaderChapters">Sure</string>
+    <string name="strTitleReaderChapters">Surah</string>
 
-    <string name="strTitleReaderJuz">Cüz</string>
+    <string name="strTitleReaderJuz">Juz</string>
 
-    <string name="strTitleReaderChapters2">Sure</string>
+    <string name="strTitleReaderChapters2">Surah</string>
 
-    <string name="strTitleReaderJuz2">Cüz</string>
+    <string name="strTitleReaderJuz2">Juz</string>
 
     <string name="strTitleReaderVerses">Verses</string>
 
@@ -2096,58 +2070,123 @@
     <string name="tasbih_reminder">Tesbih Hatırlatıcısı</string>
     <string name="estimated_challenge_duration">Tahmini Meydan Okuma Süresi</string>
     <string name="save_start_challenge">✓ KAYDET VE MEYDAN OKUMAMI BAŞLAT</string>
-    
-    <!-- Reading Units -->
-    <string name="unit_pages">Sayfalar</string>
-    <string name="unit_verses">Ayetler</string>
-    <string name="unit_juz">Cüzler</string>
-    
-    <!-- Recitation Duration Options -->
-    <string name="minutes_15">Günde 15 dakika</string>
-    <string name="minutes_30">Günde 30 dakika</string>
-    <string name="minutes_45">Günde 45 dakika</string>
-    <string name="minutes_60">Günde 60 dakika</string>
-    
-    <!-- Prayer Card & Tasbih -->
-    <string name="your_location_label">Konumunuz</string>
-    <string name="tasbih_total">Toplam : </string>
-    
-    <!-- Challenge Days -->
-    <string name="challenge_days_placeholder">30 Gün</string>
-    <string name="challenge_days_format">%d Gün</string>
-    
-    <!-- Prayer Notification Settings -->
-    <string name="notification_settings">Bildirim Ayarları</string>
-    <string name="notification_type_none">Yok</string>
-    <string name="notification_type_azan">Ezan</string>
-    <string name="notification_type_vibrate">Titreşim</string>
-    <string name="notification_type_silent">Sessiz Bildirim</string>
-    <string name="notification_type_text_tone">Standart Metin Tonu</string>
-    <string name="notification_type_clock">Saat Sesi</string>
-    <string name="azan_name">Ezan Adı</string>
-    <string name="notification_volume">Bildirim Ses Düzeyi</string>
-    <string name="pre_prayer_reminder">Namaz öncesi hatırlatma ayarla</string>
-    <string name="reminder_minutes_format">%d dakika</string>
-    <string name="random_azan">Rastgele Ezan</string>
-    <string name="volume_percentage_format">%d%%</string>
-    <string name="default_volume_display">80%</string>
-    <string name="default_minutes_display">5 dakika</string>
-    <string name="content_desc_none">Yok</string>
-    <string name="content_desc_azan">Ezan</string>
-    <string name="content_desc_vibrate">Titreşim</string>
-    <string name="content_desc_silent">Sessiz</string>
-    <string name="content_desc_text_tone">Metin Tonu</string>
-    <string name="content_desc_clock">Saat</string>
-    <string name="content_desc_decrease">Azalt</string>
-    <string name="content_desc_increase">Artır</string>
 
-    <!-- Last Read Card -->
-    <string name="last_read">Son Okunan:</string>
-    <string name="continue_reading">Devam Et</string>
-    <string name="continue_reading_arrow">Devam Et →</string>
-    <string name="verse_no_format">Ayet No: %d</string>
-    <string name="surah_format">%d. %s</string>
-    <string name="juz_format">Cüz %d</string>
-    <string name="page_format">Sayfa %d</string>
+    <!-- Qada Tracker -->
+    <string name="total_outstanding_qada">Toplam Bekleyen Kaza Namazı</string>
+    <string name="qada_count_zero">0 Namaz · Elhamdülillah &gt;</string>
+    <string name="qada_count_prayers">%1$s Namaz &gt;</string>
+    <string name="qada_login_required_title">Giriş Gerekli</string>
+    <string name="qada_login_required_message">Kaza namazlarınızı takip etmek ve namaz geçmişinizi görmek için lütfen Google hesabınızla giriş yapın.</string>
+    <string name="qada_onboarding_title">Namaz Sorumluluklarını Yönet</string>
+    <string name="qada_onboarding_description">Kaza (kaçırılmış) namazlarını takip etmeye başlamadan önce, yükümlülüklerini hangi tarihten itibaren saymak istediğini belirt.</string>
+    <string name="qada_option_today_title">Bugünden Başla (Önerilir)</string>
+    <string name="qada_option_today_subtitle">Yeni başlayanlar için önerilir</string>
+    <string name="qada_option_custom_title">Başlangıç tarihi:</string>
+    <string name="qada_option_custom_subtitle">Tarih seçmek için dokun</string>
+    <string name="qada_confirm_button">Onayla ve Takibi Başlat</string>
+    <string name="your_activity">Aktiviteniz</string>
+    <string name="salah_history_qada_tracker">Namaz Geçmişi ve Kaza Takipçisi</string>
+    <string name="weekly">Haftalık</string>
+    <string name="monthly">Aylık</string>
+    
+    <!-- Week days abbreviations -->
+    <string name="day_mon">Pzt</string>
+    <string name="day_tue">Sal</string>
+    <string name="day_wed">Çar</string>
+    <string name="day_thu">Per</string>
+    <string name="day_fri">Cum</string>
+    <string name="day_sat">Cmt</string>
+    <string name="day_sun">Paz</string>
+    
+    <!-- Prayer names -->
+    <string name="prayer_fajr">Sabah</string>
+    <string name="prayer_dhuhr">Öğle</string>
+    <string name="prayer_asr">İkindi</string>
+    <string name="prayer_maghrib">Akşam</string>
+    <string name="prayer_isha">Yatsı</string>
 
+    <!-- Onboarding Pages -->
+    <string name="strTitleIstiqamah">İstikrar</string>
+    <string name="onboardDescIstiqamah">İbadette Tutarlılık</string>
+    <string name="strTitleNotificationPermission">Bildirimler</string>
+    <string name="onboardDescNotificationPermission">Namaz hatırlatmalarıyla tutarlı kalın</string>
+    <string name="strTitleFreeTrial">Ücretsiz Deneme</string>
+    <string name="onboardDescFreeTrial">İlham almak için 7 gün ücretsiz</string>
+    
+    <!-- Istiqamah Onboarding Page -->
+    <string name="onboard_istiqamah_title">İstikrar:\nİbadette\nTutarlılık</string>
+    <string name="onboard_istiqamah_subtitle">Cennet\'e yolculuğumuz\ngünlük, tutarlı çaba ile inşa edilir.</string>
+    <string name="onboard_istiqamah_chart_title">KUR\'AN VE NAMAZ İÇİN AYIRILAN ZAMAN</string>
+    <string name="onboard_istiqamah_description">Tutarlı takip ile daha iyi alışkanlıklar geliştirecek, kaza namazlarınızı azaltacak ve günlük yaşamınızda daha fazla huzur bulacaksınız. İnşallah.</string>
+    <string name="onboard_istiqamah_month_jan">Oca</string>
+    <string name="onboard_istiqamah_month_feb">Şub</string>
+    <string name="onboard_istiqamah_month_mar">Mar</string>
+    <string name="onboard_istiqamah_month_apr">Nis</string>
+    
+    <!-- Notification Permission Onboarding Page -->
+    <string name="onboard_notification_title">Namazınızla\nTutarlı Kalın</string>
+    <string name="onboard_notification_subtitle">Hiç namaz kaçırmayın. Zamanında hatırlatmalarımız\nnerede olursanız olun görevlerinizi yerine getirmenize yardımcı olur.</string>
+    <string name="onboard_notification_dialog_title">QuranApp Size Namaz &amp; Öğrenme\nBildirimleri Göndermek İstiyor</string>
+    <string name="onboard_notification_dialog_desc">Bildirimler Ezan, Namaz zamanı\nhatırlatıcıları ve günlük Kur\'an\nmotivasyonu içerir.</string>
+    <string name="onboard_notification_allow">İZİN VER</string>
+    <string name="onboard_notification_dont_allow">İZİN VERME</string>
+    <string name="onboard_notification_review">"Elhamdülillah! Bu uygulama olmazsa olmaz. Namaz vakti uyarıları her zaman doğru ve kaza takibimde tutarlı kalmama yardımcı oluyor."</string>
+    <string name="onboard_notification_review_name">Aisha K.</string>
+    <string name="onboard_notification_review_verified">(Doğrulanmış Kullanıcı)</string>
+    
+    <!-- Free Trial Onboarding Page -->
+    <string name="onboard_trial_line1">Sizin için</string>
+    <string name="onboard_trial_line2">7 gün ücretsiz</string>
+    <string name="onboard_trial_line3">ilham almak için</string>
+    <string name="onboard_trial_line4">Allah\'ın Kelâmı!</string>
+    <string name="onboard_trial_button">Ücretsiz Deneyin</string>
+
+    <!-- Subscription -->
+    <string name="go_premium">Premium\'a Geç</string>
+    <string name="unlock_premium_features">Tüm premium özelliklerin kilidini aç</string>
+    <string name="subscription_heading">Kişisel Kur\'an Rehberinizi\nKeşfedin</string>
+    <string name="subscription_feature_ai">Yapay Zeka Destekli Öğrenme Yolları</string>
+    <string name="subscription_feature_ad_free">Reklamsız İbadet</string>
+    <string name="subscription_feature_tafsir">Derin Tefsir ve Bağlam</string>
+    <string name="subscription_feature_quiz">Tam Kapsamlı Sınav Kütüphanesi</string>
+    <string name="subscription_enable_trial">Ücretsiz denemek istiyorum</string>
+    <string name="subscription_best_value">En İyi Değer!</string>
+    <string name="subscription_price_yearly">$17.99 / yıl</string>
+    <string name="subscription_save_vs_monthly">Aylığa göre %%50 tasarruf edin</string>
+    <string name="subscription_price_monthly">$2.99 / ay</string>
+    <string name="subscription_free_trial_badge">7 günlük ücretsiz deneme</string>
+    <string name="subscription_monthly_sub_text">Ardından aylık %1$s. Şimdi ödeme yok</string>
+    <string name="subscription_yearly_sub_text">Ardından yıllık %1$s</string>
+    <string name="subscription_info_trial_monthly">7 günlük deneme bitmeden iptal etmezseniz, aylık abonelik ücreti tahsil edilecektir.</string>
+    <string name="subscription_info_trial_yearly">7 günlük deneme bitmeden iptal etmezseniz, yıllık abonelik ücreti tahsil edilecektir.</string>
+    <string name="subscription_info_autorenew_yearly">Aboneliğiniz iptal edilmedikçe her yıl otomatik yenilenecektir.</string>
+    <string name="subscription_info_autorenew_monthly">Aboneliğiniz iptal edilmedikçe her ay otomatik yenilenecektir.</string>
+    <string name="subscription_cta_trial">Denemeyi ve planı başlat</string>
+    <string name="subscription_cta_premium">Hemen Premium\'a Geç</string>
+    <string name="subscription_loading">Yükleniyor...</string>
+    <string name="subscription_no_payment_now">ŞİMDİ ÖDEME YOK</string>
+    <string name="subscription_legal_info">Uygulamayı kullanmaya devam ederek Kullanım Şartlarımızı ve Gizlilik Politikamızı kabul edersiniz</string>
+    <string name="subscription_error_billing_title">Faturalandırma Bağlantısı Başarısız</string>
+    <string name="subscription_error_billing_message">Google Play Faturalandırmasına bağlanılamadı.\n\nOlası nedenler:\n- Google Play Store yüklü değil veya güncel değil\n- Ağ bağlantı sorunu\n- Google Play hizmetleri devre dışı bırakılmış\n\nLütfen kontrol edip tekrar deneyin.</string>
+    <string name="subscription_error_no_products_title">Kullanılabilir Abonelik Planı Yok</string>
+    <string name="subscription_error_no_products_message">Abonelik planları yüklenemedi.\n\nGerekli ürün kimlikleri:\n- Aylık: %1$s\n- Yıllık: %2$s\n\nGerekli adımlar:\n1. Bu ürünleri Google Play Console\'da oluşturun\n2. Durumlarını Aktif olarak ayarlayın\n3. Uygulamayı bir test kanalına (iç/dış) yayınlayın\n4. Google Play Console\'a test hesabı ekleyin\n5. Yayılması için 1-2 saat bekleyin\n\nTest için imzalı yayın derlemesi kullanın.</string>
+    <string name="subscription_error_plan_title">Plan Kullanılamıyor</string>
+    <string name="subscription_error_plan_message">Seçilen %1$s planı kullanılabilir değil.\n\nÜrün kimliği: %2$s\n\nSorun giderme:\n1. Ürünün Google Play Console\'da mevcut olduğundan emin olun\n2. Ürün kimliğinin tamamen eşleştiğini doğrulayın\n3. Ürünün Aktif olarak ayarlandığını kontrol edin\n4. Uygulamanın bir test kanalında yayınlandığını onaylayın\n\nBaşka bir plan seçin veya destekle iletişime geçin.</string>
+    <string name="subscription_plan_yearly">Yıllık</string>
+    <string name="subscription_plan_monthly">Aylık</string>
+    <string name="subscription_message_success">Abonelik başarıyla etkinleştirildi!</string>
+    <string name="subscription_message_already_owned">Bu aboneliğe zaten sahipsiniz</string>
+    <string name="subscription_message_canceled">Satın alma iptal edildi</string>
+    <string name="subscription_message_failed">Satın alma başarısız: %1$s</string>
+    <string name="subscription_message_already_subscribed">Zaten abonesiniz!</string>
+    <string name="subscription_message_no_offer">Geçerli bir teklif bulunamadı</string>
+    
+    <string name="completed">Tamamlandı</string>
+    <string name="this_week_progress">Bu Hafta</string>
+    <string name="prayer_breakdown">Namaz Dökümü</string>
+    <string name="ada_on_time">Ada\' (Vakti Gelince)</string>
+    <string name="qada_made_up">Kaza (Tamamlandı)</string>
+    <string name="missed">Kaçırıldı</string>
+    <string name="great_consistency">Harika Tutarlılık!</string>
+    <string name="keep_up_the_good_work">İyi işlere devam et</string>
 </resources>

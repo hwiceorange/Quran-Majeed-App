@@ -33,6 +33,9 @@
     <dimen name="main_margin_mini">8dp</dimen>
 
     <dimen name="main_item_card_borders">20dp</dimen>
+    
+    <dimen name="dp_1">1dp</dimen>
+    <dimen name="dp_2">2dp</dimen>
 
 
     <dimen name="tab_max_width">264dp</dimen>
@@ -219,6 +222,9 @@
     <dimen name="dmnChapterIcon2">25sp</dimen>
 
     <dimen name="dmnChipGroupHeight">45dp</dimen>
+    
+    <!-- 🌐 Language Selection Onboarding Dimensions -->
+    <dimen name="language_card_stroke_width">2dp</dimen>
 
     <fraction name="dmnIndexMenuWidth">85%</fraction>
 

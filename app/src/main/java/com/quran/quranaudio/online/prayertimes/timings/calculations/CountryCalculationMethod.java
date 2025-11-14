@@ -92,7 +92,7 @@ public class CountryCalculationMethod {
         result.put("FO", CalculationMethodEnum.MUSLIM_WORLD_LEAGUE);
         result.put("FJ", CalculationMethodEnum.MUSLIM_WORLD_LEAGUE);
         result.put("FI", CalculationMethodEnum.MUSLIM_WORLD_LEAGUE);
-        result.put("FR", CalculationMethodEnum.MOSQUEE_DE_PARIS_FRANCE);
+        result.put("FR", CalculationMethodEnum.UNION_ORGANIZATION_ISLAMIC_DE_FRANCE);
         result.put("GF", CalculationMethodEnum.MUSLIM_WORLD_LEAGUE);
         result.put("PF", CalculationMethodEnum.MUSLIM_WORLD_LEAGUE);
         result.put("TF", CalculationMethodEnum.MUSLIM_WORLD_LEAGUE);
@@ -251,7 +251,7 @@ public class CountryCalculationMethod {
         result.put("VI", CalculationMethodEnum.MUSLIM_WORLD_LEAGUE);
         result.put("UG", CalculationMethodEnum.EGYPTIAN_GENERAL_AUTHORITY_OF_SURVEY);
         result.put("UA", CalculationMethodEnum.MUSLIM_WORLD_LEAGUE);
-        result.put("AE", CalculationMethodEnum.UMM_AL_QURA_UNIVERSITY_MAKKAH);
+        result.put("AE", CalculationMethodEnum.GULF_REGION);
         result.put("GB", CalculationMethodEnum.MUSLIM_WORLD_LEAGUE);
         result.put("US", CalculationMethodEnum.ISLAMIC_SOCIETY_OF_NORTH_AMERICA);
         result.put("UM", CalculationMethodEnum.MUSLIM_WORLD_LEAGUE);
@@ -266,6 +266,20 @@ public class CountryCalculationMethod {
         result.put("ZM", CalculationMethodEnum.EGYPTIAN_GENERAL_AUTHORITY_OF_SURVEY);
         result.put("ZW", CalculationMethodEnum.EGYPTIAN_GENERAL_AUTHORITY_OF_SURVEY);
         return Collections.unmodifiableMap(result);
+    }
+
+    public static CalculationMethodEnum getCalculationMethodByCountryCode(String countryCode) {
+        if (countryCode == null || countryCode.trim().isEmpty()) {
+            return CalculationMethodEnum.getDefault();
+        }
+
+        if ("GB".equalsIgnoreCase(countryCode)) {
+            // Without locality information default to MWL for the UK (London handled in address-based method)
+            return CalculationMethodEnum.getDefault();
+        }
+
+        CalculationMethodEnum method = CALCULATION_METHOD_BY_COUNTRY.get(countryCode.toUpperCase());
+        return method != null ? method : CalculationMethodEnum.getDefault();
     }
 
     public static CalculationMethodEnum getCalculationMethodByAddress(Address address) {

@@ -50,6 +50,10 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // 🌐 强制更新 Application Resources 的语言配置
+        // 因为 Application 实例不会重新创建，必须手动更新
+        forceUpdateApplicationLanguage();
+        
         ((App) getApplicationContext())
                 .defaultComponent
                 .inject(this);
@@ -223,6 +227,43 @@ public class MainActivity extends BaseActivity {
     public void onBackPressed() {
         // Rate us dialog removed - directly finish the app
         finish();
+    }
+    
+    /**
+     * 🌐 强制更新 Application 级别的语言配置
+     * 
+     * 原因：Application 实例在 Activity 切换时不会重新创建，
+     * 所以必须手动更新 Application 的 Resources
+     */
+    private void forceUpdateApplicationLanguage() {
+        try {
+            String language = com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs.getLocale(this);
+            
+            android.util.Log.d("MainActivity", "🔍 forceUpdateApplicationLanguage() - Language from SPAppConfigs: " + language);
+            
+            if (language == null || language.isEmpty()) {
+                android.util.Log.d("MainActivity", "⚠️ Language is null or empty");
+                return;
+            }
+            
+            java.util.Locale locale = new java.util.Locale(language);
+            java.util.Locale.setDefault(locale);
+            
+            // 更新 Application 的 Resources
+            android.content.res.Resources appResources = getApplicationContext().getResources();
+            android.content.res.Configuration appConfig = appResources.getConfiguration();
+            
+            android.util.Log.d("MainActivity", "📊 Application locale before: " + appConfig.getLocales().get(0));
+            
+            appConfig.setLocale(locale);
+            appResources.updateConfiguration(appConfig, appResources.getDisplayMetrics());
+            
+            android.util.Log.d("MainActivity", "✅ Application Resources updated to: " + language);
+            android.util.Log.d("MainActivity", "📊 Application locale after: " + appResources.getConfiguration().getLocales().get(0));
+            
+        } catch (Exception e) {
+            android.util.Log.e("MainActivity", "❌ Failed to update application language", e);
+        }
     }
 
 }

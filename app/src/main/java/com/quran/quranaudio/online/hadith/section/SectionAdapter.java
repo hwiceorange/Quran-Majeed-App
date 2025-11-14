@@ -99,7 +99,7 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.MyViewHo
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
         sectionModels.clear();
-        sectionModels.addAll((ArrayList)filterResults.values);
+        sectionModels.addAll((ArrayList<SectionModel>)filterResults.values);
         notifyDataSetChanged();
         }
     };

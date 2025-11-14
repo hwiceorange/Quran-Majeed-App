@@ -13,6 +13,8 @@ import android.util.Log;
 import androidx.media.VolumeProviderCompat;
 
 import com.quran.quranaudio.online.R;
+import com.quran.quranaudio.online.prayertimes.common.PrayerEnum;
+import com.quran.quranaudio.online.prayertimes.preferences.PreferencesHelper;
 
 import java.io.IOException;
 
@@ -24,20 +26,27 @@ import javax.inject.Singleton;
 public class ReminderPlayer {
 
     private final MediaPlayer mediaPlayer;
+    private final PreferencesHelper preferencesHelper;
     private final Context context;
 
     @Inject
-    public ReminderPlayer(Context context) {
+    public ReminderPlayer(Context context, PreferencesHelper preferencesHelper) {
         this.context = context;
+        this.preferencesHelper = preferencesHelper;
         mediaPlayer = new MediaPlayer();
     }
 
-    public void playAdhan(boolean isReminder) {
+    public void playAdhan(PrayerEnum prayerEnum, boolean isReminder) {
+        if (prayerEnum == null) {
+            prayerEnum = PrayerEnum.FAJR; // fallback
+        }
+
         if (!mediaPlayer.isPlaying()) {
             try {
-                initializeAdhanMediaPlayer(isReminder);
+                initializeAdhanMediaPlayer(prayerEnum, isReminder);
             } catch (IOException e) {
                 Log.e("AdhanPlayer", "Cannot play Adhan", e);
+                return;
             }
 
             mediaPlayer.start();
@@ -58,12 +67,13 @@ public class ReminderPlayer {
         mediaPlayer.setOnCompletionListener(mp -> adhanMediaSession.release());
     }
 
-    private void initializeAdhanMediaPlayer(boolean isReminder) throws IOException {
+    private void initializeAdhanMediaPlayer(PrayerEnum prayerEnum, boolean isReminder) throws IOException {
         mediaPlayer.reset();
         mediaPlayer.setDataSource(context, getAdhanUri(context, isReminder));
         setAudioAttribute(mediaPlayer);
         mediaPlayer.setLooping(false);
         mediaPlayer.prepare();
+        applyVolume(mediaPlayer, prayerEnum);
     }
 
     private void setAudioAttribute(MediaPlayer mediaPlayer) {
@@ -89,6 +99,13 @@ public class ReminderPlayer {
         }
 
         return Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.getPackageName() + "/" + mediaId);
+    }
+
+    private void applyVolume(MediaPlayer player, PrayerEnum prayerEnum) {
+        int volumePercent = preferencesHelper.getVolumeForPrayer(prayerEnum);
+        float volumeScalar = Math.max(0f, Math.min(1f, volumePercent / 100f));
+        player.setVolume(volumeScalar, volumeScalar);
+        Log.d("ReminderPlayer", "🔊 Applying volume " + volumePercent + "% for " + prayerEnum + " (scalar=" + volumeScalar + ")");
     }
 
     private MediaSessionCompat createMediaSession() {

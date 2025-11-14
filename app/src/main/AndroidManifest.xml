@@ -35,6 +35,9 @@
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
+    <!-- Google Play Billing permission for subscriptions -->
+    <uses-permission android:name="com.android.vending.BILLING" />
+    
     <application
         android:name="com.quran.quranaudio.online.App"
         android:allowBackup="true"
@@ -52,6 +55,11 @@
         android:largeHeap="true"
         tools:targetApi="s">
 
+        <!-- Fix AD_SERVICES_CONFIG conflict between Firebase Analytics and Google Ads -->
+        <property
+            android:name="android.adservices.AD_SERVICES_CONFIG"
+            android:resource="@xml/gma_ad_services_config"
+            tools:replace="android:resource" />
 
         <activity android:name="com.quran.quranaudio.online.SplashScreenActivity"
             android:theme="@style/LaunchTheme"
@@ -100,6 +108,12 @@
             android:name="com.quran.quranaudio.online.prayertimes.ui.PrayerNotificationSettingsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
+            android:exported="false" />
+        
+        <activity
+            android:name="com.quran.quranaudio.online.prayertimes.ui.QadaTrackerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
             android:exported="false" />
 
         <activity
@@ -191,6 +205,14 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+        <!-- Subscription Activity -->
+        <activity
+            android:name="com.quran.quranaudio.online.subscription.SubscriptionActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="false" />
+
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

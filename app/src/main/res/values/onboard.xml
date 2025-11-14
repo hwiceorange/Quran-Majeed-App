@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- 🌐 新用户引导流程 -->
     <string-array name="arrOnboardingTitles">
-      <item>@string/strTitleAppLanguage</item>
-          <item>@string/strTitleSelectReciter</item>
-        <item>@string/strLabelSelectTranslations</item>
-
+        <item>@string/strTitleAppLanguage</item>
+        <item>@string/strTitleQuranTranslation</item>
+        <item>@string/strTitleIstiqamah</item>
+        <item>@string/strTitleNotificationPermission</item>
+        <item>@string/strTitleFreeTrial</item>
     </string-array>
 
     <string-array name="arrOnboardingDescs">
-    <item>@string/onboardDescLanguage</item>
-        <item>@string/onboardDescReciter</item>
-        <item>@string/onboardDescTranslations</item>
-
+        <item>@string/onboardDescLanguage</item>
+        <item>@string/onboardDescQuranTranslation</item>
+        <item>@string/onboardDescIstiqamah</item>
+        <item>@string/onboardDescNotificationPermission</item>
+        <item>@string/onboardDescFreeTrial</item>
     </string-array>
 </resources>

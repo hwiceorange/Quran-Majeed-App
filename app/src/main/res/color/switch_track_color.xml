@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 开关轨道颜色：未选中灰色，选中蓝色 -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Switch ON - Green color -->
-    <item android:color="#4B9B76" android:state_checked="true" />
-    <!-- Switch OFF - Gray color -->
-    <item android:color="#CCCCCC" android:state_checked="false" />
+    <item android:color="#64B5F6" android:state_checked="true" />
+    <item android:color="#BDBDBD" android:state_checked="false" />
 </selector>
-

@@ -29,7 +29,9 @@ import com.quran.quranaudio.online.ads.data.Constant;
 import com.quran.quranaudio.online.ads.database.SharedPref;
 import com.quran.quranaudio.online.ads.rest.RestAdapter;
 import com.quran.quranaudio.online.BuildConfig;
+import com.quran.quranaudio.online.prayertimes.preferences.PreferencesConstants;
 import com.quran.quranaudio.online.prayertimes.ui.MainActivity;
+import com.quran.quranaudio.online.quran_module.activities.ActivityOnboarding;
 import com.quran.quranaudio.online.quran_module.utils.Log;
 import com.quran.quranaudio.quiz.utils.UserInfoUtils;
 import com.quran.quranaudio.quiz.utils.AppConfig;
@@ -298,15 +300,33 @@ public class SplashScreenActivity extends AppCompatActivity {
         handler.removeCallbacks(updateProgress);
         handler.removeCallbacks(absoluteTimeoutRunnable);
         
-        // ⭐ 隐藏 Google 登录页面 - 所有用户（包括新用户）直接跳转到主界面
-        // 原逻辑：新用户首次启动会先显示 OnboardingLoginActivity（Google 登录页面）
-        // 修改后：所有用户都直接进入 MainActivity
-        android.util.Log.d(TAG, "✅ Skipping login screen - Jumping directly to MainActivity");
-        new Handler().postDelayed(() -> {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        }, DELAY_PROGRESS);
+        // ⭐ 检查是否首次启动，决定显示 Onboarding 还是直接进入主界面
+        android.content.SharedPreferences prefs = getSharedPreferences(
+            com.quran.quranaudio.online.prayertimes.preferences.PreferencesConstants.LOCATION, 
+            MODE_PRIVATE
+        );
+        boolean isFirstLaunch = prefs.getBoolean(
+            com.quran.quranaudio.online.prayertimes.preferences.PreferencesConstants.FIRST_LAUNCH, 
+            true
+        );
+        
+        if (isFirstLaunch) {
+            // 首次启动：显示语言选择等引导页
+            android.util.Log.d(TAG, "🎯 First launch detected - Showing Onboarding (Language Selection)");
+            new Handler().postDelayed(() -> {
+                Intent intent = new Intent(this, com.quran.quranaudio.online.quran_module.activities.ActivityOnboarding.class);
+                startActivity(intent);
+                finish();
+            }, DELAY_PROGRESS);
+        } else {
+            // 老用户：直接进入主界面
+            android.util.Log.d(TAG, "✅ Existing user - Jumping directly to MainActivity");
+            new Handler().postDelayed(() -> {
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }, DELAY_PROGRESS);
+        }
         
         /* 原登录页面逻辑（已隐藏）
         boolean hasShownLogin = OnboardingLoginActivity.hasShownLoginScreen(this);

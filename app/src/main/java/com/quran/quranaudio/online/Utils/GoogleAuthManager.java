@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -14,7 +15,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,13 +46,43 @@ public class GoogleAuthManager {
         this.context = context;
         this.firebaseAuth = FirebaseAuth.getInstance();
         
-        // Configure Google Sign-In
+        // Check Google Play Services availability first
+        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
+        int status = googleAPI.isGooglePlayServicesAvailable(context);
+        
+        if (status != ConnectionResult.SUCCESS) {
+            Log.e(TAG, "Google Play Services not available: " + status);
+            if (googleAPI.isUserResolvableError(status)) {
+                Log.w(TAG, "Google Play Services error is user-resolvable");
+            }
+        } else {
+            Log.d(TAG, "Google Play Services is available and up to date");
+        }
+        
+        // Configure Google Sign-In with Web Client ID from google-services.json
+        // This ensures the Client ID is always synchronized with Firebase configuration
+        String webClientId = context.getString(com.quran.quranaudio.online.R.string.default_web_client_id);
+        Log.d(TAG, "========== Google Sign-In Configuration ==========");
+        Log.d(TAG, "📝 Package Name: " + context.getPackageName());
+        Log.d(TAG, "📝 Web Client ID: " + webClientId);
+        Log.d(TAG, "📝 Web Client ID length: " + (webClientId != null ? webClientId.length() : 0));
+        
+        // Check Firebase Auth state
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        Log.d(TAG, "🔐 Current Firebase User: " + (currentUser != null ? currentUser.getEmail() : "null"));
+        
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("517834286063-52gsp24nqkb7sht7e7jn31397nhanumb.apps.googleusercontent.com") // TODO: Replace with actual Web Client ID from Firebase
+                .requestIdToken(webClientId)
                 .requestEmail()
                 .build();
         
         this.googleSignInClient = GoogleSignIn.getClient(context, gso);
+        
+        // Check last signed-in account
+        GoogleSignInAccount lastAccount = GoogleSignIn.getLastSignedInAccount(context);
+        Log.d(TAG, "📱 Last Google Account: " + (lastAccount != null ? lastAccount.getEmail() : "null"));
+        Log.d(TAG, "✅ GoogleSignInClient initialized successfully");
+        Log.d(TAG, "==================================================");
     }
     
     /**
@@ -104,6 +139,44 @@ public class GoogleAuthManager {
      */
     public Intent getSignInIntent() {
         return googleSignInClient.getSignInIntent();
+    }
+    
+    /**
+     * Log detailed diagnostics for Google Sign-In failures
+     * Useful when Activity.RESULT_CANCELED is returned but intent carries error info
+     */
+    public void logSignInDiagnostics(@Nullable Intent data, @NonNull String sourceTag) {
+        Log.d(TAG, "[" + sourceTag + "] logSignInDiagnostics invoked");
+        if (data == null) {
+            Log.e(TAG, "[" + sourceTag + "] Sign-in intent data is null");
+            return;
+        }
+        try {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            GoogleSignInAccount account = task.getResult(ApiException.class);
+            Log.w(TAG, "[" + sourceTag + "] Diagnostics retrieved account unexpectedly: "
+                    + (account != null ? account.getEmail() : "null"));
+        } catch (ApiException e) {
+            String statusCodeString = GoogleSignInStatusCodes.getStatusCodeString(e.getStatusCode());
+            Log.e(TAG, "[" + sourceTag + "] Google Sign-In ApiException captured");
+            Log.e(TAG, "[" + sourceTag + "]   - Status Code: " + e.getStatusCode() + " (" + statusCodeString + ")");
+            Log.e(TAG, "[" + sourceTag + "]   - Status Message: " + e.getStatusMessage());
+            Log.e(TAG, "[" + sourceTag + "]   - Message: " + e.getMessage());
+            Log.e(TAG, "[" + sourceTag + "]   - Cause: " + e.getCause());
+            Status status = e.getStatus();
+            if (status != null) {
+                Log.e(TAG, "[" + sourceTag + "]   - Status: " + status);
+            }
+        }
+        Bundle extras = data.getExtras();
+        if (extras != null && !extras.isEmpty()) {
+            for (String key : extras.keySet()) {
+                Object value = extras.get(key);
+                Log.d(TAG, "[" + sourceTag + "]   - Extra: " + key + " => " + value);
+            }
+        } else {
+            Log.d(TAG, "[" + sourceTag + "]   - No extras found in intent");
+        }
     }
     
     /**

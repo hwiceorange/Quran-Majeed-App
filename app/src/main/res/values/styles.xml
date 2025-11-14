@@ -593,6 +593,69 @@
         <item name="android:windowExitAnimation">@anim/peace_bottom_sheet_slide_out</item>
     </style>
 
+    <!-- Prayer Log Time Picker Theme -->
+    <style name="PrayerTimePickerTheme" parent="Theme.AppCompat.Light.Dialog">
+        <!-- Primary color - #429971 -->
+        <item name="colorPrimary">#429971</item>
+        <item name="colorPrimaryDark">#2E6D4F</item>
+        <item name="colorAccent">#429971</item>
+        
+        <!-- Button colors -->
+        <item name="buttonBarPositiveButtonStyle">@style/PrayerTimePickerButton</item>
+        <item name="buttonBarNegativeButtonStyle">@style/PrayerTimePickerButton</item>
+        
+        <!-- Dialog background - rounded corners -->
+        <item name="android:windowBackground">@drawable/bg_time_picker_dialog</item>
+        
+        <!-- Control colors -->
+        <item name="colorControlActivated">#429971</item>
+        <item name="colorControlNormal">#757575</item>
+        
+        <!-- Text colors -->
+        <item name="android:textColorPrimary">#2D3748</item>
+        <item name="android:textColorSecondary">#757575</item>
+    </style>
+    
+    <style name="PrayerTimePickerButton" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">#429971</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    
+    <!-- Qada Date Picker Theme with rounded corners and custom color #429971 -->
+    <style name="QadaDatePickerTheme" parent="Theme.AppCompat.Light.Dialog">
+        <!-- Primary color - #429971 -->
+        <item name="colorPrimary">#429971</item>
+        <item name="colorPrimaryDark">#2E6D4F</item>
+        <item name="colorAccent">#429971</item>
+        
+        <!-- Button colors -->
+        <item name="buttonBarPositiveButtonStyle">@style/QadaDatePickerButton</item>
+        <item name="buttonBarNegativeButtonStyle">@style/QadaDatePickerButton</item>
+        
+        <!-- Dialog background - rounded corners -->
+        <item name="android:windowBackground">@drawable/bg_date_picker_dialog</item>
+        
+        <!-- Control colors -->
+        <item name="colorControlActivated">#429971</item>
+        <item name="colorControlNormal">#757575</item>
+        
+        <!-- Text colors -->
+        <item name="android:textColorPrimary">#2D3748</item>
+        <item name="android:textColorSecondary">#757575</item>
+        
+        <!-- Header background -->
+        <item name="android:headerBackground">#429971</item>
+    </style>
+    
+    <style name="QadaDatePickerButton" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">#429971</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
 
     <!-- Quran_Module* -->
 

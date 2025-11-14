@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Status 文本颜色选择器 -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 选中状态 - 深绿色 -->
+    <item android:state_selected="true" android:color="#2E7D32" />
+    
+    <!-- 未选中状态 - 灰色 -->
+    <item android:color="#757575" />
+</selector>
+

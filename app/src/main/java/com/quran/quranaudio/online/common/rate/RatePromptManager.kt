@@ -161,7 +161,6 @@ object RatePromptManager {
         markPromptShown(prefs)
 
         val ratingBar = view.findViewById<RatingBar>(R.id.rate_experience_rating_bar)
-        val closeButton = view.findViewById<ImageButton>(R.id.rate_experience_close)
         val submitButton = view.findViewById<com.google.android.material.button.MaterialButton>(R.id.btn_submit_rating)
         val maybeLaterButton = view.findViewById<com.google.android.material.button.MaterialButton>(R.id.btn_maybe_later)
 
@@ -178,12 +177,6 @@ object RatePromptManager {
 
         // Maybe Later 按钮点击
         maybeLaterButton?.setOnClickListener {
-            markDismissed(activity)
-            dialog.dismiss()
-        }
-
-        // 关闭按钮点击
-        closeButton?.setOnClickListener {
             markDismissed(activity)
             dialog.dismiss()
         }

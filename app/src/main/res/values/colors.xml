@@ -6,6 +6,10 @@
     <color name="iconTintPrimary">#41966F</color>
     <color name="iconTintSecondary">#80A393</color>
     <color name="quran_quiz_green_dark">#4B9B76</color>
+    
+    <!-- 🌐 Language Selection Onboarding Colors -->
+    <color name="primary_color">#4B9B76</color>
+    <color name="language_card_unselected_bg">#357A5E</color>
 
     <color name="hadith_card">#E6E6E6</color>
     <color name="grey">#c3c3c3 </color>
@@ -85,6 +89,17 @@
     <color name="green">#4CAF50</color>
     <color name="salah_track_button">#52BF95</color>
     <color name="bottom_nav_selected">#429971</color>
+    <color name="prayer_modal_accent">#429971</color>
+    <color name="prayer_modal_accent_light">#E5F3EF</color>
+    <color name="prayer_modal_text_primary">#212121</color>
+    <color name="prayer_modal_text_secondary">#6F6F6F</color>
+    <color name="qada_progress_track">#C4C4C4</color>
+    <color name="qada_progress_fill">#F5AC1C</color>
+    <color name="qada_progress_complete">#429971</color>
+    <color name="qada_alert_red">#E53E3E</color>
+    <color name="light_green_background">#E8F5F0</color>
+    <color name="grey_100">#F5F5F5</color>
+    <color name="grey_300">#E0E0E0</color>
 
     <color name="whitesmoke">#f5f5f5</color>
     <color name="transparent">#00000000</color>

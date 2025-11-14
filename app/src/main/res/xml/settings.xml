@@ -2,6 +2,21 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!-- 🌟 Premium Subscription -->
+    <PreferenceCategory
+        android:icon="@drawable/ic_premium"
+        android:layout="@layout/custom_preference_category"
+        android:title="@string/go_premium">
+
+        <Preference
+            android:key="PREMIUM_SUBSCRIPTION_PREFERENCE"
+            android:layout="@layout/custom_preference"
+            android:title="@string/go_premium"
+            android:summary="@string/unlock_premium_features"
+            android:icon="@drawable/ic_premium" />
+
+    </PreferenceCategory>
+
     <!-- 🌐 App Language Selection -->
     <PreferenceCategory
         android:icon="@drawable/dr_icon_language"

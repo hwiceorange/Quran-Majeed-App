@@ -39,7 +39,7 @@ object QuranScriptUtils {
         "fr" to "IndoPak",
         "gu" to "ઈન્ડોપાક",
         "hi" to "इंडो पाक",
-        "in" to "IndoPak",
+        "id" to "IndoPak",  // 统一使用 "id" 表示印尼语
         "it" to "IndoPak",
         "ml" to "ഇൻഡോപാക്",
         "pt" to "IndoPak",
@@ -58,7 +58,7 @@ object QuranScriptUtils {
         "fr" to "Uthmani Hafs",
         "gu" to "ઉથમાની હાફ્સ",
         "hi" to "उशमनी हफ्स",
-        "in" to "Utsmani Hafs",
+        "id" to "Utsmani Hafs",  // 统一使用 "id" 表示印尼语
         "it" to "Uthmani Hafs",
         "ml" to "ഓട്ടോമൻ ഹാഫുകൾ",
         "pt" to "Uthmani Hafs",
@@ -77,7 +77,7 @@ object QuranScriptUtils {
         "fr" to "Complexe Roi Fahad V1",
         "gu" to "કિંગ ફહદ કોમ્પ્લેક્સ V1",
         "hi" to "राजा फहद कॉम्प्लेक्स v1",
-        "in" to "Kompleks Raja Fahad V1",
+        "id" to "Kompleks Raja Fahad V1",  // 统一使用 "id" 表示印尼语
         "it" to "Complesso di Re Fahad V1",
         "ml" to "കിംഗ് ഫഹദ് സമുച്ചയം v1",
         "pt" to "Complexo King Fahad V1",

@@ -40,16 +40,19 @@ public class InstantPrayerScheduler extends RxWorker {
     @NonNull
     @Override
     public Single<Result> createWork() {
-        Log.i(TAG, "Starting Create Instant Prayer Scheduler Work");
+        Log.i(TAG, "🔔 Starting Create Instant Prayer Scheduler Work");
 
         String dayPrayerString = getInputData().getString("DAY_PRAYER_PARAM");
         Gson gson = new Gson();
 
         try {
             DayPrayer dayPrayer = gson.fromJson(dayPrayerString, DayPrayer.class);
+            Log.i(TAG, "🔔 Calling PrayerAlarmScheduler.scheduleAlarmsAndReminders()");
             prayerAlarmScheduler.scheduleAlarmsAndReminders(Objects.requireNonNull(dayPrayer));
+            Log.i(TAG, "✅ Prayer alarms and reminders scheduled successfully");
             return Single.just(Result.success());
         } catch (Exception e) {
+            Log.e(TAG, "❌ Failed to schedule prayer alarms and reminders", e);
             return Single.just(Result.failure());
         }
     }

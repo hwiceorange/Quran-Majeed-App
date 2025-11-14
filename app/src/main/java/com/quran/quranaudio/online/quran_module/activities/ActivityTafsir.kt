@@ -371,7 +371,7 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
                 "ar" -> "Arabic"
                 "en" -> "English"
                 "ur" -> "Urdu"
-                "id", "in" -> "Indonesian"
+                "id" -> "Indonesian"  // 统一使用 "id" 表示印尼语
                 else -> "English"
             }
             

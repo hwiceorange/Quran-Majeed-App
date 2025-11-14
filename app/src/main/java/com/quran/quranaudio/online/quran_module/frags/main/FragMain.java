@@ -973,6 +973,9 @@ public class FragMain extends BaseFragment {
                             }
                         } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
                             Log.d(TAG, "Google Sign-In canceled by user");
+                            if (googleAuthManager != null) {
+                                googleAuthManager.logSignInDiagnostics(result.getData(), "FragMain-CANCELLED");
+                            }
                             if (getContext() != null && getActivity() != null) {
                                 getActivity().runOnUiThread(() -> {
                                     android.widget.Toast.makeText(getContext(), 
@@ -982,6 +985,9 @@ public class FragMain extends BaseFragment {
                             }
                         } else {
                             Log.e(TAG, "Unexpected result code: " + result.getResultCode());
+                            if (googleAuthManager != null) {
+                                googleAuthManager.logSignInDiagnostics(result.getData(), "FragMain-UNEXPECTED");
+                            }
                         }
                     }
             );
@@ -2083,7 +2089,7 @@ public class FragMain extends BaseFragment {
             
             languageCode = languageCode.toLowerCase(java.util.Locale.US);
             
-            boolean isSupported = "en".equals(languageCode) || "in".equals(languageCode) || "id".equals(languageCode);
+            boolean isSupported = "en".equals(languageCode) || "id".equals(languageCode);  // 统一使用 "id" 表示印尼语
             Log.d(TAG, "Quiz language check: " + languageCode + " -> " + (isSupported ? "supported" : "not supported"));
             
             return isSupported;

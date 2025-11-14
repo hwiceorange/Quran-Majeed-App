@@ -81,8 +81,7 @@ public class TranslUtils {
         
         // 根据系统语言自动选择对应的译本
         switch (systemLanguage) {
-            case "id":  // 印尼语 (ISO 639-1 标准)
-            case "in":  // 印尼语 (Android 旧标准)
+            case "id":  // 印尼语（应用统一使用 "id"）
                 defTranslations.add(TRANSL_SLUG_IN);
                 android.util.Log.d("TranslUtils", "🌐 Auto-selected translation: Indonesian (Kompleks Al Quran)");
                 break;
@@ -147,7 +146,7 @@ public class TranslUtils {
         }
 
         for (String slug : inTranslations) {
-            translItems.add(createPrebuiltTranslBookInfo(slug, "in", "Bahasa Indonesia"));
+            translItems.add(createPrebuiltTranslBookInfo(slug, "id", "Bahasa Indonesia"));  // 统一使用 "id"
         }
 
         return translItems;

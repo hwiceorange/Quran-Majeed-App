@@ -1,0 +1,89 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ========================================
+    // Daily Quests - User Quest Configurations
+    // ========================================
+    match /users/{userId}/userQuestConfig/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // ========================================
+    // Daily Quests - Daily Progress
+    // ========================================
+    match /users/{userId}/dailyProgress/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // ========================================
+    // Daily Quests - Streak Stats
+    // ========================================
+    match /users/{userId}/streakStats/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // ========================================
+    // Daily Quests - User Learning State
+    // ========================================
+    match /users/{userId}/userLearningState/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // ========================================
+    // 📿 Salah Records (Prayer Tracking)
+    // ========================================
+    match /users/{userId}/salahRecords/{dateId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      
+      allow create: if request.auth != null 
+                    && request.auth.uid == userId
+                    && request.resource.data.keys().hasAll(['userId', 'dateId', 'fajr', 'dhuhr', 'asr', 'maghrib', 'isha'])
+                    && request.resource.data.userId == userId
+                    && request.resource.data.dateId is string
+                    && request.resource.data.fajr is bool
+                    && request.resource.data.dhuhr is bool
+                    && request.resource.data.asr is bool
+                    && request.resource.data.maghrib is bool
+                    && request.resource.data.isha is bool;
+      
+      allow update: if request.auth != null 
+                    && request.auth.uid == userId
+                    && request.resource.data.userId == userId;
+    }
+    
+    // ========================================
+    // 🕌 Prayer Logs (Individual Prayer Records) - NEW!
+    // ========================================
+    match /prayer_logs/{logId} {
+      // Allow authenticated users to read and write their own prayer logs
+      allow read: if request.auth != null && request.auth.uid == resource.data.userId;
+      
+      // Allow create if authenticated and userId matches
+      allow create: if request.auth != null 
+                    && request.auth.uid == request.resource.data.userId
+                    && request.resource.data.keys().hasAll(['userId', 'prayerName', 'status', 'date'])
+                    && request.resource.data.userId is string
+                    && request.resource.data.prayerName is string
+                    && request.resource.data.status is string
+                    && request.resource.data.date is string;
+      
+      // Allow update only for own records
+      allow update: if request.auth != null 
+                    && request.auth.uid == resource.data.userId
+                    && request.auth.uid == request.resource.data.userId;
+      
+      // Allow delete only for own records
+      allow delete: if request.auth != null && request.auth.uid == resource.data.userId;
+    }
+    
+    // ========================================
+    // Default Deny All Other Collections
+    // ========================================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
+
