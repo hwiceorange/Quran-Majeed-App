@@ -2154,6 +2154,11 @@
     <string name="strTitleFreeTrial">বিনামূল্যে ট্রায়াল</string>
     <string name="onboardDescFreeTrial">অনুপ্রাণিত হতে 7 দিন বিনামূল্যে</string>
     
+    <!-- Quran Version Selection Onboarding Page -->
+    <string name="onboard_quran_title">আপনার পছন্দের কুরআন অনুবাদ কোনটি?</string>
+    <string name="onboard_quran_subtitle">আমরা সমস্ত প্রাথমিক পাঠ, অধ্যয়ন এবং কুইজ প্রসঙ্গের জন্য এই সংস্করণটি ব্যবহার করব।</string>
+    <string name="onboard_continue">চালিয়ে যান</string>
+    
     <!-- Istiqamah Onboarding Page -->
     <string name="onboard_istiqamah_title">ইস্তিকামাহ:\nইবাদতে\nধারাবাহিকতা</string>
     <string name="onboard_istiqamah_subtitle">জান্নাতের (স্বর্গ) দিকে আমাদের যাত্রা\nপ্রতিদিনের ধারাবাহিক প্রচেষ্টার উপর নির্মিত।</string>

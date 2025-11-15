@@ -240,11 +240,14 @@ class FragOnboardQuranVersion : FragOnboardBase() {
             android.util.Log.d("FragOnboardQuranVersion", "📊 Total translations in API response: ${translationsArray.size}")
             
             var matchedCount = 0
+            val uniqueLanguages = mutableSetOf<String>()
+            
             for (translationElement in translationsArray) {
                 val translObj = translationElement.jsonObject
                 
                 // 获取语言名称
                 val langName = translObj["language_name"]?.jsonPrimitive?.content ?: ""
+                uniqueLanguages.add(langName)
                 
                 // 只选择匹配语言的翻译
                 if (langName.equals(targetLanguage, ignoreCase = true)) {
@@ -273,13 +276,11 @@ class FragOnboardQuranVersion : FragOnboardBase() {
                     translations.add(version)
                     
                     android.util.Log.d("FragOnboardQuranVersion", "  ✅ Found: $name ($langName)")
-                } else {
-                    // 记录不匹配的翻译（仅在调试时）
-                    if (matchedCount == 0 && translations.size < 3) {
-                        android.util.Log.d("FragOnboardQuranVersion", "  ⏭️ Skipped: language_name='$langName' (expected: '$targetLanguage')")
-                    }
                 }
             }
+            
+            // 记录所有发现的语言（帮助调试）
+            android.util.Log.d("FragOnboardQuranVersion", "📋 All available languages in API: ${uniqueLanguages.sorted().joinToString(", ")}")
             
             android.util.Log.d("FragOnboardQuranVersion", "📊 Matched $matchedCount translations for '$targetLanguage' from Quran Foundation API (total parsed: ${translations.size})")
         } catch (e: Exception) {
@@ -444,6 +445,25 @@ class FragOnboardQuranVersion : FragOnboardBase() {
                     TranslUtils.TRANSL_SLUG_UR_JUNAGARHI,
                     "مولانا محمد جوناگڑهی",
                     "ur"
+                ))
+            }
+            "ar" -> {
+                // 阿语用户：显示阿语原文（内置，不需要下载）
+                android.util.Log.d("FragOnboardQuranVersion", "✅ Adding Arabic Quran text (built-in)")
+                prebuiltVersions.add(createPrebuiltVersion(
+                    "quran_arabic_text",  // 特殊标识符，表示阿语原文
+                    "القرآن الكريم - النص العربي",  // 阿语：古兰经 - 阿拉伯文本
+                    "ar"
+                ))
+            }
+            else -> {
+                // 对于没有预装版本的语言（如土耳其语、马来语、孟加拉语），
+                // 添加英语版本作为 fallback，确保用户至少能看到一些选项
+                android.util.Log.d("FragOnboardQuranVersion", "⚠️ No prebuilt version for language '$selectedLanguageCode', adding English fallback")
+                prebuiltVersions.add(createPrebuiltVersion(
+                    TranslUtils.TRANSL_SLUG_EN_SAHIH_INTERNATIONAL,
+                    "Sahih International",
+                    "en"
                 ))
             }
         }

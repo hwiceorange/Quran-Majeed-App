@@ -2113,6 +2113,11 @@
     <string name="strTitleFreeTrial">Ücretsiz Deneme</string>
     <string name="onboardDescFreeTrial">İlham almak için 7 gün ücretsiz</string>
     
+    <!-- Quran Version Selection Onboarding Page -->
+    <string name="onboard_quran_title">Tercih ettiğiniz Kuran tercümesi hangisi?</string>
+    <string name="onboard_quran_subtitle">Bu sürümü tüm birincil okuma, çalışma ve sınav bağlamlarında kullanacağız.</string>
+    <string name="onboard_continue">Devam Et</string>
+    
     <!-- Istiqamah Onboarding Page -->
     <string name="onboard_istiqamah_title">İstikrar:\nİbadette\nTutarlılık</string>
     <string name="onboard_istiqamah_subtitle">Cennet\'e yolculuğumuz\ngünlük, tutarlı çaba ile inşa edilir.</string>

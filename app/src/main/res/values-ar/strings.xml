@@ -1385,6 +1385,11 @@
   <string name="strTitleFreeTrial">تجربة مجانية</string>
     <string name="onboardDescFreeTrial">7 أيام مجانية للإلهام</string>
 
+  <!-- Quran Version Selection Onboarding Page -->
+  <string name="onboard_quran_title">ما هي ترجمة القرآن المفضلة لديك؟</string>
+  <string name="onboard_quran_subtitle">سنستخدم هذه النسخة لجميع سياقات القراءة والدراسة والاختبار الأساسية.</string>
+  <string name="onboard_continue">متابعة</string>
+
   <!-- Istiqamah Onboarding Page -->
     <string name="onboard_istiqamah_title">الاستقامة:\nالاستمرارية في\nالعبادة</string>
     <string name="onboard_istiqamah_subtitle">رحلتنا إلى الجنة تُبنى على\nجهد يومي متسق.</string>

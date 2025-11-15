@@ -2153,6 +2153,11 @@
     <string name="strTitleFreeTrial">مفت آزمائش</string>
     <string name="onboardDescFreeTrial">متاثر ہونے کے لیے 7 دن مفت</string>
 
+    <!-- Quran Version Selection Onboarding Page -->
+    <string name="onboard_quran_title">آپ کا پسندیدہ قرآن ترجمہ کیا ہے؟</string>
+    <string name="onboard_quran_subtitle">ہم اس ورژن کو تمام بنیادی پڑھنے، مطالعہ، اور کوئز کے سیاق و سباق کے لیے استعمال کریں گے۔</string>
+    <string name="onboard_continue">جاری رکھیں</string>
+
         <!-- Istiqamah Onboarding Page -->
     <string name="onboard_istiqamah_title">استقامت:\nعبادت میں\nمستقل مزاجی</string>
     <string name="onboard_istiqamah_subtitle">جنت کا ہمارا سفر روزانہ،\nمسلسل کوششوں پر بنایا گیا ہے۔</string>

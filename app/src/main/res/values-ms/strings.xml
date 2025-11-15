@@ -2232,6 +2232,11 @@
     <string name="strTitleFreeTrial">Percubaan Percuma</string>
     <string name="onboardDescFreeTrial">7 hari percuma untuk inspirasi</string>
     
+    <!-- Quran Version Selection Onboarding Page -->
+    <string name="onboard_quran_title">Apakah terjemahan Al-Quran pilihan anda?</string>
+    <string name="onboard_quran_subtitle">Kami akan menggunakan versi ini untuk semua konteks bacaan, pembelajaran, dan kuiz utama.</string>
+    <string name="onboard_continue">Teruskan</string>
+    
     <!-- Istiqamah Onboarding Page -->
     <string name="onboard_istiqamah_title">Istiqamah:\nKonsistensi dalam\nIbadah</string>
     <string name="onboard_istiqamah_subtitle">Perjalanan kita ke Jannah (Syurga) dibina atas\nusaha harian yang konsisten.</string>
