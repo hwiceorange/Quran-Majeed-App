@@ -60,6 +60,13 @@ data class QuranTranslationVersion(
     val languageName: String,
     
     /**
+     * 简短描述（用于UI展示）
+     * 例如：Clear and accessible modern translation
+     */
+    @SerialName("short-description")
+    val shortDescription: String? = null,
+    
+    /**
      * 翻译文件的下载路径（相对路径）
      * 例如：apis/translations/en/101/translation_101_en_en_sahih-international.json
      */

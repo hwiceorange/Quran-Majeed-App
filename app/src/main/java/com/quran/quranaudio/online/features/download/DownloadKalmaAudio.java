@@ -68,6 +68,7 @@ DownloadKalmaAudio {
 
 
     @SuppressLint("UseCompatLoadingForDrawables")
+    @SuppressWarnings("deprecation")
     private void showProgress() {
         dialog = new Dialog(this.con , R.style.MyAlertDialogStyle2);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);

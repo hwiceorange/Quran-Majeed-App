@@ -202,6 +202,7 @@ public class FragMain extends BaseFragment {
             new ActivityResultContracts.RequestMultiplePermissions(), 
             new ActivityResultCallback<Map<String, Boolean>>() {
                 @Override
+                @SuppressWarnings("deprecation")
                 public void onActivityResult(Map<String, Boolean> result) {
                     Log.d(TAG, "========================================");
                     Log.d(TAG, "📋 Permission request result received");
@@ -2068,6 +2069,7 @@ public class FragMain extends BaseFragment {
      * Check if quiz is supported for current language
      * Currently supports English (en) and Indonesian (in/id)
      */
+    @SuppressWarnings("deprecation")
     private boolean isQuizSupportedLanguage() {
         try {
             java.util.Locale activeLocale;

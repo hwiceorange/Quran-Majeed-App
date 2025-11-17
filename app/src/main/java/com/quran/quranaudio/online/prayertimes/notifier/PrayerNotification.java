@@ -33,6 +33,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 
 @Singleton
+@SuppressWarnings("deprecation")
 class PrayerNotification extends BaseNotification {
 
     private final AdhanPlayer adhanPlayer;

@@ -176,6 +176,7 @@ public class PrayerNotificationSettingsActivity extends AppCompatActivity {
         return context;
     }
 
+    @SuppressWarnings("deprecation")
     private Context updateResourcesLocaleLegacy(Context context, String localeCode) {
         java.util.Locale locale = new java.util.Locale(localeCode);
         java.util.Locale.setDefault(locale);
@@ -189,6 +190,7 @@ public class PrayerNotificationSettingsActivity extends AppCompatActivity {
     /**
      * 🔄 统一设计风格：状态栏设置 (完全复制MainActivity的白色状态栏统一样式)
      */
+    @SuppressWarnings("deprecation")
     private void setupStatusBar() {
         try {
             Window window = getWindow();
@@ -588,6 +590,7 @@ public class PrayerNotificationSettingsActivity extends AppCompatActivity {
      * 显示Azan名称选择对话框
      * 根据祷告类型（Fajr或其他）显示不同的音频列表
      */
+    @SuppressWarnings("deprecation")
     private void showAzanNameDialog() {
         android.util.Log.d("PrayerNotificationSettings", "🔔 showAzanNameDialog called!");
         android.util.Log.d("PrayerNotificationSettings", "prayerEnum = " + prayerEnum);

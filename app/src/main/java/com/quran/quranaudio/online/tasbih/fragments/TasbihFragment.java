@@ -145,6 +145,7 @@ public class TasbihFragment extends BaseFragment {
     }
 
     
+    @SuppressWarnings("deprecation")
     public void tasbihClick() {
         // 防作弊检查：限制点击间隔
         long currentTime = System.currentTimeMillis();

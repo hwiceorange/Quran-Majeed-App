@@ -351,10 +351,18 @@ class PrayerLogBottomSheet : BottomSheetDialogFragment() {
         // 判断是否为今天的祷告
         val isToday = (prayerDate == currentDate)
 
+        // ✅ 转换祷告名称为英语（确保数据库一致性）
+        val englishPrayerName = com.quran.quranaudio.online.prayertimes.models.PrayerName.toEnglishName(
+            prayerName,
+            requireContext()
+        )
+        
+        android.util.Log.d("PrayerLog", "📝 Prayer name conversion: '$prayerName' → '$englishPrayerName'")
+
         // 创建祷告记录
         val prayerLog = PrayerLog.create(
             userId = currentUser.uid,
-            prayerName = prayerName,
+            prayerName = englishPrayerName,  // ✅ 使用英语名称保存
             status = selectedStatus,
             performedAt = performedAtTimestamp,
             notes = binding.etNotes.text?.toString()?.trim() ?: "",
@@ -388,13 +396,24 @@ class PrayerLogBottomSheet : BottomSheetDialogFragment() {
                         onPrayerLoggedListener?.onQadaCountChanged(qadaDelta)
                     }
                     
+                    // 🔍 诊断日志：记录回调状态和时间戳
+                    val timestamp = System.currentTimeMillis()
+                    android.util.Log.d("PrayerLog", "🔍 [EDIT-$timestamp] Before dismiss()")
+                    android.util.Log.d("PrayerLog", "🔍 [EDIT-$timestamp] onPrayerLoggedListener = ${onPrayerLoggedListener != null}")
+                    android.util.Log.d("PrayerLog", "🔍 [EDIT-$timestamp] Prayer: $prayerName, Date: $originalDate, Status: $selectedStatus")
+                    
                     dismiss()
+                    
+                    android.util.Log.d("PrayerLog", "🔍 [EDIT-$timestamp] After dismiss(), calling onPrayerLogged()")
                     
                     // 通知刷新数据（优先使用 onPrayerLoggedListener，fallback 到 parentFragment）
                     if (onPrayerLoggedListener != null) {
-                        onPrayerLoggedListener?.onPrayerLogged(prayerName)
+                        android.util.Log.d("PrayerLog", "✅ [EDIT-$timestamp] Calling onPrayerLoggedListener.onPrayerLogged($prayerName, $originalDate, ${selectedStatus.ordinal}, $existingLogId)")
+                        onPrayerLoggedListener?.onPrayerLogged(prayerName, originalDate, selectedStatus.ordinal, existingLogId!!)
+                        android.util.Log.d("PrayerLog", "🔍 [EDIT-$timestamp] onPrayerLogged() returned")
                     } else {
-                        (parentFragment as? OnPrayerLoggedListener)?.onPrayerLogged(prayerName)
+                        android.util.Log.d("PrayerLog", "⚠️ [EDIT-$timestamp] Fallback to parentFragment.onPrayerLogged($prayerName, $originalDate, ${selectedStatus.ordinal}, $existingLogId)")
+                        (parentFragment as? OnPrayerLoggedListener)?.onPrayerLogged(prayerName, originalDate, selectedStatus.ordinal, existingLogId!!)
                     }
                 }
                 .addOnFailureListener { e ->
@@ -411,45 +430,129 @@ class PrayerLogBottomSheet : BottomSheetDialogFragment() {
                     binding.btnSave.text = "Save"
                 }
         } else {
-            // 新建模式：如果是 Qada 弥补，计数器 -1
-            val qadaDelta = if (selectedStatus == PrayerLog.PrayerStatus.QADA) -1 else 0
+            // 新建模式：先检查是否已存在该日期+祷告名称的记录
+            android.util.Log.d("PrayerLog", "🔍 Checking for existing log: date=$prayerDate, prayer=$englishPrayerName")
             
-            // 创建新文档
-            collectionRef.add(prayerLog)
-                .addOnSuccessListener { documentReference ->
-                    android.util.Log.d("PrayerLog", "✅ Prayer log saved: ${documentReference.id}")
-                    android.util.Log.d("PrayerLog", "  Status: $selectedStatus, Qada delta: $qadaDelta")
-                    
-                    Toast.makeText(
-                        requireContext(),
-                        "✅ $prayerName prayer logged successfully",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    
-                    // 通知 Qada 计数器更新
-                    if (qadaDelta != 0) {
-                        onPrayerLoggedListener?.onQadaCountChanged(qadaDelta)
-                    }
-                    
-                    dismiss()
-                    
-                    // 通知刷新数据（优先使用 onPrayerLoggedListener，fallback 到 parentFragment）
-                    if (onPrayerLoggedListener != null) {
-                        onPrayerLoggedListener?.onPrayerLogged(prayerName)
+            collectionRef
+                .whereEqualTo("userId", currentUser.uid)
+                .whereEqualTo("date", prayerDate)
+                .whereEqualTo("prayerName", englishPrayerName)
+                .get()
+                .addOnSuccessListener { snapshot ->
+                    if (snapshot.documents.isNotEmpty()) {
+                        // ✅ 找到现有记录，更新它（防止重复）
+                        val existingDoc = snapshot.documents[0]
+                        val existingId = existingDoc.id
+                        
+                        android.util.Log.d("PrayerLog", "🔄 Found existing log: $existingId, updating instead of creating new")
+                        
+                        // 计算状态转换对 Qada 计数器的影响
+                        val existingLog = existingDoc.toObject(PrayerLog::class.java)
+                        val originalStatusFromDb = existingLog?.status ?: PrayerLog.PrayerStatus.MISSED
+                        val qadaDelta = calculateQadaDelta(originalStatusFromDb, selectedStatus)
+                        
+                        // 更新现有文档
+                        collectionRef.document(existingId)
+                            .set(prayerLog.copy(id = existingId))
+                            .addOnSuccessListener {
+                                android.util.Log.d("PrayerLog", "✅ Existing prayer log updated: $existingId")
+                                android.util.Log.d("PrayerLog", "  状态转换: $originalStatusFromDb → $selectedStatus, Qada delta: $qadaDelta")
+                                
+                                Toast.makeText(
+                                    requireContext(),
+                                    "✅ $prayerName prayer updated successfully",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                
+                                // 通知 Qada 计数器更新
+                                if (qadaDelta != 0) {
+                                    onPrayerLoggedListener?.onQadaCountChanged(qadaDelta)
+                                }
+                                
+                                dismiss()
+                                
+                                // 通知刷新数据
+                                if (onPrayerLoggedListener != null) {
+                                    onPrayerLoggedListener?.onPrayerLogged(prayerName, prayerDate, selectedStatus.ordinal, existingId)
+                                } else {
+                                    (parentFragment as? OnPrayerLoggedListener)?.onPrayerLogged(prayerName, prayerDate, selectedStatus.ordinal, existingId)
+                                }
+                            }
+                            .addOnFailureListener { e ->
+                                android.util.Log.e("PrayerLog", "❌ Failed to update existing prayer log", e)
+                                
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Failed to update: ${e.message}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                
+                                binding.btnSave.isEnabled = true
+                                binding.btnSave.text = "Save"
+                            }
                     } else {
-                        (parentFragment as? OnPrayerLoggedListener)?.onPrayerLogged(prayerName)
+                        // ✅ 没有找到现有记录，创建新文档
+                        android.util.Log.d("PrayerLog", "➕ No existing log found, creating new document")
+                        
+                        val qadaDelta = if (selectedStatus == PrayerLog.PrayerStatus.QADA) -1 else 0
+                        
+                        collectionRef.add(prayerLog)
+                            .addOnSuccessListener { documentReference ->
+                                android.util.Log.d("PrayerLog", "✅ New prayer log saved: ${documentReference.id}")
+                                android.util.Log.d("PrayerLog", "  Status: $selectedStatus, Qada delta: $qadaDelta")
+                                
+                                Toast.makeText(
+                                    requireContext(),
+                                    "✅ $prayerName prayer logged successfully",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                
+                                // 通知 Qada 计数器更新
+                                if (qadaDelta != 0) {
+                                    onPrayerLoggedListener?.onQadaCountChanged(qadaDelta)
+                                }
+                                
+                                val timestamp = System.currentTimeMillis()
+                                android.util.Log.d("PrayerLog", "🔍 [NEW-$timestamp] Before dismiss()")
+                                android.util.Log.d("PrayerLog", "🔍 [NEW-$timestamp] Prayer: $prayerName, Date: $prayerDate, Status: $selectedStatus")
+                                
+                                dismiss()
+                                
+                                android.util.Log.d("PrayerLog", "🔍 [NEW-$timestamp] After dismiss(), calling onPrayerLogged()")
+                                
+                                // 通知刷新数据
+                                if (onPrayerLoggedListener != null) {
+                                    android.util.Log.d("PrayerLog", "✅ [NEW-$timestamp] Calling onPrayerLoggedListener.onPrayerLogged($prayerName, $prayerDate, ${selectedStatus.ordinal}, ${documentReference.id})")
+                                    onPrayerLoggedListener?.onPrayerLogged(prayerName, prayerDate, selectedStatus.ordinal, documentReference.id)
+                                    android.util.Log.d("PrayerLog", "🔍 [NEW-$timestamp] onPrayerLogged() returned")
+                                } else {
+                                    android.util.Log.d("PrayerLog", "⚠️ [NEW-$timestamp] Fallback to parentFragment.onPrayerLogged($prayerName, $prayerDate, ${selectedStatus.ordinal}, ${documentReference.id})")
+                                    (parentFragment as? OnPrayerLoggedListener)?.onPrayerLogged(prayerName, prayerDate, selectedStatus.ordinal, documentReference.id)
+                                }
+                            }
+                            .addOnFailureListener { e ->
+                                android.util.Log.e("PrayerLog", "❌ Failed to save new prayer log", e)
+                                
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Failed to save: ${e.message}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                
+                                binding.btnSave.isEnabled = true
+                                binding.btnSave.text = "Save"
+                            }
                     }
                 }
                 .addOnFailureListener { e ->
-                    android.util.Log.e("PrayerLog", "❌ Failed to save prayer log", e)
+                    android.util.Log.e("PrayerLog", "❌ Failed to check for existing log", e)
                     
                     Toast.makeText(
                         requireContext(),
-                        "Failed to save: ${e.message}",
+                        "Failed to check existing records: ${e.message}",
                         Toast.LENGTH_SHORT
                     ).show()
                     
-                    // 恢复按钮状态
                     binding.btnSave.isEnabled = true
                     binding.btnSave.text = "Save"
                 }
@@ -494,7 +597,7 @@ class PrayerLogBottomSheet : BottomSheetDialogFragment() {
      * 回调接口 - 通知父 Fragment 祷告已记录
      */
     interface OnPrayerLoggedListener {
-        fun onPrayerLogged(prayerName: String)
+        fun onPrayerLogged(prayerName: String, date: String, newStatus: Int, logId: String)
         fun onQadaCountChanged(delta: Int) // 新增：Qada 计数器变化
     }
 

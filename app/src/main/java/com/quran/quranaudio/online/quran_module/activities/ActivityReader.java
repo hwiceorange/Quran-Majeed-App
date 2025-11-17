@@ -99,6 +99,7 @@ import java.util.stream.IntStream;
 
 import kotlin.Pair;
 
+@SuppressWarnings("deprecation")
 public class ActivityReader extends ReaderPossessingActivity {
     public static final String KEY_RECITER_CHANGED = "reciter.changed";
     public static final String KEY_TRANSLATION_RECITER_CHANGED = "translation_reciter.changed";

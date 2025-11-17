@@ -63,6 +63,7 @@ import static android.app.Activity.RESULT_OK;
  * Email: officialshaheendevelopers@gmail.com
  * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
  */
+@SuppressWarnings("deprecation")
 public class AdhanAudioPreferenceDialog extends PreferenceDialogFragmentCompat {
 
     private static final String TAG = "AdhanAudioPreference";

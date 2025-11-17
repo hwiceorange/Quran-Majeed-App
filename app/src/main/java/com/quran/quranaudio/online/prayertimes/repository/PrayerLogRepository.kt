@@ -342,8 +342,10 @@ class PrayerLogRepository {
      * 注意：
      * - Pending 状态的祷告（没有记录）计入 Outstanding
      * - Ada' 状态的祷告不计入 Qada' 统计
+     * 
+     * @param todayPrayerTimes Optional DayPrayer for today to use actual prayer times
      */
-    suspend fun getQadaSummary(): QadaSummary {
+    suspend fun getQadaSummary(todayPrayerTimes: com.quran.quranaudio.online.prayertimes.timings.DayPrayer? = null): QadaSummary {
         val userId = auth.currentUser?.uid ?: return QadaSummary(0, 0)
 
         return try {
@@ -355,21 +357,25 @@ class PrayerLogRepository {
             }
             
             val startDate = LocalDate.parse(startDateStr)
-            val yesterday = LocalDate.now().minusDays(1)
+            val today = LocalDate.now()
             
-            // 如果起始日期在今天或之后，没有待弥补的祷告
-            if (startDate.isAfter(yesterday)) {
-                Log.d(TAG, "Qada start date ($startDate) is after yesterday ($yesterday), no Qada needed")
+            // ✅ 修改：使用 Qada Tracker 的计算规则，包括今天
+            // 如果起始日期在今天之后，没有待弥补的祷告
+            if (startDate.isAfter(today)) {
+                Log.d(TAG, "Qada start date ($startDate) is after today ($today), no Qada needed")
                 return QadaSummary(0, 0)
             }
             
-            Log.d(TAG, "Computing Qada summary from $startDate to $yesterday")
+            Log.d(TAG, "✅ 【统一计算规则】Computing Qada summary from $startDate to $today (including today's started prayers)")
+            Log.d(TAG, "   📌 This calculation is shared between Salat page and Qada Tracker")
             
-            // 2. 获取该时间段内的所有祷告记录
+            // 2. 获取该时间段内的所有祷告记录（包括今天）
+            // ✅ 按 loggedAt 降序排序，确保最新记录在前
             val snapshot = firestore.collection(PrayerLog.COLLECTION_NAME)
                 .whereEqualTo("userId", userId)
                 .whereGreaterThanOrEqualTo("date", startDateStr)
-                .whereLessThan("date", LocalDate.now().toString())
+                .whereLessThanOrEqualTo("date", today.toString())
+                .orderBy("loggedAt", Query.Direction.DESCENDING)
                 .get()
                 .await()
             
@@ -386,9 +392,11 @@ class PrayerLogRepository {
                 try {
                     val status = PrayerLog.PrayerStatus.valueOf(statusValue.uppercase(Locale.ROOT))
                     
-                    // 只保留最新的记录（通过 loggedAt 排序，但这里简化处理）
+                    // ✅ 只保留最新的记录（由于已按loggedAt降序，第一次遇到的就是最新的）
                     if (!prayerRecords.containsKey(key)) {
                         prayerRecords[key] = status
+                    } else {
+                        Log.d(TAG, "   🔄 Duplicate ignored: $date-$prayerName (keeping latest: ${prayerRecords[key]})")
                     }
                 } catch (e: IllegalArgumentException) {
                     Log.w(TAG, "Unknown prayer status: $statusValue", e)
@@ -396,33 +404,74 @@ class PrayerLogRepository {
             }
             
             // 4. 计算总祷告数和统计
-            val totalDays = java.time.temporal.ChronoUnit.DAYS.between(startDate, yesterday).toInt() + 1
-            val totalPrayers = totalDays * 5 // 每天5次祷告
+            // ✅ 修改：包括今天，所以计算范围到今天
+            val totalDays = java.time.temporal.ChronoUnit.DAYS.between(startDate, today).toInt() + 1
             
             var missedCount = 0
             var qadaCount = 0
             var adaCount = 0
+            var totalCountedPrayers = 0 // 实际计入的祷告数
             
             // 遍历所有日期和祷告
             val prayerNames = listOf("Fajr", "Dhuhr", "Asr", "Maghrib", "Isha")
             var currentDate = startDate
             
-            while (!currentDate.isAfter(yesterday)) {
+            // 🔍 用于追踪哪些祷告被计为MISSED
+            val missedPrayersList = mutableListOf<String>()
+            
+            while (!currentDate.isAfter(today)) {
                 val dateStr = currentDate.toString()
+                val isToday = currentDate.isEqual(today)
+                
+                if (isToday) {
+                    Log.d(TAG, "🔍 Processing TODAY ($dateStr) prayers:")
+                    Log.d(TAG, "   todayPrayerTimes: ${if (todayPrayerTimes != null) "✅ Available" else "❌ NULL"}")
+                    if (todayPrayerTimes != null) {
+                        Log.d(TAG, "   todayPrayerTimes.timings: ${if (todayPrayerTimes.timings != null) "✅ Available" else "❌ NULL"}")
+                    }
+                }
                 
                 for (prayerName in prayerNames) {
+                    // ✅ 今天的祷告：只计入已开始的
+                    if (isToday && !hasPrayerWindowStarted(prayerName, todayPrayerTimes)) {
+                        Log.d(TAG, "   ⏭️ SKIPPED: $prayerName (window not started)")
+                        continue // 跳过未开始的祷告
+                    }
+                    
+                    totalCountedPrayers++
+                    
                     val key = "$dateStr-$prayerName"
                     val status = prayerRecords[key]
                     
+                    if (isToday) {
+                        Log.d(TAG, "   ✅ COUNTED: $prayerName -> ${status ?: "NULL (→ MISSED)"}")
+                    }
+                    
                     when (status) {
-                        PrayerLog.PrayerStatus.MISSED -> missedCount++
+                        PrayerLog.PrayerStatus.MISSED -> {
+                            missedCount++
+                            missedPrayersList.add("$dateStr-$prayerName [MISSED]")
+                        }
                         PrayerLog.PrayerStatus.QADA -> qadaCount++
                         PrayerLog.PrayerStatus.ADA -> adaCount++
-                        null -> missedCount++ // Pending 视为 Missed
+                        null -> {
+                            missedCount++ // Pending 视为 Missed
+                            missedPrayersList.add("$dateStr-$prayerName [NULL/PENDING]")
+                        }
                     }
                 }
                 
                 currentDate = currentDate.plusDays(1)
+            }
+            
+            // 🔍 输出所有被计为MISSED的祷告
+            if (missedPrayersList.isNotEmpty()) {
+                Log.d("QadaDiagnosis", "🔍 ═══ MISSED/PENDING Prayers Details ═══")
+                missedPrayersList.forEach { prayer ->
+                    Log.d("QadaDiagnosis", "   ❌ $prayer")
+                }
+                Log.d("QadaDiagnosis", "   Total MISSED/PENDING: ${missedPrayersList.size}")
+                Log.d("QadaDiagnosis", "═══════════════════════════════════════════════")
             }
             
             // Outstanding = Missed + Pending (即 missedCount)
@@ -433,7 +482,8 @@ class PrayerLogRepository {
             val summary = QadaSummary(outstanding, completed)
             Log.d(TAG, """
                 |Qada summary computed:
-                |  Period: $startDate to $yesterday ($totalDays days, $totalPrayers total prayers)
+                |  Period: $startDate to $today ($totalDays days)
+                |  Total Counted Prayers: $totalCountedPrayers (including today's started prayers)
                 |  Missed/Pending: $missedCount
                 |  Qada' (completed): $qadaCount
                 |  Ada' (on-time): $adaCount
@@ -442,6 +492,19 @@ class PrayerLogRepository {
                 |  Total Qada: ${summary.totalCount}
             """.trimMargin())
             
+            // 🔍 统一计算规则的诊断日志
+            Log.d("QadaDiagnosis", "═══════════════════════════════════════════════")
+            Log.d("QadaDiagnosis", "📊 【统一计算规则】Qada Summary (Used by Both Salat & QadaTracker)")
+            Log.d("QadaDiagnosis", "   ✅ Calculation Source: PrayerLogRepository.getQadaSummary()")
+            Log.d("QadaDiagnosis", "   📅 Date Range: $startDate to $today")
+            Log.d("QadaDiagnosis", "   📆 Total Days: $totalDays")
+            Log.d("QadaDiagnosis", "   🔢 Total Counted Prayers: $totalCountedPrayers")
+            Log.d("QadaDiagnosis", "   ❌ Outstanding (Missed/Pending): $outstanding")
+            Log.d("QadaDiagnosis", "   ✅ Completed (Qada): $completed")
+            Log.d("QadaDiagnosis", "   📈 Expected for full period: ${totalDays * 5} prayers")
+            Log.d("QadaDiagnosis", "   ⏭️  Unstarted today: ${totalDays * 5 - totalCountedPrayers}")
+            Log.d("QadaDiagnosis", "═══════════════════════════════════════════════")
+            
             summary
         } catch (e: Exception) {
             Log.e(TAG, "Error calculating Qada summary", e)
@@ -449,10 +512,75 @@ class PrayerLogRepository {
         }
     }
 
-    fun getQadaSummaryAsync(callback: QadaSummaryCallback) {
+    /**
+     * ✅ 统一的祷告窗口判断逻辑 (与 QadaTrackerActivity 完全一致)
+     * Check if a prayer's window has started today
+     * Uses actual prayer times when available, falls back to conservative estimates
+     * @param prayerName The prayer to check
+     * @param dayPrayer Optional DayPrayer with actual prayer times
+     */
+    fun hasPrayerWindowStarted(prayerName: String, dayPrayer: com.quran.quranaudio.online.prayertimes.timings.DayPrayer?): Boolean {
+        // Try to use actual prayer times first
+        if (dayPrayer != null && dayPrayer.timings != null) {
+            try {
+                val now = java.time.LocalDateTime.now()
+                val nextPrayerTime = getNextPrayerTime(prayerName, dayPrayer)
+                
+                if (nextPrayerTime != null) {
+                    val hasStarted = now.isAfter(nextPrayerTime) || now.isEqual(nextPrayerTime)
+                    Log.d(TAG, "✅ Prayer: $prayerName, Next: ${nextPrayerTime.toLocalTime()}, Now: ${now.toLocalTime()}, Started: $hasStarted")
+                    return hasStarted
+                }
+            } catch (e: Exception) {
+                Log.w(TAG, "Error checking prayer time for $prayerName, using fallback", e)
+            }
+        }
+        
+        // Fallback to conservative time estimates if actual times not available
+        Log.d(TAG, "⚠️ Using fallback time check for $prayerName (no actual prayer times)")
+        val calendar = java.util.Calendar.getInstance()
+        val hour = calendar.get(java.util.Calendar.HOUR_OF_DAY)
+
+        return when (prayerName) {
+            "Fajr" -> hour >= 11 // After typical Dhuhr time
+            "Dhuhr" -> hour >= 15 // After typical Asr time  
+            "Asr" -> hour >= 18 // After typical Maghrib time
+            "Maghrib" -> hour >= 20 // After typical Isha time
+            "Isha" -> hour >= 23 // Close to midnight
+            else -> false
+        }
+    }
+    
+    /**
+     * Get the NEXT prayer's time (used to determine if current prayer window has passed)
+     * @return LocalDateTime of the next prayer, or null if not available
+     */
+    private fun getNextPrayerTime(prayerName: String, dayPrayer: com.quran.quranaudio.online.prayertimes.timings.DayPrayer): java.time.LocalDateTime? {
+        val timings = dayPrayer.timings ?: return null
+        
+        return when (prayerName) {
+            "Fajr" -> timings[com.quran.quranaudio.online.prayertimes.common.PrayerEnum.DHOHR]
+            "Dhuhr" -> timings[com.quran.quranaudio.online.prayertimes.common.PrayerEnum.ASR]
+            "Asr" -> timings[com.quran.quranaudio.online.prayertimes.common.PrayerEnum.MAGHRIB]
+            "Maghrib" -> timings[com.quran.quranaudio.online.prayertimes.common.PrayerEnum.ICHA]
+            "Isha" -> {
+                // Isha is the last prayer, use 3 hours after Isha as boundary
+                val isha = timings[com.quran.quranaudio.online.prayertimes.common.PrayerEnum.ICHA]
+                isha?.plusHours(3)
+            }
+            else -> null
+        }
+    }
+    
+    /**
+     * Java-compatible async method to get Qada summary
+     * @param todayPrayerTimes Optional DayPrayer for today to use actual prayer times
+     * @param callback Callback to receive the result
+     */
+    fun getQadaSummaryAsync(todayPrayerTimes: com.quran.quranaudio.online.prayertimes.timings.DayPrayer?, callback: QadaSummaryCallback) {
         CoroutineScope(Dispatchers.IO).launch {
             val summary = try {
-                getQadaSummary()
+                getQadaSummary(todayPrayerTimes)
             } catch (e: Exception) {
                 Log.e(TAG, "Error in getQadaSummaryAsync", e)
                 QadaSummary(0, 0)
@@ -495,26 +623,38 @@ class PrayerLogRepository {
                 .whereEqualTo("userId", userId)
                 .whereGreaterThanOrEqualTo("date", startDate)
                 .whereLessThanOrEqualTo("date", endDate)
+                .orderBy("date", Query.Direction.ASCENDING)
                 .get()
                 .await()
             
             Log.d(TAG, "Found ${snapshot.documents.size} prayer logs in date range")
             
-            for (doc in snapshot.documents) {
+            // ✅ 先按 loggedAt 排序（最新的在前），然后去重
+            val sortedDocs = snapshot.documents.sortedByDescending { doc ->
+                doc.getTimestamp("loggedAt")?.toDate()?.time ?: 0L
+            }
+            
+            for (doc in sortedDocs) {
                 val log = doc.toObject(PrayerLog::class.java)
                 if (log != null) {
                     val date = log.date
                     val prayerName = log.prayerName
                     val status = log.status
                     
+                    // ✅ 注意：prayerName 可能是英语或本地化名称
+                    // 向后兼容由调用者处理（QadaTrackerActivity会标准化查询）
+                    
                     if (!result.containsKey(date)) {
                         result[date] = mutableMapOf()
                     }
                     
-                    // 如果同一天同一个祷告有多条记录，取最新的
-                    result[date]!![prayerName] = status
-                    
-                    Log.d(TAG, "  $date $prayerName -> $status")
+                    // ✅ 去重逻辑：如果同一天同一个祷告有多条记录，只保留第一条（最新的）
+                    if (!result[date]!!.containsKey(prayerName)) {
+                        result[date]!![prayerName] = status
+                        Log.d(TAG, "  $date $prayerName -> $status")
+                    } else {
+                        Log.d(TAG, "  🔄 Duplicate log ignored: $date $prayerName (keeping the latest one)")
+                    }
                 }
             }
             
@@ -548,22 +688,45 @@ class PrayerLogRepository {
                 .whereEqualTo("userId", userId)
                 .whereGreaterThanOrEqualTo("date", startDate)
                 .whereLessThanOrEqualTo("date", endDate)
+                .orderBy("date", Query.Direction.ASCENDING)
                 .get()
                 .await()
             
             Log.d(TAG, "Found ${snapshot.documents.size} prayer logs in date range")
             
-            for (doc in snapshot.documents) {
+            // ✅ 先按 loggedAt 排序（最新的在前），然后去重
+            val sortedDocs = snapshot.documents.sortedByDescending { doc ->
+                doc.getTimestamp("loggedAt")?.toDate()?.time ?: 0L
+            }
+            
+            for (doc in sortedDocs) {
                 val log = doc.toObject(PrayerLog::class.java)
-                if (log != null && log.date.isNotEmpty() && log.prayerName.isNotEmpty()) {
+                if (log != null) {
                     val date = log.date
                     val prayerName = log.prayerName
+                    
+                    // 跳过无效记录
+                    if (date.isEmpty() || prayerName.isEmpty()) {
+                        Log.w(TAG, "  ⚠️ Skipping invalid log: doc.id=${doc.id}, date='$date', prayerName='$prayerName'")
+                        continue
+                    }
+                    
                     val logInfo = PrayerLogInfo(doc.id, log.status)
+                    
+                    // ✅ 注意：prayerName 可能是英语或本地化名称
+                    // 向后兼容由调用者处理（QadaTrackerActivity会标准化查询）
                     
                     if (!result.containsKey(date)) {
                         result[date] = mutableMapOf()
                     }
-                    result[date]!![prayerName] = logInfo
+                    
+                    // ✅ 去重逻辑：如果同一天同一个祷告有多条记录，只保留第一条（最新的）
+                    if (!result[date]!!.containsKey(prayerName)) {
+                        result[date]!![prayerName] = logInfo
+                        Log.d(TAG, "  ✅ $date $prayerName -> ${log.status} (docId: ${doc.id})")
+                    } else {
+                        Log.d(TAG, "  🔄 Duplicate log ignored: $date $prayerName (keeping the latest one)")
+                    }
                 }
             }
             

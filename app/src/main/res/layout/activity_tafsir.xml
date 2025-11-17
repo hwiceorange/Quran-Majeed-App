@@ -68,6 +68,14 @@
             android:layout_height="match_parent"
             android:nestedScrollingEnabled="false" />
 
+        <!-- 内容锁定覆盖层 -->
+        <include
+            android:id="@+id/contentLockOverlay"
+            layout="@layout/content_lock_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
         <RelativeLayout
             android:id="@+id/loader"
             android:layout_width="match_parent"

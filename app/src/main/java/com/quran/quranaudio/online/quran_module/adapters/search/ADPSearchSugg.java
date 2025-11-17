@@ -34,6 +34,7 @@ import com.quran.quranaudio.online.quran_module.widgets.chapterCard.ChapterCard;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("deprecation")
 public class ADPSearchSugg extends RecyclerView.Adapter<VHSearchResultBase> {
     private final Configuration mConfigs;
     private ActivityQuran_Search mActivitySearch;

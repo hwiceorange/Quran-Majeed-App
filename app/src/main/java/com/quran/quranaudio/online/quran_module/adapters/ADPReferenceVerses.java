@@ -45,6 +45,7 @@ import com.quran.quranaudio.online.quran_module.views.reader.VerseView;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public class ADPReferenceVerses extends RecyclerView.Adapter<ADPReferenceVerses.VHReferenceVerse> implements
         Destroyable {
     public static final int VIEWTYPE_DESCRIPTION = 0x0;

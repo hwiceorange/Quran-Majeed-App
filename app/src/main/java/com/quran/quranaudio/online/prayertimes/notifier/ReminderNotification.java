@@ -33,6 +33,7 @@ import javax.inject.Singleton;
 
 
 @Singleton
+@SuppressWarnings("deprecation")
 class ReminderNotification extends BaseNotification {
 
     private final ReminderPlayer reminderPlayer;

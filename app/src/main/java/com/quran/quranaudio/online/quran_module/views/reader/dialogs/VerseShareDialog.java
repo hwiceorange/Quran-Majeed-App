@@ -59,6 +59,7 @@ import java.util.stream.Stream;
 
 import kotlin.Unit;
 
+@SuppressWarnings("deprecation")
 public class VerseShareDialog extends PeaceDialog {
     private final ReaderPossessingActivity mActivity;
     private final Pattern patternFootnoteTag = Pattern.compile("<fn.*?>(.*?)<.*?fn>");

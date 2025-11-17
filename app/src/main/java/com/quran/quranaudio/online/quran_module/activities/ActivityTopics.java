@@ -61,6 +61,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@SuppressWarnings("deprecation")
 public class ActivityTopics extends BaseActivity {
     private final RunnableTaskRunner mTaskRunner = new RunnableTaskRunner();
     private final Handler mSearchHandler = new Handler(Looper.getMainLooper());

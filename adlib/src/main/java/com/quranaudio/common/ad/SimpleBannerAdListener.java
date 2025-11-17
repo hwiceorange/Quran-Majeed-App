@@ -1,5 +1,6 @@
 package com.quranaudio.common.ad;
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -14,6 +15,7 @@ import com.google.android.gms.ads.LoadAdError;
  * banner 广告监听回调
  */
 public class SimpleBannerAdListener extends AdListener {
+	private static final String TAG = "SimpleBannerAdListener";
 	long startTime;
 	AdLoadCallback callback;
 	AdShowCallback showCallback;
@@ -30,6 +32,7 @@ public class SimpleBannerAdListener extends AdListener {
 		this.adId = adId;
 		this.mFunctionTag = functionTag;
 		startTime=System.currentTimeMillis();
+		Log.d(TAG, "📢 Banner ad listener created for: " + functionTag);
 	}
 
 
@@ -51,6 +54,14 @@ public class SimpleBannerAdListener extends AdListener {
 
 	@Override public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
 		super.onAdFailedToLoad(loadAdError);
+		Log.e(TAG, "❌ Banner ad failed to load for " + mFunctionTag + 
+			" | Code: " + loadAdError.getCode() + 
+			" | Message: " + loadAdError.getMessage());
+		// Hide banner container when ad fails to load
+		if(admobAdView!=null) {
+			admobAdView.setVisibility(View.GONE);
+			Log.d(TAG, "🔄 Banner container hidden (ad failed)");
+		}
 		reportEvent(
 			"onAdFailedToLoad",
 			System.currentTimeMillis() - startTime,
@@ -74,10 +85,13 @@ public class SimpleBannerAdListener extends AdListener {
 
 	@Override public void onAdLoaded() {
 		super.onAdLoaded();
+		long loadTime = System.currentTimeMillis() - startTime;
+		Log.d(TAG, "✅ Banner ad loaded successfully for " + mFunctionTag + " in " + loadTime + "ms");
 		if(admobAdView!=null) {
 			admobAdView.setVisibility(View.VISIBLE);
+			Log.d(TAG, "👁️ Banner container now VISIBLE");
 		}
-		reportEvent("onAdLoaded",System.currentTimeMillis() - startTime, null, null);
+		reportEvent("onAdLoaded", loadTime, null, null);
 		if(callback!=null) {
 			callback.onAdLoaded(null);
 		}

@@ -1451,10 +1451,31 @@
     <string name="day_sat">Sat</string>
     <string name="day_sun">Sun</string>
     
+    <!-- Qada Tracker Monthly View -->
+    <string name="qada_monthly_date">DATE</string>
+    
     <!-- Prayer names -->
     <string name="prayer_fajr">Fajr</string>
     <string name="prayer_dhuhr">Dhuhr</string>
     <string name="prayer_asr">Asr</string>
     <string name="prayer_maghrib">Maghrib</string>
     <string name="prayer_isha">Isha</string>
+    
+    <!-- Content Lock & Unlock Strings -->
+    <string name="content_locked">Content Locked</string>
+    <string name="unlock_full_content">Unlock Full Content</string>
+    <string name="unlock_description">Get access to complete tafsir content</string>
+    <string name="watch_ad_to_unlock">Watch Ad to Unlock</string>
+    <string name="subscribe_to_unlock">Subscribe Pro to Unlock</string>
+    <string name="or">or</string>
+    
+    <!-- Rewarded Ad Loading Dialog -->
+    <string name="loading_ad">Loading Ad…</string>
+    <string name="please_wait_seconds">Please wait %d seconds…</string>
+    <string name="you_can_close_now">You can close now</string>
+    <string name="ad_not_ready">Ad Not Ready</string>
+    <string name="ad_not_ready_message">The ad is not ready yet. Please try again later.</string>
+    <string name="retry">Retry</string>
+    <string name="unlock_success_message">Full commentary unlocked!</string>
+    
 </resources>

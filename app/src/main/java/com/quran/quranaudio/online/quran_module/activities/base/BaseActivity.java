@@ -44,6 +44,7 @@ import com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs;
 
 import java.util.Locale;
 
+@SuppressWarnings("deprecation")
 public abstract class BaseActivity extends ResHelperActivity implements NetworkStateReceiverListener,
         ActivityResultStarter {
     private final ActivityResultLauncher<Intent> mActivityResultLauncher = activityResultHandler();

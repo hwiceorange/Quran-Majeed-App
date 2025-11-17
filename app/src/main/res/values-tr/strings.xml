@@ -2098,6 +2098,9 @@
     <string name="day_sat">Cmt</string>
     <string name="day_sun">Paz</string>
     
+    <!-- Qada Tracker Monthly View -->
+    <string name="qada_monthly_date">TARİH</string>
+    
     <!-- Prayer names -->
     <string name="prayer_fajr">Sabah</string>
     <string name="prayer_dhuhr">Öğle</string>

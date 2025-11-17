@@ -25,6 +25,7 @@ import com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs;
 import java.util.Locale;
 
 
+@SuppressWarnings("deprecation")
 public class QiblaDirectionActivity extends AppCompatActivity {
 
     public PermissionUtil.PermissionRequestObject mRequestObject;

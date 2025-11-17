@@ -27,6 +27,7 @@ import com.quran.quranaudio.online.prayertimes.ui.calendar.CalendarActivity;
  * Bottom Sheet Dialog displaying tools menu
  * Provides quick access to: Hadith Books, Qibla Direction, Calendar, Six Kalmas, Zakat Calculator
  */
+@SuppressWarnings("deprecation")
 public class ToolsMenuBottomSheet extends BottomSheetDialogFragment {
 
     private static final String TAG = "ToolsMenuBottomSheet";

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+    经文注释内容锁定覆盖层
+    用于显示50%锁定效果和解锁按钮
+-->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/contentLockOverlay"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone"
+    tools:visibility="visible">
+
+    <!-- 上半部分：透明，显示内容 -->
+    <View
+        android:id="@+id/topHalfSpacer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toTopOf="@id/lockOverlayContent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- 下半部分：模糊遮罩 + 锁定UI -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lockOverlayContent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/bg_content_lock_gradient"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent="0.5"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <!-- 锁图标 -->
+        <ImageView
+            android:id="@+id/lockIcon"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginTop="40dp"
+            android:contentDescription="@string/content_locked"
+            android:src="@drawable/ic_lock"
+            android:tint="@color/colorPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- 标题 -->
+        <TextView
+            android:id="@+id/tvLockTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/unlock_full_content"
+            android:textAlignment="center"
+            android:textColor="@color/colorText"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lockIcon" />
+
+        <!-- 描述文字 -->
+        <TextView
+            android:id="@+id/tvLockDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:text="@string/unlock_description"
+            android:textAlignment="center"
+            android:textColor="@color/colorText2"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvLockTitle" />
+
+        <!-- 按钮容器 -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="80dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <!-- 按钮1: 观看广告免费解锁 -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnWatchAd"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginBottom="12dp"
+                android:text="@string/watch_ad_to_unlock"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                app:cornerRadius="8dp"
+                app:icon="@drawable/ic_play_circle"
+                app:iconGravity="textStart"
+                app:iconPadding="8dp"
+                app:iconTint="@color/white" />
+
+            <!-- 分隔文字 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:text="@string/or"
+                android:textColor="@color/colorText2"
+                android:textSize="14sp" />
+
+            <!-- 按钮2: 订阅Pro永久解锁 -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSubscribe"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/subscribe_to_unlock"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp"
+                app:cornerRadius="8dp"
+                app:icon="@drawable/ic_star"
+                app:iconGravity="textStart"
+                app:iconPadding="8dp"
+                app:iconTint="@color/colorPrimary"
+                app:strokeColor="@color/colorPrimary"
+                app:strokeWidth="2dp" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+

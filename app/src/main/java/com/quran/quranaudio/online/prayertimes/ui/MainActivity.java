@@ -36,6 +36,7 @@ import javax.inject.Inject;
 import androidx.lifecycle.ViewModelProvider;
 
 
+@SuppressWarnings("deprecation")
 public class MainActivity extends BaseActivity {
 
    /* ActivityResultLauncher<String[]> mPermissionResultLauncher;

@@ -56,6 +56,7 @@ import java.util.regex.Pattern;
 
 import kotlin.Unit;
 
+@SuppressWarnings("deprecation")
 public class ActivityProphets extends BaseActivity {
     private final Handler mSearchHandler = new Handler(Looper.getMainLooper());
     private ActivityTopicsBinding mBinding;

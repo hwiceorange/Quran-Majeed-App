@@ -80,22 +80,27 @@ public class App extends BaseApp {
     }
 
     @JvmField
+    @SuppressWarnings("deprecation")
     public ApplicationComponent appComponent = DaggerApplicationComponent
             .builder()
             .appModule(new AppModule(this))
             .build();
 
+    @SuppressWarnings("deprecation")
     @JvmField
     public ReceiverComponent receiverComponent = DaggerReceiverComponent
             .builder()
             .appModule(new AppModule(this))
             .build();
 
+    @SuppressWarnings("deprecation")
     @JvmField
     public AdapterComponent adapterComponent = DaggerAdapterComponent
             .builder()
             .appModule(new AppModule(this))
             .build();
+    
+    @SuppressWarnings("deprecation")
     @JvmField
     public DefaultComponent defaultComponent = DaggerDefaultComponent
             .builder()

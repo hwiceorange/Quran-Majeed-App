@@ -69,6 +69,7 @@ import java.util.stream.Collectors;
 
 import kotlin.Pair;
 
+@SuppressWarnings("deprecation")
 public class QuickReference extends PeaceBottomSheet implements BookmarkCallbacks, Destroyable {
     private final CallableTaskRunner<List<Verse>> mTaskRunner = new CallableTaskRunner<>();
     private ReaderPossessingActivity mActivity;

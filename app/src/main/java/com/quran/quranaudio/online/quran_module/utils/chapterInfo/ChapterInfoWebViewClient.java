@@ -27,6 +27,7 @@ import java.util.StringJoiner;
 
 import kotlin.Pair;
 
+@SuppressWarnings("deprecation")
 public class ChapterInfoWebViewClient extends WebViewClient {
     private final QuranMeta.ChapterMeta mChapterInfoMeta;
     private final ActivityChapInfo mActivityChapInfo;

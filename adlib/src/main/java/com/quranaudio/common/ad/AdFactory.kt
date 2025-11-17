@@ -6,6 +6,7 @@ import android.app.Application.ActivityLifecycleCallbacks
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
@@ -41,11 +42,28 @@ object AdFactory : ActivityLifecycleCallbacks {
 
     private fun initAdmob(context: Context) {
         try {
-            MobileAds.initialize(context) {
-                Log.d(TAG, "MobileAds init: successful")
+            // 配置AdMob RequestConfiguration with test devices
+            // Include emulator and allow for physical device testing
+            val testDeviceIds = mutableListOf(com.google.android.gms.ads.AdRequest.DEVICE_ID_EMULATOR)
+            
+            // In DEBUG mode, enable verbose logging to get device test ID
+            val requestConfiguration = com.google.android.gms.ads.RequestConfiguration.Builder()
+                .setTestDeviceIds(testDeviceIds)
+                .build()
+            MobileAds.setRequestConfiguration(requestConfiguration)
+            Log.d(TAG, "✅ AdMob RequestConfiguration set with test devices: $testDeviceIds")
+            
+            // 初始化MobileAds
+            MobileAds.initialize(context) { initStatus ->
+                val statusMap = initStatus.adapterStatusMap
+                for ((className, status) in statusMap) {
+                    Log.d(TAG, "Adapter: $className | State: ${status.initializationState} | Latency: ${status.latency}")
+                }
+                Log.d(TAG, "✅ MobileAds init: successful")
+                Log.d(TAG, "📱 To add your physical device as test device, check logcat for: 'Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList(...)'")
             }
-        }catch (e:Exception){
-
+        } catch (e: Exception) {
+            Log.e(TAG, "❌ MobileAds init failed: ${e.message}", e)
         }
     }
 
@@ -58,21 +76,49 @@ object AdFactory : ActivityLifecycleCallbacks {
         callback: AdLoadCallback?,
         showCallback: AdShowCallback?
     ) {
+        // Check if user is subscribed (premium user)
+        if (SubscriptionChecker.isUserSubscribed(activity)) {
+            Log.d(TAG, "🎁 User is subscribed, skipping banner ad for $functionTag")
+            bannerContainer?.visibility = View.GONE
+            callback?.onAdFailedToLoad("user_subscribed")
+            return
+        }
+        
         val adId = AdConfig.getAdIdByPosition(adPosition)
+        Log.d(TAG, "📢 loadBannerAd: position=$adPosition, functionTag=$functionTag, adId=$adId")
+        
         if (adId.isBlank()) {
+            Log.e(TAG, "❌ Banner Ad ID is blank for position: $adPosition")
+            bannerContainer?.visibility = View.GONE
             callback?.onAdFailedToLoad(adId)
             return
         }
+        
+        // Initially hide the container, will be shown when ad loads successfully
+        bannerContainer?.visibility = View.GONE
+        Log.d(TAG, "🔄 Banner container initially hidden, will show when ad loads")
+        
         val adView = AdView(
             bannerContainer!!.context
         )
-        if (width == 0) {
-            adView.setAdSize(AdSize.LARGE_BANNER)
-        } else {
-            val density = activity.resources.displayMetrics.density
-            val adWidth = (width * 1.0f / density).toInt()
-            val adSize = AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(activity, adWidth)
-            adView.setAdSize(adSize)
+        when {
+            width == -1 -> {
+                // Use MREC (Medium Rectangle) 300x250
+                adView.setAdSize(AdSize.MEDIUM_RECTANGLE)
+                Log.d(TAG, "📏 Using MREC (Medium Rectangle) size: 300x250dp")
+            }
+            width == 0 -> {
+                // Use LARGE_BANNER 320x100
+                adView.setAdSize(AdSize.LARGE_BANNER)
+                Log.d(TAG, "📏 Using LARGE_BANNER size: 320x100dp")
+            }
+            else -> {
+                // Use adaptive banner with specified width
+                val adWidth = width
+                val adSize = AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(activity, adWidth)
+                adView.setAdSize(adSize)
+                Log.d(TAG, "📏 Using adaptive banner size: width=${adWidth}dp, expected height=${adSize.height}dp")
+            }
         }
         adView.adUnitId = adId
         adView.adListener = SimpleBannerAdListener(
@@ -88,9 +134,17 @@ object AdFactory : ActivityLifecycleCallbacks {
         reportEvent("startLoadAd", adPosition, functionTag, adId)
         val request = AdRequest.Builder().build()
         adView.loadAd(request)
+        Log.d(TAG, "🚀 Banner ad request sent for $functionTag")
     }
 
     fun loadAppOpenAd(activity: Activity, adPosition: String, callback: AdLoadCallback?) {
+        // Check if user is subscribed (premium user)
+        if (SubscriptionChecker.isUserSubscribed(activity)) {
+            Log.d(TAG, "🎁 User is subscribed, skipping app open ad")
+            callback?.onAdFailedToLoad("user_subscribed")
+            return
+        }
+        
         val adId = AdConfig.getAdIdByPosition(adPosition)
         if (adId.isBlank()) {
             callback?.onAdFailedToLoad(adId)
@@ -145,6 +199,13 @@ object AdFactory : ActivityLifecycleCallbacks {
     }
 
     fun loadInterstitialAd(activity: Activity, adPosition: String, callback: AdLoadCallback?) {
+        // Check if user is subscribed (premium user)
+        if (SubscriptionChecker.isUserSubscribed(activity)) {
+            Log.d(TAG, "🎁 User is subscribed, skipping interstitial ad")
+            callback?.onAdFailedToLoad("user_subscribed")
+            return
+        }
+        
         val adId = AdConfig.getAdIdByPosition(adPosition)
         if (adId.isBlank()) {
             callback?.onAdFailedToLoad(adId)
@@ -206,6 +267,13 @@ object AdFactory : ActivityLifecycleCallbacks {
     }
 
     fun loadRewardAd(activity: Activity, adPosition: String, callback: AdLoadCallback?) {
+        // Check if user is subscribed (premium user)
+        if (SubscriptionChecker.isUserSubscribed(activity)) {
+            Log.d(TAG, "🎁 User is subscribed, skipping reward ad")
+            callback?.onAdFailedToLoad("user_subscribed")
+            return
+        }
+        
         val adId = AdConfig.getAdIdByPosition(adPosition)
         if (adId.isBlank()){
             callback?.onAdFailedToLoad(adId)
@@ -382,6 +450,14 @@ object AdFactory : ActivityLifecycleCallbacks {
         callback: AdLoadCallback?,
         showCallback: AdShowCallback?
     ) {
+        // Check if user is subscribed (premium user)
+        if (SubscriptionChecker.isUserSubscribed(activity)) {
+            Log.d(TAG, "🎁 User is subscribed, skipping native ad for $functionTag")
+            callback?.onAdFailedToLoad("user_subscribed")
+            showCallback?.onShowFail()
+            return
+        }
+        
         val adId = AdConfig.getAdIdByPosition(adPosition)
         if (adId.isBlank()){
             callback?.onAdFailedToLoad(adId)

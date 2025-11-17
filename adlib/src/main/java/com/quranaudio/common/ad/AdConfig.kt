@@ -16,6 +16,7 @@ object AdConfig {
     const val AD_BANNER = "banner_ad"
     const val AD_QUIZ_INTERS = "inters_ad_quiz" //quiz插屏id
     const val AD_QUIZ_REWARD = "reward_ad_quiz"  //quiz激励id
+    const val AD_TAFSIR_REWARD = "reward_ad_tafsir"  //tafsir注释解锁激励广告id
 
     private const val AD_TEST_APPOPEN_ID = "ca-app-pub-3940256099942544/9257395921"
     private const val AD_TEST_INTERS_ID = "ca-app-pub-3940256099942544/1033173712"
@@ -25,6 +26,7 @@ object AdConfig {
 
     private const val AD_QUIZ_INTERS_ID = "ca-app-pub-3966802724737141/2182661506"
     private const val AD_QUIZ_REWARD_ID = "ca-app-pub-3966802724737141/2186558832"
+    private const val AD_TAFSIR_REWARD_ID = "ca-app-pub-3966802724737141/2186558832"  // 复用Quiz激励广告ID
     private const val AD_APPOPEN_ID = "ca-app-pub-3966802724737141/3298687654"
     private const val AD_NEW_USER_INTERS_ID = "ca-app-pub-3966802724737141/7804176008"
     private const val AD_INTERS_ID = "ca-app-pub-3966802724737141/2182661506"
@@ -33,20 +35,35 @@ object AdConfig {
 
 
     fun getAdIdByPosition(position: String): String {
+        android.util.Log.d("AdConfig", "🔍 getAdIdByPosition: position=$position, isTest=$isTest, BuildConfig.DEBUG=${BuildConfig.DEBUG}")
+        
         if (!isTest) {
-            val adId = FirebaseRemoteConfig.getInstance().getString("${position}_admob")
-            if (adId.isNotBlank()) return adId
+            val remoteConfigKey = "${position}_admob"
+            val adId = FirebaseRemoteConfig.getInstance().getString(remoteConfigKey)
+            android.util.Log.d("AdConfig", "🔍 Firebase RemoteConfig check: key=$remoteConfigKey, value='$adId', isNotBlank=${adId.isNotBlank()}")
+            if (adId.isNotBlank()) {
+                android.util.Log.d("AdConfig", "✅ Using RemoteConfig ad ID: $adId")
+                return adId
         }
-        return when (position) {
-            AD_APPOPEN -> if (useTestAD()) AD_TEST_APPOPEN_ID else AD_APPOPEN_ID
-            AD_NEW_USER_INTERS -> if (useTestAD()) AD_TEST_INTERS_ID else AD_NEW_USER_INTERS_ID
-            AD_INTERS -> if (useTestAD()) AD_TEST_INTERS_ID else AD_INTERS_ID
-            AD_NATIVE -> if (useTestAD()) AD_TEST_NATIVE_ID else AD_NATIVE_ID
-            AD_BANNER -> if (useTestAD()) AD_TEST_BANNER_ID else AD_BANNER_ID
-            AD_QUIZ_INTERS -> if (useTestAD()) AD_TEST_INTERS_ID else AD_QUIZ_INTERS_ID
-            AD_QUIZ_REWARD -> if (useTestAD()) AD_TEST_REWARD_ID else AD_QUIZ_REWARD_ID
+        }
+        
+        val useTest = useTestAD()
+        android.util.Log.d("AdConfig", "🔍 useTestAD()=$useTest")
+        
+        val finalAdId = when (position) {
+            AD_APPOPEN -> if (useTest) AD_TEST_APPOPEN_ID else AD_APPOPEN_ID
+            AD_NEW_USER_INTERS -> if (useTest) AD_TEST_INTERS_ID else AD_NEW_USER_INTERS_ID
+            AD_INTERS -> if (useTest) AD_TEST_INTERS_ID else AD_INTERS_ID
+            AD_NATIVE -> if (useTest) AD_TEST_NATIVE_ID else AD_NATIVE_ID
+            AD_BANNER -> if (useTest) AD_TEST_BANNER_ID else AD_BANNER_ID
+            AD_QUIZ_INTERS -> if (useTest) AD_TEST_INTERS_ID else AD_QUIZ_INTERS_ID
+            AD_QUIZ_REWARD -> if (useTest) AD_TEST_REWARD_ID else AD_QUIZ_REWARD_ID
+            AD_TAFSIR_REWARD -> if (useTest) AD_TEST_REWARD_ID else AD_TAFSIR_REWARD_ID
             else -> ""
         }
+        
+        android.util.Log.d("AdConfig", "✅ Final ad ID for $position: $finalAdId")
+        return finalAdId
     }
 
     private fun useTestAD(): Boolean {

@@ -1330,6 +1330,9 @@
     <string name="day_sat">السبت</string>
     <string name="day_sun">الأحد</string>
     
+    <!-- Qada Tracker Monthly View -->
+    <string name="qada_monthly_date">التاريخ</string>
+    
     <!-- Prayer names -->
     <string name="prayer_fajr">الفجر</string>
     <string name="prayer_dhuhr">الظهر</string>

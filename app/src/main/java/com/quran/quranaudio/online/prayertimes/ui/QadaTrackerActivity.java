@@ -1,6 +1,7 @@
 package com.quran.quranaudio.online.prayertimes.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -31,7 +32,19 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.quran.quranaudio.online.R;
 import com.quran.quranaudio.online.prayertimes.models.PrayerLog;
 import com.quran.quranaudio.online.prayertimes.repository.PrayerLogRepository;
+import com.quran.quranaudio.online.prayertimes.timings.DayPrayer;
+import com.quran.quranaudio.online.prayertimes.common.PrayerEnum;
 import com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs;
+
+// 插屏广告相关导入
+import com.quranaudio.common.ad.AdConfig;
+import com.quranaudio.common.ad.AdFactory;
+import com.quranaudio.common.ad.AdShowCallback;
+import com.quranaudio.common.ad.model.AdItem;
+import com.quranaudio.common.ad.model.RewardItem;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.widget.FrameLayout;
 
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
@@ -76,9 +89,18 @@ public class QadaTrackerActivity extends AppCompatActivity {
     // Data repository
     private PrayerLogRepository prayerLogRepository;
     
+    // Prayer times
+    private DayPrayer todayPrayerTimes = null;
+    
     // Prayer data cache (date -> prayerName -> PrayerLogData)
     private Map<String, Map<String, PrayerLogData>> weeklyData = new HashMap<>();
     private Map<String, Map<String, PrayerLogData>> monthlyData = new HashMap<>();
+    
+    // Banner Ad Containers
+    private FrameLayout bannerAdContainerWeekly;
+    private FrameLayout bannerAdContainerMonthly;
+    private boolean weeklyAdLoaded = false;
+    private boolean monthlyAdLoaded = false;
     
     /**
      * Simple data class to cache prayer log info
@@ -115,6 +137,7 @@ public class QadaTrackerActivity extends AppCompatActivity {
         configuration.setLocale(new Locale(language));
     }
     
+    @SuppressWarnings("deprecation")
     private Context updateBaseContextLocale(Context context) {
         String language = SPAppConfigs.getLocale(context);
         
@@ -141,6 +164,7 @@ public class QadaTrackerActivity extends AppCompatActivity {
         }
     }
     
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -156,6 +180,9 @@ public class QadaTrackerActivity extends AppCompatActivity {
         // Initialize repository
         prayerLogRepository = new PrayerLogRepository();
         
+        // ✅ 尝试从Intent获取今天的祷告时间
+        loadPrayerTimesFromIntent();
+        
         initializeViews();
         setupListeners();
         setupStatusBar();
@@ -165,6 +192,52 @@ public class QadaTrackerActivity extends AppCompatActivity {
         
         // Default to Weekly view
         switchToWeeklyView();
+    }
+    
+    /**
+     * ✅ 从Intent加载祷告时间数据
+     * 如果没有传递数据，将使用fallback估算时间
+     */
+    private void loadPrayerTimesFromIntent() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            Log.d(TAG, "⚠️ Android version < O, using fallback prayer times");
+            return;
+        }
+        
+        Intent intent = getIntent();
+        if (intent == null) {
+            Log.d(TAG, "⚠️ Intent is null, using fallback prayer times");
+            return;
+        }
+        
+        try {
+            // 尝试读取所有祷告时间
+            Map<PrayerEnum, java.time.LocalDateTime> timings = new HashMap<>();
+            boolean hasAnyTiming = false;
+            
+            for (PrayerEnum prayer : PrayerEnum.values()) {
+                String key = "prayer_time_" + prayer.name();
+                String timeStr = intent.getStringExtra(key);
+                if (timeStr != null && !timeStr.isEmpty()) {
+                    java.time.LocalDateTime time = java.time.LocalDateTime.parse(timeStr);
+                    timings.put(prayer, time);
+                    hasAnyTiming = true;
+                    Log.d(TAG, "   ✅ " + prayer + ": " + time.toLocalTime());
+                }
+            }
+            
+            if (hasAnyTiming) {
+                // 创建一个简单的DayPrayer对象（只包含timings）
+                todayPrayerTimes = new DayPrayer();
+                todayPrayerTimes.setTimings(timings);
+                Log.d(TAG, "✅ Successfully loaded prayer times from Intent");
+            } else {
+                Log.d(TAG, "⚠️ No prayer times found in Intent, will use fallback");
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "❌ Error loading prayer times from Intent", e);
+            Log.d(TAG, "   Will use fallback prayer times");
+        }
     }
     
     private void initializeViews() {
@@ -186,14 +259,188 @@ public class QadaTrackerActivity extends AppCompatActivity {
     }
     
     private void setupListeners() {
-        // Toolbar navigation click
-        toolbar.setNavigationOnClickListener(v -> finish());
+        // Toolbar navigation click - 显示插屏广告后退出
+        toolbar.setNavigationOnClickListener(v -> handleExit());
         
         btnTabWeekly.setOnClickListener(v -> switchToWeeklyView());
         btnTabMonthly.setOnClickListener(v -> switchToMonthlyView());
         
         btnPrevDate.setOnClickListener(v -> navigatePrevious());
         btnNextDate.setOnClickListener(v -> navigateNext());
+        
+        // Note: Banner ads will be loaded in switchToWeeklyView() and switchToMonthlyView()
+    }
+    
+    /**
+     * Load banner ad for Weekly view
+     */
+    private void loadWeeklyBannerAd() {
+        if (weeklyAdLoaded) {
+            Log.d(TAG, "⚠️ Weekly banner already loaded, skipping...");
+            return;
+        }
+        
+        Log.d(TAG, "🔵 loadWeeklyBannerAd() called");
+        View weeklyView = findViewById(R.id.weekly_view);
+        if (weeklyView != null) {
+            Log.d(TAG, "✅ weeklyView found");
+            bannerAdContainerWeekly = weeklyView.findViewById(R.id.banner_ad_container_weekly);
+            if (bannerAdContainerWeekly != null) {
+                Log.d(TAG, "✅ banner_ad_container_weekly found, loading ad...");
+                weeklyAdLoaded = true;
+                // Post to message queue to ensure view is laid out
+                bannerAdContainerWeekly.post(() -> {
+                AdFactory.INSTANCE.loadBannerAd(
+                    this,                       // activity
+                    -1,                         // width (-1 for MREC 300x250)
+                    bannerAdContainerWeekly,    // container
+                    AdConfig.AD_BANNER,         // ad position
+                    "QadaTracker_Weekly",       // function tag
+                    null,                       // load callback
+                    null                        // show callback
+                );
+                });
+            } else {
+                Log.e(TAG, "❌ banner_ad_container_weekly is NULL!");
+            }
+        } else {
+            Log.e(TAG, "❌ weeklyView is NULL!");
+            }
+        }
+        
+    /**
+     * Load banner ad for Monthly view
+     */
+    private void loadMonthlyBannerAd() {
+        if (monthlyAdLoaded) {
+            Log.d(TAG, "⚠️ Monthly banner already loaded, skipping...");
+            return;
+        }
+        
+        Log.d(TAG, "🔵 loadMonthlyBannerAd() called");
+        View monthlyView = findViewById(R.id.monthly_view);
+        if (monthlyView != null) {
+            Log.d(TAG, "✅ monthlyView found");
+            bannerAdContainerMonthly = monthlyView.findViewById(R.id.banner_ad_container_monthly);
+            if (bannerAdContainerMonthly != null) {
+                Log.d(TAG, "✅ banner_ad_container_monthly found, loading ad...");
+                monthlyAdLoaded = true;
+                // Post to message queue to ensure view is laid out
+                bannerAdContainerMonthly.post(() -> {
+                AdFactory.INSTANCE.loadBannerAd(
+                    this,                       // activity
+                    -1,                         // width (-1 for MREC 300x250)
+                    bannerAdContainerMonthly,   // container
+                    AdConfig.AD_BANNER,         // ad position
+                    "QadaTracker_Monthly",      // function tag
+                    null,                       // load callback
+                    null                        // show callback
+                );
+                });
+            } else {
+                Log.e(TAG, "❌ banner_ad_container_monthly is NULL!");
+            }
+        } else {
+            Log.e(TAG, "❌ monthlyView is NULL!");
+        }
+    }
+    
+    /**
+     * 处理退出Qada Tracker页面流程
+     * 留存用户（第3天及以后）显示插屏广告
+     */
+    private void handleExit() {
+        // 检查是否是留存用户（第3天及以后）
+        if (shouldShowExitAd()) {
+            showExitInterstitialAd();
+        } else {
+            // 新用户（前2天）直接退出，不阻挡用户体验
+            finish();
+        }
+    }
+    
+    /**
+     * 判断是否应该显示退出插屏广告
+     * @return true 如果用户是留存用户（第3天及以后）
+     */
+    private boolean shouldShowExitAd() {
+        int installDays = getInstallDays();
+        Log.d(TAG, "📅 Install days: " + installDays + ", shouldShowExitAd: " + (installDays >= 3));
+        return installDays >= 3;
+    }
+    
+    /**
+     * 获取应用安装天数
+     * @return 安装天数（0表示安装当天）
+     */
+    private int getInstallDays() {
+        try {
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            long firstInstallTime = packageInfo.firstInstallTime;
+            long currentTime = System.currentTimeMillis();
+            int days = (int) ((currentTime - firstInstallTime) / (24 * 60 * 60 * 1000));
+            Log.d(TAG, "📱 First install: " + firstInstallTime + ", Current: " + currentTime + ", Days: " + days);
+            return days;
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(TAG, "❌ Failed to get install days", e);
+            return 0;
+        }
+    }
+    
+    /**
+     * 显示退出插屏广告
+     * 使用应用内共用插屏ID (AD_INTERS)
+     */
+    private void showExitInterstitialAd() {
+        Log.d(TAG, "🎬 Showing exit interstitial ad...");
+        
+        AdFactory.INSTANCE.showInterstitialAd(
+            this,
+            AdConfig.AD_INTERS,
+            "qada_tracker_exit",
+            new AdShowCallback() {
+                @Override
+                public void onAdImpression(AdItem adItem) {
+                    Log.d(TAG, "📊 Ad impression recorded");
+                }
+                
+                @Override
+                public void onAdClicked(AdItem adItem) {
+                    Log.d(TAG, "👆 Ad clicked");
+                }
+                
+                @Override
+                public void onUserEarnedReward(AdItem adItem, RewardItem rewardItem) {
+                    // 插屏广告不需要奖励
+                }
+                
+                @Override
+                public void onAdClosed(AdItem adItem) {
+                    Log.d(TAG, "✅ Ad closed, finishing activity");
+                    finish();
+                }
+                
+                @Override
+                public void onShow(AdItem adItem) {
+                    Log.d(TAG, "📺 Ad shown");
+                }
+                
+                @Override
+                public void onShowFail() {
+                    Log.d(TAG, "❌ Ad failed to show, finishing activity directly");
+                    // 如果广告展示失败，直接退出，不阻挡用户体验
+                    finish();
+                }
+            }
+        );
+    }
+    
+    /**
+     * 重写返回键行为，同样显示插屏广告
+     */
+    @Override
+    public void onBackPressed() {
+        handleExit();
     }
     
     private void setupStatusBar() {
@@ -222,6 +469,9 @@ public class QadaTrackerActivity extends AppCompatActivity {
         
         // Load weekly data
         loadWeeklyData();
+        
+        // Load banner ad for weekly view
+        loadWeeklyBannerAd();
     }
     
     /**
@@ -243,6 +493,9 @@ public class QadaTrackerActivity extends AppCompatActivity {
         
         // Load monthly data
         loadMonthlyData();
+        
+        // Load banner ad for monthly view
+        loadMonthlyBannerAd();
     }
     
     /**
@@ -322,10 +575,11 @@ public class QadaTrackerActivity extends AppCompatActivity {
         gridContainer.addView(headerRow);
         
         // Create prayer rows (Fajr, Dhuhr, Asr, Maghrib, Isha)
-        String[] prayers = getPrayerNames();
+        String[] prayers = getPrayerNames();  // English names for data queries
+        String[] localizedPrayers = getLocalizedPrayerNames();  // Localized names for UI display
         
-        for (String prayer : prayers) {
-            LinearLayout prayerRow = createWeeklyPrayerRow(prayer);
+        for (int i = 0; i < prayers.length; i++) {
+            LinearLayout prayerRow = createWeeklyPrayerRow(prayers[i], localizedPrayers[i]);
             gridContainer.addView(prayerRow);
         }
     }
@@ -333,14 +587,19 @@ public class QadaTrackerActivity extends AppCompatActivity {
     /**
      * Get localized prayer names
      */
+    /**
+     * Get English prayer names for database queries
+     * Always use fixed English names for Firestore queries to ensure consistency across languages
+     */
     private String[] getPrayerNames() {
-        return new String[] {
-            getString(R.string.prayer_fajr),
-            getString(R.string.prayer_dhuhr),
-            getString(R.string.prayer_asr),
-            getString(R.string.prayer_maghrib),
-            getString(R.string.prayer_isha)
-        };
+        return com.quran.quranaudio.online.prayertimes.models.PrayerName.ALL_PRAYERS;
+    }
+    
+    /**
+     * Get localized prayer names for UI display
+     */
+    private String[] getLocalizedPrayerNames() {
+        return com.quran.quranaudio.online.prayertimes.models.PrayerName.getAllLocalizedNames(this);
     }
     
     /**
@@ -405,8 +664,10 @@ public class QadaTrackerActivity extends AppCompatActivity {
     
     /**
      * Create prayer row for weekly view
+     * @param prayerName English prayer name for data queries
+     * @param localizedName Localized prayer name for UI display
      */
-    private LinearLayout createWeeklyPrayerRow(String prayerName) {
+    private LinearLayout createWeeklyPrayerRow(String prayerName, String localizedName) {
         LinearLayout row = new LinearLayout(this);
         row.setOrientation(LinearLayout.HORIZONTAL);
         row.setGravity(Gravity.CENTER_VERTICAL);
@@ -418,7 +679,7 @@ public class QadaTrackerActivity extends AppCompatActivity {
         rowParams.setMargins(0, 0, 0, dpToPx(8));
         row.setLayoutParams(rowParams);
         
-        // Prayer name
+        // Prayer name (显示本地化名称)
         TextView nameView = new TextView(this);
         LinearLayout.LayoutParams nameParams = new LinearLayout.LayoutParams(
             dpToPx(56),  // ✅ 从 70 缩小到 56，与表头对齐
@@ -426,7 +687,7 @@ public class QadaTrackerActivity extends AppCompatActivity {
         );
         nameParams.setMargins(0, dpToPx(2), dpToPx(8), dpToPx(2));  // ✅ 右边距 8dp，与 Mon 列明显区分
         nameView.setLayoutParams(nameParams);
-        nameView.setText(prayerName);
+        nameView.setText(localizedName);  // 使用本地化名称显示
         nameView.setTextSize(14);
         nameView.setTextColor(Color.parseColor("#1A1A1A"));
         nameView.setGravity(Gravity.CENTER_VERTICAL);
@@ -514,7 +775,7 @@ public class QadaTrackerActivity extends AppCompatActivity {
     }
     
     /**
-     * Create header row for monthly view
+     * Create header row for monthly view (修复：使用字符串资源支持多语言)
      */
     private LinearLayout createMonthlyHeaderRow() {
         LinearLayout row = new LinearLayout(this);
@@ -528,7 +789,16 @@ public class QadaTrackerActivity extends AppCompatActivity {
         rowParams.setMargins(0, 0, 0, dpToPx(12));
         row.setLayoutParams(rowParams);
         
-        String[] headers = {"DATE", "FAJR", "DHUHR", "ASR", "MAGHRIB", "ISHA"};
+        // 使用字符串资源替代硬编码（支持多语言）
+        String[] headers = {
+            getString(R.string.qada_monthly_date),
+            getString(R.string.prayer_fajr),
+            getString(R.string.prayer_dhuhr),
+            getString(R.string.prayer_asr),
+            getString(R.string.prayer_maghrib),
+            getString(R.string.prayer_isha)
+        };
+        
         for (int i = 0; i < headers.length; i++) {
             TextView headerView = new TextView(this);
             LinearLayout.LayoutParams headerParams = new LinearLayout.LayoutParams(
@@ -653,14 +923,22 @@ public class QadaTrackerActivity extends AppCompatActivity {
                 // Set listener for refreshing data
                 bottomSheet.setOnPrayerLoggedListener(new PrayerLogBottomSheet.OnPrayerLoggedListener() {
                     @Override
-                    public void onPrayerLogged(String prayer) {
-                        Log.d(TAG, "✅ Prayer logged callback: " + prayer);
+                    public void onPrayerLogged(String prayer, String date, int newStatus, String logId) {
+                        long timestamp = System.currentTimeMillis();
+                        Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "] onPrayerLogged() received");
+                        Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "] Prayer: " + prayer + ", Date: " + date + ", Status: " + newStatus);
+                        Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "] Current mode: " + currentMode);
+                        
                         // Refresh data
                         if (currentMode == ViewMode.WEEKLY) {
+                            Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "] Calling loadWeeklyData()");
                             loadWeeklyData();
                         } else {
+                            Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "] Calling loadMonthlyData()");
                             loadMonthlyData();
                         }
+                        
+                        Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "] onPrayerLogged() completed");
                     }
                     
                     @Override
@@ -685,13 +963,45 @@ public class QadaTrackerActivity extends AppCompatActivity {
                 
                 bottomSheet.setOnPrayerLoggedListener(new PrayerLogBottomSheet.OnPrayerLoggedListener() {
                     @Override
-                    public void onPrayerLogged(String prayer) {
-                        Log.d(TAG, "✅ Qada logged callback: " + prayer);
-                        if (currentMode == ViewMode.WEEKLY) {
+                    public void onPrayerLogged(String prayer, String date, int newStatus, String logId) {
+                        long timestamp = System.currentTimeMillis();
+                        Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "] Qada logged callback");
+                        Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "]   Prayer: " + prayer);
+                        Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "]   Date: " + date);
+                        Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "]   New Status: " + newStatus);
+                        Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "]   Log ID: " + logId);
+                        Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "]   Current mode: " + currentMode);
+                        
+                        // 🔥 立即更新本地缓存（不等待 Firestore 查询），解决最终一致性问题
+                        if (currentMode == ViewMode.MONTHLY) {
+                            // 确保 monthlyData 中有该日期的数据
+                            if (!monthlyData.containsKey(date)) {
+                                monthlyData.put(date, new HashMap<>());
+                            }
+                            
+                            // 将 Int 转换为 PrayerLog.PrayerStatus 枚举
+                            PrayerLog.PrayerStatus status = PrayerLog.PrayerStatus.values()[newStatus];
+                            
+                            // 立即更新本地缓存
+                            PrayerLogData logData = new PrayerLogData(logId, status);
+                            monthlyData.get(date).put(prayer, logData);
+                            
+                            Log.d(TAG, "🔥 [CALLBACK-" + timestamp + "] Local cache updated immediately");
+                            Log.d(TAG, "🔥 [CALLBACK-" + timestamp + "]   Date: " + date + ", Prayer: " + prayer + ", Status: " + newStatus);
+                            
+                            // 立即刷新 UI，显示更新后的状态
+                            runOnUiThread(() -> {
+                                buildMonthlyPrayerTable();
+                                updateMonthlyCompletion();
+                            });
+                            
+                            Log.d(TAG, "🔥 [CALLBACK-" + timestamp + "] UI refreshed immediately");
+                        } else if (currentMode == ViewMode.WEEKLY) {
+                            Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "] Calling loadWeeklyData()");
                             loadWeeklyData();
-                        } else {
-                            loadMonthlyData();
                         }
+                        
+                        Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "] Qada logged callback completed");
                     }
                     
                     @Override
@@ -719,13 +1029,42 @@ public class QadaTrackerActivity extends AppCompatActivity {
                     
                     bottomSheet.setOnPrayerLoggedListener(new PrayerLogBottomSheet.OnPrayerLoggedListener() {
                         @Override
-                        public void onPrayerLogged(String prayer) {
-                            Log.d(TAG, "✅ Prayer updated callback: " + prayer);
-                            if (currentMode == ViewMode.WEEKLY) {
+                        public void onPrayerLogged(String prayer, String updatedDate, int newStatus, String updatedLogId) {
+                            long timestamp = System.currentTimeMillis();
+                            Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "] Prayer updated callback");
+                            Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "]   Prayer: " + prayer);
+                            Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "]   Date: " + updatedDate);
+                            Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "]   New Status: " + newStatus);
+                            Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "]   Log ID: " + updatedLogId);
+                            Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "]   Current mode: " + currentMode);
+                            
+                            // 🔥 立即更新本地缓存
+                            if (currentMode == ViewMode.MONTHLY) {
+                                if (!monthlyData.containsKey(updatedDate)) {
+                                    monthlyData.put(updatedDate, new HashMap<>());
+                                }
+                                
+                                // 将 Int 转换为 PrayerLog.PrayerStatus 枚举
+                                PrayerLog.PrayerStatus status = PrayerLog.PrayerStatus.values()[newStatus];
+                                
+                                PrayerLogData logData = new PrayerLogData(updatedLogId, status);
+                                monthlyData.get(updatedDate).put(prayer, logData);
+                                
+                                Log.d(TAG, "🔥 [CALLBACK-" + timestamp + "] Local cache updated");
+                                
+                                // 立即刷新 UI
+                                runOnUiThread(() -> {
+                                    buildMonthlyPrayerTable();
+                                    updateMonthlyCompletion();
+                                });
+                                
+                                Log.d(TAG, "🔥 [CALLBACK-" + timestamp + "] UI refreshed");
+                            } else if (currentMode == ViewMode.WEEKLY) {
+                                Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "] Calling loadWeeklyData()");
                                 loadWeeklyData();
-                            } else {
-                                loadMonthlyData();
                             }
+                            
+                            Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "] Prayer updated callback completed");
                         }
                         
                         @Override
@@ -750,13 +1089,42 @@ public class QadaTrackerActivity extends AppCompatActivity {
                             
                             bottomSheet.setOnPrayerLoggedListener(new PrayerLogBottomSheet.OnPrayerLoggedListener() {
                                 @Override
-                                public void onPrayerLogged(String prayer) {
-                                    Log.d(TAG, "✅ Prayer updated callback: " + prayer);
-                                    if (currentMode == ViewMode.WEEKLY) {
+                                public void onPrayerLogged(String prayer, String updatedDate, int newStatus, String updatedLogId) {
+                                    long timestamp = System.currentTimeMillis();
+                                    Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "] Prayer updated (Firestore fallback)");
+                                    Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "]   Prayer: " + prayer);
+                                    Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "]   Date: " + updatedDate);
+                                    Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "]   New Status: " + newStatus);
+                                    Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "]   Log ID: " + updatedLogId);
+                                    Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "]   Current mode: " + currentMode);
+                                    
+                                    // 🔥 立即更新本地缓存
+                                    if (currentMode == ViewMode.MONTHLY) {
+                                        if (!monthlyData.containsKey(updatedDate)) {
+                                            monthlyData.put(updatedDate, new HashMap<>());
+                                        }
+                                        
+                                        // 将 Int 转换为 PrayerLog.PrayerStatus 枚举
+                                        PrayerLog.PrayerStatus status = PrayerLog.PrayerStatus.values()[newStatus];
+                                        
+                                        PrayerLogData logData = new PrayerLogData(updatedLogId, status);
+                                        monthlyData.get(updatedDate).put(prayer, logData);
+                                        
+                                        Log.d(TAG, "🔥 [CALLBACK-" + timestamp + "] Local cache updated");
+                                        
+                                        // 立即刷新 UI
+                                        runOnUiThread(() -> {
+                                            buildMonthlyPrayerTable();
+                                            updateMonthlyCompletion();
+                                        });
+                                        
+                                        Log.d(TAG, "🔥 [CALLBACK-" + timestamp + "] UI refreshed");
+                                    } else if (currentMode == ViewMode.WEEKLY) {
+                                        Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "] Calling loadWeeklyData()");
                                         loadWeeklyData();
-                                    } else {
-                                        loadMonthlyData();
                                     }
+                                    
+                                    Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "] Prayer updated callback completed");
                                 }
                                 
                                 @Override
@@ -792,9 +1160,10 @@ public class QadaTrackerActivity extends AppCompatActivity {
     
     /**
      * Get log ID from cache (优化：避免重复查询 Firestore)
+     * ✅ 支持向后兼容：尝试英语名称和本地化名称
      * 
      * @param date Prayer date (YYYY-MM-DD)
-     * @param prayerName Prayer name
+     * @param prayerName Prayer name (English)
      * @return log ID or null if not in cache
      */
     private String getLogIdFromCache(String date, String prayerName) {
@@ -803,10 +1172,23 @@ public class QadaTrackerActivity extends AppCompatActivity {
         
         if (dataSource.containsKey(date)) {
             Map<String, PrayerLogData> dayData = dataSource.get(date);
-            if (dayData != null && dayData.containsKey(prayerName)) {
-                PrayerLogData logData = dayData.get(prayerName);
-                if (logData != null) {
-                    return logData.logId;
+            if (dayData != null) {
+                // ✅ 首先尝试英语名称（新数据）
+                if (dayData.containsKey(prayerName)) {
+                    PrayerLogData logData = dayData.get(prayerName);
+                    if (logData != null) {
+                        return logData.logId;
+                    }
+                }
+                
+                // ✅ 向后兼容：尝试本地化名称（旧数据）
+                String localizedName = com.quran.quranaudio.online.prayertimes.models.PrayerName
+                    .getLocalizedName(prayerName, this);
+                if (!localizedName.equals(prayerName) && dayData.containsKey(localizedName)) {
+                    PrayerLogData logData = dayData.get(localizedName);
+                    if (logData != null) {
+                        return logData.logId;
+                    }
                 }
             }
         }
@@ -951,6 +1333,9 @@ public class QadaTrackerActivity extends AppCompatActivity {
     private void loadMonthlyData() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return;
         
+        long timestamp = System.currentTimeMillis();
+        Log.d(TAG, "🔍 [LOAD-" + timestamp + "] ========== loadMonthlyData() START ==========");
+        
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
             Log.e(TAG, "User not authenticated");
@@ -961,7 +1346,8 @@ public class QadaTrackerActivity extends AppCompatActivity {
         LocalDate monthStart = currentDate.withDayOfMonth(1);
         LocalDate monthEnd = currentDate.withDayOfMonth(currentDate.lengthOfMonth());
         
-        Log.d(TAG, "Loading monthly data from " + monthStart + " to " + monthEnd);
+        Log.d(TAG, "🔍 [LOAD-" + timestamp + "] Loading monthly data from " + monthStart + " to " + monthEnd);
+        Log.d(TAG, "🔍 [LOAD-" + timestamp + "] Starting Firestore query...");
         
         // Load data from Firestore with log IDs
         prayerLogRepository.getPrayerLogsByDateRangeWithIdsAsync(
@@ -970,6 +1356,8 @@ public class QadaTrackerActivity extends AppCompatActivity {
             new PrayerLogRepository.DateRangeWithIdsCallback() {
                 @Override
                 public void onResult(Map<String, Map<String, PrayerLogRepository.PrayerLogInfo>> data) {
+                    Log.d(TAG, "🔍 [LOAD-" + timestamp + "] Firestore query returned " + data.size() + " dates");
+                    
                     monthlyData.clear();
                     
                     // Convert PrayerLogInfo to PrayerLogData
@@ -978,16 +1366,21 @@ public class QadaTrackerActivity extends AppCompatActivity {
                         for (Map.Entry<String, PrayerLogRepository.PrayerLogInfo> prayerEntry : dateEntry.getValue().entrySet()) {
                             PrayerLogRepository.PrayerLogInfo info = prayerEntry.getValue();
                             dayData.put(prayerEntry.getKey(), new PrayerLogData(info.getLogId(), info.getStatus()));
+                            Log.d(TAG, "🔍 [LOAD-" + timestamp + "]   " + dateEntry.getKey() + " - " + prayerEntry.getKey() + ": " + info.getStatus());
                         }
                         monthlyData.put(dateEntry.getKey(), dayData);
                     }
                     
-                    Log.d(TAG, "Loaded " + monthlyData.size() + " days of monthly data with log IDs");
+                    Log.d(TAG, "🔍 [LOAD-" + timestamp + "] Loaded " + monthlyData.size() + " days of monthly data with log IDs");
+                    Log.d(TAG, "🔍 [LOAD-" + timestamp + "] Updating UI on main thread...");
                     
                     // Update UI on main thread
                     runOnUiThread(() -> {
+                        Log.d(TAG, "🔍 [LOAD-" + timestamp + "] Building monthly prayer table...");
                         buildMonthlyPrayerTable();
+                        Log.d(TAG, "🔍 [LOAD-" + timestamp + "] Updating monthly completion...");
                         updateMonthlyCompletion();
+                        Log.d(TAG, "🔍 [LOAD-" + timestamp + "] ========== loadMonthlyData() COMPLETED ==========");
                     });
                 }
             }
@@ -996,6 +1389,7 @@ public class QadaTrackerActivity extends AppCompatActivity {
     
     /**
      * Get prayer status for a specific date and prayer name
+     * ✅ 支持向后兼容：尝试英语名称和本地化名称
      */
     private int getPrayerStatus(String date, String prayerName, boolean isWeekly) {
         Map<String, Map<String, PrayerLogData>> dataSource = 
@@ -1004,18 +1398,23 @@ public class QadaTrackerActivity extends AppCompatActivity {
         if (dataSource.containsKey(date)) {
             Map<String, PrayerLogData> dayData = dataSource.get(date);
             
-            if (dayData != null && dayData.containsKey(prayerName)) {
-                PrayerLogData logData = dayData.get(prayerName);
-                if (logData != null) {
-                    PrayerLog.PrayerStatus status = logData.status;
-                    
-                    // Convert status to int (0=Ada', 1=Qada', 2=Missed)
-                    if (status == PrayerLog.PrayerStatus.ADA) {
-                        return 0;
-                    } else if (status == PrayerLog.PrayerStatus.QADA) {
-                        return 1;
-                    } else if (status == PrayerLog.PrayerStatus.MISSED) {
-                        return 2;
+            if (dayData != null) {
+                // ✅ 首先尝试英语名称（新数据）
+                if (dayData.containsKey(prayerName)) {
+                    PrayerLogData logData = dayData.get(prayerName);
+                    if (logData != null) {
+                        return convertStatusToInt(logData.status);
+                    }
+                }
+                
+                // ✅ 向后兼容：尝试本地化名称（旧数据）
+                String localizedName = com.quran.quranaudio.online.prayertimes.models.PrayerName
+                    .getLocalizedName(prayerName, this);
+                if (!localizedName.equals(prayerName) && dayData.containsKey(localizedName)) {
+                    PrayerLogData logData = dayData.get(localizedName);
+                    if (logData != null) {
+                        Log.d(TAG, "🔄 Found legacy localized data: " + date + " " + localizedName);
+                        return convertStatusToInt(logData.status);
                     }
                 }
             }
@@ -1061,6 +1460,21 @@ public class QadaTrackerActivity extends AppCompatActivity {
         }
         
         // Default: Pending
+        return -1;
+    }
+    
+    /**
+     * Convert PrayerStatus enum to int
+     * @return 0=Ada', 1=Qada', 2=Missed, -1=Pending
+     */
+    private int convertStatusToInt(PrayerLog.PrayerStatus status) {
+        if (status == PrayerLog.PrayerStatus.ADA) {
+            return 0;
+        } else if (status == PrayerLog.PrayerStatus.QADA) {
+            return 1;
+        } else if (status == PrayerLog.PrayerStatus.MISSED) {
+            return 2;
+        }
         return -1;
     }
     
@@ -1192,6 +1606,17 @@ public class QadaTrackerActivity extends AppCompatActivity {
         
         Log.d(TAG, "Weekly completion: " + completedPrayers + "/" + totalPrayers + " = " + completionRate + "%");
         
+        // 🔍 诊断日志：周Tab完成度计算
+        Log.d("QadaDiagnosis", "═══════════════════════════════════════════════");
+        Log.d("QadaDiagnosis", "📊 【统一计算规则】QadaTracker Weekly Tab - Completion Rate");
+        Log.d("QadaDiagnosis", "   ✅ Prayer Window Check: PrayerLogRepository.hasPrayerWindowStarted()");
+        Log.d("QadaDiagnosis", "   📅 Week Range: " + weekStart + " to " + weekEnd);
+        Log.d("QadaDiagnosis", "   ✅ Completed (Ada'+Qada'): " + completedPrayers);
+        Log.d("QadaDiagnosis", "   🔢 Total Prayers: " + totalPrayers);
+        Log.d("QadaDiagnosis", "   📈 Completion Rate: " + completionRate + "%");
+        Log.d("QadaDiagnosis", "   📌 Calculation Range: Current week only");
+        Log.d("QadaDiagnosis", "═══════════════════════════════════════════════");
+        
         // Update UI elements for weekly completion rate
         android.widget.ProgressBar circularProgress = weeklyView.findViewById(R.id.circular_progress);
         android.widget.TextView tvPercentage = weeklyView.findViewById(R.id.tv_completion_percentage);
@@ -1224,6 +1649,9 @@ public class QadaTrackerActivity extends AppCompatActivity {
         int totalPrayers = 0;
         int completedPrayers = 0; // Ada' + Qada'
         
+        // 🔍 用于追踪未完成的祷告
+        java.util.List<String> notCompletedList = new java.util.ArrayList<>();
+        
         String[] prayerNames = getPrayerNames();
         
         // ✅ 解析 Qada 开始日期
@@ -1251,25 +1679,51 @@ public class QadaTrackerActivity extends AppCompatActivity {
                 isValidDate = false; // 未来日期，不计入
             }
             
+            boolean isToday = date.isEqual(today);
+            
+            if (isToday) {
+                Log.d(TAG, "🔍 Processing TODAY (" + dateStr + ") prayers:");
+                Log.d(TAG, "   todayPrayerTimes: " + (todayPrayerTimes != null ? "✅ Available" : "❌ NULL"));
+                if (todayPrayerTimes != null) {
+                    Log.d(TAG, "   todayPrayerTimes.timings: " + (todayPrayerTimes.getTimings() != null ? "✅ Available" : "❌ NULL"));
+                }
+            }
+            
             if (isValidDate) {
                 for (String prayerName : prayerNames) {
                     if (!shouldIncludePrayerInDenominator(date, prayerName)) {
+                        if (isToday) {
+                            Log.d(TAG, "   ⏭️ SKIPPED: " + prayerName + " (window not started)");
+                        }
                         continue;
                     }
                     
                     totalPrayers++;
                     
+                    boolean completed = false;
+                    PrayerLog.PrayerStatus status = null;
                     if (monthlyData.containsKey(dateStr)) {
                         Map<String, PrayerLogData> dayData = monthlyData.get(dateStr);
                         if (dayData != null && dayData.containsKey(prayerName)) {
                             PrayerLogData logData = dayData.get(prayerName);
                             if (logData != null) {
-                                PrayerLog.PrayerStatus status = logData.status;
+                                status = logData.status;
                                 if (status == PrayerLog.PrayerStatus.ADA || status == PrayerLog.PrayerStatus.QADA) {
                                     completedPrayers++;
+                                    completed = true;
                                 }
                             }
                         }
+                    }
+                    
+                    // 🔍 追踪未完成的祷告
+                    if (!completed) {
+                        String statusStr = status != null ? status.toString() : "NULL/PENDING";
+                        notCompletedList.add(dateStr + "-" + prayerName + " [" + statusStr + "]");
+                    }
+                    
+                    if (isToday) {
+                        Log.d(TAG, "   ✅ COUNTED: " + prayerName + " -> " + (completed ? "COMPLETED" : "NOT COMPLETED [" + (status != null ? status : "NULL") + "]"));
                     }
                 }
             }
@@ -1280,6 +1734,28 @@ public class QadaTrackerActivity extends AppCompatActivity {
         int completionRate = totalPrayers > 0 ? (completedPrayers * 100 / totalPrayers) : 0;
         
         Log.d(TAG, "Monthly completion: " + completedPrayers + "/" + totalPrayers + " = " + completionRate + "%");
+        
+        // 🔍 输出未完成祷告的详细信息
+        if (!notCompletedList.isEmpty()) {
+            Log.d("QadaDiagnosis", "🔍 ═══ QadaTracker: NOT COMPLETED Prayers ═══");
+            for (String prayer : notCompletedList) {
+                Log.d("QadaDiagnosis", "   ❌ " + prayer);
+            }
+            Log.d("QadaDiagnosis", "   Total NOT COMPLETED: " + notCompletedList.size());
+            Log.d("QadaDiagnosis", "═══════════════════════════════════════════════");
+        }
+        
+        // 🔍 诊断日志：月Tab完成度计算
+        Log.d("QadaDiagnosis", "═══════════════════════════════════════════════");
+        Log.d("QadaDiagnosis", "📊 【统一计算规则】QadaTracker Monthly Tab - Completion Rate");
+        Log.d("QadaDiagnosis", "   ✅ Prayer Window Check: PrayerLogRepository.hasPrayerWindowStarted()");
+        Log.d("QadaDiagnosis", "   📅 Month Range: " + monthStart + " to " + monthEnd);
+        Log.d("QadaDiagnosis", "   ✅ Completed (Ada'+Qada'): " + completedPrayers);
+        Log.d("QadaDiagnosis", "   ❌ Not Completed: " + notCompletedList.size());
+        Log.d("QadaDiagnosis", "   🔢 Total Prayers: " + totalPrayers);
+        Log.d("QadaDiagnosis", "   📈 Completion Rate: " + completionRate + "%");
+        Log.d("QadaDiagnosis", "   📌 Calculation Range: Current month only");
+        Log.d("QadaDiagnosis", "═══════════════════════════════════════════════");
         
         // Update UI elements for monthly completion rate
         android.widget.ProgressBar circularProgress = monthlyView.findViewById(R.id.circular_progress_monthly);
@@ -1415,33 +1891,31 @@ public class QadaTrackerActivity extends AppCompatActivity {
     }
 
     /**
-     * Rough heuristic to determine whether a prayer's window has started today.
-     * Uses general time anchors to avoid counting future prayers in the denominator.
+     * ✅ 使用 PrayerLogRepository 的统一判断逻辑
+     * Check if a prayer's window has started today using ACTUAL prayer times.
+     * 
+     * This method now delegates to PrayerLogRepository for consistent calculation
+     * across Salat page and Qada Tracker.
      */
     private boolean hasPrayerWindowStarted(String prayerName) {
-        Calendar now = Calendar.getInstance();
-        int hour = now.get(Calendar.HOUR_OF_DAY);
-        int minute = now.get(Calendar.MINUTE);
-
-        switch (prayerName) {
-            case "Fajr":
-                return hour >= 4; // Typical dawn start
-            case "Dhuhr":
-                return hour >= 11; // Around midday
-            case "Asr":
-                return hour >= 15; // Mid-afternoon
-            case "Maghrib":
-                return hour >= 18; // Sunset
-            case "Isha":
-                if (hour > 20) {
-                    return true;
-                }
-                if (hour == 20) {
-                    return minute >= 0;
-                }
-                return false;
-            default:
-                return false;
+        if (prayerLogRepository == null) {
+            Log.e(TAG, "❌ PrayerLogRepository is null, cannot check prayer window");
+            return false;
+        }
+        
+        // ✅ 使用 PrayerLogRepository 的统一计算规则
+        return prayerLogRepository.hasPrayerWindowStarted(prayerName, todayPrayerTimes);
+    }
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Clean up banner ads
+        if (bannerAdContainerWeekly != null) {
+            bannerAdContainerWeekly.removeAllViews();
+        }
+        if (bannerAdContainerMonthly != null) {
+            bannerAdContainerMonthly.removeAllViews();
         }
     }
 }

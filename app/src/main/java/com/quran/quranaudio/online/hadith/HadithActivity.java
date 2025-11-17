@@ -65,6 +65,7 @@ public class HadithActivity extends AppCompatActivity {
         return context.createConfigurationContext(configuration);
     }
 
+    @SuppressWarnings("deprecation")
     private Context updateResourcesLocaleLegacy(Context context, Locale locale) {
         Resources resources = context.getResources();
         Configuration configuration = resources.getConfiguration();
@@ -73,6 +74,7 @@ public class HadithActivity extends AppCompatActivity {
         return context;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

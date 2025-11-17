@@ -51,6 +51,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
  * 3. Real-time magnetic field detection and calibration prompts
  * 4. Device tilt compensation
  */
+@SuppressWarnings("deprecation")
 public class QiblaFragment extends BaseFragment implements EnhancedCompass.EnhancedCompassListener {
 
     private static final String TAG = "QiblaFragmentEnhanced";

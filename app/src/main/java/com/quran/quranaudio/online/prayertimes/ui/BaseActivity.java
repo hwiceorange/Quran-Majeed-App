@@ -63,6 +63,7 @@ public class BaseActivity extends AppCompatActivity {
         return context.createConfigurationContext(configuration);
     }
 
+    @SuppressWarnings("deprecation")
     private Context updateResourcesLocaleLegacy(Context context, Locale locale) {
         Resources resources = context.getResources();
         Configuration configuration = resources.getConfiguration();
@@ -71,6 +72,7 @@ public class BaseActivity extends AppCompatActivity {
         return context;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void applyOverrideConfiguration(Configuration overrideConfiguration) {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
@@ -79,6 +81,7 @@ public class BaseActivity extends AppCompatActivity {
         super.applyOverrideConfiguration(overrideConfiguration);
     }
 
+    @SuppressWarnings("deprecation")
     protected void setLocale(Locale locale) {
         SPAppConfigs.setLocale(this, locale.toLanguageTag());
         Resources resources = getResources();

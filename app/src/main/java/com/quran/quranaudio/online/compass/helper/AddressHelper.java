@@ -8,6 +8,7 @@ import com.quran.quranaudio.online.App;
 import java.util.List;
 import java.util.Locale;
 
+@SuppressWarnings("deprecation")
 public class AddressHelper {
     public static void getAddress(final double d, final double d2) {
         new Thread() {

@@ -18,6 +18,7 @@ import com.quran.quranaudio.online.quran_module.components.editor.VerseEditor;
 import com.quran.quranaudio.online.quran_module.utils.gesture.HoverPushOpacityEffect;
 import com.quran.quranaudio.online.quran_module.widgets.editor.EditorFGView;
 
+@SuppressWarnings("deprecation")
 public class ADPEditorFG extends RecyclerView.Adapter<ADPEditorFG.VHEditorFG> {
     private final VerseEditor mEditor;
     private int mSelected;

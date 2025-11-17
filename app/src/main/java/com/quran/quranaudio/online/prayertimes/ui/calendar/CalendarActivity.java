@@ -46,6 +46,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import kotlin.Unit;
 
 
+@SuppressWarnings("deprecation")
 public class CalendarActivity extends BaseActivity {
 
     private static final String TAG = "CalendarActivity";

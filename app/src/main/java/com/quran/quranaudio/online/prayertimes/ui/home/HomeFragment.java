@@ -628,6 +628,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    @SuppressWarnings("deprecation")
     private boolean isQuizSupportedLanguage() {
         Locale activeLocale;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

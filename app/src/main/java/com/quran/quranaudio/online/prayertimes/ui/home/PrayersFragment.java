@@ -337,7 +337,6 @@ public class PrayersFragment extends Fragment implements com.quran.quranaudio.on
         initializeViews(rootView);
         initializeSalahRecording();
 
-
         homeViewModel
                 .getError()
                 .observe(
@@ -921,8 +920,9 @@ public class PrayersFragment extends Fragment implements com.quran.quranaudio.on
             return;
         }
 
-        Log.d("PrayersFragment", "📊 Loading Qada summary");
-        prayerLogRepository.getQadaSummaryAsync(new PrayerLogRepository.QadaSummaryCallback() {
+        Log.d("PrayersFragment", "📊 Loading Qada summary with actual prayer times");
+        // Pass current prayer times to ensure consistent calculation with Qada Tracker
+        prayerLogRepository.getQadaSummaryAsync(currentDayPrayer, new PrayerLogRepository.QadaSummaryCallback() {
             @Override
             public void onResult(PrayerLogRepository.QadaSummary summary) {
                 if (!isAdded() || getActivity() == null) {
@@ -952,6 +952,16 @@ public class PrayersFragment extends Fragment implements com.quran.quranaudio.on
         }
 
         int total = Math.max(outstanding + completed, 0);
+        
+        // 🔍 诊断日志：Salat 页面的 Qada 计数
+        android.util.Log.d("QadaDiagnosis", "═══════════════════════════════════════════════");
+        android.util.Log.d("QadaDiagnosis", "📊 【统一计算规则】Salat Page - Total Qada Count");
+        android.util.Log.d("QadaDiagnosis", "   ✅ Calculation Source: PrayerLogRepository.getQadaSummary()");
+        android.util.Log.d("QadaDiagnosis", "   ❌ Outstanding (Missed+Pending): " + outstanding);
+        android.util.Log.d("QadaDiagnosis", "   ✅ Completed (Qada'): " + completed);
+        android.util.Log.d("QadaDiagnosis", "   🔢 Total: " + total);
+        android.util.Log.d("QadaDiagnosis", "   📌 This is the same calculation used by QadaTracker");
+        android.util.Log.d("QadaDiagnosis", "═══════════════════════════════════════════════");
 
         if (outstanding > 0) {
             String formatted = NumberFormat.getIntegerInstance().format(outstanding);
@@ -1015,6 +1025,13 @@ public class PrayersFragment extends Fragment implements com.quran.quranaudio.on
             return;
         }
 
+        // Show loading feedback to user
+        if (getContext() != null) {
+            android.widget.Toast.makeText(getContext(), 
+                getString(R.string.loading), 
+                android.widget.Toast.LENGTH_SHORT).show();
+        }
+
         // Check if user has configured Qada start date
         checkAndShowQadaOnboarding();
     }
@@ -1062,6 +1079,26 @@ public class PrayersFragment extends Fragment implements com.quran.quranaudio.on
      */
     private void openQadaTrackerActivity() {
         Intent intent = new Intent(requireContext(), com.quran.quranaudio.online.prayertimes.ui.QadaTrackerActivity.class);
+        
+        // ✅ 传递今天的祷告时间数据，用于精确的祷告窗口判断
+        if (currentDayPrayer != null && currentDayPrayer.getTimings() != null) {
+            Log.d("PrayersFragment", "📤 Passing today's prayer times to QadaTracker");
+            // 传递序列化的祷告时间数据
+            java.util.Map<com.quran.quranaudio.online.prayertimes.common.PrayerEnum, java.time.LocalDateTime> timings = currentDayPrayer.getTimings();
+            if (timings != null) {
+                for (java.util.Map.Entry<com.quran.quranaudio.online.prayertimes.common.PrayerEnum, java.time.LocalDateTime> entry : timings.entrySet()) {
+                    if (entry.getValue() != null) {
+                        String key = "prayer_time_" + entry.getKey().name();
+                        String value = entry.getValue().toString();
+                        intent.putExtra(key, value);
+                        Log.d("PrayersFragment", "   " + entry.getKey() + ": " + value);
+                    }
+                }
+            }
+        } else {
+            Log.w("PrayersFragment", "⚠️ currentDayPrayer or timings is null, QadaTracker will use fallback times");
+        }
+        
         startActivity(intent);
     }
     
@@ -1672,6 +1709,7 @@ public class PrayersFragment extends Fragment implements com.quran.quranaudio.on
     /**
      * Show permission warning dialog
      */
+    @SuppressWarnings("deprecation")
     private void showPermissionWarning() {
         if (getActivity() == null) return;
         
@@ -1845,8 +1883,12 @@ public class PrayersFragment extends Fragment implements com.quran.quranaudio.on
      * Reloads prayer logs to update UI
      */
     @Override
-    public void onPrayerLogged(String prayerName) {
-        Log.d("PrayersFragment", "📝 onPrayerLogged callback received: " + prayerName);
+    public void onPrayerLogged(String prayerName, String date, int newStatus, String logId) {
+        Log.d("PrayersFragment", "📝 onPrayerLogged callback received");
+        Log.d("PrayersFragment", "   Prayer: " + prayerName);
+        Log.d("PrayersFragment", "   Date: " + date);
+        Log.d("PrayersFragment", "   Status: " + newStatus);
+        Log.d("PrayersFragment", "   LogId: " + logId);
         
         // Reload prayer logs to refresh UI
         loadTodayPrayerLogs();

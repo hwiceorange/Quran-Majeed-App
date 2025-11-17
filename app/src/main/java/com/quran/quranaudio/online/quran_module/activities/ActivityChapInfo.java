@@ -47,7 +47,7 @@ import java.util.List;
 import kotlin.io.FilesKt;
 import kotlin.text.Charsets;
 
-@SuppressWarnings("ResultOfMethodCallIgnored")
+@SuppressWarnings({"ResultOfMethodCallIgnored", "deprecation"})
 public class ActivityChapInfo extends ReaderPossessingActivity {
     private final CallableTaskRunner<String> mTaskRunner = new CallableTaskRunner<>();
     private ActivityChapterInfoBinding mBinding;

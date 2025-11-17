@@ -35,6 +35,7 @@ import com.quran.quranaudio.online.quran_module.widgets.radio.PeaceRadioGroup;
 
 import java.util.Set;
 
+@SuppressWarnings("deprecation")
 public class FragEditorTransls extends FragEditorBase {
     private PeaceRadioGroup mRadioGroup;
 

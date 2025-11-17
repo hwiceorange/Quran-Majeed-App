@@ -23,6 +23,7 @@ import io.reactivex.rxjava3.core.Single;
 
 
 @Singleton
+@SuppressWarnings("deprecation")
 public class AddressHelper {
 
     private static final int MINIMUM_DISTANCE_FOR_OBSOLESCENCE = 1000; //1KM

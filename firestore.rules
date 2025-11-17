@@ -1,7 +1,9 @@
 rules_version = '2';
+
 service cloud.firestore {
+
   match /databases/{database}/documents {
-    
+
     // ========================================
     // ✅ Learning Plan Configuration（学习计划配置）
     // Path: users/{userId}/learningPlan/{document}
@@ -9,7 +11,7 @@ service cloud.firestore {
     match /users/{userId}/learningPlan/{document=**} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
-    
+
     // ========================================
     // ✅ Daily Progress（每日进度）
     // Path: users/{userId}/dailyProgress/{document}
@@ -17,7 +19,7 @@ service cloud.firestore {
     match /users/{userId}/dailyProgress/{document=**} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
-    
+
     // ========================================
     // ✅ Streak Stats（连续记录统计）
     // Path: users/{userId}/streakStats/{document}
@@ -25,7 +27,7 @@ service cloud.firestore {
     match /users/{userId}/streakStats/{document=**} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
-    
+
     // ========================================
     // ✅ Learning State（学习状态 - 阅读位置）
     // Path: users/{userId}/learningState/{document}
@@ -33,7 +35,7 @@ service cloud.firestore {
     match /users/{userId}/learningState/{document=**} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
-    
+
     // ========================================
     // ✅ Tasbih Data（念珠计数器数据）
     // Path: users/{userId}/tasbihData/{document}
@@ -41,14 +43,14 @@ service cloud.firestore {
     match /users/{userId}/tasbihData/{document=**} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
-    
+
     // ========================================
     // 🕌 Salah Records（祷告记录 - 旧版）
     // Path: users/{userId}/salahRecords/{dateId}
     // ========================================
     match /users/{userId}/salahRecords/{dateId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
-      
+
       allow create: if request.auth != null 
                     && request.auth.uid == userId
                     && request.resource.data.keys().hasAll(['userId', 'dateId', 'fajr', 'dhuhr', 'asr', 'maghrib', 'isha'])
@@ -59,19 +61,19 @@ service cloud.firestore {
                     && request.resource.data.asr is bool
                     && request.resource.data.maghrib is bool
                     && request.resource.data.isha is bool;
-      
+
       allow update: if request.auth != null 
                     && request.auth.uid == userId
                     && request.resource.data.userId == userId;
     }
-    
+
     // ========================================
     // 🕌 Prayer Logs（祷告记录 - 新版）
     // Path: prayer_logs/{logId}（根集合）
     // ========================================
     match /prayer_logs/{logId} {
       allow read: if request.auth != null && request.auth.uid == resource.data.userId;
-      
+
       allow create: if request.auth != null 
                     && request.auth.uid == request.resource.data.userId
                     && request.resource.data.keys().hasAll(['userId', 'prayerName', 'status', 'date'])
@@ -81,16 +83,16 @@ service cloud.firestore {
                     && request.resource.data.date is string
                     && (!request.resource.data.keys().hasAny(['isToday']) || request.resource.data.isToday is bool)
                     && (!request.resource.data.keys().hasAny(['tags']) || request.resource.data.tags is list);
-      
+
       allow update: if request.auth != null 
                     && request.auth.uid == resource.data.userId
                     && request.auth.uid == request.resource.data.userId
                     && (!request.resource.data.keys().hasAny(['isToday']) || request.resource.data.isToday is bool)
                     && (!request.resource.data.keys().hasAny(['tags']) || request.resource.data.tags is list);
-      
+
       allow delete: if request.auth != null && request.auth.uid == resource.data.userId;
     }
-    
+
     // ========================================
     // 📅 Qada Configuration（Qada 追溯配置）
     // Path: users/{userId}/qadaConfig/{document}
@@ -98,7 +100,28 @@ service cloud.firestore {
     match /users/{userId}/qadaConfig/{document=**} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
-    
+
+    // ========================================
+    // 🔓 Unlocked Content（解锁内容记录 - Tafsir）
+    // Path: users/{userId}/unlocked_content/{contentId}
+    // ========================================
+    match /users/{userId}/unlocked_content/{contentId} {
+      // 允许用户读写自己的解锁记录
+      allow read: if request.auth != null && request.auth.uid == userId;
+
+      // 创建解锁记录：验证必需字段
+      allow create: if request.auth != null 
+                    && request.auth.uid == userId
+                    && request.resource.data.keys().hasAll(['contentId', 'unlockedBy', 'timestamp'])
+                    && request.resource.data.contentId is string
+                    && request.resource.data.unlockedBy is string
+                    && request.resource.data.unlockedBy in ['REWARDED_AD', 'SUBSCRIPTION']
+                    && request.resource.data.timestamp is timestamp;
+
+      // 更新和删除
+      allow update, delete: if request.auth != null && request.auth.uid == userId;
+    }
+
     // ========================================
     // 🚫 Legacy: User Quest Config（旧版配置 - 向后兼容）
     // Path: users/{userId}/userQuestConfig/{document}
@@ -106,7 +129,7 @@ service cloud.firestore {
     match /users/{userId}/userQuestConfig/{document=**} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
-    
+
     // ========================================
     // 🚫 Legacy: User Learning State（旧版名称 - 向后兼容）
     // Path: users/{userId}/userLearningState/{document}
@@ -114,7 +137,7 @@ service cloud.firestore {
     match /users/{userId}/userLearningState/{document=**} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
-    
+
     // ========================================
     // 🚫 Default Deny All Other Collections
     // ========================================
@@ -123,5 +146,3 @@ service cloud.firestore {
     }
   }
 }
-
-

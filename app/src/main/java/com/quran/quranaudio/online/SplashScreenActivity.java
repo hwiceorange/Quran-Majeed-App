@@ -161,13 +161,25 @@ public class SplashScreenActivity extends AppCompatActivity {
                        progressBarRunning=false;
                        pbView.setProgress(100);
                        
-                       // 🔥 关键修复：广告开始展示时，取消所有超时定时器
+                       // 🔥 修复：不完全取消超时，而是设置15秒绝对兜底保护
                        handler.removeCallbacks(absoluteTimeoutRunnable);
                        handler.removeCallbacks(r);
                        
+                       // ⚠️ 绝对兜底保护：即使广告正在展示，15秒后强制跳转（防止SDK回调失败导致卡死）
+                       handler.postDelayed(new Runnable() {
+                           @Override
+                           public void run() {
+                               if(!hasJumpedToMain) {
+                                   android.util.Log.e(TAG, "❌ [FAILSAFE] Ad did not close after 15s, forcing jump to main");
+                                   android.util.Log.e(TAG, "❌ [FAILSAFE] This may indicate: 1) Test ad issue, 2) Ad SDK callback failure, 3) Ad creative issue");
+                                   startMainActivity();
+                               }
+                           }
+                       }, 15000); // 15秒绝对超时
+                       
                        android.util.Log.d(TAG, "📊 [AppOpen] onAdImpression - Ad displayed to user");
                        android.util.Log.d(TAG, "📊 [AppOpen] Time from show request to impression: " + (impressionTime - showRequestTime) + "ms");
-                       android.util.Log.d(TAG, "✅ [AppOpen] All timeout timers cancelled - ad will only close by user action");
+                       android.util.Log.d(TAG, "✅ [AppOpen] 15s failsafe timeout set (prevents permanent freeze)");
                    }
 
                    @Override public void onAdClicked(@Nullable AdItem adItem) {
@@ -197,10 +209,23 @@ public class SplashScreenActivity extends AppCompatActivity {
 
                    @Override public void onShow(@Nullable AdItem adItem) {
                        android.util.Log.d(TAG, "📱 [AppOpen] onShow - Ad show callback triggered");
+                       
                        // 🔥 额外保护：在onShow时也取消超时定时器（防止onAdImpression延迟）
                        handler.removeCallbacks(absoluteTimeoutRunnable);
                        handler.removeCallbacks(r);
-                       android.util.Log.d(TAG, "✅ [AppOpen] Timeout timers cancelled at onShow");
+                       
+                       // ⚠️ 绝对兜底保护：即使广告正在展示，15秒后强制跳转（防止SDK回调失败导致卡死）
+                       handler.postDelayed(new Runnable() {
+                           @Override
+                           public void run() {
+                               if(!hasJumpedToMain) {
+                                   android.util.Log.e(TAG, "❌ [FAILSAFE-onShow] Ad did not close after 15s, forcing jump to main");
+                                   startMainActivity();
+                               }
+                           }
+                       }, 15000); // 15秒绝对超时
+                       
+                       android.util.Log.d(TAG, "✅ [AppOpen] 15s failsafe timeout set at onShow");
                    }
 
                    @Override public void onShowFail() {
@@ -288,6 +313,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressWarnings("deprecation")
     public void startMainActivity() {
         if(hasJumpedToMain) {
             return; // 防止重复跳转

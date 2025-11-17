@@ -17,12 +17,19 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.widget.SeekBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.activity.result.ActivityResult
+import androidx.constraintlayout.widget.ConstraintLayout
+import com.google.android.material.button.MaterialButton
 import com.peacedesign.android.utils.DrawableUtils
 import com.peacedesign.android.utils.WindowUtils
 import com.quran.quranaudio.online.R
+import com.quran.quranaudio.online.model.UnlockedContent
+import com.quran.quranaudio.online.repository.UnlockedContentRepository
+import com.quran.quranaudio.online.subscription.SubscriptionHelper
+import com.quran.quranaudio.online.ui.dialog.RewardedAdLoadingDialog
 import com.quran.quranaudio.online.quran_module.api.JsonHelper
 import com.quran.quranaudio.online.quran_module.api.RetrofitInstance
 import com.quran.quranaudio.online.quran_module.api.models.tafsir.TafsirInfoModel
@@ -45,6 +52,8 @@ import com.quran.quranaudio.online.quran_module.utils.univ.Keys
 import com.quran.quranaudio.online.quran_module.utils.univ.ResUtils
 import com.quran.quranaudio.online.quran_module.widgets.PageAlert
 import com.quran.quranaudio.online.quran_module.widgets.bottomSheet.PeaceBottomSheet
+import com.quranaudio.common.ad.AdConfig
+import com.quranaudio.common.ad.AdFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -58,6 +67,12 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
     private lateinit var pageAlert: PageAlert
     private lateinit var jsInterface: TafsirJsInterface
     private lateinit var tafsirInfoModel: TafsirInfoModel
+    
+    // 解锁内容相关
+    private lateinit var unlockedContentRepository: UnlockedContentRepository
+    private var isContentUnlocked = false
+    private var isAdLoaded = false
+    private var adLoadingDialog: RewardedAdLoadingDialog? = null
 
     var tafsirKey: String? = null
     var chapterNo = 0
@@ -76,7 +91,9 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
         binding = ActivityTafsirBinding.bind(activityView)
         pageAlert = PageAlert(this)
         jsInterface = TafsirJsInterface(this)
+        unlockedContentRepository = UnlockedContentRepository.getInstance()
         initThis()
+        initLockOverlay()
     }
 
     private fun initThis() {
@@ -351,6 +368,9 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
 
         runOnUiThread {
             binding.webView.loadDataWithBaseURL(null, html, "text/html; charset=UTF-8", "utf-8", null)
+            
+            // 内容加载完成后，检查解锁状态
+            checkUnlockStatus()
         }
     }
 
@@ -492,5 +512,318 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
     fun scrollToTop() {
         binding.webView.scrollTo(0, 0)
         binding.appBar.setExpanded(true)
+    }
+    
+    // ==================== 内容解锁功能 ====================
+    
+    /**
+     * 初始化锁定覆盖层
+     */
+    private fun initLockOverlay() {
+        val lockOverlay = binding.contentLockOverlay.root as? ConstraintLayout ?: return
+        
+        val btnWatchAd = lockOverlay.findViewById<MaterialButton>(R.id.btnWatchAd)
+        val btnSubscribe = lockOverlay.findViewById<MaterialButton>(R.id.btnSubscribe)
+        
+        btnWatchAd?.setOnClickListener {
+            android.util.Log.d("ActivityTafsir", "🎬 Watch Ad button clicked")
+            showRewardedAd()
+        }
+        
+        btnSubscribe?.setOnClickListener {
+            android.util.Log.d("ActivityTafsir", "💳 Subscribe button clicked")
+            goToSubscriptionPage()
+        }
+    }
+    
+    /**
+     * 检查内容解锁状态并更新UI
+     */
+    private fun checkUnlockStatus() {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                // 方式1: 检查用户是否订阅
+                val isSubscribed = SubscriptionHelper.isUserSubscribed(this@ActivityTafsir)
+                
+                // 方式2: 检查该经文是否通过广告解锁
+                val isUnlockedByAd = unlockedContentRepository.isContentUnlocked(chapterNo, verseNo)
+                
+                isContentUnlocked = isSubscribed || isUnlockedByAd
+                
+                android.util.Log.d("ActivityTafsir", "📊 Unlock Status Check:")
+                android.util.Log.d("ActivityTafsir", "  - Subscribed: $isSubscribed")
+                android.util.Log.d("ActivityTafsir", "  - Unlocked by Ad: $isUnlockedByAd")
+                android.util.Log.d("ActivityTafsir", "  - Final Status: $isContentUnlocked")
+                
+                runOnUiThread {
+                    updateLockOverlayVisibility()
+                }
+            } catch (e: Exception) {
+                android.util.Log.e("ActivityTafsir", "❌ Error checking unlock status", e)
+                isContentUnlocked = false
+                runOnUiThread {
+                    updateLockOverlayVisibility()
+                }
+            }
+        }
+    }
+    
+    /**
+     * 更新锁定覆盖层的可见性
+     */
+    private fun updateLockOverlayVisibility() {
+        val lockOverlay = binding.contentLockOverlay.root
+        val webView = binding.webView
+        
+        if (isContentUnlocked) {
+            // 已解锁：隐藏覆盖层，显示完整内容，恢复滚动
+            lockOverlay.visibility = View.GONE
+            webView.setOnTouchListener(null) // 恢复触摸事件
+            webView.setOnScrollChangeListener(null) // 移除滚动监听
+            android.util.Log.d("ActivityTafsir", "✅ Content unlocked, hiding overlay and enabling scroll")
+        } else {
+            // 未解锁：显示覆盖层（50%遮罩效果），限制滚动
+            lockOverlay.visibility = View.VISIBLE
+            
+            // 限制WebView滚动到最多50%的内容高度
+            webView.setOnScrollChangeListener { v, _, scrollY, _, _ ->
+                val webViewHeight = v.height
+                val contentHeight = (v as android.webkit.WebView).contentHeight * v.scale
+                val maxScrollY = (contentHeight * 0.5f).toInt() - webViewHeight
+                
+                if (scrollY > maxScrollY && maxScrollY > 0) {
+                    // 如果滚动超过50%，强制回滚到50%位置
+                    v.scrollTo(0, maxScrollY)
+                    android.util.Log.d("ActivityTafsir", "🚫 Scroll limited to 50%")
+                }
+            }
+            
+            android.util.Log.d("ActivityTafsir", "🔒 Content locked, showing overlay and limiting scroll to 50%")
+            
+            // 预加载激励广告
+            preloadRewardedAd()
+        }
+    }
+    
+    /**
+     * 预加载激励广告
+     */
+    private fun preloadRewardedAd() {
+        if (isAdLoaded) {
+            android.util.Log.d("ActivityTafsir", "✅ Ad already loaded")
+            return
+        }
+        
+        android.util.Log.d("ActivityTafsir", "📡 Preloading rewarded ad...")
+        
+        AdFactory.loadRewardAd(this, AdConfig.AD_TAFSIR_REWARD, object : com.quranaudio.common.ad.AdLoadCallback {
+            override fun onAdLoaded(adItem: com.quranaudio.common.ad.model.AdItem?) {
+                isAdLoaded = true
+                android.util.Log.d("ActivityTafsir", "✅ Rewarded ad loaded successfully")
+                
+                // 如果Loading对话框还在显示，立即播放广告
+                adLoadingDialog?.onAdReadyToShow()
+            }
+            
+            override fun onAdFailedToLoad(adPosition: String?) {
+                isAdLoaded = false
+                android.util.Log.e("ActivityTafsir", "❌ Rewarded ad failed to load")
+                
+                // 如果Loading对话框还在显示，显示错误提示
+                adLoadingDialog?.showAdNotReadyError()
+            }
+        })
+    }
+    
+    /**
+     * 显示激励广告
+     */
+    private fun showRewardedAd() {
+        if (isAdLoaded) {
+            // 广告已加载，直接播放
+            android.util.Log.d("ActivityTafsir", "▶️ Showing loaded ad immediately")
+            playRewardedAd()
+        } else {
+            // 广告未加载，显示Loading对话框
+            android.util.Log.d("ActivityTafsir", "⏳ Ad not loaded, showing loading dialog")
+            showAdLoadingDialog()
+        }
+    }
+    
+    /**
+     * 显示广告加载对话框
+     */
+    private fun showAdLoadingDialog() {
+        adLoadingDialog = RewardedAdLoadingDialog(
+            context = this,
+            onAdReady = {
+                // 广告准备好，播放广告
+                android.util.Log.d("ActivityTafsir", "✅ Ad ready from dialog callback")
+                playRewardedAd()
+            },
+            onRetry = {
+                // 用户点击重试
+                android.util.Log.d("ActivityTafsir", "🔄 User clicked retry")
+                isAdLoaded = false
+                preloadRewardedAd()
+            },
+            onDismiss = {
+                // 用户关闭对话框
+                android.util.Log.d("ActivityTafsir", "❌ User dismissed loading dialog")
+                adLoadingDialog = null
+            }
+        )
+        
+        adLoadingDialog?.show()
+        
+        // 如果广告还没开始加载，现在开始加载
+        if (!isAdLoaded) {
+            preloadRewardedAd()
+        }
+    }
+    
+    /**
+     * 播放激励广告
+     */
+    private fun playRewardedAd() {
+        AdFactory.showRewardAd(
+            this,
+            AdConfig.AD_TAFSIR_REWARD,
+            "tafsir_unlock",
+            object : com.quranaudio.common.ad.AdShowCallback {
+                override fun onAdImpression(p0: com.quranaudio.common.ad.model.AdItem?) {
+                    android.util.Log.d("ActivityTafsir", "👁️ Ad impression")
+                }
+                
+                override fun onAdClicked(p0: com.quranaudio.common.ad.model.AdItem?) {
+                    android.util.Log.d("ActivityTafsir", "👆 Ad clicked")
+                }
+                
+                override fun onUserEarnedReward(
+                    p0: com.quranaudio.common.ad.model.AdItem?,
+                    p1: com.quranaudio.common.ad.model.RewardItem?
+                ) {
+                    android.util.Log.d("ActivityTafsir", "🎉 User earned reward!")
+                    
+                    // 用户观看完广告，解锁内容
+                    unlockContentByAd()
+                }
+                
+                override fun onAdClosed(p0: com.quranaudio.common.ad.model.AdItem?) {
+                    android.util.Log.d("ActivityTafsir", "🚪 Ad closed")
+                    
+                    // 重置广告加载状态
+                    isAdLoaded = false
+                }
+                
+                override fun onShow(p0: com.quranaudio.common.ad.model.AdItem?) {
+                    android.util.Log.d("ActivityTafsir", "▶️ Ad showing")
+                }
+                
+                override fun onShowFail() {
+                    android.util.Log.e("ActivityTafsir", "❌ Ad show failed")
+                    Toast.makeText(
+                        this@ActivityTafsir,
+                        R.string.ad_not_ready_message,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    
+                    // 重置状态并重新加载
+                    isAdLoaded = false
+                    preloadRewardedAd()
+                }
+            }
+        )
+    }
+    
+    /**
+     * 通过观看广告解锁内容
+     */
+    private fun unlockContentByAd() {
+        android.util.Log.d("ActivityTafsir", "🎬 Starting unlock process by ad...")
+        android.util.Log.d("ActivityTafsir", "  - chapterNo: $chapterNo")
+        android.util.Log.d("ActivityTafsir", "  - verseNo: $verseNo")
+        
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val success = unlockedContentRepository.unlockContent(
+                    chapterNo,
+                    verseNo,
+                    UnlockedContent.UnlockMethod.REWARDED_AD
+                )
+                
+                android.util.Log.d("ActivityTafsir", "📝 Firestore save result: $success")
+                
+                if (success) {
+                    android.util.Log.d("ActivityTafsir", "✅ Content unlocked successfully in Firestore")
+                    
+                    runOnUiThread {
+                        // 更新本地状态
+                        isContentUnlocked = true
+                        
+                        // 立即更新UI
+                        updateLockOverlayVisibility()
+                        
+                        // 显示成功提示
+                        Toast.makeText(
+                            this@ActivityTafsir,
+                            R.string.unlock_success_message,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        
+                        android.util.Log.d("ActivityTafsir", "✅ UI updated, overlay should be hidden now")
+                    }
+                } else {
+                    android.util.Log.e("ActivityTafsir", "❌ Failed to unlock content in Firestore")
+                    
+                    runOnUiThread {
+                        Toast.makeText(
+                            this@ActivityTafsir,
+                            "Failed to unlock content. Please try again.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            } catch (e: Exception) {
+                android.util.Log.e("ActivityTafsir", "❌ Exception during unlock", e)
+                android.util.Log.e("ActivityTafsir", "  Exception message: ${e.message}")
+                android.util.Log.e("ActivityTafsir", "  Stack trace: ${e.stackTraceToString()}")
+                
+                runOnUiThread {
+                    Toast.makeText(
+                        this@ActivityTafsir,
+                        "Error: ${e.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+    }
+    
+    /**
+     * 跳转到订阅页面
+     */
+    private fun goToSubscriptionPage() {
+        android.util.Log.d("ActivityTafsir", "🛒 Navigating to subscription page")
+        SubscriptionHelper.launchSubscriptionPage(this)
+    }
+    
+    /**
+     * 在onResume中检查订阅状态
+     */
+    override fun onResume() {
+        super.onResume()
+        
+        // 检查解锁状态（可能用户刚订阅回来）
+        checkUnlockStatus()
+    }
+    
+    /**
+     * 清理资源
+     */
+    override fun onDestroy() {
+        super.onDestroy()
+        adLoadingDialog?.dismiss()
+        adLoadingDialog = null
     }
 }

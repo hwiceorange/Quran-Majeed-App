@@ -51,6 +51,7 @@ import com.quran.quranaudio.online.quran_module.utils.services.RecitationService
 import com.quran.quranaudio.online.quran_module.widgets.bottomSheet.PeaceBottomSheet;
 import com.quran.quranaudio.online.quran_module.widgets.bottomSheet.PeaceBottomSheetParams;
 
+@SuppressWarnings("deprecation")
 public class VerseOptionsDialog extends PeaceBottomSheet implements View.OnClickListener, BookmarkCallbacks {
     private ReaderPossessingActivity mActivity;
     private VODLayout mVODLayout;

@@ -35,6 +35,7 @@ import com.quran.quranaudio.online.quran_module.widgets.editor.EditorSelectImage
 
 import java.util.concurrent.atomic.AtomicReference;
 
+@SuppressWarnings("deprecation")
 public class ADPEditorBG extends RecyclerView.Adapter<ADPEditorBG.VHEditorBG> {
     private final FragEditorBG mFrag;
     private final VerseEditor mEditor;

@@ -86,6 +86,7 @@
     <color name="malikBook">@color/colorPrimary</color>
 
     <color name="red">#FF1611</color>
+    <color name="colorError">#FF1611</color>
     <color name="green">#4CAF50</color>
     <color name="salah_track_button">#52BF95</color>
     <color name="bottom_nav_selected">#429971</color>

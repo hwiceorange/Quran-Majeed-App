@@ -69,7 +69,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
-@SuppressWarnings("ResultOfMethodCallIgnored")
+@SuppressWarnings({"ResultOfMethodCallIgnored", "deprecation"})
 public class ActivityEditShare extends BaseActivity implements OnEditorChangeListener {
     private final EditorUtils mEditorUtils = new EditorUtils();
     private final String IMAGE_EXT = ".png";

@@ -17,6 +17,7 @@ import com.quran.quranaudio.online.prayertimes.utils.AlertHelper;
 import com.quran.quranaudio.online.R;
 
 
+@SuppressWarnings("deprecation")
 public class IntroActivity extends AppIntro {
 
     @Override

@@ -25,6 +25,7 @@ import com.quran.quranaudio.online.quran_module.views.reader.VerseView;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("deprecation")
 public class ADPReader extends RecyclerView.Adapter<ADPReader.VHReader> {
     private final QuranMeta.ChapterMeta mChapterInfoMeta;
     private final ActivityReader mActivity;

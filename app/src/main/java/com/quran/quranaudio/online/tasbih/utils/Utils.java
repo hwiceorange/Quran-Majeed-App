@@ -35,6 +35,7 @@ public class Utils {
         }
     }
 
+    @SuppressWarnings("deprecation")
     public static void vibrator() {
         Vibrator vibrator = (Vibrator) App.get().getSystemService(Context.VIBRATOR_SERVICE);
         if (vibrator != null && vibrator.hasVibrator()) {
@@ -42,6 +43,7 @@ public class Utils {
         }
     }
 
+    @SuppressWarnings("deprecation")
     public static void vibratorLong() {
         Vibrator vibrator = (Vibrator) App.get().getSystemService(Context.VIBRATOR_SERVICE);
         if (vibrator != null && vibrator.hasVibrator()) {
@@ -49,6 +51,7 @@ public class Utils {
         }
     }
 
+    @SuppressWarnings("deprecation")
     public static void showKeyboard(final SearchView editText) {
         new Handler().postDelayed(new Runnable() {
 

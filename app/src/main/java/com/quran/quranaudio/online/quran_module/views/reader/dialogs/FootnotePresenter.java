@@ -63,6 +63,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("deprecation")
 public class FootnotePresenter extends PeaceBottomSheet {
     private LytReaderVerseFootnoteBinding mBinding;
     private ReaderPossessingActivity mActivity;

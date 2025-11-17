@@ -61,6 +61,7 @@ public class BookFragment extends Fragment implements BookInterface {
         return bookFragment;
     }
 
+    @SuppressWarnings("deprecation")
     private void setupHadithModels() {
         ArrayList<String> bookName = new ArrayList<>();
         bookName.add(getResources().getString(R.string.bukhari_book));

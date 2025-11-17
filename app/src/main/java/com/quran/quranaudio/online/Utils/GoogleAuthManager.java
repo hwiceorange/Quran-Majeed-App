@@ -42,6 +42,7 @@ public class GoogleAuthManager {
         void onFailure(String error);
     }
     
+    @SuppressWarnings("deprecation")
     public GoogleAuthManager(Context context) {
         this.context = context;
         this.firebaseAuth = FirebaseAuth.getInstance();
@@ -145,6 +146,7 @@ public class GoogleAuthManager {
      * Log detailed diagnostics for Google Sign-In failures
      * Useful when Activity.RESULT_CANCELED is returned but intent carries error info
      */
+    @SuppressWarnings("deprecation")
     public void logSignInDiagnostics(@Nullable Intent data, @NonNull String sourceTag) {
         Log.d(TAG, "[" + sourceTag + "] logSignInDiagnostics invoked");
         if (data == null) {
@@ -186,6 +188,7 @@ public class GoogleAuthManager {
      * @param data Intent data from the result
      * @param callback Callback for authentication result
      */
+    @SuppressWarnings("deprecation")
     public void handleSignInResult(Intent data, AuthCallback callback) {
         Log.d(TAG, "handleSignInResult() called");
         
@@ -256,6 +259,7 @@ public class GoogleAuthManager {
      * @param account GoogleSignInAccount
      * @param callback Callback for authentication result
      */
+    @SuppressWarnings("deprecation")
     private void firebaseAuthWithGoogle(GoogleSignInAccount account, AuthCallback callback) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
         

@@ -1264,6 +1264,9 @@ seperti: Waktu Sholat Global, metode perhitungan yang berbeda, notifikasi, memba
     <string name="day_sat">Sab</string>
     <string name="day_sun">Min</string>
     
+    <!-- Qada Tracker Monthly View -->
+    <string name="qada_monthly_date">TANGGAL</string>
+    
     <!-- Prayer names -->
     <string name="prayer_fajr">Subuh</string>
     <string name="prayer_dhuhr">Dzuhur</string>

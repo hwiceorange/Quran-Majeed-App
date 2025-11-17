@@ -15,6 +15,7 @@ import com.quran.quranaudio.online.databinding.FragmentOnboardQuranVersionSelect
 import com.quran.quranaudio.online.prayertimes.preferences.PreferencesConstants
 import com.quran.quranaudio.online.prayertimes.ui.MainActivity
 import com.quran.quranaudio.online.quran_module.api.RetrofitInstance
+import com.quran.quranaudio.online.quran_module.data.LocalTranslationData
 import com.quran.quranaudio.online.quran_module.models.QuranTranslationVersion
 import com.quran.quranaudio.online.quran_module.utils.reader.TranslUtils
 import com.quran.quranaudio.online.quran_module.utils.services.TranslationDownloadService
@@ -60,7 +61,8 @@ class FragOnboardQuranVersion : FragOnboardBase() {
     private data class VersionCardViews(
         val card: MaterialCardView,
         val checkIcon: View,
-        val nameText: TextView
+        val nameText: TextView,
+        val descriptionText: TextView
     )
     
     override fun onCreateView(
@@ -93,40 +95,53 @@ class FragOnboardQuranVersion : FragOnboardBase() {
     }
     
     /**
-     * 从服务端加载翻译版本列表（优先使用缓存）
+     * 从服务端加载翻译版本列表（优先使用本地数据，后台加载API）
+     * 
+     * 优化方案：
+     * 1. 立即显示本地数据（无等待）
+     * 2. 后台异步加载API数据
+     * 3. 合并并更新列表
      */
     private fun loadTranslationVersions() {
-        showLoading(true)
+        android.util.Log.d("FragOnboardQuranVersion", "🚀 Fast loading: displaying local data immediately")
+        android.util.Log.d("FragOnboardQuranVersion", "📍 Selected language: $selectedLanguageCode")
         
+        // ⚡ 步骤1：立即加载并显示本地数据（无需等待，用户体验优先）
+        val localVersions = LocalTranslationData.getVersions(selectedLanguageCode)
+        android.util.Log.d("FragOnboardQuranVersion", "✅ Local data loaded: ${localVersions.size} versions")
+        
+        // 立即显示本地版本
+        availableVersions.clear()
+        availableVersions.addAll(localVersions)
+        displayTranslationVersions()
+        
+        // 🌐 步骤2：后台异步加载API数据（不阻塞UI）
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                android.util.Log.d("FragOnboardQuranVersion", "🔄 Loading translation versions for: $selectedLanguageCode")
+                android.util.Log.d("FragOnboardQuranVersion", "🔄 Background: fetching API data for: $selectedLanguageCode")
                 
-                // 🚀 方案0：优先从缓存加载
-                var translations = TranslationCacheManager.getTranslations(
+                // 方案A：优先从缓存加载
+                var apiTranslations = TranslationCacheManager.getTranslations(
                     requireContext(),
                     selectedLanguageCode,
                     forceRefresh = false
                 )
                 
-                if (translations != null) {
-                    android.util.Log.d("FragOnboardQuranVersion", "⚡ Loaded from cache: ${translations.size} translations")
+                if (apiTranslations != null) {
+                    android.util.Log.d("FragOnboardQuranVersion", "⚡ API data from cache: ${apiTranslations.size} translations")
                 } else {
-                    android.util.Log.d("FragOnboardQuranVersion", "📡 Cache miss, fetching from API...")
-                    
-                    // 方案1：尝试从主API获取
-                    translations = try {
-                        android.util.Log.d("FragOnboardQuranVersion", "📡 Trying primary API...")
+                    // 方案B：从主API获取
+                    apiTranslations = try {
+                        android.util.Log.d("FragOnboardQuranVersion", "📡 Fetching from primary API...")
                         val responseBody = RetrofitInstance.github.getAvailableTranslations()
                         val jsonString = responseBody.string()
                         parseTranslationsJson(jsonString, selectedLanguageCode)
                     } catch (primaryError: Exception) {
-                        android.util.Log.e("FragOnboardQuranVersion", "❌ Primary API failed: ${primaryError.message}", primaryError)
+                        android.util.Log.e("FragOnboardQuranVersion", "❌ Primary API failed: ${primaryError.message}")
                         
-                        // 方案2：尝试备用API (Quran Foundation)
+                        // 方案C：尝试备用API
                         try {
-                            android.util.Log.d("FragOnboardQuranVersion", "📡 Trying fallback API (Quran Foundation)...")
-                            // 🔑 关键修复：传递语言参数，让 API 只返回指定语言的翻译
+                            android.util.Log.d("FragOnboardQuranVersion", "📡 Trying fallback API...")
                             val languageMap = mapOf(
                                 "en" to "english",
                                 "id" to "indonesian",
@@ -137,63 +152,48 @@ class FragOnboardQuranVersion : FragOnboardBase() {
                                 "bn" to "bengali"
                             )
                             val apiLanguage = languageMap[selectedLanguageCode] ?: "english"
-                            android.util.Log.d("FragOnboardQuranVersion", "📍 Requesting translations for language: $apiLanguage (code: $selectedLanguageCode)")
-                            
                             val responseBody = RetrofitInstance.quranFoundation.getTranslations(apiLanguage)
                             val jsonString = responseBody.string()
                             parseQuranFoundationTranslations(jsonString, selectedLanguageCode)
                         } catch (fallbackError: Exception) {
-                            android.util.Log.e("FragOnboardQuranVersion", "❌ Fallback API also failed: ${fallbackError.message}", fallbackError)
-                            
-                            // 方案3：使用预装版本作为最后的fallback
-                            android.util.Log.d("FragOnboardQuranVersion", "📦 Using prebuilt versions as final fallback")
+                            android.util.Log.e("FragOnboardQuranVersion", "❌ Fallback API failed: ${fallbackError.message}")
                             emptyList()
                         }
                     }
                 }
                 
                 // 使用安全的空值处理
-                val finalTranslations = translations ?: emptyList()
-                
-                android.util.Log.d("FragOnboardQuranVersion", "✅ Loaded ${finalTranslations.size} translations for language: $selectedLanguageCode")
-                
-                // 【调试】打印所有翻译的语言代码
-                finalTranslations.forEach { 
-                    android.util.Log.d("FragOnboardQuranVersion", "  📖 Translation: ${it.displayName} (lang: ${it.languageCode})")
-                }
+                val finalApiTranslations = apiTranslations ?: emptyList()
                 
                 withContext(Dispatchers.Main) {
-                    showLoading(false)
-                    
-                    if (finalTranslations.isEmpty()) {
-                        // 没有API数据，使用预装版本
-                        android.util.Log.w("FragOnboardQuranVersion", "⚠️ No translations from API, loading prebuilt versions for: $selectedLanguageCode")
-                        loadPrebuiltVersions()
+                    if (finalApiTranslations.isNotEmpty()) {
+                        // 🔄 步骤3：合并本地数据和API数据
+                        android.util.Log.d("FragOnboardQuranVersion", "🔄 Merging local (${localVersions.size}) + API (${finalApiTranslations.size}) versions")
+                        val mergedVersions = LocalTranslationData.mergeVersions(localVersions, finalApiTranslations)
+                        
+                        android.util.Log.d("FragOnboardQuranVersion", "✅ Merged total: ${mergedVersions.size} versions")
+                        
+                        // 只有真正有新版本时才刷新UI
+                        if (mergedVersions.size > localVersions.size) {
+                            android.util.Log.d("FragOnboardQuranVersion", "🔄 Found ${mergedVersions.size - localVersions.size} new versions, updating UI")
+                            
+                            availableVersions.clear()
+                            availableVersions.addAll(mergedVersions) // 不排序，保持本地顺序
+                            
+                            // 刷新UI显示新版本
+                            displayTranslationVersions()
+                        } else {
+                            android.util.Log.d("FragOnboardQuranVersion", "✓ No new versions from API, keeping local data unchanged")
+                        }
                     } else {
-                        // 合并API数据和预装版本（缓存已包含预装版本，无需重复添加）
-                        availableVersions.clear()
-                        availableVersions.addAll(finalTranslations)
-                        
-                        // 去重（以versionId为key）
-                        val uniqueVersions = availableVersions.distinctBy { it.versionId }
-                        availableVersions.clear()
-                        availableVersions.addAll(uniqueVersions.sortedBy { it.displayName })
-                        
-                        android.util.Log.d("FragOnboardQuranVersion", "📊 Total versions to display: ${availableVersions.size}")
-                        displayTranslationVersions()
+                        // API无数据，保持本地数据
+                        android.util.Log.d("FragOnboardQuranVersion", "ℹ️ No API data, keeping local versions displayed")
                     }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                android.util.Log.e("FragOnboardQuranVersion", "❌ Unexpected error in loadTranslationVersions", e)
-                
-                withContext(Dispatchers.Main) {
-                    showLoading(false)
-                    showError("Failed to load translations.")
-                    
-                    // 最终fallback：显示预装版本
-                    loadPrebuiltVersions()
-                }
+                android.util.Log.e("FragOnboardQuranVersion", "❌ Background API load failed, but local data already displayed: ${e.message}")
+                // 用户已经看到本地数据，不影响用户体验
             }
         }
     }
@@ -553,19 +553,102 @@ class FragOnboardQuranVersion : FragOnboardBase() {
     }
     
     /**
-     * 创建版本选择卡片
+     * 创建版本选择卡片（新UI：显示版本名 — 作者 + 简短说明）
+     * 特殊处理：阿拉伯语版本不显示作者和描述
      */
     private fun createVersionCard(version: QuranTranslationVersion): View {
-        val inflater = LayoutInflater.from(requireContext())
-        val cardView = inflater.inflate(R.layout.item_quran_version_card, binding.containerVersions, false) as MaterialCardView
+        val cardView = MaterialCardView(requireContext()).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                bottomMargin = resources.getDimensionPixelSize(R.dimen.spacing_medium)
+            }
+            radius = resources.getDimension(R.dimen.main_item_card_borders)
+            cardElevation = 0f
+            setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.language_card_unselected_bg))
+        }
         
-        val nameText = cardView.findViewById<TextView>(R.id.tv_version_name)
-        val checkIcon = cardView.findViewById<View>(R.id.icon_check)
+        // 创建内部容器
+        val container = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.HORIZONTAL
+            setPadding(
+                resources.getDimensionPixelSize(R.dimen.spacing_large),
+                resources.getDimensionPixelSize(R.dimen.spacing_large),
+                resources.getDimensionPixelSize(R.dimen.spacing_large),
+                resources.getDimensionPixelSize(R.dimen.spacing_large)
+            )
+            gravity = android.view.Gravity.CENTER_VERTICAL
+        }
         
-        nameText.text = version.getDisplayText()
+        // 左侧：文本内容（垂直布局）
+        val textContainer = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.VERTICAL
+            layoutParams = LinearLayout.LayoutParams(
+                0,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                1f
+            )
+        }
         
-        // 保存视图引用
-        versionCardViews[version.versionId] = VersionCardViews(cardView, checkIcon, nameText)
+        // 判断是否为阿拉伯语原文（不显示作者和描述）
+        val isArabicOriginal = version.languageCode == "ar" && version.authorName.isNullOrEmpty()
+        
+        // 主标题：版本名称 或 版本名称 — 作者
+        val titleText = TextView(requireContext()).apply {
+            val titleString = if (isArabicOriginal) {
+                // 阿拉伯语原文：只显示版本名称
+                version.displayName
+            } else {
+                // 其他版本：显示版本名称 — 作者
+                "${version.displayName} — ${version.authorName ?: ""}"
+            }
+            text = titleString
+            textSize = 16f
+            setTypeface(null, android.graphics.Typeface.BOLD)
+            setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
+        }
+        
+        // 副标题：简短说明（阿拉伯语原文不显示）
+        val descriptionText = TextView(requireContext()).apply {
+            text = version.shortDescription ?: ""
+            textSize = 13f
+            // 使用80%透明度的白色，与主标题形成视觉层次
+            setTextColor(android.graphics.Color.argb(204, 255, 255, 255)) // 80% white (0.8 * 255 = 204)
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                topMargin = resources.getDimensionPixelSize(R.dimen.spacing_small)
+            }
+            visibility = if (isArabicOriginal || version.shortDescription.isNullOrEmpty()) {
+                View.GONE
+            } else {
+                View.VISIBLE
+            }
+        }
+        
+        textContainer.addView(titleText)
+        textContainer.addView(descriptionText)
+        
+        // 右侧：选中图标
+        val checkIcon = View(requireContext()).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                resources.getDimensionPixelSize(R.dimen.dmnActionButtonTiny),
+                resources.getDimensionPixelSize(R.dimen.dmnActionButtonTiny)
+            ).apply {
+                marginStart = resources.getDimensionPixelSize(R.dimen.spacing_medium)
+            }
+            setBackgroundResource(R.drawable.ic_check_circle)
+            visibility = View.GONE
+        }
+        
+        container.addView(textContainer)
+        container.addView(checkIcon)
+        cardView.addView(container)
+        
+        // 保存视图引用（包含标题和描述文本）
+        versionCardViews[version.versionId] = VersionCardViews(cardView, checkIcon, titleText, descriptionText)
         
         // 设置点击事件
         cardView.setOnClickListener {
@@ -596,6 +679,7 @@ class FragOnboardQuranVersion : FragOnboardBase() {
     private fun updateVersionSelection(selectedVersionId: String) {
         val primaryColor = ContextCompat.getColor(requireContext(), R.color.primary_color)
         val whiteColor = ContextCompat.getColor(requireContext(), android.R.color.white)
+        val whiteColor80 = android.graphics.Color.argb(204, 255, 255, 255) // 80% white
         val unselectedBgColor = ContextCompat.getColor(requireContext(), R.color.language_card_unselected_bg)
         val strokeWidth = resources.getDimensionPixelSize(R.dimen.language_card_stroke_width)
         
@@ -603,17 +687,19 @@ class FragOnboardQuranVersion : FragOnboardBase() {
             val isSelected = (versionId == selectedVersionId)
             
             if (isSelected) {
-                // ✅ 选中状态：白色背景 + 绿色边框 + 绿色文字 + 绿色对勾
+                // ✅ 选中状态：白色背景 + 绿色边框 + 绿色文字（标题和描述） + 绿色对勾
                 views.card.setCardBackgroundColor(whiteColor)
                 views.card.strokeColor = primaryColor
                 views.card.strokeWidth = strokeWidth
                 views.nameText.setTextColor(primaryColor)
+                views.descriptionText.setTextColor(primaryColor) // 描述文本也是绿色
                 views.checkIcon.visibility = View.VISIBLE
             } else {
                 // ⭕ 未选中状态：深绿色背景 + 无边框 + 白色文字 + 对勾隐藏
                 views.card.setCardBackgroundColor(unselectedBgColor)
                 views.card.strokeWidth = 0
                 views.nameText.setTextColor(whiteColor)
+                views.descriptionText.setTextColor(whiteColor80) // 描述文本80%白色
                 views.checkIcon.visibility = View.GONE
             }
         }
@@ -679,7 +765,7 @@ class FragOnboardQuranVersion : FragOnboardBase() {
     }
     
     /**
-     * 启动下载
+     * 启动下载（修复：使用正确的 QuranTranslBookInfo 格式）
      */
     private fun startDownload(version: QuranTranslationVersion) {
         android.util.Log.d("FragOnboardQuranVersion", "═══════════════════════════════════════════════")
@@ -695,19 +781,27 @@ class FragOnboardQuranVersion : FragOnboardBase() {
                 android.util.Log.d("FragOnboardQuranVersion", "   Translation ID: ${version.numericId}")
                 downloadFromQuranFoundation(version)
             } else {
-                // 从主API下载
-                val downloadUrl = version.getFullDownloadUrl()
+                // 从主API下载 - 使用正确的 QuranTranslBookInfo 格式
+                val downloadPath = version.downloadPath ?: ""
                 android.util.Log.d("FragOnboardQuranVersion", "   📡 下载源: 主 API")
-                android.util.Log.d("FragOnboardQuranVersion", "   下载 URL: $downloadUrl")
+                android.util.Log.d("FragOnboardQuranVersion", "   下载路径: $downloadPath")
+                
+                // 创建 QuranTranslBookInfo 对象（TranslationDownloadService 需要此格式）
+                val bookInfo = com.quran.quranaudio.online.quran_module.components.quran.subcomponents.QuranTranslBookInfo(version.versionId).apply {
+                    bookName = version.bookName ?: version.displayName
+                    authorName = version.authorName ?: ""
+                    displayName = version.displayName
+                    langName = version.languageName
+                    langCode = version.languageCode
+                    this.downloadPath = downloadPath
+                }
                 
                 val intent = Intent(requireContext(), TranslationDownloadService::class.java).apply {
-                    putExtra("translation_slug", version.versionId)
-                    putExtra("translation_name", version.displayName)
-                    putExtra("download_url", downloadUrl)
+                    putExtra(com.quran.quranaudio.online.quran_module.utils.receivers.TranslDownloadReceiver.KEY_TRANSL_BOOK_INFO, bookInfo)
                 }
                 requireContext().startService(intent)
                 
-                android.util.Log.d("FragOnboardQuranVersion", "   ✅ 后台下载服务已启动")
+                android.util.Log.d("FragOnboardQuranVersion", "   ✅ 后台下载服务已启动（使用QuranTranslBookInfo）")
             }
         } catch (e: Exception) {
             e.printStackTrace()

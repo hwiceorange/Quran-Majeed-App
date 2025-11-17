@@ -20,6 +20,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.quran.quranaudio.online.R;
 import com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs;
+import com.quranaudio.common.ad.AdConfig;
+import com.quranaudio.common.ad.AdFactory;
+import android.widget.FrameLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +37,7 @@ public class WuduGuideActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private WuduStepsAdapter adapter;
     private List<WuduStep> wuduSteps;
+    private FrameLayout bannerAdContainer;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -83,6 +87,7 @@ public class WuduGuideActivity extends AppCompatActivity {
         setupToolbar();
         setupRecyclerView();
         loadWuduSteps();
+        setupBannerAd();
     }
 
     private void setupToolbar() {
@@ -237,6 +242,50 @@ public class WuduGuideActivity extends AppCompatActivity {
         ));
         
         adapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Setup Adaptive Banner Ad at bottom
+     */
+    private void setupBannerAd() {
+        android.util.Log.d("WuduGuideActivity", "🔵 setupBannerAd() called");
+        bannerAdContainer = findViewById(R.id.banner_ad_container);
+        if (bannerAdContainer != null) {
+            android.util.Log.d("WuduGuideActivity", "✅ Banner container found, loading ad...");
+            // Post to message queue to ensure view is laid out
+            bannerAdContainer.post(() -> {
+                android.util.Log.d("WuduGuideActivity", "📤 Posting banner ad load request");
+                
+                // Get screen width in dp for adaptive banner
+                android.util.DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+                float screenWidthDp = displayMetrics.widthPixels / displayMetrics.density;
+                int adWidthDp = (int) screenWidthDp;
+                
+                android.util.Log.d("WuduGuideActivity", "📏 Screen width: " + adWidthDp + "dp (using adaptive banner)");
+                
+                // Load Adaptive Banner Ad using AD_BANNER position
+                AdFactory.INSTANCE.loadBannerAd(
+                    this,              // activity
+                    adWidthDp,         // width (full screen width for adaptive banner)
+                    bannerAdContainer, // container
+                    AdConfig.AD_BANNER,// ad position
+                    "WuduGuide",       // function tag
+                    null,              // load callback
+                    null               // show callback
+                );
+            });
+        } else {
+            android.util.Log.e("WuduGuideActivity", "❌ Banner container is NULL! R.id.banner_ad_container not found");
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Clean up banner ad
+        if (bannerAdContainer != null) {
+            bannerAdContainer.removeAllViews();
+        }
     }
 }
 

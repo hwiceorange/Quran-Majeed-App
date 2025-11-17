@@ -54,6 +54,7 @@ import java.util.stream.Collectors;
 
 import kotlin.Pair;
 
+@SuppressWarnings("deprecation")
 public class ActivityReference extends ReaderPossessingActivity {
     public Set<String> mSelectedTranslSlugs;
     private final RunnableTaskRunner mTaskRunner = new RunnableTaskRunner();
