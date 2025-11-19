@@ -222,7 +222,6 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
     }
 
     private fun initContent(intent: Intent) {
-        var key = intent.getStringExtra("tafsirKey") ?: com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPReader.getSavedTafsirKey(this)
         val chapterNo = intent.getIntExtra(Keys.READER_KEY_CHAPTER_NO, -1)
         val verseNo = intent.getIntExtra(Keys.READER_KEY_VERSE_NO, -1)
 
@@ -231,6 +230,33 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
             return
         }
 
+        android.util.Log.d("ActivityTafsir", "🔍 Initializing Tafsir for Surah:$chapterNo, Ayah:$verseNo")
+        
+        // 🔧 强制确保 TafsirManager 已准备好
+        // 这对于从答题模块等外部入口跳转的场景很重要
+        val models = TafsirManager.getModels()
+        if (models == null || models.isEmpty()) {
+            android.util.Log.w("ActivityTafsir", "⚠️ TafsirManager not ready, preparing now...")
+            binding.loader.visibility = View.VISIBLE
+            
+            TafsirManager.prepare(this, false) {
+                android.util.Log.d("ActivityTafsir", "✅ TafsirManager prepared, continuing initialization...")
+                runOnUiThread {
+                    initContentAfterPrepare(intent, chapterNo, verseNo)
+                }
+            }
+            return
+        }
+        
+        initContentAfterPrepare(intent, chapterNo, verseNo)
+    }
+    
+    /**
+     * 在 TafsirManager 准备完成后初始化内容
+     */
+    private fun initContentAfterPrepare(intent: Intent, chapterNo: Int, verseNo: Int) {
+        var key = intent.getStringExtra("tafsirKey") ?: com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPReader.getSavedTafsirKey(this)
+        
         if (key == null) {
             key = com.quran.quranaudio.online.quran_module.utils.tafsir.TafsirUtils.getPreferredTafsirKey(this)
         }
@@ -250,6 +276,8 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
             return
         }
 
+        android.util.Log.d("ActivityTafsir", "✅ Using Tafsir: ${model.name} (${model.langName})")
+        
         this.tafsirInfoModel = model
         this.tafsirKey = key
         this.chapterNo = chapterNo
@@ -329,6 +357,7 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
             val tafsirFile = fileUtils.getTafsirFileSingleVerse(tafsirKey, chapterNo, verseNo)
             val slug = com.quran.quranaudio.online.quran_module.utils.tafsir.TafsirUtils.getTafsirSlugFromKey(tafsirKey)
 
+            // 检查本地缓存
             if (tafsirFile.length() > 0) {
                 val read = tafsirFile.readText()
                 val tafsir = JsonHelper.json.decodeFromString<TafsirModel>(read)
@@ -336,18 +365,36 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
                 return@launch
             }
 
+            // 检查网络连接
             if (!NetworkStateReceiver.isNetworkConnected(this@ActivityTafsir)) {
                 runOnUiThread { noInternet() }
                 return@launch
             }
 
             try {
-                val tafsir = RetrofitInstance.quran.getTafsir(slug, "$chapterNo:$verseNo")["tafsir"]!!
+                // 根据 slug 选择 API 源
+                val tafsir = when {
+                    // 印尼语 Tafsir 从自定义服务器加载
+                    slug.startsWith("id-") -> {
+                        android.util.Log.d("ActivityTafsir", "📥 Loading Indonesian Tafsir from custom server: $slug")
+                        RetrofitInstance.customTafsir.getTafsir(slug, "$chapterNo:$verseNo")["tafsir"]!!
+                    }
+                    // 其他 Tafsir 从 Quran.com 加载
+                    else -> {
+                        android.util.Log.d("ActivityTafsir", "📥 Loading Tafsir from Quran.com: $slug")
+                        RetrofitInstance.quran.getTafsir(slug, "$chapterNo:$verseNo")["tafsir"]!!
+                    }
+                }
 
+                // 保存到缓存
                 fileUtils.createFile(tafsirFile)
                 tafsirFile.writeText(JsonHelper.json.encodeToString(tafsir))
+                android.util.Log.d("ActivityTafsir", "✅ Tafsir loaded and cached successfully")
+                
                 renderData(tafsir)
             } catch (e: Exception) {
+                val apiSource = if (slug.startsWith("id-")) "custom server (dochubai.com)" else "Quran.com"
+                android.util.Log.e("ActivityTafsir", "❌ Failed to load tafsir from $apiSource: ${e.message}")
                 Log.saveError(e, "ActivityTafsir")
                 e.printStackTrace()
                 fail("Failed to load tafsir.", true)

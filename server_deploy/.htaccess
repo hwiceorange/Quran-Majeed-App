@@ -1,0 +1,32 @@
+# Tafsir API - URL Rewrite Configuration
+# 部署位置：/public_html/quran/apis/tafsirs/.htaccess
+
+# 启用 URL 重写
+RewriteEngine On
+
+# 设置 RewriteBase（根据实际路径调整）
+RewriteBase /quran/apis/tafsirs/
+
+# 如果请求的不是实际存在的文件或目录，则重写到 index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# 将所有请求重定向到 index.php，并保留原始 URL
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+# 允许 CORS（跨域资源共享）
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type"
+</IfModule>
+
+# 设置字符编码
+AddDefaultCharset utf-8
+
+# 禁止目录浏览
+Options -Indexes
+
+# 自定义错误页面（可选）
+# ErrorDocument 404 /error_404.php
+# ErrorDocument 500 /error_500.php

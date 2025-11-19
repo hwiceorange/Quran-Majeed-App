@@ -364,7 +364,7 @@
         </receiver>
 
         <service android:name=".quran_module.utils.services.RecitationService" android:foregroundServiceType="mediaPlayback"/>
-        <service android:name=".quran_module.utils.services.RecitationChapterDownloadService" />
+        <service android:name=".quran_module.utils.services.RecitationChapterDownloadService" android:foregroundServiceType="dataSync" />
         <service android:name=".quran_module.utils.services.TranslationDownloadService" />
         <service android:name=".quran_module.utils.services.KFQPCScriptFontsDownloadService" />
 

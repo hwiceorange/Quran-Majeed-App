@@ -2,6 +2,7 @@
 <resources>
     <string name="quran_no_ad_tips">Ad not loaded, try again later</string>
     <string name="quran_loading_ad">Loading Ad...</string>
+    <string name="quiz_review_default_explanation">This verse provides important guidance. Study it carefully to understand its meaning and application.</string>
     <string name="quran_correct">Correct</string>
     <string name="quran_wrong">Wrong</string>
     <string name="quran_question">Question %1$s</string>
@@ -41,6 +42,18 @@
     <string name="quran_free_diamonds">Free Gemstone</string>
     <string name="quran_watch_video_free_diamonds">Watch video get 5 Gemstone</string>
     <string name="quran_watch">Watch</string>
-
+    
+    <!-- Quiz Review & Learn Page -->
+    <string name="quiz_review_header">Review &amp; Learn</string>
+    <string name="quiz_review_title">Reflect &amp; Review</string>
+    <string name="quiz_review_subtitle">Incorrect. Understand the Verse.</string>
+    <string name="quiz_correct_answer_label">Correct Answer:</string>
+    <string name="quiz_related_verse">Related Verse</string>
+    <string name="quiz_verse_reference">Surah %1$d, Ayah %2$d</string>
+    <string name="quiz_simplified_tafsir">Simplified Tafsir</string>
+    <string name="quiz_full_tafsir">Full Tafsir (Premium)</string>
+    <string name="quiz_try_again_btn">Try Again</string>
+    <string name="quiz_skip_btn">Skip</string>
+    <string name="quiz_quit_level_btn">Quit Level</string>
 
 </resources>

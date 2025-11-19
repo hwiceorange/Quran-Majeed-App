@@ -38,7 +38,7 @@ class VotdReceiver : BroadcastReceiver() {
 
                     var slugs = SPReader.getSavedTranslations(context)
                     if (slugs.isEmpty()) {
-                        slugs = TranslUtils.defaultTranslationSlugs()
+                        slugs = TranslUtils.defaultTranslationSlugs(context)
                     }
 
                     QuranTranslationFactory(context).use {

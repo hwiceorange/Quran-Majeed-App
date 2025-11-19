@@ -62,4 +62,20 @@ object RetrofitInstance {
             .build()
             .create(QuranFoundationApi::class.java)
     }
+    
+    /**
+     * 🌐 Custom Tafsir API (自定义 Tafsir API)
+     * 用于从 dochubai.com 服务器加载印尼语等自定义 Tafsir
+     * 服务器目录: /public_html/quran/apis/tafsirs/
+     */
+    val customTafsir: CustomTafsirApi by lazy {
+        Retrofit.Builder()
+            .baseUrl("https://apis.dochubai.com/quran/apis/tafsirs/")
+            .addConverterFactory(
+                JsonHelper.json.asConverterFactory("application/json".toMediaType())
+            )
+            .client(client)  // ✅ 启用日志拦截器
+            .build()
+            .create(CustomTafsirApi::class.java)
+    }
 }

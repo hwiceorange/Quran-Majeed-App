@@ -62,7 +62,8 @@ class QuranQuizNotifyActivity :
         binding.questionContentTv.text = questionBean.question
         binding.optionsView.setData(questionBean)
         if (isDebug()) {
-            binding.debugRightAnswerTv.text = questionBean.answer
+            // 显示随机化后的正确答案
+            binding.debugRightAnswerTv.text = binding.optionsView.getShuffledAnswer()
         }
         binding.optionsView.setAnswerResultListener {_, selectAnswer ->
             Tasks.postDelayedByUI({

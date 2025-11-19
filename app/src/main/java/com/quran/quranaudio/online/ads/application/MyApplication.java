@@ -23,6 +23,10 @@ public class MyApplication extends Application {
         applyLanguageConfiguration();
         android.util.Log.d("MyApplication", "🚀 Application.onCreate() called");
         
+        // 🔄 同步语言设置（如果语言改变，清除翻译和 Tafsir 缓存）
+        com.quran.quranaudio.online.quran_module.utils.LanguageSyncHelper.INSTANCE.syncLanguageSettings(this);
+        android.util.Log.d("MyApplication", "🔄 Language sync check completed");
+        
         // 📦 预加载所有语言的古兰经翻译版本（后台异步）
         TranslationCacheManager.INSTANCE.preloadAllTranslations(this);
         android.util.Log.d("MyApplication", "📦 Translation cache preloading started");

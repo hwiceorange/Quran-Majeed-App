@@ -246,7 +246,7 @@ public class VOTDView extends FrameLayout implements Destroyable, BookmarkCallba
 
     private QuranTranslBookInfo obtainOptimalSlug(Context ctx, QuranTranslationFactory factory) {
         // 🌐 优先根据应用语言自动选择翻译
-        Set<String> autoSelectedTranslations = com.quran.quranaudio.online.quran_module.utils.reader.TranslUtils.defaultTranslationSlugs();
+        Set<String> autoSelectedTranslations = com.quran.quranaudio.online.quran_module.utils.reader.TranslUtils.defaultTranslationSlugs(ctx);
         
         QuranTranslBookInfo bookInfo = null;
         

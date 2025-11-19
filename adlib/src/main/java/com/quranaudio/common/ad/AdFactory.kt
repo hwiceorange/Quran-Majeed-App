@@ -109,14 +109,14 @@ object AdFactory : ActivityLifecycleCallbacks {
             }
             width == 0 -> {
                 // Use LARGE_BANNER 320x100
-                adView.setAdSize(AdSize.LARGE_BANNER)
+            adView.setAdSize(AdSize.LARGE_BANNER)
                 Log.d(TAG, "📏 Using LARGE_BANNER size: 320x100dp")
             }
             else -> {
                 // Use adaptive banner with specified width
                 val adWidth = width
-                val adSize = AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(activity, adWidth)
-                adView.setAdSize(adSize)
+            val adSize = AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(activity, adWidth)
+            adView.setAdSize(adSize)
                 Log.d(TAG, "📏 Using adaptive banner size: width=${adWidth}dp, expected height=${adSize.height}dp")
             }
         }

@@ -5,8 +5,11 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
 import android.view.View
 import android.view.animation.LinearInterpolator
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.animation.doOnEnd
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
@@ -39,7 +42,7 @@ import com.quran.quranaudio.quiz.extension.showGemAd
 import com.quran.quranaudio.quiz.extension.showInterAdByPoolNew
 import com.quran.quranaudio.quiz.extension.visible
 import com.quranaudio.quiz.quiz.QuestionFail
-import com.quranaudio.quiz.quiz.QuranQuestionRevivalActivity
+import com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity
 import com.quranaudio.quiz.quiz.QuestionViewModel
 import com.quranaudio.quiz.quiz.QuizGemChange
 import com.quranaudio.quiz.quiz.QuizGemManager
@@ -67,6 +70,51 @@ class QuranQuestionFragment :
     val TAG = "QuestionFragment"
     private var currentBean: QuestionBean? = null
     private var isSkipNextLevel = false
+
+    // 🔧 ActivityResultLauncher for QuizReviewLearnActivity
+    private val reviewLearnLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val action = result.data?.getStringExtra(QuizReviewLearnActivity.RESULT_ACTION)
+            android.util.Log.d(TAG, "📬 Received result from QuizReviewLearnActivity: action=$action")
+            
+            when (action) {
+                QuizReviewLearnActivity.ACTION_TRY_AGAIN -> {
+                    // 🔧 重置状态，重新显示当前题目
+                    hasNavigatedToReview = false  // 重置标志位
+                    currentBean?.run { updateQuestionUI(this) }
+                }
+                QuizReviewLearnActivity.ACTION_SKIP -> {
+                    // 🔧 重置状态，跳过当前题目，继续下一题或升级
+                    hasNavigatedToReview = false  // 重置标志位
+                    if (viewModel.isLastQuestionInLevel()) {
+                        val currentLevel = SPTools.getInt(Constants.KEY_LAST_QUESTION_LEVEL, 1)
+                        reportQuizLevelUp(currentLevel)
+                        isSkipNextLevel = true
+                        binding.quizNsv.gone()
+                        binding.levelThoughtCl.root.visible()
+                    } else {
+                        viewModel.showNextQuestion()
+                    }
+                }
+                QuizReviewLearnActivity.ACTION_QUIT -> {
+                    // 🔧 完全重置状态，返回第一题
+                    hasNavigatedToReview = false  // 重置标志位
+                    countValueAnimator?.cancel()   // 取消倒计时
+                    
+                    // 🔧 取消所有pending的打开错误页面任务
+                    pendingReviewRunnable?.let { 
+                        Tasks.cancelUITask(it)
+                        pendingReviewRunnable = null
+                        logd("📌 Cancelled pending review task on Quit")
+                    }
+                    
+                    viewModel.tryAgainQuestion()   // 返回第一题
+                }
+            }
+        }
+    }
 
     // 倒计时25s
     private val STAY_TIME = 25f
@@ -183,7 +231,44 @@ class QuranQuestionFragment :
                     }
                 }, 2000)
             } else {
-                Tasks.postDelayedByUI({ countValueAnimator?.cancel() }, 1000)
+                // 🔧 Step 1: Remove revival logic, navigate directly to Review & Learn page
+                // Cancel countdown immediately
+                countValueAnimator?.cancel()
+                
+                // 🔧 防止重复打开：如果已经打开了，就不再打开
+                if (hasNavigatedToReview) {
+                    logd("Answer incorrect but already navigated to Review page, skipping")
+                    return@setAnswerResultListener
+                }
+                hasNavigatedToReview = true
+                
+                // 🔧 取消之前pending的任务（如果有）
+                pendingReviewRunnable?.let { Tasks.cancelUITask(it) }
+                
+                // Navigate to Review & Learn activity with current question data
+                pendingReviewRunnable = Runnable {
+                    // 🔧 检查Fragment是否仍然可见
+                    if (!isAdded || !isVisible || view == null || !userVisibleHint) {
+                        logd("⚠️ Pending review task but Fragment not visible, skipping")
+                        hasNavigatedToReview = false  // 重置标志，因为没有真正打开
+                        pendingReviewRunnable = null
+                        return@Runnable
+                    }
+                    
+                    if (context != null && activity.isValid()) {
+                        currentBean?.let { question ->
+                            // 🔧 使用 launcher 启动，以便接收返回结果
+                            val intent = Intent(requireContext(), QuizReviewLearnActivity::class.java).apply {
+                                putExtra("key_question", question)
+                                putExtra("key_ayah_id", question.ayah_id)
+                                putExtra("key_question_id", question.id)
+                            }
+                            reviewLearnLauncher.launch(intent)
+                            pendingReviewRunnable = null  // 清除引用
+                        }
+                    }
+                }
+                Tasks.postDelayedByUI(pendingReviewRunnable!!, 500) // Small delay to show wrong answer feedback
             }
         }
         binding.levelThoughtCl.nextLevelTv.setOnClickListener {
@@ -407,6 +492,15 @@ class QuranQuestionFragment :
     }
 
     private fun updateQuestionUI(questionBean: QuestionBean) {
+        hasNavigatedToReview = false  // 🔧 重置标志，为新题目做准备
+        
+        // 🔧 取消之前pending的任务（切换到新题目时）
+        pendingReviewRunnable?.let {
+            Tasks.cancelUITask(it)
+            pendingReviewRunnable = null
+            logd("📌 Cancelled pending review task on updateQuestionUI")
+        }
+        
         countValueAnimator?.pause()
         countValueAnimator = getQuizCountTimeAnimator(STAY_TIME)
         binding.levelThoughtCl.levelThoughtLav.cancelAnimation()
@@ -422,9 +516,13 @@ class QuranQuestionFragment :
         binding.questionProgressTv.text = viewModel.getProgressQuestion()
         binding.optionsView.setData(questionBean)
         if (isDebug()) {
-            binding.debugRightAnswerTv.text = questionBean.answer
+            // 显示随机化后的正确答案
+            binding.debugRightAnswerTv.text = binding.optionsView.getShuffledAnswer()
         }
     }
+
+    private var hasNavigatedToReview = false  // 防止重复打开Review页面
+    private var pendingReviewRunnable: Runnable? = null  // 🔧 保存pending的打开错误页面任务
 
     private fun getQuizCountTimeAnimator(playTime: Float): ValueAnimator {
         return ValueAnimator.ofFloat(0f, playTime).apply {
@@ -435,8 +533,31 @@ class QuranQuestionFragment :
                 binding.timeCountTv.text = "${(playTime - v).toInt()}"
             }
             doOnEnd {
+                // 🔧 防止重复打开：如果已经因为回答错误打开了，就不再打开
+                if (hasNavigatedToReview) {
+                    logd("Countdown ended but already navigated to Review page, skipping")
+                    return@doOnEnd
+                }
+                
+                // 🔧 检查Fragment是否可见：如果用户已经切换到其他页面，不打开错误页
+                if (!isAdded || !isVisible || view == null || !userVisibleHint) {
+                    logd("⚠️ Countdown ended but Fragment not visible, skipping Review page")
+                    return@doOnEnd
+                }
+                
+                // If countdown finishes without answer, treat as wrong answer
+                // Navigate directly to Review & Learn page
                 if (context != null && activity.isValid()) {
-                    QuranQuestionRevivalActivity.open(requireContext())
+                    currentBean?.let { question ->
+                        hasNavigatedToReview = true
+                        // 🔧 使用 launcher 启动，以便接收返回结果
+                        val intent = Intent(requireContext(), QuizReviewLearnActivity::class.java).apply {
+                            putExtra("key_question", question)
+                            putExtra("key_ayah_id", question.ayah_id)
+                            putExtra("key_question_id", question.id)
+                        }
+                        reviewLearnLauncher.launch(intent)
+                    }
                 }
             }
             duration = (playTime * 1000).toLong()

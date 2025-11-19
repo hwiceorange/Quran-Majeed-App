@@ -23,9 +23,10 @@ data class AppConfigInfo(
 object AppConfig {
     val TAG = AppConfig::class.java.simpleName
     private lateinit var lastAppConfig: AppConfigInfo
-    private var lan: String = "en"
+    internal var lan: String = "en"  // Changed to internal for QuestionTools access
     fun isIDLan() = "id" == lan
     fun isEsLan() = "es" == lan
+    fun isArLan() = "ar" == lan  // Added Arabic language check
     fun setLanguage() {
         // 🔧 修复：优先从用户设置的语言配置读取，而不是系统配置
         // 主应用通过 SPAppConfigs 保存用户选择的语言到 SharedPreferences
@@ -47,9 +48,9 @@ object AppConfig {
             loge("🌍 从系统配置读取语言: $lan", "lan_config")
         }
         
-        // 语言代码标准化
+        // 语言代码标准化（Android 资源文件夹命名）
         when(lan) {
-            "in" -> lan = "id"  // 印尼语标准化
+            "id" -> lan = "in"  // 印尼语：id → in (Android 旧标准)
             "ji"-> lan="yi"
             "he"-> lan="iw"
         }

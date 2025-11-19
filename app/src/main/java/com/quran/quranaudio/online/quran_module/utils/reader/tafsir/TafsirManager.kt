@@ -29,13 +29,22 @@ object TafsirManager {
         force: Boolean,
         readyCallback: () -> Unit
     ) {
+        android.util.Log.d("TafsirManager", "🔧 prepare called: force=$force, hasModel=${availableTafsirsModel != null}")
+        
         if (!force && availableTafsirsModel != null) {
+            android.util.Log.d("TafsirManager", "✅ Using cached model")
             readyCallback()
             return
         }
 
         loadTafsirs(ctx, force) { availableTafsirsModel ->
+            android.util.Log.d("TafsirManager", "📦 Tafsir loaded, isNull=${availableTafsirsModel == null}")
             TafsirManager.availableTafsirsModel = availableTafsirsModel
+            if (availableTafsirsModel != null) {
+                android.util.Log.d("TafsirManager", "✅ Model assigned, calling readyCallback")
+            } else {
+                android.util.Log.w("TafsirManager", "⚠️ Model is null, calling readyCallback anyway")
+            }
             readyCallback()
         }
     }
@@ -46,45 +55,74 @@ object TafsirManager {
         force: Boolean,
         callback: (AvailableTafsirsModel?) -> Unit
     ) {
+        android.util.Log.d("TafsirManager", "📥 loadTafsirs called: force=$force")
         val fileUtils = FileUtils.newInstance(ctx)
 
         val tafsirsFile = fileUtils.tafsirsManifestFile
+        android.util.Log.d("TafsirManager", "📂 Tafsir manifest file: ${tafsirsFile.absolutePath}, exists=${tafsirsFile.exists()}")
+        
         if (force) {
+            android.util.Log.d("TafsirManager", "🌐 Force loading from network...")
             CoroutineScope(Dispatchers.IO).launch {
                 try {
-                    val response = RetrofitInstance.quran.getAvailableTafsirs()
-                    val availableTafsirs = buildAvailableTafsirsModel(response.tafsirs)
-                    val stringData = JsonHelper.json.encodeToString(AvailableTafsirsModel.serializer(), availableTafsirs)
-
+                    // 使用 GitHub API 而不是 Quran.com API（更稳定）
+                    val response = RetrofitInstance.github.getAvailableTafsirs()
+                    val responseString = response.string()
+                    android.util.Log.d("TafsirManager", "📥 Received response, length=${responseString.length}")
+                    
+                    // 保存原始 JSON
                     fileUtils.createFile(tafsirsFile)
-                    tafsirsFile.writeText(stringData)
+                    tafsirsFile.writeText(responseString)
 
+                    android.util.Log.d("TafsirManager", "✅ Network load successful")
                     withContext(Dispatchers.Main) {
-                        postTafsirsLoad(ctx, stringData, callback)
+                        postTafsirsLoad(ctx, responseString, callback)
                     }
                 } catch (e: Exception) {
+                    android.util.Log.e("TafsirManager", "❌ Network load failed: ${e.message}")
+                    android.util.Log.w("TafsirManager", "⚠️ Attempting to load from assets as fallback...")
                     Log.saveError(e, "loadTafsirs")
                     e.printStackTrace()
-                    withContext(Dispatchers.Main) {
-                        callback(null)
+                    
+                    // 尝试从 assets 加载备用清单
+                    try {
+                        val assetsData = ctx.assets.open("tafsir/available_tafsirs_info.json").bufferedReader().use { it.readText() }
+                        android.util.Log.d("TafsirManager", "✅ Loaded from assets, length=${assetsData.length}")
+                        
+                        fileUtils.createFile(tafsirsFile)
+                        tafsirsFile.writeText(assetsData)
+                        
+                        withContext(Dispatchers.Main) {
+                            postTafsirsLoad(ctx, assetsData, callback)
+                        }
+                    } catch (assetsError: Exception) {
+                        android.util.Log.e("TafsirManager", "❌ Assets fallback also failed: ${assetsError.message}")
+                        withContext(Dispatchers.Main) {
+                            callback(null)
+                        }
                     }
                 }
             }
         } else {
             if (!tafsirsFile.exists()) {
+                android.util.Log.d("TafsirManager", "⚠️ Manifest file not found, forcing network load")
                 loadTafsirs(ctx, true, callback)
                 return
             }
 
+            android.util.Log.d("TafsirManager", "📄 Loading from local file...")
             try {
                 val stringData = tafsirsFile.readText()
                 if (stringData.isEmpty()) {
+                    android.util.Log.d("TafsirManager", "⚠️ File is empty, forcing network load")
                     loadTafsirs(ctx, true, callback)
                     return
                 }
 
+                android.util.Log.d("TafsirManager", "✅ Local file loaded successfully")
                 postTafsirsLoad(ctx, stringData, callback)
             } catch (e: IOException) {
+                android.util.Log.e("TafsirManager", "❌ File read error: ${e.message}")
                 Log.saveError(e, "loadTafsirs")
                 e.printStackTrace()
                 loadTafsirs(ctx, true, callback)
@@ -97,13 +135,20 @@ object TafsirManager {
         stringData: String,
         callback: (AvailableTafsirsModel?) -> Unit
     ) {
+        android.util.Log.d("TafsirManager", "📊 postTafsirsLoad called")
         SPAppActions.setFetchTafsirsForce(ctx, false)
         val savedTafsirKey = SPReader.getSavedTafsirKey(ctx)
+        android.util.Log.d("TafsirManager", "🔑 Saved Tafsir key: $savedTafsirKey")
 
         try {
             val availableTafsirsModel = JsonHelper.json.decodeFromString<AvailableTafsirsModel>(
                 stringData
             )
+
+            android.util.Log.d("TafsirManager", "✅ Parsed ${availableTafsirsModel.tafsirs.size} language groups")
+            availableTafsirsModel.tafsirs.forEach { (lang, models) ->
+                android.util.Log.d("TafsirManager", "   - $lang: ${models.size} tafsirs")
+            }
 
             availableTafsirsModel.tafsirs.values.forEach { tafsirModels ->
                 tafsirModels.forEach { tafsirModel ->
@@ -114,6 +159,7 @@ object TafsirManager {
 
             callback(availableTafsirsModel)
         } catch (e: Exception) {
+            android.util.Log.e("TafsirManager", "❌ JSON parse error: ${e.message}")
             Log.saveError(e, "postTafsirsLoad")
             e.printStackTrace()
             callback(null)

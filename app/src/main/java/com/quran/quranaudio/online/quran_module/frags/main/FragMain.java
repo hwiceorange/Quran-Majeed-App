@@ -2211,11 +2211,18 @@ public class FragMain extends BaseFragment {
             }
 
             return new QuestionBean(
-                quizQuestion.getId(),
+                String.valueOf(quizQuestion.getId()),  // Convert int to String
                 quizQuestion.getQuestionText(),
                 optionMap,
                 0,
-                correctKey
+                correctKey,
+                "",  // Category
+                "",  // Subclass
+                0,   // surah_id
+                0,   // ayah_id
+                "",  // tafsir_brief
+                "",  // tafsir_detailed
+                ""   // explanation
             );
 
         } catch (Exception e) {

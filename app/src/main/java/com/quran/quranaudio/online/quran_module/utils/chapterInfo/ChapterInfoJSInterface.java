@@ -30,7 +30,7 @@ public class ChapterInfoJSInterface {
         }
 
         mActivity.showReferenceSingleVerseOrRange(
-            TranslUtils.defaultTranslationSlugs(),
+            TranslUtils.defaultTranslationSlugs(mActivity),
             chapterNo, new Pair<>(fromVerse, toVerse)
         );
     }

@@ -110,8 +110,10 @@ class TranslationDownloadService : Service() {
         notifManager: NotificationManagerCompat
     ) {
         notifManager.cancel(NOTIF_ID)
-        ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_DETACH)
-        startForeground(notifId, notification)
+        
+        // 🔧 Android 14 Fix: 不使用前台服务，直接显示通知
+        // Android 14 不允许从后台启动前台服务，改用普通通知
+        notifManager.notify(notifId, notification)
     }
 
     private fun startDownload(

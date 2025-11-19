@@ -160,6 +160,13 @@ public class App extends BaseApp {
         }
         
         AdFactory.INSTANCE.init(this,BuildConfig.DEBUG);
+        
+        // 注入 QuranDataProvider 实现给 Quiz 模块
+        com.quran.quranaudio.quiz.data.QuranDataProviderHolder.INSTANCE.setInstance(
+            com.quran.quranaudio.online.quran_module.quiz.QuranDataRepositoryImpl.getInstance(this)
+        );
+        android.util.Log.d("App", "✅ QuranDataProvider injected for Quiz module");
+        
         //Ads
         if (!Constant.FORCE_TO_SHOW_APP_OPEN_AD_ON_START) {
             registerActivityLifecycleCallbacks(activityLifecycleCallbacks);

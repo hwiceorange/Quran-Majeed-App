@@ -1,0 +1,38 @@
+================================================================================
+📤 Tafsir 清单文件上传摘要
+================================================================================
+
+✅ 文件已生成：
+   本地位置: server_deploy/available_tafsirs_info.json
+   文件大小: 1.1 KB
+
+📍 上传到服务器的位置：
+   目标 URL: https://apis.dochubai.com/quran/apis/tafsirs/available_tafsirs_info.json
+   
+   服务器路径（常见）:
+   - /var/www/html/quran/apis/tafsirs/available_tafsirs_info.json
+   或
+   - /var/www/apis.dochubai.com/quran/apis/tafsirs/available_tafsirs_info.json
+
+🚀 快速上传命令（SSH）：
+   scp server_deploy/available_tafsirs_info.json user@dochubai.com:/var/www/html/quran/apis/tafsirs/
+
+📁 目录结构：
+   quran/
+   └── apis/
+       └── tafsirs/
+           └── available_tafsirs_info.json  ← 上传到这里
+
+✅ 上传后验证：
+   curl https://apis.dochubai.com/quran/apis/tafsirs/available_tafsirs_info.json
+   
+   应该返回 JSON 内容
+
+⚠️  重要：
+   - 文件权限必须是 644
+   - URL 路径不能改变（应用中硬编码）
+   - 必须可以通过 HTTPS 访问
+
+📖 详细说明：见 SERVER_UPLOAD_INSTRUCTIONS.md
+
+================================================================================

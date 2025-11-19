@@ -43,4 +43,19 @@
     <string name="quran_watch">Tonton</string>
 
 
+</resources><?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Quiz Review & Learn Page - Indonesian -->
+    <string name="quiz_review_header">Tinjau &amp; Pelajari</string>
+    <string name="quiz_review_title">Renungkan &amp; Tinjau</string>
+    <string name="quiz_review_subtitle">Salah. Pahami Ayat Ini.</string>
+    <string name="quiz_correct_answer_label">Jawaban Benar:</string>
+    <string name="quiz_related_verse">Ayat Terkait</string>
+    <string name="quiz_verse_reference">Surah %1$d, Ayat %2$d</string>
+    <string name="quiz_simplified_tafsir">Tafsir Ringkas</string>
+    <string name="quiz_full_tafsir">Tafsir Lengkap (Premium)</string>
+    <string name="quiz_try_again_btn">Coba Lagi</string>
+    <string name="quiz_skip_btn">Lewati</string>
+    <string name="quiz_quit_level_btn">Keluar Level</string>
 </resources>
+

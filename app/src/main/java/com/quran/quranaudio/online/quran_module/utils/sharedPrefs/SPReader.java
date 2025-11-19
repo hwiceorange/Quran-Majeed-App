@@ -91,7 +91,7 @@ public abstract class SPReader {
 
         if (!sp.contains(KEY_TRANSLATIONS)) {
             SharedPreferences.Editor editor = sp.edit();
-            editor.putStringSet(KEY_TRANSLATIONS, TranslUtils.defaultTranslationSlugs());
+            editor.putStringSet(KEY_TRANSLATIONS, TranslUtils.defaultTranslationSlugs(context));
             editor.apply();
         }
 

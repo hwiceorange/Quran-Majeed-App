@@ -2,6 +2,7 @@ package com.quran.quranaudio.online.quran_module.utils.services
 
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.os.Binder
 import android.os.Build
@@ -312,7 +313,10 @@ class KFQPCScriptFontsDownloadService : LifecycleService() {
             .setOnlyAlertOnce(true)
             .setGroupSummary(true)
 
-        startForeground(DOWNLOAD_SCRIPT_NOTIFICATION_ID, initialNotifBuilder.build())
+        // 🔧 Android 14 Fix: 不使用前台服务，直接显示通知
+        // Android 14 不允许从后台启动前台服务，改用普通通知
+        val notifManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notifManager.notify(DOWNLOAD_SCRIPT_NOTIFICATION_ID, initialNotifBuilder.build())
     }
 
     private fun showProgressNotification(partNo: Int?, progress: Int, scriptKey: String) {

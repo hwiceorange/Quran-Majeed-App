@@ -72,11 +72,13 @@ public class TranslUtils {
      * - 其他语言 → Sahih International (英语作为默认)
      * 
      * @return 默认译本的 slug 集合
+     * @deprecated 使用 defaultTranslationSlugs(Context) 以确保语言与应用设置同步
      */
+    @Deprecated
     public static Set<String> defaultTranslationSlugs() {
         Set<String> defTranslations = new HashSet<>();
         
-        // 获取系统语言
+        // 获取系统语言（仅作为回退）
         String systemLanguage = getSystemLanguage();
         
         // 根据系统语言自动选择对应的译本
@@ -103,6 +105,94 @@ public class TranslUtils {
         }
         
         return defTranslations;
+    }
+    
+    /**
+     * 🌐 获取默认译本（推荐）：根据用户在应用内设置的语言自动匹配对应的译本
+     * 
+     * 优先级：
+     * 1. 应用内设置的语言（SPAppConfigs.getLocale）
+     * 2. 系统语言（作为回退）
+     * 
+     * 匹配规则：
+     * - 印尼语 (id/in) → Kompleks Al Quran Raja Fahd
+     * - 英语 (en) → Sahih International
+     * - 乌尔都语 (ur) → مولانا محمد جوناگڑهی
+     * - 阿拉伯语 (ar) → (未来可添加阿拉伯语Tafsir)
+     * - 其他语言 → Sahih International (英语作为默认)
+     * 
+     * @param context Android Context，用于读取应用语言设置
+     * @return 默认译本的 slug 集合
+     */
+    public static Set<String> defaultTranslationSlugs(Context context) {
+        Set<String> defTranslations = new HashSet<>();
+        
+        // 🔧 优先从应用设置获取语言，确保与用户选择的应用语言同步
+        String appLanguage = getAppLanguage(context);
+        
+        android.util.Log.d("TranslUtils", "🌐 App language: " + appLanguage + " (from SPAppConfigs)");
+        
+        // 根据应用语言自动选择对应的译本
+        switch (appLanguage) {
+            case "id":  // 印尼语（应用统一使用 "id"）
+                defTranslations.add(TRANSL_SLUG_IN);
+                android.util.Log.d("TranslUtils", "🌐 Auto-selected translation: Indonesian (Kompleks Al Quran)");
+                break;
+                
+            case "en":  // 英语
+                defTranslations.add(TRANSL_SLUG_EN_SAHIH_INTERNATIONAL);
+                android.util.Log.d("TranslUtils", "🌐 Auto-selected translation: English (Sahih International)");
+                break;
+                
+            case "ur":  // 乌尔都语
+                defTranslations.add(TRANSL_SLUG_UR_JUNAGARHI);
+                android.util.Log.d("TranslUtils", "🌐 Auto-selected translation: Urdu (Junagarhi)");
+                break;
+                
+            case "ar":  // 阿拉伯语
+                // 阿拉伯语通常不需要翻译，但可以默认英语作为辅助
+                defTranslations.add(TRANSL_SLUG_EN_SAHIH_INTERNATIONAL);
+                android.util.Log.d("TranslUtils", "🌐 Auto-selected translation: English (for Arabic speakers)");
+                break;
+                
+            default:    // 其他语言：默认使用英语译本
+                defTranslations.add(TRANSL_SLUG_EN_SAHIH_INTERNATIONAL);
+                android.util.Log.d("TranslUtils", "🌐 Auto-selected translation: English (Sahih International) - Default for unsupported language: " + appLanguage);
+                break;
+        }
+        
+        return defTranslations;
+    }
+    
+    /**
+     * 🌐 获取应用设置的语言代码
+     * 
+     * 优先级：
+     * 1. 用户在应用内设置的语言（SPAppConfigs）
+     * 2. 系统语言（作为回退）
+     * 
+     * @param context Android Context
+     * @return 语言代码 (如: "en", "id", "ur", "ar", 等)
+     */
+    private static String getAppLanguage(Context context) {
+        try {
+            if (context != null) {
+                // 从 SharedPreferences 读取用户设置的语言
+                String savedLanguage = com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs.getLocale(context);
+                
+                if (savedLanguage != null && !savedLanguage.isEmpty()) {
+                    android.util.Log.d("TranslUtils", "📱 Using app language from settings: " + savedLanguage);
+                    return savedLanguage;
+                }
+            }
+        } catch (Exception e) {
+            android.util.Log.w("TranslUtils", "Failed to get app language from settings: " + e.getMessage());
+        }
+        
+        // 回退到系统语言
+        String systemLanguage = getSystemLanguage();
+        android.util.Log.d("TranslUtils", "🌍 Falling back to system language: " + systemLanguage);
+        return systemLanguage;
     }
     
     /**

@@ -767,7 +767,7 @@ public class FragSettingsMain extends FragSettingsBase implements FragmentResult
         SPReader.setSavedTextSizeMultTafsir(ctx, ReaderTextSizeUtils.TEXT_SIZE_MULT_TAFSIR_DEFAULT);
         SPReader.setSavedScript(ctx, QuranScriptUtils.SCRIPT_DEFAULT);
 
-        initTranslSlugs = TranslUtils.defaultTranslationSlugs().toArray(new String[0]);
+        initTranslSlugs = TranslUtils.defaultTranslationSlugs(ctx).toArray(new String[0]);
 
         TafsirManager.prepare(ctx, false, () -> {
             Map<String, List<TafsirInfoModel>> tafsirModels = TafsirManager.getModels();

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Quiz Review & Learn Page - Arabic -->
+    <string name="quiz_review_header">مراجعة وتعلم</string>
+    <string name="quiz_review_title">تأمل ومراجعة</string>
+    <string name="quiz_review_subtitle">إجابة خاطئة. افهم الآية.</string>
+    <string name="quiz_correct_answer_label">الإجابة الصحيحة:</string>
+    <string name="quiz_related_verse">الآية ذات الصلة</string>
+    <string name="quiz_verse_reference">سورة %1$d، آية %2$d</string>
+    <string name="quiz_simplified_tafsir">تفسير مبسط</string>
+    <string name="quiz_full_tafsir">التفسير الكامل (بريميوم)</string>
+    <string name="quiz_try_again_btn">حاول مرة أخرى</string>
+    <string name="quiz_skip_btn">تخطي</string>
+    <string name="quiz_quit_level_btn">إنهاء المستوى</string>
+</resources>
+

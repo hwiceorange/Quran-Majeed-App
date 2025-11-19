@@ -1,0 +1,39 @@
+
+name: Deploy Tafsir Manifest
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'server_deploy/available_tafsirs_info.json'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Deploy to server
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H $SERVER_HOST >> ~/.ssh/known_hosts
+          
+          scp server_deploy/available_tafsirs_info.json \
+            ${SERVER_USER}@${SERVER_HOST}:/var/www/html/quran/apis/tafsirs/
+          
+          ssh ${SERVER_USER}@${SERVER_HOST} \
+            'chmod 644 /var/www/html/quran/apis/tafsirs/available_tafsirs_info.json'
+          
+          echo "✅ Deployment successful!"
+      
+      - name: Verify deployment
+        run: |
+          sleep 2
+          curl -f https://apis.dochubai.com/quran/apis/tafsirs/available_tafsirs_info.json || exit 1
+          echo "✅ File is accessible!"

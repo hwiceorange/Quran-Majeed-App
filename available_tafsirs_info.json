@@ -1,0 +1,34 @@
+{
+  "tafsirs": {
+    "en": [
+      {
+        "key": "en-tafisr-ibn-kathir",
+        "name": "Tafsir Ibn Kathir",
+        "author": "Ibn Kathir",
+        "langCode": "en",
+        "langName": "English",
+        "slug": "en-tafisr-ibn-kathir"
+      }
+    ],
+    "id": [
+      {
+        "key": "id-tafsir-kemenag",
+        "name": "Tafsir Al-Qur'an Kemenag",
+        "author": "Kementerian Agama RI",
+        "langCode": "id",
+        "langName": "Indonesian",
+        "slug": "id-tafsir-kemenag"
+      }
+    ],
+    "ar": [
+      {
+        "key": "ar-tafsir-muyassar",
+        "name": "التفسير الميسر",
+        "author": "مجمع الملك فهد",
+        "langCode": "ar",
+        "langName": "Arabic",
+        "slug": "ar-tafsir-muyassar"
+      }
+    ]
+  }
+}

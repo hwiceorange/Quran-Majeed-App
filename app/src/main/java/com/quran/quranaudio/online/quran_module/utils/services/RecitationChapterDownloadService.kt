@@ -69,7 +69,7 @@ class RecitationChapterDownloadService : Service() {
     override fun onCreate() {
         super.onCreate()
         if (STARTED_BY_USER && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForeground(
+            startForegroundCompat(
                 NOTIF_ID,
                 NotificationUtils.createEmptyNotif(this, getString(R.string.strNotifChannelIdDownloads))
             )
@@ -92,7 +92,7 @@ class RecitationChapterDownloadService : Service() {
                 this,
                 getString(R.string.strNotifChannelIdDownloads)
             )
-            startForeground(NOTIF_ID, notification)
+            startForegroundCompat(NOTIF_ID, notification)
             finish()
             return START_NOT_STICKY
         }
@@ -206,7 +206,22 @@ class RecitationChapterDownloadService : Service() {
     ) {
         notifManager?.cancel(NOTIF_ID)
         ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_DETACH)
-        startForeground(notifId, notification)
+        startForegroundCompat(notifId, notification)
+    }
+    
+    /**
+     * 🔧 Android 14+ 兼容的 startForeground 方法
+     */
+    private fun startForegroundCompat(notifId: Int, notification: Notification) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            startForeground(
+                notifId,
+                notification,
+                android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
+            )
+        } else {
+            startForeground(notifId, notification)
+        }
     }
 
     private fun notify(

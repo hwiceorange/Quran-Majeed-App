@@ -104,6 +104,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                     // 保存新语言
                     com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs.setLocale(requireContext(), newLanguageCode);
                     
+                    // 🔄 同步语言设置（清除旧的翻译和 Tafsir 缓存）
+                    com.quran.quranaudio.online.quran_module.utils.LanguageSyncHelper.INSTANCE.syncLanguageSettings(requireContext());
+                    android.util.Log.d("SettingsFragment", "🔄 Language sync completed, recreating activity...");
+                    
                     // 更新摘要
                     updateLanguageSummary(appLanguagePref, newLanguageCode);
                     

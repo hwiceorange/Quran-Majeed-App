@@ -30,7 +30,8 @@ class QuestionOptionView : LinearLayoutCompat {
                     optionItemView?.setNoClick()
                 }
                 mQuestionBean?.run {
-                    val isRight = it.tag == this.answer
+                    // 使用随机化后的正确答案进行验证
+                    val isRight = it.tag == tempShuffledAnswer
                     if (isRight) {
                         questionOptionItemView.setRightStyle()
                     } else {
@@ -53,19 +54,37 @@ class QuestionOptionView : LinearLayoutCompat {
         if (questionBean.options.size != mOptionListView.size) {
             throw IllegalAccessException("question content is error, option is not 4, is ${questionBean.options}")
         }
-        questionBean.options.keys.forEachIndexed { index, s ->
+        
+        // 🎲 随机化选项内容，保持ABCD顺序
+        val (shuffledOptions, newAnswerKey) = questionBean.getShuffledQuestion()
+        
+        // 更新题目的正确答案键（用于验证）
+        // 注意：这里我们需要临时存储新的answer，因为原始questionBean不能修改
+        tempShuffledAnswer = newAnswerKey
+        
+        // 按ABCD顺序显示，但内容已被随机打乱
+        shuffledOptions.keys.forEachIndexed { index, key ->
             mOptionListView[index]?.run {
                 resetStyle()
-                tag = s
-                setData(s, questionBean.options[s] ?: "")
+                tag = key  // tag保存键名(A/B/C/D)
+                setData(key, shuffledOptions[key] ?: "")
             }
         }
+    }
+    
+    private var tempShuffledAnswer: String = ""  // 临时存储随机化后的正确答案
+    
+    /**
+     * 获取随机化后的正确答案键（用于测试模式显示）
+     */
+    fun getShuffledAnswer(): String {
+        return tempShuffledAnswer
     }
 
     fun hideOption(noGemCallBack:()->Unit) {
         mQuestionBean?.run {
             val noHideList =
-                mOptionListView.filter { it?.tag != this.answer && it?.isHideStatus() == false }
+                mOptionListView.filter { it?.tag != tempShuffledAnswer && it?.isHideStatus() == false }
             if (noHideList.isNotEmpty()) {
                 if (QuizGemManager.isEnableHideProp()) {
                     QuizGemManager.consumeHideOptionPropCount()

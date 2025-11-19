@@ -1,0 +1,43 @@
+{
+  "tafsirs": {
+    "en": [
+      {
+        "id": 93,
+        "name": "Tafsir Ibn Kathir",
+        "author_name": "Ibn Kathir",
+        "slug": "en-tafisr-ibn-kathir",
+        "language_name": "english",
+        "translated_name": {
+          "name": "Tafsir Ibn Kathir",
+          "language_name": "english"
+        }
+      }
+    ],
+    "id": [
+      {
+        "id": 999,
+        "name": "Tafsir Al-Qur'an Kemenag",
+        "author_name": "Kementerian Agama Republik Indonesia",
+        "slug": "id-tafsir-kemenag",
+        "language_name": "indonesian",
+        "translated_name": {
+          "name": "Tafsir Kementerian Agama RI",
+          "language_name": "indonesian"
+        }
+      }
+    ],
+    "ar": [
+      {
+        "id": 169,
+        "name": "التفسير الميسر",
+        "author_name": "مجمع الملك فهد لطباعة المصحف الشريف",
+        "slug": "ar-tafsir-muyassar",
+        "language_name": "arabic",
+        "translated_name": {
+          "name": "Tafsir Al-Muyassar",
+          "language_name": "arabic"
+        }
+      }
+    ]
+  }
+}

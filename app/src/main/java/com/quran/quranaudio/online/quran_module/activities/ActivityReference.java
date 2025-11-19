@@ -185,7 +185,7 @@ public class ActivityReference extends ReaderPossessingActivity {
             Collectors.toSet());
 
         if (mSelectedTranslSlugs.size() == 0) {
-            mSelectedTranslSlugs = TranslUtils.defaultTranslationSlugs();
+            mSelectedTranslSlugs = TranslUtils.defaultTranslationSlugs(this);
         }
 
         initContent(refModel);

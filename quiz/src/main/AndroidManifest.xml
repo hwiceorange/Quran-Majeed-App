@@ -3,10 +3,6 @@
 
     <application>
         <activity
-            android:name="com.quranaudio.quiz.quiz.QuranQuestionRevivalActivity"
-            android:exported="false" />
-
-        <activity
             android:name="com.quranaudio.quiz.quiz.QuranQuizNotifyActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
@@ -14,8 +10,9 @@
             android:name="com.quranaudio.quiz.quiz.QuranQuizNotifyResultActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <!-- ✅ 新的 Review & Learn 错误结果页 -->
         <activity
-            android:name="com.quran.quranaudio.quiz.activity.QuranQuestionFailActivity"
+            android:name="com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
 

@@ -1,0 +1,40 @@
+
+✅ Tafsir API 修复摘要
+================================
+
+问题: HTTP 500 错误
+解决: 使用 GitHub API 替代 Quran.com API
+
+修改文件: TafsirManager.kt
+- 修改前: RetrofitInstance.quran.getAvailableTafsirs()
+- 修改后: RetrofitInstance.github.getAvailableTafsirs()
+
+印尼语 Tafsir 数据:
+- 记录数: 6,236 条
+- 表名: tafsir_indonesian
+- 语言: id (Indonesian)
+- 来源: Kemenag
+
+现在请编译测试:
+================================
+cd /Users/huwei/AndroidStudioProjects/quran0
+./gradlew :app:assembleDebug
+adb uninstall com.quran.quranaudio.online
+adb install app/build/outputs/apk/debug/app-debug.apk
+
+测试日志监控:
+================================
+adb logcat -c
+adb logcat | grep -E 'TafsirManager|MainActivity.*Tafsir|ActivityTafsir'
+
+预期结果:
+================================
+✅ TafsirManager: 📥 Received response, length=XXXX
+✅ TafsirManager: ✅ Parsed X language groups
+✅ TafsirManager:    - id: X tafsirs
+✅ MainActivity: ✅ Auto-selected and saved Tafsir: id-tafsir-kemenag
+✅ ActivityTafsir: ✅ Tafsir loaded successfully
+
+如果成功，印尼语注释将自动工作！
+================================
+

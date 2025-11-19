@@ -8,6 +8,7 @@ import com.peacedesign.android.utils.WindowUtils
 import com.quran.quranaudio.online.R
 import com.quran.quranaudio.online.databinding.FragSettingsLangBinding
 import com.quran.quranaudio.online.quran_module.activities.readerSettings.Activity_Quran_Settings
+import com.quran.quranaudio.online.quran_module.utils.LanguageSyncHelper
 import com.quran.quranaudio.online.quran_module.utils.extensions.dp2px
 import com.quran.quranaudio.online.quran_module.utils.extensions.getStringArray
 import com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs
@@ -117,6 +118,10 @@ class FragSettingsLanguage : FragSettingsBase() {
         
         // 直接保存语言代码（不使用 toLanguageTag()）
         SPAppConfigs.setLocale(ctx, locale)
+        
+        // 🔄 同步语言设置（清除旧的翻译和 Tafsir 缓存）
+        LanguageSyncHelper.syncLanguageSettings(ctx)
+        android.util.Log.d("FragSettingsLanguage", "🔄 Language sync completed, restarting app...")
         
         // 重启应用以应用新语言
         restartMainActivity(ctx)

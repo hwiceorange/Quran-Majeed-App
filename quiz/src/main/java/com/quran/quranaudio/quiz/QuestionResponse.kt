@@ -48,8 +48,9 @@ object QuestionResponse {
     }
 
     suspend fun getAllQuestion() = withContext(Dispatchers.Default) {
-        // 🔧 获取当前语言（id 或 en）
-        val currentLanguage = if (com.quran.quranaudio.quiz.utils.AppConfig.isIDLan()) "id" else "en"
+        // 🔧 获取当前语言（支持 en, id, ar 及其他语言，fallback 到 en）
+        com.quran.quranaudio.quiz.utils.AppConfig.setLanguage()
+        val currentLanguage = com.quran.quranaudio.quiz.utils.AppConfig.lan
         
         // 🔧 如果语言改变了，清空缓存并重新加载
         if (cachedLanguage != currentLanguage) {

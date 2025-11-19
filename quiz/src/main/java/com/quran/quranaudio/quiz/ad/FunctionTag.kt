@@ -48,5 +48,12 @@ object FunctionTag {
     const val NATIVE_HOME_BACK_AD = "home_back_ad"
     const val NATIVE_QUIZ_RELIVE = "native_quiz_relive"
 
+    // Quiz Review & Learn
+    const val QUIZ_REVIEW_TRY_AGAIN_REWARD = "quiz_review_try_again_reward"
+    const val QUIZ_REVIEW_TRY_AGAIN_INTER = "quiz_review_try_again_inter"
+    const val QUIZ_REVIEW_SKIP_REWARD = "quiz_review_skip_reward"
+    const val QUIZ_REVIEW_SKIP_INTER = "quiz_review_skip_inter"
+    const val NATIVE_QUIZ_REVIEW_LEARN = "native_quiz_review_learn"
+
 
 }

@@ -1,0 +1,115 @@
+#!/bin/bash
+# 答题模块注释修复 - 编译和测试脚本
+
+echo "========================================="
+echo "🔧 答题模块注释修复 - 编译和测试"
+echo "========================================="
+echo ""
+
+# 项目路径
+PROJECT_DIR="/Users/huwei/AndroidStudioProjects/quran0"
+cd "$PROJECT_DIR" || exit 1
+
+echo "📍 当前目录: $(pwd)"
+echo ""
+
+# 清理旧的 APK
+echo "🗑️  清理旧的构建文件..."
+rm -f app/build/outputs/apk/debug/app-debug.apk
+echo "✅ 清理完成"
+echo ""
+
+# 显示修改的文件
+echo "📝 修改的文件:"
+echo "  1. quiz/.../QuizReviewLearnActivity.kt"
+echo "     - 修改 handleFullTafsirClick(): 不传递 tafsir_detailed 占位符"
+echo "     - 修改 openTafsirDetailPage(): 移除 tafsirSlug 参数"
+echo "     - 修改 subscriptionLauncher 回调"
+echo ""
+echo "  2. app/.../ActivityTafsir.kt"
+echo "     - 添加 TafsirManager 准备检查"
+echo "     - 确保从外部入口跳转时 TafsirManager 已加载"
+echo ""
+
+# 编译说明
+echo "========================================="
+echo "⚠️  编译说明"
+echo "========================================="
+echo ""
+echo "由于 gradlew 需要 Java 环境，请使用以下方式之一编译："
+echo ""
+echo "方式 1: 使用 Android Studio"
+echo "  1. 打开 Android Studio"
+echo "  2. 点击 Build → Clean Project"
+echo "  3. 点击 Build → Rebuild Project"
+echo "  4. 等待编译完成"
+echo ""
+echo "方式 2: 使用终端（需要配置 Java）"
+echo "  ./gradlew clean :app:assembleDebug"
+echo ""
+
+# 测试计划
+echo "========================================="
+echo "🧪 测试计划"
+echo "========================================="
+echo ""
+echo "测试场景 1: 英语环境"
+echo "  1. 设置应用语言为英语"
+echo "  2. 进入答题模块，故意答错一题"
+echo "  3. 在错误结果页，点击 'Full Tafsir (Premium)'"
+echo "  4. 验证:"
+echo "     ✓ 不再弹出'无注释'对话框"
+echo "     ✓ 直接显示英语 Tafsir 内容"
+echo "     ✓ 章节和 Verse 与题目一致"
+echo ""
+echo "测试场景 2: 印尼语环境"
+echo "  1. 设置应用语言为印尼语"
+echo "  2. 进入答题模块，故意答错一题"
+echo "  3. 在错误结果页，点击 'Full Tafsir (Premium)'"
+echo "  4. 验证:"
+echo "     ✓ 显示印尼语 Tafsir 内容（从自定义服务器加载）"
+echo "     ✓ 章节和 Verse 与题目一致"
+echo ""
+echo "测试场景 3: 订阅后自动打开"
+echo "  1. 使用未订阅账号"
+echo "  2. 答错一题，点击 'Full Tafsir (Premium)'"
+echo "  3. 在订阅页面完成订阅"
+echo "  4. 验证:"
+echo "     ✓ 自动返回并打开 Tafsir 页面"
+echo "     ✓ 不弹出'无注释'对话框"
+echo ""
+
+# 日志监控命令
+echo "========================================="
+echo "📊 日志监控命令"
+echo "========================================="
+echo ""
+echo "监控 Tafsir 加载日志:"
+echo "  adb logcat | grep -E 'ActivityTafsir|TafsirManager|QuizReviewLearn' --line-buffered"
+echo ""
+echo "成功日志示例:"
+echo "  QuizReviewLearn: 📖 Opening Tafsir for Surah:1, Ayah:1 (auto language selection)"
+echo "  ActivityTafsir: 🔍 Initializing Tafsir for Surah:1, Ayah:1"
+echo "  ActivityTafsir: ✅ Using Tafsir: Tafsir Ibn Kathir (english)"
+echo "  ActivityTafsir: ✅ Tafsir loaded and cached successfully"
+echo ""
+
+# 重要提示
+echo "========================================="
+echo "⚠️  重要提示"
+echo "========================================="
+echo ""
+echo "1. 确保设备已连接:"
+echo "   adb devices"
+echo ""
+echo "2. 如果出现问题，请提供完整的崩溃日志:"
+echo "   adb logcat | grep -E 'FATAL|AndroidRuntime'"
+echo ""
+echo "3. 查看完整的诊断文档:"
+echo "   cat QUIZ_TAFSIR_FIX_ROOT_CAUSE.md"
+echo ""
+
+echo "========================================="
+echo "✅ 准备完成！请使用 Android Studio 编译"
+echo "========================================="
+

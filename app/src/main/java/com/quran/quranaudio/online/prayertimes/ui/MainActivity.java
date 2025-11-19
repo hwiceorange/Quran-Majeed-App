@@ -67,6 +67,9 @@ public class MainActivity extends BaseActivity {
                 .getPrayerDataPreloader();
 
         super.onCreate(savedInstanceState);
+        
+        // 🔧 自动初始化 Tafsir：在首次启动或引导完成后，根据应用语言自动选择默认 Tafsir
+        initializeDefaultTafsirIfNeeded();
 
         setContentView(R.layout.activity_main);
         navView = findViewById(R.id.nav_view);
@@ -264,6 +267,76 @@ public class MainActivity extends BaseActivity {
             
         } catch (Exception e) {
             android.util.Log.e("MainActivity", "❌ Failed to update application language", e);
+        }
+    }
+    
+    /**
+     * 🔧 自动初始化默认 Tafsir
+     * 
+     * 在首次启动或引导完成后，根据用户设置的应用语言自动选择并保存默认 Tafsir，
+     * 避免用户点击注释时弹出 "Tafsir Not Available" 对话框
+     * 
+     * 优先级：
+     * 1. 如果已有保存的 Tafsir key，则跳过
+     * 2. 根据应用语言自动选择最佳 Tafsir
+     * 3. 保存到 SharedPreferences
+     */
+    private void initializeDefaultTafsirIfNeeded() {
+        try {
+            // 检查是否已有保存的 Tafsir key
+            String savedTafsirKey = com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPReader.getSavedTafsirKey(this);
+            
+            if (savedTafsirKey != null && !savedTafsirKey.isEmpty()) {
+                android.util.Log.d("MainActivity", "✅ Tafsir already initialized: " + savedTafsirKey);
+                return;
+            }
+            
+            android.util.Log.d("MainActivity", "🔧 No Tafsir selected, initializing default Tafsir...");
+            
+            // 异步准备 Tafsir 列表并选择默认值
+            com.quran.quranaudio.online.quran_module.utils.reader.tafsir.TafsirManager.prepare(this, false, new kotlin.jvm.functions.Function0<kotlin.Unit>() {
+                @Override
+                public kotlin.Unit invoke() {
+                    // 获取用户设置的语言
+                    String userLanguage = com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs.getLocale(MainActivity.this);
+                    String systemLanguage = java.util.Locale.getDefault().getLanguage();
+                    String targetLanguage;
+                    if (userLanguage != null && !userLanguage.isEmpty()) {
+                        targetLanguage = userLanguage;
+                    } else {
+                        targetLanguage = systemLanguage;
+                    }
+                    
+                    android.util.Log.d("MainActivity", "🌍 Target language for Tafsir: " + targetLanguage);
+                    
+                    // 获取所有可用的 Tafsir 模型
+                    java.util.Map<String, java.util.List<com.quran.quranaudio.online.quran_module.api.models.tafsir.TafsirInfoModel>> tafsirModels = 
+                        com.quran.quranaudio.online.quran_module.utils.reader.tafsir.TafsirManager.getModels();
+                    
+                    if (tafsirModels != null && !tafsirModels.isEmpty()) {
+                        // 根据语言选择最佳 Tafsir（使用 INSTANCE 访问 Kotlin object）
+                        String selectedKey = com.quran.quranaudio.online.quran_module.utils.tafsir.TafsirLanguageMapper.INSTANCE.pickBestTafsirKey(
+                            targetLanguage, 
+                            tafsirModels
+                        );
+                        
+                        if (selectedKey != null) {
+                            // 保存选择的 Tafsir key
+                            com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPReader.setSavedTafsirKey(MainActivity.this, selectedKey);
+                            android.util.Log.d("MainActivity", "✅ Auto-selected and saved Tafsir: " + selectedKey + " for language: " + targetLanguage);
+                        } else {
+                            android.util.Log.w("MainActivity", "⚠️ No suitable Tafsir found for language: " + targetLanguage);
+                        }
+                    } else {
+                        android.util.Log.w("MainActivity", "⚠️ No Tafsir models available");
+                    }
+                    
+                    return kotlin.Unit.INSTANCE;
+                }
+            });
+            
+        } catch (Exception e) {
+            android.util.Log.e("MainActivity", "❌ Failed to initialize default Tafsir", e);
         }
     }
 
