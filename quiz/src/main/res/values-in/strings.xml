@@ -41,10 +41,7 @@
     <string name="quran_free_diamonds">Batu Permata Gratis</string>
     <string name="quran_watch_video_free_diamonds">Tonton video dapatkan 5 Batu Permata</string>
     <string name="quran_watch">Tonton</string>
-
-
-</resources><?xml version="1.0" encoding="utf-8"?>
-<resources>
+    
     <!-- Quiz Review & Learn Page - Indonesian -->
     <string name="quiz_review_header">Tinjau &amp; Pelajari</string>
     <string name="quiz_review_title">Renungkan &amp; Tinjau</string>
