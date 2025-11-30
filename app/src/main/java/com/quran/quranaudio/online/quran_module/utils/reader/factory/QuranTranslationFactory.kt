@@ -185,7 +185,12 @@ class QuranTranslationFactory(private val context: Context) : Closeable {
      *      [<Transl-of-Slug1>, <Transl-of-Slug2>, <Transl-of-Slug3>] -> verse 1:1
      * */
     fun getTranslationsSingleVerse(slugs: Set<String>, chapNo: Int, verseNo: Int): List<Translation> {
+        android.util.Log.d("QuranTranslationFactory", "═══════════════════════════════════════")
+        android.util.Log.d("QuranTranslationFactory", "📖 Getting translations for verse $chapNo:$verseNo")
+        android.util.Log.d("QuranTranslationFactory", "   Requested slugs: $slugs")
+        
         val nSlugs = sortTranslationSlugs(validatePremierShip(slugs))
+        android.util.Log.d("QuranTranslationFactory", "   After validation/sort: $nSlugs")
 
         val transls = ArrayList<Translation>()
 
@@ -193,11 +198,18 @@ class QuranTranslationFactory(private val context: Context) : Closeable {
         val selectionArgs = arrayOf(chapNo.toString(), verseNo.toString())
 
         for ((slugIndex, slug) in nSlugs.withIndex()) {
+            android.util.Log.d("QuranTranslationFactory", "   🔍 Querying table '$slug'...")
             val translations = getTranslationsFromQuery(slug, selection, selectionArgs)
             if (!translations.isNullOrEmpty()) {
+                android.util.Log.d("QuranTranslationFactory", "      ✅ Found translation: ${translations[0].text.take(50)}...")
                 transls.add(slugIndex, translations[0])
+            } else {
+                android.util.Log.w("QuranTranslationFactory", "      ❌ No translation found in table '$slug'")
             }
         }
+        
+        android.util.Log.d("QuranTranslationFactory", "   📊 Result: ${transls.size} translations found")
+        android.util.Log.d("QuranTranslationFactory", "═══════════════════════════════════════")
 
         return transls
     }
@@ -329,14 +341,20 @@ class QuranTranslationFactory(private val context: Context) : Closeable {
     ): List<Translation>? {
         return try {
             val cols = arrayOf(COL_CHAPTER_NO, COL_VERSE_NO, COL_TEXT, COL_FOOTNOTES)
+            val escapedTableName = QuranTranslDBHelper.escapeTableName(translSlug)
+            android.util.Log.d("QuranTranslationFactory", "         SQL: SELECT * FROM $escapedTableName WHERE $selection")
+            android.util.Log.d("QuranTranslationFactory", "         Args: [${selectionArgs.joinToString(",")}]")
+            
             val cursor = dbHelper.readableDatabase.query(
                 true,
-                QuranTranslDBHelper.escapeTableName(translSlug),
+                escapedTableName,
                 cols, selection, selectionArgs,
                 null, null, QuranTranslDBHelper.translationsOrderBy(), null
             )
+            android.util.Log.d("QuranTranslationFactory", "         Result count: ${cursor.count}")
             getTranslationsFromCursor(translSlug, cursor)
         } catch (e: Exception) {
+            android.util.Log.e("QuranTranslationFactory", "         ❌ Query failed: ${e.message}", e)
             e.printStackTrace()
             null
         }

@@ -269,9 +269,26 @@ object LocalTranslationData {
     
     /**
      * 马来语版本 (Malay)
+     * 顺序优化：1. Abdullah Basmeih (推荐), 2. JAKIM (官方)
      */
     private fun getMalayVersions(): List<QuranTranslationVersion> {
         return listOf(
+            // 🥇 推荐：Abdullah Muhammad Basmeih - 最流行的马来语翻译
+            QuranTranslationVersion(
+                versionId = "ms_39_abdullah",
+                displayName = "Abdullah Muhammad Basmeih",
+                bookName = "Tafsir Pimpinan Ar-Rahman",
+                authorName = "Abdullah Muhammad Basmeih",
+                languageCode = "ms",
+                languageName = "Bahasa Melayu",
+                shortDescription = "Terjemahan klasik yang terkenal di Malaysia.",
+                downloadPath = "https://api.quran.com/api/v4/quran/translations/39",
+                isPrebuilt = false,
+                isDownloaded = false,
+                numericId = 39,
+                isQuranFoundationApi = true
+            ),
+            // 备选：JAKIM - 马来西亚宗教部官方翻译
             QuranTranslationVersion(
                 versionId = "ms_jakim",
                 displayName = "JAKIM",
@@ -279,20 +296,8 @@ object LocalTranslationData {
                 authorName = "Jabatan Kemajuan Islam Malaysia",
                 languageCode = "ms",
                 languageName = "Bahasa Melayu",
-                shortDescription = "Terjemahan Rasmi Malaysia.",
+                shortDescription = "Terjemahan rasmi Malaysia.",
                 downloadPath = "apis/translations/ms/ms_jakim.json",
-                isPrebuilt = false,
-                isDownloaded = false
-            ),
-            QuranTranslationVersion(
-                versionId = "ms_abdullah_muhammad_basmeih",
-                displayName = "Abdullah Muhammad Basmeih",
-                bookName = "Tafsir Pimpinan Ar-Rahman",
-                authorName = "Abdullah Muhammad Basmeih",
-                languageCode = "ms",
-                languageName = "Bahasa Melayu",
-                shortDescription = "Klasik, Melayu Tradisional.",
-                downloadPath = "apis/translations/ms/ms_abdullah_muhammad_basmeih.json",
                 isPrebuilt = false,
                 isDownloaded = false
             )
@@ -301,41 +306,80 @@ object LocalTranslationData {
     
     /**
      * 土耳其语版本 (Turkish)
+     * 顺序优化：1. Diyanet İşleri (推荐), 2. Elmalılı Hamdi Yazır (经典)
      */
     private fun getTurkishVersions(): List<QuranTranslationVersion> {
         return listOf(
+            // 🥇 推荐：Diyanet İşleri - 土耳其宗教事务局官方翻译
             QuranTranslationVersion(
-                versionId = "tr_diyanet_isleri",
+                versionId = "tr_77_diyanet",
                 displayName = "Diyanet İşleri",
                 bookName = "Kur'an-ı Kerim Meali",
                 authorName = "Türkiye Cumhuriyeti Diyanet İşleri Başkanlığı",
                 languageCode = "tr",
                 languageName = "Türkçe",
-                shortDescription = "Türkiye Resmi Çevirisi.",
-                downloadPath = "apis/translations/tr/tr_diyanet_isleri.json",
+                shortDescription = "Türkiye'nin resmi çevirisi.",
+                downloadPath = "https://api.quran.com/api/v4/quran/translations/77",
                 isPrebuilt = false,
-                isDownloaded = false
+                isDownloaded = false,
+                numericId = 77,
+                isQuranFoundationApi = true
             ),
+            // 备选：Elmalılı Hamdi Yazır - 经典翻译
             QuranTranslationVersion(
-                versionId = "tr_elmalili_hamdi_yazir",
+                versionId = "tr_52_hamdi",
                 displayName = "Elmalılı Hamdi Yazır",
                 bookName = "Hak Dini Kur'an Dili",
                 authorName = "Elmalılı Hamdi Yazır",
                 languageCode = "tr",
                 languageName = "Türkçe",
-                shortDescription = "Klasik, Tarihsel Perspektif.",
-                downloadPath = "apis/translations/tr/tr_elmalili_hamdi_yazir.json",
+                shortDescription = "Klasik ve tarihsel perspektif.",
+                downloadPath = "https://api.quran.com/api/v4/quran/translations/52",
                 isPrebuilt = false,
-                isDownloaded = false
+                isDownloaded = false,
+                numericId = 52,
+                isQuranFoundationApi = true
             )
         )
     }
     
     /**
      * 孟加拉语版本 (Bengali)
+     * 顺序优化：1. Taisirul Quran (推荐), 2. Sheikh Mujibur Rahman, 3. Muhiuddin Khan
      */
     private fun getBengaliVersions(): List<QuranTranslationVersion> {
         return listOf(
+            // 🥇 推荐：Taisirul Quran - 最流行的现代孟加拉语翻译
+            QuranTranslationVersion(
+                versionId = TranslUtils.TRANSL_SLUG_BN_TAISIRUL,
+                displayName = "তাইসীরুল কুরআন",
+                bookName = "Taisirul Quran",
+                authorName = "Tawheed Publication",
+                languageCode = "bn",
+                languageName = "বাংলা",
+                shortDescription = "সবচেয়ে জনপ্রিয় আধুনিক বাংলা অনুবাদ।",
+                downloadPath = "https://api.quran.com/api/v4/quran/translations/161",
+                isPrebuilt = false,
+                isDownloaded = false,
+                numericId = 161,
+                isQuranFoundationApi = true
+            ),
+            // 备选：Sheikh Mujibur Rahman
+            QuranTranslationVersion(
+                versionId = "bn_163_sheikh-mujibur-rahman",
+                displayName = "শেখ মুজিবুর রহমান",
+                bookName = "Sheikh Mujibur Rahman",
+                authorName = "Darussalam Publication",
+                languageCode = "bn",
+                languageName = "বাংলা",
+                shortDescription = "দারুসসালাম প্রকাশনী কর্তৃক প্রকাশিত।",
+                downloadPath = "https://api.quran.com/api/v4/quran/translations/163",
+                isPrebuilt = false,
+                isDownloaded = false,
+                numericId = 163,
+                isQuranFoundationApi = true
+            ),
+            // 传统版本：Muhiuddin Khan
             QuranTranslationVersion(
                 versionId = "bn_muhiuddin_khan",
                 displayName = "মুহিউদ্দিন খান",
@@ -343,7 +387,7 @@ object LocalTranslationData {
                 authorName = "মাওলানা মুহিউদ্দিন খান",
                 languageCode = "bn",
                 languageName = "বাংলা",
-                shortDescription = "বাংলাদেশে সুপরিচিত অনুবাদ.",
+                shortDescription = "বাংলাদেশে সুপরিচিত অনুবাদ।",
                 downloadPath = "apis/translations/bn/bn_muhiuddin_khan.json",
                 isPrebuilt = false,
                 isDownloaded = false

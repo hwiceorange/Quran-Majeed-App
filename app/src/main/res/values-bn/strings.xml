@@ -1286,21 +1286,21 @@
 
     <string name="strLabelVersesText">Verses</string>
 
-    <string name="strLabelSurah" formatted="false">Surah %s</string>
+    <string name="strLabelSurah" formatted="false">সূরা %s</string>
 
-    <string name="strLabelPageNo" formatted="false">Page %d</string>
+    <string name="strLabelPageNo" formatted="false">পৃষ্ঠা %d</string>
 
-    <string name="strLabelJuzNo" formatted="false">Juz %d</string>
+    <string name="strLabelJuzNo" formatted="false">পারা %d</string>
 
-    <string name="strLabelVerseNo" formatted="false">Verse %d</string>
+    <string name="strLabelVerseNo" formatted="false">আয়াত %d</string>
 
-    <string name="strLabelVerses" formatted="false">Verses %1$d–%2$d</string>
+    <string name="strLabelVerses" formatted="false">আয়াত %1$d–%2$d</string>
 
-    <string name="strLabelVerseNoWithColon" formatted="false">Verse : %d</string>
+    <string name="strLabelVerseNoWithColon" formatted="false">আয়াত : %d</string>
 
-    <string name="strLabelVersesWithColon" formatted="false">Verses : %1$d–%2$d</string>
+    <string name="strLabelVersesWithColon" formatted="false">আয়াত : %1$d–%2$d</string>
 
-    <string name="strLabelVerseCountWithColon" formatted="false">Verses: %d</string>
+    <string name="strLabelVerseCountWithColon" formatted="false">আয়াত: %d</string>
 
     <string name="strLabelVerseNoRange" formatted="false">%1$d–%2$d</string>
 
@@ -1310,13 +1310,13 @@
 
     <string name="strLabelVerseSerialWithChapter" formatted="false">%1$s %2$d:%3$d</string>
 
-    <string name="strLabelVerseWithChapNameAndNo" formatted="false">Surah %1$s %2$d: Verse %3$d</string>
+    <string name="strLabelVerseWithChapNameAndNo" formatted="false">সূরা %1$s %2$d: আয়াত %3$d</string>
 
-    <string name="strLabelVerseWithChapNameWithBar" formatted="false">Surah %1$s │ Verse %2$d</string>
+    <string name="strLabelVerseWithChapNameWithBar" formatted="false">সূরা %1$s │ আয়াত %2$d</string>
 
-    <string name="strLabelVerseWithChapNameWithColon" formatted="false">Surah %1$s : Verse %2$d</string>
+    <string name="strLabelVerseWithChapNameWithColon" formatted="false">সূরা %1$s : আয়াত %2$d</string>
 
-    <string name="strLabelFeatureQuranMiniInfo" formatted="false">Chapter No. %1$d │ Verses %2$d–%3$d</string>
+    <string name="strLabelFeatureQuranMiniInfo" formatted="false">সূরা নং %1$d │ আয়াত %2$d–%3$d</string>
 
     <string name="strTitleAppUser">QuranApp user</string>
 
@@ -1334,13 +1334,13 @@
 
     <string name="noFootnotesForThisVerse">There are no footnotes for this verse.</string>
 
-    <string name="strTitleReaderChapters">Surah</string>
+    <string name="strTitleReaderChapters">সূরা</string>
 
-    <string name="strTitleReaderJuz">Juz</string>
+    <string name="strTitleReaderJuz">পারা</string>
 
-    <string name="strTitleReaderChapters2">Surah</string>
+    <string name="strTitleReaderChapters2">সূরা</string>
 
-    <string name="strTitleReaderJuz2">Juz</string>
+    <string name="strTitleReaderJuz2">পারা</string>
 
     <string name="strTitleReaderVerses">Verses</string>
 
@@ -2198,4 +2198,13 @@
     <string name="missed">মিস</string>
     <string name="great_consistency">দুর্দান্ত ধারাবাহিকতা!</string>
     <string name="keep_up_the_good_work">ভালো কাজ চালিয়ে যান</string>
+
+    <!-- Last Read Card -->
+    <string name="last_read">শেষ পড়া:</string>
+    <string name="continue_reading">চালিয়ে যান</string>
+    <string name="continue_reading_arrow">চালিয়ে যান →</string>
+    <string name="verse_no_format">আয়াত নং: %d</string>
+    <string name="surah_format">%d. %s</string>
+    <string name="juz_format">পারা %d</string>
+    <string name="page_format">পৃষ্ঠা %d</string>
 </resources>

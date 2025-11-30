@@ -213,7 +213,28 @@ public final class FileUtils {
      */
     @NonNull
     public Bitmap getBitmapFromUri(@NonNull Uri uri) throws IOException {
-        return MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), uri);
+        // Use modern API for Android P (API 28) and above
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+            android.graphics.ImageDecoder.Source source = 
+                android.graphics.ImageDecoder.createSource(getContext().getContentResolver(), uri);
+            return android.graphics.ImageDecoder.decodeBitmap(source);
+        } else {
+            // Fallback for older Android versions
+            // Use BitmapFactory with InputStream to avoid the deprecated getBitmap() method
+            java.io.InputStream inputStream = getContext().getContentResolver().openInputStream(uri);
+            if (inputStream == null) {
+                throw new IOException("Unable to open input stream for URI: " + uri);
+            }
+            try {
+                Bitmap bitmap = android.graphics.BitmapFactory.decodeStream(inputStream);
+                if (bitmap == null) {
+                    throw new IOException("Failed to decode bitmap from URI: " + uri);
+                }
+                return bitmap;
+            } finally {
+                inputStream.close();
+            }
+        }
     }
 
     /**

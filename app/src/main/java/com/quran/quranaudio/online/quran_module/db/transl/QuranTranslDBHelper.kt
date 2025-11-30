@@ -117,7 +117,7 @@ class QuranTranslDBHelper(private val context: Context) : SQLiteOpenHelper(
         return "$chapterNo:$verseNo"
     }
 
-    private fun createTranslTable(DB: SQLiteDatabase, bookInfo: QuranTranslBookInfo) {
+    fun createTranslTable(DB: SQLiteDatabase, bookInfo: QuranTranslBookInfo) {
         DB.execSQL(
             "CREATE TABLE IF NOT EXISTS ${escapeTableName(bookInfo.slug)} (" +
                 "$_ID TEXT PRIMARY KEY," +
@@ -161,7 +161,7 @@ class QuranTranslDBHelper(private val context: Context) : SQLiteOpenHelper(
         }
     }
 
-    private fun insertTranslationQuery(
+    fun insertTranslationQuery(
         DB: SQLiteDatabase,
         tableName: String,
         chapterNo: Int,
@@ -179,7 +179,7 @@ class QuranTranslDBHelper(private val context: Context) : SQLiteOpenHelper(
         DB.insert(escapeTableName(tableName), null, values)
     }
 
-    private fun storeTranslationInfo(bookInfo: QuranTranslBookInfo, DB: SQLiteDatabase) {
+    fun storeTranslationInfo(bookInfo: QuranTranslBookInfo, DB: SQLiteDatabase) {
         val values = ContentValues().apply {
             put(QuranTranslInfoEntry.COL_SLUG, bookInfo.slug)
             put(QuranTranslInfoEntry.COL_LANG_CODE, bookInfo.langCode)

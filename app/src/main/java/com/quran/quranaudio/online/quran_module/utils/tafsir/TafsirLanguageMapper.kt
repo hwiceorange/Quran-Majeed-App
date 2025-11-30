@@ -21,6 +21,7 @@ object TafsirLanguageMapper {
     private val preferredSlugByLanguage = mapOf(
         "en" to "en-tafisr-ibn-kathir",
         "ar" to "ar-tafsir-muyassar",
+        "id" to "id-tafsir-kemenag",
         "ur" to "tafsir-bayan-ul-quran",
         "bn" to "bn-tafseer-ibn-e-kaseer",
         "ru" to "ru-tafseer-al-saddi",
@@ -28,13 +29,13 @@ object TafsirLanguageMapper {
     )
 
     private val fallbackLanguages = mapOf(
-        "id" to listOf("en"),  // 统一使用 "id" 表示印尼语
-        "ms" to listOf("en"),
-        "tr" to listOf("ar", "en"),
+        "id" to listOf("ar", "en"),
+        "ms" to listOf("id", "ar", "en"),  // 马来语回退到印尼语或英语
+        "tr" to listOf("ar", "en"),        // 土耳其语回退到阿拉伯语或英语
         "fa" to listOf("ar", "en"),
-        "ru" to listOf("en"),
-        "bn" to listOf("en"),
-        "ur" to listOf("en"),
+        "ru" to listOf("ar", "en"),
+        "bn" to listOf("ur", "en"),        // 孟加拉语优先，回退乌尔都语或英语
+        "ur" to listOf("ar", "en"),
         "ku" to listOf("ar", "en")
     )
 

@@ -1,0 +1,59 @@
+{
+  "tafsirs": [
+    {
+      "id": 169,
+      "name": "Ibn Kathir (Abridged)",
+      "author_name": "Hafiz Ibn Kathir",
+      "slug": "en-tafisr-ibn-kathir",
+      "language_name": "english",
+      "translated_name": {
+        "name": "Ibn Kathir (Abridged)",
+        "language_name": "english"
+      }
+    },
+    {
+      "id": 16,
+      "name": "Tafsir Muyassar",
+      "author_name": "المیسر",
+      "slug": "ar-tafsir-muyassar",
+      "language_name": "arabic",
+      "translated_name": {
+        "name": "Tafsir Muyassar",
+        "language_name": "english"
+      }
+    },
+    {
+      "id": 164,
+      "name": "Tafseer ibn Kathir",
+      "author_name": "Tawheed Publication",
+      "slug": "bn-tafseer-ibn-e-kaseer",
+      "language_name": "bengali",
+      "translated_name": {
+        "name": "Tafseer ibn Kathir",
+        "language_name": "english"
+      }
+    },
+    {
+      "id": 90,
+      "name": "Al-Qurtubi",
+      "author_name": "Qurtubi",
+      "slug": "ar-tafseer-al-qurtubi",
+      "language_name": "arabic",
+      "translated_name": {
+        "name": "Al-Qurtubi",
+        "language_name": "english"
+      }
+    },
+    {
+      "id": 159,
+      "name": "Bayan ul Quran",
+      "author_name": "Dr. Israr Ahmad",
+      "slug": "tafsir-bayan-ul-quran",
+      "language_name": "urdu",
+      "translated_name": {
+        "name": "Bayan ul Quran",
+        "language_name": "english"
+      }
+    }
+  ]
+}

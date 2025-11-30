@@ -1,0 +1,18 @@
+{
+  "generated_at": "2025-11-29T00:57:01.246200",
+  "api_base_url": "https://api.quran.com",
+  "summary": {
+    "total_translations": 126,
+    "total_tafsirs": 20,
+    "priority_1_translations": 18,
+    "priority_2_translations": 8,
+    "priority_3_translations": 11,
+    "priority_tafsirs": 5
+  },
+  "notes": [
+    "优先级 1: 孟加拉语、马来语、土耳其语、印尼语、乌尔都语 - 必须同步",
+    "优先级 2: 英语、阿拉伯语、波斯语 - 推荐同步",
+    "优先级 3: 法语、德语、西班牙语、俄语、中文 - 可选同步",
+    "Tafsir 推荐按需加载，不建议全部同步到数据库"
+  ]
+}

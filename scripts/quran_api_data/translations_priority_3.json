@@ -1,0 +1,125 @@
+{
+  "translations": [
+    {
+      "id": 78,
+      "name": "Ministry of Awqaf, Egypt",
+      "author_name": "Ministry of Awqaf, Egypt",
+      "slug": "ru-ministry-of-awqaf",
+      "language_name": "russian",
+      "translated_name": {
+        "name": "Ministry of Awqaf, Egypt",
+        "language_name": "english"
+      }
+    },
+    {
+      "id": 79,
+      "name": "Abu Adel",
+      "author_name": "Abu Adel",
+      "slug": "ru-abu-adel",
+      "language_name": "russian",
+      "translated_name": {
+        "name": "Abu Adel",
+        "language_name": "english"
+      }
+    },
+    {
+      "id": 83,
+      "name": "Sheikh Isa Garcia",
+      "author_name": "Sheikh Isa Garcia",
+      "slug": "es-isa-garcia",
+      "language_name": "spanish",
+      "translated_name": {
+        "name": "Sheikh Isa Garcia",
+        "language_name": "english"
+      }
+    },
+    {
+      "id": 136,
+      "name": "Montada Islamic Foundation",
+      "author_name": "Montada Islamic Foundation",
+      "slug": null,
+      "language_name": "french",
+      "translated_name": {
+        "name": "Montada Islamic Foundation",
+        "language_name": "english"
+      }
+    },
+    {
+      "id": 140,
+      "name": "Montada Islamic Foundation",
+      "author_name": "Montada Islamic Foundation",
+      "slug": null,
+      "language_name": "spanish",
+      "translated_name": {
+        "name": "Montada Islamic Foundation",
+        "language_name": "english"
+      }
+    },
+    {
+      "id": 45,
+      "name": "Russian Translation ( Elmir Kuliev )",
+      "author_name": "Elmir Kuliev",
+      "slug": "quran.ru.kuliev",
+      "language_name": "russian",
+      "translated_name": {
+        "name": "Russian Translation ( Elmir Kuliev )",
+        "language_name": "english"
+      }
+    },
+    {
+      "id": 56,
+      "name": "Chinese Translation (Simplified) - Ma Jain",
+      "author_name": "Ma Jian",
+      "slug": "quran.zh.ma.jain",
+      "language_name": "chinese",
+      "translated_name": {
+        "name": "Chinese Translation (Simplified) - Ma Jain",
+        "language_name": "english"
+      }
+    },
+    {
+      "id": 31,
+      "name": "Muhammad Hamidullah",
+      "author_name": "Muhammad Hamidullah",
+      "slug": "quran.fr.hamidullah",
+      "language_name": "french",
+      "translated_name": {
+        "name": "Muhammad Hamidullah",
+        "language_name": "english"
+      }
+    },
+    {
+      "id": 208,
+      "name": "Abu Reda Muhammad ibn Ahmad",
+      "author_name": "Abu Reda Muhammad ibn Ahmad",
+      "slug": null,
+      "language_name": "german",
+      "translated_name": {
+        "name": "Abu Reda Muhammad ibn Ahmad",
+        "language_name": "english"
+      }
+    },
+    {
+      "id": 109,
+      "name": "Muhammad Makin",
+      "author_name": "Muhammad Makin",
+      "slug": null,
+      "language_name": "chinese",
+      "translated_name": {
+        "name": "Muhammad Makin",
+        "language_name": "english"
+      }
+    },
+    {
+      "id": 27,
+      "name": "Frank Bubenheim and Nadeem",
+      "author_name": "Frank Bubenheim and Nadeem",
+      "slug": "de-bubenheim",
+      "language_name": "german",
+      "translated_name": {
+        "name": "Frank Bubenheim and Nadeem",
+        "language_name": "english"
+      }
+    }
+  ]
+}

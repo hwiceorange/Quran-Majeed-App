@@ -3,11 +3,19 @@
     "en": [
       {
         "key": "en-tafisr-ibn-kathir",
-        "name": "Tafsir Ibn Kathir",
+        "name": "Ibn Kathir (Abridged)",
         "author": "Ibn Kathir",
         "langCode": "en",
         "langName": "english",
         "slug": "en-tafisr-ibn-kathir"
+      },
+      {
+        "key": "en-tafsir-maarif-ul-quran",
+        "name": "Ma'arif al-Qur'an",
+        "author": "Mufti Muhammad Shafi",
+        "langCode": "en",
+        "langName": "english",
+        "slug": "en-tafsir-maarif-ul-quran"
       }
     ],
     "id": [
@@ -28,6 +36,84 @@
         "langCode": "ar",
         "langName": "arabic",
         "slug": "ar-tafsir-muyassar"
+      },
+      {
+        "key": "ar-tafsir-ibn-kathir",
+        "name": "Tafsir Ibn Kathir",
+        "author": "Ibn Kathir",
+        "langCode": "ar",
+        "langName": "arabic",
+        "slug": "ar-tafsir-ibn-kathir"
+      },
+      {
+        "key": "ar-tafsir-al-tabari",
+        "name": "Tafsir al-Tabari",
+        "author": "Al-Tabari",
+        "langCode": "ar",
+        "langName": "arabic",
+        "slug": "ar-tafsir-al-tabari"
+      }
+    ],
+    "bn": [
+      {
+        "key": "bn-tafseer-ibn-e-kaseer",
+        "name": "Tafseer ibn Kathir",
+        "author": "Tawheed Publication",
+        "langCode": "bn",
+        "langName": "bengali",
+        "slug": "bn-tafseer-ibn-e-kaseer"
+      },
+      {
+        "key": "bn-tafsir-ahsanul-bayaan",
+        "name": "Tafsir Ahsanul Bayaan",
+        "author": "Hafizur Rahman Seoharvi",
+        "langCode": "bn",
+        "langName": "bengali",
+        "slug": "bn-tafsir-ahsanul-bayaan"
+      },
+      {
+        "key": "bn-tafsir-abu-bakr-zakaria",
+        "name": "Tafsir Abu Bakr Zakaria",
+        "author": "Abu Bakr Muhammad Zakaria",
+        "langCode": "bn",
+        "langName": "bengali",
+        "slug": "bn-tafsir-abu-bakr-zakaria"
+      }
+    ],
+    "ur": [
+      {
+        "key": "tafsir-bayan-ul-quran",
+        "name": "Bayan ul Quran",
+        "author": "Dr. Israr Ahmed",
+        "langCode": "ur",
+        "langName": "urdu",
+        "slug": "tafsir-bayan-ul-quran"
+      },
+      {
+        "key": "tafseer-ibn-e-kaseer-urdu",
+        "name": "Tafsir Ibn Kathir",
+        "author": "Ibn Kathir",
+        "langCode": "ur",
+        "langName": "urdu",
+        "slug": "tafseer-ibn-e-kaseer-urdu"
+      },
+      {
+        "key": "tafsir-fe-zalul-quran-syed-qatab",
+        "name": "Fi Zilal al-Quran",
+        "author": "Syed Qutb",
+        "langCode": "ur",
+        "langName": "urdu",
+        "slug": "tafsir-fe-zalul-quran-syed-qatab"
+      }
+    ],
+    "ru": [
+      {
+        "key": "ru-tafseer-al-saddi",
+        "name": "Al-Sa'di",
+        "author": "Abd al-Rahman ibn Nasir al-Sa'di",
+        "langCode": "ru",
+        "langName": "russian",
+        "slug": "ru-tafseer-al-saddi"
       }
     ]
   }

@@ -1,0 +1,92 @@
+{
+  "translations": [
+    {
+      "id": 85,
+      "name": "M.A.S. Abdel Haleem",
+      "author_name": "Abdul Haleem",
+      "slug": "en-haleem",
+      "language_name": "english",
+      "translated_name": {
+        "name": "M.A.S. Abdel Haleem",
+        "language_name": "english"
+      }
+    },
+    {
+      "id": 149,
+      "name": "Fadel Soliman, Bridges’ translation",
+      "author_name": "Fadel Soliman",
+      "slug": "bridges-translation",
+      "language_name": "english",
+      "translated_name": {
+        "name": "Fadel Soliman, Bridges’ translation",
+        "language_name": "english"
+      }
+    },
+    {
+      "id": 84,
+      "name": "T. Usmani",
+      "author_name": "Mufti Taqi Usmani",
+      "slug": "en-taqi-usmani",
+      "language_name": "english",
+      "translated_name": {
+        "name": "T. Usmani",
+        "language_name": "english"
+      }
+    },
+    {
+      "id": 95,
+      "name": "A. Maududi (Tafhim commentary)",
+      "author_name": "Sayyid Abul Ala Maududi",
+      "slug": "en-al-maududi",
+      "language_name": "english",
+      "translated_name": {
+        "name": "A. Maududi (Tafhim commentary)",
+        "language_name": "english"
+      }
+    },
+    {
+      "id": 19,
+      "name": "M. Pickthall",
+      "author_name": "Mohammed Marmaduke William Pickthall",
+      "slug": "quran.en.pickthall",
+      "language_name": "english",
+      "translated_name": {
+        "name": "M. Pickthall",
+        "language_name": "english"
+      }
+    },
+    {
+      "id": 20,
+      "name": "Saheeh International",
+      "author_name": "Saheeh International",
+      "slug": "en-sahih-international",
+      "language_name": "english",
+      "translated_name": {
+        "name": "Saheeh International",
+        "language_name": "english"
+      }
+    },
+    {
+      "id": 135,
+      "name": "IslamHouse.com",
+      "author_name": "IslamHouse.com",
+      "slug": null,
+      "language_name": "persian",
+      "translated_name": {
+        "name": "IslamHouse.com",
+        "language_name": "english"
+      }
+    },
+    {
+      "id": 29,
+      "name": "Hussein Taji Kal Dari",
+      "author_name": "Hussein Taji Kal Dari",
+      "slug": "fr-hussein-taji",
+      "language_name": "persian",
+      "translated_name": {
+        "name": "Hussein Taji Kal Dari",
+        "language_name": "english"
+      }
+    }
+  ]
+}

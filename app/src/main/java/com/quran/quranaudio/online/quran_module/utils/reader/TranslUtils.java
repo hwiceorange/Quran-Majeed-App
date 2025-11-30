@@ -51,6 +51,15 @@ public class TranslUtils {
     public static final String TRANSL_SLUG_UR_JUNAGARHI = "in_junagarhi";
 
     public static final String TRANSL_SLUG_IN = "in_quran-complex";
+    
+    // Malay translation slug (Abdullah Basmeih - ID: 39)
+    public static final String TRANSL_SLUG_MS_ABDULLAH = "ms_39_abdullah";
+    
+    // Turkish translation slug (Diyanet İşleri - ID: 77)
+    public static final String TRANSL_SLUG_TR_DIYANET = "tr_77_diyanet";
+    
+    // Bengali translation slug (Taisirul Quran - ID: 161)
+    public static final String TRANSL_SLUG_BN_TAISIRUL = "bn_161_taisirul-quran";
 
 
     /**
@@ -153,6 +162,21 @@ public class TranslUtils {
                 // 阿拉伯语通常不需要翻译，但可以默认英语作为辅助
                 defTranslations.add(TRANSL_SLUG_EN_SAHIH_INTERNATIONAL);
                 android.util.Log.d("TranslUtils", "🌐 Auto-selected translation: English (for Arabic speakers)");
+                break;
+                
+            case "ms":  // 马来语
+                defTranslations.add(TRANSL_SLUG_MS_ABDULLAH);
+                android.util.Log.d("TranslUtils", "🌐 Auto-selected translation: Malay (Abdullah Basmeih)");
+                break;
+                
+            case "tr":  // 土耳其语
+                defTranslations.add(TRANSL_SLUG_TR_DIYANET);
+                android.util.Log.d("TranslUtils", "🌐 Auto-selected translation: Turkish (Diyanet İşleri)");
+                break;
+                
+            case "bn":  // 孟加拉语
+                defTranslations.add(TRANSL_SLUG_BN_TAISIRUL);
+                android.util.Log.d("TranslUtils", "🌐 Auto-selected translation: Bengali (Taisirul Quran)");
                 break;
                 
             default:    // 其他语言：默认使用英语译本

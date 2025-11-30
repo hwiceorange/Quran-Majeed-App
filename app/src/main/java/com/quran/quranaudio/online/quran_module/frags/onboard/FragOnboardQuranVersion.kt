@@ -15,9 +15,11 @@ import com.quran.quranaudio.online.databinding.FragmentOnboardQuranVersionSelect
 import com.quran.quranaudio.online.prayertimes.preferences.PreferencesConstants
 import com.quran.quranaudio.online.prayertimes.ui.MainActivity
 import com.quran.quranaudio.online.quran_module.api.RetrofitInstance
+import com.quran.quranaudio.online.quran_module.components.quran.subcomponents.QuranTranslBookInfo
 import com.quran.quranaudio.online.quran_module.data.LocalTranslationData
 import com.quran.quranaudio.online.quran_module.models.QuranTranslationVersion
 import com.quran.quranaudio.online.quran_module.utils.reader.TranslUtils
+import com.quran.quranaudio.online.quran_module.utils.reader.factory.QuranTranslationFactory
 import com.quran.quranaudio.online.quran_module.utils.services.TranslationDownloadService
 import com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs
 import com.quran.quranaudio.online.quran_module.utils.univ.FileUtils
@@ -758,10 +760,63 @@ class FragOnboardQuranVersion : FragOnboardBase() {
         
         // 验证保存
         val saved = prefs.getStringSet(TranslUtils.KEY_TRANSLATIONS, null)
-        android.util.Log.d("FragOnboardQuranVersion", "   ✅ 已保存到 SharedPreferences:")
+        android.util.Log.d("FragOnboardQuranVersion", "   ✅ 已保存翻译到 SharedPreferences:")
         android.util.Log.d("FragOnboardQuranVersion", "   Key: ${TranslUtils.KEY_TRANSLATIONS}")
         android.util.Log.d("FragOnboardQuranVersion", "   Value: $saved")
+        
+        // 🆕 同时配置对应语言的默认 Tafsir（注释）
+        configureDefaultTafsir(version.languageCode)
+        
         android.util.Log.d("FragOnboardQuranVersion", "═══════════════════════════════════════════════")
+    }
+    
+    /**
+     * 根据选择的语言配置默认的 Tafsir（注释）
+     */
+    private fun configureDefaultTafsir(languageCode: String) {
+        android.util.Log.d("FragOnboardQuranVersion", "📖 配置默认 Tafsir...")
+        android.util.Log.d("FragOnboardQuranVersion", "   目标语言: $languageCode")
+        
+        // 准备 Tafsir Manager（加载可用的 Tafsir 列表）
+        com.quran.quranaudio.online.quran_module.utils.reader.tafsir.TafsirManager.prepare(
+            requireContext(),
+            false  // 不强制刷新，使用缓存
+        ) {
+            val availableTafsirs = com.quran.quranaudio.online.quran_module.utils.reader.tafsir.TafsirManager.getModels()
+            
+            if (availableTafsirs.isNullOrEmpty()) {
+                android.util.Log.w("FragOnboardQuranVersion", "   ⚠️ 没有可用的 Tafsir")
+                return@prepare Unit
+            }
+            
+            // 根据语言选择最佳的 Tafsir
+            val tafsirKey = com.quran.quranaudio.online.quran_module.utils.tafsir.TafsirLanguageMapper.pickBestTafsirKey(
+                languageCode,
+                availableTafsirs
+            )
+            
+            if (tafsirKey != null) {
+                android.util.Log.d("FragOnboardQuranVersion", "   ✅ 选择的 Tafsir: $tafsirKey")
+                
+                // 保存到 SharedPreferences
+                com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPReader.setSavedTafsirKey(
+                    requireContext(),
+                    tafsirKey
+                )
+                
+                // 验证保存
+                val savedTafsir = com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPReader.getSavedTafsirKey(requireContext())
+                android.util.Log.d("FragOnboardQuranVersion", "   ✅ Tafsir 已保存: $savedTafsir")
+                
+                // 获取 Tafsir 名称用于日志
+                val tafsirName = com.quran.quranaudio.online.quran_module.utils.tafsir.TafsirUtils.getTafsirName(tafsirKey)
+                android.util.Log.d("FragOnboardQuranVersion", "   📖 Tafsir 名称: $tafsirName")
+            } else {
+                android.util.Log.w("FragOnboardQuranVersion", "   ⚠️ 没有找到适合语言 '$languageCode' 的 Tafsir")
+            }
+            
+            Unit
+        }
     }
     
     /**
@@ -812,25 +867,119 @@ class FragOnboardQuranVersion : FragOnboardBase() {
     
     /**
      * 从 Quran Foundation API 下载翻译
+     * 
+     * ⚠️ 优化：逐章下载并立即保存，用户可以立即查看已下载的章节
      */
     private fun downloadFromQuranFoundation(version: QuranTranslationVersion) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                android.util.Log.d("FragOnboardQuranVersion", "🔄 Fetching translation from Quran Foundation API: ID ${version.numericId}")
+                android.util.Log.d("FragOnboardQuranVersion", "═══════════════════════════════════════════════")
+                android.util.Log.d("FragOnboardQuranVersion", "🔄 Downloading translation from Quran Foundation API")
+                android.util.Log.d("FragOnboardQuranVersion", "   Translation ID: ${version.numericId}")
+                android.util.Log.d("FragOnboardQuranVersion", "   Version: ${version.displayName}")
+                android.util.Log.d("FragOnboardQuranVersion", "   Strategy: Download chapter by chapter, save immediately")
                 
-                // 调用 Quran Foundation API 获取完整翻译数据
-                val responseBody = RetrofitInstance.quranFoundation.getQuranTranslation(version.numericId)
-                val jsonString = responseBody.string()
+                // 创建 QuranTranslBookInfo（数据库需要）
+                val bookInfo = com.quran.quranaudio.online.quran_module.components.quran.subcomponents.QuranTranslBookInfo(version.versionId).apply {
+                    bookName = version.bookName ?: version.displayName
+                    authorName = version.authorName ?: ""
+                    displayName = version.displayName
+                    langName = version.languageName
+                    langCode = version.languageCode
+                }
                 
-                // 保存到本地文件
-                val fileUtils = FileUtils.newInstance(requireContext())
-                val localFile = File(fileUtils.translationDir, version.getLocalFileName())
-                localFile.writeText(jsonString)
+                android.util.Log.d("FragOnboardQuranVersion", "   📊 QuranTranslBookInfo: slug='${bookInfo.slug}'")
                 
-                android.util.Log.d("FragOnboardQuranVersion", "✅ Translation downloaded successfully: ${localFile.absolutePath}")
+                // 打开数据库连接（保持连接以提高性能）
+                val factory = QuranTranslationFactory(requireContext())
+                val db = factory.dbHelper.writableDatabase
+                
+                try {
+                    // 先保存翻译信息到元数据表
+                    factory.dbHelper.storeTranslationInfo(bookInfo, db)
+                    
+                    // 创建翻译数据表
+                    factory.dbHelper.createTranslTable(db, bookInfo)
+                    
+                    android.util.Log.d("FragOnboardQuranVersion", "   ✅ Database table created: ${bookInfo.slug}")
+                    android.util.Log.d("FragOnboardQuranVersion", "   🚀 Starting chapter-by-chapter download...")
+                    
+                    var totalVerses = 0
+                    
+                    // 逐章下载并立即保存
+                    for (chapterNo in 1..114) {
+                        var retryCount = 0
+                        var success = false
+                        
+                        while (!success && retryCount < 3) {
+                            try {
+                                // 下载单个章节
+                                val url = "https://api.quran.com/api/v4/verses/by_chapter/$chapterNo?translations=${version.numericId}"
+                                val response = java.net.URL(url).readText()
+                                val json = org.json.JSONObject(response)
+                                val verses = json.getJSONArray("verses")
+                                
+                                // 立即插入到数据库
+                                for (i in 0 until verses.length()) {
+                                    val verseObj = verses.getJSONObject(i)
+                                    val translations = verseObj.getJSONArray("translations")
+                                    
+                                    if (translations.length() > 0) {
+                                        val translation = translations.getJSONObject(0)
+                                        val verseKey = verseObj.getString("verse_key")
+                                        val verseNo = verseKey.split(":")[1].toInt()
+                                        
+                                        // 直接插入数据库
+                                        factory.dbHelper.insertTranslationQuery(
+                                            db,
+                                            bookInfo.slug,
+                                            chapterNo,
+                                            verseNo,
+                                            translation.getString("text"),
+                                            "[]" // footnotes
+                                        )
+                                        totalVerses++
+                                    }
+                                }
+                                
+                                success = true
+                                
+                                // 每下载完一章就显示进度
+                                if (chapterNo == 1 || chapterNo % 10 == 0 || chapterNo == 114) {
+                                    android.util.Log.d("FragOnboardQuranVersion", "   📥 Progress: $chapterNo/114 chapters ($totalVerses verses) ✅ Available now!")
+                                }
+                                
+                            } catch (e: Exception) {
+                                retryCount++
+                                android.util.Log.w("FragOnboardQuranVersion", "   ⚠️ Failed chapter $chapterNo (attempt $retryCount/3): ${e.message}")
+                                if (retryCount < 3) {
+                                    Thread.sleep(2000)
+                                } else {
+                                    android.util.Log.e("FragOnboardQuranVersion", "   ❌ Chapter $chapterNo failed after 3 attempts")
+                                    throw e
+                                }
+                            }
+                        }
+                    }
+                    
+                    android.util.Log.d("FragOnboardQuranVersion", "   ✅ All chapters downloaded: 114 chapters, $totalVerses verses")
+                    
+                    // 验证保存的数据
+                    val allTransls = factory.getAvailableTranslationBooksInfo()
+                    android.util.Log.d("FragOnboardQuranVersion", "   📋 All translations in database (${allTransls.size}):")
+                    allTransls.values.forEach { transl ->
+                        android.util.Log.d("FragOnboardQuranVersion", "      - slug: '${transl.slug}', displayName: '${transl.displayName}'")
+                    }
+                    
+                } finally {
+                    db.close()
+                    factory.close()
+                }
+                
+                android.util.Log.d("FragOnboardQuranVersion", "═══════════════════════════════════════════════")
                 
                 withContext(Dispatchers.Main) {
-                    // 可以在这里显示下载成功的提示
+                    // 显示下载成功的提示
                     android.widget.Toast.makeText(
                         requireContext(),
                         "Translation downloaded: ${version.displayName}",
@@ -839,13 +988,16 @@ class FragOnboardQuranVersion : FragOnboardBase() {
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+                android.util.Log.e("FragOnboardQuranVersion", "═══════════════════════════════════════════════")
                 android.util.Log.e("FragOnboardQuranVersion", "❌ Failed to download from Quran Foundation API", e)
+                android.util.Log.e("FragOnboardQuranVersion", "   Error: ${e.message}")
+                android.util.Log.e("FragOnboardQuranVersion", "═══════════════════════════════════════════════")
                 
                 withContext(Dispatchers.Main) {
                     android.widget.Toast.makeText(
                         requireContext(),
-                        "Failed to download translation",
-                        android.widget.Toast.LENGTH_SHORT
+                        "Failed to download translation: ${e.message}",
+                        android.widget.Toast.LENGTH_LONG
                     ).show()
                 }
             }
