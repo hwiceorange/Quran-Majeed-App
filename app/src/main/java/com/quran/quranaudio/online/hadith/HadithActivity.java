@@ -28,10 +28,11 @@ import android.widget.RelativeLayout;
 import com.quran.quranaudio.online.hadith.book.BookFragment;
 import com.quran.quranaudio.online.hadith.bookmark.BookmarkFragment;
 import com.quran.quranaudio.online.hadith.data.HadithDataHelper;
-import com.quran.quranaudio.online.hadith.data.HadithDownloadDialog;
 import com.quran.quranaudio.online.hadith.search.Hadith_SearchActivity;
 import com.quran.quranaudio.online.hadith.settings.SettingsActivity;
 import com.quran.quranaudio.online.R;
+
+import android.app.ProgressDialog;
 // import com.quran.quranaudio.online.ads.data.Constant; // 广告常量导入已移除
 import com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs;
 
@@ -152,29 +153,34 @@ public class HadithActivity extends AppCompatActivity {
      * 检查阿拉伯语圣训数据是否可用，如果不可用则自动下载
      * Arabic hadith data is required for all Hadith functionality
      */
+    @SuppressWarnings("deprecation")
     private void checkAndDownloadArabicHadith() {
         if (HadithDataHelper.isArabicAvailable(this)) {
             // Arabic data already available
             return;
         }
         
-        // Show download dialog
-        HadithDownloadDialog downloadDialog = new HadithDownloadDialog(this);
-        downloadDialog.setCancelable(false);
-        downloadDialog.show();
-        downloadDialog.setMessage(getString(R.string.downloading_hadith_arabic));
+        // Show download progress dialog
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle(getString(R.string.downloading));
+        progressDialog.setMessage(getString(R.string.downloading_hadith_arabic));
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setMax(100);
+        progressDialog.setProgress(0);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         
         HadithDataHelper.ensureArabicAvailable(
             this,
             progress -> {
                 // Update progress
-                runOnUiThread(() -> downloadDialog.updateProgress(progress));
+                runOnUiThread(() -> progressDialog.setProgress(progress));
             },
             success -> {
                 runOnUiThread(() -> {
-                    downloadDialog.dismiss();
+                    progressDialog.dismiss();
                     if (!success) {
-                        // Show error and close activity
+                        // Show error and offer retry
                         new androidx.appcompat.app.AlertDialog.Builder(this)
                             .setTitle(R.string.downloading_failed)
                             .setMessage(R.string.hadith_download_failed_message)
