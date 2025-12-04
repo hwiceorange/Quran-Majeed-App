@@ -61,6 +61,39 @@ public class HadithDataHelper {
     }
     
     /**
+     * Check if Arabic (base language) is available
+     * Arabic is required for all Hadith functionality
+     */
+    public static boolean isArabicAvailable(@NonNull Context context) {
+        HadithDataManager manager = HadithDataManager.Companion.getInstance(context);
+        return manager.isLanguageFullyDownloaded("ara");
+    }
+    
+    /**
+     * Ensure Arabic hadith data is available
+     * This should be called when entering the Hadith module
+     * Downloads Arabic data if not available
+     */
+    public static void ensureArabicAvailable(
+            @NonNull Context context,
+            @Nullable ProgressCallback progressCallback,
+            @Nullable CompletionCallback completionCallback
+    ) {
+        if (isArabicAvailable(context)) {
+            if (progressCallback != null) {
+                progressCallback.onProgress(100);
+            }
+            if (completionCallback != null) {
+                completionCallback.onComplete(true);
+            }
+            return;
+        }
+        
+        // Download Arabic hadith data
+        downloadLanguage(context, "ara", progressCallback, completionCallback);
+    }
+    
+    /**
      * Download hadith data for a language asynchronously
      */
     public static void downloadLanguage(

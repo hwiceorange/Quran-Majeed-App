@@ -703,9 +703,11 @@
     <string name="six_kalmas">الكلمات الست</string>
     <string name="kalmas" translatable="false">Kalmas</string>
     <string name="share_kalma" translatable="false">Share Kalma</string>
-    <string name="downloading_failed">Downloading Failed</string>
-    <string name="downloading">Downloading:</string>
-    <string name="please_wait">Please Wait.</string>
+    <string name="downloading_failed">فشل التحميل</string>
+    <string name="downloading">جارٍ التحميل:</string>
+    <string name="please_wait">يرجى الانتظار.</string>
+    <string name="downloading_hadith_arabic">جارٍ تحميل بيانات الحديث…</string>
+    <string name="hadith_download_failed_message">فشل تحميل بيانات الحديث. يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى.</string>
     <string name="downloading_download_progress">Download Progress</string>
     <string name="downloading_start_downloading">Start Downloading.</string>
     <string name="downloading_mb">MB</string>

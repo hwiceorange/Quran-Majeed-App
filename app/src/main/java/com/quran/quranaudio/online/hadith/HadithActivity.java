@@ -27,6 +27,8 @@ import android.widget.RelativeLayout;
 // import com.raiadnan.ads.sdk.format.BannerAd; // 广告导入已移除
 import com.quran.quranaudio.online.hadith.book.BookFragment;
 import com.quran.quranaudio.online.hadith.bookmark.BookmarkFragment;
+import com.quran.quranaudio.online.hadith.data.HadithDataHelper;
+import com.quran.quranaudio.online.hadith.data.HadithDownloadDialog;
 import com.quran.quranaudio.online.hadith.search.Hadith_SearchActivity;
 import com.quran.quranaudio.online.hadith.settings.SettingsActivity;
 import com.quran.quranaudio.online.R;
@@ -142,7 +144,52 @@ public class HadithActivity extends AppCompatActivity {
             startActivity(intent); //, ActivityOptions.makeCustomAnimation(this,android.R.anim.slide_in_left,android.R.anim.slide_out_right).toBundle()
         });
 
-        // 广告代码已移除
+        // 检查并下载阿拉伯语圣训数据（首次进入时自动下载）
+        checkAndDownloadArabicHadith();
+    }
+    
+    /**
+     * 检查阿拉伯语圣训数据是否可用，如果不可用则自动下载
+     * Arabic hadith data is required for all Hadith functionality
+     */
+    private void checkAndDownloadArabicHadith() {
+        if (HadithDataHelper.isArabicAvailable(this)) {
+            // Arabic data already available
+            return;
+        }
+        
+        // Show download dialog
+        HadithDownloadDialog downloadDialog = new HadithDownloadDialog(this);
+        downloadDialog.setCancelable(false);
+        downloadDialog.show();
+        downloadDialog.setMessage(getString(R.string.downloading_hadith_arabic));
+        
+        HadithDataHelper.ensureArabicAvailable(
+            this,
+            progress -> {
+                // Update progress
+                runOnUiThread(() -> downloadDialog.updateProgress(progress));
+            },
+            success -> {
+                runOnUiThread(() -> {
+                    downloadDialog.dismiss();
+                    if (!success) {
+                        // Show error and close activity
+                        new androidx.appcompat.app.AlertDialog.Builder(this)
+                            .setTitle(R.string.downloading_failed)
+                            .setMessage(R.string.hadith_download_failed_message)
+                            .setPositiveButton(R.string.retry, (dialog, which) -> {
+                                checkAndDownloadArabicHadith();
+                            })
+                            .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                                finish();
+                            })
+                            .setCancelable(false)
+                            .show();
+                    }
+                });
+            }
+        );
     }
 
     // loadBannerAd方法已移除

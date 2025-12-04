@@ -707,6 +707,8 @@ seperti: Waktu Sholat Global, metode perhitungan yang berbeda, notifikasi, memba
     <string name="downloading_failed">Gagal Mengunduh</string>
     <string name="downloading">Mengunduh:</string>
     <string name="please_wait">Silakan tunggu.</string>
+    <string name="downloading_hadith_arabic">Mengunduh Data Hadis…</string>
+    <string name="hadith_download_failed_message">Gagal mengunduh data Hadis. Silakan periksa koneksi internet Anda dan coba lagi.</string>
     <string name="downloading_download_progress">Progres Unduhan</string>
     <string name="downloading_start_downloading">Mulai Mengunduh.</string>
     <string name="downloading_mb">MB</string>

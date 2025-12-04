@@ -1131,6 +1131,8 @@
     <string name="downloading">Downloading:</string>
 
     <string name="please_wait">براہ کرم انتظار کریں۔</string>
+    <string name="downloading_hadith_arabic">حدیث ڈیٹا ڈاؤن لوڈ ہو رہا ہے…</string>
+    <string name="hadith_download_failed_message">حدیث ڈیٹا ڈاؤن لوڈ کرنے میں ناکامی۔ براہ کرم اپنا انٹرنیٹ کنکشن چیک کریں اور دوبارہ کوشش کریں۔</string>
 
     <string name="downloading_download_progress">Download Progress</string>
 

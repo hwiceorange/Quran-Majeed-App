@@ -15,11 +15,11 @@ import java.net.URL
  * Hadith Data Manager - Handles on-demand downloading of Hadith collections
  * 
  * Strategy:
- * - English (eng) hadith data is bundled with the app as default
- * - Arabic (ara) hadith data is always bundled (required for all languages)
- * - Other languages (urd, ind) are downloaded on first use
+ * - ALL hadith data (Arabic, Urdu, Indonesian) is downloaded on first use
+ * - Arabic is required and will be auto-downloaded when entering Hadith module
+ * - Other languages are downloaded when user selects them
  * 
- * This significantly reduces APK size by ~80MB while maintaining full functionality.
+ * This significantly reduces APK size by ~70MB while maintaining full functionality.
  */
 class HadithDataManager private constructor(private val context: Context) {
     
@@ -39,14 +39,16 @@ class HadithDataManager private constructor(private val context: Context) {
             "ibnmajah.min"
         )
         
-        // Languages bundled with app (always available offline)
-        // Only Arabic is bundled - required for showing original text
-        val BUNDLED_LANGUAGES = setOf("ara")
+        // No languages bundled with app - all downloaded on demand
+        val BUNDLED_LANGUAGES = emptySet<String>()
         
-        // Languages available for download from server
-        // urd (Urdu), ind (Indonesian)
-        // Note: English hadith data does not exist in this project
-        val DOWNLOADABLE_LANGUAGES = setOf("urd", "ind")
+        // All languages available for download from server
+        // ara (Arabic) - required, auto-downloaded when entering Hadith module
+        // urd (Urdu), ind (Indonesian) - downloaded when user selects
+        val DOWNLOADABLE_LANGUAGES = setOf("ara", "urd", "ind")
+        
+        // Arabic is the base language required for Hadith display
+        const val BASE_LANGUAGE = "ara"
         
         @Volatile
         private var instance: HadithDataManager? = null
@@ -298,10 +300,29 @@ class HadithDataManager private constructor(private val context: Context) {
      */
     fun getAvailableLanguages(): List<LanguageInfo> {
         return listOf(
-            LanguageInfo("ara", "Arabic", true, 100), // Always bundled
+            LanguageInfo("ara", "Arabic", isLanguageFullyDownloaded("ara"), getLanguageDownloadProgress("ara")),
             LanguageInfo("urd", "Urdu", isLanguageFullyDownloaded("urd"), getLanguageDownloadProgress("urd")),
             LanguageInfo("ind", "Indonesian", isLanguageFullyDownloaded("ind"), getLanguageDownloadProgress("ind"))
         )
+    }
+    
+    /**
+     * Check if Arabic (base language) is available
+     * Arabic is required for displaying original Hadith text
+     */
+    fun isArabicAvailable(): Boolean {
+        return isLanguageFullyDownloaded(BASE_LANGUAGE)
+    }
+    
+    /**
+     * Download Arabic hadith data (required for all Hadith functionality)
+     */
+    suspend fun ensureArabicAvailable(progressCallback: ((Int) -> Unit)? = null): Boolean {
+        if (isArabicAvailable()) {
+            progressCallback?.invoke(100)
+            return true
+        }
+        return downloadLanguage(BASE_LANGUAGE, progressCallback)
     }
     
     data class LanguageInfo(
