@@ -961,7 +961,7 @@ class FragOnboardQuranVersion : FragOnboardBase() {
                             }
                         }
                     }
-                    
+                
                     android.util.Log.d("FragOnboardQuranVersion", "   ✅ All chapters downloaded: 114 chapters, $totalVerses verses")
                     
                     // 验证保存的数据

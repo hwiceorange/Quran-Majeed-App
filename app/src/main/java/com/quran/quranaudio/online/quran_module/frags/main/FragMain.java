@@ -475,11 +475,11 @@ public class FragMain extends BaseFragment {
         // Quiz module temporarily disabled
         // initializeQuizModule();
         
-        // Initialize Mecca Live Card
-        initializeMeccaLiveCard();
+        // Initialize Mecca Live Card - HIDDEN
+        // initializeMeccaLiveCard();
         
-        // Initialize Medina Live Card
-        initializeMedinaLiveCard();
+        // Initialize Medina Live Card - HIDDEN
+        // initializeMedinaLiveCard();
         
         // Initialize Daily Quests Feature
         initializeDailyQuests();
@@ -578,49 +578,10 @@ public class FragMain extends BaseFragment {
                 // Ad calls removed
             }
         });
-        mBinding.meccaLive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Backup live stream URL list
-                String[] meccaLiveUrls = {
-                    "http://m.live.net.sa:1935/live/quran/playlist.m3u8", // Original URL
-                    "https://ythls.armelin.one/channel/UCos52-JmjOoBnBOnxJCWAQA.m3u8", // Mecca Live YouTube to HLS
-                    "https://www.youtube.com/watch?v=e85tJVzKwDU", // YouTube backup 1
-                    "https://www.youtube.com/watch?v=yd19lGSibQ4"  // YouTube backup 2
-                };
-                
-                String selectedUrl = meccaLiveUrls[0]; // Use first URL by default
-                Log.d("FragMain", "Mecca Live URL: " + selectedUrl);
-                Log.d("FragMain", "Available backup URLs: " + java.util.Arrays.toString(meccaLiveUrls));
-                
-                Intent intent = new Intent(getActivity(), LiveActivity.class);
-                intent.putExtra("live", selectedUrl);
-                intent.putExtra("backup_urls", meccaLiveUrls);
-                startActivity(intent);
-            }
-        });
-        mBinding.medinaLive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Backup live stream URL list (HLS streaming priority for in-app playback)
-                String[] medinaLiveUrls = {
-                    "http://m.live.net.sa:1935/live/sunnah/playlist.m3u8", // Original HLS URL (priority)
-                    "https://ythls.armelin.one/channel/UCJr4gikBowJ8I-iUXs7CkMg.m3u8", // YouTube to HLS
-                    "https://www.youtube.com/watch?v=4s4XX-qaNgg", // YouTube live backup 1
-                    "https://www.youtube.com/watch?v=0lg0XeJ2gAU", // YouTube live backup 2
-                    "https://www.youtube.com/watch?v=4Ar8JHRCdSE" // YouTube live backup 3
-                };
-                
-                String selectedUrl = medinaLiveUrls[0]; // Use first URL by default (HLS streaming)
-                Log.d("FragMain", "Medina Live URL: " + selectedUrl);
-                Log.d("FragMain", "Available backup URLs: " + java.util.Arrays.toString(medinaLiveUrls));
-                
-                Intent intent = new Intent(getActivity(), LiveActivity.class);
-                intent.putExtra("live", selectedUrl);
-                intent.putExtra("backup_urls", medinaLiveUrls);
-                startActivity(intent);
-            }
-        });
+        
+        // Note: Mecca Live and Medina Live click listeners are now handled in 
+        // initializeMeccaLiveCard() and initializeMedinaLiveCard() methods
+        // The old mBinding.meccaLive and mBinding.medinaLive views are deprecated
 
         // Ad code removed
 
@@ -1874,15 +1835,22 @@ public class FragMain extends BaseFragment {
     private void initializeMeccaLiveCard() {
         try {
             View rootView = mBinding.getRoot();
-            View meccaCard = rootView.findViewById(R.id.mecca_live_card);
+            View meccaCardContainer = rootView.findViewById(R.id.mecca_live_card);
             
+            if (meccaCardContainer == null) {
+                Log.w(TAG, "Mecca Live card container not found");
+                return;
+            }
+            
+            // Find the actual CardView inside the container
+            View meccaCard = meccaCardContainer.findViewById(R.id.mecca_live_card_root);
             if (meccaCard == null) {
-                Log.w(TAG, "Mecca Live card not found");
+                Log.w(TAG, "Mecca Live card root not found");
                 return;
             }
             
             // Find viewer count TextView
-            TextView tvViewers = meccaCard.findViewById(R.id.mecca_live_viewers);
+            TextView tvViewers = meccaCardContainer.findViewById(R.id.mecca_live_viewers);
             
             // Generate random viewer count (795-13849)
             int viewerCount = 795 + new java.util.Random().nextInt(13849 - 795 + 1);
@@ -1899,7 +1867,7 @@ public class FragMain extends BaseFragment {
                 "https://www.youtube.com/watch?v=21rf6-horn4"
             };
             
-            // Click entire card to launch LiveActivity
+            // Click CardView to launch LiveActivity
             meccaCard.setOnClickListener(v -> {
                 try {
                     Intent intent = new Intent(requireActivity(), LiveActivity.class);
@@ -1926,15 +1894,22 @@ public class FragMain extends BaseFragment {
     private void initializeMedinaLiveCard() {
         try {
             View rootView = mBinding.getRoot();
-            View medinaCard = rootView.findViewById(R.id.medina_live_card);
+            View medinaCardContainer = rootView.findViewById(R.id.medina_live_card);
             
+            if (medinaCardContainer == null) {
+                Log.w(TAG, "Medina Live card container not found");
+                return;
+            }
+            
+            // Find the actual CardView inside the container
+            View medinaCard = medinaCardContainer.findViewById(R.id.medina_live_card_root);
             if (medinaCard == null) {
-                Log.w(TAG, "Medina Live card not found");
+                Log.w(TAG, "Medina Live card root not found");
                 return;
             }
             
             // Find viewer count TextView
-            TextView tvViewers = medinaCard.findViewById(R.id.medina_live_viewers);
+            TextView tvViewers = medinaCardContainer.findViewById(R.id.medina_live_viewers);
             
             // Generate random viewer count (135-8523)
             int viewerCount = 135 + new java.util.Random().nextInt(8523 - 135 + 1);
@@ -1951,7 +1926,7 @@ public class FragMain extends BaseFragment {
                 "https://www.youtube.com/watch?v=4Ar8JHRCdSE"
             };
             
-            // Click entire card to launch LiveActivity
+            // Click CardView to launch LiveActivity
             medinaCard.setOnClickListener(v -> {
                 try {
                     Intent intent = new Intent(requireActivity(), LiveActivity.class);

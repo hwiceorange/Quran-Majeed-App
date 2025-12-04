@@ -2197,4 +2197,35 @@
     <string name="missed">Kaçırıldı</string>
     <string name="great_consistency">Harika Tutarlılık!</string>
     <string name="keep_up_the_good_work">İyi işlere devam et</string>
+
+    <!-- Rewarded Ad Loading Dialog -->
+    <string name="loading_ad">Reklam Yükleniyor…</string>
+    <string name="please_wait_seconds">Lütfen %d saniye bekleyin…</string>
+    <string name="you_can_close_now">Şimdi kapatabilirsiniz</string>
+    <string name="ad_not_ready">Reklam Hazır Değil</string>
+    <string name="ad_not_ready_message">Reklam henüz hazır değil. Lütfen daha sonra tekrar deneyin.</string>
+    <string name="retry">Tekrar Dene</string>
+    
+    <!-- Prayer Log Bottom Sheet -->
+    <string name="prayer_log_title">Namaz Kaydet</string>
+    <string name="prayer_log_prayer_label">Namaz</string>
+    <string name="prayer_log_status_label">Durum</string>
+    <string name="prayer_log_status_ada">Ada\'</string>
+    <string name="prayer_log_status_qada">Kaza</string>
+    <string name="prayer_log_status_missed">Kaçırıldı</string>
+    <string name="prayer_log_prayed_at">Kılındığı Zaman</string>
+    <string name="prayer_log_recorded_at">Kaydedildiği Zaman</string>
+    <string name="prayer_log_notes_label">Notlar</string>
+    <string name="prayer_log_tag_mosque">Camide</string>
+    <string name="prayer_log_tag_traveling">Seyahatte</string>
+    <string name="prayer_log_tag_family">Aile ile</string>
+    <string name="prayer_log_notes_hint">Ayrıntı ekle…</string>
+    <string name="prayer_log_saving">Kaydediliyor…</string>
+    <string name="prayer_log_save">Kaydet</string>
+    <string name="prayer_log_updated">%s namazı başarıyla güncellendi</string>
+    <string name="prayer_log_saved">%s namazı başarıyla kaydedildi</string>
+    <string name="prayer_log_failed_load">Namaz kaydı yüklenemedi</string>
+    <string name="prayer_log_failed_save">Kaydetme başarısız: %s</string>
+    <string name="prayer_log_failed_update">Güncelleme başarısız: %s</string>
+    <string name="prayer_log_login_required">Namaz kayıtlarını kaydetmek için giriş yapın</string>
 </resources>

@@ -16,7 +16,7 @@
 #   public *;
 #}
 -optimizationpasses 5
--dontoptimize
+# -dontoptimize  # Removed to enable code optimization for smaller APK size
 -dontusemixedcaseclassnames
 -dontskipnonpubliclibraryclasses
 -dontpreverify

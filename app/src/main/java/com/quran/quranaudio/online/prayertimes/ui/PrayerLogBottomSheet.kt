@@ -145,7 +145,7 @@ class PrayerLogBottomSheet : BottomSheetDialogFragment() {
                 android.util.Log.e("PrayerLog", "❌ Error loading existing log", e)
                 // ✅ 安全检查
                 if (_binding != null) {
-                    Toast.makeText(requireContext(), "Failed to load prayer log", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.prayer_log_failed_load), Toast.LENGTH_SHORT).show()
                 }
             }
     }
@@ -240,55 +240,32 @@ class PrayerLogBottomSheet : BottomSheetDialogFragment() {
     private fun setupChipListeners() {
         android.util.Log.d("PrayerLog", "📍 setupChipListeners() called")
         
-        // 🔧 关键修复：禁用 ChipGroup 的自动选择管理，改为手动管理
-        // 这样可以避免全局样式（singleSelection=true）的干扰
-        
-        // 🔧 修复：确保 ChipGroup 不拦截点击事件
-        binding.chipGroupTags.isFocusable = false
-        binding.chipGroupTags.isClickable = false
-        
+        // 使用 Filter Chip 样式，支持多选
+        // 标签使用本地化的字符串资源，但存储时使用英文键值
         val chips = listOf(
-            binding.chipMosque to "At Mosque",
-            binding.chipTraveling to "Traveling",
-            binding.chipFamily to "With Family"
+            Triple(binding.chipMosque, getString(R.string.prayer_log_tag_mosque), "At Mosque"),
+            Triple(binding.chipTraveling, getString(R.string.prayer_log_tag_traveling), "Traveling"),
+            Triple(binding.chipFamily, getString(R.string.prayer_log_tag_family), "With Family")
         )
 
-        chips.forEach { (chip, tag) ->
-            android.util.Log.d("PrayerLog", "🔧 Setting up listener for chip: $tag")
-            android.util.Log.d("PrayerLog", "  clickable=${chip.isClickable}, focusable=${chip.isFocusable}, checkable=${chip.isCheckable}")
+        chips.forEach { (chip, displayText, tagKey) ->
+            android.util.Log.d("PrayerLog", "🔧 Setting up listener for chip: $tagKey")
             
-            // 确保 chip 可以点击
-            chip.isClickable = true
-            chip.isFocusable = true
-            chip.isCheckable = true
-            
-            // 使用 setOnClickListener 而不是 setOnCheckedChangeListener
-            // 因为 ChipGroup 的 singleSelection 模式会干扰 setOnCheckedChangeListener
-            chip.setOnClickListener {
-                android.util.Log.d("PrayerLog", "🔘 Chip clicked: $tag, current checked: ${chip.isChecked}")
+            // 使用 setOnCheckedChangeListener 来处理选中状态变化
+            chip.setOnCheckedChangeListener { _, isChecked ->
+                android.util.Log.d("PrayerLog", "🔘 Chip changed: $tagKey, isChecked: $isChecked")
                 
-                // 手动切换选中状态
-                if (chip.isChecked) {
-                    // 当前是选中状态，点击后取消选中
-                    chip.isChecked = false
-                    selectedTags.remove(tag)
-                    android.util.Log.d("PrayerLog", "❌ Tag unselected: $tag")
-                } else {
-                    // 当前是未选中状态，点击后选中
-                    chip.isChecked = true
-                    if (!selectedTags.contains(tag)) {
-                        selectedTags.add(tag)
+                if (isChecked) {
+                    if (!selectedTags.contains(tagKey)) {
+                        selectedTags.add(tagKey)
+                        android.util.Log.d("PrayerLog", "✅ Tag selected: $tagKey")
                     }
-                    android.util.Log.d("PrayerLog", "✅ Tag selected: $tag")
+                } else {
+                    selectedTags.remove(tagKey)
+                    android.util.Log.d("PrayerLog", "❌ Tag unselected: $tagKey")
                 }
                 
                 android.util.Log.d("PrayerLog", "📋 Selected tags: $selectedTags")
-            }
-            
-            // 🔧 添加触摸事件监听用于调试
-            chip.setOnTouchListener { v, event ->
-                android.util.Log.d("PrayerLog", "👆 Chip touched: $tag, action=${event.action}")
-                false // 返回 false 让事件继续传递
             }
         }
         
@@ -333,13 +310,13 @@ class PrayerLogBottomSheet : BottomSheetDialogFragment() {
     private fun savePrayerLog() {
         val currentUser = auth.currentUser
         if (currentUser == null) {
-            Toast.makeText(requireContext(), "Please login to save prayer logs", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.prayer_log_login_required), Toast.LENGTH_SHORT).show()
             return
         }
 
         // 禁用按钮防止重复点击
         binding.btnSave.isEnabled = false
-        binding.btnSave.text = "Saving..."
+        binding.btnSave.text = getString(R.string.prayer_log_saving)
 
         // 获取当前日期 (YYYY-MM-DD)
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
@@ -387,7 +364,7 @@ class PrayerLogBottomSheet : BottomSheetDialogFragment() {
                     
                     Toast.makeText(
                         requireContext(),
-                        "✅ $prayerName prayer updated successfully",
+                        getString(R.string.prayer_log_updated, prayerName),
                         Toast.LENGTH_SHORT
                     ).show()
                     
@@ -421,13 +398,13 @@ class PrayerLogBottomSheet : BottomSheetDialogFragment() {
                     
                     Toast.makeText(
                         requireContext(),
-                        "Failed to update: ${e.message}",
+                        getString(R.string.prayer_log_failed_update, e.message ?: ""),
                         Toast.LENGTH_SHORT
                     ).show()
                     
                     // 恢复按钮状态
                     binding.btnSave.isEnabled = true
-                    binding.btnSave.text = "Save"
+                    binding.btnSave.text = getString(R.string.prayer_log_save)
                 }
         } else {
             // 新建模式：先检查是否已存在该日期+祷告名称的记录
@@ -460,7 +437,7 @@ class PrayerLogBottomSheet : BottomSheetDialogFragment() {
                                 
                                 Toast.makeText(
                                     requireContext(),
-                                    "✅ $prayerName prayer updated successfully",
+                                    getString(R.string.prayer_log_updated, prayerName),
                                     Toast.LENGTH_SHORT
                                 ).show()
                                 
@@ -483,12 +460,12 @@ class PrayerLogBottomSheet : BottomSheetDialogFragment() {
                                 
                                 Toast.makeText(
                                     requireContext(),
-                                    "Failed to update: ${e.message}",
+                                    getString(R.string.prayer_log_failed_update, e.message ?: ""),
                                     Toast.LENGTH_SHORT
                                 ).show()
                                 
                                 binding.btnSave.isEnabled = true
-                                binding.btnSave.text = "Save"
+                                binding.btnSave.text = getString(R.string.prayer_log_save)
                             }
                     } else {
                         // ✅ 没有找到现有记录，创建新文档
@@ -503,7 +480,7 @@ class PrayerLogBottomSheet : BottomSheetDialogFragment() {
                                 
                                 Toast.makeText(
                                     requireContext(),
-                                    "✅ $prayerName prayer logged successfully",
+                                    getString(R.string.prayer_log_saved, prayerName),
                                     Toast.LENGTH_SHORT
                                 ).show()
                                 
@@ -535,12 +512,12 @@ class PrayerLogBottomSheet : BottomSheetDialogFragment() {
                                 
                                 Toast.makeText(
                                     requireContext(),
-                                    "Failed to save: ${e.message}",
+                                    getString(R.string.prayer_log_failed_save, e.message ?: ""),
                                     Toast.LENGTH_SHORT
                                 ).show()
                                 
                                 binding.btnSave.isEnabled = true
-                                binding.btnSave.text = "Save"
+                                binding.btnSave.text = getString(R.string.prayer_log_save)
                             }
                     }
                 }
@@ -549,12 +526,12 @@ class PrayerLogBottomSheet : BottomSheetDialogFragment() {
                     
                     Toast.makeText(
                         requireContext(),
-                        "Failed to check existing records: ${e.message}",
+                        getString(R.string.prayer_log_failed_save, e.message ?: ""),
                         Toast.LENGTH_SHORT
                     ).show()
                     
                     binding.btnSave.isEnabled = true
-                    binding.btnSave.text = "Save"
+                    binding.btnSave.text = getString(R.string.prayer_log_save)
                 }
         }
     }

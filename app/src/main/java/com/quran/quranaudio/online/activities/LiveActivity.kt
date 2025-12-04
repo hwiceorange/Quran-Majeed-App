@@ -29,7 +29,7 @@ class LiveActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
-        // 获取备用URL列表
+        // Get backup URL list
         backupUrls = intent.getStringArrayExtra("backup_urls")
         
         val liveView = findViewById<PlayerView>(R.id.live_view)
@@ -40,17 +40,17 @@ class LiveActivity : AppCompatActivity() {
             .build()
         liveView.player = player
         
-        // 尝试播放当前URL
+        // Try to play current URL
         tryPlayUrl(live)
         
-        // 添加播放器事件监听器
+        // Add player event listener
         player!!.addListener(object : Player.Listener {
             override fun onPlayerError(error: PlaybackException) {
                 super.onPlayerError(error)
                 android.util.Log.e("LiveActivity", "Player error: " + error.message)
                 android.util.Log.e("LiveActivity", "Error cause: " + error.cause?.message)
                 
-                // 尝试下一个备用URL
+                // Try next backup URL
                 tryNextUrl()
             }
             
@@ -82,21 +82,21 @@ class LiveActivity : AppCompatActivity() {
         
         if (url.isNullOrEmpty()) {
             android.util.Log.e("LiveActivity", "URL is null or empty!")
-            Toast.makeText(this, "直播URL为空", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, R.string.live_url_empty, Toast.LENGTH_LONG).show()
             return
         }
         
-        // 检查是否是YouTube URL
+        // Check if it's a YouTube URL
         if (url.contains("youtube.com") || url.contains("youtu.be")) {
             android.util.Log.d("LiveActivity", "YouTube URL detected, opening in browser/YouTube app")
             try {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                intent.setPackage("com.google.android.youtube") // 尝试使用YouTube app
+                intent.setPackage("com.google.android.youtube") // Try to use YouTube app
                 startActivity(intent)
-                finish() // 关闭当前Activity
+                finish() // Close current Activity
                 return
             } catch (e: Exception) {
-                // 如果YouTube app不存在，用浏览器打开
+                // If YouTube app doesn't exist, open in browser
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                 startActivity(intent)
                 finish()
@@ -104,7 +104,7 @@ class LiveActivity : AppCompatActivity() {
             }
         }
         
-        // 对于其他URL，使用ExoPlayer播放
+        // For other URLs, use ExoPlayer to play
         val mediaItem = MediaItem.Builder()
             .setUri(url)
             .build()
@@ -118,11 +118,11 @@ class LiveActivity : AppCompatActivity() {
             currentUrlIndex++
             val nextUrl = backupUrls!![currentUrlIndex]
             android.util.Log.d("LiveActivity", "Trying backup URL $currentUrlIndex: $nextUrl")
-            Toast.makeText(this, "尝试备用直播源 ${currentUrlIndex + 1}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.live_trying_backup, currentUrlIndex + 1), Toast.LENGTH_SHORT).show()
             tryPlayUrl(nextUrl)
         } else {
             android.util.Log.e("LiveActivity", "All URLs failed")
-            Toast.makeText(this, "所有直播源都无法连接", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, R.string.live_all_sources_failed, Toast.LENGTH_LONG).show()
         }
     }
 

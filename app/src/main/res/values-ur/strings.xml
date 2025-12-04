@@ -2198,4 +2198,35 @@
     <string name="great_consistency">بہترین استقامت!</string>
     <string name="keep_up_the_good_work">اچھا کام جاری رکھیں</string>
 
+    <!-- Rewarded Ad Loading Dialog -->
+    <string name="loading_ad">اشتہار لوڈ ہو رہا ہے…</string>
+    <string name="please_wait_seconds">براہ کرم %d سیکنڈ انتظار کریں…</string>
+    <string name="you_can_close_now">اب آپ بند کر سکتے ہیں</string>
+    <string name="ad_not_ready">اشتہار تیار نہیں</string>
+    <string name="ad_not_ready_message">اشتہار ابھی تک تیار نہیں ہے۔ براہ کرم بعد میں دوبارہ کوشش کریں۔</string>
+    <string name="retry">دوبارہ کوشش کریں</string>
+    
+    <!-- Prayer Log Bottom Sheet -->
+    <string name="prayer_log_title">نماز ریکارڈ کریں</string>
+    <string name="prayer_log_prayer_label">نماز</string>
+    <string name="prayer_log_status_label">حیثیت</string>
+    <string name="prayer_log_status_ada">ادا</string>
+    <string name="prayer_log_status_qada">قضا</string>
+    <string name="prayer_log_status_missed">چھوٹ گئی</string>
+    <string name="prayer_log_prayed_at">نماز کا وقت</string>
+    <string name="prayer_log_recorded_at">ریکارڈ کیا گیا</string>
+    <string name="prayer_log_notes_label">نوٹس</string>
+    <string name="prayer_log_tag_mosque">مسجد میں</string>
+    <string name="prayer_log_tag_traveling">سفر میں</string>
+    <string name="prayer_log_tag_family">خاندان کے ساتھ</string>
+    <string name="prayer_log_notes_hint">تفصیلات شامل کریں…</string>
+    <string name="prayer_log_saving">محفوظ ہو رہا ہے…</string>
+    <string name="prayer_log_save">محفوظ کریں</string>
+    <string name="prayer_log_updated">%s نماز کامیابی سے اپڈیٹ ہوئی</string>
+    <string name="prayer_log_saved">%s نماز کامیابی سے ریکارڈ ہوئی</string>
+    <string name="prayer_log_failed_load">نماز ریکارڈ لوڈ کرنے میں ناکامی</string>
+    <string name="prayer_log_failed_save">محفوظ کرنے میں ناکامی: %s</string>
+    <string name="prayer_log_failed_update">اپڈیٹ کرنے میں ناکامی: %s</string>
+    <string name="prayer_log_login_required">نماز ریکارڈ محفوظ کرنے کے لیے لاگ ان کریں</string>
+
 </resources>

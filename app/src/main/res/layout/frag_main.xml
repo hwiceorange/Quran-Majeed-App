@@ -72,15 +72,17 @@
                 layout="@layout/view_daily_quran_quiz"
                 android:visibility="gone" />
 
-            <!-- Mecca Live Card - 放在 Quiz Card 下方 -->
+            <!-- Mecca Live Card - HIDDEN -->
             <include
                 android:id="@+id/mecca_live_card"
-                layout="@layout/layout_mecca_live_card" />
+                layout="@layout/layout_mecca_live_card"
+                android:visibility="gone" />
 
-            <!-- Medina Live Card - 放在 Mecca Live Card 下方 -->
+            <!-- Medina Live Card - HIDDEN -->
             <include
                 android:id="@+id/medina_live_card"
-                layout="@layout/layout_medina_live_card" />
+                layout="@layout/layout_medina_live_card"
+                android:visibility="gone" />
 
             <FrameLayout
                 android:id="@+id/appUpdateContainer"

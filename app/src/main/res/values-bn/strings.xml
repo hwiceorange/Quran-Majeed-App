@@ -2207,4 +2207,35 @@
     <string name="surah_format">%d. %s</string>
     <string name="juz_format">পারা %d</string>
     <string name="page_format">পৃষ্ঠা %d</string>
+
+    <!-- Rewarded Ad Loading Dialog -->
+    <string name="loading_ad">বিজ্ঞাপন লোড হচ্ছে…</string>
+    <string name="please_wait_seconds">অনুগ্রহ করে %d সেকেন্ড অপেক্ষা করুন…</string>
+    <string name="you_can_close_now">আপনি এখন বন্ধ করতে পারেন</string>
+    <string name="ad_not_ready">বিজ্ঞাপন প্রস্তুত নয়</string>
+    <string name="ad_not_ready_message">বিজ্ঞাপন এখনও প্রস্তুত নয়। অনুগ্রহ করে কিছুক্ষণ পরে আবার চেষ্টা করুন।</string>
+    <string name="retry">পুনরায় চেষ্টা করুন</string>
+    
+    <!-- Prayer Log Bottom Sheet -->
+    <string name="prayer_log_title">নামাজ রেকর্ড করুন</string>
+    <string name="prayer_log_prayer_label">নামাজ</string>
+    <string name="prayer_log_status_label">অবস্থা</string>
+    <string name="prayer_log_status_ada">আদা\'</string>
+    <string name="prayer_log_status_qada">কাজা\'</string>
+    <string name="prayer_log_status_missed">বাদ পড়েছে</string>
+    <string name="prayer_log_prayed_at">নামাজের সময়</string>
+    <string name="prayer_log_recorded_at">রেকর্ডের সময়</string>
+    <string name="prayer_log_notes_label">নোট</string>
+    <string name="prayer_log_tag_mosque">মসজিদে</string>
+    <string name="prayer_log_tag_traveling">ভ্রমণে</string>
+    <string name="prayer_log_tag_family">পরিবারের সাথে</string>
+    <string name="prayer_log_notes_hint">বিবরণ যোগ করুন…</string>
+    <string name="prayer_log_saving">সংরক্ষণ করা হচ্ছে…</string>
+    <string name="prayer_log_save">সংরক্ষণ</string>
+    <string name="prayer_log_updated">%s নামাজ সফলভাবে আপডেট হয়েছে</string>
+    <string name="prayer_log_saved">%s নামাজ সফলভাবে রেকর্ড হয়েছে</string>
+    <string name="prayer_log_failed_load">নামাজ রেকর্ড লোড করতে ব্যর্থ</string>
+    <string name="prayer_log_failed_save">সংরক্ষণ ব্যর্থ: %s</string>
+    <string name="prayer_log_failed_update">আপডেট ব্যর্থ: %s</string>
+    <string name="prayer_log_login_required">নামাজ রেকর্ড সংরক্ষণ করতে লগইন করুন</string>
 </resources>

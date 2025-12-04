@@ -51,7 +51,7 @@ public class TranslUtils {
     public static final String TRANSL_SLUG_UR_JUNAGARHI = "in_junagarhi";
 
     public static final String TRANSL_SLUG_IN = "in_quran-complex";
-    
+
     // Malay translation slug (Abdullah Basmeih - ID: 39)
     public static final String TRANSL_SLUG_MS_ABDULLAH = "ms_39_abdullah";
     

@@ -251,9 +251,12 @@ public class QuranListeningTracker {
     
     /**
      * Gets today's date as a string (YYYY-MM-DD).
+     * 使用设备本地时区，确保与用户感知的"今天"一致
      */
     private String getTodayDateString() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        // 显式使用设备默认时区，与用户所在时区保持一致
+        sdf.setTimeZone(java.util.TimeZone.getDefault());
         return sdf.format(new Date());
     }
     

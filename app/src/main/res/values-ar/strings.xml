@@ -1172,6 +1172,13 @@
   <string name="mecca_live_description">بث مباشر 24/7 من المسجد الحرام في مكة</string>
   <string name="medina_live_description">بث مباشر 24/7 من المسجد النبوي في المدينة</string>
   <string name="play">تشغيل</string>
+  
+  <!-- Live Stream Error Messages -->
+  <string name="live_url_empty">رابط البث المباشر فارغ</string>
+  <string name="live_trying_backup">جاري تجربة المصدر الاحتياطي %d</string>
+  <string name="live_all_sources_failed">جميع مصادر البث غير متاحة</string>
+  <string name="live_loading">جاري تحميل البث المباشر…</string>
+  <string name="live_connection_error">فشل الاتصال، جاري تجربة المصدر التالي…</string>
 
   <!-- Daily Quests Card -->
   <string name="streak">سلسلة متواصلة</string>
@@ -1430,6 +1437,37 @@
     <string name="missed">فائتة</string>
     <string name="great_consistency">استمرارية رائعة!</string>
     <string name="keep_up_the_good_work">استمر في العمل الجيد</string>
+
+    <!-- Rewarded Ad Loading Dialog -->
+    <string name="loading_ad">جارٍ تحميل الإعلان…</string>
+    <string name="please_wait_seconds">الرجاء الانتظار %d ثانية…</string>
+    <string name="you_can_close_now">يمكنك الإغلاق الآن</string>
+    <string name="ad_not_ready">الإعلان غير جاهز</string>
+    <string name="ad_not_ready_message">الإعلان غير جاهز بعد. يرجى المحاولة مرة أخرى لاحقاً.</string>
+    <string name="retry">إعادة المحاولة</string>
+    
+    <!-- Prayer Log Bottom Sheet -->
+    <string name="prayer_log_title">تسجيل الصلاة</string>
+    <string name="prayer_log_prayer_label">الصلاة</string>
+    <string name="prayer_log_status_label">الحالة</string>
+    <string name="prayer_log_status_ada">أداء</string>
+    <string name="prayer_log_status_qada">قضاء</string>
+    <string name="prayer_log_status_missed">فائتة</string>
+    <string name="prayer_log_prayed_at">وقت الصلاة</string>
+    <string name="prayer_log_recorded_at">تم التسجيل في</string>
+    <string name="prayer_log_notes_label">ملاحظات</string>
+    <string name="prayer_log_tag_mosque">في المسجد</string>
+    <string name="prayer_log_tag_traveling">مسافر</string>
+    <string name="prayer_log_tag_family">مع العائلة</string>
+    <string name="prayer_log_notes_hint">أضف أي تفاصيل…</string>
+    <string name="prayer_log_saving">جارٍ الحفظ…</string>
+    <string name="prayer_log_save">حفظ</string>
+    <string name="prayer_log_updated">تم تحديث صلاة %s بنجاح</string>
+    <string name="prayer_log_saved">تم تسجيل صلاة %s بنجاح</string>
+    <string name="prayer_log_failed_load">فشل تحميل سجل الصلاة</string>
+    <string name="prayer_log_failed_save">فشل الحفظ: %s</string>
+    <string name="prayer_log_failed_update">فشل التحديث: %s</string>
+    <string name="prayer_log_login_required">يرجى تسجيل الدخول لحفظ سجلات الصلاة</string>
 
 </resources>
 

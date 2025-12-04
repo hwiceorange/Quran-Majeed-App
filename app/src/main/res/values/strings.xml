@@ -1307,6 +1307,13 @@
     <string name="mecca_live_description">24/7 Live stream from the Holy Mosque in Mecca</string>
     <string name="medina_live_description">24/7 Live stream from the Prophet\'s Mosque in Medina</string>
     <string name="play">Play</string>
+    
+    <!-- Live Stream Error Messages -->
+    <string name="live_url_empty">Live stream URL is empty</string>
+    <string name="live_trying_backup">Trying backup source %d</string>
+    <string name="live_all_sources_failed">All live sources are unavailable</string>
+    <string name="live_loading">Loading live stream…</string>
+    <string name="live_connection_error">Connection failed, trying next source…</string>
 
     <!-- Daily Quests Card -->
     <string name="daily_quests">Daily Quests</string>
@@ -1477,5 +1484,36 @@
     <string name="ad_not_ready_message">The ad is not ready yet. Please try again later.</string>
     <string name="retry">Retry</string>
     <string name="unlock_success_message">Full commentary unlocked!</string>
+    
+    <!-- Prayer Log Bottom Sheet -->
+    <string name="prayer_log_title">Log Prayer</string>
+    <string name="prayer_log_prayer_label">Prayer</string>
+    <string name="prayer_log_status_label">Status</string>
+    <string name="prayer_log_status_ada">Ada\'</string>
+    <string name="prayer_log_status_qada">Qada\'</string>
+    <string name="prayer_log_status_missed">Missed</string>
+    <string name="prayer_log_prayed_at">Prayed At</string>
+    <string name="prayer_log_recorded_at">Recorded At</string>
+    <string name="prayer_log_notes_label">Notes</string>
+    <string name="prayer_log_tag_mosque">At Mosque</string>
+    <string name="prayer_log_tag_traveling">Traveling</string>
+    <string name="prayer_log_tag_family">With Family</string>
+    <string name="prayer_log_notes_hint">Add any details…</string>
+    <string name="prayer_log_saving">Saving…</string>
+    <string name="prayer_log_save">Save</string>
+    <string name="prayer_log_updated">%s prayer updated successfully</string>
+    <string name="prayer_log_saved">%s prayer logged successfully</string>
+    <string name="prayer_log_failed_load">Failed to load prayer log</string>
+    <string name="prayer_log_failed_save">Failed to save: %s</string>
+    <string name="prayer_log_failed_update">Failed to update: %s</string>
+    <string name="prayer_log_login_required">Please login to save prayer logs</string>
+    
+    <!-- Hadith Download Manager -->
+    <string name="download_hadith_title">Download %s Hadith</string>
+    <string name="download_hadith_message">Hadith data for %s language is not available offline. Would you like to download it now? (About 15-20 MB)</string>
+    <string name="downloading_hadith_data">Downloading Hadith data…</string>
+    <string name="download_complete">Download complete!</string>
+    <string name="download_failed">Download failed. Please check your internet connection and try again.</string>
+    <string name="hadith_data_not_available">Hadith data not available. Please download it first.</string>
     
 </resources>

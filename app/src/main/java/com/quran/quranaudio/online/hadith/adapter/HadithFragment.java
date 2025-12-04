@@ -12,9 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.quran.quranaudio.online.R;
+import com.quran.quranaudio.online.hadith.data.HadithDataHelper;
+import com.quran.quranaudio.online.hadith.data.HadithDownloadDialog;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
@@ -88,9 +91,35 @@ public class HadithFragment extends Fragment implements HadithInterface {
     private void setupHadithModels() {
         try {
             //read the arabic hadith json and the translated json according to the language
+            // Note: Only urd (Urdu) and ind (Indonesian) translations exist, no English
             String language = sharedPreferences.getString("language", "urd");
-            String hadithBookArabic = IOUtils.toString(requireActivity().getAssets().open("ara-" + bookId + ".json"));
-            String hadithBookEnglish = IOUtils.toString(requireActivity().getAssets().open(language + "-" + bookId + ".json"));
+            
+            // Use HadithDataManager for on-demand loading
+            String hadithBookArabic;
+            String hadithBookEnglish;
+            
+            // Arabic is always bundled
+            hadithBookArabic = HadithDataHelper.getHadithData(requireContext(), "ara", bookId);
+            
+            // Check if translated language data is available
+            if (!HadithDataHelper.isHadithAvailable(requireContext(), language, bookId)) {
+                // Show download dialog for non-bundled languages
+                if (HadithDataHelper.requiresDownload(language)) {
+                    showDownloadDialog(language);
+                    return;
+                }
+            }
+            
+            hadithBookEnglish = HadithDataHelper.getHadithData(requireContext(), language, bookId);
+            
+            // Fallback to Urdu if data not available (English doesn't exist)
+            if (hadithBookEnglish == null) {
+                hadithBookEnglish = HadithDataHelper.getHadithData(requireContext(), "urd", bookId);
+            }
+            
+            if (hadithBookArabic == null || hadithBookEnglish == null) {
+                return; // Data not available
+            }
 
             //convert the arabic Ahadith to an JsonArray
             JSONArray hadithsArabic = new JSONObject(hadithBookArabic).getJSONArray("hadiths");
@@ -148,6 +177,31 @@ public class HadithFragment extends Fragment implements HadithInterface {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void showDownloadDialog(String language) {
+        String languageName = getLanguageDisplayName(language);
+        HadithDownloadDialog dialog = HadithDownloadDialog.newInstance(language, languageName);
+        dialog.setOnDownloadCompleteListener(success -> {
+            if (success && isAdded()) {
+                // Reload data after download
+                setupHadithModels();
+                if (adapter != null) {
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
+        dialog.show(getParentFragmentManager());
+    }
+    
+    private String getLanguageDisplayName(String languageCode) {
+        switch (languageCode) {
+            case "urd": return "Urdu";
+            case "ind": return "Indonesian";
+            case "eng": return "English";
+            case "ara": return "Arabic";
+            default: return languageCode;
         }
     }
 

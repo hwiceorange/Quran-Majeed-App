@@ -100,9 +100,9 @@ public class QuranReadingTracker {
         
         Log.d(TAG, "✅ Recorded " + versesRead + " verses. Total today: " + newTotal);
         
-        // 同时更新 pages（用于向后兼容）
-        int equivalentPages = Math.max(1, versesRead / 10);
-        recordPagesRead(equivalentPages);
+        // 🔥 修复：移除向后兼容的page转换，避免混淆不同单位的计数
+        // 如果用户配置是VERSES单位，就只记录VERSES，不再同时更新PAGES
+        // 这样可以确保计数的准确性
     }
     
     /**
@@ -117,6 +117,32 @@ public class QuranReadingTracker {
         }
         
         return prefs.getInt(KEY_VERSES_READ_TODAY, 0);
+    }
+    
+    /**
+     * 🔥 新增：获取今天已阅读的经文数量（公共方法，用于调试）
+     */
+    public int getTodayVersesReadPublic() {
+        return getTodayVersesRead();
+    }
+    
+    /**
+     * 🔥 新增：打印当前计数状态（用于调试）
+     */
+    public void logCurrentProgress() {
+        String today = getTodayDateString();
+        int versesRead = getTodayVersesRead();
+        int pagesRead = getTodayPagesRead();
+        boolean isCompleted = prefs.getBoolean(KEY_TASK_COMPLETED_TODAY, false);
+        
+        Log.d(TAG, "═══════════════════════════════════════");
+        Log.d(TAG, "📊 当前阅读进度统计");
+        Log.d(TAG, "───────────────────────────────────────");
+        Log.d(TAG, "📅 日期: " + today);
+        Log.d(TAG, "📖 今日已读Verses: " + versesRead);
+        Log.d(TAG, "📄 今日已读Pages: " + pagesRead);
+        Log.d(TAG, "✅ 任务完成状态: " + (isCompleted ? "已完成" : "未完成"));
+        Log.d(TAG, "═══════════════════════════════════════");
     }
     
     /**
@@ -305,9 +331,12 @@ public class QuranReadingTracker {
     
     /**
      * Gets today's date as a string (YYYY-MM-DD).
+     * 使用设备本地时区，确保与用户感知的"今天"一致
      */
     private String getTodayDateString() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        // 显式使用设备默认时区，与用户所在时区保持一致
+        sdf.setTimeZone(java.util.TimeZone.getDefault());
         return sdf.format(new Date());
     }
     

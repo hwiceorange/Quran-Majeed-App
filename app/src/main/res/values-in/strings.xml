@@ -1364,4 +1364,36 @@ seperti: Waktu Sholat Global, metode perhitungan yang berbeda, notifikasi, memba
     <string name="missed">Terlewat</string>
     <string name="great_consistency">Konsistensi Hebat!</string>
     <string name="keep_up_the_good_work">Pertahankan kerja bagus Anda</string>
+
+    <!-- Rewarded Ad Loading Dialog -->
+    <string name="loading_ad">Memuat Iklan…</string>
+    <string name="please_wait_seconds">Harap tunggu %d detik…</string>
+    <string name="you_can_close_now">Anda dapat menutup sekarang</string>
+    <string name="ad_not_ready">Iklan Belum Siap</string>
+    <string name="ad_not_ready_message">Iklan belum siap. Silakan coba lagi nanti.</string>
+    <string name="retry">Coba Lagi</string>
+    
+    <!-- Prayer Log Bottom Sheet -->
+    <string name="prayer_log_title">Catat Salat</string>
+    <string name="prayer_log_prayer_label">Salat</string>
+    <string name="prayer_log_status_label">Status</string>
+    <string name="prayer_log_status_ada">Ada\'</string>
+    <string name="prayer_log_status_qada">Qada\'</string>
+    <string name="prayer_log_status_missed">Terlewat</string>
+    <string name="prayer_log_prayed_at">Waktu Salat</string>
+    <string name="prayer_log_recorded_at">Dicatat Pada</string>
+    <string name="prayer_log_notes_label">Catatan</string>
+    <string name="prayer_log_tag_mosque">Di Masjid</string>
+    <string name="prayer_log_tag_traveling">Dalam Perjalanan</string>
+    <string name="prayer_log_tag_family">Bersama Keluarga</string>
+    <string name="prayer_log_notes_hint">Tambahkan detail…</string>
+    <string name="prayer_log_saving">Menyimpan…</string>
+    <string name="prayer_log_save">Simpan</string>
+    <string name="prayer_log_updated">Salat %s berhasil diperbarui</string>
+    <string name="prayer_log_saved">Salat %s berhasil dicatat</string>
+    <string name="prayer_log_failed_load">Gagal memuat catatan salat</string>
+    <string name="prayer_log_failed_save">Gagal menyimpan: %s</string>
+    <string name="prayer_log_failed_update">Gagal memperbarui: %s</string>
+    <string name="prayer_log_login_required">Silakan masuk untuk menyimpan catatan salat</string>
 </resources>
+

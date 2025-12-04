@@ -54,14 +54,14 @@ android {
         applicationId "com.quran.quranaudio.online"
         minSdkVersion 26
         targetSdkVersion 35
-        versionCode 75
-        versionName "1.8.3"
+        versionCode 77
+        versionName "1.8.5"
         multiDexEnabled true
         
         // Support for 16 KB page sizes (Google Play requirement)
         ndk {
-            // Specify the ABI configurations
-            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+            // Only include ARM architectures for production (x86/x86_64 are for emulators only)
+            abiFilters 'armeabi-v7a', 'arm64-v8a'
         }
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -120,7 +120,7 @@ android {
             //proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
-            // shrinkResources true
+            shrinkResources true
             resValue "string", "cleartextTrafficPermitted", "false"
 
             signingConfig signingConfigs.release
@@ -219,7 +219,6 @@ dependencies {
     testImplementation 'com.squareup.assertj:assertj-android:1.2.0'
 
     def room_version ="2.4.3"
-    implementation 'androidx.room:room-runtime:2.4.3'
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
@@ -321,7 +320,7 @@ dependencies {
 
     //PrayerTimes
     androidTestImplementation 'androidx.test.espresso:espresso-core:{strictly 3.1.0-alpha3}'
-    implementation 'com.android.support:multidex:1.0.3'
+    // Note: using androidx.multidex:multidex instead of com.android.support:multidex
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
     implementation 'com.google.android.gms:play-services-location:21.0.1'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
@@ -367,7 +366,7 @@ dependencies {
     implementation 'com.batoulapps.adhan:adhan:1.2.1'
     implementation 'com.aminography:primecalendar:1.7.0'
     implementation 'com.github.luisvasquez:sTooltip:1.5.1'
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    // Note: swiperefreshlayout already declared above
   //  implementation 'com.github.ShaheenDevelopers:MultiAdsSdk:1.0.0'
   //  implementation 'com.github.solodroidx:multi-ads-sdk:1.0.9'
 
@@ -422,8 +421,7 @@ dependencies {
     implementation libs.srlExtUtil
 
     //Quran_Module*
-
-    implementation 'androidx.multidex:multidex:2.0.1'
+    // Note: multidex already declared above at line 347
   //  implementation 'com.github.megatronking.stringfog:xor:5.0.0'
 }
 

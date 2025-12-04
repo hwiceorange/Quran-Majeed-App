@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.quran.quranaudio.online.R;
 import com.quran.quranaudio.online.hadith.adapter.HadithFragment;
+import com.quran.quranaudio.online.hadith.data.HadithDataHelper;
+import com.quran.quranaudio.online.hadith.data.HadithDownloadDialog;
 import com.quran.quranaudio.online.hadith.helper.SharedPreferencesHelper;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
@@ -80,8 +82,28 @@ public class SectionFragment extends Fragment implements SectionInterface {
 
     private void setupSectionModels() {
         try {
+            // Note: Only urd (Urdu) and ind (Indonesian) translations exist, no English
             String language = SharedPreferencesHelper.getValue(requireContext(),"language","urd");
-            String everything = IOUtils.toString(requireActivity().getAssets().open(language + "-" + bookId + ".json"));
+            
+            // Check if hadith data is available, download if needed
+            if (!HadithDataHelper.isHadithAvailable(requireContext(), language, bookId)) {
+                if (HadithDataHelper.requiresDownload(language)) {
+                    showDownloadDialog(language);
+                    return;
+                }
+            }
+            
+            String everything = HadithDataHelper.getHadithData(requireContext(), language, bookId);
+            
+            // Fallback to Urdu if data not available (English doesn't exist)
+            if (everything == null) {
+                everything = HadithDataHelper.getHadithData(requireContext(), "urd", bookId);
+            }
+            
+            if (everything == null) {
+                return; // Data not available
+            }
+            
             JSONObject hadithBookObject = new JSONObject(everything);
             JSONObject metadata = hadithBookObject.getJSONObject("metadata");
             String bookName = metadata.getString("name");
@@ -99,6 +121,28 @@ public class SectionFragment extends Fragment implements SectionInterface {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+    
+    private void showDownloadDialog(String language) {
+        String languageName = getLanguageDisplayName(language);
+        HadithDownloadDialog dialog = HadithDownloadDialog.newInstance(language, languageName);
+        dialog.setOnDownloadCompleteListener(success -> {
+            if (success && isAdded()) {
+                // Reload data after download
+                setupSectionModels();
+            }
+        });
+        dialog.show(getParentFragmentManager());
+    }
+    
+    private String getLanguageDisplayName(String languageCode) {
+        switch (languageCode) {
+            case "urd": return "Urdu";
+            case "ind": return "Indonesian";
+            case "eng": return "English";
+            case "ara": return "Arabic";
+            default: return languageCode;
         }
     }
 

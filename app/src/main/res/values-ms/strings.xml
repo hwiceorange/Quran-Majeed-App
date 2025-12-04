@@ -2278,4 +2278,34 @@
     <string name="keep_up_the_good_work">Teruskan kerja yang baik</string>
 
 
+    <!-- Rewarded Ad Loading Dialog -->
+    <string name="loading_ad">Memuatkan Iklan…</string>
+    <string name="please_wait_seconds">Sila tunggu %d saat…</string>
+    <string name="you_can_close_now">Anda boleh tutup sekarang</string>
+    <string name="ad_not_ready">Iklan Tidak Bersedia</string>
+    <string name="ad_not_ready_message">Iklan belum bersedia. Sila cuba lagi kemudian.</string>
+    <string name="retry">Cuba Semula</string>
+    
+    <!-- Prayer Log Bottom Sheet -->
+    <string name="prayer_log_title">Rekod Solat</string>
+    <string name="prayer_log_prayer_label">Solat</string>
+    <string name="prayer_log_status_label">Status</string>
+    <string name="prayer_log_status_ada">Ada\'</string>
+    <string name="prayer_log_status_qada">Qada\'</string>
+    <string name="prayer_log_status_missed">Terlepas</string>
+    <string name="prayer_log_prayed_at">Waktu Solat</string>
+    <string name="prayer_log_recorded_at">Direkodkan Pada</string>
+    <string name="prayer_log_notes_label">Nota</string>
+    <string name="prayer_log_tag_mosque">Di Masjid</string>
+    <string name="prayer_log_tag_traveling">Dalam Perjalanan</string>
+    <string name="prayer_log_tag_family">Bersama Keluarga</string>
+    <string name="prayer_log_notes_hint">Tambah maklumat…</string>
+    <string name="prayer_log_saving">Menyimpan…</string>
+    <string name="prayer_log_save">Simpan</string>
+    <string name="prayer_log_updated">Solat %s berjaya dikemas kini</string>
+    <string name="prayer_log_saved">Solat %s berjaya direkodkan</string>
+    <string name="prayer_log_failed_load">Gagal memuatkan rekod solat</string>
+    <string name="prayer_log_failed_save">Gagal menyimpan: %s</string>
+    <string name="prayer_log_failed_update">Gagal mengemaskini: %s</string>
+    <string name="prayer_log_login_required">Sila log masuk untuk menyimpan rekod solat</string>
 </resources>

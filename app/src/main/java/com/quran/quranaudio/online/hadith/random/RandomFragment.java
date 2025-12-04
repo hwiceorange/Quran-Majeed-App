@@ -17,6 +17,8 @@ import com.quran.quranaudio.online.hadith.adapter.HadithAdapter;
 import com.quran.quranaudio.online.hadith.adapter.HadithGradesModel;
 import com.quran.quranaudio.online.hadith.adapter.HadithInterface;
 import com.quran.quranaudio.online.hadith.adapter.HadithModel;
+import com.quran.quranaudio.online.hadith.data.HadithDataHelper;
+import com.quran.quranaudio.online.hadith.data.HadithDownloadDialog;
 import com.quran.quranaudio.online.R;
 
 import org.apache.commons.io.IOUtils;
@@ -62,16 +64,34 @@ public class RandomFragment extends Fragment implements HadithInterface {
         View mView = inflater.inflate(R.layout.fragment_random, container, false);
         CardView refreshCardView = mView.findViewById(R.id.refreshCardView);
         refreshCardView.setOnClickListener(view -> {
-            int randomBook = new Random().nextInt(7);
+            int randomBook = new Random().nextInt(6); // Only 6 books (exclude malik which may not be available)
 
             //read the arabic hadith json and the translated json according to the language
+            // Note: Only urd (Urdu) and ind (Indonesian) translations exist, no English
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
-            language = sharedPreferences.getString("language", "eng");
-            try {
-                hadithBookArabic = IOUtils.toString(requireContext().getAssets().open("ara-" + displayName[randomBook] + ".json"));
-                hadithBookEnglish = IOUtils.toString(requireContext().getAssets().open(language + "-" + displayName[randomBook] + ".json"));
-            } catch (IOException e) {
-                e.printStackTrace();
+            language = sharedPreferences.getString("language", "urd");
+            
+            String collection = displayName[randomBook];
+            
+            // Check if hadith data is available
+            if (!HadithDataHelper.isHadithAvailable(requireContext(), language, collection)) {
+                if (HadithDataHelper.requiresDownload(language)) {
+                    showDownloadDialog(language);
+                    return;
+                }
+            }
+            
+            // Use HadithDataHelper to load data
+            hadithBookArabic = HadithDataHelper.getHadithData(requireContext(), "ara", collection);
+            hadithBookEnglish = HadithDataHelper.getHadithData(requireContext(), language, collection);
+            
+            // Fallback to Urdu if data not available (English doesn't exist)
+            if (hadithBookEnglish == null) {
+                hadithBookEnglish = HadithDataHelper.getHadithData(requireContext(), "urd", collection);
+            }
+            
+            if (hadithBookArabic == null || hadithBookEnglish == null) {
+                return; // Data not available
             }
 
             RecyclerView recyclerView = mView.findViewById(R.id.randomRecyclerView);
@@ -137,6 +157,25 @@ public class RandomFragment extends Fragment implements HadithInterface {
                     hadithModels.add(new HadithModel(String.valueOf(1), hadithArabicText, hadithEnglishText, referenceText, referenceBookText, language, hadithGradesModels));
         }catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void showDownloadDialog(String language) {
+        String languageName = getLanguageDisplayName(language);
+        HadithDownloadDialog dialog = HadithDownloadDialog.newInstance(language, languageName);
+        dialog.setOnDownloadCompleteListener(success -> {
+            // User can click refresh again after download
+        });
+        dialog.show(getParentFragmentManager());
+    }
+    
+    private String getLanguageDisplayName(String languageCode) {
+        switch (languageCode) {
+            case "urd": return "Urdu";
+            case "ind": return "Indonesian";
+            case "eng": return "English";
+            case "ara": return "Arabic";
+            default: return languageCode;
         }
     }
 

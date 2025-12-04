@@ -262,6 +262,9 @@ public class ActivityReader extends ReaderPossessingActivity {
     private long juzAyatViewStartTime = 0;   // 进入某Ayat的时间戳
     private static final long AYAT_VIEW_THRESHOLD_MS = 3000;  // Ayat停留阈值：3秒
     
+    // 🔥 修复：防止单Verse模式重复计数
+    private String lastRecordedVerseKey = "";  // 格式: "chapterNo:verseNo"
+    
     // Daily Quest: Quran Listening Tracker
     private com.quran.quranaudio.online.quests.helper.QuranListeningTracker quranListeningTracker;
     private boolean isListeningMode = false;
@@ -291,31 +294,41 @@ public class ActivityReader extends ReaderPossessingActivity {
         if (quranReadingTracker != null && sessionStartTime > 0 && !isListeningMode) {
             // 🔥 修复：根据用户设置的阅读单位来追踪进度
             try {
-                // 🔥 关键修复：在离开页面前，确保结束位置已更新
-                if (sessionEndSurah == -1 || sessionEndAyah == -1) {
-                    android.util.Log.w("ActivityReader", "⚠️ 结束位置未更新，尝试最后一次更新");
-                    updateCurrentPageNumber();
-                }
+                // 🔥 修复：检查是否是单Verse模式
+                boolean isSingleVerseMode = mReaderParams != null && mReaderParams.isSingleVerse();
                 
-                // 计算实际阅读的 verses 数量
-                int versesRead = calculateVersesRead();
-                
-                if (versesRead > 0) {
-                    // 直接记录 verses 数量，让 Tracker 根据配置决定如何处理
-                    quranReadingTracker.recordVersesRead(versesRead);
-                    android.util.Log.d("ActivityReader", "✅ 记录阅读进度: " + versesRead + " verses");
-
-                    maybeTriggerSurahCompletion(versesRead);
-                } else if (sessionStartPage > 0 && sessionEndPage > 0) {
-                    // 回退到页码追踪
-                    quranReadingTracker.recordPageRange(sessionStartPage, sessionEndPage);
-                    android.util.Log.d("ActivityReader", "✅ 使用页码追踪: " + sessionStartPage + "-" + sessionEndPage);
+                if (isSingleVerseMode) {
+                    // 单Verse模式：已在 initVerseRange() 中记录，这里跳过以避免重复
+                    android.util.Log.d("ActivityReader", "📖 单Verse模式：跳过onStop记录（已在initVerseRange中记录）");
                 } else {
-                    // 最后回退到时间估算
-                    long sessionDuration = System.currentTimeMillis() - sessionStartTime;
-                    int pagesRead = Math.max(1, (int) (sessionDuration / 120000));
-                    quranReadingTracker.recordPagesRead(pagesRead);
-                    android.util.Log.d("ActivityReader", "⚠️ 使用时间估算追踪: " + pagesRead + " pages");
+                    // 非单Verse模式（章节模式、Juz模式、页面模式）：需要在onStop记录
+                    
+                    // 🔥 关键修复：在离开页面前，确保结束位置已更新
+                    if (sessionEndSurah == -1 || sessionEndAyah == -1) {
+                        android.util.Log.w("ActivityReader", "⚠️ 结束位置未更新，尝试最后一次更新");
+                        updateCurrentPageNumber();
+                    }
+                    
+                    // 计算实际阅读的 verses 数量
+                    int versesRead = calculateVersesRead();
+                    
+                    if (versesRead > 0) {
+                        // 直接记录 verses 数量，让 Tracker 根据配置决定如何处理
+                        quranReadingTracker.recordVersesRead(versesRead);
+                        android.util.Log.d("ActivityReader", "✅ 记录阅读进度: " + versesRead + " verses");
+
+                        maybeTriggerSurahCompletion(versesRead);
+                    } else if (sessionStartPage > 0 && sessionEndPage > 0) {
+                        // 回退到页码追踪
+                        quranReadingTracker.recordPageRange(sessionStartPage, sessionEndPage);
+                        android.util.Log.d("ActivityReader", "✅ 使用页码追踪: " + sessionStartPage + "-" + sessionEndPage);
+                    } else {
+                        // 最后回退到时间估算
+                        long sessionDuration = System.currentTimeMillis() - sessionStartTime;
+                        int pagesRead = Math.max(1, (int) (sessionDuration / 120000));
+                        quranReadingTracker.recordPagesRead(pagesRead);
+                        android.util.Log.d("ActivityReader", "⚠️ 使用时间估算追踪: " + pagesRead + " pages");
+                    }
                 }
             } catch (Exception e) {
                 android.util.Log.e("ActivityReader", "Failed to track reading progress", e);
@@ -335,6 +348,9 @@ public class ActivityReader extends ReaderPossessingActivity {
             sessionStartAyah = -1;
             sessionEndSurah = -1;
             sessionEndAyah = -1;
+            
+            // 🔥 修复：重置单Verse追踪标记
+            lastRecordedVerseKey = "";
             
             // 🔥 Daily Quest Step 2: 不重置lastCompletedPage，保留跨会话
             // lastCompletedPage在整个应用生命周期内保持，直到新的一天或任务完成
@@ -418,6 +434,16 @@ public class ActivityReader extends ReaderPossessingActivity {
             quranReadingTracker = new QuranReadingTracker(this);
         }
         sessionStartTime = System.currentTimeMillis();
+        
+        // 🔥 修复：检查是否是新的一天，如果是则重置单Verse追踪标记
+        // 这确保了每天的计数都从0开始
+        if (quranReadingTracker.getTodayPagesRead() == 0) {
+            lastRecordedVerseKey = "";
+            android.util.Log.d("ActivityReader", "🔄 新的一天开始，重置Verse追踪标记");
+        }
+        
+        // 🔥 新增：打印当前进度状态（用于调试）
+        quranReadingTracker.logCurrentProgress();
         
         // 🔥 Daily Quest Step 2: 初始化lastCompletedPage（从今天已完成的pages数开始）
         if (lastCompletedPage == -1 && isPageReadingMode()) {
@@ -1459,18 +1485,28 @@ public class ActivityReader extends ReaderPossessingActivity {
             return;
         }
 
-        // 🔥 Daily Quest Step 1: 单Verse模式下，每次切换verse时立即追踪阅读进度
+        // 🔥 修复：单Verse模式防止重复计数
         if (quranReadingTracker != null && !isListeningMode) {
             // 检查是否是单Verse切换（用于每日任务计数）
             boolean isSingleVerseSwitch = QuranUtils.doesRangeDenoteSingle(verseRange);
             if (isSingleVerseSwitch) {
-                // 用户点击了"下一Verse"按钮或首次进入单Verse模式，记录阅读进度+1
-                quranReadingTracker.recordVersesRead(1);
-                android.util.Log.d("ActivityReader", "📖 单Verse模式：记录阅读进度 +1 verse (Surah " + 
-                    chapter.getChapterNumber() + ", Verse " + verseRange.getFirst() + ")");
+                // 生成当前Verse的唯一标识
+                String currentVerseKey = chapter.getChapterNumber() + ":" + verseRange.getFirst();
                 
-                // 立即检查任务完成状态
-                quranReadingTracker.checkAndMarkCompleteAsync();
+                // 只有当这是一个新的Verse时才记录（防止重复计数）
+                if (!currentVerseKey.equals(lastRecordedVerseKey)) {
+                    quranReadingTracker.recordVersesRead(1);
+                    lastRecordedVerseKey = currentVerseKey;
+                    
+                    android.util.Log.d("ActivityReader", "📖 单Verse模式：记录新Verse阅读进度 +1 (Surah " + 
+                        chapter.getChapterNumber() + ", Verse " + verseRange.getFirst() + ")");
+                    
+                    // 立即检查任务完成状态
+                    quranReadingTracker.checkAndMarkCompleteAsync();
+                } else {
+                    android.util.Log.d("ActivityReader", "📖 单Verse模式：跳过重复记录 (Surah " + 
+                        chapter.getChapterNumber() + ", Verse " + verseRange.getFirst() + ")");
+                }
             }
         }
 
