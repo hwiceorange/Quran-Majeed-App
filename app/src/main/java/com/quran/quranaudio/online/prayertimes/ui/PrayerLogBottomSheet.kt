@@ -81,8 +81,12 @@ class PrayerLogBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun setupViews() {
-        // 设置祷告名称
-        binding.tvPrayerName.text = prayerName
+        // 设置祷告名称（使用本地化名称显示）
+        val localizedPrayerName = com.quran.quranaudio.online.prayertimes.models.PrayerName.getLocalizedName(
+            prayerName,
+            requireContext()
+        )
+        binding.tvPrayerName.text = localizedPrayerName
 
         if (isEditMode && existingLogId != null) {
             // 编辑模式：加载现有数据
@@ -260,9 +264,13 @@ class PrayerLogBottomSheet : BottomSheetDialogFragment() {
                         selectedTags.add(tagKey)
                         android.util.Log.d("PrayerLog", "✅ Tag selected: $tagKey")
                     }
+                    // 将标签添加到 Notes 文本框
+                    appendTagToNotes(displayText)
                 } else {
                     selectedTags.remove(tagKey)
                     android.util.Log.d("PrayerLog", "❌ Tag unselected: $tagKey")
+                    // 从 Notes 文本框移除标签
+                    removeTagFromNotes(displayText)
                 }
                 
                 android.util.Log.d("PrayerLog", "📋 Selected tags: $selectedTags")
@@ -270,6 +278,50 @@ class PrayerLogBottomSheet : BottomSheetDialogFragment() {
         }
         
         android.util.Log.d("PrayerLog", "✅ setupChipListeners() completed")
+    }
+    
+    /**
+     * 将标签追加到 Notes 文本框
+     */
+    private fun appendTagToNotes(tag: String) {
+        val currentText = binding.etNotes.text?.toString()?.trim() ?: ""
+        val tagWithPrefix = "#$tag"
+        
+        // 检查标签是否已存在
+        if (currentText.contains(tagWithPrefix)) {
+            return
+        }
+        
+        val newText = if (currentText.isEmpty()) {
+            tagWithPrefix
+        } else {
+            "$currentText $tagWithPrefix"
+        }
+        
+        binding.etNotes.setText(newText)
+        binding.etNotes.setSelection(newText.length)
+        android.util.Log.d("PrayerLog", "📝 Tag added to notes: $tagWithPrefix")
+    }
+    
+    /**
+     * 从 Notes 文本框移除标签
+     */
+    private fun removeTagFromNotes(tag: String) {
+        val currentText = binding.etNotes.text?.toString() ?: ""
+        val tagWithPrefix = "#$tag"
+        
+        // 移除标签（包括前后可能的空格）
+        val newText = currentText
+            .replace(" $tagWithPrefix", "")
+            .replace("$tagWithPrefix ", "")
+            .replace(tagWithPrefix, "")
+            .trim()
+        
+        binding.etNotes.setText(newText)
+        if (newText.isNotEmpty()) {
+            binding.etNotes.setSelection(newText.length)
+        }
+        android.util.Log.d("PrayerLog", "📝 Tag removed from notes: $tagWithPrefix")
     }
 
     /**
