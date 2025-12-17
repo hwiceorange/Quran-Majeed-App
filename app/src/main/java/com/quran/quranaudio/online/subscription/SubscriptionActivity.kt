@@ -543,9 +543,43 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
     
     /**
      * 导航到主页
+     * 🎯 在导航前尝试展示插屏广告（仅未付费用户）
      */
     private fun navigateToMainActivity() {
         android.util.Log.d("SubscriptionActivity", "🏠 Navigating to MainActivity")
+        
+        // 🎯 Check if this is from onboarding flow (only show ad in onboarding flow)
+        val fromOnboarding = intent.getBooleanExtra("from_onboarding", false)
+        
+        if (fromOnboarding) {
+            android.util.Log.d("SubscriptionActivity", "🎯 From onboarding - attempting to show interstitial ad")
+            
+            // Try to show interstitial ad with callback (handles subscription check internally)
+            val adShown = com.quranaudio.common.ad.InterstitialAdManager.getInstance().showAdIfAvailable(this) {
+                // This callback is invoked when user dismisses the ad or ad fails to show
+                android.util.Log.d("SubscriptionActivity", "✅ Ad closed by user, proceeding to MainActivity")
+                proceedToMainActivity()
+            }
+            
+            if (!adShown) {
+                // No ad available or user subscribed - navigate immediately
+                android.util.Log.d("SubscriptionActivity", "⚠️ No ad shown (subscribed or unavailable), navigating immediately")
+                proceedToMainActivity()
+            } else {
+                android.util.Log.d("SubscriptionActivity", "✅ Interstitial ad shown, waiting for user to close it")
+            }
+        } else {
+            // Not from onboarding - navigate directly without ad
+            android.util.Log.d("SubscriptionActivity", "📱 Not from onboarding, navigating directly")
+            proceedToMainActivity()
+        }
+    }
+    
+    /**
+     * 执行导航到主页的实际操作
+     */
+    private fun proceedToMainActivity() {
+        android.util.Log.d("SubscriptionActivity", "🚀 Proceeding to MainActivity")
         
         val intent = android.content.Intent(this, com.quran.quranaudio.online.prayertimes.ui.MainActivity::class.java)
         intent.addFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK or android.content.Intent.FLAG_ACTIVITY_NEW_TASK)

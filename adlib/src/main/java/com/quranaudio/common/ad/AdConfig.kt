@@ -1,5 +1,6 @@
 package com.quranaudio.common.ad
 
+import com.google.firebase.FirebaseApp
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.quran.quranaudio.common.ad.BuildConfig
 
@@ -38,12 +39,23 @@ object AdConfig {
         android.util.Log.d("AdConfig", "🔍 getAdIdByPosition: position=$position, isTest=$isTest, BuildConfig.DEBUG=${BuildConfig.DEBUG}")
         
         if (!isTest) {
+            try {
+                // Check if Firebase is initialized before using RemoteConfig
+                FirebaseApp.getInstance()
+                
             val remoteConfigKey = "${position}_admob"
             val adId = FirebaseRemoteConfig.getInstance().getString(remoteConfigKey)
             android.util.Log.d("AdConfig", "🔍 Firebase RemoteConfig check: key=$remoteConfigKey, value='$adId', isNotBlank=${adId.isNotBlank()}")
             if (adId.isNotBlank()) {
                 android.util.Log.d("AdConfig", "✅ Using RemoteConfig ad ID: $adId")
                 return adId
+                }
+            } catch (e: IllegalStateException) {
+                // Firebase not initialized yet - this can happen during cold start or error states
+                android.util.Log.w("AdConfig", "⚠️ Firebase not initialized, using default ad IDs: ${e.message}")
+            } catch (e: Exception) {
+                // Handle any other Firebase-related errors
+                android.util.Log.e("AdConfig", "❌ Error accessing Firebase RemoteConfig: ${e.message}", e)
         }
         }
         

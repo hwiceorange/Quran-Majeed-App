@@ -54,8 +54,8 @@ android {
         applicationId "com.quran.quranaudio.online"
         minSdkVersion 26
         targetSdkVersion 35
-        versionCode 78
-        versionName "1.8.6"
+        versionCode 97
+        versionName "1.9.15"
         multiDexEnabled true
         
         // Support for 16 KB page sizes (Google Play requirement)
@@ -104,6 +104,24 @@ android {
         abortOnError false
         checkReleaseBuilds false
     }
+    
+    // AAPT options to fix resource packaging issues
+    aaptOptions {
+        noCompress 'mp3', 'kml', 'json', 'zip', 'webp', 'xml'
+        cruncherEnabled = false
+        ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
+    }
+    
+    // Additional packaging options to handle large resource files
+    packagingOptions {
+        // Exclude duplicate files that cause conflicts
+        resources {
+            excludes += ['META-INF/DEPENDENCIES', 'META-INF/LICENSE', 'META-INF/LICENSE.txt', 
+                        'META-INF/license.txt', 'META-INF/NOTICE', 'META-INF/NOTICE.txt', 
+                        'META-INF/notice.txt', 'META-INF/ASL2.0', 'META-INF/*.kotlin_module']
+        }
+    }
+    
     buildTypes {
 
         debug {

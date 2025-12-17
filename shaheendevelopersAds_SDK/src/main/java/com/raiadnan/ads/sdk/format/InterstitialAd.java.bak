@@ -48,14 +48,10 @@ import com.raiadnan.ads.sdk.helper.AppLovinCustomEventInterstitial;
 import com.raiadnan.ads.sdk.util.OnInterstitialAdDismissedListener;
 import com.raiadnan.ads.sdk.util.OnInterstitialAdShowedListener;
 import com.raiadnan.ads.sdk.util.Tools;
-// StartApp SDK removed
-//import com.startapp.sdk.adsbase.Ad;
-// StartApp SDK removed
-//import com.startapp.sdk.adsbase.StartAppAd;
-// StartApp SDK removed
-//import com.startapp.sdk.adsbase.adlisteners.AdDisplayListener;
-// StartApp SDK removed
-//import com.startapp.sdk.adsbase.adlisteners.AdEventListener;
+import com.startapp.sdk.adsbase.Ad;
+import com.startapp.sdk.adsbase.StartAppAd;
+import com.startapp.sdk.adsbase.adlisteners.AdDisplayListener;
+import com.startapp.sdk.adsbase.adlisteners.AdEventListener;
 import com.unity3d.mediation.IInterstitialAdLoadListener;
 import com.unity3d.mediation.IInterstitialAdShowListener;
 import com.unity3d.mediation.errors.LoadError;
@@ -72,9 +68,7 @@ public class InterstitialAd {
         private com.google.android.gms.ads.interstitial.InterstitialAd adMobInterstitialAd;
         private AdManagerInterstitialAd adManagerInterstitialAd;
         private com.facebook.ads.InterstitialAd fanInterstitialAd;
-        // StartApp SDK removed
-
-        // private StartAppAd startAppAd;
+        private StartAppAd startAppAd;
         private com.unity3d.mediation.InterstitialAd unityInterstitialAd;
         private MaxInterstitialAd maxInterstitialAd;
         public AppLovinInterstitialAdDialog appLovinInterstitialAdDialog;
@@ -322,8 +316,19 @@ public class InterstitialAd {
                         break;
 
                     case STARTAPP:
-                        // StartApp SDK removed - no longer supported
-                        Log.w(TAG, "StartApp SDK has been removed");
+                        startAppAd = new StartAppAd(activity);
+                        startAppAd.loadAd(new AdEventListener() {
+                            @Override
+                            public void onReceiveAd(@NonNull Ad ad) {
+                                Log.d(TAG, "Startapp Interstitial Ad loaded");
+                            }
+
+                            @Override
+                            public void onFailedToReceiveAd(@Nullable Ad ad) {
+                                Log.d(TAG, "Failed to load Startapp Interstitial Ad");
+                                loadBackupInterstitialAd();
+                            }
+                        });
                         break;
 
                     case UNITY:
@@ -539,8 +544,19 @@ public class InterstitialAd {
                         break;
 
                     case STARTAPP:
-                        // StartApp SDK removed - no longer supported
-                        Log.w(TAG, "StartApp SDK has been removed");
+                        startAppAd = new StartAppAd(activity);
+                        startAppAd.loadAd(new AdEventListener() {
+                            @Override
+                            public void onReceiveAd(@NonNull Ad ad) {
+                                Log.d(TAG, "Startapp Interstitial Ad loaded");
+                            }
+
+                            @Override
+                            public void onFailedToReceiveAd(@Nullable Ad ad) {
+                                Log.d(TAG, "Failed to load Startapp Interstitial Ad");
+                            }
+                        });
+                        Log.d(TAG, "load StartApp as backup Ad");
                         break;
 
                     case UNITY:
@@ -672,8 +688,13 @@ public class InterstitialAd {
                             break;
 
                         case STARTAPP:
-                            // StartApp SDK removed - no longer supported
-                            Log.w(TAG, "StartApp SDK has been removed");
+                            if (startAppAd != null) {
+                                startAppAd.showAd();
+                                Log.d(TAG, "startapp interstitial not null [counter] : " + counter);
+                            } else {
+                                showBackupInterstitialAd();
+                                Log.d(TAG, "startapp interstitial null");
+                            }
                             break;
 
                         case UNITY:
@@ -761,8 +782,9 @@ public class InterstitialAd {
                         break;
 
                     case STARTAPP:
-                        // StartApp SDK removed - no longer supported
-                        Log.w(TAG, "StartApp SDK has been removed");
+                        if (startAppAd != null) {
+                            startAppAd.showAd();
+                        }
                         break;
 
                     case UNITY:
@@ -947,8 +969,19 @@ public class InterstitialAd {
                         break;
 
                     case STARTAPP:
-                        // StartApp SDK removed - no longer supported
-                        Log.w(TAG, "StartApp SDK has been removed");
+                        startAppAd = new StartAppAd(activity);
+                        startAppAd.loadAd(new AdEventListener() {
+                            @Override
+                            public void onReceiveAd(@NonNull Ad ad) {
+                                Log.d(TAG, "Startapp Interstitial Ad loaded");
+                            }
+
+                            @Override
+                            public void onFailedToReceiveAd(@Nullable Ad ad) {
+                                Log.d(TAG, "Failed to load Startapp Interstitial Ad");
+                                loadBackupInterstitialAd(onInterstitialAdDismissedListener);
+                            }
+                        });
                         break;
 
                     case UNITY:
@@ -1172,8 +1205,19 @@ public class InterstitialAd {
                         break;
 
                     case STARTAPP:
-                        // StartApp SDK removed - no longer supported
-                        Log.w(TAG, "StartApp SDK has been removed");
+                        startAppAd = new StartAppAd(activity);
+                        startAppAd.loadAd(new AdEventListener() {
+                            @Override
+                            public void onReceiveAd(@NonNull Ad ad) {
+                                Log.d(TAG, "Startapp Interstitial Ad loaded");
+                            }
+
+                            @Override
+                            public void onFailedToReceiveAd(@Nullable Ad ad) {
+                                Log.d(TAG, "Failed to load Startapp Interstitial Ad");
+                            }
+                        });
+                        Log.d(TAG, "load StartApp as backup Ad");
                         break;
 
                     case UNITY:
@@ -1307,8 +1351,33 @@ public class InterstitialAd {
                             break;
 
                         case STARTAPP:
-                            // StartApp SDK removed - no longer supported
-                            Log.w(TAG, "StartApp SDK has been removed");
+                            if (startAppAd != null) {
+                                startAppAd.showAd(new AdDisplayListener() {
+                                    @Override
+                                    public void adHidden(Ad ad) {
+                                        onInterstitialAdDismissedListener.onInterstitialAdDismissed();
+                                    }
+
+                                    @Override
+                                    public void adDisplayed(Ad ad) {
+                                        onInterstitialAdShowedListener.onInterstitialAdShowed();
+                                    }
+
+                                    @Override
+                                    public void adClicked(Ad ad) {
+
+                                    }
+
+                                    @Override
+                                    public void adNotDisplayed(Ad ad) {
+
+                                    }
+                                });
+                                Log.d(TAG, "startapp interstitial not null [counter] : " + counter);
+                            } else {
+                                showBackupInterstitialAd(onInterstitialAdShowedListener, onInterstitialAdDismissedListener);
+                                Log.d(TAG, "startapp interstitial null");
+                            }
                             break;
 
                         case UNITY:
@@ -1413,8 +1482,29 @@ public class InterstitialAd {
                         break;
 
                     case STARTAPP:
-                        // StartApp SDK removed - no longer supported
-                        Log.w(TAG, "StartApp SDK has been removed");
+                        if (startAppAd != null) {
+                            startAppAd.showAd(new AdDisplayListener() {
+                                @Override
+                                public void adHidden(Ad ad) {
+                                    onInterstitialAdDismissedListener.onInterstitialAdDismissed();
+                                }
+
+                                @Override
+                                public void adDisplayed(Ad ad) {
+                                    onInterstitialAdShowedListener.onInterstitialAdShowed();
+                                }
+
+                                @Override
+                                public void adClicked(Ad ad) {
+
+                                }
+
+                                @Override
+                                public void adNotDisplayed(Ad ad) {
+
+                                }
+                            });
+                        }
                         break;
 
                     case UNITY:

@@ -347,92 +347,24 @@ public class QadaTrackerActivity extends AppCompatActivity {
     
     /**
      * 处理退出Qada Tracker页面流程
-     * 留存用户（第3天及以后）显示插屏广告
+     * 所有未付费用户退出时显示插屏广告
      */
     private void handleExit() {
-        // 检查是否是留存用户（第3天及以后）
-        if (shouldShowExitAd()) {
-            showExitInterstitialAd();
-        } else {
-            // 新用户（前2天）直接退出，不阻挡用户体验
-            finish();
-        }
-    }
-    
-    /**
-     * 判断是否应该显示退出插屏广告
-     * @return true 如果用户是留存用户（第3天及以后）
-     */
-    private boolean shouldShowExitAd() {
-        int installDays = getInstallDays();
-        Log.d(TAG, "📅 Install days: " + installDays + ", shouldShowExitAd: " + (installDays >= 3));
-        return installDays >= 3;
-    }
-    
-    /**
-     * 获取应用安装天数
-     * @return 安装天数（0表示安装当天）
-     */
-    private int getInstallDays() {
-        try {
-            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            long firstInstallTime = packageInfo.firstInstallTime;
-            long currentTime = System.currentTimeMillis();
-            int days = (int) ((currentTime - firstInstallTime) / (24 * 60 * 60 * 1000));
-            Log.d(TAG, "📱 First install: " + firstInstallTime + ", Current: " + currentTime + ", Days: " + days);
-            return days;
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.e(TAG, "❌ Failed to get install days", e);
-            return 0;
-        }
-    }
-    
-    /**
-     * 显示退出插屏广告
-     * 使用应用内共用插屏ID (AD_INTERS)
-     */
-    private void showExitInterstitialAd() {
-        Log.d(TAG, "🎬 Showing exit interstitial ad...");
+        // 🎯 Show interstitial ad before exiting (only for unpaid users)
+        Log.d(TAG, "🎯 User exiting Qada Tracker, attempting to show exit interstitial ad");
+        boolean adShown = com.quranaudio.common.ad.InterstitialAdManager.Companion.getInstance().showAdIfAvailable(this);
         
-        AdFactory.INSTANCE.showInterstitialAd(
-            this,
-            AdConfig.AD_INTERS,
-            "qada_tracker_exit",
-            new AdShowCallback() {
-                @Override
-                public void onAdImpression(AdItem adItem) {
-                    Log.d(TAG, "📊 Ad impression recorded");
-                }
-                
-                @Override
-                public void onAdClicked(AdItem adItem) {
-                    Log.d(TAG, "👆 Ad clicked");
-                }
-                
-                @Override
-                public void onUserEarnedReward(AdItem adItem, RewardItem rewardItem) {
-                    // 插屏广告不需要奖励
-                }
-                
-                @Override
-                public void onAdClosed(AdItem adItem) {
-                    Log.d(TAG, "✅ Ad closed, finishing activity");
+        if (adShown) {
+            Log.d(TAG, "✅ Exit ad shown to unpaid user, delaying finish to allow ad to display");
+            // CRITICAL: Delay finish() to allow ad to render and display properly
+            // Ad needs the Activity context to remain alive
+            new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+                    finish();
+            }, 500); // 500ms delay to ensure ad renders
+        } else {
+            Log.d(TAG, "⚠️ No exit ad shown (subscribed or unavailable), finishing immediately");
                     finish();
                 }
-                
-                @Override
-                public void onShow(AdItem adItem) {
-                    Log.d(TAG, "📺 Ad shown");
-                }
-                
-                @Override
-                public void onShowFail() {
-                    Log.d(TAG, "❌ Ad failed to show, finishing activity directly");
-                    // 如果广告展示失败，直接退出，不阻挡用户体验
-                    finish();
-                }
-            }
-        );
     }
     
     /**

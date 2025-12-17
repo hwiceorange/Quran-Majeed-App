@@ -3,6 +3,7 @@ package com.quran.quranaudio.online.quests.ui;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -97,7 +98,7 @@ public class TajweedTimerActivity extends AppCompatActivity {
     }
     
     private void setupTimer() {
-        timerHandler = new Handler();
+        timerHandler = new Handler(Looper.getMainLooper());
         timerRunnable = new Runnable() {
             @Override
             public void run() {
@@ -193,8 +194,11 @@ public class TajweedTimerActivity extends AppCompatActivity {
         // Show completion message
         Toast.makeText(this, "🎉 Tajweed Practice completed! Well done!", Toast.LENGTH_LONG).show();
         
-        // Auto-close after 3 seconds
-        new Handler().postDelayed(() -> {
+        // Note: Ad will be shown when user exits main reading flow (ActivityReader), not here
+        // to avoid interrupting the user with multiple ads
+        
+        // Auto-close after 3 seconds (original behavior)
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
             finish();
         }, 3000);
         

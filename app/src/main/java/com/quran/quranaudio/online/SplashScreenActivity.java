@@ -66,21 +66,16 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         pbView=findViewById(R.id.progressbar);
         
-        // ⭐ 新用户首日不加载开屏广告（避免浪费和展示率异常）
-        boolean isNewUserFirstDay = UserInfoUtils.INSTANCE.isNewUser() && AppConfig.INSTANCE.isInstallFirstDay();
-        if (!isNewUserFirstDay) {
-            String adId = AdConfig.INSTANCE.getAdIdByPosition(AdConfig.AD_APPOPEN);
-            boolean isTestAd = adId.contains("3940256099942544"); // Google测试广告ID
-            android.util.Log.d(TAG, "✅ Loading AppOpen Ad (not new user's first day)");
-            android.util.Log.d(TAG, "📱 Ad ID: " + adId);
-            android.util.Log.d(TAG, "🧪 Is Test Ad: " + isTestAd);
-            if (isTestAd) {
-                android.util.Log.w(TAG, "⚠️ Using TEST Ad - test ads may auto-close quickly. Use Release build for production ads.");
-            }
-            AdFactory.INSTANCE.loadAppOpenAd(this, AdConfig.AD_APPOPEN,null);
-        } else {
-            android.util.Log.d(TAG, "🚫 Skipping AppOpen Ad load (new user's first day)");
+        // ⭐ 所有用户（包括新用户首次安装）都展示开屏广告
+        String adId = AdConfig.INSTANCE.getAdIdByPosition(AdConfig.AD_APPOPEN);
+        boolean isTestAd = adId.contains("3940256099942544"); // Google测试广告ID
+        android.util.Log.d(TAG, "✅ Loading AppOpen Ad for all users (including first install)");
+        android.util.Log.d(TAG, "📱 Ad ID: " + adId);
+        android.util.Log.d(TAG, "🧪 Is Test Ad: " + isTestAd);
+        if (isTestAd) {
+            android.util.Log.w(TAG, "⚠️ Using TEST Ad - test ads may auto-close quickly. Use Release build for production ads.");
         }
+        AdFactory.INSTANCE.loadAppOpenAd(this, AdConfig.AD_APPOPEN,null);
         
         /*
         if (Constant.AD_STATUS.equals(AD_STATUS_ON) && Constant.OPEN_ADS_ON_START) {
@@ -135,21 +130,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 return; // 已经跳转，不再处理
             }
             
-            // ⭐ 新用户首日不展示开屏广告，等待进度条到100%后跳转
-            boolean isNewUserFirstDay = UserInfoUtils.INSTANCE.isNewUser() && AppConfig.INSTANCE.isInstallFirstDay();
-            if (isNewUserFirstDay) {
-                int currentProgress = pbView.getProgress();
-                if (currentProgress >= 100) {
-                    android.util.Log.d(TAG, "✅ New user first day - progress 100%, jumping to main");
-                    startMainActivity();
-                } else {
-                    android.util.Log.d(TAG, "⏳ New user first day - waiting for progress (current: " + currentProgress + "%)");
-                    handler.removeCallbacks(r);
-                    handler.postDelayed(r, 100); // 每100ms检查一次进度
-                }
-                return;
-            }
-            
+            // ⭐ 所有用户（包括新用户首次安装）都尝试展示开屏广告
             if (AdFactory.INSTANCE.hasAppOpenAd(AdConfig.AD_APPOPEN)){
                final long showRequestTime = System.currentTimeMillis();
                android.util.Log.d(TAG, "✅ AppOpen Ad is ready, requesting to show...");
@@ -444,13 +425,12 @@ public class SplashScreenActivity extends AppCompatActivity {
             handler.removeCallbacks(updateProgress);
             handler.postDelayed(updateProgress, 25);
             
-            // 🔥 启动绝对超时保护：新用户3秒，老用户5秒
-            boolean isNewUserFirstDay = UserInfoUtils.INSTANCE.isNewUser() && AppConfig.INSTANCE.isInstallFirstDay();
-            int timeoutDuration = isNewUserFirstDay ? 3000 : 5000;
+            // 🔥 启动绝对超时保护：所有用户统一5秒超时
+            int timeoutDuration = 5000;
             handler.removeCallbacks(absoluteTimeoutRunnable);
             handler.postDelayed(absoluteTimeoutRunnable, timeoutDuration);
             
-            android.util.Log.d(TAG, "📊 Progress bar started with " + (timeoutDuration/1000) + "s timeout protection");
+            android.util.Log.d(TAG, "📊 Progress bar started with " + (timeoutDuration/1000) + "s timeout protection for all users");
         }
     }
 

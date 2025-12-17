@@ -304,6 +304,9 @@ public class QuranReadingTracker {
             return;
         }
         
+        // Note: Ad will be shown when user exits ActivityReader, not here
+        // to avoid interrupting the user while they are still reading
+        
         // Update task completion in Firebase (Task 1: Quran Reading)
         new Thread(() -> {
             try {

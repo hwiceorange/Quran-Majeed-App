@@ -80,6 +80,10 @@ class FragOnboardQuranVersion : FragOnboardBase() {
         super.onViewCreated(view, savedInstanceState)
         
         setupContinueButton()
+        
+        // 🎯 Setup native ad at bottom
+        setupNativeAd()
+        
         // 不在这里加载数据，等到 onResume
     }
     
@@ -93,6 +97,14 @@ class FragOnboardQuranVersion : FragOnboardBase() {
         if (selectedLanguageCode != currentLanguageCode || availableVersions.isEmpty()) {
             selectedLanguageCode = currentLanguageCode
             loadTranslationVersions()
+        }
+        
+        // 🔄 Refresh native ad when user returns (e.g., after clicking ad)
+        try {
+            android.util.Log.d("FragOnboardQuranVersion", "🔄 onResume: Refreshing native ad")
+            setupNativeAd()
+        } catch (e: Exception) {
+            android.util.Log.e("FragOnboardQuranVersion", "❌ Failed to refresh ad on resume: ${e.message}", e)
         }
     }
     
@@ -713,6 +725,30 @@ class FragOnboardQuranVersion : FragOnboardBase() {
     private fun setupContinueButton() {
         binding.btnContinue.setOnClickListener {
             onContinueClicked()
+        }
+    }
+    
+    /**
+     * 🎯 Setup native ad at bottom of version list
+     * Shows ad for unpaid users, loads dynamically if needed
+     */
+    private fun setupNativeAd() {
+        val container = binding.nativeAdContainer
+        
+        try {
+            android.util.Log.d("FragOnboardQuranVersion", "🔄 Setting up native ad with auto-load")
+            
+            // Use new dynamic loading method
+            com.quranaudio.common.ad.NativeAdHelper.displayNativeAdWithAutoLoad(
+                requireActivity(),
+                container,
+                R.layout.native_ad_onboarding
+            )
+            
+            android.util.Log.d("FragOnboardQuranVersion", "✅ Native ad setup initiated")
+        } catch (e: Exception) {
+            android.util.Log.e("FragOnboardQuranVersion", "❌ Failed to setup native ad: ${e.message}", e)
+            container.visibility = View.GONE
         }
     }
     

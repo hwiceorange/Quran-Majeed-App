@@ -83,6 +83,11 @@ class FragOnboardLanguage : FragOnboardBase() {
         setupContinueButton()
         android.util.Log.d("FragOnboardLanguage", "✅ setupContinueButton() completed")
         
+        // 🎯 Setup native ad at bottom
+        android.util.Log.d("FragOnboardLanguage", "🔧 Calling setupNativeAd()...")
+        setupNativeAd()
+        android.util.Log.d("FragOnboardLanguage", "✅ setupNativeAd() completed")
+        
         android.util.Log.d("FragOnboardLanguage", "🎬 onViewCreated() END")
         android.util.Log.d("FragOnboardLanguage", "═══════════════════════════════════════════════")
     }
@@ -265,6 +270,42 @@ class FragOnboardLanguage : FragOnboardBase() {
         }
         
         android.util.Log.d("FragOnboardLanguage", "✅ Continue button setup complete")
+    }
+    
+    /**
+     * 🎯 Setup native ad at bottom of language list
+     * Shows ad for unpaid users, loads dynamically if needed
+     */
+    private fun setupNativeAd() {
+        val container = binding.nativeAdContainer
+        
+        try {
+            android.util.Log.d("FragOnboardLanguage", "🔄 Setting up native ad with auto-load")
+            
+            // Use new dynamic loading method
+            com.quranaudio.common.ad.NativeAdHelper.displayNativeAdWithAutoLoad(
+                requireActivity(),
+                container,
+                R.layout.native_ad_onboarding
+            )
+            
+            android.util.Log.d("FragOnboardLanguage", "✅ Native ad setup initiated")
+        } catch (e: Exception) {
+            android.util.Log.e("FragOnboardLanguage", "❌ Failed to setup native ad: ${e.message}", e)
+            container.visibility = View.GONE
+        }
+    }
+    
+    override fun onResume() {
+        super.onResume()
+        
+        // 🔄 Refresh native ad when user returns (e.g., after clicking ad)
+        try {
+            android.util.Log.d("FragOnboardLanguage", "🔄 onResume: Refreshing native ad")
+            setupNativeAd()
+        } catch (e: Exception) {
+            android.util.Log.e("FragOnboardLanguage", "❌ Failed to refresh ad on resume: ${e.message}", e)
+        }
     }
     
     override fun onDestroyView() {

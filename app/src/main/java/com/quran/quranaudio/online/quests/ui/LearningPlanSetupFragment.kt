@@ -532,18 +532,31 @@ class LearningPlanSetupFragment : Fragment() {
                     Toast.makeText(requireContext(), "Learning plan saved successfully! ✅", Toast.LENGTH_SHORT).show()
                     viewModel.resetSaveStatus()
                     
-                    // 使用 Handler 延迟导航，确保 Toast 显示且避免并发问题
+                    // 🎯 Show interstitial ad before returning to home
                     android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
                         try {
-                            if (isAdded && view != null) {
-                                findNavController().popBackStack()
-                                Log.d(TAG, "已成功返回主页")
+                            if (isAdded && view != null && activity != null) {
+                                Log.d(TAG, "🎯 Attempting to show interstitial ad before navigation")
+                                
+                                // Show ad with callback (it will handle subscription check internally)
+                                val adShown = com.quranaudio.common.ad.InterstitialAdManager.getInstance().showAdIfAvailable(requireActivity()) {
+                                    // This callback is invoked when user dismisses the ad or ad fails to show
+                                    Log.d(TAG, "✅ Ad closed by user, navigating back to home")
+                                    navigateBackToHome()
+                                }
+                                
+                                if (!adShown) {
+                                    Log.d(TAG, "⚠️ No ad shown (subscribed or unavailable), navigating immediately")
+                                    navigateBackToHome()
+                                } else {
+                                    Log.d(TAG, "✅ Interstitial ad shown, waiting for user to close it")
+                                }
                             } else {
                                 Log.w(TAG, "Fragment 已分离，无法导航")
                             }
                         } catch (e: Exception) {
-                            Log.e(TAG, "导航失败", e)
-                            Toast.makeText(requireContext(), "导航失败，请手动返回主页", Toast.LENGTH_SHORT).show()
+                            Log.e(TAG, "广告展示或导航失败", e)
+                            navigateBackToHome()
                         }
                     }, 500) // 500ms 延迟，确保 Toast 显示
                 }
@@ -714,6 +727,23 @@ class LearningPlanSetupFragment : Fragment() {
         binding.rbTasbih50.alpha = alpha
         binding.rbTasbih100.isEnabled = enabled
         binding.rbTasbih100.alpha = alpha
+    }
+    
+    /**
+     * 🔥 Helper function: Navigate back to home screen
+     */
+    private fun navigateBackToHome() {
+        try {
+            if (isAdded && view != null) {
+                findNavController().popBackStack()
+                Log.d(TAG, "✅ Successfully navigated back to home")
+            } else {
+                Log.w(TAG, "⚠️ Fragment detached, cannot navigate")
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "❌ Navigation failed", e)
+            Toast.makeText(requireContext(), "Navigation failed, please go back manually", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onDestroyView() {

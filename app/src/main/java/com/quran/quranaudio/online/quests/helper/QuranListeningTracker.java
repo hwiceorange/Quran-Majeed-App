@@ -223,6 +223,9 @@ public class QuranListeningTracker {
         
         Log.d(TAG, "🔥 Calling markTaskComplete() - starting Firebase update...");
         
+        // Note: Ad will be shown when user exits ActivityReader, not here
+        // to avoid interrupting the user while they are still listening
+        
         // Update task completion in Firebase (Task 2: Quran Listening)
         new Thread(() -> {
             try {

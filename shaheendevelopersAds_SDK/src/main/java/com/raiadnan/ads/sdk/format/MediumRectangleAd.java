@@ -47,8 +47,10 @@ import com.google.android.gms.ads.admanager.AdManagerAdView;
 import com.raiadnan.ads.sdk.R;
 import com.raiadnan.ads.sdk.helper.AppLovinCustomEventBanner;
 import com.raiadnan.ads.sdk.util.Tools;
-import com.startapp.sdk.ads.banner.Banner;
-import com.startapp.sdk.ads.banner.BannerListener;
+// StartApp SDK removed
+//import com.startapp.sdk.ads.banner.Banner;
+// StartApp SDK removed
+//import com.startapp.sdk.ads.banner.BannerListener;
 import com.unity3d.services.banners.BannerErrorInfo;
 import com.unity3d.services.banners.BannerView;
 import com.unity3d.services.banners.UnityBannerSize;
@@ -277,30 +279,8 @@ public class MediumRectangleAd {
                         break;
 
                     case STARTAPP:
-                        RelativeLayout startAppAdView = activity.findViewById(R.id.startapp_banner_view_container);
-                        Banner banner = new Banner(activity, new BannerListener() {
-                            @Override
-                            public void onReceiveAd(View banner) {
-                                startAppAdView.setVisibility(View.VISIBLE);
-                            }
-
-                            @Override
-                            public void onFailedToReceiveAd(View banner) {
-                                startAppAdView.setVisibility(View.GONE);
-                                loadBackupBannerAd();
-                                Log.d(TAG, adNetwork + " failed load startapp banner ad : ");
-                            }
-
-                            @Override
-                            public void onImpression(View view) {
-
-                            }
-
-                            @Override
-                            public void onClick(View banner) {
-                            }
-                        });
-                        startAppAdView.addView(banner);
+                        // StartApp SDK removed - no longer supported
+                        Log.w(TAG, "StartApp SDK has been removed");
                         break;
 
                     case UNITY:
@@ -567,29 +547,8 @@ public class MediumRectangleAd {
                         break;
 
                     case STARTAPP:
-                        RelativeLayout startAppAdView = activity.findViewById(R.id.startapp_banner_view_container);
-                        Banner banner = new Banner(activity, new BannerListener() {
-                            @Override
-                            public void onReceiveAd(View banner) {
-                                startAppAdView.setVisibility(View.VISIBLE);
-                            }
-
-                            @Override
-                            public void onFailedToReceiveAd(View banner) {
-                                startAppAdView.setVisibility(View.GONE);
-                                Log.d(TAG, adNetwork + " failed load startapp banner ad : ");
-                            }
-
-                            @Override
-                            public void onImpression(View view) {
-
-                            }
-
-                            @Override
-                            public void onClick(View banner) {
-                            }
-                        });
-                        startAppAdView.addView(banner);
+                        // StartApp SDK removed - no longer supported
+                        Log.w(TAG, "StartApp SDK has been removed");
                         break;
 
                     case UNITY:

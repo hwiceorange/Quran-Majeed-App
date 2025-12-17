@@ -971,8 +971,43 @@ public class ActivityReader extends ReaderPossessingActivity {
     @Override
     public void onBackPressed() {
         if (isTaskRoot()) {
+            // 🎯 Check reading duration before showing ad
+            long sessionDuration = 0;
+            if (sessionStartTime > 0) {
+                sessionDuration = System.currentTimeMillis() - sessionStartTime;
+            }
+            long sessionDurationSeconds = sessionDuration / 1000;
+            
+            android.util.Log.d("ActivityReader", "🎯 User exiting to MainActivity");
+            android.util.Log.d("ActivityReader", "📊 Reading duration: " + sessionDurationSeconds + " seconds");
+            
+            // Only show ad if reading duration > 3 minutes (180 seconds) for unpaid users
+            final long MIN_READING_DURATION_SECONDS = 180;
+            
+            if (sessionDurationSeconds >= MIN_READING_DURATION_SECONDS) {
+                android.util.Log.d("ActivityReader", "✅ Reading duration >= 3 minutes, attempting to show interstitial ad");
+                boolean adShown = com.quranaudio.common.ad.InterstitialAdManager.Companion.getInstance().showAdIfAvailable(this);
+                
+                if (adShown) {
+                    android.util.Log.d("ActivityReader", "✅ Exit ad shown to unpaid user, delaying finish to allow ad to display");
+                    // CRITICAL: Delay finish() to allow ad to render and display properly
+                    // Ad needs the Activity context to remain alive
+                    new Handler().postDelayed(() -> {
             launchMainActivity();
             finish();
+                    }, 500); // 500ms delay to ensure ad renders
+                } else {
+                    android.util.Log.d("ActivityReader", "⚠️ No exit ad shown (subscribed or unavailable), finishing immediately");
+                    // No ad shown - navigate immediately
+                    launchMainActivity();
+                    finish();
+                }
+            } else {
+                android.util.Log.d("ActivityReader", "⏱️ Reading duration < 3 minutes (" + sessionDurationSeconds + "s), skipping ad, finishing immediately");
+                // Reading duration too short - skip ad and navigate immediately
+                launchMainActivity();
+                finish();
+            }
 
             return;
         }

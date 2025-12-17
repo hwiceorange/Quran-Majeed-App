@@ -335,8 +335,57 @@ public class NativeAdViewHolder extends RecyclerView.ViewHolder {
                         break;
 
                     case STARTAPP:
-                        // StartApp SDK removed - no longer supported
-                        Log.w(TAG, "StartApp SDK has been removed");
+                        if (startappNativeAd.getVisibility() != View.VISIBLE) {
+                            StartAppNativeAd startAppNativeAd = new StartAppNativeAd(context);
+                            NativeAdPreferences nativePrefs = new NativeAdPreferences()
+                                    .setAdsNumber(3)
+                                    .setAutoBitmapDownload(true)
+                                    .setPrimaryImageSize(Constant.STARTAPP_IMAGE_MEDIUM);
+                            AdEventListener adListener = new AdEventListener() {
+                                @Override
+                                public void onReceiveAd(@NonNull Ad arg0) {
+                                    Log.d("STARTAPP_ADS", "ad loaded");
+                                    startappNativeAd.setVisibility(View.VISIBLE);
+                                    nativeAdViewContainer.setVisibility(View.VISIBLE);
+                                    //noinspection rawtypes
+                                    ArrayList ads = startAppNativeAd.getNativeAds(); // get NativeAds list
+
+                                    // Print all ads details to log
+                                    for (Object ad : ads) {
+                                        Log.d("STARTAPP_ADS", ad.toString());
+                                    }
+
+                                    NativeAdDetails ad = (NativeAdDetails) ads.get(0);
+                                    if (ad != null) {
+                                        startappNativeImage.setImageBitmap(ad.getImageBitmap());
+                                        startappNativeIcon.setImageBitmap(ad.getSecondaryImageBitmap());
+                                        startappNativeTitle.setText(ad.getTitle());
+                                        startappNativeDescription.setText(ad.getDescription());
+                                        startappNativeButton.setText(ad.isApp() ? "Install" : "Open");
+                                        ad.registerViewForInteraction(itemView);
+                                    }
+
+                                    if (darkTheme) {
+                                        startappNativeBackground.setBackgroundResource(nativeBackgroundDark);
+                                    } else {
+                                        startappNativeBackground.setBackgroundResource(nativeBackgroundLight);
+                                    }
+
+                                }
+
+                                @Override
+                                public void onFailedToReceiveAd(Ad arg0) {
+                                    //startapp_native_ad.setVisibility(View.GONE);
+                                    //native_ad_view_container.setVisibility(View.GONE);
+                                    loadBackupNativeAd(context, adStatus, placementStatus, backupAdNetwork, adMobNativeId, adManagerNativeId, fanNativeId, appLovinNativeId, appLovinDiscMrecZoneId, wortiseNativeId, darkTheme, legacyGDPR, nativeAdStyle, nativeBackgroundLight, nativeBackgroundDark);
+                                    Log.d(TAG, "ad failed");
+                                }
+                            };
+                            //noinspection deprecation
+                            startAppNativeAd.loadAd(nativePrefs, adListener);
+                        } else {
+                            Log.d(TAG, "StartApp native ads has been loaded");
+                        }
                         break;
 
                     case APPLOVIN:
@@ -629,8 +678,56 @@ public class NativeAdViewHolder extends RecyclerView.ViewHolder {
                         break;
 
                     case STARTAPP:
-                        // StartApp SDK removed - no longer supported
-                        Log.w(TAG, "StartApp SDK has been removed");
+                        if (startappNativeAd.getVisibility() != View.VISIBLE) {
+                            StartAppNativeAd startAppNativeAd = new StartAppNativeAd(context);
+                            NativeAdPreferences nativePrefs = new NativeAdPreferences()
+                                    .setAdsNumber(3)
+                                    .setAutoBitmapDownload(true)
+                                    .setPrimaryImageSize(Constant.STARTAPP_IMAGE_MEDIUM);
+                            AdEventListener adListener = new AdEventListener() {
+                                @Override
+                                public void onReceiveAd(@NonNull Ad arg0) {
+                                    Log.d("STARTAPP_ADS", "ad loaded");
+                                    startappNativeAd.setVisibility(View.VISIBLE);
+                                    nativeAdViewContainer.setVisibility(View.VISIBLE);
+                                    //noinspection rawtypes
+                                    ArrayList ads = startAppNativeAd.getNativeAds(); // get NativeAds list
+
+                                    // Print all ads details to log
+                                    for (Object ad : ads) {
+                                        Log.d("STARTAPP_ADS", ad.toString());
+                                    }
+
+                                    NativeAdDetails ad = (NativeAdDetails) ads.get(0);
+                                    if (ad != null) {
+                                        startappNativeImage.setImageBitmap(ad.getImageBitmap());
+                                        startappNativeIcon.setImageBitmap(ad.getSecondaryImageBitmap());
+                                        startappNativeTitle.setText(ad.getTitle());
+                                        startappNativeDescription.setText(ad.getDescription());
+                                        startappNativeButton.setText(ad.isApp() ? "Install" : "Open");
+                                        ad.registerViewForInteraction(itemView);
+                                    }
+
+                                    if (darkTheme) {
+                                        startappNativeBackground.setBackgroundResource(nativeBackgroundDark);
+                                    } else {
+                                        startappNativeBackground.setBackgroundResource(nativeBackgroundLight);
+                                    }
+
+                                }
+
+                                @Override
+                                public void onFailedToReceiveAd(Ad arg0) {
+                                    startappNativeAd.setVisibility(View.GONE);
+                                    nativeAdViewContainer.setVisibility(View.GONE);
+                                    Log.d(TAG, "ad failed");
+                                }
+                            };
+                            //noinspection deprecation
+                            startAppNativeAd.loadAd(nativePrefs, adListener);
+                        } else {
+                            Log.d(TAG, "StartApp native ads has been loaded");
+                        }
                         break;
 
                     case APPLOVIN:
@@ -921,8 +1018,57 @@ public class NativeAdViewHolder extends RecyclerView.ViewHolder {
                         break;
 
                     case STARTAPP:
-                        // StartApp SDK removed - no longer supported
-                        Log.w(TAG, "StartApp SDK has been removed");
+                        if (startappNativeAd.getVisibility() != View.VISIBLE) {
+                            StartAppNativeAd startAppNativeAd = new StartAppNativeAd(context);
+                            NativeAdPreferences nativePrefs = new NativeAdPreferences()
+                                    .setAdsNumber(3)
+                                    .setAutoBitmapDownload(true)
+                                    .setPrimaryImageSize(Constant.STARTAPP_IMAGE_MEDIUM);
+                            AdEventListener adListener = new AdEventListener() {
+                                @Override
+                                public void onReceiveAd(@NonNull Ad arg0) {
+                                    Log.d("STARTAPP_ADS", "ad loaded");
+                                    startappNativeAd.setVisibility(View.VISIBLE);
+                                    nativeAdViewContainer.setVisibility(View.VISIBLE);
+                                    //noinspection rawtypes
+                                    ArrayList ads = startAppNativeAd.getNativeAds(); // get NativeAds list
+
+                                    // Print all ads details to log
+                                    for (Object ad : ads) {
+                                        Log.d("STARTAPP_ADS", ad.toString());
+                                    }
+
+                                    NativeAdDetails ad = (NativeAdDetails) ads.get(0);
+                                    if (ad != null) {
+                                        startappNativeImage.setImageBitmap(ad.getImageBitmap());
+                                        startappNativeIcon.setImageBitmap(ad.getSecondaryImageBitmap());
+                                        startappNativeTitle.setText(ad.getTitle());
+                                        startappNativeDescription.setText(ad.getDescription());
+                                        startappNativeButton.setText(ad.isApp() ? "Install" : "Open");
+                                        ad.registerViewForInteraction(itemView);
+                                    }
+
+                                    if (darkTheme) {
+                                        startappNativeBackground.setBackgroundResource(nativeBackgroundDark);
+                                    } else {
+                                        startappNativeBackground.setBackgroundResource(nativeBackgroundLight);
+                                    }
+
+                                }
+
+                                @Override
+                                public void onFailedToReceiveAd(Ad arg0) {
+                                    //startapp_native_ad.setVisibility(View.GONE);
+                                    //native_ad_view_container.setVisibility(View.GONE);
+                                    loadBackupNativeAd(context, adStatus, placementStatus, backupAdNetwork, adMobNativeId, adManagerNativeId, fanNativeId, appLovinNativeId, appLovinDiscMrecZoneId, darkTheme, legacyGDPR, nativeAdStyle, nativeBackgroundLight, nativeBackgroundDark);
+                                    Log.d(TAG, "ad failed");
+                                }
+                            };
+                            //noinspection deprecation
+                            startAppNativeAd.loadAd(nativePrefs, adListener);
+                        } else {
+                            Log.d(TAG, "StartApp native ads has been loaded");
+                        }
                         break;
 
                     case APPLOVIN:
@@ -1215,8 +1361,56 @@ public class NativeAdViewHolder extends RecyclerView.ViewHolder {
                         break;
 
                     case STARTAPP:
-                        // StartApp SDK removed - no longer supported
-                        Log.w(TAG, "StartApp SDK has been removed");
+                        if (startappNativeAd.getVisibility() != View.VISIBLE) {
+                            StartAppNativeAd startAppNativeAd = new StartAppNativeAd(context);
+                            NativeAdPreferences nativePrefs = new NativeAdPreferences()
+                                    .setAdsNumber(3)
+                                    .setAutoBitmapDownload(true)
+                                    .setPrimaryImageSize(Constant.STARTAPP_IMAGE_MEDIUM);
+                            AdEventListener adListener = new AdEventListener() {
+                                @Override
+                                public void onReceiveAd(@NonNull Ad arg0) {
+                                    Log.d("STARTAPP_ADS", "ad loaded");
+                                    startappNativeAd.setVisibility(View.VISIBLE);
+                                    nativeAdViewContainer.setVisibility(View.VISIBLE);
+                                    //noinspection rawtypes
+                                    ArrayList ads = startAppNativeAd.getNativeAds(); // get NativeAds list
+
+                                    // Print all ads details to log
+                                    for (Object ad : ads) {
+                                        Log.d("STARTAPP_ADS", ad.toString());
+                                    }
+
+                                    NativeAdDetails ad = (NativeAdDetails) ads.get(0);
+                                    if (ad != null) {
+                                        startappNativeImage.setImageBitmap(ad.getImageBitmap());
+                                        startappNativeIcon.setImageBitmap(ad.getSecondaryImageBitmap());
+                                        startappNativeTitle.setText(ad.getTitle());
+                                        startappNativeDescription.setText(ad.getDescription());
+                                        startappNativeButton.setText(ad.isApp() ? "Install" : "Open");
+                                        ad.registerViewForInteraction(itemView);
+                                    }
+
+                                    if (darkTheme) {
+                                        startappNativeBackground.setBackgroundResource(nativeBackgroundDark);
+                                    } else {
+                                        startappNativeBackground.setBackgroundResource(nativeBackgroundLight);
+                                    }
+
+                                }
+
+                                @Override
+                                public void onFailedToReceiveAd(Ad arg0) {
+                                    startappNativeAd.setVisibility(View.GONE);
+                                    nativeAdViewContainer.setVisibility(View.GONE);
+                                    Log.d(TAG, "ad failed");
+                                }
+                            };
+                            //noinspection deprecation
+                            startAppNativeAd.loadAd(nativePrefs, adListener);
+                        } else {
+                            Log.d(TAG, "StartApp native ads has been loaded");
+                        }
                         break;
 
                     case APPLOVIN:
@@ -1506,8 +1700,57 @@ public class NativeAdViewHolder extends RecyclerView.ViewHolder {
                         break;
 
                     case STARTAPP:
-                        // StartApp SDK removed - no longer supported
-                        Log.w(TAG, "StartApp SDK has been removed");
+                        if (startappNativeAd.getVisibility() != View.VISIBLE) {
+                            StartAppNativeAd startAppNativeAd = new StartAppNativeAd(context);
+                            NativeAdPreferences nativePrefs = new NativeAdPreferences()
+                                    .setAdsNumber(3)
+                                    .setAutoBitmapDownload(true)
+                                    .setPrimaryImageSize(Constant.STARTAPP_IMAGE_MEDIUM);
+                            AdEventListener adListener = new AdEventListener() {
+                                @Override
+                                public void onReceiveAd(@NonNull Ad arg0) {
+                                    Log.d("STARTAPP_ADS", "ad loaded");
+                                    startappNativeAd.setVisibility(View.VISIBLE);
+                                    nativeAdViewContainer.setVisibility(View.VISIBLE);
+                                    //noinspection rawtypes
+                                    ArrayList ads = startAppNativeAd.getNativeAds(); // get NativeAds list
+
+                                    // Print all ads details to log
+                                    for (Object ad : ads) {
+                                        Log.d("STARTAPP_ADS", ad.toString());
+                                    }
+
+                                    NativeAdDetails ad = (NativeAdDetails) ads.get(0);
+                                    if (ad != null) {
+                                        startappNativeImage.setImageBitmap(ad.getImageBitmap());
+                                        startappNativeIcon.setImageBitmap(ad.getSecondaryImageBitmap());
+                                        startappNativeTitle.setText(ad.getTitle());
+                                        startappNativeDescription.setText(ad.getDescription());
+                                        startappNativeButton.setText(ad.isApp() ? "Install" : "Open");
+                                        ad.registerViewForInteraction(itemView);
+                                    }
+
+                                    if (darkTheme) {
+                                        startappNativeBackground.setBackgroundResource(nativeBackgroundDark);
+                                    } else {
+                                        startappNativeBackground.setBackgroundResource(nativeBackgroundLight);
+                                    }
+
+                                }
+
+                                @Override
+                                public void onFailedToReceiveAd(Ad arg0) {
+                                    //startapp_native_ad.setVisibility(View.GONE);
+                                    //native_ad_view_container.setVisibility(View.GONE);
+                                    loadBackupNativeAd(context, adStatus, placementStatus, backupAdNetwork, adMobNativeId, adManagerNativeId, fanNativeId, appLovinNativeId, darkTheme, legacyGDPR, nativeAdStyle, nativeBackgroundLight, nativeBackgroundDark);
+                                    Log.d(TAG, "ad failed");
+                                }
+                            };
+                            //noinspection deprecation
+                            startAppNativeAd.loadAd(nativePrefs, adListener);
+                        } else {
+                            Log.d(TAG, "StartApp native ads has been loaded");
+                        }
                         break;
 
                     case APPLOVIN:
@@ -1762,8 +2005,56 @@ public class NativeAdViewHolder extends RecyclerView.ViewHolder {
                         break;
 
                     case STARTAPP:
-                        // StartApp SDK removed - no longer supported
-                        Log.w(TAG, "StartApp SDK has been removed");
+                        if (startappNativeAd.getVisibility() != View.VISIBLE) {
+                            StartAppNativeAd startAppNativeAd = new StartAppNativeAd(context);
+                            NativeAdPreferences nativePrefs = new NativeAdPreferences()
+                                    .setAdsNumber(3)
+                                    .setAutoBitmapDownload(true)
+                                    .setPrimaryImageSize(Constant.STARTAPP_IMAGE_MEDIUM);
+                            AdEventListener adListener = new AdEventListener() {
+                                @Override
+                                public void onReceiveAd(@NonNull Ad arg0) {
+                                    Log.d("STARTAPP_ADS", "ad loaded");
+                                    startappNativeAd.setVisibility(View.VISIBLE);
+                                    nativeAdViewContainer.setVisibility(View.VISIBLE);
+                                    //noinspection rawtypes
+                                    ArrayList ads = startAppNativeAd.getNativeAds(); // get NativeAds list
+
+                                    // Print all ads details to log
+                                    for (Object ad : ads) {
+                                        Log.d("STARTAPP_ADS", ad.toString());
+                                    }
+
+                                    NativeAdDetails ad = (NativeAdDetails) ads.get(0);
+                                    if (ad != null) {
+                                        startappNativeImage.setImageBitmap(ad.getImageBitmap());
+                                        startappNativeIcon.setImageBitmap(ad.getSecondaryImageBitmap());
+                                        startappNativeTitle.setText(ad.getTitle());
+                                        startappNativeDescription.setText(ad.getDescription());
+                                        startappNativeButton.setText(ad.isApp() ? "Install" : "Open");
+                                        ad.registerViewForInteraction(itemView);
+                                    }
+
+                                    if (darkTheme) {
+                                        startappNativeBackground.setBackgroundResource(nativeBackgroundDark);
+                                    } else {
+                                        startappNativeBackground.setBackgroundResource(nativeBackgroundLight);
+                                    }
+
+                                }
+
+                                @Override
+                                public void onFailedToReceiveAd(Ad arg0) {
+                                    startappNativeAd.setVisibility(View.GONE);
+                                    nativeAdViewContainer.setVisibility(View.GONE);
+                                    Log.d(TAG, "ad failed");
+                                }
+                            };
+                            //noinspection deprecation
+                            startAppNativeAd.loadAd(nativePrefs, adListener);
+                        } else {
+                            Log.d(TAG, "StartApp native ads has been loaded");
+                        }
                         break;
 
                     case APPLOVIN:
@@ -2013,8 +2304,57 @@ public class NativeAdViewHolder extends RecyclerView.ViewHolder {
                         break;
 
                     case STARTAPP:
-                        // StartApp SDK removed - no longer supported
-                        Log.w(TAG, "StartApp SDK has been removed");
+                        if (startappNativeAd.getVisibility() != View.VISIBLE) {
+                            StartAppNativeAd startAppNativeAd = new StartAppNativeAd(context);
+                            NativeAdPreferences nativePrefs = new NativeAdPreferences()
+                                    .setAdsNumber(3)
+                                    .setAutoBitmapDownload(true)
+                                    .setPrimaryImageSize(Constant.STARTAPP_IMAGE_MEDIUM);
+                            AdEventListener adListener = new AdEventListener() {
+                                @Override
+                                public void onReceiveAd(@NonNull Ad arg0) {
+                                    Log.d("STARTAPP_ADS", "ad loaded");
+                                    startappNativeAd.setVisibility(View.VISIBLE);
+                                    nativeAdViewContainer.setVisibility(View.VISIBLE);
+                                    //noinspection rawtypes
+                                    ArrayList ads = startAppNativeAd.getNativeAds(); // get NativeAds list
+
+                                    // Print all ads details to log
+                                    for (Object ad : ads) {
+                                        Log.d("STARTAPP_ADS", ad.toString());
+                                    }
+
+                                    NativeAdDetails ad = (NativeAdDetails) ads.get(0);
+                                    if (ad != null) {
+                                        startappNativeImage.setImageBitmap(ad.getImageBitmap());
+                                        startappNativeIcon.setImageBitmap(ad.getSecondaryImageBitmap());
+                                        startappNativeTitle.setText(ad.getTitle());
+                                        startappNativeDescription.setText(ad.getDescription());
+                                        startappNativeButton.setText(ad.isApp() ? "Install" : "Open");
+                                        ad.registerViewForInteraction(itemView);
+                                    }
+
+                                    if (darkTheme) {
+                                        startappNativeBackground.setBackgroundResource(R.color.color_native_background_dark);
+                                    } else {
+                                        startappNativeBackground.setBackgroundResource(R.color.color_native_background_light);
+                                    }
+
+                                }
+
+                                @Override
+                                public void onFailedToReceiveAd(Ad arg0) {
+                                    //startapp_native_ad.setVisibility(View.GONE);
+                                    //native_ad_view_container.setVisibility(View.GONE);
+                                    loadBackupNativeAd(context, adStatus, placementStatus, backupAdNetwork, adMobNativeId, adManagerNativeId, fanNativeId, appLovinNativeId, darkTheme, legacyGDPR, nativeAdStyle);
+                                    Log.d(TAG, "ad failed");
+                                }
+                            };
+                            //noinspection deprecation
+                            startAppNativeAd.loadAd(nativePrefs, adListener);
+                        } else {
+                            Log.d(TAG, "StartApp native ads has been loaded");
+                        }
                         break;
 
                     case APPLOVIN:
@@ -2259,8 +2599,56 @@ public class NativeAdViewHolder extends RecyclerView.ViewHolder {
                         break;
 
                     case STARTAPP:
-                        // StartApp SDK removed - no longer supported
-                        Log.w(TAG, "StartApp SDK has been removed");
+                        if (startappNativeAd.getVisibility() != View.VISIBLE) {
+                            StartAppNativeAd startAppNativeAd = new StartAppNativeAd(context);
+                            NativeAdPreferences nativePrefs = new NativeAdPreferences()
+                                    .setAdsNumber(3)
+                                    .setAutoBitmapDownload(true)
+                                    .setPrimaryImageSize(Constant.STARTAPP_IMAGE_MEDIUM);
+                            AdEventListener adListener = new AdEventListener() {
+                                @Override
+                                public void onReceiveAd(@NonNull Ad arg0) {
+                                    Log.d("STARTAPP_ADS", "ad loaded");
+                                    startappNativeAd.setVisibility(View.VISIBLE);
+                                    nativeAdViewContainer.setVisibility(View.VISIBLE);
+                                    //noinspection rawtypes
+                                    ArrayList ads = startAppNativeAd.getNativeAds(); // get NativeAds list
+
+                                    // Print all ads details to log
+                                    for (Object ad : ads) {
+                                        Log.d("STARTAPP_ADS", ad.toString());
+                                    }
+
+                                    NativeAdDetails ad = (NativeAdDetails) ads.get(0);
+                                    if (ad != null) {
+                                        startappNativeImage.setImageBitmap(ad.getImageBitmap());
+                                        startappNativeIcon.setImageBitmap(ad.getSecondaryImageBitmap());
+                                        startappNativeTitle.setText(ad.getTitle());
+                                        startappNativeDescription.setText(ad.getDescription());
+                                        startappNativeButton.setText(ad.isApp() ? "Install" : "Open");
+                                        ad.registerViewForInteraction(itemView);
+                                    }
+
+                                    if (darkTheme) {
+                                        startappNativeBackground.setBackgroundResource(R.color.color_native_background_dark);
+                                    } else {
+                                        startappNativeBackground.setBackgroundResource(R.color.color_native_background_light);
+                                    }
+
+                                }
+
+                                @Override
+                                public void onFailedToReceiveAd(Ad arg0) {
+                                    startappNativeAd.setVisibility(View.GONE);
+                                    nativeAdViewContainer.setVisibility(View.GONE);
+                                    Log.d(TAG, "ad failed");
+                                }
+                            };
+                            //noinspection deprecation
+                            startAppNativeAd.loadAd(nativePrefs, adListener);
+                        } else {
+                            Log.d(TAG, "StartApp native ads has been loaded");
+                        }
                         break;
 
                     case APPLOVIN:

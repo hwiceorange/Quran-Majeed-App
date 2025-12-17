@@ -57,14 +57,10 @@ import com.raiadnan.ads.sdk.util.Constant;
 import com.raiadnan.ads.sdk.util.NativeTemplateStyle;
 import com.raiadnan.ads.sdk.util.TemplateView;
 import com.raiadnan.ads.sdk.util.Tools;
-// StartApp SDK removed
-//import com.startapp.sdk.ads.nativead.NativeAdDetails;
-// StartApp SDK removed
-//import com.startapp.sdk.ads.nativead.NativeAdPreferences;
-// StartApp SDK removed
-//import com.startapp.sdk.ads.nativead.StartAppNativeAd;
-// StartApp SDK removed
-//import com.startapp.sdk.adsbase.adlisteners.AdEventListener;
+import com.startapp.sdk.ads.nativead.NativeAdDetails;
+import com.startapp.sdk.ads.nativead.NativeAdPreferences;
+import com.startapp.sdk.ads.nativead.StartAppNativeAd;
+import com.startapp.sdk.adsbase.adlisteners.AdEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -428,8 +424,55 @@ public class NativeAdFragment {
                         break;
 
                     case STARTAPP:
-                        // StartApp SDK removed - no longer supported
-                        Log.w(TAG, "StartApp SDK has been removed");
+                        if (startappNativeAd.getVisibility() != View.VISIBLE) {
+                            StartAppNativeAd startAppNativeAd = new StartAppNativeAd(activity);
+                            NativeAdPreferences nativePrefs = new NativeAdPreferences()
+                                    .setAdsNumber(3)
+                                    .setAutoBitmapDownload(true)
+                                    .setPrimaryImageSize(Constant.STARTAPP_IMAGE_MEDIUM);
+                            AdEventListener adListener = new AdEventListener() {
+                                @Override
+                                public void onReceiveAd(@NonNull com.startapp.sdk.adsbase.Ad arg0) {
+                                    Log.d(TAG, "StartApp Native Ad loaded");
+                                    startappNativeAd.setVisibility(View.VISIBLE);
+                                    nativeAdViewContainer.setVisibility(View.VISIBLE);
+                                    //noinspection rawtypes
+                                    ArrayList ads = startAppNativeAd.getNativeAds(); // get NativeAds list
+
+                                    // Print all ads details to log
+                                    for (Object ad : ads) {
+                                        Log.d(TAG, "StartApp Native Ad " + ad.toString());
+                                    }
+
+                                    NativeAdDetails ad = (NativeAdDetails) ads.get(0);
+                                    if (ad != null) {
+                                        startappNativeImage.setImageBitmap(ad.getImageBitmap());
+                                        startappNativeIcon.setImageBitmap(ad.getSecondaryImageBitmap());
+                                        startappNativeTitle.setText(ad.getTitle());
+                                        startappNativeDescription.setText(ad.getDescription());
+                                        startappNativeButton.setText(ad.isApp() ? "Install" : "Open");
+                                        ad.registerViewForInteraction(startappNativeAd);
+                                    }
+
+                                    if (darkTheme) {
+                                        startappNativeBackground.setBackgroundResource(nativeBackgroundDark);
+                                    } else {
+                                        startappNativeBackground.setBackgroundResource(nativeBackgroundLight);
+                                    }
+
+                                }
+
+                                @Override
+                                public void onFailedToReceiveAd(com.startapp.sdk.adsbase.Ad arg0) {
+                                    loadBackupNativeAd();
+                                    Log.d(TAG, "StartApp Native Ad failed loaded");
+                                }
+                            };
+                            //noinspection deprecation
+                            startAppNativeAd.loadAd(nativePrefs, adListener);
+                        } else {
+                            Log.d(TAG, "StartApp Native Ad has been loaded");
+                        }
                         break;
 
                     case APPLOVIN:
@@ -630,8 +673,55 @@ public class NativeAdFragment {
                         break;
 
                     case STARTAPP:
-                        // StartApp SDK removed - no longer supported
-                        Log.w(TAG, "StartApp SDK has been removed");
+                        if (startappNativeAd.getVisibility() != View.VISIBLE) {
+                            StartAppNativeAd startAppNativeAd = new StartAppNativeAd(activity);
+                            NativeAdPreferences nativePrefs = new NativeAdPreferences()
+                                    .setAdsNumber(3)
+                                    .setAutoBitmapDownload(true)
+                                    .setPrimaryImageSize(Constant.STARTAPP_IMAGE_MEDIUM);
+                            AdEventListener adListener = new AdEventListener() {
+                                @Override
+                                public void onReceiveAd(@NonNull com.startapp.sdk.adsbase.Ad arg0) {
+                                    Log.d(TAG, "StartApp Native Ad loaded");
+                                    startappNativeAd.setVisibility(View.VISIBLE);
+                                    nativeAdViewContainer.setVisibility(View.VISIBLE);
+                                    //noinspection rawtypes
+                                    ArrayList ads = startAppNativeAd.getNativeAds(); // get NativeAds list
+
+                                    // Print all ads details to log
+                                    for (Object ad : ads) {
+                                        Log.d(TAG, "StartApp Native Ad " + ad.toString());
+                                    }
+
+                                    NativeAdDetails ad = (NativeAdDetails) ads.get(0);
+                                    if (ad != null) {
+                                        startappNativeImage.setImageBitmap(ad.getImageBitmap());
+                                        startappNativeTitle.setText(ad.getTitle());
+                                        startappNativeDescription.setText(ad.getDescription());
+                                        startappNativeButton.setText(ad.isApp() ? "Install" : "Open");
+                                        ad.registerViewForInteraction(startappNativeAd);
+                                    }
+
+                                    if (darkTheme) {
+                                        startappNativeBackground.setBackgroundResource(nativeBackgroundDark);
+                                    } else {
+                                        startappNativeBackground.setBackgroundResource(nativeBackgroundLight);
+                                    }
+
+                                }
+
+                                @Override
+                                public void onFailedToReceiveAd(com.startapp.sdk.adsbase.Ad arg0) {
+                                    startappNativeAd.setVisibility(View.GONE);
+                                    nativeAdViewContainer.setVisibility(View.GONE);
+                                    Log.d(TAG, "StartApp Native Ad failed loaded");
+                                }
+                            };
+                            //noinspection deprecation
+                            startAppNativeAd.loadAd(nativePrefs, adListener);
+                        } else {
+                            Log.d(TAG, "StartApp Native Ad has been loaded");
+                        }
                         break;
 
                     case FAN:

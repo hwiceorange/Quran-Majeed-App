@@ -26,10 +26,8 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.AdapterStatus;
 //import com.ironsource.mediationsdk.IronSource;
 import com.raiadnan.ads.sdk.helper.AudienceNetworkInitializeHelper;
-// StartApp SDK removed
-//import com.startapp.sdk.adsbase.StartAppAd;
-// StartApp SDK removed
-//import com.startapp.sdk.adsbase.StartAppSDK;
+import com.startapp.sdk.adsbase.StartAppAd;
+import com.startapp.sdk.adsbase.StartAppSDK;
 import com.unity3d.mediation.IInitializationListener;
 import com.unity3d.mediation.InitializationConfiguration;
 import com.unity3d.mediation.UnityMediation;
@@ -143,8 +141,10 @@ public class AdNetwork {
                         AudienceNetworkInitializeHelper.initializeAd(activity, debug);
                         break;
                     case STARTAPP:
-                        // StartApp SDK removed - no longer supported
-                        Log.d(TAG, "StartApp SDK has been removed");
+                        StartAppSDK.init(activity, startappAppId, false);
+                        StartAppSDK.setTestAdsEnabled(debug);
+                        StartAppAd.disableSplash();
+                        StartAppSDK.setUserConsent(activity, "pas", System.currentTimeMillis(), true);
                         break;
                     case UNITY:
                         InitializationConfiguration configuration = InitializationConfiguration.builder()
@@ -207,8 +207,10 @@ public class AdNetwork {
                         AudienceNetworkInitializeHelper.initializeAd(activity, debug);
                         break;
                     case STARTAPP:
-                        // StartApp SDK removed - no longer supported
-                        Log.d(TAG, "StartApp SDK has been removed");
+                        StartAppSDK.init(activity, startappAppId, false);
+                        StartAppSDK.setTestAdsEnabled(debug);
+                        StartAppAd.disableSplash();
+                        StartAppSDK.setUserConsent(activity, "pas", System.currentTimeMillis(), true);
                         break;
                     case UNITY:
                         InitializationConfiguration configuration = InitializationConfiguration.builder()

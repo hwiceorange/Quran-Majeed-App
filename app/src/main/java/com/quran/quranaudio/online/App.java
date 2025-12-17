@@ -161,6 +161,16 @@ public class App extends BaseApp {
         
         AdFactory.INSTANCE.init(this,BuildConfig.DEBUG);
         
+        // 🎯 Initialize and preload interstitial ad manager
+        com.quranaudio.common.ad.InterstitialAdManager.Companion.getInstance().initialize(this);
+        com.quranaudio.common.ad.InterstitialAdManager.Companion.getInstance().preloadAd();
+        android.util.Log.d("App", "✅ InterstitialAdManager initialized and preload started");
+        
+        // 🎯 Initialize and preload native ad manager for onboarding pages
+        com.quranaudio.common.ad.NativeAdManager.Companion.getInstance().initialize(this);
+        com.quranaudio.common.ad.NativeAdManager.Companion.getInstance().preloadAd();
+        android.util.Log.d("App", "✅ NativeAdManager initialized and preload started");
+        
         // 注入 QuranDataProvider 实现给 Quiz 模块
         com.quran.quranaudio.quiz.data.QuranDataProviderHolder.INSTANCE.setInstance(
             com.quran.quranaudio.online.quran_module.quiz.QuranDataRepositoryImpl.getInstance(this)

@@ -188,6 +188,9 @@ public class TasbihFragment extends BaseFragment {
             "🎉 Daily Tasbih Quest completed! (" + dailyCount + "/" + dailyQuestTarget + ")", 
             Toast.LENGTH_LONG).show();
         
+        // Note: Ad will be shown when user exits the app or navigates away, not here
+        // to avoid interrupting the user while they are still actively using the feature
+        
         // Mark task as complete in Firebase (if user is logged in)
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             // 使用 AsyncTask 或 Handler 来异步处理（避免阻塞 UI 线程）

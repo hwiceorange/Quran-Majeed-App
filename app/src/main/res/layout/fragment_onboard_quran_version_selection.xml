@@ -62,6 +62,13 @@
 
             <!-- 翻译版本卡片将动态添加到这里 -->
 
+            <!-- 🎯 Native Ad Container - 15dp top margin for separation -->
+            <FrameLayout
+                android:id="@+id/native_ad_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
         </LinearLayout>
     </ScrollView>
 

@@ -36,34 +36,86 @@ object AdFactory : ActivityLifecycleCallbacks {
 
     fun init(application: Application, testMode: Boolean) {
         application.registerActivityLifecycleCallbacks(this)
-        initAdmob(application)
         AdConfig.isTest = testMode
+        
+        // 🔍 Check for legacy SDKs that cause problems
+        if (LegacySDKDetector.hasLegacySDKs()) {
+            Log.w(TAG, "⚠️⚠️⚠️ LEGACY SDK DETECTED ⚠️⚠️⚠️")
+            Log.w(TAG, LegacySDKDetector.getLegacySDKWarningMessage() ?: "")
+            Log.w(TAG, "⚠️ Skipping AdMob initialization to prevent deadlock")
+            Log.w(TAG, "⚠️ User MUST uninstall and reinstall app for ads to work")
+            // Don't initialize ads - would cause deadlock with legacy StartApp
+            return
+        }
+        
+        // ✅ Initialize AdMob on main thread with EXTENDED delay (5 seconds)
+        // Very long delay to ensure ALL other SDKs complete initialization:
+        // 1. App startup fully completes
+        // 2. All legacy/background SDKs finish (including StartApp if present)
+        // 3. All locks released
+        // 4. UI is interactive before ads load
+        // 
+        // Trade-off: Ads load 5 seconds after app start, but NO DEADLOCK
+        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+            Log.d(TAG, "🕐 5-second delay completed, starting AdMob initialization")
+            initAdmobOnMainThread(application)
+        }, 5000) // ⚠️ 5 second delay to completely avoid lock contention
     }
 
-    private fun initAdmob(context: Context) {
+    /**
+     * Initialize Google AdMob SDK on main thread with timeout protection.
+     * ⚠️ MUST be called on main thread - Google Ads requires WebView which needs main thread.
+     * 
+     * Protection mechanisms:
+     * - Try-catch for all operations
+     * - Delayed initialization (1 second) to avoid lock contention
+     * - Graceful failure handling
+     * 
+     * Note: We use a simple delay instead of background thread to avoid:
+     * - Thread synchronization issues
+     * - Deadlock with other SDKs (e.g., legacy StartApp)
+     * - Race conditions during initialization
+     */
+    private fun initAdmobOnMainThread(context: Context) {
         try {
-            // 配置AdMob RequestConfiguration with test devices
-            // Include emulator and allow for physical device testing
+            Log.d(TAG, "🔄 Initializing AdMob on main thread (delayed to avoid lock contention)")
+            
+            // Configure AdMob RequestConfiguration with test devices
             val testDeviceIds = mutableListOf(com.google.android.gms.ads.AdRequest.DEVICE_ID_EMULATOR)
             
-            // In DEBUG mode, enable verbose logging to get device test ID
             val requestConfiguration = com.google.android.gms.ads.RequestConfiguration.Builder()
                 .setTestDeviceIds(testDeviceIds)
                 .build()
-            MobileAds.setRequestConfiguration(requestConfiguration)
-            Log.d(TAG, "✅ AdMob RequestConfiguration set with test devices: $testDeviceIds")
             
-            // 初始化MobileAds
-            MobileAds.initialize(context) { initStatus ->
-                val statusMap = initStatus.adapterStatusMap
-                for ((className, status) in statusMap) {
-                    Log.d(TAG, "Adapter: $className | State: ${status.initializationState} | Latency: ${status.latency}")
+            try {
+                MobileAds.setRequestConfiguration(requestConfiguration)
+                Log.d(TAG, "✅ AdMob RequestConfiguration set successfully")
+            } catch (e: Exception) {
+                Log.e(TAG, "⚠️ Failed to set RequestConfiguration (non-fatal): ${e.message}")
+                // Continue with initialization even if this fails
+            }
+            
+            // Initialize MobileAds with error handling
+            try {
+                MobileAds.initialize(context) { initStatus ->
+                    try {
+                        val statusMap = initStatus.adapterStatusMap
+                        for ((className, status) in statusMap) {
+                            Log.d(TAG, "Adapter: $className | State: ${status.initializationState} | Latency: ${status.latency}")
+                        }
+                        Log.d(TAG, "✅ MobileAds initialization successful")
+                    } catch (e: Exception) {
+                        Log.e(TAG, "⚠️ Error logging adapter status: ${e.message}")
+                    }
                 }
-                Log.d(TAG, "✅ MobileAds init: successful")
-                Log.d(TAG, "📱 To add your physical device as test device, check logcat for: 'Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList(...)'")
+                Log.d(TAG, "📱 AdMob initialization started successfully")
+            } catch (e: Exception) {
+                Log.e(TAG, "❌ Failed to initialize MobileAds: ${e.message}", e)
+                // App can still function, ads just won't load
             }
         } catch (e: Exception) {
-            Log.e(TAG, "❌ MobileAds init failed: ${e.message}", e)
+            Log.e(TAG, "❌ Critical error during AdMob initialization: ${e.message}", e)
+            // Fail gracefully - app continues without ads if initialization fails
         }
     }
 
