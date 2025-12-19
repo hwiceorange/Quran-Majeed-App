@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 📱 Native Ad Dimensions for Tablets (sw600dp+) -->
+    <!-- 主图 4:3 比例，占约 40% 屏幕宽度 -->
+    <dimen name="native_ad_media_width">240dp</dimen>
+    <dimen name="native_ad_media_height">180dp</dimen>
+</resources>
+
