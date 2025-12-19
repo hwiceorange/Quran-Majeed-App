@@ -352,12 +352,6 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- 🎯 Native Ad Container - 15dp top margin for separation -->
-            <FrameLayout
-                android:id="@+id/native_ad_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone" />
         </LinearLayout>
     </ScrollView>
 
@@ -368,7 +362,7 @@
         android:layout_height="64dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/onboarding_continue"
         android:textColor="#4B9B76"
         android:textSize="18sp"
@@ -381,6 +375,19 @@
         app:iconTint="#4B9B76"
         app:rippleColor="#4B9B76"
         app:elevation="0dp"
+        app:layout_constraintBottom_toTopOf="@id/native_ad_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- 🎯 Native Ad Container - 在页面底部，与内容完全区分 -->
+    <FrameLayout
+        android:id="@+id/native_ad_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

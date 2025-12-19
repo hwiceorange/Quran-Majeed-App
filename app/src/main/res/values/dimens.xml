@@ -226,9 +226,8 @@
     <!-- 🌐 Language Selection Onboarding Dimensions -->
     <dimen name="language_card_stroke_width">2dp</dimen>
 
-    <!-- 📱 Native Ad Dimensions (手机端默认) -->
+    <!-- 📱 Native Ad Dimensions (手机端默认，高度由 4:3 比例自动计算) -->
     <dimen name="native_ad_media_width">80dp</dimen>
-    <dimen name="native_ad_media_height">80dp</dimen>
 
     <fraction name="dmnIndexMenuWidth">85%</fraction>
 

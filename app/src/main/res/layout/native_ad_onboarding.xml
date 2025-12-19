@@ -39,15 +39,26 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:baselineAligned="false">
 
-            <!-- Icon -->
-            <com.google.android.gms.ads.nativead.MediaView
-                android:id="@+id/ad_media"
+            <!-- Media Container with 4:3 aspect ratio -->
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="@dimen/native_ad_media_width"
-                android:layout_height="@dimen/native_ad_media_height"
-                android:layout_marginEnd="12dp"
-                android:scaleType="centerCrop" />
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp">
+
+                <com.google.android.gms.ads.nativead.MediaView
+                    android:id="@+id/ad_media"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintDimensionRatio="4:3" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- Text Content -->
             <LinearLayout

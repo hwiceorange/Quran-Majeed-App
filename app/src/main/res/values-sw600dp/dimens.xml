@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- 📱 Native Ad Dimensions for Tablets (sw600dp+) -->
-    <!-- 主图 4:3 比例，占约 40% 屏幕宽度 -->
+    <!-- 主图宽度 240dp，4:3 比例自动计算高度 = 180dp -->
+    <!-- 占约 40% 屏幕宽度，符合 Google Ads 政策 -->
     <dimen name="native_ad_media_width">240dp</dimen>
-    <dimen name="native_ad_media_height">180dp</dimen>
 </resources>
 
