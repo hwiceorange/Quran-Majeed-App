@@ -1418,6 +1418,11 @@ public class PrayersFragment extends Fragment implements com.quran.quranaudio.on
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void updateNextPrayerViews(DayPrayer dayPrayer) {
+        // Check if fragment is still attached to avoid crashes
+        if (!isAdded() || getContext() == null) {
+            return;
+        }
+        
         Map<PrayerEnum, LocalDateTime> timings = dayPrayer.getTimings();
 
         PrayerEnum nextPrayerKey = PrayerUtils.getNextPrayer(timings, LocalDateTime.now());
@@ -1553,7 +1558,10 @@ public class PrayersFragment extends Fragment implements com.quran.quranaudio.on
 
             @RequiresApi(api = Build.VERSION_CODES.O)
             public void onFinish() {
-                updateNextPrayerViews(dayPrayer);
+                // Check if fragment is still attached before updating views
+                if (isAdded() && getContext() != null) {
+                    updateNextPrayerViews(dayPrayer);
+                }
             }
         };
         TimeRemainingCTimer.start();

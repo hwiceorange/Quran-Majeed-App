@@ -220,9 +220,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         }
 
         if (dialogFragment != null) {
-            // Note: setTargetFragment() is deprecated in newer Android versions.
-            // PreferenceDialogFragmentCompat automatically finds the parent fragment,
-            // so we don't need to set it explicitly.
+            // Note: setTargetFragment() is deprecated, but it's required for PreferenceDialogFragmentCompat
+            // to work correctly. Without it, the dialog crashes with "Target fragment must implement TargetFragment interface".
+            // This is a known limitation until AndroidX provides a proper replacement.
+            //noinspection deprecation
+            dialogFragment.setTargetFragment(this, 0);
             dialogFragment.show(getParentFragmentManager(), DIALOG_FRAGMENT_TAG);
         } else {
             super.onDisplayPreferenceDialog(preference);

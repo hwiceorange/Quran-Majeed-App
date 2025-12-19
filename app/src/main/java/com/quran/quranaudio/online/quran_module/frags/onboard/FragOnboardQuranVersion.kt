@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import com.quran.quranaudio.online.R
@@ -129,14 +130,17 @@ class FragOnboardQuranVersion : FragOnboardBase() {
         availableVersions.addAll(localVersions)
         displayTranslationVersions()
         
+        // Capture context early to avoid accessing it when fragment might be detached
+        val appContext = context?.applicationContext ?: return
+        
         // 🌐 步骤2：后台异步加载API数据（不阻塞UI）
-        CoroutineScope(Dispatchers.IO).launch {
+        lifecycleScope.launch(Dispatchers.IO) {
             try {
                 android.util.Log.d("FragOnboardQuranVersion", "🔄 Background: fetching API data for: $selectedLanguageCode")
                 
                 // 方案A：优先从缓存加载
                 var apiTranslations = TranslationCacheManager.getTranslations(
-                    requireContext(),
+                    appContext,
                     selectedLanguageCode,
                     forceRefresh = false
                 )
@@ -180,6 +184,9 @@ class FragOnboardQuranVersion : FragOnboardBase() {
                 val finalApiTranslations = apiTranslations ?: emptyList()
                 
                 withContext(Dispatchers.Main) {
+                    // Only update UI if fragment is still attached
+                    if (!isAdded || context == null) return@withContext
+                    
                     if (finalApiTranslations.isNotEmpty()) {
                         // 🔄 步骤3：合并本地数据和API数据
                         android.util.Log.d("FragOnboardQuranVersion", "🔄 Merging local (${localVersions.size}) + API (${finalApiTranslations.size}) versions")
@@ -907,7 +914,10 @@ class FragOnboardQuranVersion : FragOnboardBase() {
      * ⚠️ 优化：逐章下载并立即保存，用户可以立即查看已下载的章节
      */
     private fun downloadFromQuranFoundation(version: QuranTranslationVersion) {
-        CoroutineScope(Dispatchers.IO).launch {
+        // Capture context early to avoid accessing it when fragment might be detached
+        val appContext = context?.applicationContext ?: return
+        
+        lifecycleScope.launch(Dispatchers.IO) {
             try {
                 android.util.Log.d("FragOnboardQuranVersion", "═══════════════════════════════════════════════")
                 android.util.Log.d("FragOnboardQuranVersion", "🔄 Downloading translation from Quran Foundation API")
@@ -927,7 +937,7 @@ class FragOnboardQuranVersion : FragOnboardBase() {
                 android.util.Log.d("FragOnboardQuranVersion", "   📊 QuranTranslBookInfo: slug='${bookInfo.slug}'")
                 
                 // 打开数据库连接（保持连接以提高性能）
-                val factory = QuranTranslationFactory(requireContext())
+                val factory = QuranTranslationFactory(appContext)
                 val db = factory.dbHelper.writableDatabase
                 
                 try {
@@ -1015,12 +1025,14 @@ class FragOnboardQuranVersion : FragOnboardBase() {
                 android.util.Log.d("FragOnboardQuranVersion", "═══════════════════════════════════════════════")
                 
                 withContext(Dispatchers.Main) {
-                    // 显示下载成功的提示
-                    android.widget.Toast.makeText(
-                        requireContext(),
-                        "Translation downloaded: ${version.displayName}",
-                        android.widget.Toast.LENGTH_SHORT
-                    ).show()
+                    // Show success message only if fragment is still attached
+                    if (isAdded && context != null) {
+                        android.widget.Toast.makeText(
+                            requireContext(),
+                            "Translation downloaded: ${version.displayName}",
+                            android.widget.Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -1030,11 +1042,14 @@ class FragOnboardQuranVersion : FragOnboardBase() {
                 android.util.Log.e("FragOnboardQuranVersion", "═══════════════════════════════════════════════")
                 
                 withContext(Dispatchers.Main) {
-                    android.widget.Toast.makeText(
-                        requireContext(),
-                        "Failed to download translation: ${e.message}",
-                        android.widget.Toast.LENGTH_LONG
-                    ).show()
+                    // Show error message only if fragment is still attached
+                    if (isAdded && context != null) {
+                        android.widget.Toast.makeText(
+                            requireContext(),
+                            "Failed to download translation: ${e.message}",
+                            android.widget.Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
             }
         }

@@ -763,6 +763,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void updateNextPrayerViews(DayPrayer dayPrayer) {
+        // Check if fragment is still attached to avoid crashes
+        if (!isAdded() || getContext() == null) {
+            return;
+        }
+        
         Map<PrayerEnum, LocalDateTime> timings = dayPrayer.getTimings();
 
         PrayerEnum nextPrayerKey = PrayerUtils.getNextPrayer(timings, LocalDateTime.now());
@@ -844,13 +849,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         circularProgressBar.setProgressWithAnimation(getProgressBarPercentage(timeRemaining, timeBetween), 1000L);
         TimeRemainingCTimer = new CountDownTimer(timeRemaining, 1000L) {
             public void onTick(long millisUntilFinished) {
-                timeRemainingTextView.setText(getString(R.string.remaining) + ": " + UiUtils.formatTimeForTimer(millisUntilFinished));
-                circularProgressBar.setProgress(getProgressBarPercentage(timeRemaining, timeBetween));
+                // Check if fragment is still attached to avoid crashes
+                if (isAdded() && getContext() != null) {
+                    timeRemainingTextView.setText(getString(R.string.remaining) + ": " + UiUtils.formatTimeForTimer(millisUntilFinished));
+                    circularProgressBar.setProgress(getProgressBarPercentage(timeRemaining, timeBetween));
+                }
             }
 
             @RequiresApi(api = Build.VERSION_CODES.O)
             public void onFinish() {
-                updateNextPrayerViews(dayPrayer);
+                // Check if fragment is still attached before updating views
+                if (isAdded() && getContext() != null) {
+                    updateNextPrayerViews(dayPrayer);
+                }
             }
         };
         TimeRemainingCTimer.start();

@@ -117,6 +117,11 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
     }
 
     private fun showFontSizeDialog() {
+        // Check if activity is still valid before showing dialog
+        if (isFinishing || isDestroyed) {
+            return
+        }
+        
         val binding = LytTafsirTextSizeBinding.inflate(layoutInflater)
 
         PeaceBottomSheet().apply {
@@ -242,7 +247,9 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
             TafsirManager.prepare(this, false) {
                 android.util.Log.d("ActivityTafsir", "✅ TafsirManager prepared, continuing initialization...")
                 runOnUiThread {
-                    initContentAfterPrepare(intent, chapterNo, verseNo)
+                    if (!isFinishing && !isDestroyed) {
+                        initContentAfterPrepare(intent, chapterNo, verseNo)
+                    }
                 }
             }
             return
@@ -367,7 +374,11 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
 
             // 检查网络连接
             if (!NetworkStateReceiver.isNetworkConnected(this@ActivityTafsir)) {
-                runOnUiThread { noInternet() }
+                runOnUiThread { 
+                    if (!isFinishing && !isDestroyed) {
+                        noInternet() 
+                    }
+                }
                 return@launch
             }
 
@@ -414,10 +425,12 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
         val html = pattern.replace(getBoilerPlateHTML()) { match -> map[match.value].orEmpty() }
 
         runOnUiThread {
-            binding.webView.loadDataWithBaseURL(null, html, "text/html; charset=UTF-8", "utf-8", null)
-            
-            // 内容加载完成后，检查解锁状态
-            checkUnlockStatus()
+            if (!isFinishing && !isDestroyed) {
+                binding.webView.loadDataWithBaseURL(null, html, "text/html; charset=UTF-8", "utf-8", null)
+                
+                // 内容加载完成后，检查解锁状态
+                checkUnlockStatus()
+            }
         }
     }
 
@@ -427,6 +440,11 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
      */
     private fun showTafsirSetupDialog() {
         runOnUiThread {
+            // Check if activity is still valid before showing dialog
+            if (isFinishing || isDestroyed) {
+                return@runOnUiThread
+            }
+            
             binding.loader.visibility = View.GONE
             
             // 获取当前语言
@@ -603,13 +621,17 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
                 android.util.Log.d("ActivityTafsir", "  - Final Status: $isContentUnlocked")
                 
                 runOnUiThread {
-                    updateLockOverlayVisibility()
+                    if (!isFinishing && !isDestroyed) {
+                        updateLockOverlayVisibility()
+                    }
                 }
             } catch (e: Exception) {
                 android.util.Log.e("ActivityTafsir", "❌ Error checking unlock status", e)
                 isContentUnlocked = false
                 runOnUiThread {
-                    updateLockOverlayVisibility()
+                    if (!isFinishing && !isDestroyed) {
+                        updateLockOverlayVisibility()
+                    }
                 }
             }
         }
@@ -701,6 +723,11 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
      * 显示广告加载对话框
      */
     private fun showAdLoadingDialog() {
+        // Check if activity is still valid before showing dialog
+        if (isFinishing || isDestroyed) {
+            return
+        }
+        
         adLoadingDialog = RewardedAdLoadingDialog(
             context = this,
             onAdReady = {
@@ -805,30 +832,34 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
                     android.util.Log.d("ActivityTafsir", "✅ Content unlocked successfully in Firestore")
                     
                     runOnUiThread {
-                        // 更新本地状态
-                        isContentUnlocked = true
-                        
-                        // 立即更新UI
-                        updateLockOverlayVisibility()
-                        
-                        // 显示成功提示
-                        Toast.makeText(
-                            this@ActivityTafsir,
-                            R.string.unlock_success_message,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        
-                        android.util.Log.d("ActivityTafsir", "✅ UI updated, overlay should be hidden now")
+                        if (!isFinishing && !isDestroyed) {
+                            // 更新本地状态
+                            isContentUnlocked = true
+                            
+                            // 立即更新UI
+                            updateLockOverlayVisibility()
+                            
+                            // 显示成功提示
+                            Toast.makeText(
+                                this@ActivityTafsir,
+                                R.string.unlock_success_message,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            
+                            android.util.Log.d("ActivityTafsir", "✅ UI updated, overlay should be hidden now")
+                        }
                     }
                 } else {
                     android.util.Log.e("ActivityTafsir", "❌ Failed to unlock content in Firestore")
                     
                     runOnUiThread {
-                        Toast.makeText(
-                            this@ActivityTafsir,
-                            "Failed to unlock content. Please try again.",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        if (!isFinishing && !isDestroyed) {
+                            Toast.makeText(
+                                this@ActivityTafsir,
+                                "Failed to unlock content. Please try again.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
             } catch (e: Exception) {
@@ -837,11 +868,13 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
                 android.util.Log.e("ActivityTafsir", "  Stack trace: ${e.stackTraceToString()}")
                 
                 runOnUiThread {
-                    Toast.makeText(
-                        this@ActivityTafsir,
-                        "Error: ${e.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    if (!isFinishing && !isDestroyed) {
+                        Toast.makeText(
+                            this@ActivityTafsir,
+                            "Error: ${e.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
         }
