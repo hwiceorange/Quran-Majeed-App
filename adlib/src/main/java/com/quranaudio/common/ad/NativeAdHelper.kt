@@ -48,10 +48,8 @@ object NativeAdHelper {
             try {
                 Log.d(TAG, "📺 Displaying native ad")
                 
-                // 🆕 添加 Impression 监听（确保统计）
-                nativeAd.setOnAdImpressionListener {
-                    Log.d(TAG, "👁️ onAdImpression: Ad impression recorded")
-                }
+                // ✅ AdMob 会在 NativeAdView 显示时自动追踪 impression
+                // 无需手动设置监听器
                 
                 // Inflate the ad layout
                 val adView = LayoutInflater.from(activity).inflate(layoutResId, container, false) as NativeAdView

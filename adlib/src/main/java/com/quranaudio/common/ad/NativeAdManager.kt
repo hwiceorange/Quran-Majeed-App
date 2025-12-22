@@ -198,10 +198,8 @@ class NativeAdManager private constructor() {
         
         val adLoader = AdLoader.Builder(context, adUnitId)
             .forNativeAd { nativeAd ->
-                // 🆕 添加 Impression 监听（确保统计）
-                nativeAd.setOnAdImpressionListener {
-                    Log.d(TAG, "👁️ onAdImpression: Ad impression recorded by AdMob")
-                }
+                // ✅ AdMob 会在 NativeAdView 显示时自动追踪 impression
+                // NativeAdView.setNativeAd() 触发时会自动记录 impression
                 
                 // ✅ 存储时添加时间戳
                 val cachedAd = CachedNativeAd(nativeAd, System.currentTimeMillis())
@@ -395,7 +393,7 @@ class NativeAdManager private constructor() {
             // ✅ 如果缓存池低于阈值，立即补充
             if (cachedNativeAds.size < MIN_CACHE_THRESHOLD) {
                 Log.d(TAG, "📦 Cache low, replenishing...")
-                loadNewAd()
+            loadNewAd()
             }
             
             return cachedAd.ad

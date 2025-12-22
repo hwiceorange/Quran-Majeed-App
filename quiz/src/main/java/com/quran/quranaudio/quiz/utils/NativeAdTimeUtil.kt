@@ -14,10 +14,10 @@ import com.quran.quranaudio.quiz.base.CloudManager
  */
 object NativeAdTimeUtil {
     private const val TAG = "NativeAdTimeUtil"
-    
+
     // ✅ 按场景存储上次展示时间
     private val showTimeMapByTag = hashMapOf<String, Long>()
-    
+
     // ✅ 默认间隔时间：5 分钟
     private const val DEFAULT_INTERVAL_MS = 5 * 60 * 1000L  // 5 minutes
     

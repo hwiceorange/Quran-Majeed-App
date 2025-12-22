@@ -82,11 +82,8 @@ class PlanAdNativeSmallWrapperView : LinearLayout {
         // ✅ 有缓存，立即展示
         Log.d(TAG, "✅ Displaying cached ad for tag: $adTag")
         try {
-            // 🆕 添加 Impression 监听（确保统计）
-            nativeAd.setOnAdImpressionListener {
-                Log.d(TAG, "👁️ onAdImpression for tag: $adTag")
-                reportEvent(adTag, "native_ad_impression", "success")
-            }
+            // ✅ AdMob 会在 NativeAdView 显示时自动追踪 impression
+            // 调用 NativeAdView.setNativeAd() 时会自动触发 impression 记录
             
             inflateView(nativeAd)
             

@@ -122,11 +122,8 @@ class AdNativeSmallWrapperView : LinearLayout {
         // ✅ 有缓存，立即展示
         Log.d(TAG, "✅ Displaying cached ad for tag: $adTag")
         try {
-            // 🆕 添加 Impression 监听（确保统计）
-            nativeAd.setOnAdImpressionListener {
-                Log.d(TAG, "👁️ onAdImpression for tag: $adTag")
-                reportEvent(adTag, "native_ad_impression", "success")
-            }
+            // ✅ AdMob 会在 NativeAdView 显示时自动追踪 impression
+            // 调用 NativeAdView.setNativeAd() 时会自动触发 impression 记录
             
             inflateView(nativeAd)
             
@@ -137,8 +134,8 @@ class AdNativeSmallWrapperView : LinearLayout {
             Log.e(TAG, "❌ Failed to display ad: ${e.message}", e)
             reportEvent(adTag, "native_ad_error", e.message ?: "display_failed")
             binding.root.gone()
-        }
-    }
+                }
+            }
 
     /**
      * ✅ 渲染原生广告视图
@@ -146,40 +143,40 @@ class AdNativeSmallWrapperView : LinearLayout {
     private fun inflateView(mNativeAd: NativeAd) {
         try {
             // 显示容器
-            binding.root.visibility = View.VISIBLE
-            binding.adMaxFl.visibility = View.GONE
-            binding.nativeAdView.visibility = View.VISIBLE
+        binding.root.visibility = View.VISIBLE
+        binding.adMaxFl.visibility = View.GONE
+        binding.nativeAdView.visibility = View.VISIBLE
             
             // Icon
-            if (mNativeAd.icon != null) {
-                binding.nativeAdIcon.setImageDrawable(mNativeAd.icon!!.drawable)
+        if (mNativeAd.icon != null) {
+            binding.nativeAdIcon.setImageDrawable(mNativeAd.icon!!.drawable)
                 binding.nativeAdIcon.visibility = View.VISIBLE
             } else {
                 binding.nativeAdIcon.visibility = View.GONE
-            }
+        }
             
             // Headline
-            binding.nativeAdTitle.text = mNativeAd.headline
+        binding.nativeAdTitle.text = mNativeAd.headline
             
             // Body
-            binding.nativeAdBody.text = mNativeAd.body
+        binding.nativeAdBody.text = mNativeAd.body
             
             // Media
-            if (mNativeAd.mediaContent != null) {
-                binding.coverview.mediaContent = mNativeAd.mediaContent
+        if (mNativeAd.mediaContent != null) {
+            binding.coverview.mediaContent = mNativeAd.mediaContent
                 binding.coverview.visibility = View.VISIBLE
-            } else {
+        } else {
                 binding.coverview.visibility = View.GONE
-            }
+        }
             
             // Call to Action
             binding.cta.text = mNativeAd.callToAction
             
             // Bind views
-            binding.nativeAdView.headlineView = binding.nativeAdTitle
-            binding.nativeAdView.mediaView = binding.coverview
-            binding.nativeAdView.bodyView = binding.nativeAdBody
-            binding.nativeAdView.callToActionView = binding.cta
+        binding.nativeAdView.headlineView = binding.nativeAdTitle
+        binding.nativeAdView.mediaView = binding.coverview
+        binding.nativeAdView.bodyView = binding.nativeAdBody
+        binding.nativeAdView.callToActionView = binding.cta
             binding.nativeAdView.iconView = binding.nativeAdIcon
             
             // Set native ad

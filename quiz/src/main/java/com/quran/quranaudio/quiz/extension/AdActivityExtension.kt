@@ -161,37 +161,37 @@ fun Activity.showInterAdByPoolNew(
                 // 检查对话框是否正在显示，避免 "View not attached to window manager" 异常
                 try {
                     if (loadingDialog.isShowing) {
-                        loadingDialog.dismiss()
+                    loadingDialog.dismiss()
                     }
                 } catch (e: Exception) {
                     android.util.Log.w("AdExtension", "⚠️ Failed to dismiss loading dialog", e)
                 }
                 
-                AdFactory
-                    .showInterstitialAd(this, adPosition, functionTag, object : AdShowCallback {
-                        override fun onAdImpression(p0: AdItem?) {
-                            CloudManager.adLastShowTime = System.currentTimeMillis()
-                        }
+                    AdFactory
+                        .showInterstitialAd(this, adPosition, functionTag, object : AdShowCallback {
+                            override fun onAdImpression(p0: AdItem?) {
+                                CloudManager.adLastShowTime = System.currentTimeMillis()
+                            }
 
-                        override fun onAdClicked(p0: AdItem?) {
-                        }
+                            override fun onAdClicked(p0: AdItem?) {
+                            }
 
-                        override fun onUserEarnedReward(p0: AdItem?, p1: RewardItem?) {
-                        }
+                            override fun onUserEarnedReward(p0: AdItem?, p1: RewardItem?) {
+                            }
 
-                        override fun onAdClosed(p0: AdItem?) {
-                            wrapCallback.invoke(true)
-                        }
+                            override fun onAdClosed(p0: AdItem?) {
+                                wrapCallback.invoke(true)
+                            }
 
-                        override fun onShow(p0: AdItem?) {
-                            showCallback?.invoke()
-                            CloudManager.adLastShowTime = System.currentTimeMillis()
-                        }
+                            override fun onShow(p0: AdItem?) {
+                                showCallback?.invoke()
+                                CloudManager.adLastShowTime = System.currentTimeMillis()
+                            }
 
-                        override fun onShowFail() {
-                            wrapCallback.invoke(false)
-                        }
-                    })
+                            override fun onShowFail() {
+                                wrapCallback.invoke(false)
+                            }
+                        })
             }, 500L)
         } else {
             // ✅ 第一次检查失败，确保回调
@@ -254,38 +254,38 @@ fun Activity.showRewardAd(
                 // 检查对话框是否正在显示，避免 "View not attached to window manager" 异常
                 try {
                     if (loadingDialog.isShowing) {
-                        loadingDialog.dismiss()
+                    loadingDialog.dismiss()
                     }
                 } catch (e: Exception) {
                     android.util.Log.w("AdExtension", "⚠️ Failed to dismiss loading dialog", e)
                 }
                 
-                AdFactory
-                    .showRewardAd(this, adPosition, functionTag, object : AdShowCallback {
-                        override fun onAdImpression(p0: AdItem?) {
-                            CloudManager.adLastShowTime = System.currentTimeMillis()
-                        }
+                    AdFactory
+                        .showRewardAd(this, adPosition, functionTag, object : AdShowCallback {
+                            override fun onAdImpression(p0: AdItem?) {
+                                CloudManager.adLastShowTime = System.currentTimeMillis()
+                            }
 
-                        override fun onAdClicked(p0: AdItem?) {
-                        }
+                            override fun onAdClicked(p0: AdItem?) {
+                            }
 
-                        override fun onUserEarnedReward(p0: AdItem?, p1: RewardItem?) {
-                            rewardCallback?.invoke()
-                        }
+                            override fun onUserEarnedReward(p0: AdItem?, p1: RewardItem?) {
+                                rewardCallback?.invoke()
+                            }
 
-                        override fun onAdClosed(p0: AdItem?) {
-                            callbacks.invoke(true)
-                        }
+                            override fun onAdClosed(p0: AdItem?) {
+                                callbacks.invoke(true)
+                            }
 
-                        override fun onShow(p0: AdItem?) {
-                            showCallback?.invoke()
-                            CloudManager.adLastShowTime = System.currentTimeMillis()
-                        }
+                            override fun onShow(p0: AdItem?) {
+                                showCallback?.invoke()
+                                CloudManager.adLastShowTime = System.currentTimeMillis()
+                            }
 
-                        override fun onShowFail() {
-                            callbacks.invoke(false)
-                        }
-                    })
+                            override fun onShowFail() {
+                                callbacks.invoke(false)
+                            }
+                        })
             }, 500L)
         } else {
             // ✅ 第一次检查失败，确保回调
