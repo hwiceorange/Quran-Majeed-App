@@ -77,6 +77,9 @@ android {
     }
 
     kapt {
+        correctErrorTypes = true
+        useBuildCache = false
+        
         javacOptions {
             option("-Xmaxerrs", 500)
             option("-Xlint:deprecation", true)
@@ -86,7 +89,6 @@ android {
             arg("plugin", "org.jetbrains.kotlin.kapt3:kotlin-allopen")
             arg("plugin", "org.jetbrains.kotlin.kapt3:kotlin-noarg")
         }
-       // useBuildCache = true
     }
 
 
