@@ -13,18 +13,40 @@ import androidx.preference.PreferenceDialogFragmentCompat;
  * Whatsapp: +923002375907
  * Email: officialshaheendevelopers@gmail.com
  * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
+ * 
+ * 🔧 Fix: Removed preference field to fix "Target fragment must implement TargetFragment interface" crash
+ * PreferenceDialogFragmentCompat provides getPreference() method to dynamically get the preference
+ * 
+ * 🔧 Fix v2: Added public no-arg constructor for Fragment recreation
+ * Android requires Fragments to have a public no-arg constructor for system recreation (e.g., after configuration change)
  */
 public class AdhanReminderPreferenceDialog extends PreferenceDialogFragmentCompat {
 
-    private final AdhanReminderPreference preference;
     private AdhanReminderView numberPickerView;
 
-    public AdhanReminderPreferenceDialog(AdhanReminderPreference preference) {
-        this.preference = preference;
+    /**
+     * ✅ Public no-arg constructor required by Android Fragment framework
+     * This is used when the system recreates the dialog (e.g., after screen rotation)
+     */
+    public AdhanReminderPreferenceDialog() {
+        // Empty constructor - arguments will be restored from savedInstanceState
+    }
 
+    /**
+     * Factory constructor used when creating the dialog programmatically
+     */
+    public AdhanReminderPreferenceDialog(AdhanReminderPreference preference) {
+        // ✅ Only set arguments, don't store preference reference
         final Bundle b = new Bundle();
         b.putString(ARG_KEY, preference.getKey());
         setArguments(b);
+    }
+    
+    /**
+     * ✅ Helper method to get the preference safely
+     */
+    private AdhanReminderPreference getAdhanReminderPreference() {
+        return (AdhanReminderPreference) getPreference();
     }
 
     @Override
@@ -52,17 +74,20 @@ public class AdhanReminderPreferenceDialog extends PreferenceDialogFragmentCompa
     public void onDialogClosed(boolean positiveResult) {
         if (positiveResult) {
             updatePreferenceValues();
-            preference.persist();
+            // ✅ Get preference dynamically
+            getAdhanReminderPreference().persist();
         }
     }
 
     private void setPickerInitialValues() {
-        int adjustment = preference.getAdjustment();
+        // ✅ Get preference dynamically
+        int adjustment = getAdhanReminderPreference().getAdjustment();
         numberPickerView.setNumberPickerValue(adjustment);
     }
 
     private void updatePreferenceValues() {
         int numberPickerValue = numberPickerView.getNumberPickerValue();
-        preference.setAdjustment(numberPickerValue);
+        // ✅ Get preference dynamically
+        getAdhanReminderPreference().setAdjustment(numberPickerValue);
     }
 }

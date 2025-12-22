@@ -14,18 +14,38 @@ import androidx.preference.PreferenceDialogFragmentCompat;
  * Whatsapp: +923002375907
  * Email: officialshaheendevelopers@gmail.com
  * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
+ * 
+ * 🔧 Fix: Removed preference field to fix "Target fragment must implement TargetFragment interface" crash
+ * PreferenceDialogFragmentCompat provides getPreference() method to dynamically get the preference
+ * 
+ * 🔧 Fix v2: Added public no-arg constructor for Fragment recreation
  */
 public class NumberPickerPreferenceDialog extends PreferenceDialogFragmentCompat {
 
-    private final NumberPickerPreference preference;
     private NumberPickerView numberPickerView;
 
-    public NumberPickerPreferenceDialog(NumberPickerPreference preference) {
-        this.preference = preference;
+    /**
+     * ✅ Public no-arg constructor required by Android Fragment framework
+     */
+    public NumberPickerPreferenceDialog() {
+        // Empty constructor - arguments will be restored from savedInstanceState
+    }
 
+    /**
+     * Factory constructor used when creating the dialog programmatically
+     */
+    public NumberPickerPreferenceDialog(NumberPickerPreference preference) {
+        // ✅ Only set arguments, don't store preference reference
         final Bundle b = new Bundle();
         b.putString(ARG_KEY, preference.getKey());
         setArguments(b);
+    }
+    
+    /**
+     * ✅ Helper method to get the preference safely
+     */
+    private NumberPickerPreference getNumberPickerPreference() {
+        return (NumberPickerPreference) getPreference();
     }
 
     @Override
@@ -53,19 +73,23 @@ public class NumberPickerPreferenceDialog extends PreferenceDialogFragmentCompat
     public void onDialogClosed(boolean positiveResult) {
         if (positiveResult) {
             updatePreferenceValues();
-            preference.persist();
+            // ✅ Get preference dynamically
+            getNumberPickerPreference().persist();
         }
     }
 
     private void setPickerInitialValues() {
-        numberPickerView.setValue(preference.getValue());
-        numberPickerView.setMaxValue(preference.getMaxValue());
-        numberPickerView.setMinValue(preference.getMinValue());
-        numberPickerView.setUnitValue(preference.getUnitValue());
+        // ✅ Get preference dynamically
+        NumberPickerPreference pref = getNumberPickerPreference();
+        numberPickerView.setValue(pref.getValue());
+        numberPickerView.setMaxValue(pref.getMaxValue());
+        numberPickerView.setMinValue(pref.getMinValue());
+        numberPickerView.setUnitValue(pref.getUnitValue());
     }
 
     private void updatePreferenceValues() {
         int numberPickerValue = numberPickerView.getValue();
-        preference.setValue(numberPickerValue);
+        // ✅ Get preference dynamically
+        getNumberPickerPreference().setValue(numberPickerValue);
     }
 }

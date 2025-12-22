@@ -235,9 +235,20 @@ class RecitationService : Service(), MediaDescriptionAdapter {
             setClearMediaItemsOnStop(true)
         }
 
-        registerReceiver(headsetReceiver, IntentFilter(AudioManager.ACTION_HEADSET_PLUG).apply {
-            addAction(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
-        })
+        // ✅ Android 14+ 需要明确指定 RECEIVER_EXPORTED 或 RECEIVER_NOT_EXPORTED
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(
+                headsetReceiver,
+                IntentFilter(AudioManager.ACTION_HEADSET_PLUG).apply {
+                    addAction(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
+                },
+                Context.RECEIVER_NOT_EXPORTED  // 仅应用内使用，不导出
+            )
+        } else {
+            registerReceiver(headsetReceiver, IntentFilter(AudioManager.ACTION_HEADSET_PLUG).apply {
+                addAction(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
+            })
+        }
 
         syncConfigurations()
     }

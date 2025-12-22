@@ -77,12 +77,17 @@ class TranslationDownloadService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (intent == null) {
-            val notification = NotificationUtils.createEmptyNotif(
+        // ✅ 立即调用 startForeground() 防止 ForegroundServiceDidNotStartInTimeException
+        // Android 8.0+ 要求在 5 秒内调用，否则会崩溃
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val emptyNotification = NotificationUtils.createEmptyNotif(
                 this,
                 getString(R.string.strNotifChannelIdDownloads)
             )
-            startForeground(NOTIF_ID, notification)
+            startForeground(NOTIF_ID, emptyNotification)
+        }
+        
+        if (intent == null) {
             finish()
             return START_NOT_STICKY
         }
@@ -90,7 +95,10 @@ class TranslationDownloadService : Service() {
         val bookInfo = intent.serializableExtra<QuranTranslBookInfo>(
             TranslDownloadReceiver.KEY_TRANSL_BOOK_INFO
         )
-            ?: return START_NOT_STICKY
+        if (bookInfo == null) {
+            finish()
+            return START_NOT_STICKY
+        }
 
         currentDownloads.add(bookInfo.slug)
         jobs[bookInfo.slug] = Job()

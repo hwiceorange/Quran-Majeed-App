@@ -166,10 +166,26 @@ public class App extends BaseApp {
         com.quranaudio.common.ad.InterstitialAdManager.Companion.getInstance().preloadAd();
         android.util.Log.d("App", "✅ InterstitialAdManager initialized and preload started");
         
-        // 🎯 Initialize and preload native ad manager for onboarding pages
+        // 🎯 Initialize and preload native ad manager (优化版：缓存池)
         com.quranaudio.common.ad.NativeAdManager.Companion.getInstance().initialize(this);
         com.quranaudio.common.ad.NativeAdManager.Companion.getInstance().preloadAd();
-        android.util.Log.d("App", "✅ NativeAdManager initialized and preload started");
+        
+        // ✅ 延迟加载以填满缓存池（3个广告）
+        new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                com.quranaudio.common.ad.NativeAdManager.Companion.getInstance().loadNewAd();
+            }
+        }, 2000); // 2秒后加载第二个
+        
+        new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                com.quranaudio.common.ad.NativeAdManager.Companion.getInstance().loadNewAd();
+            }
+        }, 4000); // 4秒后加载第三个
+        
+        android.util.Log.d("App", "✅ NativeAdManager initialized with pool preloading (target: 3 ads)");
         
         // 注入 QuranDataProvider 实现给 Quiz 模块
         com.quran.quranaudio.quiz.data.QuranDataProviderHolder.INSTANCE.setInstance(
@@ -300,6 +316,12 @@ public class App extends BaseApp {
 
         @Override
         public void onActivityResumed(@NonNull Activity activity) {
+            // ✅ 检查原生广告缓存池，不足则补充
+            int cacheSize = com.quranaudio.common.ad.NativeAdManager.Companion.getInstance().getCacheSize();
+            if (cacheSize < 2) {
+                android.util.Log.d("App", "⚠️ Native ad cache low (" + cacheSize + "), replenishing...");
+                com.quranaudio.common.ad.NativeAdManager.Companion.getInstance().loadNewAd();
+            }
         }
 
         @Override

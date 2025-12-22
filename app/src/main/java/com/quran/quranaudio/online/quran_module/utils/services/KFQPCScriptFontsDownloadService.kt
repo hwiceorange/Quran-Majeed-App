@@ -313,10 +313,11 @@ class KFQPCScriptFontsDownloadService : LifecycleService() {
             .setOnlyAlertOnce(true)
             .setGroupSummary(true)
 
-        // 🔧 Android 14 Fix: 不使用前台服务，直接显示通知
-        // Android 14 不允许从后台启动前台服务，改用普通通知
-        val notifManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notifManager.notify(DOWNLOAD_SCRIPT_NOTIFICATION_ID, initialNotifBuilder.build())
+        // ✅ 必须调用 startForeground()，否则会导致 ForegroundServiceDidNotStartInTimeException
+        // 使用 startForegroundService() 启动的服务必须在 5 秒内调用 startForeground()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForeground(DOWNLOAD_SCRIPT_NOTIFICATION_ID, initialNotifBuilder.build())
+        }
     }
 
     private fun showProgressNotification(partNo: Int?, progress: Int, scriptKey: String) {

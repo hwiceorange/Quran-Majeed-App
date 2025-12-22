@@ -48,19 +48,24 @@ object AdFactory : ActivityLifecycleCallbacks {
             return
         }
         
-        // ✅ Initialize AdMob on main thread with EXTENDED delay (5 seconds)
-        // Very long delay to ensure ALL other SDKs complete initialization:
+        // ✅ Initialize AdMob on main thread with delay (5 seconds)
+        // 
+        // Delay rationale:
         // 1. App startup fully completes
         // 2. All legacy/background SDKs finish (including StartApp if present)
         // 3. All locks released
         // 4. UI is interactive before ads load
         // 
-        // Trade-off: Ads load 5 seconds after app start, but NO DEADLOCK
+        // 🆕 WebView 预热已移除（可能阻塞主线程导致 ANR）
+        // 改为依赖增强的异常捕获机制，确保不影响产品功能
+        // 
+        // Trade-off: Ads load 5 seconds after app start, NO DEADLOCK, NO ANR
         android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
             Log.d(TAG, "🕐 5-second delay completed, starting AdMob initialization")
             initAdmobOnMainThread(application)
-        }, 5000) // ⚠️ 5 second delay to completely avoid lock contention
+        }, 5000) // ⚠️ 5 second delay - 不再需要等待 WebView 预热
     }
+    
 
     /**
      * Initialize Google AdMob SDK on main thread with timeout protection.
@@ -68,17 +73,26 @@ object AdFactory : ActivityLifecycleCallbacks {
      * 
      * Protection mechanisms:
      * - Try-catch for all operations
-     * - Delayed initialization (1 second) to avoid lock contention
+     * - Delayed initialization (5 seconds) to avoid lock contention
      * - Graceful failure handling
+     * - IllegalStateException catch for WebView issues
+     * - ⚠️ WebView 预热已移除（防止主线程阻塞导致 ANR）
      * 
      * Note: We use a simple delay instead of background thread to avoid:
      * - Thread synchronization issues
      * - Deadlock with other SDKs (e.g., legacy StartApp)
      * - Race conditions during initialization
+     * - Main thread ANR (removed WebView pre-warming)
      */
     private fun initAdmobOnMainThread(context: Context) {
         try {
-            Log.d(TAG, "🔄 Initializing AdMob on main thread (delayed to avoid lock contention)")
+            // ✅ Verify we're on main thread
+            if (android.os.Looper.myLooper() != android.os.Looper.getMainLooper()) {
+                Log.e(TAG, "❌ initAdmobOnMainThread called from wrong thread, aborting")
+                return
+            }
+            
+            Log.d(TAG, "🔄 Initializing AdMob on main thread")
             
             // Configure AdMob RequestConfiguration with test devices
             val testDeviceIds = mutableListOf(com.google.android.gms.ads.AdRequest.DEVICE_ID_EMULATOR)
@@ -95,7 +109,7 @@ object AdFactory : ActivityLifecycleCallbacks {
                 // Continue with initialization even if this fails
             }
             
-            // Initialize MobileAds with error handling
+            // Initialize MobileAds with comprehensive error handling
             try {
                 MobileAds.initialize(context) { initStatus ->
                     try {
@@ -109,10 +123,21 @@ object AdFactory : ActivityLifecycleCallbacks {
                     }
                 }
                 Log.d(TAG, "📱 AdMob initialization started successfully")
+            } catch (e: IllegalStateException) {
+                // 🆕 Specific catch for WebView initialization crashes
+                Log.e(TAG, "❌ WebView IllegalStateException during AdMob init: ${e.message}", e)
+                Log.w(TAG, "⚠️ This usually means WebView provider (Chrome) has issues")
+                Log.w(TAG, "⚠️ Ads will not load, but app will continue normally")
+                // App can still function, ads just won't load
             } catch (e: Exception) {
                 Log.e(TAG, "❌ Failed to initialize MobileAds: ${e.message}", e)
                 // App can still function, ads just won't load
             }
+        } catch (e: IllegalStateException) {
+            // 🆕 Catch WebView-related IllegalStateException at top level
+            Log.e(TAG, "❌ Critical IllegalStateException during AdMob initialization: ${e.message}", e)
+            Log.w(TAG, "⚠️ Likely WebView provider issue - continuing without ads")
+            // Fail gracefully - app continues without ads if initialization fails
         } catch (e: Exception) {
             Log.e(TAG, "❌ Critical error during AdMob initialization: ${e.message}", e)
             // Fail gracefully - app continues without ads if initialization fails
@@ -466,6 +491,30 @@ object AdFactory : ActivityLifecycleCallbacks {
         callback?.onShowFail()
     }
 
+    /**
+     * ⚠️ DEPRECATED: Use NativeAdManager instead for unified native ad management
+     * 
+     * This method is kept for backward compatibility but should NOT be used in new code.
+     * 
+     * Migration guide:
+     * ```
+     * // Old way (deprecated):
+     * AdFactory.showNativeAd(activity, AdConfig.AD_NATIVE, tag, callback)
+     * 
+     * // New way (recommended):
+     * val nativeAd = NativeAdManager.getInstance().getCachedAd(activity)
+     * if (nativeAd != null) {
+     *     // Display the ad
+     * }
+     * ```
+     */
+    @Deprecated(
+        message = "Use NativeAdManager.getInstance().getCachedAd() instead for unified native ad management",
+        replaceWith = ReplaceWith(
+            "NativeAdManager.getInstance().getCachedAd(activity)",
+            "com.quranaudio.common.ad.NativeAdManager"
+        )
+    )
     fun showNativeAd(
         activity: Activity,
         adPosition: String,
@@ -473,6 +522,8 @@ object AdFactory : ActivityLifecycleCallbacks {
         showCallback: AdShowCallback,
         loadAndShowNext: Boolean = true
     ) {
+        Log.w(TAG, "⚠️ DEPRECATED: showNativeAd() called. Use NativeAdManager instead.")
+        
         val adId = AdConfig.getAdIdByPosition(adPosition)
         consumeAd(adId)?.let { adItem ->
             (adItem.ad as? NativeAd)?.run {
@@ -495,6 +546,18 @@ object AdFactory : ActivityLifecycleCallbacks {
         loadNativeAd(activity, adPosition, functionTag, null, if (loadAndShowNext) showCallback else null)
     }
 
+    /**
+     * ⚠️ DEPRECATED: Use NativeAdManager instead for unified native ad management
+     * 
+     * This method is kept for backward compatibility but should NOT be used in new code.
+     */
+    @Deprecated(
+        message = "Use NativeAdManager.getInstance().loadNewAd() instead for unified native ad management",
+        replaceWith = ReplaceWith(
+            "NativeAdManager.getInstance().loadNewAd()",
+            "com.quranaudio.common.ad.NativeAdManager"
+        )
+    )
     fun loadNativeAd(
         activity: Activity,
         adPosition: String,
@@ -502,6 +565,8 @@ object AdFactory : ActivityLifecycleCallbacks {
         callback: AdLoadCallback?,
         showCallback: AdShowCallback?
     ) {
+        Log.w(TAG, "⚠️ DEPRECATED: loadNativeAd() called. Use NativeAdManager instead.")
+        
         // Check if user is subscribed (premium user)
         if (SubscriptionChecker.isUserSubscribed(activity)) {
             Log.d(TAG, "🎁 User is subscribed, skipping native ad for $functionTag")
@@ -546,7 +611,19 @@ object AdFactory : ActivityLifecycleCallbacks {
         adLoader.loadAd(AdRequest.Builder().build())
     }
 
+    /**
+     * ⚠️ DEPRECATED: Use NativeAdManager instead for unified native ad management
+     */
+    @Deprecated(
+        message = "Use NativeAdManager.getInstance().hasCachedAd(context) instead",
+        replaceWith = ReplaceWith(
+            "NativeAdManager.getInstance().hasCachedAd(context)",
+            "com.quranaudio.common.ad.NativeAdManager"
+        )
+    )
     fun hasNativeAd(adPosition: String): Boolean {
+        Log.w(TAG, "⚠️ DEPRECATED: hasNativeAd() called. Use NativeAdManager instead.")
+        
         val adId = AdConfig.getAdIdByPosition(adPosition)
         adsCache[adId]?.let {
             return it.isValid() && it.ad is NativeAd
@@ -582,7 +659,8 @@ object AdFactory : ActivityLifecycleCallbacks {
         loadInterstitialAd(activity, AdConfig.AD_INTERS, null)
 //        loadInterstitialAd(activity, AdConfig.AD_INTERS_HIGH, null)
         loadAppOpenAd(activity, AdConfig.AD_APPOPEN, null)
-        loadNativeAd(activity, AdConfig.AD_NATIVE, "", null, null)
+        // ❌ 移除：loadNativeAd(activity, AdConfig.AD_NATIVE, "", null, null)
+        // ✅ 原生广告由 NativeAdManager 统一管理，不需要在这里加载
     }
 
     override fun onActivityStarted(activity: Activity) {

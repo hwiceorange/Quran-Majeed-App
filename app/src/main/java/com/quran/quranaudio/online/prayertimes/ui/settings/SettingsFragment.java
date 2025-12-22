@@ -221,11 +221,25 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         }
 
         if (dialogFragment != null) {
-            // Note: setTargetFragment() is deprecated, but it's required for PreferenceDialogFragmentCompat
-            // to work correctly. Without it, the dialog crashes with "Target fragment must implement TargetFragment interface".
-            // This is a known limitation until AndroidX provides a proper replacement.
-            dialogFragment.setTargetFragment(this, 0);
-            dialogFragment.show(getParentFragmentManager(), DIALOG_FRAGMENT_TAG);
+            try {
+                // Note: setTargetFragment() is deprecated, but it's required for PreferenceDialogFragmentCompat
+                // to work correctly. Without it, the dialog crashes with "Target fragment must implement TargetFragment interface".
+                // This is a known limitation until AndroidX provides a proper replacement.
+                
+                // ✅ 防御性检查：确保 Fragment 状态正常
+                if (!isAdded() || isDetached()) {
+                    android.util.Log.w("SettingsFragment", "⚠️ Fragment not in valid state, cannot show dialog");
+                    return;
+                }
+                
+                dialogFragment.setTargetFragment(this, 0);
+                dialogFragment.show(getParentFragmentManager(), DIALOG_FRAGMENT_TAG);
+            } catch (IllegalStateException e) {
+                // 🆕 捕获任何状态异常，防止崩溃
+                android.util.Log.e("SettingsFragment", "❌ Failed to show dialog: " + e.getMessage(), e);
+                android.util.Log.w("SettingsFragment", "⚠️ Dialog will not be displayed, but app continues normally");
+                // 优雅降级：不显示对话框，但应用继续运行
+            }
         } else {
             super.onDisplayPreferenceDialog(preference);
         }

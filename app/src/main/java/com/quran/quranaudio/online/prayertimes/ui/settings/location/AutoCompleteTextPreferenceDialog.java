@@ -42,6 +42,11 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
  * Whatsapp: +923002375907
  * Email: officialshaheendevelopers@gmail.com
  * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
+ * 
+ * 🔧 Fix: Removed preference field to fix "Target fragment must implement TargetFragment interface" crash
+ * PreferenceDialogFragmentCompat provides getPreference() method to dynamically get the preference
+ * 
+ * 🔧 Fix v2: Added public no-arg constructor for Fragment recreation
  */
 public class AutoCompleteTextPreferenceDialog extends PreferenceDialogFragmentCompat {
 
@@ -53,7 +58,6 @@ public class AutoCompleteTextPreferenceDialog extends PreferenceDialogFragmentCo
     private AutoSuggestAdapter autoSuggestAdapter;
     private Context context;
 
-    private final AutoCompleteTextPreference preference;
     private AutoCompleteLoading mEditText;
     private boolean isSelectedText;
     private Address selectedAddress;
@@ -64,13 +68,31 @@ public class AutoCompleteTextPreferenceDialog extends PreferenceDialogFragmentCo
     @Inject
     PreferencesHelper preferencesHelper;
 
+    /**
+     * ✅ Public no-arg constructor required by Android Fragment framework
+     */
+    public AutoCompleteTextPreferenceDialog() {
+        // Empty constructor - arguments will be restored from savedInstanceState
+        this.isSelectedText = false;
+    }
+
+    /**
+     * Factory constructor used when creating the dialog programmatically
+     */
     public AutoCompleteTextPreferenceDialog(AutoCompleteTextPreference preference) {
-        this.preference = preference;
+        // ✅ Only set arguments, don't store preference reference
         this.isSelectedText = false;
 
         final Bundle b = new Bundle();
         b.putString(ARG_KEY, preference.getKey());
         setArguments(b);
+    }
+    
+    /**
+     * ✅ Helper method to get the preference safely
+     */
+    private AutoCompleteTextPreference getAutoCompleteTextPreference() {
+        return (AutoCompleteTextPreference) getPreference();
     }
 
     @Override
@@ -177,8 +199,10 @@ public class AutoCompleteTextPreferenceDialog extends PreferenceDialogFragmentCo
     public void onDialogClosed(boolean positiveResult) {
         if (positiveResult) {
             String textValue = mEditText.getText().toString();
-            if (preference.callChangeListener(textValue) && isSelectedText) {
-                preference.setText(textValue);
+            // ✅ Get preference dynamically
+            AutoCompleteTextPreference pref = getAutoCompleteTextPreference();
+            if (pref.callChangeListener(textValue) && isSelectedText) {
+                pref.setText(textValue);
                 preferencesHelper.updateAddressPreferences(selectedAddress);
             }
         }

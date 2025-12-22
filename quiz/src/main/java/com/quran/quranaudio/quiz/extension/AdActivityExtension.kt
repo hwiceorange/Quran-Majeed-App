@@ -141,6 +141,7 @@ fun Activity.showInterAdByPoolNew(
     }
     beforeShowCallbacks?.invoke(canShow)
     if (canShow) {
+        // ✅ 只在开始时检查一次生命周期
         if (this.isValid()) {
             if (!hasInterAdByPool()) {
                 wrapCallback.invoke(false)
@@ -148,36 +149,54 @@ fun Activity.showInterAdByPoolNew(
             }
             val loadingDialog = LoadingDialog(this, R.string.quran_loading_ad.getResString())
             loadingDialog.show()
+            
+            // ⚡ 优化延迟时间：从 1000ms 缩短至 500ms
+            // 原因：缩短延迟窗口期，减少用户快速操作导致的广告丢失，同时保持视觉流畅
             Tasks.postDelayedByUI({
-                if (this.isValid()) {
-                    loadingDialog.dismiss()
-                    AdFactory
-                        .showInterstitialAd(this, adPosition, functionTag, object : AdShowCallback {
-                            override fun onAdImpression(p0: AdItem?) {
-                                CloudManager.adLastShowTime = System.currentTimeMillis()
-                            }
-
-                            override fun onAdClicked(p0: AdItem?) {
-                            }
-
-                            override fun onUserEarnedReward(p0: AdItem?, p1: RewardItem?) {
-                            }
-
-                            override fun onAdClosed(p0: AdItem?) {
-                                wrapCallback.invoke(true)
-                            }
-
-                            override fun onShow(p0: AdItem?) {
-                                showCallback?.invoke()
-                                CloudManager.adLastShowTime = System.currentTimeMillis()
-                            }
-
-                            override fun onShowFail() {
-                                wrapCallback.invoke(false)
-                            }
-                        })
+                // ✅ 移除第二次 isValid() 检查，避免广告展示率下降
+                // 原因：1秒延迟期间用户可能快速操作导致Activity状态变化，但广告仍应展示
+                // AdFactory.showInterstitialAd 内部会处理Activity生命周期问题
+                
+                // ✅ 优化 Loading 对话框 dismiss 时机，避免 Race Condition
+                // 检查对话框是否正在显示，避免 "View not attached to window manager" 异常
+                try {
+                    if (loadingDialog.isShowing) {
+                        loadingDialog.dismiss()
+                    }
+                } catch (e: Exception) {
+                    android.util.Log.w("AdExtension", "⚠️ Failed to dismiss loading dialog", e)
                 }
-            },1000L)
+                
+                AdFactory
+                    .showInterstitialAd(this, adPosition, functionTag, object : AdShowCallback {
+                        override fun onAdImpression(p0: AdItem?) {
+                            CloudManager.adLastShowTime = System.currentTimeMillis()
+                        }
+
+                        override fun onAdClicked(p0: AdItem?) {
+                        }
+
+                        override fun onUserEarnedReward(p0: AdItem?, p1: RewardItem?) {
+                        }
+
+                        override fun onAdClosed(p0: AdItem?) {
+                            wrapCallback.invoke(true)
+                        }
+
+                        override fun onShow(p0: AdItem?) {
+                            showCallback?.invoke()
+                            CloudManager.adLastShowTime = System.currentTimeMillis()
+                        }
+
+                        override fun onShowFail() {
+                            wrapCallback.invoke(false)
+                        }
+                    })
+            }, 500L)
+        } else {
+            // ✅ 第一次检查失败，确保回调
+            android.util.Log.w("AdExtension", "⚠️ Activity not valid, skipping interstitial ad")
+            wrapCallback.invoke(false)
         }
 
     } else {
@@ -215,6 +234,7 @@ fun Activity.showRewardAd(
 
     beforeShowCallbacks?.invoke(canShow)
     if (canShow) {
+        // ✅ 只在开始时检查一次生命周期
         if (this.isValid()) {
             if (!hasRewardAdByPool(adPosition)) {
                 callbacks.invoke(false)
@@ -222,37 +242,55 @@ fun Activity.showRewardAd(
             }
             val loadingDialog = LoadingDialog(this, R.string.quran_loading_ad.getResString())
             loadingDialog.show()
+            
+            // ⚡ 优化延迟时间：从 1000ms 缩短至 500ms
+            // 原因：缩短延迟窗口期，减少用户快速操作导致的广告丢失，同时保持视觉流畅
             Tasks.postDelayedByUI({
-                if (this.isValid()) {
-                    loadingDialog.dismiss()
-                    AdFactory
-                        .showRewardAd(this, adPosition, functionTag, object : AdShowCallback {
-                            override fun onAdImpression(p0: AdItem?) {
-                                CloudManager.adLastShowTime = System.currentTimeMillis()
-                            }
-
-                            override fun onAdClicked(p0: AdItem?) {
-                            }
-
-                            override fun onUserEarnedReward(p0: AdItem?, p1: RewardItem?) {
-                                rewardCallback?.invoke()
-                            }
-
-                            override fun onAdClosed(p0: AdItem?) {
-                                callbacks.invoke(true)
-                            }
-
-                            override fun onShow(p0: AdItem?) {
-                                showCallback?.invoke()
-                                CloudManager.adLastShowTime = System.currentTimeMillis()
-                            }
-
-                            override fun onShowFail() {
-                                callbacks.invoke(false)
-                            }
-                        })
+                // ✅ 移除第二次 isValid() 检查，避免激励广告展示率下降
+                // 原因：延迟期间用户可能快速操作导致Activity状态变化，但广告仍应展示
+                // AdFactory.showRewardAd 内部会处理Activity生命周期问题
+                
+                // ✅ 优化 Loading 对话框 dismiss 时机，避免 Race Condition
+                // 检查对话框是否正在显示，避免 "View not attached to window manager" 异常
+                try {
+                    if (loadingDialog.isShowing) {
+                        loadingDialog.dismiss()
+                    }
+                } catch (e: Exception) {
+                    android.util.Log.w("AdExtension", "⚠️ Failed to dismiss loading dialog", e)
                 }
-            },1000L)
+                
+                AdFactory
+                    .showRewardAd(this, adPosition, functionTag, object : AdShowCallback {
+                        override fun onAdImpression(p0: AdItem?) {
+                            CloudManager.adLastShowTime = System.currentTimeMillis()
+                        }
+
+                        override fun onAdClicked(p0: AdItem?) {
+                        }
+
+                        override fun onUserEarnedReward(p0: AdItem?, p1: RewardItem?) {
+                            rewardCallback?.invoke()
+                        }
+
+                        override fun onAdClosed(p0: AdItem?) {
+                            callbacks.invoke(true)
+                        }
+
+                        override fun onShow(p0: AdItem?) {
+                            showCallback?.invoke()
+                            CloudManager.adLastShowTime = System.currentTimeMillis()
+                        }
+
+                        override fun onShowFail() {
+                            callbacks.invoke(false)
+                        }
+                    })
+            }, 500L)
+        } else {
+            // ✅ 第一次检查失败，确保回调
+            android.util.Log.w("AdExtension", "⚠️ Activity not valid, skipping reward ad")
+            callbacks.invoke(false)
         }
 
     } else {

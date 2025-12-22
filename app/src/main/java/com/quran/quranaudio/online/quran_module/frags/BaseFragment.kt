@@ -37,7 +37,16 @@ abstract class BaseFragment : Fragment(), NetworkStateReceiverListener, Activity
             mNetworkReceiver = NetworkStateReceiver().apply {
                 addListener(this@BaseFragment)
             }
-            requireContext().registerReceiver(mNetworkReceiver, intentFilter)
+            // ✅ Android 14+ 需要明确指定 RECEIVER_EXPORTED 或 RECEIVER_NOT_EXPORTED
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                requireContext().registerReceiver(
+                    mNetworkReceiver,
+                    intentFilter,
+                    Context.RECEIVER_NOT_EXPORTED  // 仅应用内使用，不导出
+                )
+            } else {
+                requireContext().registerReceiver(mNetworkReceiver, intentFilter)
+            }
         }
     }
     fun getArgs(): Bundle = arguments ?: Bundle()

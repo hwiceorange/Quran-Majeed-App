@@ -145,7 +145,17 @@ public abstract class BaseActivity extends ResHelperActivity implements NetworkS
 
         mNetworkReceiver = new NetworkStateReceiver();
         mNetworkReceiver.addListener(this);
-        registerReceiver(mNetworkReceiver, NetworkStateReceiver.getIntentFilter());
+        
+        // ✅ Android 14+ 需要明确指定 RECEIVER_EXPORTED 或 RECEIVER_NOT_EXPORTED
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(
+                mNetworkReceiver,
+                NetworkStateReceiver.getIntentFilter(),
+                Context.RECEIVER_NOT_EXPORTED  // 仅应用内使用，不导出
+            );
+        } else {
+            registerReceiver(mNetworkReceiver, NetworkStateReceiver.getIntentFilter());
+        }
     }
 
     @Override

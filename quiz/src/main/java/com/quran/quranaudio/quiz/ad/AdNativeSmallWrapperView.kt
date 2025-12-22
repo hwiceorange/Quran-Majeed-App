@@ -15,11 +15,7 @@ import com.quran.quranaudio.quiz.extension.reportEvent
 import com.quran.quranaudio.quiz.extension.visible
 import com.quran.quranaudio.quiz.utils.NativeAdTimeUtil
 import com.google.android.gms.ads.nativead.NativeAd
-import com.quranaudio.common.ad.AdConfig
-import com.quranaudio.common.ad.AdFactory
-import com.quranaudio.common.ad.AdShowCallback
-import com.quranaudio.common.ad.model.AdItem
-import com.quranaudio.common.ad.model.RewardItem
+import com.quranaudio.common.ad.NativeAdManager
 import com.quran.quranaudio.quiz.R
 import com.quran.quranaudio.quiz.databinding.LayoutAdNativeSmallWrapperBinding
 
@@ -69,96 +65,131 @@ class AdNativeSmallWrapperView : LinearLayout {
         }
     }
 
+    /**
+     * ✅ 统一使用 NativeAdManager 加载原生广告
+     * 
+     * 优化逻辑:
+     * - 按场景（Tag）检查时间间隔
+     * - 只展示已缓存的广告，不做异步加载
+     * - 无广告立即隐藏，不等待加载
+     * - 🆕 确保 UI 操作在主线程
+     * - 🆕 添加 Impression 监听
+     */
     fun loadNativeAd(adTag: String) {
-        reportEvent(adTag,"show_native_ad")
-        if (NativeAdTimeUtil.isIntercept(adTag)) {
-            Log.d(TAG, "loadNativeAd: 在间隔时间内，不刷新")
-            reportEvent(adTag,"no_native_ad", "less_time")
+        // 🆕 确保在主线程执行（UI 安全）
+        if (android.os.Looper.myLooper() != android.os.Looper.getMainLooper()) {
+            android.os.Handler(android.os.Looper.getMainLooper()).post {
+                loadNativeAd(adTag)
+            }
             return
         }
+        
+        reportEvent(adTag, "show_native_ad")
+        
+        // ✅ 优化：按场景（Tag）检查时间间隔
+        if (NativeAdTimeUtil.isInterceptByTag(adTag)) {
+            Log.d(TAG, "⏱️ Too soon for tag: $adTag, skipping")
+            reportEvent(adTag, "no_native_ad", "interval_blocked")
+            binding.root.gone()
+            return
+        }
+        
         this.adTag = adTag
-        val activity = context as Activity
-        if (activity.isValid() && isLoadAd) {
-            AdFactory.showNativeAd(
-                activity, AdConfig.AD_NATIVE,
-                adTag,nativeShowCallback
-            )
+        val activity = context as? Activity
+        
+        if (activity == null || !activity.isValid()) {
+            Log.w(TAG, "⚠️ Activity invalid, skipping ad")
+            binding.root.gone()
+            return
         }
-    }
-
-    val nativeShowCallback = object : AdShowCallback {
-        override fun onAdImpression(p0: AdItem?) {
-            Log.d(TAG, "onAdImpression: ")
+        
+        if (!isLoadAd) {
+            Log.d(TAG, "⚠️ isLoadAd = false, skipping")
+            binding.root.gone()
+            return
         }
-
-        override fun onAdClicked(p0: AdItem?) {
-            Log.d(TAG, "onAdClicked: ")
-            NativeAdTimeUtil.saveTime(adTag, 0)
+        
+        // ✅ 统一使用 NativeAdManager 获取缓存广告
+        val nativeAd = NativeAdManager.getInstance().getCachedAd(activity)
+        
+        if (nativeAd == null) {
+            Log.d(TAG, "⚠️ No cached ad available for tag: $adTag")
+            reportEvent(adTag, "no_native_ad", "no_cache")
+            binding.root.gone()
+            return
         }
-
-        override fun onUserEarnedReward(p0: AdItem?, p1: RewardItem?) {
-        }
-
-        override fun onAdClosed(p0: AdItem?) {
-            Log.d(TAG, "onAdClosed: ")
-        }
-
-        override fun onShow(p0: AdItem?) {
-            Log.d(TAG, "onShow: ")
-            NativeAdTimeUtil.saveTime(adTag, System.currentTimeMillis())
-            val activity = context as Activity
-            if (activity.isValid()){
-                showNativeAd(p0)
-            }
-        }
-
-        override fun onShowFail() {
-            Log.d(TAG, "onShowFail: ")
-        }
-
-    }
-
-    fun showNativeAd(p0: AdItem?) {
-        if (p0 != null && p0.ad != null) {
-            when (p0.ad) {
-                is NativeAd -> {
-                    inflateView(p0.ad as NativeAd)
-                    binding.adMaxFl.gone()
-                }
-
-                is MaxNativeAdView -> {
-                    binding.root.visibility = View.VISIBLE
-                    binding.adMaxFl.visibility = View.VISIBLE
-                    binding.adMaxFl.removeAllViews()
-                    binding.adMaxFl.addView(p0.ad as MaxNativeAdView)
-                    binding.nativeAdView.gone()
-                }
-            }
-        }
-    }
-
-    private fun inflateView(mNativeAd: NativeAd) {
-        binding.root.visibility = View.VISIBLE
-        binding.adMaxFl.visibility = View.GONE
-        binding.nativeAdView.visibility = View.VISIBLE
-        if (mNativeAd.icon != null) {
-            binding.nativeAdIcon.setImageDrawable(mNativeAd.icon!!.drawable)
-        }
-        binding.nativeAdTitle.text = mNativeAd.headline
-        binding.nativeAdBody.text = mNativeAd.body
-        if (mNativeAd.mediaContent != null) {
-            binding.coverview.mediaContent = mNativeAd.mediaContent
-        } else {
-            binding.nativeAdIcon.visibility = View.GONE
-        }
-        binding.nativeAdView.headlineView = binding.nativeAdTitle
-        binding.nativeAdView.mediaView = binding.coverview
-        binding.nativeAdView.bodyView = binding.nativeAdBody
-        binding.nativeAdView.callToActionView = binding.cta
+        
+        // ✅ 有缓存，立即展示
+        Log.d(TAG, "✅ Displaying cached ad for tag: $adTag")
         try {
+            // 🆕 添加 Impression 监听（确保统计）
+            nativeAd.setOnAdImpressionListener {
+                Log.d(TAG, "👁️ onAdImpression for tag: $adTag")
+                reportEvent(adTag, "native_ad_impression", "success")
+            }
+            
+            inflateView(nativeAd)
+            
+            // ✅ 记录展示时间（按场景）
+            NativeAdTimeUtil.saveTimeByTag(adTag, System.currentTimeMillis())
+            reportEvent(adTag, "native_ad_shown", "success")
+        } catch (e: Exception) {
+            Log.e(TAG, "❌ Failed to display ad: ${e.message}", e)
+            reportEvent(adTag, "native_ad_error", e.message ?: "display_failed")
+            binding.root.gone()
+        }
+    }
+
+    /**
+     * ✅ 渲染原生广告视图
+     */
+    private fun inflateView(mNativeAd: NativeAd) {
+        try {
+            // 显示容器
+            binding.root.visibility = View.VISIBLE
+            binding.adMaxFl.visibility = View.GONE
+            binding.nativeAdView.visibility = View.VISIBLE
+            
+            // Icon
+            if (mNativeAd.icon != null) {
+                binding.nativeAdIcon.setImageDrawable(mNativeAd.icon!!.drawable)
+                binding.nativeAdIcon.visibility = View.VISIBLE
+            } else {
+                binding.nativeAdIcon.visibility = View.GONE
+            }
+            
+            // Headline
+            binding.nativeAdTitle.text = mNativeAd.headline
+            
+            // Body
+            binding.nativeAdBody.text = mNativeAd.body
+            
+            // Media
+            if (mNativeAd.mediaContent != null) {
+                binding.coverview.mediaContent = mNativeAd.mediaContent
+                binding.coverview.visibility = View.VISIBLE
+            } else {
+                binding.coverview.visibility = View.GONE
+            }
+            
+            // Call to Action
+            binding.cta.text = mNativeAd.callToAction
+            
+            // Bind views
+            binding.nativeAdView.headlineView = binding.nativeAdTitle
+            binding.nativeAdView.mediaView = binding.coverview
+            binding.nativeAdView.bodyView = binding.nativeAdBody
+            binding.nativeAdView.callToActionView = binding.cta
+            binding.nativeAdView.iconView = binding.nativeAdIcon
+            
+            // Set native ad
             binding.nativeAdView.setNativeAd(mNativeAd)
-        } catch (e: Exception){
-          //  FirebaseCrashlytics.getInstance().recordException(e)
+            
+            Log.d(TAG, "✅ Native ad inflated successfully")
+        } catch (e: Exception) {
+            Log.e(TAG, "❌ Failed to inflate native ad", e)
+            binding.root.gone()
+            throw e
         }
     }
 }

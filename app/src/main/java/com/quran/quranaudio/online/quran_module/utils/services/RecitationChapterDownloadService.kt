@@ -87,17 +87,26 @@ class RecitationChapterDownloadService : Service() {
     override fun onBind(intent: Intent) = binder
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (intent == null) {
-            val notification = NotificationUtils.createEmptyNotif(
+        // ✅ 立即调用 startForeground() 防止 ForegroundServiceDidNotStartInTimeException
+        // Android 8.0+ 要求在 5 秒内调用，否则会崩溃
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val emptyNotification = NotificationUtils.createEmptyNotif(
                 this,
                 getString(R.string.strNotifChannelIdDownloads)
             )
-            startForegroundCompat(NOTIF_ID, notification)
+            startForegroundCompat(NOTIF_ID, emptyNotification)
+        }
+        
+        if (intent == null) {
             finish()
             return START_NOT_STICKY
         }
 
-        val chapterModel: ManageAudioChapterModel = intent.serializableExtra(KEY_RECITATION_CHAPTER_MODEL)!!
+        val chapterModel: ManageAudioChapterModel = intent.serializableExtra(KEY_RECITATION_CHAPTER_MODEL)
+        if (chapterModel == null) {
+            finish()
+            return START_NOT_STICKY
+        }
 
         val key = makeKey(chapterModel.reciterModel.slug, chapterModel.chapterMeta.chapterNo)
         val notifBuilder = prepareNotification(key, chapterModel)
