@@ -68,6 +68,8 @@ import com.quran.quranaudio.quiz.QuestionBean;
 import com.quran.quranaudio.quiz.base.Constants;
 import com.quranaudio.quiz.quiz.QuranQuizNotifyResultActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.quranaudio.common.ad.NativeAdHelper;
+import android.widget.FrameLayout;
 import java.util.TreeMap;
 
 import org.apache.commons.lang3.StringUtils;
