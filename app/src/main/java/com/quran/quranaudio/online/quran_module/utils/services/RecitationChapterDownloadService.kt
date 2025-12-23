@@ -102,7 +102,7 @@ class RecitationChapterDownloadService : Service() {
             return START_NOT_STICKY
         }
 
-        val chapterModel: ManageAudioChapterModel = intent.serializableExtra(KEY_RECITATION_CHAPTER_MODEL)
+        val chapterModel: ManageAudioChapterModel? = intent.serializableExtra(KEY_RECITATION_CHAPTER_MODEL)
         if (chapterModel == null) {
             finish()
             return START_NOT_STICKY
