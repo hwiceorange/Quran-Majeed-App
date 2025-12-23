@@ -1215,7 +1215,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             
             // 使用 NativeAdHelper 加载原生广告
             // 复用 Quiz 的布局样式
-            com.quranaudio.common.ad.NativeAdHelper.displayNativeAdWithAutoLoad(
+            com.quranaudio.common.ad.NativeAdHelper.INSTANCE.displayNativeAdWithAutoLoad(
                 getActivity(),
                 votdNativeAdContainer,
                 com.quran.quranaudio.quiz.R.layout.layout_ad_native_small_wrapper

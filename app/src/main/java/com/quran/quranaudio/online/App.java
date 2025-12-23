@@ -258,7 +258,9 @@ public class App extends BaseApp {
             if (isFirstLaunch) {
                 isFirstLaunch = false;
                 android.util.Log.d("App", "🚀 First launch, preloading app open ad");
-                AdFactory.INSTANCE.loadAppOpenAd(getApplication(), com.quranaudio.common.ad.AdConfig.AD_APPOPEN, null);
+                if (currentActivity != null) {
+                    AdFactory.INSTANCE.loadAppOpenAd(currentActivity, com.quranaudio.common.ad.AdConfig.AD_APPOPEN, null);
+                }
                 return;
             }
             
