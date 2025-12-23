@@ -66,17 +66,16 @@ class AdNativeSmallWrapperView : LinearLayout {
     }
 
     /**
-     * ✅ 统一使用 NativeAdManager 加载原生广告
+     * 🔥 加载并展示原生广告 - 优化版
      * 
-     * 优化逻辑:
-     * - 按场景（Tag）检查时间间隔
-     * - 只展示已缓存的广告，不做异步加载
-     * - 无广告立即隐藏，不等待加载
-     * - 🆕 确保 UI 操作在主线程
-     * - 🆕 添加 Impression 监听
+     * 改进:
+     * - ❌ 移除时间间隔限制（用户要求：每次都展示）
+     * - ✅ 优先使用缓存（快速）
+     * - ✅ 没有缓存时动态加载（保证展示）
+     * - ✅ 确保 UI 操作在主线程
      */
     fun loadNativeAd(adTag: String) {
-        // 🆕 确保在主线程执行（UI 安全）
+        // 确保在主线程执行
         if (android.os.Looper.myLooper() != android.os.Looper.getMainLooper()) {
             android.os.Handler(android.os.Looper.getMainLooper()).post {
                 loadNativeAd(adTag)
@@ -85,57 +84,36 @@ class AdNativeSmallWrapperView : LinearLayout {
         }
         
         reportEvent(adTag, "show_native_ad")
-        
-        // ✅ 优化：按场景（Tag）检查时间间隔
-        if (NativeAdTimeUtil.isInterceptByTag(adTag)) {
-            Log.d(TAG, "⏱️ Too soon for tag: $adTag, skipping")
-            reportEvent(adTag, "no_native_ad", "interval_blocked")
-            binding.root.gone()
-            return
-        }
-        
         this.adTag = adTag
-        val activity = context as? Activity
         
+        val activity = context as? Activity
         if (activity == null || !activity.isValid()) {
-            Log.w(TAG, "⚠️ Activity invalid, skipping ad")
+            Log.w(TAG, "⚠️ Activity invalid")
             binding.root.gone()
             return
         }
         
         if (!isLoadAd) {
-            Log.d(TAG, "⚠️ isLoadAd = false, skipping")
+            Log.d(TAG, "⚠️ isLoadAd = false")
             binding.root.gone()
             return
         }
         
-        // ✅ 统一使用 NativeAdManager 获取缓存广告
-        val nativeAd = NativeAdManager.getInstance().getCachedAd(activity)
-        
-        if (nativeAd == null) {
-            Log.d(TAG, "⚠️ No cached ad available for tag: $adTag")
-            reportEvent(adTag, "no_native_ad", "no_cache")
-            binding.root.gone()
-            return
-        }
-        
-        // ✅ 有缓存，立即展示
-        Log.d(TAG, "✅ Displaying cached ad for tag: $adTag")
+        // 🔥 改进：使用 NativeAdHelper 的自动加载方法
+        // 优先使用缓存，没有缓存会动态加载
         try {
-            // ✅ AdMob 会在 NativeAdView 显示时自动追踪 impression
-            // 调用 NativeAdView.setNativeAd() 时会自动触发 impression 记录
-            
-            inflateView(nativeAd)
-            
-            // ✅ 记录展示时间（按场景）
-            NativeAdTimeUtil.saveTimeByTag(adTag, System.currentTimeMillis())
-            reportEvent(adTag, "native_ad_shown", "success")
+            com.quranaudio.common.ad.NativeAdHelper.displayNativeAdWithAutoLoad(
+                activity,
+                this,
+                R.layout.layout_ad_native_small_wrapper
+            )
+            Log.d(TAG, "✅ Ad display initiated for: $adTag")
         } catch (e: Exception) {
-            Log.e(TAG, "❌ Failed to display ad: ${e.message}", e)
-            reportEvent(adTag, "native_ad_error", e.message ?: "display_failed")
+            Log.e(TAG, "❌ Failed to load ad: ${e.message}", e)
+            reportEvent(adTag, "native_ad_error", e.message ?: "load_failed")
             binding.root.gone()
-                }
-            }
+        }
+    }
 
     /**
      * ✅ 渲染原生广告视图

@@ -153,6 +153,8 @@ public class SplashScreenActivity extends AppCompatActivity {
                                if(!hasJumpedToMain) {
                                    android.util.Log.e(TAG, "❌ [FAILSAFE] Ad did not close after 15s, forcing jump to main");
                                    android.util.Log.e(TAG, "❌ [FAILSAFE] This may indicate: 1) Test ad issue, 2) Ad SDK callback failure, 3) Ad creative issue");
+                                   // 🔥 强制跳转也要预加载
+                                   AdFactory.INSTANCE.loadAppOpenAd(SplashScreenActivity.this, AdConfig.AD_APPOPEN, null);
                                    startMainActivity();
                                }
                            }
@@ -185,6 +187,11 @@ public class SplashScreenActivity extends AppCompatActivity {
                            android.util.Log.w(TAG, "⚠️ [AppOpen] This may be a TEST AD or the ad creative is very short");
                            android.util.Log.w(TAG, "⚠️ [AppOpen] Production ads should require user to manually close");
                        }
+                       
+                       // 🔥 预加载下一个开屏广告（用于热启动）
+                       android.util.Log.d(TAG, "🔄 [AppOpen] Preloading next app open ad for hot start");
+                       AdFactory.INSTANCE.loadAppOpenAd(SplashScreenActivity.this, AdConfig.AD_APPOPEN, null);
+                       
                        startMainActivity();
                    }
 
@@ -201,6 +208,8 @@ public class SplashScreenActivity extends AppCompatActivity {
                            public void run() {
                                if(!hasJumpedToMain) {
                                    android.util.Log.e(TAG, "❌ [FAILSAFE-onShow] Ad did not close after 15s, forcing jump to main");
+                                   // 🔥 强制跳转也要预加载
+                                   AdFactory.INSTANCE.loadAppOpenAd(SplashScreenActivity.this, AdConfig.AD_APPOPEN, null);
                                    startMainActivity();
                                }
                            }
@@ -210,12 +219,18 @@ public class SplashScreenActivity extends AppCompatActivity {
                    }
 
                    @Override public void onShowFail() {
-                       android.util.Log.w(TAG, "❌ [AppOpen] onShowFail - Ad failed to show, jumping to main");
+                       android.util.Log.w(TAG, "❌ [AppOpen] onShowFail - Ad failed to show");
+                       // 🔥 失败后也要预加载，确保热启动有广告
+                       android.util.Log.d(TAG, "🔄 [AppOpen] Preloading ad for hot start after failure");
+                       AdFactory.INSTANCE.loadAppOpenAd(SplashScreenActivity.this, AdConfig.AD_APPOPEN, null);
                        startMainActivity();
                    }
                });
             } else if(count>=5){ // 🔥 修改：8秒 → 5秒
-                android.util.Log.d(TAG, "⏱️ Timeout reached (5s), jumping to main activity");
+                android.util.Log.d(TAG, "⏱️ Timeout reached (5s)");
+                // 🔥 超时也要预加载，确保热启动有广告
+                android.util.Log.d(TAG, "🔄 Preloading ad for hot start after timeout");
+                AdFactory.INSTANCE.loadAppOpenAd(SplashScreenActivity.this, AdConfig.AD_APPOPEN, null);
                 startMainActivity();
             } else {
                 count++;
@@ -290,6 +305,9 @@ public class SplashScreenActivity extends AppCompatActivity {
                     .setApplovinAppOpenId(Constant.APPLOVIN_APP_OPEN_AP_ID)
                     .build(this::startMainActivity);
         } else {
+            // 🔥 不展示广告时也要预加载，确保热启动有广告
+            android.util.Log.d(TAG, "🔄 Ad not enabled, preloading for hot start");
+            AdFactory.INSTANCE.loadAppOpenAd(SplashScreenActivity.this, AdConfig.AD_APPOPEN, null);
             startMainActivity();
         }
     }
@@ -410,6 +428,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         public void run() {
             android.util.Log.w(TAG, "⚠️ Absolute timeout reached, force jumping to main");
             pbView.setProgress(100);
+            // 🔥 绝对超时也要预加载
+            AdFactory.INSTANCE.loadAppOpenAd(SplashScreenActivity.this, AdConfig.AD_APPOPEN, null);
             startMainActivity();
         }
     };

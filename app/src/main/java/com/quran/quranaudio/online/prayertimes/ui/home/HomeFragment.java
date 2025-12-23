@@ -138,6 +138,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private ImageView btnShare;
     private ImageView btnBookmark;
     private ProgressBar loadingIndicator;
+    private FrameLayout votdNativeAdContainer;  // 🔥 原生广告容器
     private int votdChapterNo = -1;
     private int votdVerseNo = -1;
 
@@ -546,6 +547,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             btnShare = verseOfDayCardView.findViewById(R.id.votd_share);
             btnBookmark = verseOfDayCardView.findViewById(R.id.votd_bookmark);
             // loadingIndicator = verseOfDayCardView.findViewById(R.id.loading_indicator);  // Not in new layout
+            votdNativeAdContainer = verseOfDayCardView.findViewById(R.id.votd_native_ad_container);  // 🔥 原生广告容器
         }
 
         // Initialize Mecca Live Card Views
@@ -1192,6 +1194,35 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         // Load verse of the day
         loadVerseOfTheDay();
+        
+        // 🔥 Load native ad at bottom of card
+        loadVOTDNativeAd();
+    }
+    
+    /**
+     * 🔥 加载 Verse of the Day 卡片底部的原生广告
+     * 复用 Quiz Review & Learn 的样式和逻辑
+     */
+    private void loadVOTDNativeAd() {
+        if (votdNativeAdContainer == null || getActivity() == null) {
+            return;
+        }
+        
+        try {
+            android.util.Log.d("HomeFragment", "📡 Loading native ad for VOTD card...");
+            
+            // 使用 NativeAdHelper 加载原生广告
+            // 复用 Quiz 的布局样式
+            com.quranaudio.common.ad.NativeAdHelper.displayNativeAdWithAutoLoad(
+                getActivity(),
+                votdNativeAdContainer,
+                com.quran.quranaudio.quiz.R.layout.layout_ad_native_small_wrapper
+            );
+            
+            android.util.Log.d("HomeFragment", "✅ Native ad load initiated for VOTD");
+        } catch (Exception e) {
+            android.util.Log.e("HomeFragment", "❌ Failed to load VOTD native ad: " + e.getMessage(), e);
+        }
     }
 
     /**

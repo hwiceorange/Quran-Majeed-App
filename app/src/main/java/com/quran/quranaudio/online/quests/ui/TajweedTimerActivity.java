@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -80,7 +81,10 @@ public class TajweedTimerActivity extends AppCompatActivity {
     }
     
     private void initViews() {
-        findViewById(R.id.btn_back).setOnClickListener(v -> onBackPressed());
+        // 使用新的 OnBackPressedDispatcher API 替代过时的 onBackPressed()
+        findViewById(R.id.btn_back).setOnClickListener(v -> {
+            getOnBackPressedDispatcher().onBackPressed();
+        });
         
         tvGoalTime = findViewById(R.id.tv_goal_time);
         tvTimer = findViewById(R.id.tv_timer);

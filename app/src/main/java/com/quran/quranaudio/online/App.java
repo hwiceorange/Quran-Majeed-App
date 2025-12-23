@@ -194,12 +194,19 @@ public class App extends BaseApp {
         android.util.Log.d("App", "✅ QuranDataProvider injected for Quiz module");
         
         //Ads
+        // 🔥 始终注册Activity生命周期回调（用于跟踪当前Activity）
+        registerActivityLifecycleCallbacks(activityLifecycleCallbacks);
+        
         if (!Constant.FORCE_TO_SHOW_APP_OPEN_AD_ON_START) {
-            registerActivityLifecycleCallbacks(activityLifecycleCallbacks);
+            // 旧的SDK方式（目前不使用因为FORCE_TO_SHOW_APP_OPEN_AD_ON_START=true）
             ProcessLifecycleOwner.get().getLifecycle().addObserver(lifecycleObserver);
             appOpenAdMob = new AppOpenAdMob();
             appOpenAdManager = new AppOpenAdManager();
             appOpenAdAppLovin = new AppOpenAdAppLovin();
+        } else {
+            // 🔥 新增：使用新的AdFactory API处理热启动开屏广告
+            ProcessLifecycleOwner.get().getLifecycle().addObserver(resumeAdObserver);
+            android.util.Log.d("App", "✅ Hot start app open ad observer registered");
         }
         //Ads*
         app = this;
@@ -239,6 +246,83 @@ public class App extends BaseApp {
     }
 
     //Ads
+    // 🔥 用于热启动（从后台恢复）时展示开屏广告的生命周期观察器
+    LifecycleObserver resumeAdObserver = new DefaultLifecycleObserver() {
+        private boolean isFirstLaunch = true;
+        
+        @Override
+        public void onStart(@NonNull LifecycleOwner owner) {
+            DefaultLifecycleObserver.super.onStart(owner);
+            
+            // 🔥 首次启动：不展示但要预加载
+            if (isFirstLaunch) {
+                isFirstLaunch = false;
+                android.util.Log.d("App", "🚀 First launch, preloading app open ad");
+                AdFactory.INSTANCE.loadAppOpenAd(getApplication(), com.quranaudio.common.ad.AdConfig.AD_APPOPEN, null);
+                return;
+            }
+            
+            // 🔥 检查当前Activity是否有效
+            if (currentActivity == null) {
+                android.util.Log.w("App", "⚠️ currentActivity is null");
+                return;
+            }
+            
+            String activityName = currentActivity.getClass().getSimpleName();
+            android.util.Log.d("App", "🔄 App onStart, current: " + activityName);
+            
+            // 🔥 只排除SplashScreenActivity（避免重复展示）
+            if (activityName.equals("SplashScreenActivity")) {
+                android.util.Log.d("App", "🚫 Skip ad on SplashScreenActivity");
+                return;
+            }
+            
+            // 🔥 所有其他页面都展示开屏广告
+            android.util.Log.d("App", "✅ Showing app open ad on: " + activityName);
+            
+            if (AdFactory.INSTANCE.hasAppOpenAd(com.quranaudio.common.ad.AdConfig.AD_APPOPEN)) {
+                android.util.Log.d("App", "📱 Ad ready, showing...");
+                AdFactory.INSTANCE.showAppOpenAd(currentActivity, com.quranaudio.common.ad.AdConfig.AD_APPOPEN, new com.quranaudio.common.ad.AdShowCallback() {
+                    @Override
+                    public void onAdImpression(@Nullable com.quranaudio.common.ad.model.AdItem adItem) {
+                        android.util.Log.d("App", "📱 Ad impression");
+                    }
+
+                    @Override
+                    public void onAdClicked(@Nullable com.quranaudio.common.ad.model.AdItem adItem) {
+                        android.util.Log.d("App", "👆 Ad clicked");
+                    }
+
+                    @Override
+                    public void onUserEarnedReward(@Nullable com.quranaudio.common.ad.model.AdItem adItem, @Nullable com.quranaudio.common.ad.model.RewardItem rewardItem) {
+                        // N/A for app open ads
+                    }
+
+                    @Override
+                    public void onShow(@Nullable com.quranaudio.common.ad.model.AdItem adItem) {
+                        android.util.Log.d("App", "📱 Ad shown");
+                    }
+
+                    @Override
+                    public void onShowFail() {
+                        android.util.Log.w("App", "❌ Ad show failed, reloading");
+                        AdFactory.INSTANCE.loadAppOpenAd(currentActivity, com.quranaudio.common.ad.AdConfig.AD_APPOPEN, null);
+                    }
+
+                    @Override
+                    public void onAdClosed(@Nullable com.quranaudio.common.ad.model.AdItem adItem) {
+                        android.util.Log.d("App", "📱 Ad closed, preloading next");
+                        AdFactory.INSTANCE.loadAppOpenAd(currentActivity, com.quranaudio.common.ad.AdConfig.AD_APPOPEN, null);
+                    }
+                });
+            } else {
+                android.util.Log.w("App", "⚠️ Ad not ready, loading now");
+                AdFactory.INSTANCE.loadAppOpenAd(currentActivity, com.quranaudio.common.ad.AdConfig.AD_APPOPEN, null);
+            }
+        }
+    };
+    
+    // 保留旧的生命周期观察器（用于兼容性，但实际不会被注册因为FORCE_TO_SHOW_APP_OPEN_AD_ON_START=true）
     LifecycleObserver lifecycleObserver = new DefaultLifecycleObserver() {
         @Override
         public void onStart(@NonNull LifecycleOwner owner) {
@@ -280,10 +364,15 @@ public class App extends BaseApp {
     ActivityLifecycleCallbacks activityLifecycleCallbacks = new ActivityLifecycleCallbacks() {
         @Override
         public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+            // 🔥 更新当前Activity引用（用于热启动展示广告）
+            currentActivity = activity;
         }
 
         @Override
         public void onActivityStarted(@NonNull Activity activity) {
+            // 🔥 更新当前Activity引用（用于热启动展示广告）
+            currentActivity = activity;
+            
             if (Constant.OPEN_ADS_ON_START) {
                 if (Constant.AD_STATUS.equals(AD_STATUS_ON)) {
                     switch (Constant.AD_NETWORK) {
@@ -316,6 +405,9 @@ public class App extends BaseApp {
 
         @Override
         public void onActivityResumed(@NonNull Activity activity) {
+            // 🔥 更新当前Activity引用（用于热启动展示广告）
+            currentActivity = activity;
+            
             // ✅ 检查原生广告缓存池，不足则补充
             int cacheSize = com.quranaudio.common.ad.NativeAdManager.Companion.getInstance().getCacheSize();
             if (cacheSize < 2) {
@@ -338,6 +430,10 @@ public class App extends BaseApp {
 
         @Override
         public void onActivityDestroyed(@NonNull Activity activity) {
+            // 🔥 清理当前Activity引用（避免内存泄漏）
+            if (currentActivity == activity) {
+                currentActivity = null;
+            }
         }
     };
 

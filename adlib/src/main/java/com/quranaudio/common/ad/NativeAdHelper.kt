@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.gms.ads.nativead.MediaView
 import com.google.android.gms.ads.nativead.NativeAd
@@ -132,61 +133,110 @@ object NativeAdHelper {
      * Maps ad components to their respective views using dynamic IDs.
      */
     private fun populateNativeAdView(nativeAd: NativeAd, adView: NativeAdView) {
-        // Get resource IDs dynamically from the app's R class
         val context = adView.context
         val packageName = context.packageName
         
-        // Set the media view
+        // Set media view - 支持两套ID
+        var mediaView: MediaView? = null
+        // 优先使用 Quiz ID
         try {
-            val mediaViewId = context.resources.getIdentifier("ad_media", "id", packageName)
-            val mediaView = adView.findViewById<MediaView>(mediaViewId)
-            mediaView?.let {
-                adView.mediaView = it
-            }
-        } catch (e: Exception) {
-            Log.w(TAG, "Media view not found: ${e.message}")
+            val id = context.resources.getIdentifier("coverview", "id", packageName)
+            mediaView = adView.findViewById<MediaView>(id)
+        } catch (e: Exception) { }
+        // 回退到旧ID
+        if (mediaView == null) {
+            try {
+                val id = context.resources.getIdentifier("ad_media", "id", packageName)
+                mediaView = adView.findViewById<MediaView>(id)
+            } catch (e: Exception) { }
+        }
+        mediaView?.let { adView.mediaView = it }
+        
+        // Set headline - 支持两套ID
+        var headlineView: TextView? = null
+        // 优先使用 Quiz ID
+        try {
+            val id = context.resources.getIdentifier("nativeAdTitle", "id", packageName)
+            headlineView = adView.findViewById<TextView>(id)
+        } catch (e: Exception) { }
+        // 回退到旧ID
+        if (headlineView == null) {
+            try {
+                val id = context.resources.getIdentifier("ad_headline", "id", packageName)
+                headlineView = adView.findViewById<TextView>(id)
+            } catch (e: Exception) { }
+        }
+        headlineView?.let {
+            it.text = nativeAd.headline
+            adView.headlineView = it
         }
         
-        // Set the headline
+        // Set body - 支持两套ID
+        var bodyView: TextView? = null
+        // 优先使用 Quiz ID
         try {
-            val headlineViewId = context.resources.getIdentifier("ad_headline", "id", packageName)
-            val headlineView = adView.findViewById<TextView>(headlineViewId)
-            headlineView?.let {
-                it.text = nativeAd.headline
-                adView.headlineView = it
-            }
-        } catch (e: Exception) {
-            Log.w(TAG, "Headline view not found: ${e.message}")
+            val id = context.resources.getIdentifier("nativeAdBody", "id", packageName)
+            bodyView = adView.findViewById<TextView>(id)
+        } catch (e: Exception) { }
+        // 回退到旧ID
+        if (bodyView == null) {
+            try {
+                val id = context.resources.getIdentifier("ad_body", "id", packageName)
+                bodyView = adView.findViewById<TextView>(id)
+            } catch (e: Exception) { }
+        }
+        bodyView?.let {
+            it.text = nativeAd.body
+            adView.bodyView = it
         }
         
-        // Set the body
+        // Set icon - 支持两套ID
+        var iconView: ImageView? = null
+        // 优先使用 Quiz ID
         try {
-            val bodyViewId = context.resources.getIdentifier("ad_body", "id", packageName)
-            val bodyView = adView.findViewById<TextView>(bodyViewId)
-            bodyView?.let {
-                it.text = nativeAd.body
-                adView.bodyView = it
+            val id = context.resources.getIdentifier("nativeAdIcon", "id", packageName)
+            iconView = adView.findViewById<ImageView>(id)
+        } catch (e: Exception) { }
+        // 回退到旧ID
+        if (iconView == null) {
+            try {
+                val id = context.resources.getIdentifier("ad_app_icon", "id", packageName)
+                iconView = adView.findViewById<ImageView>(id)
+            } catch (e: Exception) { }
+        }
+        iconView?.let {
+            nativeAd.icon?.let { icon ->
+                it.setImageDrawable(icon.drawable)
+                adView.iconView = it
+            } ?: run {
+                it.visibility = View.GONE
             }
-        } catch (e: Exception) {
-            Log.w(TAG, "Body view not found: ${e.message}")
         }
         
-        // Set the call to action button
+        // Set CTA - 支持两套ID (TextView 或 Button)
+        var ctaView: View? = null
+        // 优先使用 Quiz ID (TextView)
         try {
-            val ctaViewId = context.resources.getIdentifier("ad_call_to_action", "id", packageName)
-            val callToActionView = adView.findViewById<Button>(ctaViewId)
-            callToActionView?.let {
-                it.text = nativeAd.callToAction
-                adView.callToActionView = it
+            val id = context.resources.getIdentifier("cta", "id", packageName)
+            ctaView = adView.findViewById<TextView>(id)
+        } catch (e: Exception) { }
+        // 回退到旧ID (Button)
+        if (ctaView == null) {
+            try {
+                val id = context.resources.getIdentifier("ad_call_to_action", "id", packageName)
+                ctaView = adView.findViewById<Button>(id)
+            } catch (e: Exception) { }
+        }
+        ctaView?.let {
+            when (it) {
+                is TextView -> it.text = nativeAd.callToAction
+                is Button -> it.text = nativeAd.callToAction
             }
-        } catch (e: Exception) {
-            Log.w(TAG, "CTA button not found: ${e.message}")
+            adView.callToActionView = it
         }
         
-        // Register the native ad with the ad view
         adView.setNativeAd(nativeAd)
-        
-        Log.d(TAG, "📋 Native ad view populated: headline=${nativeAd.headline}")
+        Log.d(TAG, "✅ Ad populated: ${nativeAd.headline}")
     }
     
     /**

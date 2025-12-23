@@ -82,6 +82,7 @@ class QuizReviewLearnActivity :
         
         setupViews()
         setupClickListeners()
+        preloadNativeAd()  // 🔥 新增：预加载原生广告（确保第一时间展示）
         preloadRewardedAd()
         
         // Handle back button
@@ -148,8 +149,30 @@ class QuizReviewLearnActivity :
     
     override fun onResume() {
         super.onResume()
-        // Load native ad dynamically when user is still on the page
-        binding.nativeAdView.loadNativeAd(FunctionTag.NATIVE_QUIZ_REVIEW_LEARN)
+        // 🔥 移除重复调用（initView 中的 preloadNativeAd 已经处理）
+        android.util.Log.d(TAG, "ℹ️ onResume: Native ad handled in initView")
+    }
+    
+    /**
+     * 🔥 预加载原生广告 - 页面打开时立即展示
+     * 
+     * 优化:
+     * - 非付费用户每次都展示
+     * - 优先使用缓存（快）
+     * - 没有缓存动态加载（保证显示）
+     * - 无时间间隔限制
+     */
+    private fun preloadNativeAd() {
+        try {
+            android.util.Log.d(TAG, "📡 Loading native ad...")
+            
+            // 🔥 使用自定义View的加载方法（已优化为自动加载）
+            binding.nativeAdView.loadNativeAd(FunctionTag.NATIVE_QUIZ_REVIEW_LEARN)
+            
+            android.util.Log.d(TAG, "✅ Native ad load initiated")
+        } catch (e: Exception) {
+            android.util.Log.e(TAG, "❌ Failed to load native ad: ${e.message}", e)
+        }
     }
     
     /**
