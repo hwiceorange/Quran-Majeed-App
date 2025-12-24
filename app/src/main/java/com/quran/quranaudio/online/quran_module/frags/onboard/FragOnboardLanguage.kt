@@ -277,10 +277,26 @@ class FragOnboardLanguage : FragOnboardBase() {
      * Shows ad for unpaid users, loads dynamically if needed
      */
     private fun setupNativeAd() {
+        android.util.Log.d("DIAGNOSE", "→→ setupNativeAd() called")
+        
         val container = binding.nativeAdContainer
+        android.util.Log.d("DIAGNOSE", "→→ Native ad container found: ${container != null}")
         
         try {
-            android.util.Log.d("FragOnboardLanguage", "🔄 Setting up native ad with auto-load")
+            // Check subscription status
+            val isSubscribed = com.quranaudio.common.ad.SubscriptionChecker.isUserSubscribed(requireContext())
+            android.util.Log.d("DIAGNOSE", "→→ User subscribed: $isSubscribed")
+            
+            if (isSubscribed) {
+                android.util.Log.d("DIAGNOSE", "→→ User is subscribed, hiding ad container")
+                container.visibility = View.GONE
+                return
+            }
+            
+            android.util.Log.d("DIAGNOSE", "→→ Calling NativeAdHelper.displayNativeAdWithAutoLoad()")
+            android.util.Log.d("DIAGNOSE", "→→ Activity: ${requireActivity()}")
+            android.util.Log.d("DIAGNOSE", "→→ Container: $container")
+            android.util.Log.d("DIAGNOSE", "→→ Layout: R.layout.native_ad_onboarding")
             
             // Use new dynamic loading method
             com.quranaudio.common.ad.NativeAdHelper.displayNativeAdWithAutoLoad(
@@ -289,9 +305,12 @@ class FragOnboardLanguage : FragOnboardBase() {
                 R.layout.native_ad_onboarding
             )
             
-            android.util.Log.d("FragOnboardLanguage", "✅ Native ad setup initiated")
+            android.util.Log.d("DIAGNOSE", "✅ NativeAdHelper.displayNativeAdWithAutoLoad() returned")
         } catch (e: Exception) {
-            android.util.Log.e("FragOnboardLanguage", "❌ Failed to setup native ad: ${e.message}", e)
+            android.util.Log.e("DIAGNOSE_ERROR", "❌ setupNativeAd() FAILED", e)
+            android.util.Log.e("DIAGNOSE_ERROR", "❌ Exception type: ${e.javaClass.name}")
+            android.util.Log.e("DIAGNOSE_ERROR", "❌ Exception message: ${e.message}")
+            e.printStackTrace()
             container.visibility = View.GONE
         }
     }

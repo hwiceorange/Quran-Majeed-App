@@ -127,15 +127,28 @@ public class App extends BaseApp {
     //QM*
     @Override
     public void onCreate() {
-        super.onCreate();
+        android.util.Log.d("DIAGNOSE", "========================================");
+        android.util.Log.d("DIAGNOSE", "App.onCreate() START");
+        android.util.Log.d("DIAGNOSE", "========================================");
+        
+        try {
+            super.onCreate();
+            android.util.Log.d("DIAGNOSE", "✅ super.onCreate() completed");
+        } catch (Exception e) {
+            android.util.Log.e("DIAGNOSE_ERROR", "❌ super.onCreate() FAILED", e);
+            throw e;
+        }
         
         // 🚨 关键修复：必须在最开始进行 WebView 多进程隔离
         // 这必须在任何可能使用 WebView 的代码（如广告SDK）之前执行
+        android.util.Log.d("DIAGNOSE", "→ Starting WebView isolation check...");
         if (Build.VERSION.SDK_INT >= 28) {
             try {
                 String currentProcess = Application.getProcessName();
                 String mainProcess = this.getPackageName();
                 
+                android.util.Log.d("DIAGNOSE", "→ Current process: " + currentProcess);
+                android.util.Log.d("DIAGNOSE", "→ Main process: " + mainProcess);
                 android.util.Log.d("App", "🔍 Process Check - Current: " + currentProcess + ", Main: " + mainProcess);
                 
                 // 为非主进程设置独立的 WebView 数据目录后缀
@@ -144,95 +157,193 @@ public class App extends BaseApp {
                     String suffix = currentProcess.replace(mainProcess, "").replace(":", "");
                     if (!suffix.isEmpty()) {
                         WebView.setDataDirectorySuffix(suffix);
+                        android.util.Log.d("DIAGNOSE", "✅ WebView suffix set: " + suffix);
                         android.util.Log.d("App", "✅ WebView data directory suffix set for CHILD process: [" + suffix + "]");
                     } else {
+                        android.util.Log.w("DIAGNOSE", "⚠️ Child process but suffix is empty");
                         android.util.Log.w("App", "⚠️ Child process but suffix is empty");
                     }
                 } else {
+                    android.util.Log.d("DIAGNOSE", "✅ MAIN process - using default WebView");
                     android.util.Log.d("App", "✅ MAIN process - using default WebView data directory");
                 }
             } catch (IllegalStateException e) {
                 // WebView 已经被初始化（这不应该在 onCreate 开始时发生）
+                android.util.Log.e("DIAGNOSE_ERROR", "❌ WebView already initialized!", e);
                 android.util.Log.e("App", "❌ WebView already initialized before onCreate!", e);
             } catch (Exception e) {
+                android.util.Log.e("DIAGNOSE_ERROR", "❌ WebView isolation failed", e);
                 android.util.Log.e("App", "❌ Failed to configure WebView isolation", e);
             }
         }
         
-        AdFactory.INSTANCE.init(this,BuildConfig.DEBUG);
+        android.util.Log.d("DIAGNOSE", "→ Starting AdFactory initialization...");
+        try {
+            AdFactory.INSTANCE.init(this,BuildConfig.DEBUG);
+            android.util.Log.d("DIAGNOSE", "✅ AdFactory.init() completed");
+        } catch (Exception e) {
+            android.util.Log.e("DIAGNOSE_ERROR", "❌ AdFactory.init() FAILED", e);
+            throw e;
+        }
         
         // 🎯 Initialize and preload interstitial ad manager
-        com.quranaudio.common.ad.InterstitialAdManager.Companion.getInstance().initialize(this);
-        com.quranaudio.common.ad.InterstitialAdManager.Companion.getInstance().preloadAd();
-        android.util.Log.d("App", "✅ InterstitialAdManager initialized and preload started");
+        android.util.Log.d("DIAGNOSE", "→ Starting InterstitialAdManager initialization...");
+        try {
+            com.quranaudio.common.ad.InterstitialAdManager.Companion.getInstance().initialize(this);
+            android.util.Log.d("DIAGNOSE", "✅ InterstitialAdManager.initialize() completed");
+            com.quranaudio.common.ad.InterstitialAdManager.Companion.getInstance().preloadAd();
+            android.util.Log.d("DIAGNOSE", "✅ InterstitialAdManager.preloadAd() completed");
+            android.util.Log.d("App", "✅ InterstitialAdManager initialized and preload started");
+        } catch (Exception e) {
+            android.util.Log.e("DIAGNOSE_ERROR", "❌ InterstitialAdManager initialization FAILED", e);
+            throw e;
+        }
         
         // 🎯 Initialize and preload native ad manager (优化版：缓存池)
-        com.quranaudio.common.ad.NativeAdManager.Companion.getInstance().initialize(this);
-        com.quranaudio.common.ad.NativeAdManager.Companion.getInstance().preloadAd();
+        android.util.Log.d("DIAGNOSE", "→ Starting NativeAdManager initialization...");
+        try {
+            com.quranaudio.common.ad.NativeAdManager.Companion.getInstance().initialize(this);
+            android.util.Log.d("DIAGNOSE", "✅ NativeAdManager.initialize() completed");
+            com.quranaudio.common.ad.NativeAdManager.Companion.getInstance().preloadAd();
+            android.util.Log.d("DIAGNOSE", "✅ NativeAdManager.preloadAd() completed");
+        } catch (Exception e) {
+            android.util.Log.e("DIAGNOSE_ERROR", "❌ NativeAdManager initialization FAILED", e);
+            throw e;
+        }
         
         // ✅ 延迟加载以填满缓存池（3个广告）
+        android.util.Log.d("DIAGNOSE", "→ Scheduling delayed NativeAdManager loads...");
         new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                com.quranaudio.common.ad.NativeAdManager.Companion.getInstance().loadNewAd();
+                try {
+                    android.util.Log.d("DIAGNOSE", "→ NativeAdManager.loadNewAd() #2 starting...");
+                    com.quranaudio.common.ad.NativeAdManager.Companion.getInstance().loadNewAd();
+                    android.util.Log.d("DIAGNOSE", "✅ NativeAdManager.loadNewAd() #2 completed");
+                } catch (Exception e) {
+                    android.util.Log.e("DIAGNOSE_ERROR", "❌ NativeAdManager.loadNewAd() #2 FAILED", e);
+                }
             }
         }, 2000); // 2秒后加载第二个
         
         new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                com.quranaudio.common.ad.NativeAdManager.Companion.getInstance().loadNewAd();
+                try {
+                    android.util.Log.d("DIAGNOSE", "→ NativeAdManager.loadNewAd() #3 starting...");
+                    com.quranaudio.common.ad.NativeAdManager.Companion.getInstance().loadNewAd();
+                    android.util.Log.d("DIAGNOSE", "✅ NativeAdManager.loadNewAd() #3 completed");
+                } catch (Exception e) {
+                    android.util.Log.e("DIAGNOSE_ERROR", "❌ NativeAdManager.loadNewAd() #3 FAILED", e);
+                }
             }
         }, 4000); // 4秒后加载第三个
         
+        android.util.Log.d("DIAGNOSE", "✅ NativeAdManager pool preloading scheduled");
         android.util.Log.d("App", "✅ NativeAdManager initialized with pool preloading (target: 3 ads)");
         
         // 注入 QuranDataProvider 实现给 Quiz 模块
-        com.quran.quranaudio.quiz.data.QuranDataProviderHolder.INSTANCE.setInstance(
-            com.quran.quranaudio.online.quran_module.quiz.QuranDataRepositoryImpl.getInstance(this)
-        );
-        android.util.Log.d("App", "✅ QuranDataProvider injected for Quiz module");
+        android.util.Log.d("DIAGNOSE", "→ Starting QuranDataProvider injection...");
+        try {
+            com.quran.quranaudio.quiz.data.QuranDataProviderHolder.INSTANCE.setInstance(
+                com.quran.quranaudio.online.quran_module.quiz.QuranDataRepositoryImpl.getInstance(this)
+            );
+            android.util.Log.d("DIAGNOSE", "✅ QuranDataProvider injection completed");
+            android.util.Log.d("App", "✅ QuranDataProvider injected for Quiz module");
+        } catch (Exception e) {
+            android.util.Log.e("DIAGNOSE_ERROR", "❌ QuranDataProvider injection FAILED", e);
+            throw e;
+        }
         
         //Ads
         // 🔥 始终注册Activity生命周期回调（用于跟踪当前Activity）
-        registerActivityLifecycleCallbacks(activityLifecycleCallbacks);
+        android.util.Log.d("DIAGNOSE", "→ Registering ActivityLifecycleCallbacks...");
+        try {
+            registerActivityLifecycleCallbacks(activityLifecycleCallbacks);
+            android.util.Log.d("DIAGNOSE", "✅ ActivityLifecycleCallbacks registered");
+        } catch (Exception e) {
+            android.util.Log.e("DIAGNOSE_ERROR", "❌ ActivityLifecycleCallbacks registration FAILED", e);
+            throw e;
+        }
         
+        android.util.Log.d("DIAGNOSE", "→ Checking FORCE_TO_SHOW_APP_OPEN_AD_ON_START: " + Constant.FORCE_TO_SHOW_APP_OPEN_AD_ON_START);
         if (!Constant.FORCE_TO_SHOW_APP_OPEN_AD_ON_START) {
             // 旧的SDK方式（目前不使用因为FORCE_TO_SHOW_APP_OPEN_AD_ON_START=true）
+            android.util.Log.d("DIAGNOSE", "→ Using old SDK app open ad approach");
             ProcessLifecycleOwner.get().getLifecycle().addObserver(lifecycleObserver);
             appOpenAdMob = new AppOpenAdMob();
             appOpenAdManager = new AppOpenAdManager();
             appOpenAdAppLovin = new AppOpenAdAppLovin();
         } else {
             // 🔥 新增：使用新的AdFactory API处理热启动开屏广告
+            android.util.Log.d("DIAGNOSE", "→ Using new AdFactory app open ad approach");
             ProcessLifecycleOwner.get().getLifecycle().addObserver(resumeAdObserver);
+            android.util.Log.d("DIAGNOSE", "✅ Resume ad observer registered");
             android.util.Log.d("App", "✅ Hot start app open ad observer registered");
         }
         //Ads*
         app = this;
 
-        this.faceRobotoL = Typeface.createFromAsset(getAssets(), "Roboto_Light.ttf");
-        this.faceRobotoB = Typeface.createFromAsset(getAssets(), "Roboto_Bold.ttf");
-        this.faceRobotoR = Typeface.createFromAsset(getAssets(), "Roboto_Regular.ttf");
-        this.faceArabic = Typeface.createFromAsset(getAssets(), "XBZarIndoPak.ttf");
-
-        // enable TLS1.1/1.2 for kitkat devices
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            TLSSocketFactoryCompat.setAsDefault();
+        android.util.Log.d("DIAGNOSE", "→ Loading Typefaces...");
+        try {
+            this.faceRobotoL = Typeface.createFromAsset(getAssets(), "Roboto_Light.ttf");
+            this.faceRobotoB = Typeface.createFromAsset(getAssets(), "Roboto_Bold.ttf");
+            this.faceRobotoR = Typeface.createFromAsset(getAssets(), "Roboto_Regular.ttf");
+            this.faceArabic = Typeface.createFromAsset(getAssets(), "XBZarIndoPak.ttf");
+            android.util.Log.d("DIAGNOSE", "✅ All Typefaces loaded");
+        } catch (Exception e) {
+            android.util.Log.e("DIAGNOSE_ERROR", "❌ Typeface loading FAILED", e);
+            throw e;
         }
 
-        CaocConfig
-                .Builder
-                .create()
-                .apply();
+        // enable TLS1.1/1.2 for kitkat devices
+        android.util.Log.d("DIAGNOSE", "→ SDK version: " + Build.VERSION.SDK_INT);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            android.util.Log.d("DIAGNOSE", "→ Setting TLS for KitKat...");
+            try {
+                TLSSocketFactoryCompat.setAsDefault();
+                android.util.Log.d("DIAGNOSE", "✅ TLS configured for KitKat");
+            } catch (Exception e) {
+                android.util.Log.e("DIAGNOSE_ERROR", "❌ TLS configuration FAILED", e);
+            }
+        }
 
-        configureWorkManager();
+        android.util.Log.d("DIAGNOSE", "→ Configuring CaocConfig...");
+        try {
+            CaocConfig
+                    .Builder
+                    .create()
+                    .apply();
+            android.util.Log.d("DIAGNOSE", "✅ CaocConfig configured");
+        } catch (Exception e) {
+            android.util.Log.e("DIAGNOSE_ERROR", "❌ CaocConfig FAILED", e);
+            throw e;
+        }
+
+        android.util.Log.d("DIAGNOSE", "→ Configuring WorkManager...");
+        try {
+            configureWorkManager();
+            android.util.Log.d("DIAGNOSE", "✅ WorkManager configured");
+        } catch (Exception e) {
+            android.util.Log.e("DIAGNOSE_ERROR", "❌ WorkManager configuration FAILED", e);
+            throw e;
+        }
 
         //QM
 
-        NotificationUtils.INSTANCE.createNotificationChannels((Context)this);
+        android.util.Log.d("DIAGNOSE", "→ Creating NotificationChannels...");
+        try {
+            NotificationUtils.INSTANCE.createNotificationChannels((Context)this);
+            android.util.Log.d("DIAGNOSE", "✅ NotificationChannels created");
+        } catch (Exception e) {
+            android.util.Log.e("DIAGNOSE_ERROR", "❌ NotificationChannels creation FAILED", e);
+            throw e;
+        }
 
         //QM*
+        android.util.Log.d("DIAGNOSE", "========================================");
+        android.util.Log.d("DIAGNOSE", "✅ App.onCreate() COMPLETED SUCCESSFULLY");
+        android.util.Log.d("DIAGNOSE", "========================================");
     }
 
 
@@ -375,19 +486,21 @@ public class App extends BaseApp {
             // 🔥 更新当前Activity引用（用于热启动展示广告）
             currentActivity = activity;
             
-            if (Constant.OPEN_ADS_ON_START) {
+            // 🔥 仅在旧的SDK方式下才需要检查appOpenAdMob对象
+            // 新逻辑使用AdFactory和resumeAdObserver，不需要这些检查
+            if (!Constant.FORCE_TO_SHOW_APP_OPEN_AD_ON_START && Constant.OPEN_ADS_ON_START) {
                 if (Constant.AD_STATUS.equals(AD_STATUS_ON)) {
                     switch (Constant.AD_NETWORK) {
                         case ADMOB:
                             if (!Constant.ADMOB_APP_OPEN_AD_ID.equals("0")) {
-                                if (!appOpenAdMob.isShowingAd) {
+                                if (appOpenAdMob != null && !appOpenAdMob.isShowingAd) {
                                     currentActivity = activity;
                                 }
                             }
                             break;
                         case GOOGLE_AD_MANAGER:
                             if (!Constant.GOOGLE_AD_MANAGER_APP_OPEN_AD_ID.equals("0")) {
-                                if (!appOpenAdManager.isShowingAd) {
+                                if (appOpenAdManager != null && !appOpenAdManager.isShowingAd) {
                                     currentActivity = activity;
                                 }
                             }
@@ -395,7 +508,7 @@ public class App extends BaseApp {
                         case APPLOVIN:
                         case APPLOVIN_MAX:
                             if (!Constant.APPLOVIN_APP_OPEN_AP_ID.equals("0")) {
-                                if (!appOpenAdAppLovin.isShowingAd) {
+                                if (appOpenAdAppLovin != null && !appOpenAdAppLovin.isShowingAd) {
                                     currentActivity = activity;
                                 }
                             }

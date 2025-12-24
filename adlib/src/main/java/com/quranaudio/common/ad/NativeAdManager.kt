@@ -171,33 +171,44 @@ class NativeAdManager private constructor() {
     fun loadNewAd() {
         val context = appContext
         if (context == null) {
+            android.util.Log.e("NATIVE_AD_TRACK", "❌ NativeAdManager.loadNewAd() - AppContext is null")
             Log.e(TAG, "❌ AppContext is null, cannot load ad")
             return
         }
         
         // ✅ 检查缓存池是否已满
         if (cachedNativeAds.size >= CACHE_POOL_SIZE) {
+            android.util.Log.d("NATIVE_AD_TRACK", "✅ Cache pool is full (${cachedNativeAds.size}/$CACHE_POOL_SIZE), skipping load")
             Log.d(TAG, "✅ Cache pool is full (${cachedNativeAds.size}/$CACHE_POOL_SIZE), skipping load")
             return
         }
         
         if (isLoading) {
+            android.util.Log.d("NATIVE_AD_TRACK", "⚠️ Ad is already loading, skipping duplicate request")
             Log.d(TAG, "⚠️ Ad is already loading, skipping duplicate request")
             return
         }
         
         // Check subscription status
         if (SubscriptionChecker.isUserSubscribed(context)) {
+            android.util.Log.d("NATIVE_AD_TRACK", "🎁 User is subscribed, skipping native ad load")
             Log.d(TAG, "🎁 User is subscribed, skipping native ad load")
             return
         }
         
         isLoading = true
         
+        android.util.Log.d("NATIVE_AD_TRACK", "🔄 NativeAdManager.loadNewAd() - Starting ad load (${cachedNativeAds.size}/$CACHE_POOL_SIZE)")
+        android.util.Log.d("NATIVE_AD_TRACK", "   Ad Unit ID: $adUnitId")
         Log.d(TAG, "🔄 Loading new native ad (${cachedNativeAds.size}/$CACHE_POOL_SIZE)")
         
         val adLoader = AdLoader.Builder(context, adUnitId)
             .forNativeAd { nativeAd ->
+                android.util.Log.d("NATIVE_AD_TRACK", "✅ Native ad loaded from AdMob")
+                android.util.Log.d("NATIVE_AD_TRACK", "   Headline: ${nativeAd.headline}")
+                android.util.Log.d("NATIVE_AD_TRACK", "   Body: ${nativeAd.body?.take(50)}")
+                android.util.Log.d("NATIVE_AD_TRACK", "   Advertiser: ${nativeAd.advertiser}")
+                
                 // ✅ AdMob 会在 NativeAdView 显示时自动追踪 impression
                 // NativeAdView.setNativeAd() 触发时会自动记录 impression
                 
@@ -206,6 +217,8 @@ class NativeAdManager private constructor() {
                 cachedNativeAds.add(cachedAd)
                 isLoading = false
                 
+                android.util.Log.d("NATIVE_AD_TRACK", "✅ Ad added to cache pool (${cachedNativeAds.size}/$CACHE_POOL_SIZE)")
+                android.util.Log.d("NATIVE_AD_TRACK", "   Pending callbacks: ${pendingCallbacks.size}")
                 Log.d(TAG, "✅ Native ad loaded successfully (cache: ${cachedNativeAds.size}/$CACHE_POOL_SIZE)")
                 
                 // Notify pending callbacks
@@ -213,18 +226,25 @@ class NativeAdManager private constructor() {
                 
                 // ✅ 继续加载直到缓存池满
                 if (cachedNativeAds.size < CACHE_POOL_SIZE) {
+                    android.util.Log.d("NATIVE_AD_TRACK", "📦 Pool not full yet, loading next ad...")
                     Log.d(TAG, "📦 Pool not full yet, loading next ad...")
                     loadNewAd()
                 } else {
+                    android.util.Log.d("NATIVE_AD_TRACK", "🎉 Cache pool full (${cachedNativeAds.size}/$CACHE_POOL_SIZE)")
                     Log.d(TAG, "🎉 Cache pool full (${cachedNativeAds.size}/$CACHE_POOL_SIZE)")
                 }
             }
             .withAdListener(object : AdListener() {
                 override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                    android.util.Log.e("NATIVE_AD_TRACK", "❌ Native ad load failed")
+                    android.util.Log.e("NATIVE_AD_TRACK", "   Error code: ${loadAdError.code}")
+                    android.util.Log.e("NATIVE_AD_TRACK", "   Error message: ${loadAdError.message}")
+                    android.util.Log.e("NATIVE_AD_TRACK", "   Domain: ${loadAdError.domain}")
                     Log.e(TAG, "❌ Failed to load: ${loadAdError.message} (Code: ${loadAdError.code})")
                     isLoading = false
                     
                     // Notify pending callbacks with null
+                    android.util.Log.d("NATIVE_AD_TRACK", "   Notifying ${pendingCallbacks.size} pending callbacks with null")
                     notifyPendingCallbacks(null)
                     
                     // ✅ 如果缓存池为空，延迟重试

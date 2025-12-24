@@ -167,6 +167,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onAttach(@NonNull Context context) {
+        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
+        android.util.Log.d("NATIVE_AD_TRACK", "🎯 HomeFragment.onAttach() CALLED");
+        android.util.Log.d("NATIVE_AD_TRACK", "   context: " + (context != null ? context.getClass().getSimpleName() : "NULL"));
+        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
+        
         ((App) requireContext().getApplicationContext())
                 .appComponent
                 .homeComponent()
@@ -174,6 +179,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 .inject(this);
 
         super.onAttach(context);
+        
+        android.util.Log.d("NATIVE_AD_TRACK", "✅ HomeFragment.onAttach() COMPLETED");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -181,6 +188,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
+        android.util.Log.d("NATIVE_AD_TRACK", "🎯 HomeFragment.onCreateView() START");
+        android.util.Log.d("NATIVE_AD_TRACK", "   inflater: " + (inflater != null ? "NOT NULL" : "NULL"));
+        android.util.Log.d("NATIVE_AD_TRACK", "   container: " + (container != null ? "NOT NULL" : "NULL"));
+        android.util.Log.d("NATIVE_AD_TRACK", "   savedInstanceState: " + (savedInstanceState != null ? "NOT NULL" : "NULL"));
+        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
 
         todayDate = LocalDateTime.now();
 
@@ -221,13 +234,35 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 }
         );
 
+        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
+        android.util.Log.d("NATIVE_AD_TRACK", "🎯 HomeFragment.onCreateView() START");
+        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
+        
         initializeViews(rootView);
+        android.util.Log.d("NATIVE_AD_TRACK", "✅ initializeViews() completed");
+        
         initializeQuizEntry(rootView);
+        android.util.Log.d("NATIVE_AD_TRACK", "✅ initializeQuizEntry() completed");
+        
         initializeHeaderListeners();
+        android.util.Log.d("NATIVE_AD_TRACK", "✅ initializeHeaderListeners() completed");
+        
         initializePrayerCardListeners();
+        android.util.Log.d("NATIVE_AD_TRACK", "✅ initializePrayerCardListeners() completed");
+        
+        android.util.Log.d("NATIVE_AD_TRACK", "→ Calling initializeVerseOfDayCard()...");
         initializeVerseOfDayCard();
+        android.util.Log.d("NATIVE_AD_TRACK", "✅ initializeVerseOfDayCard() completed");
+        
         initializeLiveStreamCards();
+        android.util.Log.d("NATIVE_AD_TRACK", "✅ initializeLiveStreamCards() completed");
+        
         updateHeaderUI();
+        android.util.Log.d("NATIVE_AD_TRACK", "✅ updateHeaderUI() completed");
+        
+        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
+        android.util.Log.d("NATIVE_AD_TRACK", "✅ HomeFragment.onCreateView() COMPLETED");
+        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
 
         //PermissionStart
 
@@ -472,6 +507,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onResume() {
+        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
+        android.util.Log.d("NATIVE_AD_TRACK", "🎯 HomeFragment.onResume() CALLED");
+        android.util.Log.d("NATIVE_AD_TRACK", "   isAdded: " + isAdded());
+        android.util.Log.d("NATIVE_AD_TRACK", "   isVisible: " + isVisible());
+        android.util.Log.d("NATIVE_AD_TRACK", "   isResumed: " + isResumed());
+        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
+        
         super.onResume();
         //Initialize();
         if(allowRefresh){
@@ -1175,7 +1217,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
      * Initialize Verse of the Day Card
      */
     private void initializeVerseOfDayCard() {
-        if (verseOfDayCard == null) return;
+        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
+        android.util.Log.d("NATIVE_AD_TRACK", "🎯 HomeFragment.initializeVerseOfDayCard() CALLED");
+        android.util.Log.d("NATIVE_AD_TRACK", "   verseOfDayCard: " + (verseOfDayCard != null ? "NOT NULL" : "NULL"));
+        android.util.Log.d("NATIVE_AD_TRACK", "   votdNativeAdContainer: " + (votdNativeAdContainer != null ? "NOT NULL" : "NULL"));
+        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
+        
+        android.util.Log.d("DIAGNOSE", "→→ HomeFragment.initializeVerseOfDayCard() called");
+        android.util.Log.d("DIAGNOSE", "→→ verseOfDayCard: " + (verseOfDayCard != null ? "NOT NULL" : "NULL"));
+        
+        if (verseOfDayCard == null) {
+            android.util.Log.e("DIAGNOSE_ERROR", "❌ verseOfDayCard is NULL, returning");
+            return;
+        }
 
         // Card click - Navigate to verse detail
         verseOfDayCard.setOnClickListener(v -> {
@@ -1195,10 +1249,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
 
         // Load verse of the day
+        android.util.Log.d("DIAGNOSE", "→→ Calling loadVerseOfTheDay()...");
         loadVerseOfTheDay();
         
         // 🔥 Load native ad at bottom of card
+        android.util.Log.d("NATIVE_AD_TRACK", "→ Calling loadVOTDNativeAd()...");
+        android.util.Log.d("DIAGNOSE", "→→ Calling loadVOTDNativeAd()...");
         loadVOTDNativeAd();
+        android.util.Log.d("NATIVE_AD_TRACK", "✅ loadVOTDNativeAd() returned");
+        android.util.Log.d("DIAGNOSE", "✅ initializeVerseOfDayCard() completed");
+        android.util.Log.d("NATIVE_AD_TRACK", "✅ HomeFragment.initializeVerseOfDayCard() COMPLETED");
+        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
     }
     
     /**
@@ -1206,11 +1267,46 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
      * 复用 Quiz Review & Learn 的样式和逻辑
      */
     private void loadVOTDNativeAd() {
-        if (votdNativeAdContainer == null || getActivity() == null) {
+        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
+        android.util.Log.d("NATIVE_AD_TRACK", "🎯 HomeFragment.loadVOTDNativeAd() CALLED");
+        android.util.Log.d("NATIVE_AD_TRACK", "   votdNativeAdContainer: " + (votdNativeAdContainer != null ? "NOT NULL" : "NULL"));
+        android.util.Log.d("NATIVE_AD_TRACK", "   getActivity(): " + (getActivity() != null ? getActivity().getClass().getSimpleName() : "NULL"));
+        android.util.Log.d("NATIVE_AD_TRACK", "   isAdded: " + isAdded());
+        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
+        
+        android.util.Log.d("DIAGNOSE", "→→ HomeFragment.loadVOTDNativeAd() called");
+        android.util.Log.d("DIAGNOSE", "→→ votdNativeAdContainer: " + (votdNativeAdContainer != null ? "NOT NULL" : "NULL"));
+        android.util.Log.d("DIAGNOSE", "→→ getActivity(): " + (getActivity() != null ? getActivity().getClass().getSimpleName() : "NULL"));
+        
+        if (votdNativeAdContainer == null) {
+            android.util.Log.e("DIAGNOSE_ERROR", "❌ votdNativeAdContainer is NULL!");
+            return;
+        }
+        
+        if (getActivity() == null) {
+            android.util.Log.e("NATIVE_AD_TRACK", "❌ getActivity() is NULL!");
+            android.util.Log.e("DIAGNOSE_ERROR", "❌ getActivity() is NULL!");
+            return;
+        }
+        
+        // 检查订阅状态
+        boolean isSubscribed = com.quranaudio.common.ad.SubscriptionChecker.INSTANCE.isUserSubscribed(getActivity());
+        android.util.Log.d("NATIVE_AD_TRACK", "→ Checking subscription: " + isSubscribed);
+        android.util.Log.d("DIAGNOSE", "→→ User subscribed: " + isSubscribed);
+        
+        if (isSubscribed) {
+            android.util.Log.d("NATIVE_AD_TRACK", "❌ User is subscribed, hiding VOTD ad");
+            android.util.Log.d("DIAGNOSE", "→→ User is subscribed, hiding VOTD ad container");
+            votdNativeAdContainer.setVisibility(android.view.View.GONE);
             return;
         }
         
         try {
+            android.util.Log.d("NATIVE_AD_TRACK", "→ Calling NativeAdHelper.displayNativeAdWithAutoLoad()...");
+            android.util.Log.d("NATIVE_AD_TRACK", "   Activity: " + getActivity().getClass().getSimpleName());
+            android.util.Log.d("NATIVE_AD_TRACK", "   Container: " + votdNativeAdContainer.getClass().getSimpleName());
+            android.util.Log.d("NATIVE_AD_TRACK", "   Layout: com.quran.quranaudio.quiz.R.layout.layout_ad_native_small_wrapper");
+            android.util.Log.d("DIAGNOSE", "→→ Calling NativeAdHelper.displayNativeAdWithAutoLoad for VOTD...");
             android.util.Log.d("HomeFragment", "📡 Loading native ad for VOTD card...");
             
             // 使用 NativeAdHelper 加载原生广告
@@ -1221,10 +1317,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 com.quran.quranaudio.quiz.R.layout.layout_ad_native_small_wrapper
             );
             
+            android.util.Log.d("NATIVE_AD_TRACK", "✅ displayNativeAdWithAutoLoad() call completed");
+            android.util.Log.d("DIAGNOSE", "✅ NativeAdHelper.displayNativeAdWithAutoLoad returned for VOTD");
             android.util.Log.d("HomeFragment", "✅ Native ad load initiated for VOTD");
         } catch (Exception e) {
+            android.util.Log.e("NATIVE_AD_TRACK", "❌ Exception in loadVOTDNativeAd()", e);
+            android.util.Log.e("DIAGNOSE_ERROR", "❌ Failed to load VOTD native ad", e);
             android.util.Log.e("HomeFragment", "❌ Failed to load VOTD native ad: " + e.getMessage(), e);
+            votdNativeAdContainer.setVisibility(android.view.View.GONE);
         }
+        
+        android.util.Log.d("NATIVE_AD_TRACK", "✅ HomeFragment.loadVOTDNativeAd() COMPLETED");
+        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
     }
 
     /**

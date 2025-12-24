@@ -298,18 +298,58 @@ public class TasbihFragment extends BaseFragment {
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    try {
-                        Log.d(TAG, "Back button clicked - navigating to home");
-                        androidx.navigation.Navigation.findNavController(v).popBackStack();
-                    } catch (Exception e) {
-                        Log.e(TAG, "Failed to navigate back", e);
-                        // Fallback: try to finish activity
-                        if (getActivity() != null) {
-                            getActivity().onBackPressed();
+                    android.util.Log.d("DIAGNOSE", "→→ TasbihFragment: Back button clicked");
+                    android.util.Log.d("DIAGNOSE", "→→ Checking if Dhikr quest completed: " + dailyQuestCompleted);
+                    
+                    // 🔥 如果Dhikr任务完成，先展示插屏广告
+                    if (dailyQuestCompleted && getActivity() != null) {
+                        android.util.Log.d("DIAGNOSE", "→→ Dhikr completed! Showing interstitial ad before navigating back");
+                        
+                        try {
+                            // 展示插屏广告
+                            boolean adShown = com.quranaudio.common.ad.InterstitialAdManager.Companion.getInstance().showAdIfAvailable(getActivity());
+                            
+                            if (adShown) {
+                                android.util.Log.d("DIAGNOSE", "✅ Interstitial ad shown, delaying navigation");
+                                // 延迟返回，让广告有时间渲染
+                                new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        android.util.Log.d("DIAGNOSE", "✅ Ad display complete, navigating back");
+                                        navigateBack(v);
+                                    }
+                                }, 500); // 500ms延迟确保广告渲染
+                            } else {
+                                android.util.Log.d("DIAGNOSE", "⚠️ No ad shown (subscribed or unavailable), navigating back immediately");
+                                navigateBack(v);
+                            }
+                        } catch (Exception e) {
+                            android.util.Log.e("DIAGNOSE_ERROR", "❌ Failed to show interstitial ad", e);
+                            // 如果广告失败，直接返回
+                            navigateBack(v);
                         }
+                    } else {
+                        android.util.Log.d("DIAGNOSE", "→→ Dhikr not completed, navigating back directly");
+                        navigateBack(v);
                     }
                 }
             });
+        }
+    }
+    
+    /**
+     * 导航返回到主页
+     */
+    private void navigateBack(View v) {
+        try {
+            Log.d(TAG, "Navigating back to home");
+            androidx.navigation.Navigation.findNavController(v).popBackStack();
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to navigate back", e);
+            // Fallback: use modern back handling
+            if (getActivity() != null) {
+                getActivity().getOnBackPressedDispatcher().onBackPressed();
+            }
         }
         
         this.total = TasbihManager.get().getTotal();

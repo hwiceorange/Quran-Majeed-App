@@ -59,23 +59,67 @@ public class SplashScreenActivity extends AppCompatActivity {
     ProgressBar pbView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
-        sharedPref = new SharedPref(this);
+        android.util.Log.d("DIAGNOSE", "========================================");
+        android.util.Log.d("DIAGNOSE", "SplashScreenActivity.onCreate() START");
+        android.util.Log.d("DIAGNOSE", "========================================");
+        
+        try {
+            super.onCreate(savedInstanceState);
+            android.util.Log.d("DIAGNOSE", "✅ super.onCreate() completed");
+        } catch (Exception e) {
+            android.util.Log.e("DIAGNOSE_ERROR", "❌ super.onCreate() FAILED", e);
+            throw e;
+        }
+        
+        android.util.Log.d("DIAGNOSE", "→ Setting content view...");
+        try {
+            setContentView(R.layout.activity_splash);
+            android.util.Log.d("DIAGNOSE", "✅ setContentView() completed");
+        } catch (Exception e) {
+            android.util.Log.e("DIAGNOSE_ERROR", "❌ setContentView() FAILED", e);
+            throw e;
+        }
+        
+        android.util.Log.d("DIAGNOSE", "→ Initializing SharedPref...");
+        try {
+            sharedPref = new SharedPref(this);
+            android.util.Log.d("DIAGNOSE", "✅ SharedPref initialized");
+        } catch (Exception e) {
+            android.util.Log.e("DIAGNOSE_ERROR", "❌ SharedPref initialization FAILED", e);
+            throw e;
+        }
       //  initAds();
 
-        pbView=findViewById(R.id.progressbar);
+        android.util.Log.d("DIAGNOSE", "→ Finding ProgressBar view...");
+        try {
+            pbView=findViewById(R.id.progressbar);
+            android.util.Log.d("DIAGNOSE", "✅ ProgressBar found: " + (pbView != null));
+        } catch (Exception e) {
+            android.util.Log.e("DIAGNOSE_ERROR", "❌ ProgressBar findViewById FAILED", e);
+            throw e;
+        }
         
         // ⭐ 所有用户（包括新用户首次安装）都展示开屏广告
-        String adId = AdConfig.INSTANCE.getAdIdByPosition(AdConfig.AD_APPOPEN);
-        boolean isTestAd = adId.contains("3940256099942544"); // Google测试广告ID
-        android.util.Log.d(TAG, "✅ Loading AppOpen Ad for all users (including first install)");
-        android.util.Log.d(TAG, "📱 Ad ID: " + adId);
-        android.util.Log.d(TAG, "🧪 Is Test Ad: " + isTestAd);
-        if (isTestAd) {
-            android.util.Log.w(TAG, "⚠️ Using TEST Ad - test ads may auto-close quickly. Use Release build for production ads.");
+        android.util.Log.d("DIAGNOSE", "→ Getting AdConfig ad ID...");
+        try {
+            String adId = AdConfig.INSTANCE.getAdIdByPosition(AdConfig.AD_APPOPEN);
+            android.util.Log.d("DIAGNOSE", "✅ Ad ID retrieved: " + adId);
+            boolean isTestAd = adId.contains("3940256099942544"); // Google测试广告ID
+            android.util.Log.d(TAG, "✅ Loading AppOpen Ad for all users (including first install)");
+            android.util.Log.d(TAG, "📱 Ad ID: " + adId);
+            android.util.Log.d(TAG, "🧪 Is Test Ad: " + isTestAd);
+            android.util.Log.d("DIAGNOSE", "→ Is Test Ad: " + isTestAd);
+            if (isTestAd) {
+                android.util.Log.w(TAG, "⚠️ Using TEST Ad - test ads may auto-close quickly. Use Release build for production ads.");
+            }
+            
+            android.util.Log.d("DIAGNOSE", "→ Calling AdFactory.loadAppOpenAd()...");
+            AdFactory.INSTANCE.loadAppOpenAd(this, AdConfig.AD_APPOPEN,null);
+            android.util.Log.d("DIAGNOSE", "✅ AdFactory.loadAppOpenAd() called successfully");
+        } catch (Exception e) {
+            android.util.Log.e("DIAGNOSE_ERROR", "❌ AdFactory.loadAppOpenAd() FAILED", e);
+            throw e;
         }
-        AdFactory.INSTANCE.loadAppOpenAd(this, AdConfig.AD_APPOPEN,null);
         
         /*
         if (Constant.AD_STATUS.equals(AD_STATUS_ON) && Constant.OPEN_ADS_ON_START) {
@@ -116,8 +160,18 @@ public class SplashScreenActivity extends AppCompatActivity {
             requestConfig();
         }*/
 
-        requestConfig();
-
+        android.util.Log.d("DIAGNOSE", "→ Calling requestConfig()...");
+        try {
+            requestConfig();
+            android.util.Log.d("DIAGNOSE", "✅ requestConfig() called successfully");
+        } catch (Exception e) {
+            android.util.Log.e("DIAGNOSE_ERROR", "❌ requestConfig() FAILED", e);
+            throw e;
+        }
+        
+        android.util.Log.d("DIAGNOSE", "========================================");
+        android.util.Log.d("DIAGNOSE", "✅ SplashScreenActivity.onCreate() COMPLETED");
+        android.util.Log.d("DIAGNOSE", "========================================");
     }
 
     Handler handler=new Handler(Looper.getMainLooper());

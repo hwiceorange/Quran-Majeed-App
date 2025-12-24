@@ -36,42 +36,107 @@ object NativeAdHelper {
         container: ViewGroup,
         layoutResId: Int
     ) {
+        val callerInfo = Thread.currentThread().stackTrace.getOrNull(3)?.let {
+            "${it.className.substringAfterLast('.')}.${it.methodName}:${it.lineNumber}"
+        } ?: "Unknown"
+        
+        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════")
+        android.util.Log.d("NATIVE_AD_TRACK", "🎯 Native Ad Request")
+        android.util.Log.d("NATIVE_AD_TRACK", "   Caller: $callerInfo")
+        android.util.Log.d("NATIVE_AD_TRACK", "   Activity: ${activity.javaClass.simpleName}")
+        android.util.Log.d("NATIVE_AD_TRACK", "   Container: ${container.javaClass.simpleName}@${System.identityHashCode(container)}")
+        android.util.Log.d("NATIVE_AD_TRACK", "   Layout ResId: $layoutResId")
+        android.util.Log.d("NATIVE_AD_TRACK", "   Container visibility: ${container.visibility} (0=VISIBLE, 4=INVISIBLE, 8=GONE)")
+        android.util.Log.d("NATIVE_AD_TRACK", "   Container parent: ${container.parent?.javaClass?.simpleName ?: "null"}")
+        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════")
+        
         Log.d(TAG, "🔄 Attempting to display native ad with auto-load")
         
         // Load ad with callback (will use cache if available, or load dynamically)
         NativeAdManager.getInstance().loadAdWithCallback(activity) { nativeAd ->
+            android.util.Log.d("NATIVE_AD_TRACK", "→ Callback received for: $callerInfo")
+            android.util.Log.d("NATIVE_AD_TRACK", "   Ad object: ${if (nativeAd != null) "NOT NULL" else "NULL"}")
+            
             if (nativeAd == null) {
+                android.util.Log.e("NATIVE_AD_TRACK", "❌ No ad available for: $callerInfo")
+                android.util.Log.e("NATIVE_AD_TRACK", "   Reason: Subscribed or failed to load")
                 Log.d(TAG, "⚠️ No ad available (subscribed or failed to load)")
                 container.visibility = View.GONE
                 return@loadAdWithCallback
             }
             
             try {
+                android.util.Log.d("NATIVE_AD_TRACK", "→ Inflating ad view for: $callerInfo")
+                android.util.Log.d("NATIVE_AD_TRACK", "   Ad headline: ${nativeAd.headline}")
+                android.util.Log.d("NATIVE_AD_TRACK", "   Ad body: ${nativeAd.body?.take(50)}")
                 Log.d(TAG, "📺 Displaying native ad")
                 
                 // ✅ AdMob 会在 NativeAdView 显示时自动追踪 impression
                 // 无需手动设置监听器
                 
                 // Inflate the ad layout
-                val adView = LayoutInflater.from(activity).inflate(layoutResId, container, false) as NativeAdView
+                val inflatedView = LayoutInflater.from(activity).inflate(layoutResId, container, false)
+                android.util.Log.d("NATIVE_AD_TRACK", "   Inflated view type: ${inflatedView.javaClass.simpleName}")
+                
+                // 🔥 处理两种布局结构：
+                // 1. 根元素就是 NativeAdView
+                // 2. 根元素是 FrameLayout，里面包含 NativeAdView
+                val adView: NativeAdView = if (inflatedView is NativeAdView) {
+                    android.util.Log.d("NATIVE_AD_TRACK", "   ✅ Root is NativeAdView directly")
+                    inflatedView
+                } else {
+                    android.util.Log.d("NATIVE_AD_TRACK", "   → Root is ${inflatedView.javaClass.simpleName}, searching for NativeAdView...")
+                    val foundAdView = inflatedView.findViewById<NativeAdView>(
+                        activity.resources.getIdentifier("nativeAdView", "id", activity.packageName)
+                    )
+                    if (foundAdView != null) {
+                        android.util.Log.d("NATIVE_AD_TRACK", "   ✅ Found NativeAdView inside container")
+                        foundAdView
+                    } else {
+                        android.util.Log.e("NATIVE_AD_TRACK", "   ❌ No NativeAdView found in layout!")
+                        throw IllegalStateException("Layout must contain a NativeAdView with id 'nativeAdView'")
+                    }
+                }
+                
+                android.util.Log.d("NATIVE_AD_TRACK", "   AdView resolved: ${adView.javaClass.simpleName}")
                 
                 // Populate the ad view with native ad data
+                android.util.Log.d("NATIVE_AD_TRACK", "→ Populating ad view...")
                 populateNativeAdView(nativeAd, adView)
+                android.util.Log.d("NATIVE_AD_TRACK", "   ✅ Ad view populated")
                 
                 // Setup click listener to refresh ad when user returns
                 setupAdClickRefresh(nativeAd, activity, container, layoutResId)
                 
                 // Add the ad view to container
+                android.util.Log.d("NATIVE_AD_TRACK", "→ Adding ad view to container...")
+                android.util.Log.d("NATIVE_AD_TRACK", "   Container child count before: ${container.childCount}")
                 container.removeAllViews()
-                container.addView(adView)
+                
+                // 🔥 添加inflatedView（可能是FrameLayout包裹的NativeAdView）
+                container.addView(inflatedView)
                 container.visibility = View.VISIBLE
                 
+                // 🔥 同时确保NativeAdView可见
+                adView.visibility = View.VISIBLE
+                
+                android.util.Log.d("NATIVE_AD_TRACK", "   Container child count after: ${container.childCount}")
+                android.util.Log.d("NATIVE_AD_TRACK", "   Container visibility: VISIBLE")
+                android.util.Log.d("NATIVE_AD_TRACK", "   AdView visibility: VISIBLE")
+                
+                android.util.Log.d("NATIVE_AD_TRACK", "✅ Native ad displayed successfully for: $callerInfo")
                 Log.d(TAG, "✅ Native ad displayed successfully")
             } catch (e: Exception) {
+                android.util.Log.e("NATIVE_AD_TRACK", "❌ Failed to display ad for: $callerInfo", e)
+                android.util.Log.e("NATIVE_AD_TRACK", "   Exception: ${e.javaClass.simpleName}")
+                android.util.Log.e("NATIVE_AD_TRACK", "   Message: ${e.message}")
+                e.printStackTrace()
                 Log.e(TAG, "❌ Failed to display ad: ${e.message}", e)
                 container.visibility = View.GONE
             }
         }
+        
+        android.util.Log.d("NATIVE_AD_TRACK", "→ loadAdWithCallback() called, waiting for response...")
     }
     
     /**

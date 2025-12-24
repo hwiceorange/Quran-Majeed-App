@@ -83,21 +83,36 @@ class AdNativeSmallWrapperView : LinearLayout {
             return
         }
         
+        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════")
+        android.util.Log.d("NATIVE_AD_TRACK", "🎯 AdNativeSmallWrapperView.loadNativeAd() CALLED")
+        android.util.Log.d("NATIVE_AD_TRACK", "   adTag: $adTag")
+        android.util.Log.d("NATIVE_AD_TRACK", "   context: ${context?.javaClass?.simpleName}")
+        android.util.Log.d("NATIVE_AD_TRACK", "   this (container): ${this.javaClass.simpleName}@${System.identityHashCode(this)}")
+        android.util.Log.d("NATIVE_AD_TRACK", "   isLoadAd: $isLoadAd")
+        android.util.Log.d("NATIVE_AD_TRACK", "   visibility: $visibility")
+        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════")
+        
         reportEvent(adTag, "show_native_ad")
         this.adTag = adTag
         
         val activity = context as? Activity
         if (activity == null || !activity.isValid()) {
+            android.util.Log.e("NATIVE_AD_TRACK", "❌ Activity is null or invalid!")
             Log.w(TAG, "⚠️ Activity invalid")
             binding.root.gone()
             return
         }
+        android.util.Log.d("NATIVE_AD_TRACK", "✅ Activity: ${activity.javaClass.simpleName}")
         
         if (!isLoadAd) {
+            android.util.Log.e("NATIVE_AD_TRACK", "❌ isLoadAd = false, ad loading disabled!")
             Log.d(TAG, "⚠️ isLoadAd = false")
             binding.root.gone()
             return
         }
+        
+        android.util.Log.d("NATIVE_AD_TRACK", "→ Calling NativeAdHelper.displayNativeAdWithAutoLoad()...")
+        android.util.Log.d("NATIVE_AD_TRACK", "   Layout: R.layout.layout_ad_native_small_wrapper")
         
         // 🔥 改进：使用 NativeAdHelper 的自动加载方法
         // 优先使用缓存，没有缓存会动态加载
@@ -107,8 +122,10 @@ class AdNativeSmallWrapperView : LinearLayout {
                 this,
                 R.layout.layout_ad_native_small_wrapper
             )
+            android.util.Log.d("NATIVE_AD_TRACK", "✅ displayNativeAdWithAutoLoad() call completed for: $adTag")
             Log.d(TAG, "✅ Ad display initiated for: $adTag")
         } catch (e: Exception) {
+            android.util.Log.e("NATIVE_AD_TRACK", "❌ Exception in loadNativeAd()", e)
             Log.e(TAG, "❌ Failed to load ad: ${e.message}", e)
             reportEvent(adTag, "native_ad_error", e.message ?: "load_failed")
             binding.root.gone()

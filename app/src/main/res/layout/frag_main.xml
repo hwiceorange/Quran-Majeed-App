@@ -66,6 +66,14 @@
                 android:id="@+id/verse_of_day_card"
                 layout="@layout/layout_verse_of_day_card" />
 
+            <!-- Native Ad Container - 在 Verse of The Day Card 外部独立展示 -->
+            <FrameLayout
+                android:id="@+id/votd_native_ad_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:visibility="gone" />
+
             <!-- Daily Quran Quiz Card - 放在 Verse of The Day Card 下方 -->
             <include
                 android:id="@+id/quiz_entry_view"

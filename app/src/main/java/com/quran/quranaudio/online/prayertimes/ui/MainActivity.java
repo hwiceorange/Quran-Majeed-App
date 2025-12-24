@@ -51,6 +51,10 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
+        android.util.Log.d("NATIVE_AD_TRACK", "🎯 MainActivity.onCreate() START");
+        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
+        
         // 🌐 强制更新 Application Resources 的语言配置
         // 因为 Application 实例不会重新创建，必须手动更新
         forceUpdateApplicationLanguage();
@@ -91,7 +95,11 @@ public class MainActivity extends BaseActivity {
 
 
         navController = Navigation.findNavController(this, R.id.home_host_fragment);
+        android.util.Log.d("NATIVE_AD_TRACK", "→ NavController found: " + navController);
+        android.util.Log.d("NATIVE_AD_TRACK", "→ Current destination: " + navController.getCurrentDestination());
+        
         NavigationUI.setupWithNavController(navView, navController);
+        android.util.Log.d("NATIVE_AD_TRACK", "✅ NavigationUI setup completed");
         
         // 设置统一的白色状态栏 + 深色图标（所有页面统一效果）
         setupUnifiedStatusBar();
@@ -126,12 +134,23 @@ public class MainActivity extends BaseActivity {
 
         // Set correct start destination: Home page for normal launch
         if (displaySettingsScreenFirst()) {
+            android.util.Log.d("NATIVE_AD_TRACK", "→ Setting start destination: SETTINGS");
             navGraph.setStartDestination(R.id.navigation_settings);
         } else {
+            android.util.Log.d("NATIVE_AD_TRACK", "→ Setting start destination: HOME (R.id.nav_home)");
             navGraph.setStartDestination(R.id.nav_home);  // Fixed: Start at Home page, not Learn page
         }
 
         navController.setGraph(navGraph);
+        android.util.Log.d("NATIVE_AD_TRACK", "✅ NavGraph set, current destination: " + navController.getCurrentDestination());
+        if (navController.getCurrentDestination() != null) {
+            android.util.Log.d("NATIVE_AD_TRACK", "   Destination label: " + navController.getCurrentDestination().getLabel());
+            android.util.Log.d("NATIVE_AD_TRACK", "   Destination ID: " + navController.getCurrentDestination().getId());
+        }
+        
+        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
+        android.util.Log.d("NATIVE_AD_TRACK", "✅ MainActivity.onCreate() COMPLETED");
+        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
         preferencesHelper.setFirstTimeLaunch(false);
 
         WorkCreator.schedulePeriodicPrayerUpdater(this);

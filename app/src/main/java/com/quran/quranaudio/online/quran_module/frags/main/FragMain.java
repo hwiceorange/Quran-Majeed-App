@@ -1601,14 +1601,20 @@ public class FragMain extends BaseFragment {
      * Properly reuses VOTDView for verse fetching and formatting
      */
     private void initializeVerseOfDayCard() {
+        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
+        android.util.Log.d("NATIVE_AD_TRACK", "🎯 FragMain.initializeVerseOfDayCard() CALLED");
+        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
+        
         try {
             View rootView = mBinding.getRoot();
             View verseCard = rootView.findViewById(R.id.verse_of_day_card);
             
             if (verseCard == null) {
+                android.util.Log.e("NATIVE_AD_TRACK", "❌ Verse of The Day card not found!");
                 Log.w(TAG, "Verse of The Day card not found");
                 return;
             }
+            android.util.Log.d("NATIVE_AD_TRACK", "✅ Verse of The Day card found");
             
             // Find views
             tvVotdContentText = verseCard.findViewById(R.id.votd_content_text);
@@ -1619,12 +1625,18 @@ public class FragMain extends BaseFragment {
             ImageView votdBackgroundImage = verseCard.findViewById(R.id.votd_background_image);
             
             if (votdViewEmbedded == null) {
+                android.util.Log.w("NATIVE_AD_TRACK", "⚠️ VOTDView embedded not found");
                 Log.w(TAG, "VOTDView embedded not found");
                 return;
             }
             
             // Set random background image with blur effect
             setVotdRandomBackground(votdBackgroundImage);
+            
+            // 🔥 Load native ad below VOTD card (independent container)
+            android.util.Log.d("NATIVE_AD_TRACK", "→ Calling loadVOTDNativeAd()...");
+            loadVOTDNativeAd();
+            android.util.Log.d("NATIVE_AD_TRACK", "✅ loadVOTDNativeAd() completed");
             
             // Load QuranMeta and initialize VOTD
             QuranMeta.prepareInstance(requireContext(), quranMeta -> {
@@ -1641,9 +1653,71 @@ public class FragMain extends BaseFragment {
             });
             
             Log.d(TAG, "Verse of The Day card initialized");
+            android.util.Log.d("NATIVE_AD_TRACK", "✅ FragMain.initializeVerseOfDayCard() COMPLETED");
+            android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
             
         } catch (Exception e) {
+            android.util.Log.e("NATIVE_AD_TRACK", "❌ Exception in initializeVerseOfDayCard()", e);
             Log.e(TAG, "Error initializing Verse of The Day card", e);
+        }
+    }
+    
+    /**
+     * 🔥 Load native ad below Verse of The Day card
+     * Reuses Quiz Review & Learn style and logic
+     * Ad is displayed in an independent container outside the card
+     */
+    private void loadVOTDNativeAd() {
+        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
+        android.util.Log.d("NATIVE_AD_TRACK", "🎯 FragMain.loadVOTDNativeAd() CALLED");
+        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
+        
+        try {
+            // Find native ad container in frag_main.xml (independent, outside the card)
+            View rootView = mBinding.getRoot();
+            android.view.ViewGroup votdNativeAdContainer = rootView.findViewById(R.id.votd_native_ad_container);
+            
+            android.util.Log.d("NATIVE_AD_TRACK", "→ votdNativeAdContainer: " + (votdNativeAdContainer != null ? "NOT NULL" : "NULL"));
+            
+            if (votdNativeAdContainer == null) {
+                android.util.Log.e("NATIVE_AD_TRACK", "❌ votdNativeAdContainer is NULL!");
+                return;
+            }
+            
+            if (getActivity() == null) {
+                android.util.Log.e("NATIVE_AD_TRACK", "❌ getActivity() is NULL!");
+                return;
+            }
+            
+            // Check subscription
+            boolean isSubscribed = com.quranaudio.common.ad.SubscriptionChecker.INSTANCE.isUserSubscribed(getActivity());
+            android.util.Log.d("NATIVE_AD_TRACK", "→ User subscribed: " + isSubscribed);
+            
+            if (isSubscribed) {
+                android.util.Log.d("NATIVE_AD_TRACK", "❌ User is subscribed, hiding VOTD ad");
+                votdNativeAdContainer.setVisibility(android.view.View.GONE);
+                return;
+            }
+            
+            android.util.Log.d("NATIVE_AD_TRACK", "→ Calling NativeAdHelper.displayNativeAdWithAutoLoad()...");
+            android.util.Log.d("NATIVE_AD_TRACK", "   Activity: " + getActivity().getClass().getSimpleName());
+            android.util.Log.d("NATIVE_AD_TRACK", "   Container: " + votdNativeAdContainer.getClass().getSimpleName());
+            android.util.Log.d("NATIVE_AD_TRACK", "   Layout: com.quran.quranaudio.quiz.R.layout.layout_ad_native_small_wrapper");
+            
+            // Load native ad
+            com.quranaudio.common.ad.NativeAdHelper.INSTANCE.displayNativeAdWithAutoLoad(
+                getActivity(),
+                votdNativeAdContainer,
+                com.quran.quranaudio.quiz.R.layout.layout_ad_native_small_wrapper
+            );
+            
+            android.util.Log.d("NATIVE_AD_TRACK", "✅ displayNativeAdWithAutoLoad() call completed");
+            android.util.Log.d("NATIVE_AD_TRACK", "✅ FragMain.loadVOTDNativeAd() COMPLETED");
+            android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
+            
+        } catch (Exception e) {
+            android.util.Log.e("NATIVE_AD_TRACK", "❌ Exception in loadVOTDNativeAd()", e);
+            Log.e(TAG, "Error loading VOTD native ad", e);
         }
     }
     

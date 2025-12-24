@@ -163,15 +163,64 @@ class QuizReviewLearnActivity :
      * - 无时间间隔限制
      */
     private fun preloadNativeAd() {
+        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════")
+        android.util.Log.d("NATIVE_AD_TRACK", "🎯 Quiz Result Page - preloadNativeAd() CALLED")
+        android.util.Log.d("NATIVE_AD_TRACK", "   Activity: QuizReviewLearnActivity")
+        android.util.Log.d("NATIVE_AD_TRACK", "   nativeAdView: ${binding.nativeAdView}")
+        android.util.Log.d("NATIVE_AD_TRACK", "   nativeAdView visibility: ${binding.nativeAdView.visibility} (0=VISIBLE, 4=INVISIBLE, 8=GONE)")
+        android.util.Log.d("NATIVE_AD_TRACK", "   nativeAdView width: ${binding.nativeAdView.width}")
+        android.util.Log.d("NATIVE_AD_TRACK", "   nativeAdView height: ${binding.nativeAdView.height}")
+        android.util.Log.d("NATIVE_AD_TRACK", "   nativeAdView parent: ${binding.nativeAdView.parent?.javaClass?.simpleName}")
+        
+        // 检查父容器可见性
+        val parent = binding.nativeAdView.parent as? android.view.ViewGroup
+        if (parent != null) {
+            android.util.Log.d("NATIVE_AD_TRACK", "   parent visibility: ${parent.visibility} (0=VISIBLE, 4=INVISIBLE, 8=GONE)")
+            android.util.Log.d("NATIVE_AD_TRACK", "   parent width: ${parent.width}")
+            android.util.Log.d("NATIVE_AD_TRACK", "   parent height: ${parent.height}")
+        }
+        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════")
+        
         try {
             android.util.Log.d(TAG, "📡 Loading native ad...")
+            android.util.Log.d("NATIVE_AD_TRACK", "→ Calling binding.nativeAdView.loadNativeAd()...")
             
             // 🔥 使用自定义View的加载方法（已优化为自动加载）
             binding.nativeAdView.loadNativeAd(FunctionTag.NATIVE_QUIZ_REVIEW_LEARN)
             
+            // 延迟检查广告是否真的可见
+            binding.nativeAdView.postDelayed({
+                android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════")
+                android.util.Log.d("NATIVE_AD_TRACK", "🔍 Quiz Result Page - Ad Visibility Check (after 2s)")
+                android.util.Log.d("NATIVE_AD_TRACK", "   nativeAdView visibility: ${binding.nativeAdView.visibility} (0=VISIBLE, 4=INVISIBLE, 8=GONE)")
+                android.util.Log.d("NATIVE_AD_TRACK", "   nativeAdView isShown: ${binding.nativeAdView.isShown}")
+                android.util.Log.d("NATIVE_AD_TRACK", "   nativeAdView width: ${binding.nativeAdView.width}")
+                android.util.Log.d("NATIVE_AD_TRACK", "   nativeAdView height: ${binding.nativeAdView.height}")
+                android.util.Log.d("NATIVE_AD_TRACK", "   nativeAdView childCount: ${binding.nativeAdView.childCount}")
+                
+                if (binding.nativeAdView.childCount > 0) {
+                    android.util.Log.d("NATIVE_AD_TRACK", "   ✅ Ad has ${binding.nativeAdView.childCount} child views")
+                    for (i in 0 until binding.nativeAdView.childCount) {
+                        val child = binding.nativeAdView.getChildAt(i)
+                        android.util.Log.d("NATIVE_AD_TRACK", "      Child $i: ${child.javaClass.simpleName}, visibility: ${child.visibility}, size: ${child.width}x${child.height}")
+                    }
+                } else {
+                    android.util.Log.e("NATIVE_AD_TRACK", "   ❌ Ad container has NO child views!")
+                }
+                
+                val parent = binding.nativeAdView.parent as? android.view.ViewGroup
+                if (parent != null) {
+                    android.util.Log.d("NATIVE_AD_TRACK", "   parent visibility: ${parent.visibility}")
+                    android.util.Log.d("NATIVE_AD_TRACK", "   parent size: ${parent.width}x${parent.height}")
+                }
+                android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════")
+            }, 2000)
+            
             android.util.Log.d(TAG, "✅ Native ad load initiated")
+            android.util.Log.d("NATIVE_AD_TRACK", "✅ loadNativeAd() returned successfully")
         } catch (e: Exception) {
             android.util.Log.e(TAG, "❌ Failed to load native ad: ${e.message}", e)
+            android.util.Log.e("NATIVE_AD_TRACK", "❌ Exception in preloadNativeAd()", e)
         }
     }
     

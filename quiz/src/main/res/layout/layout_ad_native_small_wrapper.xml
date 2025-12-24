@@ -3,18 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/dp_20"
     android:orientation="vertical"
-    android:visibility="gone"
+    android:visibility="visible"
     tools:visibility="visible">
 
     <com.google.android.gms.ads.nativead.NativeAdView
         android:id="@+id/nativeAdView"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_210"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/dp_210"
         android:background="@drawable/base_shape_rect_white_8_bg"
-        android:visibility="gone"
+        android:visibility="visible"
         tools:visibility="visible">
 
         <androidx.constraintlayout.widget.ConstraintLayout
