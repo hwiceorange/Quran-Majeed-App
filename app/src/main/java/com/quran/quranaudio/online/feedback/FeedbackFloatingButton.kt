@@ -39,10 +39,10 @@ class FeedbackFloatingButton(private val activity: Activity) {
             )
             
             // 计算合适的 Y 坐标（避免遮挡底部导航栏）
-            // 底部导航栏高度约 56dp + 额外安全边距 16dp = 72dp
-            val bottomNavHeightDp = 72
+            // 底部导航栏高度约 56dp + 悬浮按钮高度 56dp + 额外安全边距 16dp = 128dp
+            val bottomMarginDp = 128
             val density = activity.resources.displayMetrics.density
-            val bottomNavHeightPx = (bottomNavHeightDp * density).toInt()
+            val bottomMarginPx = (bottomMarginDp * density).toInt()
             
             // 设置布局参数
             params = WindowManager.LayoutParams(
@@ -54,7 +54,7 @@ class FeedbackFloatingButton(private val activity: Activity) {
             ).apply {
                 gravity = Gravity.BOTTOM or Gravity.END
                 x = (24 * density).toInt() // 距离右边 24dp
-                y = bottomNavHeightPx // 距离底部避开导航栏
+                y = bottomMarginPx // 距离底部避开导航栏
             }
             
             // 添加到窗口
@@ -64,7 +64,7 @@ class FeedbackFloatingButton(private val activity: Activity) {
             setupTouchListener()
             
             isShowing = true
-            android.util.Log.d("FeedbackFloatingButton", "✅ Floating button shown at y=$bottomNavHeightPx")
+            android.util.Log.d("FeedbackFloatingButton", "✅ Floating button shown at y=$bottomMarginPx (${bottomMarginDp}dp)")
             
         } catch (e: Exception) {
             android.util.Log.e("FeedbackFloatingButton", "❌ Failed to show floating button", e)

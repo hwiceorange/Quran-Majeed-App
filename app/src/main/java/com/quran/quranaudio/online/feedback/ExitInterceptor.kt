@@ -8,9 +8,11 @@ import android.util.Log
  * 退出拦截管理器
  * 
  * 功能：
- * 1. 监听用户连续两次返回键
+ * 1. 仅在用户即将退出应用时拦截（不拦截正常导航）
  * 2. 如果停留时间不足1分钟，弹出挽留对话框
  * 3. 收集退出原因
+ * 
+ * ⚠️ 重要：只拦截"退出应用"行为，不拦截正常的返回导航
  */
 class ExitInterceptor(private val activity: Activity) {
     
@@ -39,32 +41,45 @@ class ExitInterceptor(private val activity: Activity) {
     
     /**
      * 处理返回键
-     * @return true 表示拦截，false 表示放行
+     * @return true 表示拦截（阻止退出应用），false 表示放行（允许正常返回或退出）
+     * 
+     * ⚠️ 关键逻辑：
+     * 1. 只有在用户即将退出应用时才拦截
+     * 2. 正常的页面返回导航不应该被拦截
+     * 3. MainActivity 是根 Activity，按返回键会退出应用
      */
     fun onBackPressed(): Boolean {
         val currentTime = System.currentTimeMillis()
         val stayDuration = currentTime - pageEnterTime
         
+        Log.d(TAG, "⬅️ onBackPressed() - stayDuration: ${stayDuration/1000}s")
+        
         // 条件1：停留时间小于1分钟
         if (stayDuration < MIN_STAY_DURATION_MS && !hasShownExitDialog) {
-            // 条件2：连续两次按返回键（2秒内）
+            // 条件2：连续两次按返回键（2秒内）- 确认用户真的想退出
             if (currentTime - lastBackPressTime < DOUBLE_BACK_PRESS_INTERVAL) {
+                Log.d(TAG, "🚨 Double back press detected - showing exit dialog")
                 // 显示挽留对话框
                 showExitDialog()
                 lastBackPressTime = 0 // 重置
                 return true // 拦截退出
             } else {
+                // 第一次按返回键
                 lastBackPressTime = currentTime
                 android.widget.Toast.makeText(
                     activity,
                     "再按一次退出应用",
                     android.widget.Toast.LENGTH_SHORT
                 ).show()
-                return true // 拦截退出
+                Log.d(TAG, "⚠️ First back press - waiting for second press")
+                return true // 拦截退出（等待第二次按键）
             }
         }
         
-        // 停留时间超过1分钟，或已显示过对话框，放行
+        // 放行情况：
+        // 1. 停留时间超过1分钟 - 用户已经充分使用了应用
+        // 2. 已显示过对话框 - 避免重复打扰
+        Log.d(TAG, "✅ Back press released - stayDuration: ${stayDuration/1000}s, hasShownExitDialog: $hasShownExitDialog")
         return false
     }
     
