@@ -38,6 +38,12 @@ class FeedbackFloatingButton(private val activity: Activity) {
                 null
             )
             
+            // 计算合适的 Y 坐标（避免遮挡底部导航栏）
+            // 底部导航栏高度约 56dp + 额外安全边距 16dp = 72dp
+            val bottomNavHeightDp = 72
+            val density = activity.resources.displayMetrics.density
+            val bottomNavHeightPx = (bottomNavHeightDp * density).toInt()
+            
             // 设置布局参数
             params = WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -47,23 +53,18 @@ class FeedbackFloatingButton(private val activity: Activity) {
                 PixelFormat.TRANSLUCENT
             ).apply {
                 gravity = Gravity.BOTTOM or Gravity.END
-                x = 24 // 距离右边 24dp
-                y = 100 // 距离底部 100dp
+                x = (24 * density).toInt() // 距离右边 24dp
+                y = bottomNavHeightPx // 距离底部避开导航栏
             }
             
             // 添加到窗口
             windowManager?.addView(floatingView, params)
             
-            // 设置点击事件
-            floatingView?.setOnClickListener {
-                onFeedbackButtonClicked()
-            }
-            
-            // 设置触摸拖动
+            // 设置触摸拖动（内部处理点击和拖动）
             setupTouchListener()
             
             isShowing = true
-            android.util.Log.d("FeedbackFloatingButton", "✅ Floating button shown")
+            android.util.Log.d("FeedbackFloatingButton", "✅ Floating button shown at y=$bottomNavHeightPx")
             
         } catch (e: Exception) {
             android.util.Log.e("FeedbackFloatingButton", "❌ Failed to show floating button", e)
@@ -88,13 +89,14 @@ class FeedbackFloatingButton(private val activity: Activity) {
     }
     
     /**
-     * 设置触摸监听（支持拖动）
+     * 设置触摸监听（支持拖动和点击）
      */
     private fun setupTouchListener() {
         var initialX = 0
         var initialY = 0
         var initialTouchX = 0f
         var initialTouchY = 0f
+        var isMoved = false
         
         floatingView?.setOnTouchListener { view, event ->
             when (event.action) {
@@ -103,21 +105,33 @@ class FeedbackFloatingButton(private val activity: Activity) {
                     initialY = params?.y ?: 0
                     initialTouchX = event.rawX
                     initialTouchY = event.rawY
+                    isMoved = false
+                    android.util.Log.d("FeedbackFloatingButton", "Touch DOWN at (${event.rawX}, ${event.rawY})")
                     true
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    params?.x = initialX + (initialTouchX - event.rawX).toInt()
-                    params?.y = initialY + (event.rawY - initialTouchY).toInt()
-                    windowManager?.updateViewLayout(floatingView, params)
-                    true
-                }
-                MotionEvent.ACTION_UP -> {
                     val deltaX = Math.abs(event.rawX - initialTouchX)
                     val deltaY = Math.abs(event.rawY - initialTouchY)
                     
-                    // 如果移动距离很小，视为点击
-                    if (deltaX < 10 && deltaY < 10) {
-                        view.performClick()
+                    // 如果移动超过阈值，认为是拖动
+                    if (deltaX > 10 || deltaY > 10) {
+                        isMoved = true
+                        params?.x = initialX + (initialTouchX - event.rawX).toInt()
+                        params?.y = initialY + (event.rawY - initialTouchY).toInt()
+                        windowManager?.updateViewLayout(floatingView, params)
+                        android.util.Log.d("FeedbackFloatingButton", "Touch MOVE - dragging")
+                    }
+                    true
+                }
+                MotionEvent.ACTION_UP -> {
+                    android.util.Log.d("FeedbackFloatingButton", "Touch UP - isMoved: $isMoved")
+                    
+                    // 如果没有移动，视为点击
+                    if (!isMoved) {
+                        android.util.Log.d("FeedbackFloatingButton", "🎯 Detected as CLICK, opening dialog...")
+                        onFeedbackButtonClicked()
+                    } else {
+                        android.util.Log.d("FeedbackFloatingButton", "Detected as DRAG, position saved")
                     }
                     true
                 }
@@ -130,12 +144,27 @@ class FeedbackFloatingButton(private val activity: Activity) {
      * 反馈按钮点击
      */
     private fun onFeedbackButtonClicked() {
-        // 显示反馈弹窗
-        if (activity is androidx.fragment.app.FragmentActivity) {
-            val dialog = FeedbackBottomSheetDialog.newInstance()
-            dialog.show(activity.supportFragmentManager, FeedbackBottomSheetDialog.TAG)
+        try {
+            android.util.Log.d("FeedbackFloatingButton", "📱 onFeedbackButtonClicked() called")
             
-            android.util.Log.d("FeedbackFloatingButton", "📱 Feedback dialog opened")
+            // 显示反馈弹窗
+            if (activity is androidx.fragment.app.FragmentActivity) {
+                val dialog = FeedbackBottomSheetDialog.newInstance()
+                dialog.show(activity.supportFragmentManager, FeedbackBottomSheetDialog.TAG)
+                
+                android.util.Log.d("FeedbackFloatingButton", "✅ Feedback dialog opened successfully")
+            } else {
+                android.util.Log.e("FeedbackFloatingButton", "❌ Activity is not FragmentActivity: ${activity.javaClass.name}")
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("FeedbackFloatingButton", "❌ Failed to open feedback dialog", e)
+            
+            // 显示 Toast 提示用户
+            android.widget.Toast.makeText(
+                activity,
+                "反馈功能暂时不可用",
+                android.widget.Toast.LENGTH_SHORT
+            ).show()
         }
     }
     
