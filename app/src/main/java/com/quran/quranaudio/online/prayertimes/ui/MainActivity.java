@@ -384,7 +384,8 @@ public class MainActivity extends BaseActivity {
             android.util.Log.d("MainActivity", "💬 Initializing feedback system...");
             
             // Set current page name (for feedback data collection)
-            FeedbackManager.getInstance().setCurrentPage("MainActivity");
+            // Note: Use Companion.getInstance() to access Kotlin companion object from Java
+            FeedbackManager.Companion.getInstance().setCurrentPage("MainActivity");
             
             // Initialize floating feedback button (delayed 3 seconds to avoid startup interference)
             new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {

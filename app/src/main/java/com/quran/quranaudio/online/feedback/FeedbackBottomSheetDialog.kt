@@ -55,7 +55,8 @@ class FeedbackBottomSheetDialog : BottomSheetDialogFragment() {
     private var currentStage = 1
     
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
+        // Use Material Components default theme
+        return BottomSheetDialog(requireContext(), com.google.android.material.R.style.Theme_Design_BottomSheetDialog)
     }
     
     override fun onCreateView(

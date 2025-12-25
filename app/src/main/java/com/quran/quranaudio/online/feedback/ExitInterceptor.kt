@@ -108,7 +108,7 @@ class ExitInterceptor(private val activity: Activity) {
      */
     private fun submitExitFeedback(reason: String) {
         try {
-            FeedbackManager.getInstance().submitFeedback(
+            FeedbackManager.Companion.getInstance().submitFeedback(
                 context = activity,
                 emotion = FeedbackEmotion.HATE, // 快速退出视为不满意
                 selectedTags = listOf(reason),
