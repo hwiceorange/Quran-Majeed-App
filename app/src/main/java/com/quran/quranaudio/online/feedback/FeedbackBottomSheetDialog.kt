@@ -239,7 +239,7 @@ class FeedbackBottomSheetDialog : BottomSheetDialogFragment() {
         btnSubmit.text = "提交中..."
         
         // 提交到 Firebase
-        FeedbackManager.getInstance().submitFeedback(
+        FeedbackManager.Companion.getInstance().submitFeedback(
             context = requireContext(),
             emotion = emotion,
             selectedTags = selectedTags.toList(),
