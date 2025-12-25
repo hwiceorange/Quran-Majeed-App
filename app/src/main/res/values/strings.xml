@@ -1527,6 +1527,14 @@
     <string name="feedback_emotion_neutral">Okay/Confused</string>
     <string name="feedback_emotion_hate">Poor/Unsatisfied</string>
     
+    <!-- Feedback Emotions - Short (for cards) -->
+    <string name="feedback_emotion_love_short">Great</string>
+    <string name="feedback_emotion_neutral_short">Okay</string>
+    <string name="feedback_emotion_hate_short">Poor</string>
+    
+    <!-- Feedback Prompts -->
+    <string name="feedback_prompt_tags">Which aspects? (Select multiple)</string>
+    
     <!-- Feedback Tags - Hate/Dislike -->
     <string name="feedback_tag_translation_error">Translation/Verse Error</string>
     <string name="feedback_tag_prayer_time_inaccurate">Prayer Time Inaccurate</string>

@@ -56,7 +56,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="好用"
+                    android:text="@string/feedback_emotion_love_short"
                     android:textSize="14sp"
                     android:textColor="@color/feedback_text_secondary"
                     android:layout_marginTop="4dp" />
@@ -91,7 +91,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="一般"
+                    android:text="@string/feedback_emotion_neutral_short"
                     android:textSize="14sp"
                     android:textColor="@color/feedback_text_secondary"
                     android:layout_marginTop="4dp" />
@@ -126,7 +126,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="难用"
+                    android:text="@string/feedback_emotion_hate_short"
                     android:textSize="14sp"
                     android:textColor="@color/feedback_text_secondary"
                     android:layout_marginTop="4dp" />
@@ -146,7 +146,7 @@
             android:id="@+id/tv_tag_prompt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="具体是哪方面呢？（可多选）"
+            android:text="@string/feedback_prompt_tags"
             android:textSize="16sp"
             android:textColor="@color/feedback_text_primary"
             android:gravity="center"
@@ -175,7 +175,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="还有什么想说的吗？（选填）"
+            android:hint="@string/feedback_comment_hint"
             app:boxBackgroundMode="outline"
             app:boxCornerRadiusTopStart="12dp"
             app:boxCornerRadiusTopEnd="12dp"
@@ -198,7 +198,7 @@
             android:id="@+id/btn_submit"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:text="提交反馈"
+            android:text="@string/feedback_submit"
             android:textSize="16sp"
             android:textStyle="bold"
             app:cornerRadius="12dp"
@@ -211,7 +211,7 @@
         android:id="@+id/btn_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="← 返回"
+        android:text="@string/feedback_back"
         android:textColor="@color/feedback_text_secondary"
         style="@style/Widget.Material3.Button.TextButton"
         android:layout_gravity="start"
