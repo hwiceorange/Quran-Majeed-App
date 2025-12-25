@@ -166,9 +166,9 @@ class FeedbackManager private constructor() {
     /**
      * 提交到 Firestore（带指数退避重试）
      */
-    private suspend fun submitToFirestoreWithRetry(data: FeedbackData, retriesLeft: Int) {
+    private suspend fun submitToFirestoreWithRetry(context: Context, data: FeedbackData, retriesLeft: Int) {
         try {
-            val document = FeedbackDocument.fromFeedbackData(data)
+            val document = FeedbackDocument.fromFeedbackData(data, context)
             
             firestore.collection(COLLECTION_PATH)
                 .add(document)
@@ -182,7 +182,7 @@ class FeedbackManager private constructor() {
                 Log.w(TAG, "⚠️ Retry $retriesLeft left, waiting ${delay}ms...")
                 
                 kotlinx.coroutines.delay(delay)
-                submitToFirestoreWithRetry(data, retriesLeft - 1)
+                submitToFirestoreWithRetry(context, data, retriesLeft - 1)
             } else {
                 throw e
             }

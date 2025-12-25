@@ -1522,4 +1522,33 @@
     <string name="feedback_button_description">Open feedback dialog</string>
     <string name="feedback_toast_hint">Tell us what\'s difficult to use?</string>
     
+    <!-- Feedback Emotions -->
+    <string name="feedback_emotion_love">Great/Suggestion</string>
+    <string name="feedback_emotion_neutral">Okay/Confused</string>
+    <string name="feedback_emotion_hate">Poor/Unsatisfied</string>
+    
+    <!-- Feedback Tags - Hate/Dislike -->
+    <string name="feedback_tag_translation_error">Translation/Verse Error</string>
+    <string name="feedback_tag_prayer_time_inaccurate">Prayer Time Inaccurate</string>
+    <string name="feedback_tag_ad_interference">Ads Interference</string>
+    <string name="feedback_tag_battery_drain">Battery Drain</string>
+    <string name="feedback_tag_search_inaccurate">Search Inaccurate</string>
+    <string name="feedback_tag_slow_loading">Slow Loading</string>
+    <string name="feedback_tag_large_size">Large App Size</string>
+    
+    <!-- Feedback Tags - Love/Like -->
+    <string name="feedback_tag_good_reading">Good Reading Experience</string>
+    <string name="feedback_tag_clean_ui">Clean Interface</string>
+    <string name="feedback_tag_good_learning">Good Learning Features</string>
+    
+    <!-- Feedback UI -->
+    <string name="feedback_title_emotion">How do you feel about this app?</string>
+    <string name="feedback_title_tags">Thank you for your feedback!</string>
+    <string name="feedback_comment_hint">Any additional comments? (Optional)</string>
+    <string name="feedback_submit">Submit Feedback</string>
+    <string name="feedback_submitting">Submitting...</string>
+    <string name="feedback_submit_success">Thank you! Your feedback has been submitted.</string>
+    <string name="feedback_submit_failure">Submission failed. Please check your network and try again.</string>
+    <string name="feedback_back">Back</string>
+    
 </resources>

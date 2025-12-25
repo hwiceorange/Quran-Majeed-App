@@ -156,7 +156,7 @@ class FeedbackBottomSheetDialog : BottomSheetDialogFragment() {
         when (stage) {
             1 -> {
                 // 阶段1：情绪选择
-                tvTitle.text = "您觉得这个应用怎么样？"
+                tvTitle.text = getString(R.string.feedback_title_emotion)
                 layoutEmotionSelection.visibility = View.VISIBLE
                 layoutTagSelection.visibility = View.GONE
                 layoutCommentInput.visibility = View.GONE
@@ -164,7 +164,7 @@ class FeedbackBottomSheetDialog : BottomSheetDialogFragment() {
             }
             2 -> {
                 // 阶段2：标签选择
-                tvTitle.text = "感谢您的反馈！"
+                tvTitle.text = getString(R.string.feedback_title_tags)
                 layoutEmotionSelection.visibility = View.GONE
                 layoutTagSelection.visibility = View.VISIBLE
                 layoutCommentInput.visibility = View.GONE
@@ -191,22 +191,23 @@ class FeedbackBottomSheetDialog : BottomSheetDialogFragment() {
     private fun loadTagsForEmotion(emotion: FeedbackEmotion) {
         chipGroupTags.removeAllViews()
         
-        val tags = FeedbackTags.getTagsForEmotion(emotion)
+        val tagResIds = FeedbackTags.getTagResIdsForEmotion(emotion)
         
-        for (tag in tags) {
+        for (tagResId in tagResIds) {
+            val tagText = getString(tagResId)
             val chip = Chip(requireContext()).apply {
-                text = tag
+                text = tagText
                 isCheckable = true
                 chipBackgroundColor = ContextCompat.getColorStateList(requireContext(), R.color.feedback_chip_bg)
                 setTextColor(ContextCompat.getColor(requireContext(), R.color.feedback_text_primary))
                 
                 setOnCheckedChangeListener { _, isChecked ->
                     if (isChecked) {
-                        selectedTags.add(tag)
+                        selectedTags.add(tagText)
                         chipBackgroundColor = ContextCompat.getColorStateList(requireContext(), R.color.feedback_chip_selected)
                         setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
                     } else {
-                        selectedTags.remove(tag)
+                        selectedTags.remove(tagText)
                         chipBackgroundColor = ContextCompat.getColorStateList(requireContext(), R.color.feedback_chip_bg)
                         setTextColor(ContextCompat.getColor(requireContext(), R.color.feedback_text_primary))
                     }
@@ -236,7 +237,7 @@ class FeedbackBottomSheetDialog : BottomSheetDialogFragment() {
         
         // 显示加载状态
         btnSubmit.isEnabled = false
-        btnSubmit.text = "提交中..."
+        btnSubmit.text = getString(R.string.feedback_submitting)
         
         // 提交到 Firebase
         FeedbackManager.Companion.getInstance().submitFeedback(
@@ -249,17 +250,17 @@ class FeedbackBottomSheetDialog : BottomSheetDialogFragment() {
                 dismiss()
                 Toast.makeText(
                     requireContext(),
-                    "感谢您的直言不讳！您的建议已提交至开发者桌面。",
+                    getString(R.string.feedback_submit_success),
                     Toast.LENGTH_LONG
                 ).show()
             },
             onFailure = { exception ->
                 // 失败
                 btnSubmit.isEnabled = true
-                btnSubmit.text = "提交反馈"
+                btnSubmit.text = getString(R.string.feedback_submit)
                 Toast.makeText(
                     requireContext(),
-                    "提交失败，请检查网络连接后重试",
+                    getString(R.string.feedback_submit_failure),
                     Toast.LENGTH_SHORT
                 ).show()
                 android.util.Log.e("FeedbackDialog", "Submit failed", exception)

@@ -1,6 +1,7 @@
 package com.quran.quranaudio.online.feedback
 
 import com.google.firebase.Timestamp
+import com.quran.quranaudio.online.R
 
 /**
  * 用户反馈数据模型
@@ -29,10 +30,10 @@ data class FeedbackData(
 /**
  * 用户情绪类型
  */
-enum class FeedbackEmotion(val emoji: String, val label: String) {
-    LOVE("😍", "好用"),
-    NEUTRAL("😐", "一般"),
-    HATE("😡", "难用")
+enum class FeedbackEmotion(val emoji: String, val labelResId: Int) {
+    LOVE("😍", R.string.feedback_emotion_love),
+    NEUTRAL("😐", R.string.feedback_emotion_neutral),
+    HATE("😡", R.string.feedback_emotion_hate)
 }
 
 /**
@@ -57,42 +58,43 @@ data class AppState(
 )
 
 /**
- * 预设标签配置
+ * 预设标签配置（支持多语言）
  */
 object FeedbackTags {
-    // 😡 难用 - 对应的问题标签
-    val HATE_TAGS = listOf(
-        "找不到书签",
-        "音频断续",
-        "字体太小",
-        "搜索不准",
-        "广告太多",
-        "加载太慢"
+    // 😡 Hate/Dislike - 对应的问题标签
+    val HATE_TAG_RES_IDS = listOf(
+        R.string.feedback_tag_translation_error,      // 翻译/经文有误
+        R.string.feedback_tag_prayer_time_inaccurate, // 宣礼/提醒不准
+        R.string.feedback_tag_ad_interference,        // 广告干扰
+        R.string.feedback_tag_battery_drain,          // 后台耗电太快
+        R.string.feedback_tag_search_inaccurate,      // 搜索不准
+        R.string.feedback_tag_slow_loading,           // 加载慢
+        R.string.feedback_tag_large_size              // 包体大
     )
     
-    // 😐 一般 - 对应的改进建议
-    val NEUTRAL_TAGS = listOf(
-        "功能太少",
-        "操作复杂",
-        "没发现新功能",
-        "界面不美观",
-        "缺少提醒"
+    // 😐 Neutral/Confused - 对应的问题标签
+    val NEUTRAL_TAG_RES_IDS = listOf(
+        R.string.feedback_tag_translation_error,      // 翻译/经文有误
+        R.string.feedback_tag_prayer_time_inaccurate, // 宣礼/提醒不准
+        R.string.feedback_tag_ad_interference,        // 广告干扰
+        R.string.feedback_tag_battery_drain,          // 后台耗电太快
+        R.string.feedback_tag_search_inaccurate,      // 搜索不准
+        R.string.feedback_tag_slow_loading,           // 加载慢
+        R.string.feedback_tag_large_size              // 包体大
     )
     
-    // 😍 好用 - 对应的优点
-    val LOVE_TAGS = listOf(
-        "内容丰富",
-        "操作流畅",
-        "功能实用",
-        "设计美观",
-        "音频清晰"
+    // 😍 Love/Like - 对应的优点
+    val LOVE_TAG_RES_IDS = listOf(
+        R.string.feedback_tag_good_reading,    // 阅读体验好
+        R.string.feedback_tag_clean_ui,        // 界面很干净
+        R.string.feedback_tag_good_learning    // 学习功能好
     )
     
-    fun getTagsForEmotion(emotion: FeedbackEmotion): List<String> {
+    fun getTagResIdsForEmotion(emotion: FeedbackEmotion): List<Int> {
         return when (emotion) {
-            FeedbackEmotion.HATE -> HATE_TAGS
-            FeedbackEmotion.NEUTRAL -> NEUTRAL_TAGS
-            FeedbackEmotion.LOVE -> LOVE_TAGS
+            FeedbackEmotion.HATE -> HATE_TAG_RES_IDS
+            FeedbackEmotion.NEUTRAL -> NEUTRAL_TAG_RES_IDS
+            FeedbackEmotion.LOVE -> LOVE_TAG_RES_IDS
         }
     }
 }
@@ -116,9 +118,9 @@ data class FeedbackDocument(
     val timestamp: Any
 ) {
     companion object {
-        fun fromFeedbackData(data: FeedbackData): FeedbackDocument {
+        fun fromFeedbackData(data: FeedbackData, context: android.content.Context): FeedbackDocument {
             return FeedbackDocument(
-                emotion = data.emotion.label,
+                emotion = context.getString(data.emotion.labelResId),
                 selectedTags = data.selectedTags,
                 comment = data.comment,
                 deviceName = data.deviceInfo.deviceName,
