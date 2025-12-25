@@ -1,0 +1,451 @@
+12-24 00:33:30.853 25197 25197 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (0/3)
+12-24 00:33:30.853 25197 25197 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 00:33:31.227 25197 25197 D NATIVE_AD_TRACK: ⚠️ Ad is already loading, skipping duplicate request
+12-24 00:33:32.879 25197 25197 D NATIVE_AD_TRACK: ⚠️ Ad is already loading, skipping duplicate request
+12-24 00:33:33.572 25197 25197 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 00:33:33.572 25197 25197 D NATIVE_AD_TRACK:    Headline: Test Ad : Flood-It!
+12-24 00:33:33.574 25197 25197 D NATIVE_AD_TRACK:    Body: Install Flood-It App for free! Free Popular Casual
+12-24 00:33:33.574 25197 25197 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 00:33:33.574 25197 25197 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (1/3)
+12-24 00:33:33.574 25197 25197 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 00:33:33.574 25197 25197 D NATIVE_AD_TRACK: 📦 Pool not full yet, loading next ad...
+12-24 00:33:33.574 25197 25197 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (1/3)
+12-24 00:33:33.575 25197 25197 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 00:33:34.581 25197 25197 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 00:33:34.581 25197 25197 D NATIVE_AD_TRACK:    Headline: Test Ad : Google Ads
+12-24 00:33:34.581 25197 25197 D NATIVE_AD_TRACK:    Body: Stay up to date with your Ads Check how your ads a
+12-24 00:33:34.581 25197 25197 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 00:33:34.581 25197 25197 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (2/3)
+12-24 00:33:34.581 25197 25197 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 00:33:34.582 25197 25197 D NATIVE_AD_TRACK: 📦 Pool not full yet, loading next ad...
+12-24 00:33:34.582 25197 25197 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (2/3)
+12-24 00:33:34.582 25197 25197 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 00:33:34.879 25197 25197 D NATIVE_AD_TRACK: ⚠️ Ad is already loading, skipping duplicate request
+12-24 00:33:35.559 25197 25197 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 00:33:35.559 25197 25197 D NATIVE_AD_TRACK:    Headline: Test Ad : Google Ads
+12-24 00:33:35.559 25197 25197 D NATIVE_AD_TRACK:    Body: Stay up to date with your Ads Check how your ads a
+12-24 00:33:35.559 25197 25197 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 00:33:35.559 25197 25197 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (3/3)
+12-24 00:33:35.559 25197 25197 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 00:33:35.559 25197 25197 D NATIVE_AD_TRACK: 🎉 Cache pool full (3/3)
+12-24 00:33:36.509 25197 25197 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:33:36.509 25197 25197 D NATIVE_AD_TRACK: 🎯 Native Ad Request
+12-24 00:33:36.509 25197 25197 D NATIVE_AD_TRACK:    Caller: FragOnboardLanguage.setupNativeAd:302
+12-24 00:33:36.509 25197 25197 D NATIVE_AD_TRACK:    Activity: ActivityOnboarding
+12-24 00:33:36.509 25197 25197 D NATIVE_AD_TRACK:    Container: FrameLayout@29929388
+12-24 00:33:36.509 25197 25197 D NATIVE_AD_TRACK:    Layout ResId: 2131625365
+12-24 00:33:36.509 25197 25197 D NATIVE_AD_TRACK:    Container visibility: 8 (0=VISIBLE, 4=INVISIBLE, 8=GONE)
+12-24 00:33:36.509 25197 25197 D NATIVE_AD_TRACK:    Container parent: ConstraintLayout
+12-24 00:33:36.509 25197 25197 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:33:36.510 25197 25197 D NATIVE_AD_TRACK: → Callback received for: FragOnboardLanguage.setupNativeAd:302
+12-24 00:33:36.510 25197 25197 D NATIVE_AD_TRACK:    Ad object: NOT NULL
+12-24 00:33:36.510 25197 25197 D NATIVE_AD_TRACK: → Inflating ad view for: FragOnboardLanguage.setupNativeAd:302
+12-24 00:33:36.510 25197 25197 D NATIVE_AD_TRACK:    Ad headline: Test Ad : Flood-It!
+12-24 00:33:36.510 25197 25197 D NATIVE_AD_TRACK:    Ad body: Install Flood-It App for free! Free Popular Casual
+12-24 00:33:36.525 25197 25197 D NATIVE_AD_TRACK:    Inflated view type: NativeAdView
+12-24 00:33:36.525 25197 25197 D NATIVE_AD_TRACK:    ✅ Root is NativeAdView directly
+12-24 00:33:36.525 25197 25197 D NATIVE_AD_TRACK:    AdView resolved: NativeAdView
+12-24 00:33:36.525 25197 25197 D NATIVE_AD_TRACK: → Populating ad view...
+12-24 00:33:36.534 25197 25197 D NATIVE_AD_TRACK:    ✅ Ad view populated
+12-24 00:33:36.534 25197 25197 D NATIVE_AD_TRACK: → Adding ad view to container...
+12-24 00:33:36.534 25197 25197 D NATIVE_AD_TRACK:    Container child count before: 0
+12-24 00:33:36.534 25197 25197 D NATIVE_AD_TRACK:    Container child count after: 1
+12-24 00:33:36.534 25197 25197 D NATIVE_AD_TRACK:    Container visibility: VISIBLE
+12-24 00:33:36.534 25197 25197 D NATIVE_AD_TRACK:    AdView visibility: VISIBLE
+12-24 00:33:36.534 25197 25197 D NATIVE_AD_TRACK: ✅ Native ad displayed successfully for: FragOnboardLanguage.setupNativeAd:302
+12-24 00:33:36.534 25197 25197 D NATIVE_AD_TRACK: → loadAdWithCallback() called, waiting for response...
+12-24 00:33:36.539 25197 25197 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:33:36.539 25197 25197 D NATIVE_AD_TRACK: 🎯 Native Ad Request
+12-24 00:33:36.539 25197 25197 D NATIVE_AD_TRACK:    Caller: FragOnboardLanguage.setupNativeAd:302
+12-24 00:33:36.539 25197 25197 D NATIVE_AD_TRACK:    Activity: ActivityOnboarding
+12-24 00:33:36.539 25197 25197 D NATIVE_AD_TRACK:    Container: FrameLayout@29929388
+12-24 00:33:36.539 25197 25197 D NATIVE_AD_TRACK:    Layout ResId: 2131625365
+12-24 00:33:36.539 25197 25197 D NATIVE_AD_TRACK:    Container visibility: 0 (0=VISIBLE, 4=INVISIBLE, 8=GONE)
+12-24 00:33:36.539 25197 25197 D NATIVE_AD_TRACK:    Container parent: ConstraintLayout
+12-24 00:33:36.539 25197 25197 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:33:36.539 25197 25197 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (1/3)
+12-24 00:33:36.539 25197 25197 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 00:33:36.553 25197 25197 D NATIVE_AD_TRACK: → Callback received for: FragOnboardLanguage.setupNativeAd:302
+12-24 00:33:36.553 25197 25197 D NATIVE_AD_TRACK:    Ad object: NOT NULL
+12-24 00:33:36.553 25197 25197 D NATIVE_AD_TRACK: → Inflating ad view for: FragOnboardLanguage.setupNativeAd:302
+12-24 00:33:36.553 25197 25197 D NATIVE_AD_TRACK:    Ad headline: Test Ad : Google Ads
+12-24 00:33:36.553 25197 25197 D NATIVE_AD_TRACK:    Ad body: Stay up to date with your Ads Check how your ads a
+12-24 00:33:36.561 25197 25197 D NATIVE_AD_TRACK:    Inflated view type: NativeAdView
+12-24 00:33:36.561 25197 25197 D NATIVE_AD_TRACK:    ✅ Root is NativeAdView directly
+12-24 00:33:36.561 25197 25197 D NATIVE_AD_TRACK:    AdView resolved: NativeAdView
+12-24 00:33:36.561 25197 25197 D NATIVE_AD_TRACK: → Populating ad view...
+12-24 00:33:36.564 25197 25197 D NATIVE_AD_TRACK:    ✅ Ad view populated
+12-24 00:33:36.565 25197 25197 D NATIVE_AD_TRACK: → Adding ad view to container...
+12-24 00:33:36.565 25197 25197 D NATIVE_AD_TRACK:    Container child count before: 1
+12-24 00:33:36.566 25197 25197 D NATIVE_AD_TRACK:    Container child count after: 1
+12-24 00:33:36.566 25197 25197 D NATIVE_AD_TRACK:    Container visibility: VISIBLE
+12-24 00:33:36.566 25197 25197 D NATIVE_AD_TRACK:    AdView visibility: VISIBLE
+12-24 00:33:36.566 25197 25197 D NATIVE_AD_TRACK: ✅ Native ad displayed successfully for: FragOnboardLanguage.setupNativeAd:302
+12-24 00:33:36.566 25197 25197 D NATIVE_AD_TRACK: → loadAdWithCallback() called, waiting for response...
+12-24 00:33:37.830 25197 25197 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 00:33:37.830 25197 25197 D NATIVE_AD_TRACK:    Headline: Test Ad : Google Ads
+12-24 00:33:37.830 25197 25197 D NATIVE_AD_TRACK:    Body: Stay up to date with your Ads Check how your ads a
+12-24 00:33:37.830 25197 25197 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 00:33:37.830 25197 25197 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (2/3)
+12-24 00:33:37.830 25197 25197 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 00:33:37.830 25197 25197 D NATIVE_AD_TRACK: 📦 Pool not full yet, loading next ad...
+12-24 00:33:37.830 25197 25197 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (2/3)
+12-24 00:33:37.830 25197 25197 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 00:33:38.860 25197 25197 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 00:33:38.860 25197 25197 D NATIVE_AD_TRACK:    Headline: Test Ad : Flood-It!
+12-24 00:33:38.860 25197 25197 D NATIVE_AD_TRACK:    Body: Install Flood-It App for free! Free Popular Casual
+12-24 00:33:38.860 25197 25197 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 00:33:38.860 25197 25197 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (3/3)
+12-24 00:33:38.860 25197 25197 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 00:33:38.860 25197 25197 D NATIVE_AD_TRACK: 🎉 Cache pool full (3/3)
+12-24 00:33:41.291 25197 25197 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:33:41.291 25197 25197 D NATIVE_AD_TRACK: 🎯 Native Ad Request
+12-24 00:33:41.291 25197 25197 D NATIVE_AD_TRACK:    Caller: FragOnboardLanguage.setupNativeAd:302
+12-24 00:33:41.291 25197 25197 D NATIVE_AD_TRACK:    Activity: ActivityOnboarding
+12-24 00:33:41.291 25197 25197 D NATIVE_AD_TRACK:    Container: FrameLayout@38103518
+12-24 00:33:41.291 25197 25197 D NATIVE_AD_TRACK:    Layout ResId: 2131625365
+12-24 00:33:41.291 25197 25197 D NATIVE_AD_TRACK:    Container visibility: 8 (0=VISIBLE, 4=INVISIBLE, 8=GONE)
+12-24 00:33:41.291 25197 25197 D NATIVE_AD_TRACK:    Container parent: ConstraintLayout
+12-24 00:33:41.292 25197 25197 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:33:41.292 25197 25197 D NATIVE_AD_TRACK: → Callback received for: FragOnboardLanguage.setupNativeAd:302
+12-24 00:33:41.292 25197 25197 D NATIVE_AD_TRACK:    Ad object: NOT NULL
+12-24 00:33:41.292 25197 25197 D NATIVE_AD_TRACK: → Inflating ad view for: FragOnboardLanguage.setupNativeAd:302
+12-24 00:33:41.292 25197 25197 D NATIVE_AD_TRACK:    Ad headline: Test Ad : Google Ads
+12-24 00:33:41.292 25197 25197 D NATIVE_AD_TRACK:    Ad body: Stay up to date with your Ads Check how your ads a
+12-24 00:33:41.304 25197 25197 D NATIVE_AD_TRACK:    Inflated view type: NativeAdView
+12-24 00:33:41.304 25197 25197 D NATIVE_AD_TRACK:    ✅ Root is NativeAdView directly
+12-24 00:33:41.304 25197 25197 D NATIVE_AD_TRACK:    AdView resolved: NativeAdView
+12-24 00:33:41.304 25197 25197 D NATIVE_AD_TRACK: → Populating ad view...
+12-24 00:33:41.308 25197 25197 D NATIVE_AD_TRACK:    ✅ Ad view populated
+12-24 00:33:41.308 25197 25197 D NATIVE_AD_TRACK: → Adding ad view to container...
+12-24 00:33:41.308 25197 25197 D NATIVE_AD_TRACK:    Container child count before: 0
+12-24 00:33:41.308 25197 25197 D NATIVE_AD_TRACK:    Container child count after: 1
+12-24 00:33:41.308 25197 25197 D NATIVE_AD_TRACK:    Container visibility: VISIBLE
+12-24 00:33:41.308 25197 25197 D NATIVE_AD_TRACK:    AdView visibility: VISIBLE
+12-24 00:33:41.308 25197 25197 D NATIVE_AD_TRACK: ✅ Native ad displayed successfully for: FragOnboardLanguage.setupNativeAd:302
+12-24 00:33:41.309 25197 25197 D NATIVE_AD_TRACK: → loadAdWithCallback() called, waiting for response...
+12-24 00:33:41.314 25197 25197 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:33:41.314 25197 25197 D NATIVE_AD_TRACK: 🎯 Native Ad Request
+12-24 00:33:41.314 25197 25197 D NATIVE_AD_TRACK:    Caller: FragOnboardLanguage.setupNativeAd:302
+12-24 00:33:41.314 25197 25197 D NATIVE_AD_TRACK:    Activity: ActivityOnboarding
+12-24 00:33:41.314 25197 25197 D NATIVE_AD_TRACK:    Container: FrameLayout@38103518
+12-24 00:33:41.315 25197 25197 D NATIVE_AD_TRACK:    Layout ResId: 2131625365
+12-24 00:33:41.315 25197 25197 D NATIVE_AD_TRACK:    Container visibility: 0 (0=VISIBLE, 4=INVISIBLE, 8=GONE)
+12-24 00:33:41.315 25197 25197 D NATIVE_AD_TRACK:    Container parent: ConstraintLayout
+12-24 00:33:41.315 25197 25197 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:33:41.315 25197 25197 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (1/3)
+12-24 00:33:41.315 25197 25197 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 00:33:41.331 25197 25197 D NATIVE_AD_TRACK: → Callback received for: FragOnboardLanguage.setupNativeAd:302
+12-24 00:33:41.331 25197 25197 D NATIVE_AD_TRACK:    Ad object: NOT NULL
+12-24 00:33:41.331 25197 25197 D NATIVE_AD_TRACK: → Inflating ad view for: FragOnboardLanguage.setupNativeAd:302
+12-24 00:33:41.331 25197 25197 D NATIVE_AD_TRACK:    Ad headline: Test Ad : Google Ads
+12-24 00:33:41.331 25197 25197 D NATIVE_AD_TRACK:    Ad body: Stay up to date with your Ads Check how your ads a
+12-24 00:33:41.338 25197 25197 D NATIVE_AD_TRACK:    Inflated view type: NativeAdView
+12-24 00:33:41.338 25197 25197 D NATIVE_AD_TRACK:    ✅ Root is NativeAdView directly
+12-24 00:33:41.338 25197 25197 D NATIVE_AD_TRACK:    AdView resolved: NativeAdView
+12-24 00:33:41.338 25197 25197 D NATIVE_AD_TRACK: → Populating ad view...
+12-24 00:33:41.340 25197 25197 D NATIVE_AD_TRACK:    ✅ Ad view populated
+12-24 00:33:41.340 25197 25197 D NATIVE_AD_TRACK: → Adding ad view to container...
+12-24 00:33:41.340 25197 25197 D NATIVE_AD_TRACK:    Container child count before: 1
+12-24 00:33:41.340 25197 25197 D NATIVE_AD_TRACK:    Container child count after: 1
+12-24 00:33:41.340 25197 25197 D NATIVE_AD_TRACK:    Container visibility: VISIBLE
+12-24 00:33:41.340 25197 25197 D NATIVE_AD_TRACK:    AdView visibility: VISIBLE
+12-24 00:33:41.340 25197 25197 D NATIVE_AD_TRACK: ✅ Native ad displayed successfully for: FragOnboardLanguage.setupNativeAd:302
+12-24 00:33:41.340 25197 25197 D NATIVE_AD_TRACK: → loadAdWithCallback() called, waiting for response...
+12-24 00:33:41.421 25197 25197 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:33:41.421 25197 25197 D NATIVE_AD_TRACK: 🎯 Native Ad Request
+12-24 00:33:41.421 25197 25197 D NATIVE_AD_TRACK:    Caller: FragOnboardQuranVersion.setupNativeAd:749
+12-24 00:33:41.421 25197 25197 D NATIVE_AD_TRACK:    Activity: ActivityOnboarding
+12-24 00:33:41.421 25197 25197 D NATIVE_AD_TRACK:    Container: FrameLayout@158034761
+12-24 00:33:41.421 25197 25197 D NATIVE_AD_TRACK:    Layout ResId: 2131625365
+12-24 00:33:41.421 25197 25197 D NATIVE_AD_TRACK:    Container visibility: 8 (0=VISIBLE, 4=INVISIBLE, 8=GONE)
+12-24 00:33:41.421 25197 25197 D NATIVE_AD_TRACK:    Container parent: LinearLayout
+12-24 00:33:41.421 25197 25197 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:33:41.421 25197 25197 D NATIVE_AD_TRACK: ⚠️ Ad is already loading, skipping duplicate request
+12-24 00:33:41.421 25197 25197 D NATIVE_AD_TRACK: → Callback received for: FragOnboardQuranVersion.setupNativeAd:749
+12-24 00:33:41.421 25197 25197 D NATIVE_AD_TRACK:    Ad object: NOT NULL
+12-24 00:33:41.421 25197 25197 D NATIVE_AD_TRACK: → Inflating ad view for: FragOnboardQuranVersion.setupNativeAd:749
+12-24 00:33:41.421 25197 25197 D NATIVE_AD_TRACK:    Ad headline: Test Ad : Flood-It!
+12-24 00:33:41.421 25197 25197 D NATIVE_AD_TRACK:    Ad body: Install Flood-It App for free! Free Popular Casual
+12-24 00:33:41.429 25197 25197 D NATIVE_AD_TRACK:    Inflated view type: NativeAdView
+12-24 00:33:41.429 25197 25197 D NATIVE_AD_TRACK:    ✅ Root is NativeAdView directly
+12-24 00:33:41.429 25197 25197 D NATIVE_AD_TRACK:    AdView resolved: NativeAdView
+12-24 00:33:41.429 25197 25197 D NATIVE_AD_TRACK: → Populating ad view...
+12-24 00:33:41.431 25197 25197 D NATIVE_AD_TRACK:    ✅ Ad view populated
+12-24 00:33:41.431 25197 25197 D NATIVE_AD_TRACK: → Adding ad view to container...
+12-24 00:33:41.431 25197 25197 D NATIVE_AD_TRACK:    Container child count before: 0
+12-24 00:33:41.431 25197 25197 D NATIVE_AD_TRACK:    Container child count after: 1
+12-24 00:33:41.431 25197 25197 D NATIVE_AD_TRACK:    Container visibility: VISIBLE
+12-24 00:33:41.431 25197 25197 D NATIVE_AD_TRACK:    AdView visibility: VISIBLE
+12-24 00:33:41.431 25197 25197 D NATIVE_AD_TRACK: ✅ Native ad displayed successfully for: FragOnboardQuranVersion.setupNativeAd:749
+12-24 00:33:41.431 25197 25197 D NATIVE_AD_TRACK: → loadAdWithCallback() called, waiting for response...
+12-24 00:33:41.459 25197 25197 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:33:41.459 25197 25197 D NATIVE_AD_TRACK: 🎯 Native Ad Request
+12-24 00:33:41.459 25197 25197 D NATIVE_AD_TRACK:    Caller: FragOnboardQuranVersion.setupNativeAd:749
+12-24 00:33:41.459 25197 25197 D NATIVE_AD_TRACK:    Activity: ActivityOnboarding
+12-24 00:33:41.459 25197 25197 D NATIVE_AD_TRACK:    Container: FrameLayout@158034761
+12-24 00:33:41.459 25197 25197 D NATIVE_AD_TRACK:    Layout ResId: 2131625365
+12-24 00:33:41.459 25197 25197 D NATIVE_AD_TRACK:    Container visibility: 0 (0=VISIBLE, 4=INVISIBLE, 8=GONE)
+12-24 00:33:41.459 25197 25197 D NATIVE_AD_TRACK:    Container parent: null
+12-24 00:33:41.459 25197 25197 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:33:41.459 25197 25197 D NATIVE_AD_TRACK: → loadAdWithCallback() called, waiting for response...
+12-24 00:33:42.351 25197 25197 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 00:33:42.351 25197 25197 D NATIVE_AD_TRACK:    Headline: Test Ad : Google Ads
+12-24 00:33:42.352 25197 25197 D NATIVE_AD_TRACK:    Body: Stay up to date with your Ads Check how your ads a
+12-24 00:33:42.352 25197 25197 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 00:33:42.352 25197 25197 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (1/3)
+12-24 00:33:42.352 25197 25197 D NATIVE_AD_TRACK:    Pending callbacks: 1
+12-24 00:33:42.352 25197 25197 D NATIVE_AD_TRACK: → Callback received for: FragOnboardQuranVersion.setupNativeAd:749
+12-24 00:33:42.352 25197 25197 D NATIVE_AD_TRACK:    Ad object: NOT NULL
+12-24 00:33:42.352 25197 25197 D NATIVE_AD_TRACK: → Inflating ad view for: FragOnboardQuranVersion.setupNativeAd:749
+12-24 00:33:42.352 25197 25197 D NATIVE_AD_TRACK:    Ad headline: Test Ad : Google Ads
+12-24 00:33:42.353 25197 25197 D NATIVE_AD_TRACK:    Ad body: Stay up to date with your Ads Check how your ads a
+12-24 00:33:42.366 25197 25197 D NATIVE_AD_TRACK:    Inflated view type: NativeAdView
+12-24 00:33:42.366 25197 25197 D NATIVE_AD_TRACK:    ✅ Root is NativeAdView directly
+12-24 00:33:42.366 25197 25197 D NATIVE_AD_TRACK:    AdView resolved: NativeAdView
+12-24 00:33:42.366 25197 25197 D NATIVE_AD_TRACK: → Populating ad view...
+12-24 00:33:42.369 25197 25197 D NATIVE_AD_TRACK:    ✅ Ad view populated
+12-24 00:33:42.369 25197 25197 D NATIVE_AD_TRACK: → Adding ad view to container...
+12-24 00:33:42.369 25197 25197 D NATIVE_AD_TRACK:    Container child count before: 1
+12-24 00:33:42.369 25197 25197 D NATIVE_AD_TRACK:    Container child count after: 1
+12-24 00:33:42.369 25197 25197 D NATIVE_AD_TRACK:    Container visibility: VISIBLE
+12-24 00:33:42.369 25197 25197 D NATIVE_AD_TRACK:    AdView visibility: VISIBLE
+12-24 00:33:42.369 25197 25197 D NATIVE_AD_TRACK: ✅ Native ad displayed successfully for: FragOnboardQuranVersion.setupNativeAd:749
+12-24 00:33:42.370 25197 25197 D NATIVE_AD_TRACK: 📦 Pool not full yet, loading next ad...
+12-24 00:33:42.370 25197 25197 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (1/3)
+12-24 00:33:42.370 25197 25197 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 00:33:43.423 25197 25197 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 00:33:43.423 25197 25197 D NATIVE_AD_TRACK:    Headline: Test Ad : Google Ads
+12-24 00:33:43.423 25197 25197 D NATIVE_AD_TRACK:    Body: Stay up to date with your Ads Check how your ads a
+12-24 00:33:43.423 25197 25197 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 00:33:43.423 25197 25197 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (2/3)
+12-24 00:33:43.423 25197 25197 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 00:33:43.423 25197 25197 D NATIVE_AD_TRACK: 📦 Pool not full yet, loading next ad...
+12-24 00:33:43.423 25197 25197 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (2/3)
+12-24 00:33:43.423 25197 25197 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 00:33:44.528 25197 25197 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 00:33:44.528 25197 25197 D NATIVE_AD_TRACK:    Headline: Test Ad : Flood-It!
+12-24 00:33:44.528 25197 25197 D NATIVE_AD_TRACK:    Body: Install Flood-It App for free! Free Popular Casual
+12-24 00:33:44.528 25197 25197 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 00:33:44.528 25197 25197 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (3/3)
+12-24 00:33:44.529 25197 25197 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 00:33:44.529 25197 25197 D NATIVE_AD_TRACK: 🎉 Cache pool full (3/3)
+12-24 00:34:19.834  1655  5429 V WindowManager: DesktopModeLaunchParamsModifier: phase= 0 task=null activity=ActivityRecord{4953520 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity desktop mode is not enabled, skipping
+12-24 00:34:19.834  1655  5429 V WindowManager: TaskLaunchParamsModifier:phase=0 task=null activity=ActivityRecord{4953520 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t-1} display-area-from-source=DefaultTaskDisplayArea@32313487 display-id=0 task-display-area-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@32313487
+12-24 00:34:19.834  1655  5429 V WindowManager: DesktopModeLaunchParamsModifier: phase= 3 task=Task{8bc14d7 #4550 type=standard A=10533:com.quran.quranaudio.online} activity=ActivityRecord{4953520 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t-1} desktop mode is not enabled, skipping
+12-24 00:34:19.834  1655  5429 V WindowManager: TaskLaunchParamsModifier:phase=3 task=Task{8bc14d7 #4550 type=standard A=10533:com.quran.quranaudio.online} activity=ActivityRecord{4953520 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t-1} display-area-from-source=DefaultTaskDisplayArea@32313487 display-id=0 task-display-area-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@32313487 inherit-from-source=fullscreen non-freeform-task-display-area display-area=DefaultTaskDisplayArea@32313487 activity-requested-portrait freeform-size-mismatch=Rect(276, 696 - 805, 1776)
+12-24 00:34:19.835  1655  5429 V WindowManager: DesktopModeLaunchParamsModifier: phase= 3 task=Task{8bc14d7 #4550 type=standard A=10533:com.quran.quranaudio.online} activity=ActivityRecord{4953520 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t-1} desktop mode is not enabled, skipping
+12-24 00:34:19.835  1655  5429 V WindowManager: TaskLaunchParamsModifier:phase=3 task=Task{8bc14d7 #4550 type=standard A=10533:com.quran.quranaudio.online} activity=ActivityRecord{4953520 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t-1} display-area-from-source=DefaultTaskDisplayArea@32313487 display-id=0 task-display-area-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@32313487 inherit-from-source=fullscreen non-freeform-task-display-area display-area=DefaultTaskDisplayArea@32313487 activity-requested-portrait freeform-size-mismatch=Rect(276, 696 - 805, 1776)
+12-24 00:34:19.838  1655  5429 I ActivityTaskManager: START u0 {xflg=0x4 cmp=com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity (has extras)} with LAUNCH_MULTIPLE from uid 10533 (com.quran.quranaudio.online) (rr=82349890) (BAL_ALLOW_VISIBLE_WINDOW) result code=0
+12-24 00:34:19.839  2334  2370 V WindowManagerShell: Transition requested (#1024): android.os.BinderProxy@5ab7461 TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=4550 effectiveUid=10533 displayId=0 isRunning=true baseIntent=Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.quran.quranaudio.online/.SplashScreenActivity } baseActivity=ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.prayertimes.ui.MainActivity} topActivity=ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity} origActivity=null realActivity=ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.SplashScreenActivity} numActivities=2 lastActiveTime=127093130 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{android.os.BinderProxy@791c52f} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 0 - 0, 0) topActivityInfo=ActivityInfo{b7c4b86 com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=true isVisible=true isVisibleRequested=true isTopActivityNoDisplay=false isSleeping=false locusId=null displayAreaFeatureId=1 isTopActivityTransparent=false isActivityStackTransparent=false lastNonFullscreenBounds=Rect(276, 696 - 805, 1776) capturedLink=null capturedLinkTimestamp=0 requestedVisibleTypes=-9 topActivityRequestOpenInBrowserEducationTimestamp=0 appCompatTaskInfo=AppCompatTaskInfo { topActivityInSizeCompat=false eligibleForLetterboxEducation= false isLetterboxEducationEnabled= false isLetterboxDoubleTapEnabled= false eligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 topActivityAppBounds=Rect(0, 0 - 1080, 2400) isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false hasMinAspectRatioOverride=false topActivityLetterboxBounds=null cameraCompatTaskInfo=CameraCompatTaskInfo { freeformCameraCompatMode=inactiveundefined} topNonResizableActivityAspectRatio=-1.0} topActivityMainWindowFrame=null isAppBubble=false}, pipChange = null, remoteTransition = null, displayChange = null, flags = 0, debugId = 1024 }
+12-24 00:34:19.881 25197 25197 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:34:19.881 25197 25197 D NATIVE_AD_TRACK: 🎯 Quiz Result Page - preloadNativeAd() CALLED
+12-24 00:34:19.881 25197 25197 D NATIVE_AD_TRACK:    Activity: QuizReviewLearnActivity
+12-24 00:34:19.881 25197 25197 D NATIVE_AD_TRACK:    nativeAdView: com.quran.quranaudio.quiz.ad.AdNativeSmallWrapperView{df351d8 V.E...... ......I. 0,0-0,0 #7f0b0612 app:id/nativeAdView}
+12-24 00:34:19.881 25197 25197 D NATIVE_AD_TRACK:    nativeAdView visibility: 0
+12-24 00:34:19.881 25197 25197 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:34:19.881 25197 25197 D NATIVE_AD_TRACK: → Calling binding.nativeAdView.loadNativeAd()...
+12-24 00:34:19.881 25197 25197 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:34:19.881 25197 25197 D NATIVE_AD_TRACK: 🎯 AdNativeSmallWrapperView.loadNativeAd() CALLED
+12-24 00:34:19.881 25197 25197 D NATIVE_AD_TRACK:    adTag: native_quiz_review_learn
+12-24 00:34:19.881 25197 25197 D NATIVE_AD_TRACK:    context: QuizReviewLearnActivity
+12-24 00:34:19.881 25197 25197 D NATIVE_AD_TRACK:    this (container): AdNativeSmallWrapperView@234050008
+12-24 00:34:19.881 25197 25197 D NATIVE_AD_TRACK:    isLoadAd: true
+12-24 00:34:19.881 25197 25197 D NATIVE_AD_TRACK:    visibility: 0
+12-24 00:34:19.881 25197 25197 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:34:19.881 25197 25197 D NATIVE_AD_TRACK: ✅ Activity: QuizReviewLearnActivity
+12-24 00:34:19.881 25197 25197 D NATIVE_AD_TRACK: → Calling NativeAdHelper.displayNativeAdWithAutoLoad()...
+12-24 00:34:19.881 25197 25197 D NATIVE_AD_TRACK:    Layout: R.layout.layout_ad_native_small_wrapper
+12-24 00:34:19.882 25197 25197 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:34:19.882 25197 25197 D NATIVE_AD_TRACK: 🎯 Native Ad Request
+12-24 00:34:19.882 25197 25197 D NATIVE_AD_TRACK:    Caller: AdNativeSmallWrapperView.loadNativeAd:120
+12-24 00:34:19.882 25197 25197 D NATIVE_AD_TRACK:    Activity: QuizReviewLearnActivity
+12-24 00:34:19.882 25197 25197 D NATIVE_AD_TRACK:    Container: AdNativeSmallWrapperView@234050008
+12-24 00:34:19.882 25197 25197 D NATIVE_AD_TRACK:    Layout ResId: 2131625123
+12-24 00:34:19.882 25197 25197 D NATIVE_AD_TRACK:    Container visibility: 0 (0=VISIBLE, 4=INVISIBLE, 8=GONE)
+12-24 00:34:19.882 25197 25197 D NATIVE_AD_TRACK:    Container parent: LinearLayout
+12-24 00:34:19.882 25197 25197 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:34:19.882 25197 25197 D NATIVE_AD_TRACK: → Callback received for: AdNativeSmallWrapperView.loadNativeAd:120
+12-24 00:34:19.882 25197 25197 D NATIVE_AD_TRACK:    Ad object: NOT NULL
+12-24 00:34:19.882 25197 25197 D NATIVE_AD_TRACK: → Inflating ad view for: AdNativeSmallWrapperView.loadNativeAd:120
+12-24 00:34:19.882 25197 25197 D NATIVE_AD_TRACK:    Ad headline: Test Ad : Google Ads
+12-24 00:34:19.882 25197 25197 D NATIVE_AD_TRACK:    Ad body: Stay up to date with your Ads Check how your ads a
+12-24 00:34:19.888 25197 25197 D NATIVE_AD_TRACK:    Inflated view type: FrameLayout
+12-24 00:34:19.888 25197 25197 D NATIVE_AD_TRACK:    → Root is FrameLayout, searching for NativeAdView...
+12-24 00:34:19.889 25197 25197 D NATIVE_AD_TRACK:    ✅ Found NativeAdView inside container
+12-24 00:34:19.889 25197 25197 D NATIVE_AD_TRACK:    AdView resolved: NativeAdView
+12-24 00:34:19.889 25197 25197 D NATIVE_AD_TRACK: → Populating ad view...
+12-24 00:34:19.891 25197 25197 D NATIVE_AD_TRACK:    ✅ Ad view populated
+12-24 00:34:19.891 25197 25197 D NATIVE_AD_TRACK: → Adding ad view to container...
+12-24 00:34:19.891 25197 25197 D NATIVE_AD_TRACK:    Container child count before: 1
+12-24 00:34:19.892 25197 25197 D NATIVE_AD_TRACK:    Container child count after: 1
+12-24 00:34:19.892 25197 25197 D NATIVE_AD_TRACK:    Container visibility: VISIBLE
+12-24 00:34:19.892 25197 25197 D NATIVE_AD_TRACK:    AdView visibility: VISIBLE
+12-24 00:34:19.892 25197 25197 D NATIVE_AD_TRACK: ✅ Native ad displayed successfully for: AdNativeSmallWrapperView.loadNativeAd:120
+12-24 00:34:19.892 25197 25197 D NATIVE_AD_TRACK: → loadAdWithCallback() called, waiting for response...
+12-24 00:34:19.892 25197 25197 D NATIVE_AD_TRACK: ✅ displayNativeAdWithAutoLoad() call completed for: native_quiz_review_learn
+12-24 00:34:19.892 25197 25197 D NATIVE_AD_TRACK: ✅ loadNativeAd() returned successfully
+12-24 00:34:19.900  1655  2044 D CoreBackPreview: Window{ec284ba u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@e07cae0, mPriority=0, mIsAnimationCallback=false, mOverrideBehavior=0}
+12-24 00:34:19.920  1655  1752 I ActivityTaskManager: Displayed com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity for user 0: +86ms
+12-24 00:34:19.920  1655  1752 V WindowManager: Sent Transition (#1024) createdAt=12-24 00:34:19.834 via request=TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=4550 effectiveUid=10533 displayId=0 isRunning=true baseIntent=Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.quran.quranaudio.online/.SplashScreenActivity } baseActivity=ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.prayertimes.ui.MainActivity} topActivity=ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity} origActivity=null realActivity=ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.SplashScreenActivity} numActivities=2 lastActiveTime=127093130 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{RemoteToken{7f7bde2 Task{8bc14d7 #4550 type=standard A=10533:com.quran.quranaudio.online}}} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 0 - 0, 0) topActivityInfo=ActivityInfo{bfaf95b com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=true isVisible=true isVisibleRequested=true isTopActivityNoDisplay=false isSleeping=false locusId=null displayAreaFeatureId=1 isTopActivityTransparent=false isActivityStackTransparent=false lastNonFullscreenBounds=Rect(276, 696 - 805, 1776) capturedLink=null capturedLinkTimestamp=0 requestedVisibleTypes=-9 topActivityRequestOpenInBrowserEducationTimestamp=0 appCompatTaskInfo=AppCompatTaskInfo { topActivityInSizeCompat=false eligibleForLetterboxEducation= false isLetterboxEducationEnabled= false isLetterboxDoubleTapEnabled= false eligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 topActivityAppBounds=Rect(0, 0 - 1080, 2400) isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false hasMinAspectRatioOverride=false topActivityLetterboxBounds=null cameraCompatTaskInfo=CameraCompatTaskInfo { freeformCameraCompatMode=inactiveundefined} topNonResizableActivityAspectRatio=-1.0} topActivityMainWindowFrame=null isAppBubble=false}, pipChange = null, remoteTransition = null, displayChange = null, flags = 0, debugId = 1024 }
+12-24 00:34:19.920  1655  1752 V WindowManager:         {m=OPEN f=FILLS_TASK leash=Surface(name=ActivityRecord{4953520 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t4550})/@0xd74ee55 sb=Rect(0, 0 - 0, 0) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=-1->0 r=-1->0:-1 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}, taskId = 4550, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},
+12-24 00:34:19.923  2334  2370 V WindowManagerShell:         {m=OPEN f=FILLS_TASK leash=Surface(name=ActivityRecord{4953520 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t4550})/@0x2932c47 sb=Rect(0, 0 - 0, 0) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=-1->0 r=-1->0:-1 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}, taskId = 4550, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},
+12-24 00:34:19.923  2334  2370 V WindowManagerShell: Transition doesn't have explicit remote, search filters for match for {id=1024 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{m=OPEN f=FILLS_TASK leash=Surface(name=ActivityRecord{4953520 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t4550})/@0x2932c47 sb=Rect(0, 0 - 0, 0) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=-1->0 r=-1->0:-1 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}, taskId = 4550, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},{m=TO_BACK f=FILLS_TASK leash=Surface(name=ActivityRecord{82349890 u0 com.quran.quranaudio.online/.prayertimes.ui.MainActivity t4550})/@0x611ac74 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.prayertimes.ui.MainActivity}, taskId = 4550, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}}]}
+12-24 00:34:19.923  2334  2370 V WindowManagerShell: start default transition animation, info = {id=1024 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{m=OPEN f=FILLS_TASK leash=Surface(name=ActivityRecord{4953520 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t4550})/@0x2932c47 sb=Rect(0, 0 - 0, 0) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=-1->0 r=-1->0:-1 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}, taskId = 4550, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},{m=TO_BACK f=FILLS_TASK leash=Surface(name=ActivityRecord{82349890 u0 com.quran.quranaudio.online/.prayertimes.ui.MainActivity t4550})/@0x611ac74 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.prayertimes.ui.MainActivity}, taskId = 4550, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}}]}
+12-24 00:34:33.266 25197 25197 D QuestionFragment: 📬 Received result from QuizReviewLearnActivity: action=quit
+12-24 00:34:33.303  1655  1752 V WindowManager:         {m=CLOSE f=FILLS_TASK leash=Surface(name=ActivityRecord{4953520 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t4550})/@0xd74ee55 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}, taskId = 4550, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},
+12-24 00:34:33.306  2334  2370 V WindowManagerShell:         {m=CLOSE f=FILLS_TASK leash=Surface(name=ActivityRecord{4953520 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t4550})/@0x1a937d1 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}, taskId = 4550, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},
+12-24 00:34:33.306  2334  2370 V WindowManagerShell: Transition doesn't have explicit remote, search filters for match for {id=1025 t=CLOSE f=0x0 trk=0 r=[0@Point(0, 0)] c=[{m=CLOSE f=FILLS_TASK leash=Surface(name=ActivityRecord{4953520 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t4550})/@0x1a937d1 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}, taskId = 4550, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},{m=TO_FRONT f=FILLS_TASK leash=Surface(name=ActivityRecord{82349890 u0 com.quran.quranaudio.online/.prayertimes.ui.MainActivity t4550})/@0xb4a236 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.prayertimes.ui.MainActivity}, taskId = 4550, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}}]}
+12-24 00:34:33.306  2334  2370 V WindowManagerShell: start default transition animation, info = {id=1025 t=CLOSE f=0x0 trk=0 r=[0@Point(0, 0)] c=[{m=CLOSE f=FILLS_TASK leash=Surface(name=ActivityRecord{4953520 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t4550})/@0x1a937d1 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}, taskId = 4550, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},{m=TO_FRONT f=FILLS_TASK leash=Surface(name=ActivityRecord{82349890 u0 com.quran.quranaudio.online/.prayertimes.ui.MainActivity t4550})/@0xb4a236 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.prayertimes.ui.MainActivity}, taskId = 4550, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}}]}
+12-24 00:34:33.789 25197 25197 D VRI[QuizReviewLearnActivity]: visibilityChanged oldVisibility=true newVisibility=false
+12-24 00:34:33.810  1655  6381 D CoreBackPreview: Window{ec284ba u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}: Setting back callback null
+12-24 00:34:38.104  1655  4839 V WindowManager: DesktopModeLaunchParamsModifier: phase= 0 task=null activity=ActivityRecord{170092627 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity desktop mode is not enabled, skipping
+12-24 00:34:38.105  1655  4839 V WindowManager: TaskLaunchParamsModifier:phase=0 task=null activity=ActivityRecord{170092627 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t-1} display-area-from-source=DefaultTaskDisplayArea@32313487 display-id=0 task-display-area-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@32313487
+12-24 00:34:38.105  1655  4839 V WindowManager: DesktopModeLaunchParamsModifier: phase= 3 task=Task{8bc14d7 #4550 type=standard A=10533:com.quran.quranaudio.online} activity=ActivityRecord{170092627 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t-1} desktop mode is not enabled, skipping
+12-24 00:34:38.105  1655  4839 V WindowManager: TaskLaunchParamsModifier:phase=3 task=Task{8bc14d7 #4550 type=standard A=10533:com.quran.quranaudio.online} activity=ActivityRecord{170092627 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t-1} display-area-from-source=DefaultTaskDisplayArea@32313487 display-id=0 task-display-area-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@32313487 inherit-from-source=fullscreen non-freeform-task-display-area display-area=DefaultTaskDisplayArea@32313487 activity-requested-portrait freeform-size-mismatch=Rect(276, 696 - 805, 1776)
+12-24 00:34:38.106  1655  4839 V WindowManager: DesktopModeLaunchParamsModifier: phase= 3 task=Task{8bc14d7 #4550 type=standard A=10533:com.quran.quranaudio.online} activity=ActivityRecord{170092627 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t-1} desktop mode is not enabled, skipping
+12-24 00:34:38.106  1655  4839 V WindowManager: TaskLaunchParamsModifier:phase=3 task=Task{8bc14d7 #4550 type=standard A=10533:com.quran.quranaudio.online} activity=ActivityRecord{170092627 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t-1} display-area-from-source=DefaultTaskDisplayArea@32313487 display-id=0 task-display-area-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@32313487 inherit-from-source=fullscreen non-freeform-task-display-area display-area=DefaultTaskDisplayArea@32313487 activity-requested-portrait freeform-size-mismatch=Rect(276, 696 - 805, 1776)
+12-24 00:34:38.112  1655  4839 I ActivityTaskManager: START u0 {xflg=0x4 cmp=com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity (has extras)} with LAUNCH_MULTIPLE from uid 10533 (com.quran.quranaudio.online) (rr=82349890) (BAL_ALLOW_VISIBLE_WINDOW) result code=0
+12-24 00:34:38.112  2334  2370 V WindowManagerShell: Transition requested (#1026): android.os.BinderProxy@cfd1a3c TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=4550 effectiveUid=10533 displayId=0 isRunning=true baseIntent=Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.quran.quranaudio.online/.SplashScreenActivity } baseActivity=ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.prayertimes.ui.MainActivity} topActivity=ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity} origActivity=null realActivity=ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.SplashScreenActivity} numActivities=2 lastActiveTime=127111403 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{android.os.BinderProxy@791c52f} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 0 - 0, 0) topActivityInfo=ActivityInfo{c2aa3c5 com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=true isVisible=true isVisibleRequested=true isTopActivityNoDisplay=false isSleeping=false locusId=null displayAreaFeatureId=1 isTopActivityTransparent=false isActivityStackTransparent=false lastNonFullscreenBounds=Rect(276, 696 - 805, 1776) capturedLink=null capturedLinkTimestamp=0 requestedVisibleTypes=-9 topActivityRequestOpenInBrowserEducationTimestamp=0 appCompatTaskInfo=AppCompatTaskInfo { topActivityInSizeCompat=false eligibleForLetterboxEducation= false isLetterboxEducationEnabled= false isLetterboxDoubleTapEnabled= false eligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 topActivityAppBounds=Rect(0, 0 - 1080, 2400) isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false hasMinAspectRatioOverride=false topActivityLetterboxBounds=null cameraCompatTaskInfo=CameraCompatTaskInfo { freeformCameraCompatMode=inactiveundefined} topNonResizableActivityAspectRatio=-1.0} topActivityMainWindowFrame=null isAppBubble=false}, pipChange = null, remoteTransition = null, displayChange = null, flags = 0, debugId = 1026 }
+12-24 00:34:38.145 25197 25197 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:34:38.147 25197 25197 D NATIVE_AD_TRACK: 🎯 Quiz Result Page - preloadNativeAd() CALLED
+12-24 00:34:38.147 25197 25197 D NATIVE_AD_TRACK:    Activity: QuizReviewLearnActivity
+12-24 00:34:38.147 25197 25197 D NATIVE_AD_TRACK:    nativeAdView: com.quran.quranaudio.quiz.ad.AdNativeSmallWrapperView{1fef469 V.E...... ......I. 0,0-0,0 #7f0b0612 app:id/nativeAdView}
+12-24 00:34:38.147 25197 25197 D NATIVE_AD_TRACK:    nativeAdView visibility: 0
+12-24 00:34:38.147 25197 25197 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:34:38.147 25197 25197 D NATIVE_AD_TRACK: → Calling binding.nativeAdView.loadNativeAd()...
+12-24 00:34:38.147 25197 25197 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:34:38.148 25197 25197 D NATIVE_AD_TRACK: 🎯 AdNativeSmallWrapperView.loadNativeAd() CALLED
+12-24 00:34:38.148 25197 25197 D NATIVE_AD_TRACK:    adTag: native_quiz_review_learn
+12-24 00:34:38.148 25197 25197 D NATIVE_AD_TRACK:    context: QuizReviewLearnActivity
+12-24 00:34:38.148 25197 25197 D NATIVE_AD_TRACK:    this (container): AdNativeSmallWrapperView@33485929
+12-24 00:34:38.148 25197 25197 D NATIVE_AD_TRACK:    isLoadAd: true
+12-24 00:34:38.148 25197 25197 D NATIVE_AD_TRACK:    visibility: 0
+12-24 00:34:38.148 25197 25197 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:34:38.148 25197 25197 D NATIVE_AD_TRACK: ✅ Activity: QuizReviewLearnActivity
+12-24 00:34:38.148 25197 25197 D NATIVE_AD_TRACK: → Calling NativeAdHelper.displayNativeAdWithAutoLoad()...
+12-24 00:34:38.148 25197 25197 D NATIVE_AD_TRACK:    Layout: R.layout.layout_ad_native_small_wrapper
+12-24 00:34:38.148 25197 25197 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:34:38.148 25197 25197 D NATIVE_AD_TRACK: 🎯 Native Ad Request
+12-24 00:34:38.148 25197 25197 D NATIVE_AD_TRACK:    Caller: AdNativeSmallWrapperView.loadNativeAd:120
+12-24 00:34:38.148 25197 25197 D NATIVE_AD_TRACK:    Activity: QuizReviewLearnActivity
+12-24 00:34:38.148 25197 25197 D NATIVE_AD_TRACK:    Container: AdNativeSmallWrapperView@33485929
+12-24 00:34:38.148 25197 25197 D NATIVE_AD_TRACK:    Layout ResId: 2131625123
+12-24 00:34:38.148 25197 25197 D NATIVE_AD_TRACK:    Container visibility: 0 (0=VISIBLE, 4=INVISIBLE, 8=GONE)
+12-24 00:34:38.148 25197 25197 D NATIVE_AD_TRACK:    Container parent: LinearLayout
+12-24 00:34:38.148 25197 25197 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:34:38.148 25197 25197 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (1/3)
+12-24 00:34:38.148 25197 25197 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 00:34:38.162 25197 25197 D NATIVE_AD_TRACK: → Callback received for: AdNativeSmallWrapperView.loadNativeAd:120
+12-24 00:34:38.162 25197 25197 D NATIVE_AD_TRACK:    Ad object: NOT NULL
+12-24 00:34:38.162 25197 25197 D NATIVE_AD_TRACK: → Inflating ad view for: AdNativeSmallWrapperView.loadNativeAd:120
+12-24 00:34:38.163 25197 25197 D NATIVE_AD_TRACK:    Ad headline: Test Ad : Google Ads
+12-24 00:34:38.163 25197 25197 D NATIVE_AD_TRACK:    Ad body: Stay up to date with your Ads Check how your ads a
+12-24 00:34:38.169 25197 25197 D NATIVE_AD_TRACK:    Inflated view type: FrameLayout
+12-24 00:34:38.169 25197 25197 D NATIVE_AD_TRACK:    → Root is FrameLayout, searching for NativeAdView...
+12-24 00:34:38.170 25197 25197 D NATIVE_AD_TRACK:    ✅ Found NativeAdView inside container
+12-24 00:34:38.170 25197 25197 D NATIVE_AD_TRACK:    AdView resolved: NativeAdView
+12-24 00:34:38.170 25197 25197 D NATIVE_AD_TRACK: → Populating ad view...
+12-24 00:34:38.172 25197 25197 D NATIVE_AD_TRACK:    ✅ Ad view populated
+12-24 00:34:38.172 25197 25197 D NATIVE_AD_TRACK: → Adding ad view to container...
+12-24 00:34:38.172 25197 25197 D NATIVE_AD_TRACK:    Container child count before: 1
+12-24 00:34:38.172 25197 25197 D NATIVE_AD_TRACK:    Container child count after: 1
+12-24 00:34:38.172 25197 25197 D NATIVE_AD_TRACK:    Container visibility: VISIBLE
+12-24 00:34:38.172 25197 25197 D NATIVE_AD_TRACK:    AdView visibility: VISIBLE
+12-24 00:34:38.172 25197 25197 D NATIVE_AD_TRACK: ✅ Native ad displayed successfully for: AdNativeSmallWrapperView.loadNativeAd:120
+12-24 00:34:38.172 25197 25197 D NATIVE_AD_TRACK: → loadAdWithCallback() called, waiting for response...
+12-24 00:34:38.172 25197 25197 D NATIVE_AD_TRACK: ✅ displayNativeAdWithAutoLoad() call completed for: native_quiz_review_learn
+12-24 00:34:38.172 25197 25197 D NATIVE_AD_TRACK: ✅ loadNativeAd() returned successfully
+12-24 00:34:38.174 25197 25197 D NATIVE_AD_TRACK: ⚠️ Ad is already loading, skipping duplicate request
+12-24 00:34:38.188  1655  4839 D CoreBackPreview: Window{451d6a8 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@90e5aec, mPriority=0, mIsAnimationCallback=false, mOverrideBehavior=0}
+12-24 00:34:38.205  1655  1752 I ActivityTaskManager: Displayed com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity for user 0: +101ms
+12-24 00:34:38.206  1655  1752 V WindowManager: Sent Transition (#1026) createdAt=12-24 00:34:38.104 via request=TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=4550 effectiveUid=10533 displayId=0 isRunning=true baseIntent=Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.quran.quranaudio.online/.SplashScreenActivity } baseActivity=ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.prayertimes.ui.MainActivity} topActivity=ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity} origActivity=null realActivity=ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.SplashScreenActivity} numActivities=2 lastActiveTime=127111403 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{RemoteToken{7f7bde2 Task{8bc14d7 #4550 type=standard A=10533:com.quran.quranaudio.online}}} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 0 - 0, 0) topActivityInfo=ActivityInfo{ae71b84 com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=true isVisible=true isVisibleRequested=true isTopActivityNoDisplay=false isSleeping=false locusId=null displayAreaFeatureId=1 isTopActivityTransparent=false isActivityStackTransparent=false lastNonFullscreenBounds=Rect(276, 696 - 805, 1776) capturedLink=null capturedLinkTimestamp=0 requestedVisibleTypes=-9 topActivityRequestOpenInBrowserEducationTimestamp=0 appCompatTaskInfo=AppCompatTaskInfo { topActivityInSizeCompat=false eligibleForLetterboxEducation= false isLetterboxEducationEnabled= false isLetterboxDoubleTapEnabled= false eligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 topActivityAppBounds=Rect(0, 0 - 1080, 2400) isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false hasMinAspectRatioOverride=false topActivityLetterboxBounds=null cameraCompatTaskInfo=CameraCompatTaskInfo { freeformCameraCompatMode=inactiveundefined} topNonResizableActivityAspectRatio=-1.0} topActivityMainWindowFrame=null isAppBubble=false}, pipChange = null, remoteTransition = null, displayChange = null, flags = 0, debugId = 1026 }
+12-24 00:34:38.206  1655  1752 V WindowManager:         {m=OPEN f=FILLS_TASK leash=Surface(name=ActivityRecord{170092627 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t4550})/@0x8cbc016 sb=Rect(0, 0 - 0, 0) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=-1->0 r=-1->0:-1 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}, taskId = 4550, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},
+12-24 00:34:38.207  2334  2370 V WindowManagerShell:         {m=OPEN f=FILLS_TASK leash=Surface(name=ActivityRecord{170092627 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t4550})/@0xb6bf11a sb=Rect(0, 0 - 0, 0) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=-1->0 r=-1->0:-1 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}, taskId = 4550, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},
+12-24 00:34:38.207  2334  2370 V WindowManagerShell: Transition doesn't have explicit remote, search filters for match for {id=1026 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{m=OPEN f=FILLS_TASK leash=Surface(name=ActivityRecord{170092627 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t4550})/@0xb6bf11a sb=Rect(0, 0 - 0, 0) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=-1->0 r=-1->0:-1 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}, taskId = 4550, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},{m=TO_BACK f=FILLS_TASK leash=Surface(name=ActivityRecord{82349890 u0 com.quran.quranaudio.online/.prayertimes.ui.MainActivity t4550})/@0x487c44b sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.prayertimes.ui.MainActivity}, taskId = 4550, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}}]}
+12-24 00:34:38.208  2334  2370 V WindowManagerShell: start default transition animation, info = {id=1026 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{m=OPEN f=FILLS_TASK leash=Surface(name=ActivityRecord{170092627 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t4550})/@0xb6bf11a sb=Rect(0, 0 - 0, 0) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=-1->0 r=-1->0:-1 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}, taskId = 4550, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},{m=TO_BACK f=FILLS_TASK leash=Surface(name=ActivityRecord{82349890 u0 com.quran.quranaudio.online/.prayertimes.ui.MainActivity t4550})/@0x487c44b sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.prayertimes.ui.MainActivity}, taskId = 4550, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}}]}
+12-24 00:34:39.385 25197 25197 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 00:34:39.385 25197 25197 D NATIVE_AD_TRACK:    Headline: Test Ad : Google Ads
+12-24 00:34:39.385 25197 25197 D NATIVE_AD_TRACK:    Body: Stay up to date with your Ads Check how your ads a
+12-24 00:34:39.385 25197 25197 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 00:34:39.385 25197 25197 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (2/3)
+12-24 00:34:39.385 25197 25197 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 00:34:39.385 25197 25197 D NATIVE_AD_TRACK: 📦 Pool not full yet, loading next ad...
+12-24 00:34:39.385 25197 25197 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (2/3)
+12-24 00:34:39.386 25197 25197 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 00:34:40.483 25197 25197 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 00:34:40.483 25197 25197 D NATIVE_AD_TRACK:    Headline: Test Ad : Flood-It!
+12-24 00:34:40.483 25197 25197 D NATIVE_AD_TRACK:    Body: Install Flood-It App for free! Free Popular Casual
+12-24 00:34:40.483 25197 25197 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 00:34:40.483 25197 25197 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (3/3)
+12-24 00:34:40.483 25197 25197 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 00:34:40.483 25197 25197 D NATIVE_AD_TRACK: 🎉 Cache pool full (3/3)
+12-24 00:41:06.731 25197 25197 D QuestionFragment: 📬 Received result from QuizReviewLearnActivity: action=quit
+12-24 00:41:06.777  1655  1752 V WindowManager:         {m=CLOSE f=FILLS_TASK leash=Surface(name=ActivityRecord{170092627 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t4550})/@0x8cbc016 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}, taskId = 4550, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},
+12-24 00:41:06.780  2334  2370 V WindowManagerShell:         {m=CLOSE f=FILLS_TASK leash=Surface(name=ActivityRecord{170092627 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t4550})/@0x8f83836 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}, taskId = 4550, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},
+12-24 00:41:06.781  2334  2370 V WindowManagerShell: Transition doesn't have explicit remote, search filters for match for {id=1027 t=CLOSE f=0x0 trk=0 r=[0@Point(0, 0)] c=[{m=CLOSE f=FILLS_TASK leash=Surface(name=ActivityRecord{170092627 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t4550})/@0x8f83836 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}, taskId = 4550, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},{m=TO_FRONT f=FILLS_TASK leash=Surface(name=ActivityRecord{82349890 u0 com.quran.quranaudio.online/.prayertimes.ui.MainActivity t4550})/@0x2949337 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.prayertimes.ui.MainActivity}, taskId = 4550, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}}]}
+12-24 00:41:06.781  2334  2370 V WindowManagerShell: start default transition animation, info = {id=1027 t=CLOSE f=0x0 trk=0 r=[0@Point(0, 0)] c=[{m=CLOSE f=FILLS_TASK leash=Surface(name=ActivityRecord{170092627 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t4550})/@0x8f83836 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}, taskId = 4550, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},{m=TO_FRONT f=FILLS_TASK leash=Surface(name=ActivityRecord{82349890 u0 com.quran.quranaudio.online/.prayertimes.ui.MainActivity t4550})/@0x2949337 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.prayertimes.ui.MainActivity}, taskId = 4550, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}}]}
+12-24 00:41:07.266 25197 25197 D VRI[QuizReviewLearnActivity]: visibilityChanged oldVisibility=true newVisibility=false
+12-24 00:41:07.289  1655  6061 D CoreBackPreview: Window{451d6a8 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}: Setting back callback null
+12-24 00:47:16.681  1655  4816 V WindowManager: DesktopModeLaunchParamsModifier: phase= 0 task=null activity=ActivityRecord{188089222 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity desktop mode is not enabled, skipping
+12-24 00:47:16.681  1655  4816 V WindowManager: TaskLaunchParamsModifier:phase=0 task=null activity=ActivityRecord{188089222 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t-1} display-area-from-source=DefaultTaskDisplayArea@32313487 display-id=0 task-display-area-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@32313487
+12-24 00:47:16.682  1655  4816 V WindowManager: DesktopModeLaunchParamsModifier: phase= 3 task=Task{8bc14d7 #4550 type=standard A=10533:com.quran.quranaudio.online} activity=ActivityRecord{188089222 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t-1} desktop mode is not enabled, skipping
+12-24 00:47:16.682  1655  4816 V WindowManager: TaskLaunchParamsModifier:phase=3 task=Task{8bc14d7 #4550 type=standard A=10533:com.quran.quranaudio.online} activity=ActivityRecord{188089222 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t-1} display-area-from-source=DefaultTaskDisplayArea@32313487 display-id=0 task-display-area-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@32313487 inherit-from-source=fullscreen non-freeform-task-display-area display-area=DefaultTaskDisplayArea@32313487 activity-requested-portrait freeform-size-mismatch=Rect(276, 696 - 805, 1776)
+12-24 00:47:16.683  1655  4816 V WindowManager: DesktopModeLaunchParamsModifier: phase= 3 task=Task{8bc14d7 #4550 type=standard A=10533:com.quran.quranaudio.online} activity=ActivityRecord{188089222 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t-1} desktop mode is not enabled, skipping
+12-24 00:47:16.683  1655  4816 V WindowManager: TaskLaunchParamsModifier:phase=3 task=Task{8bc14d7 #4550 type=standard A=10533:com.quran.quranaudio.online} activity=ActivityRecord{188089222 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t-1} display-area-from-source=DefaultTaskDisplayArea@32313487 display-id=0 task-display-area-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@32313487 inherit-from-source=fullscreen non-freeform-task-display-area display-area=DefaultTaskDisplayArea@32313487 activity-requested-portrait freeform-size-mismatch=Rect(276, 696 - 805, 1776)
+12-24 00:47:16.688  1655  4816 I ActivityTaskManager: START u0 {xflg=0x4 cmp=com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity (has extras)} with LAUNCH_MULTIPLE from uid 10533 (com.quran.quranaudio.online) (rr=82349890) (BAL_ALLOW_VISIBLE_WINDOW) result code=0
+12-24 00:47:16.688  2334  2370 V WindowManagerShell: Transition requested (#1030): android.os.BinderProxy@fbdcbc6 TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=4550 effectiveUid=10533 displayId=0 isRunning=true baseIntent=Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.quran.quranaudio.online/.SplashScreenActivity } baseActivity=ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.prayertimes.ui.MainActivity} topActivity=ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity} origActivity=null realActivity=ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.SplashScreenActivity} numActivities=2 lastActiveTime=127869980 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{android.os.BinderProxy@791c52f} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 0 - 0, 0) topActivityInfo=ActivityInfo{90a4787 com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=true isVisible=true isVisibleRequested=true isTopActivityNoDisplay=false isSleeping=false locusId=null displayAreaFeatureId=1 isTopActivityTransparent=false isActivityStackTransparent=false lastNonFullscreenBounds=Rect(276, 696 - 805, 1776) capturedLink=null capturedLinkTimestamp=0 requestedVisibleTypes=-9 topActivityRequestOpenInBrowserEducationTimestamp=0 appCompatTaskInfo=AppCompatTaskInfo { topActivityInSizeCompat=false eligibleForLetterboxEducation= false isLetterboxEducationEnabled= false isLetterboxDoubleTapEnabled= false eligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 topActivityAppBounds=Rect(0, 0 - 1080, 2400) isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false hasMinAspectRatioOverride=false topActivityLetterboxBounds=null cameraCompatTaskInfo=CameraCompatTaskInfo { freeformCameraCompatMode=inactiveundefined} topNonResizableActivityAspectRatio=-1.0} topActivityMainWindowFrame=null isAppBubble=false}, pipChange = null, remoteTransition = null, displayChange = null, flags = 0, debugId = 1030 }
+12-24 00:47:16.732 25197 25197 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:47:16.732 25197 25197 D NATIVE_AD_TRACK: 🎯 Quiz Result Page - preloadNativeAd() CALLED
+12-24 00:47:16.732 25197 25197 D NATIVE_AD_TRACK:    Activity: QuizReviewLearnActivity
+12-24 00:47:16.732 25197 25197 D NATIVE_AD_TRACK:    nativeAdView: com.quran.quranaudio.quiz.ad.AdNativeSmallWrapperView{c42246d V.E...... ......I. 0,0-0,0 #7f0b0612 app:id/nativeAdView}
+12-24 00:47:16.732 25197 25197 D NATIVE_AD_TRACK:    nativeAdView visibility: 0
+12-24 00:47:16.732 25197 25197 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:47:16.732 25197 25197 D NATIVE_AD_TRACK: → Calling binding.nativeAdView.loadNativeAd()...
+12-24 00:47:16.732 25197 25197 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:47:16.732 25197 25197 D NATIVE_AD_TRACK: 🎯 AdNativeSmallWrapperView.loadNativeAd() CALLED
+12-24 00:47:16.732 25197 25197 D NATIVE_AD_TRACK:    adTag: native_quiz_review_learn
+12-24 00:47:16.732 25197 25197 D NATIVE_AD_TRACK:    context: QuizReviewLearnActivity
+12-24 00:47:16.732 25197 25197 D NATIVE_AD_TRACK:    this (container): AdNativeSmallWrapperView@205661293
+12-24 00:47:16.732 25197 25197 D NATIVE_AD_TRACK:    isLoadAd: true
+12-24 00:47:16.733 25197 25197 D NATIVE_AD_TRACK:    visibility: 0
+12-24 00:47:16.733 25197 25197 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:47:16.733 25197 25197 D NATIVE_AD_TRACK: ✅ Activity: QuizReviewLearnActivity
+12-24 00:47:16.733 25197 25197 D NATIVE_AD_TRACK: → Calling NativeAdHelper.displayNativeAdWithAutoLoad()...
+12-24 00:47:16.733 25197 25197 D NATIVE_AD_TRACK:    Layout: R.layout.layout_ad_native_small_wrapper
+12-24 00:47:16.733 25197 25197 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:47:16.733 25197 25197 D NATIVE_AD_TRACK: 🎯 Native Ad Request
+12-24 00:47:16.733 25197 25197 D NATIVE_AD_TRACK:    Caller: AdNativeSmallWrapperView.loadNativeAd:120
+12-24 00:47:16.733 25197 25197 D NATIVE_AD_TRACK:    Activity: QuizReviewLearnActivity
+12-24 00:47:16.733 25197 25197 D NATIVE_AD_TRACK:    Container: AdNativeSmallWrapperView@205661293
+12-24 00:47:16.733 25197 25197 D NATIVE_AD_TRACK:    Layout ResId: 2131625123
+12-24 00:47:16.733 25197 25197 D NATIVE_AD_TRACK:    Container visibility: 0 (0=VISIBLE, 4=INVISIBLE, 8=GONE)
+12-24 00:47:16.733 25197 25197 D NATIVE_AD_TRACK:    Container parent: LinearLayout
+12-24 00:47:16.733 25197 25197 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:47:16.733 25197 25197 D NATIVE_AD_TRACK: → Callback received for: AdNativeSmallWrapperView.loadNativeAd:120
+12-24 00:47:16.733 25197 25197 D NATIVE_AD_TRACK:    Ad object: NOT NULL
+12-24 00:47:16.733 25197 25197 D NATIVE_AD_TRACK: → Inflating ad view for: AdNativeSmallWrapperView.loadNativeAd:120
+12-24 00:47:16.733 25197 25197 D NATIVE_AD_TRACK:    Ad headline: Test Ad : Flood-It!
+12-24 00:47:16.733 25197 25197 D NATIVE_AD_TRACK:    Ad body: Install Flood-It App for free! Free Popular Casual
+12-24 00:47:16.740 25197 25197 D NATIVE_AD_TRACK:    Inflated view type: FrameLayout
+12-24 00:47:16.740 25197 25197 D NATIVE_AD_TRACK:    → Root is FrameLayout, searching for NativeAdView...
+12-24 00:47:16.740 25197 25197 D NATIVE_AD_TRACK:    ✅ Found NativeAdView inside container
+12-24 00:47:16.740 25197 25197 D NATIVE_AD_TRACK:    AdView resolved: NativeAdView
+12-24 00:47:16.740 25197 25197 D NATIVE_AD_TRACK: → Populating ad view...
+12-24 00:47:16.744 25197 25197 D NATIVE_AD_TRACK:    ✅ Ad view populated
+12-24 00:47:16.744 25197 25197 D NATIVE_AD_TRACK: → Adding ad view to container...
+12-24 00:47:16.744 25197 25197 D NATIVE_AD_TRACK:    Container child count before: 1
+12-24 00:47:16.744 25197 25197 D NATIVE_AD_TRACK:    Container child count after: 1
+12-24 00:47:16.744 25197 25197 D NATIVE_AD_TRACK:    Container visibility: VISIBLE
+12-24 00:47:16.744 25197 25197 D NATIVE_AD_TRACK:    AdView visibility: VISIBLE
+12-24 00:47:16.744 25197 25197 D NATIVE_AD_TRACK: ✅ Native ad displayed successfully for: AdNativeSmallWrapperView.loadNativeAd:120
+12-24 00:47:16.744 25197 25197 D NATIVE_AD_TRACK: → loadAdWithCallback() called, waiting for response...
+12-24 00:47:16.744 25197 25197 D NATIVE_AD_TRACK: ✅ displayNativeAdWithAutoLoad() call completed for: native_quiz_review_learn
+12-24 00:47:16.744 25197 25197 D NATIVE_AD_TRACK: ✅ loadNativeAd() returned successfully
+12-24 00:47:16.755  1655  5429 D CoreBackPreview: Window{d3fd5e u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@19d92a4, mPriority=0, mIsAnimationCallback=false, mOverrideBehavior=0}
+12-24 00:47:16.769  1655  1752 I ActivityTaskManager: Displayed com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity for user 0: +93ms
+12-24 00:47:16.771  1655  1752 V WindowManager: Sent Transition (#1030) createdAt=12-24 00:47:16.681 via request=TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=4550 effectiveUid=10533 displayId=0 isRunning=true baseIntent=Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.quran.quranaudio.online/.SplashScreenActivity } baseActivity=ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.prayertimes.ui.MainActivity} topActivity=ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity} origActivity=null realActivity=ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.SplashScreenActivity} numActivities=2 lastActiveTime=127869980 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{RemoteToken{7f7bde2 Task{8bc14d7 #4550 type=standard A=10533:com.quran.quranaudio.online}}} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 0 - 0, 0) topActivityInfo=ActivityInfo{719c4b com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=true isVisible=true isVisibleRequested=true isTopActivityNoDisplay=false isSleeping=false locusId=null displayAreaFeatureId=1 isTopActivityTransparent=false isActivityStackTransparent=false lastNonFullscreenBounds=Rect(276, 696 - 805, 1776) capturedLink=null capturedLinkTimestamp=0 requestedVisibleTypes=-9 topActivityRequestOpenInBrowserEducationTimestamp=0 appCompatTaskInfo=AppCompatTaskInfo { topActivityInSizeCompat=false eligibleForLetterboxEducation= false isLetterboxEducationEnabled= false isLetterboxDoubleTapEnabled= false eligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 topActivityAppBounds=Rect(0, 0 - 1080, 2400) isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false hasMinAspectRatioOverride=false topActivityLetterboxBounds=null cameraCompatTaskInfo=CameraCompatTaskInfo { freeformCameraCompatMode=inactiveundefined} topNonResizableActivityAspectRatio=-1.0} topActivityMainWindowFrame=null isAppBubble=false}, pipChange = null, remoteTransition = null, displayChange = null, flags = 0, debugId = 1030 }
+12-24 00:47:16.771  1655  1752 V WindowManager:         {m=OPEN f=FILLS_TASK leash=Surface(name=ActivityRecord{188089222 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t4550})/@0x2287a0e sb=Rect(0, 0 - 0, 0) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=-1->0 r=-1->0:-1 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}, taskId = 4550, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},
+12-24 00:47:16.771  2334  2370 V WindowManagerShell:         {m=OPEN f=FILLS_TASK leash=Surface(name=ActivityRecord{188089222 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t4550})/@0x495c6b4 sb=Rect(0, 0 - 0, 0) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=-1->0 r=-1->0:-1 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}, taskId = 4550, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},
+12-24 00:47:16.771  2334  2370 V WindowManagerShell: Transition doesn't have explicit remote, search filters for match for {id=1030 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{m=OPEN f=FILLS_TASK leash=Surface(name=ActivityRecord{188089222 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t4550})/@0x495c6b4 sb=Rect(0, 0 - 0, 0) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=-1->0 r=-1->0:-1 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}, taskId = 4550, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},{m=TO_BACK f=FILLS_TASK leash=Surface(name=ActivityRecord{82349890 u0 com.quran.quranaudio.online/.prayertimes.ui.MainActivity t4550})/@0x988a2dd sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.prayertimes.ui.MainActivity}, taskId = 4550, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}}]}
+12-24 00:47:16.772  2334  2370 V WindowManagerShell: start default transition animation, info = {id=1030 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{m=OPEN f=FILLS_TASK leash=Surface(name=ActivityRecord{188089222 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t4550})/@0x495c6b4 sb=Rect(0, 0 - 0, 0) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=-1->0 r=-1->0:-1 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}, taskId = 4550, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},{m=TO_BACK f=FILLS_TASK leash=Surface(name=ActivityRecord{82349890 u0 com.quran.quranaudio.online/.prayertimes.ui.MainActivity t4550})/@0x988a2dd sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffff

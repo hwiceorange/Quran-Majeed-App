@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "517834286063-9qgj0vkg08h9arqtjo03jfh3greim9g5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.quran.quranaudio.online",
+            "certificate_hash": "b62c57505743f74658e6d3f51db8a328395c75c3"
+          }
+        },
+        {
           "client_id": "517834286063-er3svn2u2f34q6tlipn1r0d8507sqd05.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

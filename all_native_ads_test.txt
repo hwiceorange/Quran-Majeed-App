@@ -1,0 +1,496 @@
+12-24 00:59:03.489 29419 29419 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (0/3)
+12-24 00:59:03.490 29419 29419 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 00:59:05.532 29419 29419 D NATIVE_AD_TRACK: ⚠️ Ad is already loading, skipping duplicate request
+12-24 00:59:07.529 29419 29419 D NATIVE_AD_TRACK: ⚠️ Ad is already loading, skipping duplicate request
+12-24 00:59:08.760 29419 29419 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 00:59:08.761 29419 29419 D NATIVE_AD_TRACK:    Headline: Test Ad : Google Ads
+12-24 00:59:08.771 29419 29419 D NATIVE_AD_TRACK:    Body: Stay up to date with your Ads Check how your ads a
+12-24 00:59:08.771 29419 29419 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 00:59:08.772 29419 29419 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (1/3)
+12-24 00:59:08.772 29419 29419 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 00:59:08.772 29419 29419 D NATIVE_AD_TRACK: 📦 Pool not full yet, loading next ad...
+12-24 00:59:08.773 29419 29419 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (1/3)
+12-24 00:59:08.773 29419 29419 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 00:59:11.415 29419 29419 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 00:59:11.416 29419 29419 D NATIVE_AD_TRACK:    Headline: Test Ad : Google Ads
+12-24 00:59:11.416 29419 29419 D NATIVE_AD_TRACK:    Body: Stay up to date with your Ads Check how your ads a
+12-24 00:59:11.416 29419 29419 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 00:59:11.416 29419 29419 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (2/3)
+12-24 00:59:11.416 29419 29419 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 00:59:11.416 29419 29419 D NATIVE_AD_TRACK: 📦 Pool not full yet, loading next ad...
+12-24 00:59:11.416 29419 29419 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (2/3)
+12-24 00:59:11.417 29419 29419 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 00:59:13.995 29419 29419 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 00:59:13.995 29419 29419 D NATIVE_AD_TRACK:    Headline: Test Ad : Google Ads
+12-24 00:59:13.995 29419 29419 D NATIVE_AD_TRACK:    Body: Stay up to date with your Ads Check how your ads a
+12-24 00:59:13.996 29419 29419 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 00:59:13.996 29419 29419 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (3/3)
+12-24 00:59:13.996 29419 29419 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 00:59:13.996 29419 29419 D NATIVE_AD_TRACK: 🎉 Cache pool full (3/3)
+12-24 00:59:31.788 29798 29798 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (0/3)
+12-24 00:59:31.788 29798 29798 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 00:59:32.078 29798 29798 D NATIVE_AD_TRACK: ⚠️ Ad is already loading, skipping duplicate request
+12-24 00:59:33.293 29798 29798 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 00:59:33.293 29798 29798 D NATIVE_AD_TRACK:    Headline: Test Ad : Google Ads
+12-24 00:59:33.295 29798 29798 D NATIVE_AD_TRACK:    Body: Stay up to date with your Ads Check how your ads a
+12-24 00:59:33.295 29798 29798 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 00:59:33.295 29798 29798 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (1/3)
+12-24 00:59:33.295 29798 29798 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 00:59:33.295 29798 29798 D NATIVE_AD_TRACK: 📦 Pool not full yet, loading next ad...
+12-24 00:59:33.295 29798 29798 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (1/3)
+12-24 00:59:33.295 29798 29798 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 00:59:33.819 29798 29798 D NATIVE_AD_TRACK: ⚠️ Ad is already loading, skipping duplicate request
+12-24 00:59:34.206 29798 29798 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 00:59:34.206 29798 29798 D NATIVE_AD_TRACK:    Headline: Test Ad : Google Ads
+12-24 00:59:34.206 29798 29798 D NATIVE_AD_TRACK:    Body: Stay up to date with your Ads Check how your ads a
+12-24 00:59:34.206 29798 29798 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 00:59:34.206 29798 29798 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (2/3)
+12-24 00:59:34.206 29798 29798 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 00:59:34.206 29798 29798 D NATIVE_AD_TRACK: 📦 Pool not full yet, loading next ad...
+12-24 00:59:34.206 29798 29798 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (2/3)
+12-24 00:59:34.206 29798 29798 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 00:59:35.392 29798 29798 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 00:59:35.392 29798 29798 D NATIVE_AD_TRACK:    Headline: Test Ad : Flood-It!
+12-24 00:59:35.392 29798 29798 D NATIVE_AD_TRACK:    Body: Install Flood-It App for free! Free Popular Casual
+12-24 00:59:35.392 29798 29798 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 00:59:35.392 29798 29798 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (3/3)
+12-24 00:59:35.392 29798 29798 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 00:59:35.392 29798 29798 D NATIVE_AD_TRACK: 🎉 Cache pool full (3/3)
+12-24 00:59:35.843 29798 29798 D NATIVE_AD_TRACK: ✅ Cache pool is full (3/3), skipping load
+12-24 00:59:40.074 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:59:40.074 29798 29798 D NATIVE_AD_TRACK: 🎯 MainActivity.onCreate() START
+12-24 00:59:40.074 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:59:40.295 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:59:40.295 29798 29798 D NATIVE_AD_TRACK: 🎯 FragMain.initializeVerseOfDayCard() CALLED
+12-24 00:59:40.295 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:59:40.295 29798 29798 D NATIVE_AD_TRACK: ✅ Verse of The Day card found
+12-24 00:59:40.308 29798 29798 D NATIVE_AD_TRACK: → Calling loadVOTDNativeAd()...
+12-24 00:59:40.308 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:59:40.308 29798 29798 D NATIVE_AD_TRACK: 🎯 FragMain.loadVOTDNativeAd() CALLED
+12-24 00:59:40.308 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:59:40.308 29798 29798 D NATIVE_AD_TRACK: → votdNativeAdContainer: NOT NULL
+12-24 00:59:40.308 29798 29798 D NATIVE_AD_TRACK: → User subscribed: false
+12-24 00:59:40.308 29798 29798 D NATIVE_AD_TRACK: → Calling NativeAdHelper.displayNativeAdWithAutoLoad()...
+12-24 00:59:40.308 29798 29798 D NATIVE_AD_TRACK:    Activity: MainActivity
+12-24 00:59:40.308 29798 29798 D NATIVE_AD_TRACK:    Container: FrameLayout
+12-24 00:59:40.308 29798 29798 D NATIVE_AD_TRACK:    Layout: com.quran.quranaudio.quiz.R.layout.layout_ad_native_small_wrapper
+12-24 00:59:40.309 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:59:40.309 29798 29798 D NATIVE_AD_TRACK: 🎯 Native Ad Request
+12-24 00:59:40.309 29798 29798 D NATIVE_AD_TRACK:    Caller: FragMain.loadVOTDNativeAd:1706
+12-24 00:59:40.309 29798 29798 D NATIVE_AD_TRACK:    Activity: MainActivity
+12-24 00:59:40.309 29798 29798 D NATIVE_AD_TRACK:    Container: FrameLayout@149608343
+12-24 00:59:40.309 29798 29798 D NATIVE_AD_TRACK:    Layout ResId: 2131625123
+12-24 00:59:40.309 29798 29798 D NATIVE_AD_TRACK:    Container visibility: 8 (0=VISIBLE, 4=INVISIBLE, 8=GONE)
+12-24 00:59:40.309 29798 29798 D NATIVE_AD_TRACK:    Container parent: LinearLayout
+12-24 00:59:40.309 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:59:40.309 29798 29798 D NATIVE_AD_TRACK: → Callback received for: FragMain.loadVOTDNativeAd:1706
+12-24 00:59:40.309 29798 29798 D NATIVE_AD_TRACK:    Ad object: NOT NULL
+12-24 00:59:40.309 29798 29798 D NATIVE_AD_TRACK: → Inflating ad view for: FragMain.loadVOTDNativeAd:1706
+12-24 00:59:40.309 29798 29798 D NATIVE_AD_TRACK:    Ad headline: Test Ad : Google Ads
+12-24 00:59:40.309 29798 29798 D NATIVE_AD_TRACK:    Ad body: Stay up to date with your Ads Check how your ads a
+12-24 00:59:40.325 29798 29798 D NATIVE_AD_TRACK:    Inflated view type: FrameLayout
+12-24 00:59:40.325 29798 29798 D NATIVE_AD_TRACK:    → Root is FrameLayout, searching for NativeAdView...
+12-24 00:59:40.326 29798 29798 D NATIVE_AD_TRACK:    ✅ Found NativeAdView inside container
+12-24 00:59:40.326 29798 29798 D NATIVE_AD_TRACK:    AdView resolved: NativeAdView
+12-24 00:59:40.326 29798 29798 D NATIVE_AD_TRACK: → Populating ad view...
+12-24 00:59:40.329 29798 29798 D NATIVE_AD_TRACK:    ✅ Ad view populated
+12-24 00:59:40.329 29798 29798 D NATIVE_AD_TRACK: → Adding ad view to container...
+12-24 00:59:40.329 29798 29798 D NATIVE_AD_TRACK:    Container child count before: 0
+12-24 00:59:40.329 29798 29798 D NATIVE_AD_TRACK:    Container child count after: 1
+12-24 00:59:40.329 29798 29798 D NATIVE_AD_TRACK:    Container visibility: VISIBLE
+12-24 00:59:40.329 29798 29798 D NATIVE_AD_TRACK:    AdView visibility: VISIBLE
+12-24 00:59:40.329 29798 29798 D NATIVE_AD_TRACK: ✅ Native ad displayed successfully for: FragMain.loadVOTDNativeAd:1706
+12-24 00:59:40.329 29798 29798 D NATIVE_AD_TRACK: → loadAdWithCallback() called, waiting for response...
+12-24 00:59:40.329 29798 29798 D NATIVE_AD_TRACK: ✅ displayNativeAdWithAutoLoad() call completed
+12-24 00:59:40.329 29798 29798 D NATIVE_AD_TRACK: ✅ FragMain.loadVOTDNativeAd() COMPLETED
+12-24 00:59:40.329 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:59:40.329 29798 29798 D NATIVE_AD_TRACK: ✅ loadVOTDNativeAd() completed
+12-24 00:59:40.330 29798 29798 D NATIVE_AD_TRACK: ✅ FragMain.initializeVerseOfDayCard() COMPLETED
+12-24 00:59:40.330 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:59:40.343 29798 29798 D NATIVE_AD_TRACK: → NavController found: androidx.navigation.NavHostController@137ea13
+12-24 00:59:40.344 29798 29798 D NATIVE_AD_TRACK: → Current destination: Destination(com.quran.quranaudio.online:id/nav_home) label=HomeFragment class=com.quran.quranaudio.online.quran_module.frags.main.FragMain
+12-24 00:59:40.345 29798 29798 D NATIVE_AD_TRACK: ✅ NavigationUI setup completed
+12-24 00:59:40.346 29798 29798 D NATIVE_AD_TRACK: → Setting start destination: HOME (R.id.nav_home)
+12-24 00:59:40.349 29798 29798 D NATIVE_AD_TRACK: ✅ NavGraph set, current destination: Destination(com.quran.quranaudio.online:id/nav_home) label=HomeFragment class=com.quran.quranaudio.online.quran_module.frags.main.FragMain
+12-24 00:59:40.349 29798 29798 D NATIVE_AD_TRACK:    Destination label: HomeFragment
+12-24 00:59:40.349 29798 29798 D NATIVE_AD_TRACK:    Destination ID: 2131428899
+12-24 00:59:40.349 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:59:40.349 29798 29798 D NATIVE_AD_TRACK: ✅ MainActivity.onCreate() COMPLETED
+12-24 00:59:40.349 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:59:40.401 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:59:40.401 29798 29798 D NATIVE_AD_TRACK: 🎯 FragMain.initializeVerseOfDayCard() CALLED
+12-24 00:59:40.401 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:59:40.401 29798 29798 D NATIVE_AD_TRACK: ✅ Verse of The Day card found
+12-24 00:59:40.402 29798 29798 D NATIVE_AD_TRACK: → Calling loadVOTDNativeAd()...
+12-24 00:59:40.402 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:59:40.402 29798 29798 D NATIVE_AD_TRACK: 🎯 FragMain.loadVOTDNativeAd() CALLED
+12-24 00:59:40.402 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:59:40.402 29798 29798 D NATIVE_AD_TRACK: → votdNativeAdContainer: NOT NULL
+12-24 00:59:40.402 29798 29798 D NATIVE_AD_TRACK: → User subscribed: false
+12-24 00:59:40.402 29798 29798 D NATIVE_AD_TRACK: → Calling NativeAdHelper.displayNativeAdWithAutoLoad()...
+12-24 00:59:40.402 29798 29798 D NATIVE_AD_TRACK:    Activity: MainActivity
+12-24 00:59:40.402 29798 29798 D NATIVE_AD_TRACK:    Container: FrameLayout
+12-24 00:59:40.402 29798 29798 D NATIVE_AD_TRACK:    Layout: com.quran.quranaudio.quiz.R.layout.layout_ad_native_small_wrapper
+12-24 00:59:40.402 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:59:40.402 29798 29798 D NATIVE_AD_TRACK: 🎯 Native Ad Request
+12-24 00:59:40.402 29798 29798 D NATIVE_AD_TRACK:    Caller: FragMain.loadVOTDNativeAd:1706
+12-24 00:59:40.402 29798 29798 D NATIVE_AD_TRACK:    Activity: MainActivity
+12-24 00:59:40.402 29798 29798 D NATIVE_AD_TRACK:    Container: FrameLayout@237217803
+12-24 00:59:40.402 29798 29798 D NATIVE_AD_TRACK:    Layout ResId: 2131625123
+12-24 00:59:40.402 29798 29798 D NATIVE_AD_TRACK:    Container visibility: 8 (0=VISIBLE, 4=INVISIBLE, 8=GONE)
+12-24 00:59:40.402 29798 29798 D NATIVE_AD_TRACK:    Container parent: LinearLayout
+12-24 00:59:40.402 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:59:40.402 29798 29798 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (1/3)
+12-24 00:59:40.402 29798 29798 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 00:59:40.415 29798 29798 D NATIVE_AD_TRACK: → Callback received for: FragMain.loadVOTDNativeAd:1706
+12-24 00:59:40.415 29798 29798 D NATIVE_AD_TRACK:    Ad object: NOT NULL
+12-24 00:59:40.415 29798 29798 D NATIVE_AD_TRACK: → Inflating ad view for: FragMain.loadVOTDNativeAd:1706
+12-24 00:59:40.415 29798 29798 D NATIVE_AD_TRACK:    Ad headline: Test Ad : Google Ads
+12-24 00:59:40.415 29798 29798 D NATIVE_AD_TRACK:    Ad body: Stay up to date with your Ads Check how your ads a
+12-24 00:59:40.422 29798 29798 D NATIVE_AD_TRACK:    Inflated view type: FrameLayout
+12-24 00:59:40.422 29798 29798 D NATIVE_AD_TRACK:    → Root is FrameLayout, searching for NativeAdView...
+12-24 00:59:40.422 29798 29798 D NATIVE_AD_TRACK:    ✅ Found NativeAdView inside container
+12-24 00:59:40.422 29798 29798 D NATIVE_AD_TRACK:    AdView resolved: NativeAdView
+12-24 00:59:40.422 29798 29798 D NATIVE_AD_TRACK: → Populating ad view...
+12-24 00:59:40.424 29798 29798 D NATIVE_AD_TRACK:    ✅ Ad view populated
+12-24 00:59:40.424 29798 29798 D NATIVE_AD_TRACK: → Adding ad view to container...
+12-24 00:59:40.424 29798 29798 D NATIVE_AD_TRACK:    Container child count before: 0
+12-24 00:59:40.424 29798 29798 D NATIVE_AD_TRACK:    Container child count after: 1
+12-24 00:59:40.424 29798 29798 D NATIVE_AD_TRACK:    Container visibility: VISIBLE
+12-24 00:59:40.424 29798 29798 D NATIVE_AD_TRACK:    AdView visibility: VISIBLE
+12-24 00:59:40.424 29798 29798 D NATIVE_AD_TRACK: ✅ Native ad displayed successfully for: FragMain.loadVOTDNativeAd:1706
+12-24 00:59:40.424 29798 29798 D NATIVE_AD_TRACK: → loadAdWithCallback() called, waiting for response...
+12-24 00:59:40.424 29798 29798 D NATIVE_AD_TRACK: ✅ displayNativeAdWithAutoLoad() call completed
+12-24 00:59:40.424 29798 29798 D NATIVE_AD_TRACK: ✅ FragMain.loadVOTDNativeAd() COMPLETED
+12-24 00:59:40.424 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:59:40.424 29798 29798 D NATIVE_AD_TRACK: ✅ loadVOTDNativeAd() completed
+12-24 00:59:40.430 29798 29798 D NATIVE_AD_TRACK: ✅ FragMain.initializeVerseOfDayCard() COMPLETED
+12-24 00:59:40.430 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:59:40.435 29798 29798 D NATIVE_AD_TRACK: ⚠️ Ad is already loading, skipping duplicate request
+12-24 00:59:41.359 29798 29798 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 00:59:41.359 29798 29798 D NATIVE_AD_TRACK:    Headline: Test Ad : Flood-It!
+12-24 00:59:41.359 29798 29798 D NATIVE_AD_TRACK:    Body: Install Flood-It App for free! Free Popular Casual
+12-24 00:59:41.359 29798 29798 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 00:59:41.359 29798 29798 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (2/3)
+12-24 00:59:41.359 29798 29798 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 00:59:41.359 29798 29798 D NATIVE_AD_TRACK: 📦 Pool not full yet, loading next ad...
+12-24 00:59:41.359 29798 29798 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (2/3)
+12-24 00:59:41.359 29798 29798 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 00:59:42.331 29798 29798 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 00:59:42.331 29798 29798 D NATIVE_AD_TRACK:    Headline: Test Ad : Flood-It!
+12-24 00:59:42.331 29798 29798 D NATIVE_AD_TRACK:    Body: Install Flood-It App for free! Free Popular Casual
+12-24 00:59:42.331 29798 29798 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 00:59:42.331 29798 29798 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (3/3)
+12-24 00:59:42.331 29798 29798 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 00:59:42.331 29798 29798 D NATIVE_AD_TRACK: 🎉 Cache pool full (3/3)
+12-24 00:59:55.039  1655  6374 V WindowManager: DesktopModeLaunchParamsModifier: phase= 0 task=null activity=ActivityRecord{188892963 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity desktop mode is not enabled, skipping
+12-24 00:59:55.039  1655  6374 V WindowManager: TaskLaunchParamsModifier:phase=0 task=null activity=ActivityRecord{188892963 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t-1} display-area-from-source=DefaultTaskDisplayArea@32313487 display-id=0 task-display-area-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@32313487
+12-24 00:59:55.039  1655  6374 V WindowManager: DesktopModeLaunchParamsModifier: phase= 3 task=Task{b49f6d0 #4552 type=standard A=10533:com.quran.quranaudio.online} activity=ActivityRecord{188892963 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t-1} desktop mode is not enabled, skipping
+12-24 00:59:55.039  1655  6374 V WindowManager: TaskLaunchParamsModifier:phase=3 task=Task{b49f6d0 #4552 type=standard A=10533:com.quran.quranaudio.online} activity=ActivityRecord{188892963 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t-1} display-area-from-source=DefaultTaskDisplayArea@32313487 display-id=0 task-display-area-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@32313487 inherit-from-source=fullscreen non-freeform-task-display-area display-area=DefaultTaskDisplayArea@32313487 activity-requested-portrait freeform-size-mismatch=Rect(276, 696 - 805, 1776)
+12-24 00:59:55.040  1655  6374 V WindowManager: DesktopModeLaunchParamsModifier: phase= 3 task=Task{b49f6d0 #4552 type=standard A=10533:com.quran.quranaudio.online} activity=ActivityRecord{188892963 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t-1} desktop mode is not enabled, skipping
+12-24 00:59:55.040  1655  6374 V WindowManager: TaskLaunchParamsModifier:phase=3 task=Task{b49f6d0 #4552 type=standard A=10533:com.quran.quranaudio.online} activity=ActivityRecord{188892963 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t-1} display-area-from-source=DefaultTaskDisplayArea@32313487 display-id=0 task-display-area-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@32313487 inherit-from-source=fullscreen non-freeform-task-display-area display-area=DefaultTaskDisplayArea@32313487 activity-requested-portrait freeform-size-mismatch=Rect(276, 696 - 805, 1776)
+12-24 00:59:55.045  1655  6374 I ActivityTaskManager: START u0 {xflg=0x4 cmp=com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity (has extras)} with LAUNCH_MULTIPLE from uid 10533 (com.quran.quranaudio.online) (rr=186677365) (BAL_ALLOW_VISIBLE_WINDOW) result code=0
+12-24 00:59:55.045  2334  2370 V WindowManagerShell: Transition requested (#1051): android.os.BinderProxy@4031746 TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=4552 effectiveUid=10533 displayId=0 isRunning=true baseIntent=Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.quran.quranaudio.online/.SplashScreenActivity } baseActivity=ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.prayertimes.ui.MainActivity} topActivity=ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity} origActivity=null realActivity=ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.SplashScreenActivity} numActivities=2 lastActiveTime=128628337 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{android.os.BinderProxy@a4a356f} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 0 - 0, 0) topActivityInfo=ActivityInfo{c8c6d07 com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=true isVisible=true isVisibleRequested=true isTopActivityNoDisplay=false isSleeping=false locusId=null displayAreaFeatureId=1 isTopActivityTransparent=false isActivityStackTransparent=false lastNonFullscreenBounds=Rect(276, 696 - 805, 1776) capturedLink=null capturedLinkTimestamp=0 requestedVisibleTypes=-9 topActivityRequestOpenInBrowserEducationTimestamp=0 appCompatTaskInfo=AppCompatTaskInfo { topActivityInSizeCompat=false eligibleForLetterboxEducation= false isLetterboxEducationEnabled= false isLetterboxDoubleTapEnabled= false eligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 topActivityAppBounds=Rect(0, 0 - 1080, 2400) isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false hasMinAspectRatioOverride=false topActivityLetterboxBounds=null cameraCompatTaskInfo=CameraCompatTaskInfo { freeformCameraCompatMode=inactiveundefined} topNonResizableActivityAspectRatio=-1.0} topActivityMainWindowFrame=null isAppBubble=false}, pipChange = null, remoteTransition = null, displayChange = null, flags = 0, debugId = 1051 }
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK: 🎯 Quiz Result Page - preloadNativeAd() CALLED
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK:    Activity: QuizReviewLearnActivity
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK:    nativeAdView: com.quran.quranaudio.quiz.ad.AdNativeSmallWrapperView{f1daff5 V.E...... ......I. 0,0-0,0 #7f0b0612 app:id/nativeAdView}
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK:    nativeAdView visibility: 0 (0=VISIBLE, 4=INVISIBLE, 8=GONE)
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK:    nativeAdView width: 0
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK:    nativeAdView height: 0
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK:    nativeAdView parent: LinearLayout
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK:    parent visibility: 0 (0=VISIBLE, 4=INVISIBLE, 8=GONE)
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK:    parent width: 0
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK:    parent height: 0
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK: → Calling binding.nativeAdView.loadNativeAd()...
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK: 🎯 AdNativeSmallWrapperView.loadNativeAd() CALLED
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK:    adTag: native_quiz_review_learn
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK:    context: QuizReviewLearnActivity
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK:    this (container): AdNativeSmallWrapperView@253603829
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK:    isLoadAd: true
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK:    visibility: 0
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK: ✅ Activity: QuizReviewLearnActivity
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK: → Calling NativeAdHelper.displayNativeAdWithAutoLoad()...
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK:    Layout: R.layout.layout_ad_native_small_wrapper
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK: 🎯 Native Ad Request
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK:    Caller: AdNativeSmallWrapperView.loadNativeAd:120
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK:    Activity: QuizReviewLearnActivity
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK:    Container: AdNativeSmallWrapperView@253603829
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK:    Layout ResId: 2131625123
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK:    Container visibility: 0 (0=VISIBLE, 4=INVISIBLE, 8=GONE)
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK:    Container parent: LinearLayout
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK: → Callback received for: AdNativeSmallWrapperView.loadNativeAd:120
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK:    Ad object: NOT NULL
+12-24 00:59:55.100 29798 29798 D NATIVE_AD_TRACK: → Inflating ad view for: AdNativeSmallWrapperView.loadNativeAd:120
+12-24 00:59:55.101 29798 29798 D NATIVE_AD_TRACK:    Ad headline: Test Ad : Flood-It!
+12-24 00:59:55.101 29798 29798 D NATIVE_AD_TRACK:    Ad body: Install Flood-It App for free! Free Popular Casual
+12-24 00:59:55.107 29798 29798 D NATIVE_AD_TRACK:    Inflated view type: FrameLayout
+12-24 00:59:55.107 29798 29798 D NATIVE_AD_TRACK:    → Root is FrameLayout, searching for NativeAdView...
+12-24 00:59:55.108 29798 29798 D NATIVE_AD_TRACK:    ✅ Found NativeAdView inside container
+12-24 00:59:55.108 29798 29798 D NATIVE_AD_TRACK:    AdView resolved: NativeAdView
+12-24 00:59:55.108 29798 29798 D NATIVE_AD_TRACK: → Populating ad view...
+12-24 00:59:55.110 29798 29798 D NATIVE_AD_TRACK:    ✅ Ad view populated
+12-24 00:59:55.110 29798 29798 D NATIVE_AD_TRACK: → Adding ad view to container...
+12-24 00:59:55.110 29798 29798 D NATIVE_AD_TRACK:    Container child count before: 1
+12-24 00:59:55.110 29798 29798 D NATIVE_AD_TRACK:    Container child count after: 1
+12-24 00:59:55.110 29798 29798 D NATIVE_AD_TRACK:    Container visibility: VISIBLE
+12-24 00:59:55.110 29798 29798 D NATIVE_AD_TRACK:    AdView visibility: VISIBLE
+12-24 00:59:55.110 29798 29798 D NATIVE_AD_TRACK: ✅ Native ad displayed successfully for: AdNativeSmallWrapperView.loadNativeAd:120
+12-24 00:59:55.110 29798 29798 D NATIVE_AD_TRACK: → loadAdWithCallback() called, waiting for response...
+12-24 00:59:55.110 29798 29798 D NATIVE_AD_TRACK: ✅ displayNativeAdWithAutoLoad() call completed for: native_quiz_review_learn
+12-24 00:59:55.110 29798 29798 D NATIVE_AD_TRACK: ✅ loadNativeAd() returned successfully
+12-24 00:59:55.123  1655  2044 D CoreBackPreview: Window{be8327f u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@98c1f4d, mPriority=0, mIsAnimationCallback=false, mOverrideBehavior=0}
+12-24 00:59:55.172  1655  1752 I ActivityTaskManager: Displayed com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity for user 0: +133ms
+12-24 00:59:55.172  1655  1752 V WindowManager: Sent Transition (#1051) createdAt=12-24 00:59:55.039 via request=TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=4552 effectiveUid=10533 displayId=0 isRunning=true baseIntent=Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.quran.quranaudio.online/.SplashScreenActivity } baseActivity=ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.prayertimes.ui.MainActivity} topActivity=ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity} origActivity=null realActivity=ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.SplashScreenActivity} numActivities=2 lastActiveTime=128628337 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{RemoteToken{5b7d03a Task{b49f6d0 #4552 type=standard A=10533:com.quran.quranaudio.online}}} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 0 - 0, 0) topActivityInfo=ActivityInfo{77f9914 com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=true isVisible=true isVisibleRequested=true isTopActivityNoDisplay=false isSleeping=false locusId=null displayAreaFeatureId=1 isTopActivityTransparent=false isActivityStackTransparent=false lastNonFullscreenBounds=Rect(276, 696 - 805, 1776) capturedLink=null capturedLinkTimestamp=0 requestedVisibleTypes=-9 topActivityRequestOpenInBrowserEducationTimestamp=0 appCompatTaskInfo=AppCompatTaskInfo { topActivityInSizeCompat=false eligibleForLetterboxEducation= false isLetterboxEducationEnabled= false isLetterboxDoubleTapEnabled= false eligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 topActivityAppBounds=Rect(0, 0 - 1080, 2400) isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false hasMinAspectRatioOverride=false topActivityLetterboxBounds=null cameraCompatTaskInfo=CameraCompatTaskInfo { freeformCameraCompatMode=inactiveundefined} topNonResizableActivityAspectRatio=-1.0} topActivityMainWindowFrame=null isAppBubble=false}, pipChange = null, remoteTransition = null, displayChange = null, flags = 0, debugId = 1051 }
+12-24 00:59:55.172  1655  1752 V WindowManager:         {m=OPEN f=FILLS_TASK leash=Surface(name=ActivityRecord{188892963 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t4552})/@0xfe2ff26 sb=Rect(0, 0 - 0, 0) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=-1->0 r=-1->0:-1 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}, taskId = 4552, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},
+12-24 00:59:55.174  2334  2370 V WindowManagerShell:         {m=OPEN f=FILLS_TASK leash=Surface(name=ActivityRecord{188892963 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t4552})/@0xb6cbe34 sb=Rect(0, 0 - 0, 0) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=-1->0 r=-1->0:-1 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}, taskId = 4552, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},
+12-24 00:59:55.174  2334  2370 V WindowManagerShell: Transition doesn't have explicit remote, search filters for match for {id=1051 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{m=OPEN f=FILLS_TASK leash=Surface(name=ActivityRecord{188892963 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t4552})/@0xb6cbe34 sb=Rect(0, 0 - 0, 0) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=-1->0 r=-1->0:-1 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}, taskId = 4552, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},{m=TO_BACK f=FILLS_TASK leash=Surface(name=ActivityRecord{186677365 u0 com.quran.quranaudio.online/.prayertimes.ui.MainActivity t4552})/@0xf79045d sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.prayertimes.ui.MainActivity}, taskId = 4552, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}}]}
+12-24 00:59:55.174  2334  2370 V WindowManagerShell: start default transition animation, info = {id=1051 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{m=OPEN f=FILLS_TASK leash=Surface(name=ActivityRecord{188892963 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t4552})/@0xb6cbe34 sb=Rect(0, 0 - 0, 0) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=-1->0 r=-1->0:-1 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}, taskId = 4552, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},{m=TO_BACK f=FILLS_TASK leash=Surface(name=ActivityRecord{186677365 u0 com.quran.quranaudio.online/.prayertimes.ui.MainActivity t4552})/@0xf79045d sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.prayertimes.ui.MainActivity}, taskId = 4552, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}}]}
+12-24 00:59:55.175  1655  2044 D CoreBackPreview: Window{738b96f u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@76a1303, mPriority=0, mIsAnimationCallback=false, mOverrideBehavior=0}
+12-24 00:59:57.123 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:59:57.124 29798 29798 D NATIVE_AD_TRACK: 🔍 Quiz Result Page - Ad Visibility Check (after 2s)
+12-24 00:59:57.124 29798 29798 D NATIVE_AD_TRACK:    nativeAdView visibility: 0 (0=VISIBLE, 4=INVISIBLE, 8=GONE)
+12-24 00:59:57.124 29798 29798 D NATIVE_AD_TRACK:    nativeAdView isShown: true
+12-24 00:59:57.124 29798 29798 D NATIVE_AD_TRACK:    nativeAdView width: 974
+12-24 00:59:57.125 29798 29798 D NATIVE_AD_TRACK:    nativeAdView height: 650
+12-24 00:59:57.125 29798 29798 D NATIVE_AD_TRACK:    nativeAdView childCount: 1
+12-24 00:59:57.125 29798 29798 D NATIVE_AD_TRACK:    ✅ Ad has 1 child views
+12-24 00:59:57.125 29798 29798 D NATIVE_AD_TRACK:       Child 0: FrameLayout, visibility: 0, size: 974x597
+12-24 00:59:57.126 29798 29798 D NATIVE_AD_TRACK:    parent visibility: 0
+12-24 00:59:57.126 29798 29798 D NATIVE_AD_TRACK:    parent size: 1080x2797
+12-24 00:59:57.126 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:59:58.387  1655  6374 D CoreBackPreview: Window{738b96f u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}: Setting back callback null
+12-24 01:00:24.467 29798 29798 D QuestionFragment: 📬 Received result from QuizReviewLearnActivity: action=quit
+12-24 01:00:24.498  1655  1752 V WindowManager:         {m=CLOSE f=FILLS_TASK leash=Surface(name=ActivityRecord{188892963 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t4552})/@0xfe2ff26 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}, taskId = 4552, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},
+12-24 01:00:24.501  2334  2370 V WindowManagerShell:         {m=CLOSE f=FILLS_TASK leash=Surface(name=ActivityRecord{188892963 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t4552})/@0xf13c05c sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}, taskId = 4552, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},
+12-24 01:00:24.501  2334  2370 V WindowManagerShell: Transition doesn't have explicit remote, search filters for match for {id=1052 t=CLOSE f=0x0 trk=0 r=[0@Point(0, 0)] c=[{m=CLOSE f=FILLS_TASK leash=Surface(name=ActivityRecord{188892963 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t4552})/@0xf13c05c sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}, taskId = 4552, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},{m=TO_FRONT f=FILLS_TASK leash=Surface(name=ActivityRecord{186677365 u0 com.quran.quranaudio.online/.prayertimes.ui.MainActivity t4552})/@0x32d1f65 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.prayertimes.ui.MainActivity}, taskId = 4552, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}}]}
+12-24 01:00:24.501  2334  2370 V WindowManagerShell: start default transition animation, info = {id=1052 t=CLOSE f=0x0 trk=0 r=[0@Point(0, 0)] c=[{m=CLOSE f=FILLS_TASK leash=Surface(name=ActivityRecord{188892963 u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity t4552})/@0xf13c05c sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}, taskId = 4552, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},{m=TO_FRONT f=FILLS_TASK leash=Surface(name=ActivityRecord{186677365 u0 com.quran.quranaudio.online/.prayertimes.ui.MainActivity t4552})/@0x32d1f65 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.prayertimes.ui.MainActivity}, taskId = 4552, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}}]}
+12-24 01:00:24.976 29798 29798 D VRI[QuizReviewLearnActivity]: visibilityChanged oldVisibility=true newVisibility=false
+12-24 01:00:25.001  1655  6374 D CoreBackPreview: Window{be8327f u0 com.quran.quranaudio.online/com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity}: Setting back callback null
+12-24 01:00:26.004 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 01:00:26.004 29798 29798 D NATIVE_AD_TRACK: 🎯 FragMain.initializeVerseOfDayCard() CALLED
+12-24 01:00:26.004 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 01:00:26.004 29798 29798 D NATIVE_AD_TRACK: ✅ Verse of The Day card found
+12-24 01:00:26.004 29798 29798 D NATIVE_AD_TRACK: → Calling loadVOTDNativeAd()...
+12-24 01:00:26.004 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 01:00:26.004 29798 29798 D NATIVE_AD_TRACK: 🎯 FragMain.loadVOTDNativeAd() CALLED
+12-24 01:00:26.004 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 01:00:26.004 29798 29798 D NATIVE_AD_TRACK: → votdNativeAdContainer: NOT NULL
+12-24 01:00:26.004 29798 29798 D NATIVE_AD_TRACK: → User subscribed: false
+12-24 01:00:26.004 29798 29798 D NATIVE_AD_TRACK: → Calling NativeAdHelper.displayNativeAdWithAutoLoad()...
+12-24 01:00:26.004 29798 29798 D NATIVE_AD_TRACK:    Activity: MainActivity
+12-24 01:00:26.004 29798 29798 D NATIVE_AD_TRACK:    Container: FrameLayout
+12-24 01:00:26.004 29798 29798 D NATIVE_AD_TRACK:    Layout: com.quran.quranaudio.quiz.R.layout.layout_ad_native_small_wrapper
+12-24 01:00:26.004 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 01:00:26.004 29798 29798 D NATIVE_AD_TRACK: 🎯 Native Ad Request
+12-24 01:00:26.004 29798 29798 D NATIVE_AD_TRACK:    Caller: FragMain.loadVOTDNativeAd:1706
+12-24 01:00:26.004 29798 29798 D NATIVE_AD_TRACK:    Activity: MainActivity
+12-24 01:00:26.004 29798 29798 D NATIVE_AD_TRACK:    Container: FrameLayout@94728290
+12-24 01:00:26.004 29798 29798 D NATIVE_AD_TRACK:    Layout ResId: 2131625123
+12-24 01:00:26.004 29798 29798 D NATIVE_AD_TRACK:    Container visibility: 8 (0=VISIBLE, 4=INVISIBLE, 8=GONE)
+12-24 01:00:26.004 29798 29798 D NATIVE_AD_TRACK:    Container parent: LinearLayout
+12-24 01:00:26.004 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 01:00:26.004 29798 29798 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (1/3)
+12-24 01:00:26.005 29798 29798 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 01:00:26.025 29798 29798 D NATIVE_AD_TRACK: → Callback received for: FragMain.loadVOTDNativeAd:1706
+12-24 01:00:26.025 29798 29798 D NATIVE_AD_TRACK:    Ad object: NOT NULL
+12-24 01:00:26.025 29798 29798 D NATIVE_AD_TRACK: → Inflating ad view for: FragMain.loadVOTDNativeAd:1706
+12-24 01:00:26.026 29798 29798 D NATIVE_AD_TRACK:    Ad headline: Test Ad : Flood-It!
+12-24 01:00:26.026 29798 29798 D NATIVE_AD_TRACK:    Ad body: Install Flood-It App for free! Free Popular Casual
+12-24 01:00:26.035 29798 29798 D NATIVE_AD_TRACK:    Inflated view type: FrameLayout
+12-24 01:00:26.035 29798 29798 D NATIVE_AD_TRACK:    → Root is FrameLayout, searching for NativeAdView...
+12-24 01:00:26.036 29798 29798 D NATIVE_AD_TRACK:    ✅ Found NativeAdView inside container
+12-24 01:00:26.036 29798 29798 D NATIVE_AD_TRACK:    AdView resolved: NativeAdView
+12-24 01:00:26.036 29798 29798 D NATIVE_AD_TRACK: → Populating ad view...
+12-24 01:00:26.039 29798 29798 D NATIVE_AD_TRACK:    ✅ Ad view populated
+12-24 01:00:26.039 29798 29798 D NATIVE_AD_TRACK: → Adding ad view to container...
+12-24 01:00:26.039 29798 29798 D NATIVE_AD_TRACK:    Container child count before: 0
+12-24 01:00:26.040 29798 29798 D NATIVE_AD_TRACK:    Container child count after: 1
+12-24 01:00:26.040 29798 29798 D NATIVE_AD_TRACK:    Container visibility: VISIBLE
+12-24 01:00:26.040 29798 29798 D NATIVE_AD_TRACK:    AdView visibility: VISIBLE
+12-24 01:00:26.040 29798 29798 D NATIVE_AD_TRACK: ✅ Native ad displayed successfully for: FragMain.loadVOTDNativeAd:1706
+12-24 01:00:26.040 29798 29798 D NATIVE_AD_TRACK: → loadAdWithCallback() called, waiting for response...
+12-24 01:00:26.040 29798 29798 D NATIVE_AD_TRACK: ✅ displayNativeAdWithAutoLoad() call completed
+12-24 01:00:26.040 29798 29798 D NATIVE_AD_TRACK: ✅ FragMain.loadVOTDNativeAd() COMPLETED
+12-24 01:00:26.040 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 01:00:26.040 29798 29798 D NATIVE_AD_TRACK: ✅ loadVOTDNativeAd() completed
+12-24 01:00:26.045 29798 29798 D NATIVE_AD_TRACK: ✅ FragMain.initializeVerseOfDayCard() COMPLETED
+12-24 01:00:26.045 29798 29798 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 01:00:27.214 29798 29798 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 01:00:27.214 29798 29798 D NATIVE_AD_TRACK:    Headline: Test Ad : Flood-It!
+12-24 01:00:27.214 29798 29798 D NATIVE_AD_TRACK:    Body: Install Flood-It App for free! Free Popular Casual
+12-24 01:00:27.214 29798 29798 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 01:00:27.214 29798 29798 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (2/3)
+12-24 01:00:27.214 29798 29798 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 01:00:27.214 29798 29798 D NATIVE_AD_TRACK: 📦 Pool not full yet, loading next ad...
+12-24 01:00:27.214 29798 29798 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (2/3)
+12-24 01:00:27.214 29798 29798 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 01:00:28.263 29798 29798 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 01:00:28.263 29798 29798 D NATIVE_AD_TRACK:    Headline: Test Ad : Flood-It!
+12-24 01:00:28.263 29798 29798 D NATIVE_AD_TRACK:    Body: Install Flood-It App for free! Free Popular Casual
+12-24 01:00:28.263 29798 29798 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 01:00:28.263 29798 29798 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (3/3)
+12-24 01:00:28.263 29798 29798 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 01:00:28.263 29798 29798 D NATIVE_AD_TRACK: 🎉 Cache pool full (3/3)
+12-24 01:05:16.245 30704 30704 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (0/3)
+12-24 01:05:16.245 30704 30704 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 01:05:16.533 30704 30704 D NATIVE_AD_TRACK: ⚠️ Ad is already loading, skipping duplicate request
+12-24 01:05:18.269 30704 30704 D NATIVE_AD_TRACK: ⚠️ Ad is already loading, skipping duplicate request
+12-24 01:05:19.338 30704 30704 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 01:05:19.338 30704 30704 D NATIVE_AD_TRACK:    Headline: Test Ad : Google Ads
+12-24 01:05:19.340 30704 30704 D NATIVE_AD_TRACK:    Body: Stay up to date with your Ads Check how your ads a
+12-24 01:05:19.340 30704 30704 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 01:05:19.340 30704 30704 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (1/3)
+12-24 01:05:19.340 30704 30704 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 01:05:19.340 30704 30704 D NATIVE_AD_TRACK: 📦 Pool not full yet, loading next ad...
+12-24 01:05:19.340 30704 30704 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (1/3)
+12-24 01:05:19.340 30704 30704 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 01:05:19.590 30704 30704 D NATIVE_AD_TRACK: ⚠️ Ad is already loading, skipping duplicate request
+12-24 01:05:20.269 30704 30704 D NATIVE_AD_TRACK: ⚠️ Ad is already loading, skipping duplicate request
+12-24 01:05:20.283 30704 30704 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 01:05:20.283 30704 30704 D NATIVE_AD_TRACK:    Headline: Test Ad : Flood-It!
+12-24 01:05:20.283 30704 30704 D NATIVE_AD_TRACK:    Body: Install Flood-It App for free! Free Popular Casual
+12-24 01:05:20.283 30704 30704 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 01:05:20.283 30704 30704 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (2/3)
+12-24 01:05:20.283 30704 30704 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 01:05:20.283 30704 30704 D NATIVE_AD_TRACK: 📦 Pool not full yet, loading next ad...
+12-24 01:05:20.283 30704 30704 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (2/3)
+12-24 01:05:20.283 30704 30704 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 01:05:21.130 30704 30704 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 01:05:21.130 30704 30704 D NATIVE_AD_TRACK:    Headline: Test Ad : Google Ads
+12-24 01:05:21.130 30704 30704 D NATIVE_AD_TRACK:    Body: Stay up to date with your Ads Check how your ads a
+12-24 01:05:21.130 30704 30704 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 01:05:21.130 30704 30704 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (3/3)
+12-24 01:05:21.130 30704 30704 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 01:05:21.130 30704 30704 D NATIVE_AD_TRACK: 🎉 Cache pool full (3/3)
+12-24 01:05:21.864 30704 30704 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 01:05:21.864 30704 30704 D NATIVE_AD_TRACK: 🎯 MainActivity.onCreate() START
+12-24 01:05:21.864 30704 30704 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 01:05:22.082 30704 30704 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 01:05:22.082 30704 30704 D NATIVE_AD_TRACK: 🎯 FragMain.initializeVerseOfDayCard() CALLED
+12-24 01:05:22.082 30704 30704 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 01:05:22.082 30704 30704 D NATIVE_AD_TRACK: ✅ Verse of The Day card found
+12-24 01:05:22.097 30704 30704 D NATIVE_AD_TRACK: → Calling loadVOTDNativeAd()...
+12-24 01:05:22.097 30704 30704 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 01:05:22.097 30704 30704 D NATIVE_AD_TRACK: 🎯 FragMain.loadVOTDNativeAd() CALLED
+12-24 01:05:22.097 30704 30704 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 01:05:22.097 30704 30704 D NATIVE_AD_TRACK: → votdNativeAdContainer: NOT NULL
+12-24 01:05:22.097 30704 30704 D NATIVE_AD_TRACK: → User subscribed: false
+12-24 01:05:22.097 30704 30704 D NATIVE_AD_TRACK: → Calling NativeAdHelper.displayNativeAdWithAutoLoad()...
+12-24 01:05:22.097 30704 30704 D NATIVE_AD_TRACK:    Activity: MainActivity
+12-24 01:05:22.097 30704 30704 D NATIVE_AD_TRACK:    Container: FrameLayout
+12-24 01:05:22.097 30704 30704 D NATIVE_AD_TRACK:    Layout: com.quran.quranaudio.quiz.R.layout.layout_ad_native_small_wrapper
+12-24 01:05:22.098 30704 30704 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 01:05:22.098 30704 30704 D NATIVE_AD_TRACK: 🎯 Native Ad Request
+12-24 01:05:22.098 30704 30704 D NATIVE_AD_TRACK:    Caller: FragMain.loadVOTDNativeAd:1708
+12-24 01:05:22.098 30704 30704 D NATIVE_AD_TRACK:    Activity: MainActivity
+12-24 01:05:22.098 30704 30704 D NATIVE_AD_TRACK:    Container: FrameLayout@80398783
+12-24 01:05:22.098 30704 30704 D NATIVE_AD_TRACK:    Layout ResId: 2131625123
+12-24 01:05:22.098 30704 30704 D NATIVE_AD_TRACK:    Container visibility: 8 (0=VISIBLE, 4=INVISIBLE, 8=GONE)
+12-24 01:05:22.098 30704 30704 D NATIVE_AD_TRACK:    Container parent: LinearLayout
+12-24 01:05:22.098 30704 30704 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 01:05:22.098 30704 30704 D NATIVE_AD_TRACK: → Callback received for: FragMain.loadVOTDNativeAd:1708
+12-24 01:05:22.098 30704 30704 D NATIVE_AD_TRACK:    Ad object: NOT NULL
+12-24 01:05:22.098 30704 30704 D NATIVE_AD_TRACK: → Inflating ad view for: FragMain.loadVOTDNativeAd:1708
+12-24 01:05:22.098 30704 30704 D NATIVE_AD_TRACK:    Ad headline: Test Ad : Google Ads
+12-24 01:05:22.098 30704 30704 D NATIVE_AD_TRACK:    Ad body: Stay up to date with your Ads Check how your ads a
+12-24 01:05:22.110 30704 30704 D NATIVE_AD_TRACK:    Inflated view type: FrameLayout
+12-24 01:05:22.110 30704 30704 D NATIVE_AD_TRACK:    → Root is FrameLayout, searching for NativeAdView...
+12-24 01:05:22.111 30704 30704 D NATIVE_AD_TRACK:    ✅ Found NativeAdView inside container
+12-24 01:05:22.111 30704 30704 D NATIVE_AD_TRACK:    AdView resolved: NativeAdView
+12-24 01:05:22.111 30704 30704 D NATIVE_AD_TRACK: → Populating ad view...
+12-24 01:05:22.114 30704 30704 D NATIVE_AD_TRACK:    ✅ Ad view populated
+12-24 01:05:22.114 30704 30704 D NATIVE_AD_TRACK: → Adding ad view to container...
+12-24 01:05:22.114 30704 30704 D NATIVE_AD_TRACK:    Container child count before: 0
+12-24 01:05:22.114 30704 30704 D NATIVE_AD_TRACK:    Container child count after: 1
+12-24 01:05:22.114 30704 30704 D NATIVE_AD_TRACK:    Container visibility: VISIBLE
+12-24 01:05:22.114 30704 30704 D NATIVE_AD_TRACK:    AdView visibility: VISIBLE
+12-24 01:05:22.114 30704 30704 D NATIVE_AD_TRACK: ✅ Native ad displayed successfully for: FragMain.loadVOTDNativeAd:1708
+12-24 01:05:22.114 30704 30704 D NATIVE_AD_TRACK: → loadAdWithCallback() called, waiting for response...
+12-24 01:05:22.114 30704 30704 D NATIVE_AD_TRACK: ✅ displayNativeAdWithAutoLoad() call completed
+12-24 01:05:22.114 30704 30704 D NATIVE_AD_TRACK: ✅ FragMain.loadVOTDNativeAd() COMPLETED
+12-24 01:05:22.114 30704 30704 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 01:05:22.114 30704 30704 D NATIVE_AD_TRACK: ✅ loadVOTDNativeAd() completed
+12-24 01:05:22.115 30704 30704 D NATIVE_AD_TRACK: ✅ FragMain.initializeVerseOfDayCard() COMPLETED
+12-24 01:05:22.115 30704 30704 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 01:05:22.129 30704 30704 D NATIVE_AD_TRACK: → NavController found: androidx.navigation.NavHostController@6cdb581
+12-24 01:05:22.129 30704 30704 D NATIVE_AD_TRACK: → Current destination: Destination(com.quran.quranaudio.online:id/nav_home) label=HomeFragment class=com.quran.quranaudio.online.quran_module.frags.main.FragMain
+12-24 01:05:22.130 30704 30704 D NATIVE_AD_TRACK: ✅ NavigationUI setup completed
+12-24 01:05:22.131 30704 30704 D NATIVE_AD_TRACK: → Setting start destination: HOME (R.id.nav_home)
+12-24 01:05:22.135 30704 30704 D NATIVE_AD_TRACK: ✅ NavGraph set, current destination: Destination(com.quran.quranaudio.online:id/nav_home) label=HomeFragment class=com.quran.quranaudio.online.quran_module.frags.main.FragMain
+12-24 01:05:22.135 30704 30704 D NATIVE_AD_TRACK:    Destination label: HomeFragment
+12-24 01:05:22.135 30704 30704 D NATIVE_AD_TRACK:    Destination ID: 2131428899
+12-24 01:05:22.135 30704 30704 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 01:05:22.135 30704 30704 D NATIVE_AD_TRACK: ✅ MainActivity.onCreate() COMPLETED
+12-24 01:05:22.135 30704 30704 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 01:05:22.188 30704 30704 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 01:05:22.188 30704 30704 D NATIVE_AD_TRACK: 🎯 FragMain.initializeVerseOfDayCard() CALLED
+12-24 01:05:22.188 30704 30704 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 01:05:22.188 30704 30704 D NATIVE_AD_TRACK: ✅ Verse of The Day card found
+12-24 01:05:22.188 30704 30704 D NATIVE_AD_TRACK: → Calling loadVOTDNativeAd()...
+12-24 01:05:22.188 30704 30704 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 01:05:22.188 30704 30704 D NATIVE_AD_TRACK: 🎯 FragMain.loadVOTDNativeAd() CALLED
+12-24 01:05:22.188 30704 30704 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 01:05:22.188 30704 30704 D NATIVE_AD_TRACK: → votdNativeAdContainer: NOT NULL
+12-24 01:05:22.188 30704 30704 D NATIVE_AD_TRACK: → User subscribed: false
+12-24 01:05:22.188 30704 30704 D NATIVE_AD_TRACK: → Calling NativeAdHelper.displayNativeAdWithAutoLoad()...
+12-24 01:05:22.188 30704 30704 D NATIVE_AD_TRACK:    Activity: MainActivity
+12-24 01:05:22.188 30704 30704 D NATIVE_AD_TRACK:    Container: FrameLayout
+12-24 01:05:22.188 30704 30704 D NATIVE_AD_TRACK:    Layout: com.quran.quranaudio.quiz.R.layout.layout_ad_native_small_wrapper
+12-24 01:05:22.189 30704 30704 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 01:05:22.189 30704 30704 D NATIVE_AD_TRACK: 🎯 Native Ad Request
+12-24 01:05:22.189 30704 30704 D NATIVE_AD_TRACK:    Caller: FragMain.loadVOTDNativeAd:1708
+12-24 01:05:22.189 30704 30704 D NATIVE_AD_TRACK:    Activity: MainActivity
+12-24 01:05:22.189 30704 30704 D NATIVE_AD_TRACK:    Container: FrameLayout@265776953
+12-24 01:05:22.189 30704 30704 D NATIVE_AD_TRACK:    Layout ResId: 2131625123
+12-24 01:05:22.189 30704 30704 D NATIVE_AD_TRACK:    Container visibility: 8 (0=VISIBLE, 4=INVISIBLE, 8=GONE)
+12-24 01:05:22.189 30704 30704 D NATIVE_AD_TRACK:    Container parent: LinearLayout
+12-24 01:05:22.189 30704 30704 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 01:05:22.189 30704 30704 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (1/3)
+12-24 01:05:22.189 30704 30704 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 01:05:22.201 30704 30704 D NATIVE_AD_TRACK: → Callback received for: FragMain.loadVOTDNativeAd:1708
+12-24 01:05:22.201 30704 30704 D NATIVE_AD_TRACK:    Ad object: NOT NULL
+12-24 01:05:22.201 30704 30704 D NATIVE_AD_TRACK: → Inflating ad view for: FragMain.loadVOTDNativeAd:1708
+12-24 01:05:22.201 30704 30704 D NATIVE_AD_TRACK:    Ad headline: Test Ad : Flood-It!
+12-24 01:05:22.201 30704 30704 D NATIVE_AD_TRACK:    Ad body: Install Flood-It App for free! Free Popular Casual
+12-24 01:05:22.208 30704 30704 D NATIVE_AD_TRACK:    Inflated view type: FrameLayout
+12-24 01:05:22.208 30704 30704 D NATIVE_AD_TRACK:    → Root is FrameLayout, searching for NativeAdView...
+12-24 01:05:22.208 30704 30704 D NATIVE_AD_TRACK:    ✅ Found NativeAdView inside container
+12-24 01:05:22.208 30704 30704 D NATIVE_AD_TRACK:    AdView resolved: NativeAdView
+12-24 01:05:22.208 30704 30704 D NATIVE_AD_TRACK: → Populating ad view...
+12-24 01:05:22.211 30704 30704 D NATIVE_AD_TRACK:    ✅ Ad view populated
+12-24 01:05:22.211 30704 30704 D NATIVE_AD_TRACK: → Adding ad view to container...
+12-24 01:05:22.211 30704 30704 D NATIVE_AD_TRACK:    Container child count before: 0
+12-24 01:05:22.211 30704 30704 D NATIVE_AD_TRACK:    Container child count after: 1
+12-24 01:05:22.211 30704 30704 D NATIVE_AD_TRACK:    Container visibility: VISIBLE
+12-24 01:05:22.211 30704 30704 D NATIVE_AD_TRACK:    AdView visibility: VISIBLE
+12-24 01:05:22.211 30704 30704 D NATIVE_AD_TRACK: ✅ Native ad displayed successfully for: FragMain.loadVOTDNativeAd:1708
+12-24 01:05:22.211 30704 30704 D NATIVE_AD_TRACK: → loadAdWithCallback() called, waiting for response...
+12-24 01:05:22.211 30704 30704 D NATIVE_AD_TRACK: ✅ displayNativeAdWithAutoLoad() call completed
+12-24 01:05:22.211 30704 30704 D NATIVE_AD_TRACK: ✅ FragMain.loadVOTDNativeAd() COMPLETED
+12-24 01:05:22.211 30704 30704 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 01:05:22.211 30704 30704 D NATIVE_AD_TRACK: ✅ loadVOTDNativeAd() completed
+12-24 01:05:22.216 30704 30704 D NATIVE_AD_TRACK: ✅ FragMain.initializeVerseOfDayCard() COMPLETED
+12-24 01:05:22.216 30704 30704 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 01:05:22.222 30704 30704 D NATIVE_AD_TRACK: ⚠️ Ad is already loading, skipping duplicate request
+12-24 01:05:22.965 30704 30704 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 01:05:22.965 30704 30704 D NATIVE_AD_TRACK:    Headline: Test Ad : Google Ads
+12-24 01:05:22.965 30704 30704 D NATIVE_AD_TRACK:    Body: Stay up to date with your Ads Check how your ads a
+12-24 01:05:22.965 30704 30704 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 01:05:22.965 30704 30704 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (2/3)
+12-24 01:05:22.965 30704 30704 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 01:05:22.965 30704 30704 D NATIVE_AD_TRACK: 📦 Pool not full yet, loading next ad...
+12-24 01:05:22.966 30704 30704 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (2/3)
+12-24 01:05:22.966 30704 30704 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 01:05:23.960 30704 30704 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 01:05:23.960 30704 30704 D NATIVE_AD_TRACK:    Headline: Test Ad : Flood-It!
+12-24 01:05:23.960 30704 30704 D NATIVE_AD_TRACK:    Body: Install Flood-It App for free! Free Popular Casual
+12-24 01:05:23.960 30704 30704 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 01:05:23.960 30704 30704 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (3/3)
+12-24 01:05:23.960 30704 30704 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 01:05:23.960 30704 30704 D NATIVE_AD_TRACK: 🎉 Cache pool full (3/3)

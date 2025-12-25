@@ -1,0 +1,392 @@
+12-24 00:19:04.324 22389 22389 D DIAGNOSE: → Starting NativeAdManager initialization...
+12-24 00:19:04.325 22389 22389 D DIAGNOSE: ✅ NativeAdManager.initialize() completed
+12-24 00:19:04.325 22389 22389 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (0/3)
+12-24 00:19:04.325 22389 22389 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 00:19:04.358 22389 22389 D DIAGNOSE: ✅ NativeAdManager.preloadAd() completed
+12-24 00:19:04.358 22389 22389 D DIAGNOSE: → Scheduling delayed NativeAdManager loads...
+12-24 00:19:04.358 22389 22389 D DIAGNOSE: ✅ NativeAdManager pool preloading scheduled
+12-24 00:19:04.724 22389 22389 D NATIVE_AD_TRACK: ⚠️ Ad is already loading, skipping duplicate request
+12-24 00:19:06.358 22389 22389 D DIAGNOSE: → NativeAdManager.loadNewAd() #2 starting...
+12-24 00:19:06.358 22389 22389 D NATIVE_AD_TRACK: ⚠️ Ad is already loading, skipping duplicate request
+12-24 00:19:06.358 22389 22389 D DIAGNOSE: ✅ NativeAdManager.loadNewAd() #2 completed
+12-24 00:19:08.358 22389 22389 D DIAGNOSE: → NativeAdManager.loadNewAd() #3 starting...
+12-24 00:19:08.358 22389 22389 D NATIVE_AD_TRACK: ⚠️ Ad is already loading, skipping duplicate request
+12-24 00:19:08.358 22389 22389 D DIAGNOSE: ✅ NativeAdManager.loadNewAd() #3 completed
+12-24 00:19:09.882 22389 22389 D NATIVE_AD_TRACK: ⚠️ Ad is already loading, skipping duplicate request
+12-24 00:19:09.980 22389 22389 D FragOnboardLanguage: 🔧 Calling setupNativeAd()...
+12-24 00:19:09.980 22389 22389 D DIAGNOSE: →→ setupNativeAd() called
+12-24 00:19:09.980 22389 22389 D DIAGNOSE: →→ Native ad container found: true
+12-24 00:19:09.980 22389 22389 D DIAGNOSE: →→ Calling NativeAdHelper.displayNativeAdWithAutoLoad()
+12-24 00:19:09.981 22389 22389 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:19:09.981 22389 22389 D NATIVE_AD_TRACK: 🎯 Native Ad Request
+12-24 00:19:09.981 22389 22389 D NATIVE_AD_TRACK:    Caller: FragOnboardLanguage.setupNativeAd:302
+12-24 00:19:09.981 22389 22389 D NATIVE_AD_TRACK:    Activity: ActivityOnboarding
+12-24 00:19:09.981 22389 22389 D NATIVE_AD_TRACK:    Container: FrameLayout@224583473
+12-24 00:19:09.981 22389 22389 D NATIVE_AD_TRACK:    Layout ResId: 2131625365
+12-24 00:19:09.981 22389 22389 D NATIVE_AD_TRACK:    Container visibility: 8 (0=VISIBLE, 4=INVISIBLE, 8=GONE)
+12-24 00:19:09.981 22389 22389 D NATIVE_AD_TRACK:    Container parent: ConstraintLayout
+12-24 00:19:09.981 22389 22389 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:19:09.981 22389 22389 D NATIVE_AD_TRACK: → loadAdWithCallback() called, waiting for response...
+12-24 00:19:09.981 22389 22389 D DIAGNOSE: ✅ NativeAdHelper.displayNativeAdWithAutoLoad() returned
+12-24 00:19:09.982 22389 22389 D FragOnboardLanguage: ✅ setupNativeAd() completed
+12-24 00:19:09.984 22389 22389 D DIAGNOSE: →→ setupNativeAd() called
+12-24 00:19:09.984 22389 22389 D DIAGNOSE: →→ Native ad container found: true
+12-24 00:19:09.984 22389 22389 D DIAGNOSE: →→ Calling NativeAdHelper.displayNativeAdWithAutoLoad()
+12-24 00:19:09.984 22389 22389 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:19:09.984 22389 22389 D NATIVE_AD_TRACK: 🎯 Native Ad Request
+12-24 00:19:09.984 22389 22389 D NATIVE_AD_TRACK:    Caller: FragOnboardLanguage.setupNativeAd:302
+12-24 00:19:09.984 22389 22389 D NATIVE_AD_TRACK:    Activity: ActivityOnboarding
+12-24 00:19:09.984 22389 22389 D NATIVE_AD_TRACK:    Container: FrameLayout@224583473
+12-24 00:19:09.984 22389 22389 D NATIVE_AD_TRACK:    Layout ResId: 2131625365
+12-24 00:19:09.984 22389 22389 D NATIVE_AD_TRACK:    Container visibility: 8 (0=VISIBLE, 4=INVISIBLE, 8=GONE)
+12-24 00:19:09.984 22389 22389 D NATIVE_AD_TRACK:    Container parent: ConstraintLayout
+12-24 00:19:09.984 22389 22389 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:19:09.984 22389 22389 D NATIVE_AD_TRACK: → loadAdWithCallback() called, waiting for response...
+12-24 00:19:09.984 22389 22389 D DIAGNOSE: ✅ NativeAdHelper.displayNativeAdWithAutoLoad() returned
+12-24 00:19:10.298 22389 22389 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 00:19:10.298 22389 22389 D NATIVE_AD_TRACK:    Headline: Test Ad : Flood-It!
+12-24 00:19:10.301 22389 22389 D NATIVE_AD_TRACK:    Body: Install Flood-It App for free! Free Popular Casual
+12-24 00:19:10.301 22389 22389 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 00:19:10.301 22389 22389 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (1/3)
+12-24 00:19:10.301 22389 22389 D NATIVE_AD_TRACK:    Pending callbacks: 2
+12-24 00:19:10.301 22389 22389 D NATIVE_AD_TRACK: → Callback received for: FragOnboardLanguage.setupNativeAd:302
+12-24 00:19:10.301 22389 22389 D NATIVE_AD_TRACK:    Ad object: NOT NULL
+12-24 00:19:10.301 22389 22389 D NATIVE_AD_TRACK: → Inflating ad view for: FragOnboardLanguage.setupNativeAd:302
+12-24 00:19:10.301 22389 22389 D NATIVE_AD_TRACK:    Ad headline: Test Ad : Flood-It!
+12-24 00:19:10.301 22389 22389 D NATIVE_AD_TRACK:    Ad body: Install Flood-It App for free! Free Popular Casual
+12-24 00:19:10.324 22389 22389 D NATIVE_AD_TRACK:    Inflated view type: NativeAdView
+12-24 00:19:10.324 22389 22389 D NATIVE_AD_TRACK:    ✅ Root is NativeAdView directly
+12-24 00:19:10.324 22389 22389 D NATIVE_AD_TRACK:    AdView resolved: NativeAdView
+12-24 00:19:10.324 22389 22389 D NATIVE_AD_TRACK: → Populating ad view...
+12-24 00:19:10.330 22389 22389 D NATIVE_AD_TRACK:    ✅ Ad view populated
+12-24 00:19:10.330 22389 22389 D NATIVE_AD_TRACK: → Adding ad view to container...
+12-24 00:19:10.330 22389 22389 D NATIVE_AD_TRACK:    Container child count before: 0
+12-24 00:19:10.332 22389 22389 D NATIVE_AD_TRACK:    Container child count after: 1
+12-24 00:19:10.333 22389 22389 D NATIVE_AD_TRACK:    Container visibility: VISIBLE
+12-24 00:19:10.333 22389 22389 D NATIVE_AD_TRACK:    AdView visibility: VISIBLE
+12-24 00:19:10.333 22389 22389 D NATIVE_AD_TRACK: ✅ Native ad displayed successfully for: FragOnboardLanguage.setupNativeAd:302
+12-24 00:19:10.333 22389 22389 D NATIVE_AD_TRACK: → Callback received for: FragOnboardLanguage.setupNativeAd:302
+12-24 00:19:10.333 22389 22389 D NATIVE_AD_TRACK:    Ad object: NOT NULL
+12-24 00:19:10.333 22389 22389 D NATIVE_AD_TRACK: → Inflating ad view for: FragOnboardLanguage.setupNativeAd:302
+12-24 00:19:10.333 22389 22389 D NATIVE_AD_TRACK:    Ad headline: Test Ad : Flood-It!
+12-24 00:19:10.333 22389 22389 D NATIVE_AD_TRACK:    Ad body: Install Flood-It App for free! Free Popular Casual
+12-24 00:19:10.345 22389 22389 D NATIVE_AD_TRACK:    Inflated view type: NativeAdView
+12-24 00:19:10.345 22389 22389 D NATIVE_AD_TRACK:    ✅ Root is NativeAdView directly
+12-24 00:19:10.345 22389 22389 D NATIVE_AD_TRACK:    AdView resolved: NativeAdView
+12-24 00:19:10.345 22389 22389 D NATIVE_AD_TRACK: → Populating ad view...
+12-24 00:19:10.349 22389 22389 D NATIVE_AD_TRACK:    ✅ Ad view populated
+12-24 00:19:10.349 22389 22389 D NATIVE_AD_TRACK: → Adding ad view to container...
+12-24 00:19:10.349 22389 22389 D NATIVE_AD_TRACK:    Container child count before: 1
+12-24 00:19:10.351 22389 22389 D NATIVE_AD_TRACK:    Container child count after: 1
+12-24 00:19:10.351 22389 22389 D NATIVE_AD_TRACK:    Container visibility: VISIBLE
+12-24 00:19:10.351 22389 22389 D NATIVE_AD_TRACK:    AdView visibility: VISIBLE
+12-24 00:19:10.351 22389 22389 D NATIVE_AD_TRACK: ✅ Native ad displayed successfully for: FragOnboardLanguage.setupNativeAd:302
+12-24 00:19:10.351 22389 22389 D NATIVE_AD_TRACK: 📦 Pool not full yet, loading next ad...
+12-24 00:19:10.351 22389 22389 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (1/3)
+12-24 00:19:10.351 22389 22389 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 00:19:11.545 22389 22389 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 00:19:11.545 22389 22389 D NATIVE_AD_TRACK:    Headline: Test Ad : Flood-It!
+12-24 00:19:11.545 22389 22389 D NATIVE_AD_TRACK:    Body: Install Flood-It App for free! Free Popular Casual
+12-24 00:19:11.546 22389 22389 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 00:19:11.546 22389 22389 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (2/3)
+12-24 00:19:11.546 22389 22389 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 00:19:11.546 22389 22389 D NATIVE_AD_TRACK: 📦 Pool not full yet, loading next ad...
+12-24 00:19:11.546 22389 22389 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (2/3)
+12-24 00:19:11.546 22389 22389 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 00:19:12.518 22389 22389 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 00:19:12.518 22389 22389 D NATIVE_AD_TRACK:    Headline: Test Ad : Google Ads
+12-24 00:19:12.518 22389 22389 D NATIVE_AD_TRACK:    Body: Stay up to date with your Ads Check how your ads a
+12-24 00:19:12.518 22389 22389 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 00:19:12.519 22389 22389 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (3/3)
+12-24 00:19:12.519 22389 22389 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 00:19:12.519 22389 22389 D NATIVE_AD_TRACK: 🎉 Cache pool full (3/3)
+12-24 00:19:24.124 22389 22389 D FragOnboardLanguage: 🔧 Calling setupNativeAd()...
+12-24 00:19:24.124 22389 22389 D DIAGNOSE: →→ setupNativeAd() called
+12-24 00:19:24.124 22389 22389 D DIAGNOSE: →→ Native ad container found: true
+12-24 00:19:24.124 22389 22389 D DIAGNOSE: →→ Calling NativeAdHelper.displayNativeAdWithAutoLoad()
+12-24 00:19:24.124 22389 22389 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:19:24.124 22389 22389 D NATIVE_AD_TRACK: 🎯 Native Ad Request
+12-24 00:19:24.124 22389 22389 D NATIVE_AD_TRACK:    Caller: FragOnboardLanguage.setupNativeAd:302
+12-24 00:19:24.124 22389 22389 D NATIVE_AD_TRACK:    Activity: ActivityOnboarding
+12-24 00:19:24.124 22389 22389 D NATIVE_AD_TRACK:    Container: FrameLayout@11336940
+12-24 00:19:24.124 22389 22389 D NATIVE_AD_TRACK:    Layout ResId: 2131625365
+12-24 00:19:24.124 22389 22389 D NATIVE_AD_TRACK:    Container visibility: 8 (0=VISIBLE, 4=INVISIBLE, 8=GONE)
+12-24 00:19:24.124 22389 22389 D NATIVE_AD_TRACK:    Container parent: ConstraintLayout
+12-24 00:19:24.124 22389 22389 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:19:24.124 22389 22389 D NATIVE_AD_TRACK: → Callback received for: FragOnboardLanguage.setupNativeAd:302
+12-24 00:19:24.124 22389 22389 D NATIVE_AD_TRACK:    Ad object: NOT NULL
+12-24 00:19:24.125 22389 22389 D NATIVE_AD_TRACK: → Inflating ad view for: FragOnboardLanguage.setupNativeAd:302
+12-24 00:19:24.125 22389 22389 D NATIVE_AD_TRACK:    Ad headline: Test Ad : Flood-It!
+12-24 00:19:24.125 22389 22389 D NATIVE_AD_TRACK:    Ad body: Install Flood-It App for free! Free Popular Casual
+12-24 00:19:24.137 22389 22389 D NATIVE_AD_TRACK:    Inflated view type: NativeAdView
+12-24 00:19:24.137 22389 22389 D NATIVE_AD_TRACK:    ✅ Root is NativeAdView directly
+12-24 00:19:24.137 22389 22389 D NATIVE_AD_TRACK:    AdView resolved: NativeAdView
+12-24 00:19:24.137 22389 22389 D NATIVE_AD_TRACK: → Populating ad view...
+12-24 00:19:24.141 22389 22389 D NATIVE_AD_TRACK:    ✅ Ad view populated
+12-24 00:19:24.141 22389 22389 D NATIVE_AD_TRACK: → Adding ad view to container...
+12-24 00:19:24.141 22389 22389 D NATIVE_AD_TRACK:    Container child count before: 0
+12-24 00:19:24.141 22389 22389 D NATIVE_AD_TRACK:    Container child count after: 1
+12-24 00:19:24.141 22389 22389 D NATIVE_AD_TRACK:    Container visibility: VISIBLE
+12-24 00:19:24.141 22389 22389 D NATIVE_AD_TRACK:    AdView visibility: VISIBLE
+12-24 00:19:24.141 22389 22389 D NATIVE_AD_TRACK: ✅ Native ad displayed successfully for: FragOnboardLanguage.setupNativeAd:302
+12-24 00:19:24.141 22389 22389 D NATIVE_AD_TRACK: → loadAdWithCallback() called, waiting for response...
+12-24 00:19:24.141 22389 22389 D DIAGNOSE: ✅ NativeAdHelper.displayNativeAdWithAutoLoad() returned
+12-24 00:19:24.141 22389 22389 D FragOnboardLanguage: ✅ setupNativeAd() completed
+12-24 00:19:24.147 22389 22389 D DIAGNOSE: →→ setupNativeAd() called
+12-24 00:19:24.147 22389 22389 D DIAGNOSE: →→ Native ad container found: true
+12-24 00:19:24.147 22389 22389 D DIAGNOSE: →→ Calling NativeAdHelper.displayNativeAdWithAutoLoad()
+12-24 00:19:24.148 22389 22389 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:19:24.148 22389 22389 D NATIVE_AD_TRACK: 🎯 Native Ad Request
+12-24 00:19:24.148 22389 22389 D NATIVE_AD_TRACK:    Caller: FragOnboardLanguage.setupNativeAd:302
+12-24 00:19:24.148 22389 22389 D NATIVE_AD_TRACK:    Activity: ActivityOnboarding
+12-24 00:19:24.148 22389 22389 D NATIVE_AD_TRACK:    Container: FrameLayout@11336940
+12-24 00:19:24.148 22389 22389 D NATIVE_AD_TRACK:    Layout ResId: 2131625365
+12-24 00:19:24.148 22389 22389 D NATIVE_AD_TRACK:    Container visibility: 0 (0=VISIBLE, 4=INVISIBLE, 8=GONE)
+12-24 00:19:24.148 22389 22389 D NATIVE_AD_TRACK:    Container parent: ConstraintLayout
+12-24 00:19:24.148 22389 22389 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:19:24.148 22389 22389 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (1/3)
+12-24 00:19:24.148 22389 22389 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 00:19:24.169 22389 22389 D NATIVE_AD_TRACK: → Callback received for: FragOnboardLanguage.setupNativeAd:302
+12-24 00:19:24.169 22389 22389 D NATIVE_AD_TRACK:    Ad object: NOT NULL
+12-24 00:19:24.169 22389 22389 D NATIVE_AD_TRACK: → Inflating ad view for: FragOnboardLanguage.setupNativeAd:302
+12-24 00:19:24.169 22389 22389 D NATIVE_AD_TRACK:    Ad headline: Test Ad : Flood-It!
+12-24 00:19:24.169 22389 22389 D NATIVE_AD_TRACK:    Ad body: Install Flood-It App for free! Free Popular Casual
+12-24 00:19:24.179 22389 22389 D NATIVE_AD_TRACK:    Inflated view type: NativeAdView
+12-24 00:19:24.179 22389 22389 D NATIVE_AD_TRACK:    ✅ Root is NativeAdView directly
+12-24 00:19:24.179 22389 22389 D NATIVE_AD_TRACK:    AdView resolved: NativeAdView
+12-24 00:19:24.179 22389 22389 D NATIVE_AD_TRACK: → Populating ad view...
+12-24 00:19:24.182 22389 22389 D NATIVE_AD_TRACK:    ✅ Ad view populated
+12-24 00:19:24.182 22389 22389 D NATIVE_AD_TRACK: → Adding ad view to container...
+12-24 00:19:24.182 22389 22389 D NATIVE_AD_TRACK:    Container child count before: 1
+12-24 00:19:24.182 22389 22389 D NATIVE_AD_TRACK:    Container child count after: 1
+12-24 00:19:24.182 22389 22389 D NATIVE_AD_TRACK:    Container visibility: VISIBLE
+12-24 00:19:24.182 22389 22389 D NATIVE_AD_TRACK:    AdView visibility: VISIBLE
+12-24 00:19:24.182 22389 22389 D NATIVE_AD_TRACK: ✅ Native ad displayed successfully for: FragOnboardLanguage.setupNativeAd:302
+12-24 00:19:24.182 22389 22389 D NATIVE_AD_TRACK: → loadAdWithCallback() called, waiting for response...
+12-24 00:19:24.182 22389 22389 D DIAGNOSE: ✅ NativeAdHelper.displayNativeAdWithAutoLoad() returned
+12-24 00:19:24.279 22389 22389 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:19:24.279 22389 22389 D NATIVE_AD_TRACK: 🎯 Native Ad Request
+12-24 00:19:24.279 22389 22389 D NATIVE_AD_TRACK:    Caller: FragOnboardQuranVersion.setupNativeAd:749
+12-24 00:19:24.279 22389 22389 D NATIVE_AD_TRACK:    Activity: ActivityOnboarding
+12-24 00:19:24.279 22389 22389 D NATIVE_AD_TRACK:    Container: FrameLayout@166828306
+12-24 00:19:24.279 22389 22389 D NATIVE_AD_TRACK:    Layout ResId: 2131625365
+12-24 00:19:24.279 22389 22389 D NATIVE_AD_TRACK:    Container visibility: 8 (0=VISIBLE, 4=INVISIBLE, 8=GONE)
+12-24 00:19:24.279 22389 22389 D NATIVE_AD_TRACK:    Container parent: LinearLayout
+12-24 00:19:24.279 22389 22389 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:19:24.280 22389 22389 D NATIVE_AD_TRACK: ⚠️ Ad is already loading, skipping duplicate request
+12-24 00:19:24.280 22389 22389 D NATIVE_AD_TRACK: → Callback received for: FragOnboardQuranVersion.setupNativeAd:749
+12-24 00:19:24.280 22389 22389 D NATIVE_AD_TRACK:    Ad object: NOT NULL
+12-24 00:19:24.280 22389 22389 D NATIVE_AD_TRACK: → Inflating ad view for: FragOnboardQuranVersion.setupNativeAd:749
+12-24 00:19:24.280 22389 22389 D NATIVE_AD_TRACK:    Ad headline: Test Ad : Google Ads
+12-24 00:19:24.281 22389 22389 D NATIVE_AD_TRACK:    Ad body: Stay up to date with your Ads Check how your ads a
+12-24 00:19:24.292 22389 22389 D NATIVE_AD_TRACK:    Inflated view type: NativeAdView
+12-24 00:19:24.292 22389 22389 D NATIVE_AD_TRACK:    ✅ Root is NativeAdView directly
+12-24 00:19:24.292 22389 22389 D NATIVE_AD_TRACK:    AdView resolved: NativeAdView
+12-24 00:19:24.292 22389 22389 D NATIVE_AD_TRACK: → Populating ad view...
+12-24 00:19:24.294 22389 22389 D NATIVE_AD_TRACK:    ✅ Ad view populated
+12-24 00:19:24.294 22389 22389 D NATIVE_AD_TRACK: → Adding ad view to container...
+12-24 00:19:24.294 22389 22389 D NATIVE_AD_TRACK:    Container child count before: 0
+12-24 00:19:24.294 22389 22389 D NATIVE_AD_TRACK:    Container child count after: 1
+12-24 00:19:24.294 22389 22389 D NATIVE_AD_TRACK:    Container visibility: VISIBLE
+12-24 00:19:24.294 22389 22389 D NATIVE_AD_TRACK:    AdView visibility: VISIBLE
+12-24 00:19:24.294 22389 22389 D NATIVE_AD_TRACK: ✅ Native ad displayed successfully for: FragOnboardQuranVersion.setupNativeAd:749
+12-24 00:19:24.294 22389 22389 D NATIVE_AD_TRACK: → loadAdWithCallback() called, waiting for response...
+12-24 00:19:24.294 22389 22389 D FragOnboardQuranVersion: ✅ Native ad setup initiated
+12-24 00:19:24.321 22389 22389 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:19:24.321 22389 22389 D NATIVE_AD_TRACK: 🎯 Native Ad Request
+12-24 00:19:24.321 22389 22389 D NATIVE_AD_TRACK:    Caller: FragOnboardQuranVersion.setupNativeAd:749
+12-24 00:19:24.321 22389 22389 D NATIVE_AD_TRACK:    Activity: ActivityOnboarding
+12-24 00:19:24.321 22389 22389 D NATIVE_AD_TRACK:    Container: FrameLayout@166828306
+12-24 00:19:24.321 22389 22389 D NATIVE_AD_TRACK:    Layout ResId: 2131625365
+12-24 00:19:24.321 22389 22389 D NATIVE_AD_TRACK:    Container visibility: 0 (0=VISIBLE, 4=INVISIBLE, 8=GONE)
+12-24 00:19:24.321 22389 22389 D NATIVE_AD_TRACK:    Container parent: null
+12-24 00:19:24.321 22389 22389 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:19:24.321 22389 22389 D NATIVE_AD_TRACK: → loadAdWithCallback() called, waiting for response...
+12-24 00:19:24.321 22389 22389 D FragOnboardQuranVersion: ✅ Native ad setup initiated
+12-24 00:19:25.397 22389 22389 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 00:19:25.397 22389 22389 D NATIVE_AD_TRACK:    Headline: Test Ad : Flood-It!
+12-24 00:19:25.397 22389 22389 D NATIVE_AD_TRACK:    Body: Install Flood-It App for free! Free Popular Casual
+12-24 00:19:25.397 22389 22389 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 00:19:25.397 22389 22389 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (1/3)
+12-24 00:19:25.397 22389 22389 D NATIVE_AD_TRACK:    Pending callbacks: 1
+12-24 00:19:25.397 22389 22389 D NATIVE_AD_TRACK: → Callback received for: FragOnboardQuranVersion.setupNativeAd:749
+12-24 00:19:25.397 22389 22389 D NATIVE_AD_TRACK:    Ad object: NOT NULL
+12-24 00:19:25.397 22389 22389 D NATIVE_AD_TRACK: → Inflating ad view for: FragOnboardQuranVersion.setupNativeAd:749
+12-24 00:19:25.397 22389 22389 D NATIVE_AD_TRACK:    Ad headline: Test Ad : Flood-It!
+12-24 00:19:25.397 22389 22389 D NATIVE_AD_TRACK:    Ad body: Install Flood-It App for free! Free Popular Casual
+12-24 00:19:25.414 22389 22389 D NATIVE_AD_TRACK:    Inflated view type: NativeAdView
+12-24 00:19:25.414 22389 22389 D NATIVE_AD_TRACK:    ✅ Root is NativeAdView directly
+12-24 00:19:25.414 22389 22389 D NATIVE_AD_TRACK:    AdView resolved: NativeAdView
+12-24 00:19:25.414 22389 22389 D NATIVE_AD_TRACK: → Populating ad view...
+12-24 00:19:25.419 22389 22389 D NATIVE_AD_TRACK:    ✅ Ad view populated
+12-24 00:19:25.419 22389 22389 D NATIVE_AD_TRACK: → Adding ad view to container...
+12-24 00:19:25.419 22389 22389 D NATIVE_AD_TRACK:    Container child count before: 1
+12-24 00:19:25.419 22389 22389 D NATIVE_AD_TRACK:    Container child count after: 1
+12-24 00:19:25.419 22389 22389 D NATIVE_AD_TRACK:    Container visibility: VISIBLE
+12-24 00:19:25.419 22389 22389 D NATIVE_AD_TRACK:    AdView visibility: VISIBLE
+12-24 00:19:25.420 22389 22389 D NATIVE_AD_TRACK: ✅ Native ad displayed successfully for: FragOnboardQuranVersion.setupNativeAd:749
+12-24 00:19:25.420 22389 22389 D NATIVE_AD_TRACK: 📦 Pool not full yet, loading next ad...
+12-24 00:19:25.420 22389 22389 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (1/3)
+12-24 00:19:25.420 22389 22389 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 00:19:26.560 22389 22389 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 00:19:26.560 22389 22389 D NATIVE_AD_TRACK:    Headline: Test Ad : Flood-It!
+12-24 00:19:26.560 22389 22389 D NATIVE_AD_TRACK:    Body: Install Flood-It App for free! Free Popular Casual
+12-24 00:19:26.561 22389 22389 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 00:19:26.561 22389 22389 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (2/3)
+12-24 00:19:26.561 22389 22389 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 00:19:26.561 22389 22389 D NATIVE_AD_TRACK: 📦 Pool not full yet, loading next ad...
+12-24 00:19:26.561 22389 22389 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (2/3)
+12-24 00:19:26.561 22389 22389 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 00:19:27.518 22389 22389 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 00:19:27.519 22389 22389 D NATIVE_AD_TRACK:    Headline: Test Ad : Google Ads
+12-24 00:19:27.519 22389 22389 D NATIVE_AD_TRACK:    Body: Stay up to date with your Ads Check how your ads a
+12-24 00:19:27.519 22389 22389 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 00:19:27.519 22389 22389 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (3/3)
+12-24 00:19:27.519 22389 22389 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 00:19:27.519 22389 22389 D NATIVE_AD_TRACK: 🎉 Cache pool full (3/3)
+12-24 00:19:56.309 22389 22389 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:19:56.309 22389 22389 D NATIVE_AD_TRACK: 🎯 Native Ad Request
+12-24 00:19:56.309 22389 22389 D NATIVE_AD_TRACK:    Caller: AdNativeSmallWrapperView.loadNativeAd:105
+12-24 00:19:56.309 22389 22389 D NATIVE_AD_TRACK:    Activity: QuizReviewLearnActivity
+12-24 00:19:56.309 22389 22389 D NATIVE_AD_TRACK:    Container: AdNativeSmallWrapperView@80158185
+12-24 00:19:56.309 22389 22389 D NATIVE_AD_TRACK:    Layout ResId: 2131625123
+12-24 00:19:56.309 22389 22389 D NATIVE_AD_TRACK:    Container visibility: 0 (0=VISIBLE, 4=INVISIBLE, 8=GONE)
+12-24 00:19:56.309 22389 22389 D NATIVE_AD_TRACK:    Container parent: LinearLayout
+12-24 00:19:56.309 22389 22389 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:19:56.309 22389 22389 D NATIVE_AD_TRACK: → Callback received for: AdNativeSmallWrapperView.loadNativeAd:105
+12-24 00:19:56.309 22389 22389 D NATIVE_AD_TRACK:    Ad object: NOT NULL
+12-24 00:19:56.309 22389 22389 D NATIVE_AD_TRACK: → Inflating ad view for: AdNativeSmallWrapperView.loadNativeAd:105
+12-24 00:19:56.309 22389 22389 D NATIVE_AD_TRACK:    Ad headline: Test Ad : Flood-It!
+12-24 00:19:56.309 22389 22389 D NATIVE_AD_TRACK:    Ad body: Install Flood-It App for free! Free Popular Casual
+12-24 00:19:56.316 22389 22389 D NATIVE_AD_TRACK:    Inflated view type: FrameLayout
+12-24 00:19:56.316 22389 22389 D NATIVE_AD_TRACK:    → Root is FrameLayout, searching for NativeAdView...
+12-24 00:19:56.316 22389 22389 D NATIVE_AD_TRACK:    ✅ Found NativeAdView inside container
+12-24 00:19:56.316 22389 22389 D NATIVE_AD_TRACK:    AdView resolved: NativeAdView
+12-24 00:19:56.316 22389 22389 D NATIVE_AD_TRACK: → Populating ad view...
+12-24 00:19:56.318 22389 22389 D NATIVE_AD_TRACK:    ✅ Ad view populated
+12-24 00:19:56.318 22389 22389 D NATIVE_AD_TRACK: → Adding ad view to container...
+12-24 00:19:56.318 22389 22389 D NATIVE_AD_TRACK:    Container child count before: 1
+12-24 00:19:56.318 22389 22389 D NATIVE_AD_TRACK:    Container child count after: 1
+12-24 00:19:56.318 22389 22389 D NATIVE_AD_TRACK:    Container visibility: VISIBLE
+12-24 00:19:56.318 22389 22389 D NATIVE_AD_TRACK:    AdView visibility: VISIBLE
+12-24 00:19:56.318 22389 22389 D NATIVE_AD_TRACK: ✅ Native ad displayed successfully for: AdNativeSmallWrapperView.loadNativeAd:105
+12-24 00:19:56.318 22389 22389 D NATIVE_AD_TRACK: → loadAdWithCallback() called, waiting for response...
+12-24 00:20:08.666 22389 22389 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:20:08.666 22389 22389 D NATIVE_AD_TRACK: 🎯 Native Ad Request
+12-24 00:20:08.666 22389 22389 D NATIVE_AD_TRACK:    Caller: AdNativeSmallWrapperView.loadNativeAd:105
+12-24 00:20:08.666 22389 22389 D NATIVE_AD_TRACK:    Activity: QuizReviewLearnActivity
+12-24 00:20:08.666 22389 22389 D NATIVE_AD_TRACK:    Container: AdNativeSmallWrapperView@34858054
+12-24 00:20:08.666 22389 22389 D NATIVE_AD_TRACK:    Layout ResId: 2131625123
+12-24 00:20:08.666 22389 22389 D NATIVE_AD_TRACK:    Container visibility: 0 (0=VISIBLE, 4=INVISIBLE, 8=GONE)
+12-24 00:20:08.666 22389 22389 D NATIVE_AD_TRACK:    Container parent: LinearLayout
+12-24 00:20:08.666 22389 22389 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:20:08.667 22389 22389 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (1/3)
+12-24 00:20:08.667 22389 22389 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 00:20:08.681 22389 22389 D NATIVE_AD_TRACK: → Callback received for: AdNativeSmallWrapperView.loadNativeAd:105
+12-24 00:20:08.681 22389 22389 D NATIVE_AD_TRACK:    Ad object: NOT NULL
+12-24 00:20:08.681 22389 22389 D NATIVE_AD_TRACK: → Inflating ad view for: AdNativeSmallWrapperView.loadNativeAd:105
+12-24 00:20:08.681 22389 22389 D NATIVE_AD_TRACK:    Ad headline: Test Ad : Flood-It!
+12-24 00:20:08.681 22389 22389 D NATIVE_AD_TRACK:    Ad body: Install Flood-It App for free! Free Popular Casual
+12-24 00:20:08.688 22389 22389 D NATIVE_AD_TRACK:    Inflated view type: FrameLayout
+12-24 00:20:08.688 22389 22389 D NATIVE_AD_TRACK:    → Root is FrameLayout, searching for NativeAdView...
+12-24 00:20:08.688 22389 22389 D NATIVE_AD_TRACK:    ✅ Found NativeAdView inside container
+12-24 00:20:08.688 22389 22389 D NATIVE_AD_TRACK:    AdView resolved: NativeAdView
+12-24 00:20:08.688 22389 22389 D NATIVE_AD_TRACK: → Populating ad view...
+12-24 00:20:08.690 22389 22389 D NATIVE_AD_TRACK:    ✅ Ad view populated
+12-24 00:20:08.690 22389 22389 D NATIVE_AD_TRACK: → Adding ad view to container...
+12-24 00:20:08.690 22389 22389 D NATIVE_AD_TRACK:    Container child count before: 1
+12-24 00:20:08.690 22389 22389 D NATIVE_AD_TRACK:    Container child count after: 1
+12-24 00:20:08.690 22389 22389 D NATIVE_AD_TRACK:    Container visibility: VISIBLE
+12-24 00:20:08.690 22389 22389 D NATIVE_AD_TRACK:    AdView visibility: VISIBLE
+12-24 00:20:08.690 22389 22389 D NATIVE_AD_TRACK: ✅ Native ad displayed successfully for: AdNativeSmallWrapperView.loadNativeAd:105
+12-24 00:20:08.690 22389 22389 D NATIVE_AD_TRACK: → loadAdWithCallback() called, waiting for response...
+12-24 00:20:08.692 22389 22389 D NATIVE_AD_TRACK: ⚠️ Ad is already loading, skipping duplicate request
+12-24 00:20:09.899 22389 22389 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 00:20:09.899 22389 22389 D NATIVE_AD_TRACK:    Headline: Test Ad : Google Ads
+12-24 00:20:09.899 22389 22389 D NATIVE_AD_TRACK:    Body: Stay up to date with your Ads Check how your ads a
+12-24 00:20:09.899 22389 22389 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 00:20:09.899 22389 22389 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (2/3)
+12-24 00:20:09.899 22389 22389 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 00:20:09.899 22389 22389 D NATIVE_AD_TRACK: 📦 Pool not full yet, loading next ad...
+12-24 00:20:09.900 22389 22389 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (2/3)
+12-24 00:20:09.900 22389 22389 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 00:20:11.083 22389 22389 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 00:20:11.083 22389 22389 D NATIVE_AD_TRACK:    Headline: Test Ad : Flood-It!
+12-24 00:20:11.083 22389 22389 D NATIVE_AD_TRACK:    Body: Install Flood-It App for free! Free Popular Casual
+12-24 00:20:11.084 22389 22389 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 00:20:11.084 22389 22389 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (3/3)
+12-24 00:20:11.084 22389 22389 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 00:20:11.084 22389 22389 D NATIVE_AD_TRACK: 🎉 Cache pool full (3/3)
+12-24 00:23:53.722 22389 22389 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:23:53.722 22389 22389 D NATIVE_AD_TRACK: 🎯 Native Ad Request
+12-24 00:23:53.722 22389 22389 D NATIVE_AD_TRACK:    Caller: AdNativeSmallWrapperView.loadNativeAd:105
+12-24 00:23:53.722 22389 22389 D NATIVE_AD_TRACK:    Activity: QuizReviewLearnActivity
+12-24 00:23:53.722 22389 22389 D NATIVE_AD_TRACK:    Container: AdNativeSmallWrapperView@60221701
+12-24 00:23:53.722 22389 22389 D NATIVE_AD_TRACK:    Layout ResId: 2131625123
+12-24 00:23:53.722 22389 22389 D NATIVE_AD_TRACK:    Container visibility: 0 (0=VISIBLE, 4=INVISIBLE, 8=GONE)
+12-24 00:23:53.722 22389 22389 D NATIVE_AD_TRACK:    Container parent: LinearLayout
+12-24 00:23:53.722 22389 22389 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:23:53.722 22389 22389 D NATIVE_AD_TRACK: → Callback received for: AdNativeSmallWrapperView.loadNativeAd:105
+12-24 00:23:53.722 22389 22389 D NATIVE_AD_TRACK:    Ad object: NOT NULL
+12-24 00:23:53.722 22389 22389 D NATIVE_AD_TRACK: → Inflating ad view for: AdNativeSmallWrapperView.loadNativeAd:105
+12-24 00:23:53.722 22389 22389 D NATIVE_AD_TRACK:    Ad headline: Test Ad : Google Ads
+12-24 00:23:53.722 22389 22389 D NATIVE_AD_TRACK:    Ad body: Stay up to date with your Ads Check how your ads a
+12-24 00:23:53.730 22389 22389 D NATIVE_AD_TRACK:    Inflated view type: FrameLayout
+12-24 00:23:53.730 22389 22389 D NATIVE_AD_TRACK:    → Root is FrameLayout, searching for NativeAdView...
+12-24 00:23:53.730 22389 22389 D NATIVE_AD_TRACK:    ✅ Found NativeAdView inside container
+12-24 00:23:53.730 22389 22389 D NATIVE_AD_TRACK:    AdView resolved: NativeAdView
+12-24 00:23:53.730 22389 22389 D NATIVE_AD_TRACK: → Populating ad view...
+12-24 00:23:53.732 22389 22389 D NATIVE_AD_TRACK:    ✅ Ad view populated
+12-24 00:23:53.732 22389 22389 D NATIVE_AD_TRACK: → Adding ad view to container...
+12-24 00:23:53.732 22389 22389 D NATIVE_AD_TRACK:    Container child count before: 1
+12-24 00:23:53.732 22389 22389 D NATIVE_AD_TRACK:    Container child count after: 1
+12-24 00:23:53.732 22389 22389 D NATIVE_AD_TRACK:    Container visibility: VISIBLE
+12-24 00:23:53.732 22389 22389 D NATIVE_AD_TRACK:    AdView visibility: VISIBLE
+12-24 00:23:53.732 22389 22389 D NATIVE_AD_TRACK: ✅ Native ad displayed successfully for: AdNativeSmallWrapperView.loadNativeAd:105
+12-24 00:23:53.732 22389 22389 D NATIVE_AD_TRACK: → loadAdWithCallback() called, waiting for response...
+12-24 00:24:20.972 22389 22389 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:24:20.972 22389 22389 D NATIVE_AD_TRACK: 🎯 Native Ad Request
+12-24 00:24:20.972 22389 22389 D NATIVE_AD_TRACK:    Caller: AdNativeSmallWrapperView.loadNativeAd:105
+12-24 00:24:20.972 22389 22389 D NATIVE_AD_TRACK:    Activity: QuizReviewLearnActivity
+12-24 00:24:20.972 22389 22389 D NATIVE_AD_TRACK:    Container: AdNativeSmallWrapperView@62676762
+12-24 00:24:20.972 22389 22389 D NATIVE_AD_TRACK:    Layout ResId: 2131625123
+12-24 00:24:20.972 22389 22389 D NATIVE_AD_TRACK:    Container visibility: 0 (0=VISIBLE, 4=INVISIBLE, 8=GONE)
+12-24 00:24:20.972 22389 22389 D NATIVE_AD_TRACK:    Container parent: LinearLayout
+12-24 00:24:20.972 22389 22389 D NATIVE_AD_TRACK: ═══════════════════════════════════════════════
+12-24 00:24:20.972 22389 22389 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (1/3)
+12-24 00:24:20.972 22389 22389 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 00:24:20.986 22389 22389 D NATIVE_AD_TRACK: → Callback received for: AdNativeSmallWrapperView.loadNativeAd:105
+12-24 00:24:20.986 22389 22389 D NATIVE_AD_TRACK:    Ad object: NOT NULL
+12-24 00:24:20.986 22389 22389 D NATIVE_AD_TRACK: → Inflating ad view for: AdNativeSmallWrapperView.loadNativeAd:105
+12-24 00:24:20.986 22389 22389 D NATIVE_AD_TRACK:    Ad headline: Test Ad : Google Ads
+12-24 00:24:20.986 22389 22389 D NATIVE_AD_TRACK:    Ad body: Stay up to date with your Ads Check how your ads a
+12-24 00:24:20.993 22389 22389 D NATIVE_AD_TRACK:    Inflated view type: FrameLayout
+12-24 00:24:20.993 22389 22389 D NATIVE_AD_TRACK:    → Root is FrameLayout, searching for NativeAdView...
+12-24 00:24:20.993 22389 22389 D NATIVE_AD_TRACK:    ✅ Found NativeAdView inside container
+12-24 00:24:20.993 22389 22389 D NATIVE_AD_TRACK:    AdView resolved: NativeAdView
+12-24 00:24:20.993 22389 22389 D NATIVE_AD_TRACK: → Populating ad view...
+12-24 00:24:20.995 22389 22389 D NATIVE_AD_TRACK:    ✅ Ad view populated
+12-24 00:24:20.995 22389 22389 D NATIVE_AD_TRACK: → Adding ad view to container...
+12-24 00:24:20.995 22389 22389 D NATIVE_AD_TRACK:    Container child count before: 1
+12-24 00:24:20.995 22389 22389 D NATIVE_AD_TRACK:    Container child count after: 1
+12-24 00:24:20.995 22389 22389 D NATIVE_AD_TRACK:    Container visibility: VISIBLE
+12-24 00:24:20.995 22389 22389 D NATIVE_AD_TRACK:    AdView visibility: VISIBLE
+12-24 00:24:20.995 22389 22389 D NATIVE_AD_TRACK: ✅ Native ad displayed successfully for: AdNativeSmallWrapperView.loadNativeAd:105
+12-24 00:24:20.995 22389 22389 D NATIVE_AD_TRACK: → loadAdWithCallback() called, waiting for response...
+12-24 00:24:20.998 22389 22389 D NATIVE_AD_TRACK: ⚠️ Ad is already loading, skipping duplicate request
+12-24 00:24:22.447 22389 22389 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 00:24:22.447 22389 22389 D NATIVE_AD_TRACK:    Headline: Test Ad : Flood-It!
+12-24 00:24:22.447 22389 22389 D NATIVE_AD_TRACK:    Body: Install Flood-It App for free! Free Popular Casual
+12-24 00:24:22.447 22389 22389 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 00:24:22.447 22389 22389 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (2/3)
+12-24 00:24:22.447 22389 22389 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 00:24:22.447 22389 22389 D NATIVE_AD_TRACK: 📦 Pool not full yet, loading next ad...
+12-24 00:24:22.448 22389 22389 D NATIVE_AD_TRACK: 🔄 NativeAdManager.loadNewAd() - Starting ad load (2/3)
+12-24 00:24:22.448 22389 22389 D NATIVE_AD_TRACK:    Ad Unit ID: ca-app-pub-3940256099942544/2247696110
+12-24 00:24:23.724 22389 22389 D NATIVE_AD_TRACK: ✅ Native ad loaded from AdMob
+12-24 00:24:23.724 22389 22389 D NATIVE_AD_TRACK:    Headline: Test Ad : Google Ads
+12-24 00:24:23.724 22389 22389 D NATIVE_AD_TRACK:    Body: Stay up to date with your Ads Check how your ads a
+12-24 00:24:23.724 22389 22389 D NATIVE_AD_TRACK:    Advertiser: null
+12-24 00:24:23.724 22389 22389 D NATIVE_AD_TRACK: ✅ Ad added to cache pool (3/3)
+12-24 00:24:23.724 22389 22389 D NATIVE_AD_TRACK:    Pending callbacks: 0
+12-24 00:24:23.725 22389 22389 D NATIVE_AD_TRACK: 🎉 Cache pool full (3/3)

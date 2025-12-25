@@ -11,6 +11,15 @@
     <color name="primary_color">#4B9B76</color>
     <color name="language_card_unselected_bg">#357A5E</color>
 
+    <!-- 💬 Feedback System Colors -->
+    <color name="feedback_primary">#1B4D3E</color>
+    <color name="feedback_card_bg">#F5F5F5</color>
+    <color name="feedback_card_selected">#E8F5E9</color>
+    <color name="feedback_text_primary">#1B4D3E</color>
+    <color name="feedback_text_secondary">#616161</color>
+    <color name="feedback_chip_bg">#E0E0E0</color>
+    <color name="feedback_chip_selected">#4B9B76</color>
+
     <color name="hadith_card">#E6E6E6</color>
     <color name="grey">#c3c3c3 </color>
     <color name="grey_two">#6E6D6D</color>

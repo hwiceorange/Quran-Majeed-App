@@ -30,6 +30,9 @@ import com.quran.quranaudio.online.prayertimes.ui.home.HomeViewModel;
 import com.quran.quranaudio.online.R;
 import com.quran.quranaudio.quiz.utils.RxBus;
 import com.quran.quranaudio.quiz.base.MainTabChangeEvent;
+import com.quran.quranaudio.online.feedback.FeedbackFloatingButton;
+import com.quran.quranaudio.online.feedback.FeedbackManager;
+import com.quran.quranaudio.online.feedback.ExitInterceptor;
 
 import javax.inject.Inject;
 
@@ -48,6 +51,10 @@ public class MainActivity extends BaseActivity {
     private PrayerDataPreloader prayerDataPreloader;
     private NavController navController;
     private BottomNavigationView navView;
+    
+    // 💬 反馈系统组件
+    private FeedbackFloatingButton feedbackFloatingButton;
+    private ExitInterceptor exitInterceptor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,6 +168,9 @@ public class MainActivity extends BaseActivity {
         
         // Register RxBus listener for MainTabChangeEvent (from quiz result page)
         registerQuizResultListener();
+        
+        // 💬 Initialize feedback system
+        initFeedbackSystem();
     }
 
     /**
@@ -248,7 +258,14 @@ public class MainActivity extends BaseActivity {
     }
 
     public void onBackPressed() {
-        // Rate us dialog removed - directly finish the app
+        // Exit interceptor logic
+        if (exitInterceptor != null && exitInterceptor.onBackPressed()) {
+            // Intercepted, do not perform default back action
+            android.util.Log.d("MainActivity", "⚠️ Back press intercepted by ExitInterceptor");
+            return;
+        }
+        
+        // Allow, perform default back action (finish app)
         finish();
     }
     
@@ -356,6 +373,44 @@ public class MainActivity extends BaseActivity {
             
         } catch (Exception e) {
             android.util.Log.e("MainActivity", "❌ Failed to initialize default Tafsir", e);
+        }
+    }
+    
+    /**
+     * 💬 Initialize feedback system
+     */
+    private void initFeedbackSystem() {
+        try {
+            android.util.Log.d("MainActivity", "💬 Initializing feedback system...");
+            
+            // Set current page name (for feedback data collection)
+            FeedbackManager.getInstance().setCurrentPage("MainActivity");
+            
+            // Initialize floating feedback button (delayed 3 seconds to avoid startup interference)
+            new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+                feedbackFloatingButton = new FeedbackFloatingButton(this);
+                feedbackFloatingButton.show();
+                android.util.Log.d("MainActivity", "✅ Feedback floating button shown");
+            }, 3000);
+            
+            // Initialize exit interceptor
+            exitInterceptor = new ExitInterceptor(this);
+            
+            android.util.Log.d("MainActivity", "✅ Feedback system initialized");
+            
+        } catch (Exception e) {
+            android.util.Log.e("MainActivity", "❌ Failed to initialize feedback system", e);
+        }
+    }
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        
+        // Cleanup feedback floating button
+        if (feedbackFloatingButton != null) {
+            feedbackFloatingButton.destroy();
+            android.util.Log.d("MainActivity", "✅ Feedback floating button destroyed");
         }
     }
 

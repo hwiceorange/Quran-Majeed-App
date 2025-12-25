@@ -1518,4 +1518,8 @@
     <string name="download_failed">Download failed. Please check your internet connection and try again.</string>
     <string name="hadith_data_not_available">Hadith data not available. Please download it first.</string>
     
+    <!-- Feedback System -->
+    <string name="feedback_button_description">Open feedback dialog</string>
+    <string name="feedback_toast_hint">Tell us what\'s difficult to use?</string>
+    
 </resources>

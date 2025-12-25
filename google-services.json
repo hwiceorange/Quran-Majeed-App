@@ -1,0 +1,64 @@
+{
+  "project_info": {
+    "project_number": "517834286063",
+    "project_id": "quran-majeed-aa3d2",
+    "storage_bucket": "quran-majeed-aa3d2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:517834286063:android:aea3c459125d4c2cd80c1a",
+        "android_client_info": {
+          "package_name": "com.quran.quranaudio.online"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "517834286063-9qgj0vkg08h9arqtjo03jfh3greim9g5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.quran.quranaudio.online",
+            "certificate_hash": "b62c57505743f74658e6d3f51db8a328395c75c3"
+          }
+        },
+        {
+          "client_id": "517834286063-er3svn2u2f34q6tlipn1r0d8507sqd05.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.quran.quranaudio.online",
+            "certificate_hash": "6dc10985e207824215ec7610200f3741eb4640ab"
+          }
+        },
+        {
+          "client_id": "517834286063-juvuspnvsf6937st2umci3olgtro9t0b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.quran.quranaudio.online",
+            "certificate_hash": "8ae5e2c39e284c7c3277ed2e8957bf08ab4f9e45"
+          }
+        },
+        {
+          "client_id": "517834286063-52gsp24nqkb7sht7e7jn31397nhanumb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxNDh9qjiGHO5nIMZKfl0RscYYErskVsg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "517834286063-52gsp24nqkb7sht7e7jn31397nhanumb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-3966802724737141~7853010339"
+    }
+  ],
+  "configuration_version": "1"
+}
