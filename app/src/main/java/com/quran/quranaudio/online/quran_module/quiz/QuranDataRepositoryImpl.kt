@@ -90,11 +90,21 @@ class QuranDataRepositoryImpl private constructor(
     
     override fun getVerseData(surahId: Int, ayahId: Int): QuizVerseData? {
         Log.d(TAG, "📖 Getting verse data - Surah:$surahId, Ayah:$ayahId")
+        val startTime = System.currentTimeMillis()
         
         // 检查Quran是否已初始化
         val quran = quranRef
         if (quran == null) {
             Log.w(TAG, "⚠️ Quran data not initialized")
+            
+            // 🎯 Firebase Analytics: 古兰经数据未初始化
+            try {
+                com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(context)
+                    .logContentPerformance("surah_text", "fail", System.currentTimeMillis() - startTime, "quran_not_initialized")
+            } catch (e: Exception) {
+                Log.e(TAG, "Analytics logging failed: ${e.message}")
+            }
+            
             return null
         }
         
@@ -103,6 +113,15 @@ class QuranDataRepositoryImpl private constructor(
             val verse = quran.getVerse(surahId, ayahId)
             if (verse == null) {
                 Log.w(TAG, "⚠️ Verse not found - Surah:$surahId, Ayah:$ayahId")
+                
+                // 🎯 Firebase Analytics: 经文未找到
+                try {
+                    com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(context)
+                        .logContentPerformance("surah_text", "fail", System.currentTimeMillis() - startTime, "verse_not_found")
+                } catch (e: Exception) {
+                    Log.e(TAG, "Analytics logging failed: ${e.message}")
+                }
+                
                 return null
             }
             
@@ -113,6 +132,16 @@ class QuranDataRepositoryImpl private constructor(
             val translationText = loadTranslation(surahId, ayahId)
             Log.d(TAG, "✅ Translation loaded (${translationText.length} chars)")
             
+            val latency = System.currentTimeMillis() - startTime
+            
+            // 🎯 Firebase Analytics: 经文加载成功（监控性能）
+            try {
+                com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(context)
+                    .logContentPerformance("surah_text", "success", latency, null)
+            } catch (e: Exception) {
+                Log.e(TAG, "Analytics logging failed: ${e.message}")
+            }
+            
             return QuizVerseData(
                 surahId = surahId,
                 ayahId = ayahId,
@@ -122,6 +151,15 @@ class QuranDataRepositoryImpl private constructor(
             
         } catch (e: Exception) {
             Log.e(TAG, "❌ Error loading verse data", e)
+            
+            // 🎯 Firebase Analytics: 经文加载异常
+            try {
+                com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(context)
+                    .logContentPerformance("surah_text", "fail", System.currentTimeMillis() - startTime, e.message ?: "unknown_error")
+            } catch (analyticsEx: Exception) {
+                Log.e(TAG, "Analytics logging failed: ${analyticsEx.message}")
+            }
+            
             return null
         }
     }

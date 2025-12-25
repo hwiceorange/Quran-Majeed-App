@@ -48,22 +48,25 @@ object AdFactory : ActivityLifecycleCallbacks {
             return
         }
         
-        // ✅ Initialize AdMob on main thread with delay (5 seconds)
+        // ✅ Initialize AdMob on main thread with delay (8 seconds - 增加延迟)
         // 
         // Delay rationale:
         // 1. App startup fully completes
         // 2. All legacy/background SDKs finish (including StartApp if present)
-        // 3. All locks released
-        // 4. UI is interactive before ads load
+        // 3. WebView provider (Chrome) fully loaded and ready
+        // 4. All locks released
+        // 5. UI is interactive before ads load
         // 
-        // 🆕 WebView 预热已移除（可能阻塞主线程导致 ANR）
-        // 改为依赖增强的异常捕获机制，确保不影响产品功能
+        // 🆕 延迟从5秒增加到8秒：
+        // - 确保 WebView 预初始化完全完成
+        // - 给 StartApp SDK 更多时间完成初始化
+        // - 降低死锁风险
         // 
-        // Trade-off: Ads load 5 seconds after app start, NO DEADLOCK, NO ANR
+        // Trade-off: Ads load 8 seconds after app start, NO DEADLOCK, NO ANR
         android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
-            Log.d(TAG, "🕐 5-second delay completed, starting AdMob initialization")
+            Log.d(TAG, "🕐 8-second delay completed, starting AdMob initialization")
             initAdmobOnMainThread(application)
-        }, 5000) // ⚠️ 5 second delay - 不再需要等待 WebView 预热
+        }, 8000) // ⚠️ 8 second delay - 确保 WebView 和所有 SDK 就绪
     }
     
 
@@ -94,53 +97,75 @@ object AdFactory : ActivityLifecycleCallbacks {
             
             Log.d(TAG, "🔄 Initializing AdMob on main thread")
             
-            // Configure AdMob RequestConfiguration with test devices
-            val testDeviceIds = mutableListOf(com.google.android.gms.ads.AdRequest.DEVICE_ID_EMULATOR)
-            
-            val requestConfiguration = com.google.android.gms.ads.RequestConfiguration.Builder()
-                .setTestDeviceIds(testDeviceIds)
-                .build()
-            
-            try {
-                MobileAds.setRequestConfiguration(requestConfiguration)
-                Log.d(TAG, "✅ AdMob RequestConfiguration set successfully")
-            } catch (e: Exception) {
-                Log.e(TAG, "⚠️ Failed to set RequestConfiguration (non-fatal): ${e.message}")
-                // Continue with initialization even if this fails
-            }
-            
-            // Initialize MobileAds with comprehensive error handling
-            try {
-                MobileAds.initialize(context) { initStatus ->
+            // 🔥 终极修复：所有 AdMob 操作延迟 2 秒后在主线程统一执行
+            // 完全避免后台线程，因为后台线程的 setRequestConfiguration 仍可能与主线程死锁
+            // 策略：等待足够长时间（App启动8秒 + 这里2秒 = 总共10秒），确保所有SDK和WebView就绪
+            android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+                try {
+                    Log.d(TAG, "🚀 Starting AdMob configuration (after 2s delay)")
+                    
+                    // Step 1: 设置 RequestConfiguration（主线程，但延迟执行避免锁竞争）
                     try {
-                        val statusMap = initStatus.adapterStatusMap
-                        for ((className, status) in statusMap) {
-                            Log.d(TAG, "Adapter: $className | State: ${status.initializationState} | Latency: ${status.latency}")
-                        }
-                        Log.d(TAG, "✅ MobileAds initialization successful")
+                        val testDeviceIds = mutableListOf(com.google.android.gms.ads.AdRequest.DEVICE_ID_EMULATOR)
+                        val requestConfiguration = com.google.android.gms.ads.RequestConfiguration.Builder()
+                            .setTestDeviceIds(testDeviceIds)
+                            .build()
+                        
+                        MobileAds.setRequestConfiguration(requestConfiguration)
+                        Log.d(TAG, "✅ AdMob RequestConfiguration set successfully")
                     } catch (e: Exception) {
-                        Log.e(TAG, "⚠️ Error logging adapter status: ${e.message}")
+                        Log.e(TAG, "⚠️ Failed to set RequestConfiguration (non-fatal): ${e.message}")
+                        // Continue even if this fails
                     }
+                    
+                    // Step 2: 再延迟 500ms 初始化 MobileAds（确保配置已生效）
+                    android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+                        try {
+                            Log.d(TAG, "🚀 Starting MobileAds.initialize()")
+                            
+                            // 超时保护：检测 30 秒后是否完成
+                            var initCompleted = false
+                            android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+                                if (!initCompleted) {
+                                    Log.e(TAG, "⚠️⚠️⚠️ MobileAds initialization timeout (30s)")
+                                    Log.e(TAG, "⚠️ Possible WebView provider issue or SDK conflict")
+                                    Log.e(TAG, "⚠️ App continues, but ads may not load")
+                                }
+                            }, 30000)
+                            
+                            // Initialize MobileAds
+                            MobileAds.initialize(context) { initStatus ->
+                                initCompleted = true
+                                try {
+                                    val statusMap = initStatus.adapterStatusMap
+                                    for ((className, status) in statusMap) {
+                                        Log.d(TAG, "Adapter: $className | State: ${status.initializationState} | Latency: ${status.latency}")
+                                    }
+                                    Log.d(TAG, "✅ MobileAds initialization successful")
+                                } catch (e: Exception) {
+                                    Log.e(TAG, "⚠️ Error logging adapter status: ${e.message}")
+                                }
+                            }
+                            Log.d(TAG, "📱 AdMob initialization started successfully")
+                            
+                        } catch (e: IllegalStateException) {
+                            Log.e(TAG, "❌ WebView IllegalStateException during AdMob init: ${e.message}", e)
+                            Log.w(TAG, "⚠️ WebView provider issue - ads will not load")
+                        } catch (e: Exception) {
+                            Log.e(TAG, "❌ Failed to initialize MobileAds: ${e.message}", e)
+                        }
+                    }, 500) // 500ms 后初始化 MobileAds
+                    
+                } catch (e: Exception) {
+                    Log.e(TAG, "❌ Error during AdMob configuration: ${e.message}", e)
                 }
-                Log.d(TAG, "📱 AdMob initialization started successfully")
-            } catch (e: IllegalStateException) {
-                // 🆕 Specific catch for WebView initialization crashes
-                Log.e(TAG, "❌ WebView IllegalStateException during AdMob init: ${e.message}", e)
-                Log.w(TAG, "⚠️ This usually means WebView provider (Chrome) has issues")
-                Log.w(TAG, "⚠️ Ads will not load, but app will continue normally")
-                // App can still function, ads just won't load
-            } catch (e: Exception) {
-                Log.e(TAG, "❌ Failed to initialize MobileAds: ${e.message}", e)
-                // App can still function, ads just won't load
-            }
+            }, 2000) // 2秒后开始配置（总延迟 8+2=10秒）
+            
         } catch (e: IllegalStateException) {
-            // 🆕 Catch WebView-related IllegalStateException at top level
             Log.e(TAG, "❌ Critical IllegalStateException during AdMob initialization: ${e.message}", e)
             Log.w(TAG, "⚠️ Likely WebView provider issue - continuing without ads")
-            // Fail gracefully - app continues without ads if initialization fails
         } catch (e: Exception) {
             Log.e(TAG, "❌ Critical error during AdMob initialization: ${e.message}", e)
-            // Fail gracefully - app continues without ads if initialization fails
         }
     }
 

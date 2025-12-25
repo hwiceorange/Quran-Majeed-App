@@ -131,9 +131,15 @@ public class App extends BaseApp {
         android.util.Log.d("DIAGNOSE", "App.onCreate() START");
         android.util.Log.d("DIAGNOSE", "========================================");
         
+        // 🎯 Firebase Analytics: 记录应用启动（用于留存率分析）
+        com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(this).logWorkflowStep("app_start");
+        
         try {
             super.onCreate();
             android.util.Log.d("DIAGNOSE", "✅ super.onCreate() completed");
+            
+            // 🎯 Firebase Analytics: 基础初始化完成
+            com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(this).logWorkflowStep("base_init_complete");
         } catch (Exception e) {
             android.util.Log.e("DIAGNOSE_ERROR", "❌ super.onCreate() FAILED", e);
             throw e;
@@ -166,6 +172,36 @@ public class App extends BaseApp {
                 } else {
                     android.util.Log.d("DIAGNOSE", "✅ MAIN process - using default WebView");
                     android.util.Log.d("App", "✅ MAIN process - using default WebView data directory");
+                    
+                    // 🔥 关键修复：在主进程主线程中提前初始化 WebView（增强版）
+                    // 防止广告SDK（如StartApp）在后台线程调用WebSettings.getDefaultUserAgent()时死锁
+                    try {
+                        android.util.Log.d("DIAGNOSE", "→ Pre-initializing WebView to prevent deadlock...");
+                        
+                        // 🆕 方法1: 预初始化 UserAgent（最轻量级）
+                        String userAgent = android.webkit.WebSettings.getDefaultUserAgent(this);
+                        android.util.Log.d("DIAGNOSE", "✅ UserAgent retrieved: " + (userAgent != null ? userAgent.substring(0, Math.min(50, userAgent.length())) + "..." : "null"));
+                        
+                        // 🆕 方法2: 创建一个临时 WebView 确保完全初始化（更彻底）
+                        // 这会触发 WebView provider (Chrome) 的完整加载
+                        try {
+                            android.webkit.WebView tempWebView = new android.webkit.WebView(this);
+                            tempWebView.getSettings().getJavaScriptEnabled(); // 触发设置初始化
+                            tempWebView.destroy(); // 立即销毁
+                            android.util.Log.d("DIAGNOSE", "✅ Temporary WebView created and destroyed successfully");
+                        } catch (Exception tempWebViewEx) {
+                            android.util.Log.w("DIAGNOSE", "⚠️ Temporary WebView creation failed (fallback to method 1): " + tempWebViewEx.getMessage());
+                            // 失败不致命，方法1已执行
+                        }
+                        
+                        android.util.Log.d("DIAGNOSE", "✅ WebView pre-initialized successfully (dual method)");
+                        android.util.Log.d("App", "✅ WebView pre-initialized in main thread (prevents SDK deadlock)");
+                        
+                    } catch (Exception webViewInitEx) {
+                        android.util.Log.e("DIAGNOSE_ERROR", "⚠️ WebView pre-init warning (non-fatal): " + webViewInitEx.getMessage());
+                        android.util.Log.w("App", "⚠️ WebView initialization failed - ads may not work properly");
+                        // 非致命错误，应用继续启动，但广告可能无法加载
+                    }
                 }
             } catch (IllegalStateException e) {
                 // WebView 已经被初始化（这不应该在 onCreate 开始时发生）
@@ -344,6 +380,9 @@ public class App extends BaseApp {
         android.util.Log.d("DIAGNOSE", "========================================");
         android.util.Log.d("DIAGNOSE", "✅ App.onCreate() COMPLETED SUCCESSFULLY");
         android.util.Log.d("DIAGNOSE", "========================================");
+        
+        // 🎯 Firebase Analytics: 应用完全启动成功
+        com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(this).logWorkflowStep("app_init_complete");
     }
 
 

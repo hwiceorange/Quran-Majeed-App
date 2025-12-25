@@ -60,6 +60,10 @@ class FragOnboardLanguage : FragOnboardBase() {
         
         super.onViewCreated(view, savedInstanceState)
         
+        // 🎯 Firebase Analytics: 语言选择页展示（新用户引导的第一个流失点）
+        com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(requireContext())
+            .logWorkflowStep("language_selection_view")
+        
         android.util.Log.d("FragOnboardLanguage", "✅ super.onViewCreated() completed")
         android.util.Log.d("FragOnboardLanguage", "🔍 Checking binding: ${_binding != null}")
         android.util.Log.d("FragOnboardLanguage", "🔍 Checking btnContinue: ${_binding?.btnContinue != null}")
@@ -146,6 +150,10 @@ class FragOnboardLanguage : FragOnboardBase() {
         
         selectedLanguageCode = code
         android.util.Log.d("FragOnboardLanguage", "   selectedLanguageCode 已设置为: '$selectedLanguageCode'")
+        
+        // 🎯 Firebase Analytics: 记录用户选择的语言（分析语言偏好）
+        com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(requireContext())
+            .logEvent("language_selected", mapOf("language_code" to code))
         
         // 🔗 关键：立即保存到共享数据层（与 Settings 页面使用相同的保存方法）
         android.util.Log.d("FragOnboardLanguage", "   正在调用 SPAppConfigs.setLocale()...")
@@ -252,6 +260,10 @@ class FragOnboardLanguage : FragOnboardBase() {
             if (activity is com.quran.quranaudio.online.quran_module.activities.ActivityOnboarding) {
                 android.util.Log.d("FragOnboardLanguage", "✅ Activity is ActivityOnboarding")
                 
+                // 🎯 Firebase Analytics: 用户完成语言选择并继续（关键转化点）
+                com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(requireContext())
+                    .logWorkflowStep("language_selection_complete")
+                
                 try {
                     android.util.Log.d("FragOnboardLanguage", "🔄 Attempting to recreate activity...")
                     activity.recreateWithLanguageChange(1)
@@ -304,6 +316,10 @@ class FragOnboardLanguage : FragOnboardBase() {
                 container,
                 R.layout.native_ad_onboarding
             )
+            
+            // 🎯 Firebase Analytics: 原生广告展示在语言选择页（可能影响新用户转化）
+            com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(requireContext())
+                .logAdExposure("native", "onboarding_language")
             
             android.util.Log.d("DIAGNOSE", "✅ NativeAdHelper.displayNativeAdWithAutoLoad() returned")
         } catch (e: Exception) {

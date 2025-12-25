@@ -249,6 +249,10 @@ class InterstitialAdManager private constructor() {
         
         Log.d(TAG, "📺 Showing interstitial ad")
         
+        // 获取调用页面位置（用于日志）
+        val adLocation = activity.javaClass.simpleName
+        Log.d(TAG, "📍 Ad location: $adLocation")
+        
         // Attach callback to handle ad dismissal
         if (onAdClosed != null) {
             ad.fullScreenContentCallback = object : FullScreenContentCallback() {
@@ -277,7 +281,7 @@ class InterstitialAdManager private constructor() {
                 }
                 
                 override fun onAdShowedFullScreenContent() {
-                    Log.d(TAG, "📺 Ad showed full screen content")
+                    Log.d(TAG, "📺 Ad showed full screen content at $adLocation")
                 }
             }
         }
@@ -290,6 +294,8 @@ class InterstitialAdManager private constructor() {
             cachedAd = null
             loadTimeMillis = 0L
             loadNewAd()
+            
+            Log.d(TAG, "📺 Interstitial ad shown at ${activity.javaClass.simpleName}")
         }
         
         return true

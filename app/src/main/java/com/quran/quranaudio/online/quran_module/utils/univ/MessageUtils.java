@@ -25,6 +25,15 @@ public class MessageUtils {
     }
 
     public static void popNoInternetMessage(Context ctx, boolean cancelable, Runnable runOnDismiss) {
+        // 🎯 Firebase Analytics: 记录网络错误弹窗（可能导致用户流失）
+        try {
+            com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(ctx)
+                .logUIException(ctx.getString(R.string.strTitleNoInternet), 
+                    ctx.getString(R.string.strMsgNoInternetLong), "no_internet_dialog");
+        } catch (Exception e) {
+            android.util.Log.e("MessageUtils", "Analytics logging failed: " + e.getMessage());
+        }
+        
         PeaceDialog.Builder builder = PeaceDialog.newBuilder(ctx);
         builder.setTitle(R.string.strTitleNoInternet);
         builder.setMessage(R.string.strMsgNoInternetLong);

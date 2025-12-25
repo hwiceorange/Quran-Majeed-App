@@ -24,6 +24,14 @@ import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 public class AlertHelper {
 
     public static void displayAlertDialog(final Context context, String title, String message) {
+        // 🎯 Firebase Analytics: 记录错误弹窗（分析用户挫败感）
+        try {
+            com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(context)
+                .logUIException(title != null ? title : "Alert", message != null ? message : "Unknown", "general_alert");
+        } catch (Exception e) {
+            android.util.Log.e("AlertHelper", "Analytics logging failed: " + e.getMessage());
+        }
+        
         TypedArray typedArray = context.getTheme().obtainStyledAttributes(R.styleable.mainStyles);
         int topColor = typedArray.getColor(R.styleable.mainStyles_navigationBackgroundStartColor, ContextCompat.getColor(context, R.color.colorAccent));
         int topTitleColor = typedArray.getColor(R.styleable.mainStyles_textColorPrimary, ContextCompat.getColor(context, R.color.textColorPrimary));
@@ -106,6 +114,14 @@ public class AlertHelper {
     }
 
     public static void displayDialogError(final Context context, String message, View.OnClickListener onClickListener) {
+        // 🎯 Firebase Analytics: 记录错误弹窗（分析用户挫败感）
+        try {
+            com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(context)
+                .logUIException(context.getString(R.string.common_alert), message != null ? message : "Unknown error", "error_dialog");
+        } catch (Exception e) {
+            android.util.Log.e("AlertHelper", "Analytics logging failed: " + e.getMessage());
+        }
+        
         TypedArray typedArray = context.getTheme().obtainStyledAttributes(R.styleable.mainStyles);
         int topColor = typedArray.getColor(R.styleable.mainStyles_navigationBackgroundStartColor, ContextCompat.getColor(context, R.color.colorAccent));
         int iconTintColor = typedArray.getColor(R.styleable.mainStyles_iconsMainColor, ContextCompat.getColor(context, R.color.colorAccent));

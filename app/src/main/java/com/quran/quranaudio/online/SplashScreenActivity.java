@@ -63,6 +63,9 @@ public class SplashScreenActivity extends AppCompatActivity {
         android.util.Log.d("DIAGNOSE", "SplashScreenActivity.onCreate() START");
         android.util.Log.d("DIAGNOSE", "========================================");
         
+        // 🎯 Firebase Analytics: Splash页面启动（用于分析首屏耗时）
+        com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(this).logWorkflowStep("splash_start");
+        
         try {
             super.onCreate(savedInstanceState);
             android.util.Log.d("DIAGNOSE", "✅ super.onCreate() completed");
@@ -172,6 +175,9 @@ public class SplashScreenActivity extends AppCompatActivity {
         android.util.Log.d("DIAGNOSE", "========================================");
         android.util.Log.d("DIAGNOSE", "✅ SplashScreenActivity.onCreate() COMPLETED");
         android.util.Log.d("DIAGNOSE", "========================================");
+        
+        // 🎯 Firebase Analytics: Splash页面初始化完成
+        com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(this).logWorkflowStep("splash_init_complete");
     }
 
     Handler handler=new Handler(Looper.getMainLooper());
@@ -217,6 +223,9 @@ public class SplashScreenActivity extends AppCompatActivity {
                        android.util.Log.d(TAG, "📊 [AppOpen] onAdImpression - Ad displayed to user");
                        android.util.Log.d(TAG, "📊 [AppOpen] Time from show request to impression: " + (impressionTime - showRequestTime) + "ms");
                        android.util.Log.d(TAG, "✅ [AppOpen] 15s failsafe timeout set (prevents permanent freeze)");
+                       
+                       // 🎯 Firebase Analytics: 开屏广告展示（诊断广告是否过早干扰用户）
+                       com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(SplashScreenActivity.this).logAdExposure("open_ad", "splash");
                    }
 
                    @Override public void onAdClicked(@Nullable AdItem adItem) {
@@ -274,6 +283,11 @@ public class SplashScreenActivity extends AppCompatActivity {
 
                    @Override public void onShowFail() {
                        android.util.Log.w(TAG, "❌ [AppOpen] onShowFail - Ad failed to show");
+                       
+                       // 🎯 Firebase Analytics: 广告加载失败（可能影响用户体验）
+                       com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(SplashScreenActivity.this)
+                           .logAdLoadFailed("open_ad", "splash", "show_failed");
+                       
                        // 🔥 失败后也要预加载，确保热启动有广告
                        android.util.Log.d(TAG, "🔄 [AppOpen] Preloading ad for hot start after failure");
                        AdFactory.INSTANCE.loadAppOpenAd(SplashScreenActivity.this, AdConfig.AD_APPOPEN, null);
@@ -392,6 +406,10 @@ public class SplashScreenActivity extends AppCompatActivity {
         if (isFirstLaunch) {
             // 首次启动：显示语言选择等引导页
             android.util.Log.d(TAG, "🎯 First launch detected - Showing Onboarding (Language Selection)");
+            
+            // 🎯 Firebase Analytics: 新用户流程（分析新用户流失点）
+            com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(this).logWorkflowStep("onboarding_start");
+            
             new Handler().postDelayed(() -> {
                 Intent intent = new Intent(this, com.quran.quranaudio.online.quran_module.activities.ActivityOnboarding.class);
                 startActivity(intent);
@@ -400,6 +418,10 @@ public class SplashScreenActivity extends AppCompatActivity {
         } else {
             // 老用户：直接进入主界面
             android.util.Log.d(TAG, "✅ Existing user - Jumping directly to MainActivity");
+            
+            // 🎯 Firebase Analytics: 老用户直接进入主页（分析留存用户行为）
+            com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(this).logWorkflowStep("main_activity_start");
+            
             new Handler().postDelayed(() -> {
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
