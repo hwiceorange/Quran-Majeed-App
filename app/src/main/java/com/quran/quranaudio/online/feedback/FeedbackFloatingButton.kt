@@ -60,8 +60,18 @@ class FeedbackFloatingButton(private val activity: Activity) {
             // 添加到窗口
             windowManager?.addView(floatingView, params)
             
-            // 设置触摸拖动（内部处理点击和拖动）
+            android.util.Log.d("FeedbackFloatingButton", "→ FloatingView added to window: $floatingView")
+            android.util.Log.d("FeedbackFloatingButton", "→ FloatingView isClickable: ${floatingView?.isClickable}")
+            android.util.Log.d("FeedbackFloatingButton", "→ FloatingView isFocusable: ${floatingView?.isFocusable}")
+            
+            // 方案1：设置触摸监听器（支持拖动和点击检测）
             setupTouchListener()
+            
+            // 方案2：同时设置普通点击监听器作为备用
+            floatingView?.setOnClickListener {
+                android.util.Log.d("FeedbackFloatingButton", "🎯 OnClick listener triggered")
+                onFeedbackButtonClicked()
+            }
             
             isShowing = true
             android.util.Log.d("FeedbackFloatingButton", "✅ Floating button shown at y=$bottomMarginPx (${bottomMarginDp}dp)")
@@ -145,25 +155,47 @@ class FeedbackFloatingButton(private val activity: Activity) {
      */
     private fun onFeedbackButtonClicked() {
         try {
-            android.util.Log.d("FeedbackFloatingButton", "📱 onFeedbackButtonClicked() called")
+            android.util.Log.d("FeedbackFloatingButton", "═══════════════════════════════════════════════")
+            android.util.Log.d("FeedbackFloatingButton", "📱 onFeedbackButtonClicked() START")
+            android.util.Log.d("FeedbackFloatingButton", "═══════════════════════════════════════════════")
+            android.util.Log.d("FeedbackFloatingButton", "→ Activity: ${activity.javaClass.name}")
+            android.util.Log.d("FeedbackFloatingButton", "→ Is FragmentActivity: ${activity is androidx.fragment.app.FragmentActivity}")
             
             // 显示反馈弹窗
             if (activity is androidx.fragment.app.FragmentActivity) {
+                android.util.Log.d("FeedbackFloatingButton", "→ Creating FeedbackBottomSheetDialog...")
                 val dialog = FeedbackBottomSheetDialog.newInstance()
-                dialog.show(activity.supportFragmentManager, FeedbackBottomSheetDialog.TAG)
                 
-                android.util.Log.d("FeedbackFloatingButton", "✅ Feedback dialog opened successfully")
+                android.util.Log.d("FeedbackFloatingButton", "→ Getting supportFragmentManager...")
+                val fragmentManager = activity.supportFragmentManager
+                android.util.Log.d("FeedbackFloatingButton", "→ FragmentManager: $fragmentManager")
+                
+                android.util.Log.d("FeedbackFloatingButton", "→ Showing dialog...")
+                dialog.show(fragmentManager, FeedbackBottomSheetDialog.TAG)
+                
+                android.util.Log.d("FeedbackFloatingButton", "✅ Dialog.show() called successfully")
+                android.util.Log.d("FeedbackFloatingButton", "═══════════════════════════════════════════════")
             } else {
                 android.util.Log.e("FeedbackFloatingButton", "❌ Activity is not FragmentActivity: ${activity.javaClass.name}")
+                
+                // 显示 Toast 提示
+                android.widget.Toast.makeText(
+                    activity,
+                    "反馈功能暂时不可用（Activity类型不匹配）",
+                    android.widget.Toast.LENGTH_SHORT
+                ).show()
             }
         } catch (e: Exception) {
-            android.util.Log.e("FeedbackFloatingButton", "❌ Failed to open feedback dialog", e)
+            android.util.Log.e("FeedbackFloatingButton", "❌ Exception in onFeedbackButtonClicked", e)
+            android.util.Log.e("FeedbackFloatingButton", "❌ Exception type: ${e.javaClass.name}")
+            android.util.Log.e("FeedbackFloatingButton", "❌ Exception message: ${e.message}")
+            e.printStackTrace()
             
             // 显示 Toast 提示用户
             android.widget.Toast.makeText(
                 activity,
-                "反馈功能暂时不可用",
-                android.widget.Toast.LENGTH_SHORT
+                "反馈功能暂时不可用: ${e.message}",
+                android.widget.Toast.LENGTH_LONG
             ).show()
         }
     }
