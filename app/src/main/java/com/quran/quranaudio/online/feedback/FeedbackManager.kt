@@ -113,7 +113,7 @@ class FeedbackManager private constructor() {
                 )
                 
                 // 提交到 Firestore（带重试）
-                submitToFirestoreWithRetry(feedbackData, MAX_RETRIES)
+                submitToFirestoreWithRetry(context, feedbackData, MAX_RETRIES)
                 
                 Log.d(TAG, "✅ Feedback submitted successfully")
                 
