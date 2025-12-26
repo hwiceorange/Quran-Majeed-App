@@ -123,6 +123,24 @@ service cloud.firestore {
     }
 
     // ========================================
+    // 💬 Feedback Submissions（用户反馈提交 - 匿名）
+    // Path: feedback_submissions/{feedbackId}（根集合）
+    // Purpose: 收集用户反馈以改进应用体验和留存率
+    // ========================================
+    match /feedback_submissions/{feedbackId} {
+      // 允许任何认证用户（包括匿名用户）创建反馈
+      // 用于诊断 9.4% 次日留存率和 52秒平均时长问题
+      allow create: if request.auth != null;
+      
+      // 普通用户无法读取反馈（保护隐私）
+      // 管理员可通过 Firebase Console 或 Admin SDK 查看
+      allow read: if false;
+      
+      // 反馈一旦提交不可修改或删除（保证数据完整性）
+      allow update, delete: if false;
+    }
+
+    // ========================================
     // 🚫 Legacy: User Quest Config（旧版配置 - 向后兼容）
     // Path: users/{userId}/userQuestConfig/{document}
     // ========================================
@@ -140,6 +158,8 @@ service cloud.firestore {
 
     // ========================================
     // 🚫 Default Deny All Other Collections
+    // 默认拒绝所有未明确允许的集合访问
+    // ⚠️ 此规则必须放在最后
     // ========================================
     match /{document=**} {
       allow read, write: if false;
