@@ -378,29 +378,55 @@ public class MainActivity extends BaseActivity {
     
     /**
      * 💬 Initialize feedback system
+     * 🔥 Critical: 延迟初始化以确保 Activity 完全准备好
      */
     private void initFeedbackSystem() {
         try {
             android.util.Log.d("MainActivity", "💬 Initializing feedback system...");
+            android.util.Log.d("MainActivity", "   → Current Activity state: isFinishing=" + isFinishing() + ", isDestroyed=" + isDestroyed());
             
             // Set current page name (for feedback data collection)
             // Note: Use Companion.getInstance() to access Kotlin companion object from Java
             FeedbackManager.Companion.getInstance().setCurrentPage("MainActivity");
             
-            // Initialize floating feedback button (delayed 3 seconds to avoid startup interference)
+            // 🔥 关键修复：增加延迟时间，并在回调中检查 Activity 状态
+            // Initialize floating feedback button (delayed 5 seconds to ensure Activity is fully ready)
             new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
-                feedbackFloatingButton = new FeedbackFloatingButton(this);
-                feedbackFloatingButton.show();
-                android.util.Log.d("MainActivity", "✅ Feedback floating button shown");
-            }, 3000);
+                try {
+                    // 🆕 在显示浮动按钮前检查 Activity 状态
+                    if (isFinishing() || isDestroyed()) {
+                        android.util.Log.w("MainActivity", "⚠️ Activity is finishing/destroyed, skip showing floating button");
+                        return;
+                    }
+                    
+                    // 检查窗口可用性
+                    if (getWindow() == null || getWindow().getDecorView().getWindowToken() == null) {
+                        android.util.Log.w("MainActivity", "⚠️ Activity window not ready, skip showing floating button");
+                        return;
+                    }
+                    
+                    android.util.Log.d("MainActivity", "→ Activity state validated, creating floating button...");
+                    android.util.Log.d("MainActivity", "   → isFinishing=" + isFinishing() + ", isDestroyed=" + isDestroyed());
+                    android.util.Log.d("MainActivity", "   → hasWindowToken=" + (getWindow().getDecorView().getWindowToken() != null));
+                    
+                    feedbackFloatingButton = new FeedbackFloatingButton(this);
+                    feedbackFloatingButton.show();
+                    android.util.Log.d("MainActivity", "✅ Feedback floating button shown");
+                    
+                } catch (Exception e) {
+                    android.util.Log.e("MainActivity", "❌ Failed to show feedback floating button", e);
+                    e.printStackTrace();
+                }
+            }, 5000); // 🆕 增加到 5 秒，确保 Activity 完全就绪
             
             // Initialize exit interceptor
             exitInterceptor = new ExitInterceptor(this);
             
-            android.util.Log.d("MainActivity", "✅ Feedback system initialized");
+            android.util.Log.d("MainActivity", "✅ Feedback system initialized (button will show after 5s)");
             
         } catch (Exception e) {
             android.util.Log.e("MainActivity", "❌ Failed to initialize feedback system", e);
+            e.printStackTrace();
         }
     }
     

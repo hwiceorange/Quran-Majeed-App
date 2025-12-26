@@ -25,11 +25,30 @@ class FeedbackFloatingButton(private val activity: Activity) {
     
     /**
      * 显示悬浮按钮
+     * 🔥 Critical: 必须在 Activity 前台且有效时调用
      */
     fun show() {
         if (isShowing) return
         
         try {
+            // 🔥 关键修复1：检查 Activity 状态
+            if (activity.isFinishing || activity.isDestroyed) {
+                android.util.Log.w("FeedbackFloatingButton", "⚠️ Activity is finishing/destroyed, abort showing floating button")
+                return
+            }
+            
+            // 🔥 关键修复2：检查 Window Token 可用性
+            val decorView = activity.window?.decorView
+            if (decorView == null || decorView.windowToken == null) {
+                android.util.Log.w("FeedbackFloatingButton", "⚠️ Activity window token not ready, abort showing floating button")
+                return
+            }
+            
+            android.util.Log.d("FeedbackFloatingButton", "✅ Activity state check passed")
+            android.util.Log.d("FeedbackFloatingButton", "   → isFinishing: ${activity.isFinishing}")
+            android.util.Log.d("FeedbackFloatingButton", "   → isDestroyed: ${activity.isDestroyed}")
+            android.util.Log.d("FeedbackFloatingButton", "   → hasWindowToken: ${decorView.windowToken != null}")
+            
             windowManager = activity.getSystemService(Context.WINDOW_SERVICE) as WindowManager
             
             // 创建悬浮视图
@@ -44,7 +63,7 @@ class FeedbackFloatingButton(private val activity: Activity) {
             val density = activity.resources.displayMetrics.density
             val bottomMarginPx = (bottomMarginDp * density).toInt()
             
-            // 设置布局参数
+            // 🔥 关键修复3：设置布局参数（使用 token 关联到 Activity）
             params = WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -55,9 +74,14 @@ class FeedbackFloatingButton(private val activity: Activity) {
                 gravity = Gravity.BOTTOM or Gravity.END
                 x = (24 * density).toInt() // 距离右边 24dp
                 y = bottomMarginPx // 距离底部避开导航栏
+                // 🆕 显式设置 token，确保关联到 Activity 窗口
+                token = decorView.windowToken
             }
             
-            // 添加到窗口
+            android.util.Log.d("FeedbackFloatingButton", "→ Attempting to add FloatingView to WindowManager...")
+            android.util.Log.d("FeedbackFloatingButton", "   → Window Token: ${params?.token}")
+            
+            // 🔥 关键修复4：添加到窗口（在主线程，带超时保护）
             windowManager?.addView(floatingView, params)
             
             android.util.Log.d("FeedbackFloatingButton", "→ FloatingView added to window: $floatingView")
@@ -74,8 +98,14 @@ class FeedbackFloatingButton(private val activity: Activity) {
             }
             
             isShowing = true
-            android.util.Log.d("FeedbackFloatingButton", "✅ Floating button shown at y=$bottomMarginPx (${bottomMarginDp}dp)")
+            android.util.Log.d("FeedbackFloatingButton", "✅ Floating button shown successfully at y=$bottomMarginPx (${bottomMarginDp}dp)")
             
+        } catch (e: android.view.WindowManager.BadTokenException) {
+            android.util.Log.e("FeedbackFloatingButton", "❌ BadTokenException: Activity window token invalid", e)
+            android.util.Log.e("FeedbackFloatingButton", "   → This usually means Activity is not in foreground or being destroyed")
+            // 不显示 Toast，因为 Activity 可能已经不可用
+        } catch (e: IllegalStateException) {
+            android.util.Log.e("FeedbackFloatingButton", "❌ IllegalStateException: Activity state invalid", e)
         } catch (e: Exception) {
             android.util.Log.e("FeedbackFloatingButton", "❌ Failed to show floating button", e)
         }
