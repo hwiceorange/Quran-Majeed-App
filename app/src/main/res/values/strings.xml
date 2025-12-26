@@ -1543,6 +1543,7 @@
     <string name="feedback_tag_search_inaccurate">Search Inaccurate</string>
     <string name="feedback_tag_slow_loading">Slow Loading</string>
     <string name="feedback_tag_large_size">Large App Size</string>
+    <string name="feedback_tag_do_not_login">Do not log in</string>
     
     <!-- Feedback Tags - Love/Like -->
     <string name="feedback_tag_good_reading">Good Reading Experience</string>

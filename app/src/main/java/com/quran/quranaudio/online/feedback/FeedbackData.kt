@@ -69,7 +69,8 @@ object FeedbackTags {
         R.string.feedback_tag_battery_drain,          // 后台耗电太快
         R.string.feedback_tag_search_inaccurate,      // 搜索不准
         R.string.feedback_tag_slow_loading,           // 加载慢
-        R.string.feedback_tag_large_size              // 包体大
+        R.string.feedback_tag_large_size,             // 包体大
+        R.string.feedback_tag_do_not_login            // 不想登录
     )
     
     // 😐 Neutral/Confused - 对应的问题标签
@@ -80,7 +81,8 @@ object FeedbackTags {
         R.string.feedback_tag_battery_drain,          // 后台耗电太快
         R.string.feedback_tag_search_inaccurate,      // 搜索不准
         R.string.feedback_tag_slow_loading,           // 加载慢
-        R.string.feedback_tag_large_size              // 包体大
+        R.string.feedback_tag_large_size,             // 包体大
+        R.string.feedback_tag_do_not_login            // 不想登录
     )
     
     // 😍 Love/Like - 对应的优点
