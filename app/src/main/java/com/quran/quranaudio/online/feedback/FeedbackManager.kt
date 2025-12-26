@@ -5,6 +5,7 @@ import android.os.Build
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.WindowManager
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.quran.quranaudio.online.BuildConfig
 import com.quran.quranaudio.online.prayertimes.preferences.PreferencesConstants
@@ -21,6 +22,10 @@ import kotlin.math.sqrt
  * 反馈管理器 - 负责收集和提交用户反馈
  * 集成 Firebase Firestore，自动收集设备和应用状态信息
  * 
+ * ✅ 支持匿名提交（无需用户登录）
+ * ✅ 自动重试机制（指数退避）
+ * ✅ 详细错误日志
+ * 
  * 用于诊断：
  * - 9.4% 次日留存率低的原因
  * - 52秒平均时长短的原因
@@ -29,8 +34,8 @@ class FeedbackManager private constructor() {
     
     companion object {
         private const val TAG = "FeedbackManager"
-        private const val COLLECTION_PATH = "user_feedback"
-        private const val MAX_RETRIES = 5
+        private const val COLLECTION_PATH = "feedback_submissions"  // 更清晰的路径
+        private const val MAX_RETRIES = 3  // 减少重试次数，加快失败反馈
         
         @Volatile
         private var instance: FeedbackManager? = null
@@ -44,6 +49,10 @@ class FeedbackManager private constructor() {
     
     private val firestore: FirebaseFirestore by lazy {
         FirebaseFirestore.getInstance()
+    }
+    
+    private val firebaseAuth: FirebaseAuth by lazy {
+        FirebaseAuth.getInstance()
     }
     
     // 应用启动时间（用于计算会话时长）
@@ -80,6 +89,11 @@ class FeedbackManager private constructor() {
     
     /**
      * 提交反馈
+     * 
+     * ✅ 自动进行 Firebase 匿名登录
+     * ✅ 带重试机制
+     * ✅ 详细错误日志
+     * 
      * @param context 上下文
      * @param emotion 用户选择的情绪
      * @param selectedTags 用户选择的标签
@@ -95,15 +109,26 @@ class FeedbackManager private constructor() {
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
+        Log.d(TAG, "═══════════════════════════════════════════════")
+        Log.d(TAG, "📤 Starting feedback submission")
+        Log.d(TAG, "═══════════════════════════════════════════════")
+        
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                // 收集设备信息
+                // ✅ Step 1: 确保 Firebase Auth 已就绪（匿名登录）
+                ensureFirebaseAuthReady()
+                
+                // ✅ Step 2: 收集设备信息
+                Log.d(TAG, "→ Collecting device info...")
                 val deviceInfo = collectDeviceInfo(context)
+                Log.d(TAG, "✅ Device info collected: ${deviceInfo.deviceName}")
                 
-                // 收集应用状态
+                // ✅ Step 3: 收集应用状态
+                Log.d(TAG, "→ Collecting app state...")
                 val appState = collectAppState(context)
+                Log.d(TAG, "✅ App state collected: page=${appState.currentPage}, session=${appState.sessionDuration}s")
                 
-                // 创建反馈数据
+                // ✅ Step 4: 创建反馈数据
                 val feedbackData = FeedbackData(
                     emotion = emotion,
                     selectedTags = selectedTags,
@@ -112,10 +137,17 @@ class FeedbackManager private constructor() {
                     appState = appState
                 )
                 
-                // 提交到 Firestore（带重试）
+                Log.d(TAG, "📝 Feedback data created")
+                Log.d(TAG, "   Emotion: ${emotion.name}")
+                Log.d(TAG, "   Tags: $selectedTags")
+                Log.d(TAG, "   Comment: ${comment?.take(50) ?: "null"}")
+                
+                // ✅ Step 5: 提交到 Firestore（带重试）
                 submitToFirestoreWithRetry(context, feedbackData, MAX_RETRIES)
                 
+                Log.d(TAG, "═══════════════════════════════════════════════")
                 Log.d(TAG, "✅ Feedback submitted successfully")
+                Log.d(TAG, "═══════════════════════════════════════════════")
                 
                 // 回调成功
                 withContext(Dispatchers.Main) {
@@ -123,13 +155,53 @@ class FeedbackManager private constructor() {
                 }
                 
             } catch (e: Exception) {
-                Log.e(TAG, "❌ Failed to submit feedback", e)
+                Log.e(TAG, "═══════════════════════════════════════════════")
+                Log.e(TAG, "❌ Failed to submit feedback")
+                Log.e(TAG, "═══════════════════════════════════════════════")
+                Log.e(TAG, "Exception type: ${e.javaClass.simpleName}")
+                Log.e(TAG, "Exception message: ${e.message}")
+                e.printStackTrace()
                 
                 // 回调失败
                 withContext(Dispatchers.Main) {
                     onFailure(e)
                 }
             }
+        }
+    }
+    
+    /**
+     * 确保 Firebase Auth 已就绪（匿名登录）
+     * 
+     * 重要：Firestore 需要认证才能写入数据
+     * 使用匿名登录可以在不要求用户注册的情况下提交反馈
+     */
+    private suspend fun ensureFirebaseAuthReady() {
+        Log.d(TAG, "🔐 Checking Firebase Auth status...")
+        
+        val currentUser = firebaseAuth.currentUser
+        
+        if (currentUser != null) {
+            Log.d(TAG, "✅ Already signed in anonymously: ${currentUser.uid}")
+            return
+        }
+        
+        // 匿名登录
+        Log.d(TAG, "→ Signing in anonymously...")
+        try {
+            val authResult = firebaseAuth.signInAnonymously().await()
+            val user = authResult.user
+            
+            if (user != null) {
+                Log.d(TAG, "✅ Anonymous sign-in successful")
+                Log.d(TAG, "   User ID: ${user.uid}")
+                Log.d(TAG, "   Is Anonymous: ${user.isAnonymous}")
+            } else {
+                throw Exception("Sign-in succeeded but user is null")
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "❌ Anonymous sign-in failed", e)
+            throw Exception("Firebase Auth failed: ${e.message}", e)
         }
     }
     
@@ -165,26 +237,60 @@ class FeedbackManager private constructor() {
     
     /**
      * 提交到 Firestore（带指数退避重试）
+     * 
+     * 路径：feedback_submissions/{documentId}
+     * 权限：需要 Firebase Auth（匿名登录即可）
      */
     private suspend fun submitToFirestoreWithRetry(context: Context, data: FeedbackData, retriesLeft: Int) {
         try {
+            Log.d(TAG, "→ Preparing Firestore document...")
             val document = FeedbackDocument.fromFeedbackData(data, context)
             
-            firestore.collection(COLLECTION_PATH)
-                .add(document)
+            // 添加用户 ID（匿名用户的 UID）
+            val userId = firebaseAuth.currentUser?.uid ?: "unknown"
+            val documentData = hashMapOf(
+                "userId" to userId,
+                "emotion" to document.emotion,
+                "selectedTags" to document.selectedTags,
+                "comment" to document.comment,
+                "deviceName" to document.deviceName,
+                "systemVersion" to document.systemVersion,
+                "appVersion" to document.appVersion,
+                "screenSize" to document.screenSize,
+                "language" to document.language,
+                "currentPage" to document.currentPage,
+                "readingProgress" to document.readingProgress,
+                "sessionDuration" to document.sessionDuration,
+                "isFirstLaunch" to document.isFirstLaunch,
+                "timestamp" to com.google.firebase.firestore.FieldValue.serverTimestamp()
+            )
+            
+            Log.d(TAG, "→ Submitting to Firestore...")
+            Log.d(TAG, "   Collection: $COLLECTION_PATH")
+            Log.d(TAG, "   User ID: $userId")
+            
+            val docRef = firestore.collection(COLLECTION_PATH)
+                .add(documentData)
                 .await()
                 
-            Log.d(TAG, "📤 Feedback document saved to Firestore")
+            Log.d(TAG, "✅ Document saved successfully")
+            Log.d(TAG, "   Document ID: ${docRef.id}")
+            Log.d(TAG, "   Collection Path: $COLLECTION_PATH/${docRef.id}")
             
         } catch (e: Exception) {
+            Log.e(TAG, "❌ Firestore write failed (retries left: $retriesLeft)")
+            Log.e(TAG, "   Error type: ${e.javaClass.simpleName}")
+            Log.e(TAG, "   Error message: ${e.message}")
+            
             if (retriesLeft > 0) {
                 val delay = (2.0.pow((MAX_RETRIES - retriesLeft).toDouble()) * 1000).toLong()
-                Log.w(TAG, "⚠️ Retry $retriesLeft left, waiting ${delay}ms...")
+                Log.w(TAG, "⏳ Retrying in ${delay}ms...")
                 
                 kotlinx.coroutines.delay(delay)
                 submitToFirestoreWithRetry(context, data, retriesLeft - 1)
             } else {
-                throw e
+                Log.e(TAG, "❌ All retries exhausted, giving up")
+                throw Exception("Firestore submission failed after $MAX_RETRIES attempts: ${e.message}", e)
             }
         }
     }
