@@ -1560,4 +1560,10 @@
     <string name="feedback_submit_failure">Submission failed. Please check your network and try again.</string>
     <string name="feedback_back">Back</string>
     
+    <!-- Account Upgrade Dialog (匿名账户升级提示) -->
+    <string name="upgrade_account_title">Congratulations on %1$d Days!</string>
+    <string name="upgrade_account_message">You\'ve been using the app for %1$d days! 🎉\n\nTo permanently save your learning progress and prayer records, we recommend linking your Google account.\n\n✅ No data loss\n✅ Sync across devices\n✅ Permanent storage</string>
+    <string name="upgrade_account_link_now">Link Account Now</string>
+    <string name="upgrade_account_remind_later">Remind Me Later</string>
+    
 </resources>
