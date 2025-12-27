@@ -1917,6 +1917,44 @@ public class PrayersFragment extends Fragment implements com.quran.quranaudio.on
                 Log.e("PrayersFragment", "❌ Invalid prayer name: " + prayerName, e);
             }
         }
+        
+        // 🎯 Record daily check-in for streak tracking (if Ada' or Qada')
+        if (newStatus == PrayerLog.PrayerStatus.ADA.getValue() || newStatus == PrayerLog.PrayerStatus.QADA.getValue()) {
+            new Thread(() -> {
+                try {
+                    Log.d("PrayersFragment", "🔥 Recording daily check-in for streak tracking...");
+                    com.quran.quranaudio.online.Utils.StreakManager.Companion.getInstance().recordCheckIn(
+                        requireContext(),
+                        (currentStreak, shouldPromptUpgrade) -> {
+                            Log.d("PrayersFragment", "✅ Streak recorded: " + currentStreak + " days, shouldPrompt: " + shouldPromptUpgrade);
+                            
+                            if (shouldPromptUpgrade) {
+                                // Show upgrade prompt dialog on main thread
+                                Log.d("PrayersFragment", "🎉 Showing account upgrade prompt (7+ days streak)");
+                                if (getActivity() != null) {
+                                    getActivity().runOnUiThread(() -> {
+                                        if (isAdded() && !isDetached()) {
+                                            com.quran.quranaudio.online.Utils.AccountUpgradeDialog.show(
+                                                requireActivity(),
+                                                currentStreak,
+                                                signInLauncher,
+                                                googleAuthManager
+                                            );
+                                        }
+                                    });
+                                }
+                            }
+                            return null;
+                        }
+                    );
+                } catch (Exception e) {
+                    Log.e("PrayersFragment", "❌ Failed to record check-in", e);
+                    // Don't block the UI if streak tracking fails
+                }
+            }).start();
+        } else {
+            Log.d("PrayersFragment", "ℹ️ Prayer status is MISSED, not recording check-in");
+        }
     }
     
     @Override

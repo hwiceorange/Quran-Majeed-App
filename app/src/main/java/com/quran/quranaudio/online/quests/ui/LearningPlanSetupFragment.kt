@@ -714,6 +714,36 @@ class LearningPlanSetupFragment : Fragment() {
         
         // Save via ViewModel
         viewModel.saveUserQuest(config)
+        
+        // 🎯 Record daily check-in for streak tracking
+        lifecycleScope.launch {
+            try {
+                Log.d(TAG, "🔥 Recording daily check-in for streak tracking...")
+                com.quran.quranaudio.online.Utils.StreakManager.getInstance().recordCheckIn(
+                    requireContext()
+                ) { currentStreak, shouldPromptUpgrade ->
+                    Log.d(TAG, "✅ Streak recorded: $currentStreak days, shouldPrompt: $shouldPromptUpgrade")
+                    
+                    if (shouldPromptUpgrade) {
+                        // Show upgrade prompt dialog
+                        Log.d(TAG, "🎉 Showing account upgrade prompt (7+ days streak)")
+                        activity?.runOnUiThread {
+                            if (isAdded && !isDetached) {
+                                com.quran.quranaudio.online.Utils.AccountUpgradeDialog.show(
+                                    requireActivity(),
+                                    currentStreak,
+                                    signInLauncher,
+                                    googleAuthManager
+                                )
+                            }
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "❌ Failed to record check-in", e)
+                // Don't block the save flow if streak tracking fails
+            }
+        }
     }
     
     /**
