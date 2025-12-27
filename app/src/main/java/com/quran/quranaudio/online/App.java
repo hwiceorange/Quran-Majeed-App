@@ -383,6 +383,24 @@ public class App extends BaseApp {
         
         // 🎯 Firebase Analytics: 应用完全启动成功
         com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(this).logWorkflowStep("app_init_complete");
+        
+        // 🔄 重试提交缓存的反馈（后台静默执行，不影响启动速度）
+        android.util.Log.d("DIAGNOSE", "→ Starting pending feedback retry...");
+        try {
+            // 延迟3秒后执行，避免影响启动性能
+            new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+                try {
+                    com.quran.quranaudio.online.feedback.FeedbackManager.Companion.getInstance()
+                        .retryPendingFeedbacks(this);
+                    android.util.Log.d("DIAGNOSE", "✅ Pending feedback retry initiated");
+                } catch (Exception e) {
+                    android.util.Log.e("DIAGNOSE", "⚠️ Failed to retry pending feedbacks (non-critical)", e);
+                }
+            }, 3000);
+        } catch (Exception e) {
+            android.util.Log.e("DIAGNOSE_ERROR", "❌ Pending feedback retry setup FAILED (non-critical)", e);
+            // 非致命错误，不影响应用启动
+        }
     }
 
 

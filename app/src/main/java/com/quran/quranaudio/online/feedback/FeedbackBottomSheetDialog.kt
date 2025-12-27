@@ -229,43 +229,69 @@ class FeedbackBottomSheetDialog : BottomSheetDialogFragment() {
     }
     
     /**
-     * 提交反馈
+     * 提交反馈（乐观更新 - Optimistic UI）
+     * 
+     * 🚀 优化策略：
+     * 1. 立即给用户"成功"反馈（不等待网络）
+     * 2. 后台异步提交到 Firebase
+     * 3. 失败时静默处理，保存到本地待重试
+     * 4. 防止重复点击
      */
     private fun onSubmit() {
         val emotion = selectedEmotion ?: return
         val comment = etComment.text?.toString()?.trim()
         
-        // 显示加载状态
-        btnSubmit.isEnabled = false
-        btnSubmit.text = getString(R.string.feedback_submitting)
+        android.util.Log.d(TAG, "🚀 [Optimistic UI] Starting feedback submission")
+        android.util.Log.d(TAG, "   → Emotion: ${emotion.name}")
+        android.util.Log.d(TAG, "   → Tags count: ${selectedTags.size}")
+        android.util.Log.d(TAG, "   → Comment length: ${comment?.length ?: 0}")
         
-        // 提交到 Firebase
-        FeedbackManager.Companion.getInstance().submitFeedback(
+        // 🔥 关键优化1：立即禁用按钮，防止重复提交
+        btnSubmit.isEnabled = false
+        android.util.Log.d(TAG, "✅ Submit button disabled to prevent duplicate clicks")
+        
+        // 🔥 关键优化2：立即显示"成功"，无需等待
+        android.util.Log.d(TAG, "💨 Showing immediate success feedback to user (optimistic)")
+        dismiss() // 立即关闭弹窗
+        Toast.makeText(
+            requireContext(),
+            getString(R.string.feedback_submit_success),
+            Toast.LENGTH_LONG
+        ).show()
+        
+        android.util.Log.d(TAG, "✅ User sees 'success' message and dialog dismissed")
+        android.util.Log.d(TAG, "🔄 Starting background submission (non-blocking)...")
+        
+        // 🔥 关键优化3：后台异步提交（不阻塞UI）
+        FeedbackManager.Companion.getInstance().submitFeedbackAsync(
             context = requireContext(),
             emotion = emotion,
             selectedTags = selectedTags.toList(),
             comment = if (comment.isNullOrEmpty()) null else comment,
             onSuccess = {
-                // 成功
-                dismiss()
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.feedback_submit_success),
-                    Toast.LENGTH_LONG
-                ).show()
+                // 后台成功 - 静默处理
+                android.util.Log.d(TAG, "✅ [Background] Feedback submitted to Firebase successfully")
+                // 不向用户显示任何提示（用户已经看到"成功"了）
             },
             onFailure = { exception ->
-                // 失败
-                btnSubmit.isEnabled = true
-                btnSubmit.text = getString(R.string.feedback_submit)
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.feedback_submit_failure),
-                    Toast.LENGTH_SHORT
-                ).show()
-                android.util.Log.e("FeedbackDialog", "Submit failed", exception)
+                // 后台失败 - 静默处理，保存到本地
+                android.util.Log.e(TAG, "❌ [Background] Firebase submission failed")
+                android.util.Log.e(TAG, "   Error: ${exception.message}")
+                
+                // 🔥 关键优化4：失败时保存到本地缓存，下次重试
+                FeedbackManager.Companion.getInstance().savePendingFeedback(
+                    context = requireContext(),
+                    emotion = emotion,
+                    selectedTags = selectedTags.toList(),
+                    comment = if (comment.isNullOrEmpty()) null else comment
+                )
+                
+                android.util.Log.w(TAG, "💾 Failed feedback saved to local cache for retry")
+                // 不向用户显示错误提示（避免困惑，用户已看到"成功"）
             }
         )
+        
+        android.util.Log.d(TAG, "🎉 Optimistic UI completed - user can continue using app")
     }
     
     companion object {

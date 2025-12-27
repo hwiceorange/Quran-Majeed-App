@@ -37,6 +37,11 @@ class FeedbackManager private constructor() {
         private const val COLLECTION_PATH = "feedback_submissions"  // 更清晰的路径
         private const val MAX_RETRIES = 3  // 减少重试次数，加快失败反馈
         
+        // 🆕 本地缓存相关常量
+        private const val PREFS_NAME = "feedback_cache"
+        private const val KEY_PENDING_FEEDBACKS = "pending_feedbacks"
+        private const val MAX_CACHED_FEEDBACKS = 10  // 最多缓存10条失败反馈
+        
         @Volatile
         private var instance: FeedbackManager? = null
         
@@ -85,6 +90,74 @@ class FeedbackManager private constructor() {
     fun setReadingProgress(surahId: Int, ayahId: Int) {
         readingProgress = "Surah $surahId, Ayah $ayahId"
         Log.d(TAG, "Reading progress: $readingProgress")
+    }
+    
+    /**
+     * 提交反馈（异步，用于乐观更新）
+     * 
+     * 🚀 特性：
+     * - 不阻塞UI线程
+     * - 失败时自动保存到本地缓存
+     * - 适用于"乐观更新"场景
+     * 
+     * @param context 上下文
+     * @param emotion 用户选择的情绪
+     * @param selectedTags 用户选择的标签
+     * @param comment 用户输入的评论（可选）
+     * @param onSuccess 成功回调（后台执行）
+     * @param onFailure 失败回调（后台执行）
+     */
+    fun submitFeedbackAsync(
+        context: Context,
+        emotion: FeedbackEmotion,
+        selectedTags: List<String>,
+        comment: String?,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        Log.d(TAG, "🚀 [Async] Starting background feedback submission")
+        
+        // 🔥 异步执行，不阻塞主线程
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                // Step 1: 确保 Firebase Auth 已就绪
+                ensureFirebaseAuthReady()
+                
+                // Step 2: 收集设备和应用信息
+                val deviceInfo = collectDeviceInfo(context)
+                val appState = collectAppState(context)
+                
+                // Step 3: 创建反馈数据
+                val feedbackData = FeedbackData(
+                    emotion = emotion,
+                    selectedTags = selectedTags,
+                    comment = comment,
+                    deviceInfo = deviceInfo,
+                    appState = appState
+                )
+                
+                Log.d(TAG, "📝 [Async] Feedback data prepared")
+                
+                // Step 4: 提交到 Firestore（带重试）
+                submitToFirestoreWithRetry(context, feedbackData, MAX_RETRIES)
+                
+                Log.d(TAG, "✅ [Async] Feedback submitted successfully to Firebase")
+                
+                // 回调成功（在主线程）
+                withContext(Dispatchers.Main) {
+                    onSuccess()
+                }
+                
+            } catch (e: Exception) {
+                Log.e(TAG, "❌ [Async] Background submission failed: ${e.message}")
+                e.printStackTrace()
+                
+                // 回调失败（在主线程）
+                withContext(Dispatchers.Main) {
+                    onFailure(e)
+                }
+            }
+        }
     }
     
     /**
@@ -305,6 +378,154 @@ class FeedbackManager private constructor() {
             model.capitalize()
         } else {
             "${manufacturer.capitalize()} $model"
+        }
+    }
+    
+    /**
+     * 保存失败的反馈到本地缓存
+     * 
+     * 💾 用途：
+     * - 网络失败时保存数据
+     * - 下次启动时自动重试
+     * - 防止用户反馈丢失
+     */
+    fun savePendingFeedback(
+        context: Context,
+        emotion: FeedbackEmotion,
+        selectedTags: List<String>,
+        comment: String?
+    ) {
+        try {
+            Log.d(TAG, "💾 Saving failed feedback to local cache...")
+            
+            val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            
+            // 读取现有缓存
+            val existingJson = prefs.getString(KEY_PENDING_FEEDBACKS, "[]") ?: "[]"
+            val existingList = org.json.JSONArray(existingJson)
+            
+            // 限制缓存数量，防止占用过多空间
+            if (existingList.length() >= MAX_CACHED_FEEDBACKS) {
+                Log.w(TAG, "⚠️ Cache limit reached ($MAX_CACHED_FEEDBACKS), removing oldest feedback")
+                existingList.remove(0) // 移除最旧的
+            }
+            
+            // 创建新的反馈条目
+            val feedbackJson = org.json.JSONObject().apply {
+                put("emotion", emotion.name)
+                put("selectedTags", org.json.JSONArray(selectedTags))
+                put("comment", comment ?: "")
+                put("timestamp", System.currentTimeMillis())
+                put("deviceName", getDeviceName())
+                put("appVersion", "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})")
+            }
+            
+            existingList.put(feedbackJson)
+            
+            // 保存到 SharedPreferences
+            prefs.edit()
+                .putString(KEY_PENDING_FEEDBACKS, existingList.toString())
+                .apply()
+            
+            Log.d(TAG, "✅ Feedback saved to local cache")
+            Log.d(TAG, "   Total cached feedbacks: ${existingList.length()}")
+            
+        } catch (e: Exception) {
+            Log.e(TAG, "❌ Failed to save feedback to cache: ${e.message}")
+            e.printStackTrace()
+        }
+    }
+    
+    /**
+     * 重试提交本地缓存的反馈
+     * 
+     * 🔄 时机：
+     * - 应用启动时调用
+     * - 网络恢复时调用
+     * - 用户再次打开反馈系统时调用
+     */
+    fun retryPendingFeedbacks(context: Context) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                val cachedJson = prefs.getString(KEY_PENDING_FEEDBACKS, "[]") ?: "[]"
+                val cachedList = org.json.JSONArray(cachedJson)
+                
+                if (cachedList.length() == 0) {
+                    Log.d(TAG, "ℹ️ No pending feedbacks in cache")
+                    return@launch
+                }
+                
+                Log.d(TAG, "🔄 Found ${cachedList.length()} pending feedbacks, retrying...")
+                
+                val successfulIndices = mutableListOf<Int>()
+                
+                for (i in 0 until cachedList.length()) {
+                    val feedbackJson = cachedList.getJSONObject(i)
+                    
+                    try {
+                        val emotionName = feedbackJson.getString("emotion")
+                        val emotion = FeedbackEmotion.valueOf(emotionName)
+                        
+                        val tagsArray = feedbackJson.getJSONArray("selectedTags")
+                        val tags = mutableListOf<String>()
+                        for (j in 0 until tagsArray.length()) {
+                            tags.add(tagsArray.getString(j))
+                        }
+                        
+                        val comment = feedbackJson.optString("comment", null)
+                        
+                        Log.d(TAG, "→ Retrying feedback #${i+1}: ${emotion.name}")
+                        
+                        // 确保认证就绪
+                        ensureFirebaseAuthReady()
+                        
+                        // 收集最新的设备和应用信息
+                        val deviceInfo = collectDeviceInfo(context)
+                        val appState = collectAppState(context)
+                        
+                        val feedbackData = FeedbackData(
+                            emotion = emotion,
+                            selectedTags = tags,
+                            comment = if (comment.isNullOrEmpty()) null else comment,
+                            deviceInfo = deviceInfo,
+                            appState = appState
+                        )
+                        
+                        // 提交（不重试，失败就算了）
+                        submitToFirestoreWithRetry(context, feedbackData, 1)
+                        
+                        Log.d(TAG, "✅ Feedback #${i+1} submitted successfully")
+                        successfulIndices.add(i)
+                        
+                    } catch (e: Exception) {
+                        Log.e(TAG, "❌ Failed to retry feedback #${i+1}: ${e.message}")
+                        // 继续处理下一个
+                    }
+                }
+                
+                // 移除成功提交的反馈
+                if (successfulIndices.isNotEmpty()) {
+                    Log.d(TAG, "🧹 Removing ${successfulIndices.size} successful feedbacks from cache...")
+                    
+                    val newList = org.json.JSONArray()
+                    for (i in 0 until cachedList.length()) {
+                        if (i !in successfulIndices) {
+                            newList.put(cachedList.getJSONObject(i))
+                        }
+                    }
+                    
+                    prefs.edit()
+                        .putString(KEY_PENDING_FEEDBACKS, newList.toString())
+                        .apply()
+                    
+                    Log.d(TAG, "✅ Cache updated, remaining: ${newList.length()}")
+                }
+                
+            } catch (e: Exception) {
+                Log.e(TAG, "❌ Error during pending feedbacks retry: ${e.message}")
+                e.printStackTrace()
+            }
         }
     }
     
