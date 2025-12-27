@@ -104,23 +104,217 @@ public class GoogleAuthManager {
     }
     
     /**
+     * Check if current user is anonymous
+     * @return true if user is signed in anonymously, false otherwise
+     */
+    public boolean isAnonymous() {
+        FirebaseUser user = getCurrentUser();
+        return user != null && user.isAnonymous();
+    }
+    
+    /**
+     * Sign in anonymously
+     * Allows users to use the app without Google account
+     * Data is saved to Firestore with anonymous UID
+     * @param callback Callback for authentication result
+     */
+    public void signInAnonymously(AuthCallback callback) {
+        Log.d(TAG, "🔓 Attempting anonymous sign-in...");
+        
+        // Check if already signed in (including anonymous)
+        FirebaseUser currentUser = getCurrentUser();
+        if (currentUser != null) {
+            if (currentUser.isAnonymous()) {
+                Log.d(TAG, "✅ Already signed in anonymously: " + currentUser.getUid());
+                callback.onSuccess(currentUser);
+            } else {
+                Log.d(TAG, "✅ Already signed in with Google: " + currentUser.getEmail());
+                callback.onSuccess(currentUser);
+            }
+            return;
+        }
+        
+        // Sign in anonymously
+        firebaseAuth.signInAnonymously()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = firebaseAuth.getCurrentUser();
+                        if (user != null) {
+                            Log.d(TAG, "✅ Anonymous sign-in successful");
+                            Log.d(TAG, "   → User ID: " + user.getUid());
+                            Log.d(TAG, "   → Is Anonymous: " + user.isAnonymous());
+                            callback.onSuccess(user);
+                        } else {
+                            Log.e(TAG, "❌ Anonymous sign-in succeeded but user is null");
+                            callback.onFailure("Anonymous sign-in succeeded but user is null");
+                        }
+                    } else {
+                        Log.e(TAG, "❌ Anonymous sign-in failed", task.getException());
+                        callback.onFailure("Anonymous sign-in failed: " + 
+                                (task.getException() != null ? task.getException().getMessage() : "Unknown error"));
+                    }
+                });
+    }
+    
+    /**
+     * Link anonymous account with Google account
+     * This preserves all data created during anonymous session
+     * Must be called on an anonymous account
+     * @param data Intent data from Google Sign-In
+     * @param callback Callback for linking result
+     */
+    @SuppressWarnings("deprecation")
+    public void linkAnonymousWithGoogle(Intent data, AuthCallback callback) {
+        Log.d(TAG, "🔗 Attempting to link anonymous account with Google...");
+        
+        FirebaseUser currentUser = getCurrentUser();
+        if (currentUser == null) {
+            Log.e(TAG, "❌ No current user to link");
+            callback.onFailure("No user is currently signed in");
+            return;
+        }
+        
+        if (!currentUser.isAnonymous()) {
+            Log.w(TAG, "⚠️ Current user is not anonymous, performing regular sign-in");
+            handleSignInResult(data, callback);
+            return;
+        }
+        
+        if (data == null) {
+            Log.e(TAG, "❌ Intent data is null");
+            callback.onFailure("Sign-in data is missing");
+            return;
+        }
+        
+        Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+        
+        try {
+            GoogleSignInAccount account = task.getResult(ApiException.class);
+            
+            if (account != null) {
+                Log.d(TAG, "✅ GoogleSignInAccount retrieved");
+                Log.d(TAG, "   → Email: " + account.getEmail());
+                Log.d(TAG, "   → Display Name: " + account.getDisplayName());
+                
+                if (account.getIdToken() == null || account.getIdToken().isEmpty()) {
+                    Log.e(TAG, "❌ ID Token is missing");
+                    callback.onFailure("Authentication token is missing");
+                    return;
+                }
+                
+                // Create Google credential
+                AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+                
+                // Link credential to anonymous account
+                Log.d(TAG, "→ Linking Google credential to anonymous account...");
+                currentUser.linkWithCredential(credential)
+                        .addOnCompleteListener(linkTask -> {
+                            if (linkTask.isSuccessful()) {
+                                FirebaseUser linkedUser = linkTask.getResult().getUser();
+                                if (linkedUser != null) {
+                                    Log.d(TAG, "✅ Account linking successful!");
+                                    Log.d(TAG, "   → User ID (unchanged): " + linkedUser.getUid());
+                                    Log.d(TAG, "   → Email (new): " + linkedUser.getEmail());
+                                    Log.d(TAG, "   → Is Anonymous: " + linkedUser.isAnonymous());
+                                    Log.d(TAG, "   → ✨ All anonymous data is preserved!");
+                                    callback.onSuccess(linkedUser);
+                                } else {
+                                    Log.e(TAG, "❌ Linking succeeded but user is null");
+                                    callback.onFailure("Linking succeeded but user is null");
+                                }
+                            } else {
+                                Exception exception = linkTask.getException();
+                                Log.e(TAG, "❌ Account linking failed", exception);
+                                
+                                // Check if credential is already in use
+                                if (exception != null && exception.getMessage() != null && 
+                                    exception.getMessage().contains("already in use")) {
+                                    Log.w(TAG, "⚠️ This Google account is already linked to another account");
+                                    callback.onFailure("This Google account is already in use. Please use a different account.");
+                                } else {
+                                    callback.onFailure("Failed to link accounts: " + 
+                                            (exception != null ? exception.getMessage() : "Unknown error"));
+                                }
+                            }
+                        });
+            } else {
+                Log.e(TAG, "❌ GoogleSignInAccount is null");
+                callback.onFailure("Failed to retrieve account information");
+            }
+        } catch (ApiException e) {
+            Log.e(TAG, "❌ Google Sign-In failed with ApiException", e);
+            Log.e(TAG, "   → Status Code: " + e.getStatusCode());
+            Log.e(TAG, "   → Status Message: " + e.getStatusMessage());
+            
+            String errorMessage;
+            switch (e.getStatusCode()) {
+                case 12501:  // SIGN_IN_CANCELLED
+                    errorMessage = "Sign-in was canceled";
+                    break;
+                case 12500:  // SIGN_IN_FAILED
+                    errorMessage = "Sign-in failed. Please try again.";
+                    break;
+                case 7:      // NETWORK_ERROR
+                    errorMessage = "Network error. Please check your connection.";
+                    break;
+                default:
+                    errorMessage = "Sign-in error (Code: " + e.getStatusCode() + ")";
+            }
+            
+            callback.onFailure(errorMessage);
+        } catch (Exception e) {
+            Log.e(TAG, "❌ Unexpected error during account linking", e);
+            callback.onFailure("Unexpected error: " + e.getMessage());
+        }
+    }
+    
+    /**
      * Get user display name
-     * @return User's display name or empty string
+     * @return User's display name, "Guest User" for anonymous, or empty string
      */
     @NonNull
     public String getUserDisplayName() {
         FirebaseUser user = getCurrentUser();
-        return user != null && user.getDisplayName() != null ? user.getDisplayName() : "";
+        if (user == null) {
+            return "";
+        }
+        
+        // Anonymous user
+        if (user.isAnonymous()) {
+            return "Guest User";
+        }
+        
+        // Google user with display name
+        if (user.getDisplayName() != null && !user.getDisplayName().isEmpty()) {
+            return user.getDisplayName();
+        }
+        
+        // Fallback to email prefix
+        if (user.getEmail() != null && !user.getEmail().isEmpty()) {
+            return user.getEmail().split("@")[0];
+        }
+        
+        return "";
     }
     
     /**
      * Get user email
-     * @return User's email or empty string
+     * @return User's email, "anonymous@guest.com" for anonymous, or empty string
      */
     @NonNull
     public String getUserEmail() {
         FirebaseUser user = getCurrentUser();
-        return user != null && user.getEmail() != null ? user.getEmail() : "";
+        if (user == null) {
+            return "";
+        }
+        
+        // Anonymous user
+        if (user.isAnonymous()) {
+            return "anonymous@guest.com";
+        }
+        
+        // Google user with email
+        return user.getEmail() != null ? user.getEmail() : "";
     }
     
     /**

@@ -384,6 +384,49 @@ public class App extends BaseApp {
         // 🎯 Firebase Analytics: 应用完全启动成功
         com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(this).logWorkflowStep("app_init_complete");
         
+        // 🔓 自动匿名登录（允许用户无需Google账号即可使用）
+        android.util.Log.d("DIAGNOSE", "→ Starting automatic authentication...");
+        try {
+            // 延迟1秒后执行，避免影响启动性能
+            new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+                try {
+                    android.util.Log.d("DIAGNOSE", "🔓 Initializing anonymous authentication...");
+                    com.quran.quranaudio.online.Utils.GoogleAuthManager authManager = 
+                        new com.quran.quranaudio.online.Utils.GoogleAuthManager(this);
+                    
+                    // 如果用户未登录，自动进行匿名登录
+                    if (!authManager.isUserSignedIn()) {
+                        android.util.Log.d("DIAGNOSE", "→ No user signed in, performing anonymous sign-in...");
+                        authManager.signInAnonymously(new com.quran.quranaudio.online.Utils.GoogleAuthManager.AuthCallback() {
+                            @Override
+                            public void onSuccess(com.google.firebase.auth.FirebaseUser user) {
+                                android.util.Log.d("DIAGNOSE", "✅ Anonymous sign-in successful");
+                                android.util.Log.d("DIAGNOSE", "   → User ID: " + user.getUid());
+                                android.util.Log.d("DIAGNOSE", "   → Is Anonymous: " + user.isAnonymous());
+                            }
+                            
+                            @Override
+                            public void onFailure(String error) {
+                                android.util.Log.e("DIAGNOSE", "❌ Anonymous sign-in failed: " + error);
+                                // 非致命错误，应用继续运行
+                            }
+                        });
+                    } else {
+                        if (authManager.isAnonymous()) {
+                            android.util.Log.d("DIAGNOSE", "✅ Already signed in anonymously");
+                        } else {
+                            android.util.Log.d("DIAGNOSE", "✅ Already signed in with Google: " + authManager.getUserEmail());
+                        }
+                    }
+                } catch (Exception e) {
+                    android.util.Log.e("DIAGNOSE", "⚠️ Failed to perform anonymous authentication (non-critical)", e);
+                }
+            }, 1000);
+        } catch (Exception e) {
+            android.util.Log.e("DIAGNOSE_ERROR", "❌ Anonymous authentication setup FAILED (non-critical)", e);
+            // 非致命错误，不影响应用启动
+        }
+        
         // 🔄 重试提交缓存的反馈（后台静默执行，不影响启动速度）
         android.util.Log.d("DIAGNOSE", "→ Starting pending feedback retry...");
         try {
