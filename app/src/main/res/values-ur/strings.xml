@@ -2231,4 +2231,20 @@
     <string name="prayer_log_failed_update">اپڈیٹ کرنے میں ناکامی: %s</string>
     <string name="prayer_log_login_required">نماز ریکارڈ محفوظ کرنے کے لیے لاگ ان کریں</string>
 
+    <!-- Feedback Tags - Hate/Dislike (Poor/Unsatisfied) -->
+    <string name="feedback_tag_verse_translation_accuracy">آیت/ترجمہ کی درستگی</string>
+    <string name="feedback_tag_adhan_prayer_time_error">اذان/نماز کے وقت میں خرابی</string>
+    <string name="feedback_tag_qibla_direction_inaccurate">قبلہ کی سمت غلط</string>
+    <string name="feedback_tag_login_privacy_concern">لاگ ان مسائل / رازداری کی تشویش</string>
+    <string name="feedback_tag_data_sync_failed">ڈیٹا مطابقت پذیری ناکام</string>
+    <string name="feedback_tag_inappropriate_ads">نامناسب/مداخلت کرنے والے اشتہارات</string>
+    <string name="feedback_tag_storage_space_usage">اسٹوریج/جگہ کا استعمال</string>
+    <string name="feedback_tag_app_lag_slow_response">ایپ میں تاخیر/سست ردعمل</string>
+    <string name="feedback_tag_search_results_irrelevant">تلاش کے نتائج غیر متعلقہ</string>
+    
+    <!-- Feedback Tags - Love/Like -->
+    <string name="feedback_tag_good_reading">اچھا پڑھنے کا تجربہ</string>
+    <string name="feedback_tag_clean_ui">صاف انٹرفیس</string>
+    <string name="feedback_tag_good_learning">اچھی سیکھنے کی خصوصیات</string>
+
 </resources>

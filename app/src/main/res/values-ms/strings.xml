@@ -2308,4 +2308,21 @@
     <string name="prayer_log_failed_save">Gagal menyimpan: %s</string>
     <string name="prayer_log_failed_update">Gagal mengemaskini: %s</string>
     <string name="prayer_log_login_required">Sila log masuk untuk menyimpan rekod solat</string>
+
+    <!-- Feedback Tags - Hate/Dislike (Poor/Unsatisfied) -->
+    <string name="feedback_tag_verse_translation_accuracy">Ketepatan Ayat/Terjemahan</string>
+    <string name="feedback_tag_adhan_prayer_time_error">Ralat Waktu Azan/Solat</string>
+    <string name="feedback_tag_qibla_direction_inaccurate">Arah Kiblat Tidak Tepat</string>
+    <string name="feedback_tag_login_privacy_concern">Masalah Log Masuk / Privasi</string>
+    <string name="feedback_tag_data_sync_failed">Gagal Penyegerakan Data</string>
+    <string name="feedback_tag_inappropriate_ads">Iklan Tidak Sesuai/Mengganggu</string>
+    <string name="feedback_tag_storage_space_usage">Penggunaan Ruang Penyimpanan</string>
+    <string name="feedback_tag_app_lag_slow_response">Apl Lambat/Tindak Balas Perlahan</string>
+    <string name="feedback_tag_search_results_irrelevant">Hasil Carian Tidak Relevan</string>
+    
+    <!-- Feedback Tags - Love/Like -->
+    <string name="feedback_tag_good_reading">Pengalaman Membaca Bagus</string>
+    <string name="feedback_tag_clean_ui">Antara Muka Bersih</string>
+    <string name="feedback_tag_good_learning">Ciri Pembelajaran Bagus</string>
+
 </resources>

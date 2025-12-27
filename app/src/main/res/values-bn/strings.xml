@@ -2238,4 +2238,21 @@
     <string name="prayer_log_failed_save">সংরক্ষণ ব্যর্থ: %s</string>
     <string name="prayer_log_failed_update">আপডেট ব্যর্থ: %s</string>
     <string name="prayer_log_login_required">নামাজ রেকর্ড সংরক্ষণ করতে লগইন করুন</string>
+
+    <!-- Feedback Tags - Hate/Dislike (Poor/Unsatisfied) -->
+    <string name="feedback_tag_verse_translation_accuracy">আয়াত/অনুবাদ নির্ভুলতা</string>
+    <string name="feedback_tag_adhan_prayer_time_error">আজান/নামাজের সময় ত্রুটি</string>
+    <string name="feedback_tag_qibla_direction_inaccurate">কিবলার দিক ভুল</string>
+    <string name="feedback_tag_login_privacy_concern">লগইন সমস্যা / গোপনীয়তা উদ্বেগ</string>
+    <string name="feedback_tag_data_sync_failed">ডেটা সিঙ্ক ব্যর্থ</string>
+    <string name="feedback_tag_inappropriate_ads">অনুপযুক্ত/বিরক্তিকর বিজ্ঞাপন</string>
+    <string name="feedback_tag_storage_space_usage">স্টোরেজ/স্পেস ব্যবহার</string>
+    <string name="feedback_tag_app_lag_slow_response">অ্যাপ ল্যাগ/ধীর প্রতিক্রিয়া</string>
+    <string name="feedback_tag_search_results_irrelevant">অনুসন্ধান ফলাফল অপ্রাসঙ্গিক</string>
+    
+    <!-- Feedback Tags - Love/Like -->
+    <string name="feedback_tag_good_reading">ভালো পড়ার অভিজ্ঞতা</string>
+    <string name="feedback_tag_clean_ui">পরিষ্কার ইন্টারফেস</string>
+    <string name="feedback_tag_good_learning">ভালো শেখার বৈশিষ্ট্য</string>
+
 </resources>

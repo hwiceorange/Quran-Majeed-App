@@ -63,26 +63,28 @@ data class AppState(
 object FeedbackTags {
     // 😡 Hate/Dislike - 对应的问题标签
     val HATE_TAG_RES_IDS = listOf(
-        R.string.feedback_tag_translation_error,      // 翻译/经文有误
-        R.string.feedback_tag_prayer_time_inaccurate, // 宣礼/提醒不准
-        R.string.feedback_tag_ad_interference,        // 广告干扰
-        R.string.feedback_tag_battery_drain,          // 后台耗电太快
-        R.string.feedback_tag_search_inaccurate,      // 搜索不准
-        R.string.feedback_tag_slow_loading,           // 加载慢
-        R.string.feedback_tag_large_size,             // 包体大
-        R.string.feedback_tag_do_not_login            // 不想登录
+        R.string.feedback_tag_verse_translation_accuracy,  // Verse/Translation Accuracy
+        R.string.feedback_tag_adhan_prayer_time_error,     // Adhan/Prayer Time Error
+        R.string.feedback_tag_qibla_direction_inaccurate,  // Qibla Direction Inaccurate
+        R.string.feedback_tag_login_privacy_concern,       // Login Issues / Privacy Concern
+        R.string.feedback_tag_data_sync_failed,            // Data Sync Failed
+        R.string.feedback_tag_inappropriate_ads,           // Inappropriate/Intrusive Ads
+        R.string.feedback_tag_storage_space_usage,         // Storage/Space Usage
+        R.string.feedback_tag_app_lag_slow_response,       // App Lag/Slow Response
+        R.string.feedback_tag_search_results_irrelevant    // Search Results Irrelevant
     )
     
-    // 😐 Neutral/Confused - 对应的问题标签
+    // 😐 Neutral/Confused - 对应的问题标签（与Poor相同）
     val NEUTRAL_TAG_RES_IDS = listOf(
-        R.string.feedback_tag_translation_error,      // 翻译/经文有误
-        R.string.feedback_tag_prayer_time_inaccurate, // 宣礼/提醒不准
-        R.string.feedback_tag_ad_interference,        // 广告干扰
-        R.string.feedback_tag_battery_drain,          // 后台耗电太快
-        R.string.feedback_tag_search_inaccurate,      // 搜索不准
-        R.string.feedback_tag_slow_loading,           // 加载慢
-        R.string.feedback_tag_large_size,             // 包体大
-        R.string.feedback_tag_do_not_login            // 不想登录
+        R.string.feedback_tag_verse_translation_accuracy,  // Verse/Translation Accuracy
+        R.string.feedback_tag_adhan_prayer_time_error,     // Adhan/Prayer Time Error
+        R.string.feedback_tag_qibla_direction_inaccurate,  // Qibla Direction Inaccurate
+        R.string.feedback_tag_login_privacy_concern,       // Login Issues / Privacy Concern
+        R.string.feedback_tag_data_sync_failed,            // Data Sync Failed
+        R.string.feedback_tag_inappropriate_ads,           // Inappropriate/Intrusive Ads
+        R.string.feedback_tag_storage_space_usage,         // Storage/Space Usage
+        R.string.feedback_tag_app_lag_slow_response,       // App Lag/Slow Response
+        R.string.feedback_tag_search_results_irrelevant    // Search Results Irrelevant
     )
     
     // 😍 Love/Like - 对应的优点

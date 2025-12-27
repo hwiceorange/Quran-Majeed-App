@@ -2228,4 +2228,21 @@
     <string name="prayer_log_failed_save">Kaydetme başarısız: %s</string>
     <string name="prayer_log_failed_update">Güncelleme başarısız: %s</string>
     <string name="prayer_log_login_required">Namaz kayıtlarını kaydetmek için giriş yapın</string>
+
+    <!-- Feedback Tags - Hate/Dislike (Poor/Unsatisfied) -->
+    <string name="feedback_tag_verse_translation_accuracy">Ayet/Çeviri Doğruluğu</string>
+    <string name="feedback_tag_adhan_prayer_time_error">Ezan/Namaz Vakti Hatası</string>
+    <string name="feedback_tag_qibla_direction_inaccurate">Kıble Yönü Yanlış</string>
+    <string name="feedback_tag_login_privacy_concern">Giriş Sorunları / Gizlilik Endişesi</string>
+    <string name="feedback_tag_data_sync_failed">Veri Senkronizasyonu Başarısız</string>
+    <string name="feedback_tag_inappropriate_ads">Uygunsuz/Rahatsız Edici Reklamlar</string>
+    <string name="feedback_tag_storage_space_usage">Depolama Alanı Kullanımı</string>
+    <string name="feedback_tag_app_lag_slow_response">Uygulama Gecikmesi/Yavaş Yanıt</string>
+    <string name="feedback_tag_search_results_irrelevant">Arama Sonuçları İlgisiz</string>
+    
+    <!-- Feedback Tags - Love/Like -->
+    <string name="feedback_tag_good_reading">İyi Okuma Deneyimi</string>
+    <string name="feedback_tag_clean_ui">Temiz Arayüz</string>
+    <string name="feedback_tag_good_learning">İyi Öğrenme Özellikleri</string>
+
 </resources>

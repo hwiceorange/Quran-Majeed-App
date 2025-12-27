@@ -1471,6 +1471,22 @@
     <string name="prayer_log_failed_update">فشل التحديث: %s</string>
     <string name="prayer_log_login_required">يرجى تسجيل الدخول لحفظ سجلات الصلاة</string>
 
+    <!-- Feedback Tags - Hate/Dislike (Poor/Unsatisfied) -->
+    <string name="feedback_tag_verse_translation_accuracy">دقة الآية/الترجمة</string>
+    <string name="feedback_tag_adhan_prayer_time_error">خطأ في وقت الأذان/الصلاة</string>
+    <string name="feedback_tag_qibla_direction_inaccurate">اتجاه القبلة غير دقيق</string>
+    <string name="feedback_tag_login_privacy_concern">مشاكل تسجيل الدخول / الخصوصية</string>
+    <string name="feedback_tag_data_sync_failed">فشل مزامنة البيانات</string>
+    <string name="feedback_tag_inappropriate_ads">إعلانات غير لائقة/متطفلة</string>
+    <string name="feedback_tag_storage_space_usage">استخدام المساحة التخزينية</string>
+    <string name="feedback_tag_app_lag_slow_response">بطء التطبيق/استجابة بطيئة</string>
+    <string name="feedback_tag_search_results_irrelevant">نتائج البحث غير ذات صلة</string>
+    
+    <!-- Feedback Tags - Love/Like -->
+    <string name="feedback_tag_good_reading">تجربة قراءة جيدة</string>
+    <string name="feedback_tag_clean_ui">واجهة نظيفة</string>
+    <string name="feedback_tag_good_learning">ميزات تعلم جيدة</string>
+
 </resources>
 
 

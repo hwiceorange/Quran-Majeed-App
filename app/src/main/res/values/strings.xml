@@ -1535,15 +1535,16 @@
     <!-- Feedback Prompts -->
     <string name="feedback_prompt_tags">Which aspects? (Select multiple)</string>
     
-    <!-- Feedback Tags - Hate/Dislike -->
-    <string name="feedback_tag_translation_error">Translation/Verse Error</string>
-    <string name="feedback_tag_prayer_time_inaccurate">Prayer Time Inaccurate</string>
-    <string name="feedback_tag_ad_interference">Ads Interference</string>
-    <string name="feedback_tag_battery_drain">Battery Drain</string>
-    <string name="feedback_tag_search_inaccurate">Search Inaccurate</string>
-    <string name="feedback_tag_slow_loading">Slow Loading</string>
-    <string name="feedback_tag_large_size">Large App Size</string>
-    <string name="feedback_tag_do_not_login">Do not log in</string>
+    <!-- Feedback Tags - Hate/Dislike (Poor/Unsatisfied) -->
+    <string name="feedback_tag_verse_translation_accuracy">Verse/Translation Accuracy</string>
+    <string name="feedback_tag_adhan_prayer_time_error">Adhan/Prayer Time Error</string>
+    <string name="feedback_tag_qibla_direction_inaccurate">Qibla Direction Inaccurate</string>
+    <string name="feedback_tag_login_privacy_concern">Login Issues / Privacy Concern</string>
+    <string name="feedback_tag_data_sync_failed">Data Sync Failed</string>
+    <string name="feedback_tag_inappropriate_ads">Inappropriate/Intrusive Ads</string>
+    <string name="feedback_tag_storage_space_usage">Storage/Space Usage</string>
+    <string name="feedback_tag_app_lag_slow_response">App Lag/Slow Response</string>
+    <string name="feedback_tag_search_results_irrelevant">Search Results Irrelevant</string>
     
     <!-- Feedback Tags - Love/Like -->
     <string name="feedback_tag_good_reading">Good Reading Experience</string>
