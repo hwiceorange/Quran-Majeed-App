@@ -651,13 +651,26 @@ public class PrayersFragment extends Fragment implements com.quran.quranaudio.on
     private void onSalahTrackClicked(SalahName salahName, MaterialButton button) {
         Log.d("PrayersFragment", "🔘 Prayer clicked: " + salahName.getDisplayName());
         
-        // Check if user is logged in
+        // ✅ 【修复】如果用户未登录，尝试自动匿名登录
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-            Log.d("PrayersFragment", "❌ User not logged in, showing login dialog");
-            showLoginDialog(salahName, button);
+            Log.w("PrayersFragment", "⚠️ User not logged in, attempting automatic anonymous sign-in...");
+            ensureUserAuthenticated(new Runnable() {
+                @Override
+                public void run() {
+                    // 登录成功后，重新执行点击逻辑
+                    handleSalahTrackClick(salahName, button);
+                }
+            });
             return;
         }
         
+        handleSalahTrackClick(salahName, button);
+    }
+    
+    /**
+     * 实际的祷告点击处理逻辑（从 onSalahTrackClicked 中提取）
+     */
+    private void handleSalahTrackClick(SalahName salahName, MaterialButton button) {
         String prayerName = salahName.getDisplayName();
         PrayerLog existingLog = todayPrayerLogs.get(prayerName);
         
@@ -685,6 +698,53 @@ public class PrayersFragment extends Fragment implements com.quran.quranaudio.on
     }
     
     /**
+     * 确保用户已认证（自动匿名登录）
+     */
+    private void ensureUserAuthenticated(Runnable onSuccess) {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            // 已登录
+            onSuccess.run();
+            return;
+        }
+        
+        // 尝试匿名登录
+        Log.d("PrayersFragment", "🔓 Attempting anonymous sign-in...");
+        
+        if (googleAuthManager == null) {
+            Log.e("PrayersFragment", "❌ GoogleAuthManager is null, cannot authenticate");
+            showErrorToast("Authentication service unavailable");
+            return;
+        }
+        
+        googleAuthManager.signInAnonymously(new com.quran.quranaudio.online.Utils.GoogleAuthManager.AuthCallback() {
+            @Override
+            public void onSuccess(com.google.firebase.auth.FirebaseUser user) {
+                Log.d("PrayersFragment", "✅ Anonymous sign-in successful: " + user.getUid());
+                if (isAdded() && getActivity() != null) {
+                    getActivity().runOnUiThread(onSuccess);
+                }
+            }
+            
+            @Override
+            public void onFailure(String error) {
+                Log.e("PrayersFragment", "❌ Anonymous sign-in failed: " + error);
+                if (isAdded() && getContext() != null) {
+                    showErrorToast("Failed to authenticate: " + error);
+                }
+            }
+        });
+    }
+    
+    /**
+     * 显示错误提示
+     */
+    private void showErrorToast(String message) {
+        if (isAdded() && getContext() != null) {
+            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        }
+    }
+    
+    /**
      * 显示祷告记录 Bottom Sheet
      * @param prayerName 祷告名称
      * @param existingLogId 现有记录 ID（编辑模式），null 表示新建
@@ -705,35 +765,24 @@ public class PrayersFragment extends Fragment implements com.quran.quranaudio.on
     }
     
     /**
+     * @deprecated No longer needed with anonymous login support
      * Shows login dialog when unauthenticated user clicks Track button
      */
+    @Deprecated
     private void showLoginDialog(SalahName salahName, MaterialButton button) {
-        new androidx.appcompat.app.AlertDialog.Builder(requireContext())
-            .setTitle(getString(R.string.qada_login_required_title))
-            .setMessage(getString(R.string.qada_login_required_message))
-            .setPositiveButton(getString(R.string.login_with_google), (dialog, which) -> {
-                dialog.dismiss();
-                initiateGoogleSignIn();
-            })
-            .setNegativeButton(getString(R.string.cancel), (dialog, which) -> dialog.dismiss())
-            .setCancelable(true)
-            .show();
+        // 已弃用 - 应用现在支持匿名登录，不再强制要求 Google 登录
+        // 如果需要提示用户升级账户，请使用 AccountUpgradeDialog
+        Log.w("PrayersFragment", "⚠️ showLoginDialog() is deprecated - using anonymous auth instead");
     }
     
     /**
+     * @deprecated No longer needed with anonymous login support
      * Shows generic login dialog (for Qada tracker access)
      */
+    @Deprecated
     private void showGenericLoginDialog() {
-        new androidx.appcompat.app.AlertDialog.Builder(requireContext())
-            .setTitle(getString(R.string.qada_login_required_title))
-            .setMessage(getString(R.string.qada_login_required_message))
-            .setPositiveButton(getString(R.string.login_with_google), (dialog, which) -> {
-                dialog.dismiss();
-                initiateGoogleSignIn();
-            })
-            .setNegativeButton(getString(R.string.cancel), (dialog, which) -> dialog.dismiss())
-            .setCancelable(true)
-            .show();
+        // 已弃用 - 应用现在支持匿名登录，不再强制要求 Google 登录
+        Log.w("PrayersFragment", "⚠️ showGenericLoginDialog() is deprecated - using anonymous auth instead");
     }
     
     /**
@@ -1018,13 +1067,26 @@ public class PrayersFragment extends Fragment implements com.quran.quranaudio.on
 
         Log.d("PrayersFragment", "📊 Outstanding Qada card clicked");
 
-        // Check if user is logged in
+        // ✅ 【修复】如果用户未登录，尝试自动匿名登录
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-            Log.d("PrayersFragment", "❌ User not logged in, showing login dialog");
-            showGenericLoginDialog();
+            Log.w("PrayersFragment", "⚠️ User not logged in, attempting automatic anonymous sign-in...");
+            ensureUserAuthenticated(new Runnable() {
+                @Override
+                public void run() {
+                    // 登录成功后，继续执行 Qada 逻辑
+                    proceedToQadaTracker();
+                }
+            });
             return;
         }
 
+        proceedToQadaTracker();
+    }
+    
+    /**
+     * 继续执行 Qada Tracker 逻辑（从 onOutstandingQadaClicked 中提取）
+     */
+    private void proceedToQadaTracker() {
         // Show loading feedback to user
         if (getContext() != null) {
             android.widget.Toast.makeText(getContext(), 
