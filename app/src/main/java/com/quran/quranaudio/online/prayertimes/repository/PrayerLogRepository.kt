@@ -520,15 +520,16 @@ class PrayerLogRepository {
      * @param dayPrayer Optional DayPrayer with actual prayer times
      */
     fun hasPrayerWindowStarted(prayerName: String, dayPrayer: com.quran.quranaudio.online.prayertimes.timings.DayPrayer?): Boolean {
+        // ✅ 【修复】判断当前祷告的开始时间是否已到，而不是下一个祷告的时间
         // Try to use actual prayer times first
         if (dayPrayer != null && dayPrayer.timings != null) {
             try {
                 val now = java.time.LocalDateTime.now()
-                val nextPrayerTime = getNextPrayerTime(prayerName, dayPrayer)
+                val currentPrayerStartTime = getCurrentPrayerStartTime(prayerName, dayPrayer)
                 
-                if (nextPrayerTime != null) {
-                    val hasStarted = now.isAfter(nextPrayerTime) || now.isEqual(nextPrayerTime)
-                    Log.d(TAG, "✅ Prayer: $prayerName, Next: ${nextPrayerTime.toLocalTime()}, Now: ${now.toLocalTime()}, Started: $hasStarted")
+                if (currentPrayerStartTime != null) {
+                    val hasStarted = now.isAfter(currentPrayerStartTime) || now.isEqual(currentPrayerStartTime)
+                    Log.d(TAG, "✅ Prayer: $prayerName, Start: ${currentPrayerStartTime.toLocalTime()}, Now: ${now.toLocalTime()}, Started: $hasStarted")
                     return hasStarted
                 }
             } catch (e: Exception) {
@@ -536,18 +537,37 @@ class PrayerLogRepository {
             }
         }
         
+        // ✅ 【修复】Fallback 逻辑也修改为判断祷告开始时间
         // Fallback to conservative time estimates if actual times not available
         Log.d(TAG, "⚠️ Using fallback time check for $prayerName (no actual prayer times)")
         val calendar = java.util.Calendar.getInstance()
         val hour = calendar.get(java.util.Calendar.HOUR_OF_DAY)
 
         return when (prayerName) {
-            "Fajr" -> hour >= 11 // After typical Dhuhr time
-            "Dhuhr" -> hour >= 15 // After typical Asr time  
-            "Asr" -> hour >= 18 // After typical Maghrib time
-            "Maghrib" -> hour >= 20 // After typical Isha time
-            "Isha" -> hour >= 23 // Close to midnight
+            "Fajr" -> hour >= 5 // Fajr starts around 5:00-6:00 AM
+            "Dhuhr" -> hour >= 12 // Dhuhr starts around 12:00 PM
+            "Asr" -> hour >= 15 // Asr starts around 3:00 PM
+            "Maghrib" -> hour >= 18 // Maghrib starts around 6:00 PM (sunset)
+            "Isha" -> hour >= 20 // Isha starts around 8:00 PM
             else -> false
+        }
+    }
+    
+    /**
+     * ✅ 【新增】获取当前祷告的开始时间
+     * Get the CURRENT prayer's start time (used to determine if prayer window has started)
+     * @return LocalDateTime of the current prayer's start, or null if not available
+     */
+    private fun getCurrentPrayerStartTime(prayerName: String, dayPrayer: com.quran.quranaudio.online.prayertimes.timings.DayPrayer): java.time.LocalDateTime? {
+        val timings = dayPrayer.timings ?: return null
+        
+        return when (prayerName) {
+            "Fajr" -> timings[com.quran.quranaudio.online.prayertimes.common.PrayerEnum.FAJR]
+            "Dhuhr" -> timings[com.quran.quranaudio.online.prayertimes.common.PrayerEnum.DHOHR]
+            "Asr" -> timings[com.quran.quranaudio.online.prayertimes.common.PrayerEnum.ASR]
+            "Maghrib" -> timings[com.quran.quranaudio.online.prayertimes.common.PrayerEnum.MAGHRIB]
+            "Isha" -> timings[com.quran.quranaudio.online.prayertimes.common.PrayerEnum.ICHA]
+            else -> null
         }
     }
     
