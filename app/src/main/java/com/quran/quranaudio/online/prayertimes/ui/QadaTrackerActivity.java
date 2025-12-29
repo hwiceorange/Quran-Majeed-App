@@ -1218,13 +1218,29 @@ public class QadaTrackerActivity extends AppCompatActivity {
         
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
-            Log.e(TAG, "User not authenticated");
+            Log.e(TAG, "❌ User not authenticated");
             buildWeeklyPrayerGrid(); // Show empty grid
             return;
         }
         
+        // ✅ 【诊断日志 1】用户信息
+        Log.d("QADA_DIAGNOSIS", "════════════════════════════════════════════════════════");
+        Log.d("QADA_DIAGNOSIS", "📊 loadWeeklyData() - START");
+        Log.d("QADA_DIAGNOSIS", "   🔐 User Info:");
+        Log.d("QADA_DIAGNOSIS", "      User ID: " + user.getUid());
+        Log.d("QADA_DIAGNOSIS", "      Is Anonymous: " + user.isAnonymous());
+        Log.d("QADA_DIAGNOSIS", "      Email: " + (user.getEmail() != null ? user.getEmail() : "null"));
+        
         LocalDate weekStart = currentDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
         LocalDate weekEnd = currentDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+        
+        // ✅ 【诊断日志 2】日期范围
+        Log.d("QADA_DIAGNOSIS", "   📅 Date Range:");
+        Log.d("QADA_DIAGNOSIS", "      Current Date: " + currentDate + " (" + currentDate.getDayOfWeek() + ")");
+        Log.d("QADA_DIAGNOSIS", "      Week Start: " + weekStart + " (" + weekStart.getDayOfWeek() + ")");
+        Log.d("QADA_DIAGNOSIS", "      Week End: " + weekEnd + " (" + weekEnd.getDayOfWeek() + ")");
+        Log.d("QADA_DIAGNOSIS", "      Query Range: " + weekStart + " to " + weekEnd);
+        Log.d("QADA_DIAGNOSIS", "════════════════════════════════════════════════════════");
         
         Log.d(TAG, "Loading weekly data from " + weekStart + " to " + weekEnd);
         
@@ -1235,6 +1251,31 @@ public class QadaTrackerActivity extends AppCompatActivity {
             new PrayerLogRepository.DateRangeWithIdsCallback() {
                 @Override
                 public void onResult(Map<String, Map<String, PrayerLogRepository.PrayerLogInfo>> data) {
+                    // ✅ 【诊断日志 3】Firestore 返回的数据
+                    Log.d("QADA_DIAGNOSIS", "════════════════════════════════════════════════════════");
+                    Log.d("QADA_DIAGNOSIS", "📦 Firestore Query Result:");
+                    Log.d("QADA_DIAGNOSIS", "   Returned Dates: " + data.size());
+                    
+                    for (Map.Entry<String, Map<String, PrayerLogRepository.PrayerLogInfo>> dateEntry : data.entrySet()) {
+                        String date = dateEntry.getKey();
+                        Map<String, PrayerLogRepository.PrayerLogInfo> prayers = dateEntry.getValue();
+                        Log.d("QADA_DIAGNOSIS", "   📆 " + date + " (" + prayers.size() + " prayers):");
+                        
+                        for (Map.Entry<String, PrayerLogRepository.PrayerLogInfo> prayerEntry : prayers.entrySet()) {
+                            PrayerLogRepository.PrayerLogInfo info = prayerEntry.getValue();
+                            Log.d("QADA_DIAGNOSIS", "      ✅ " + prayerEntry.getKey() + " -> " + info.getStatus() + " (docId: " + info.getLogId() + ")");
+                        }
+                    }
+                    
+                    if (data.isEmpty()) {
+                        Log.w("QADA_DIAGNOSIS", "   ⚠️ NO DATA RETURNED FROM FIRESTORE!");
+                        Log.w("QADA_DIAGNOSIS", "   Possible reasons:");
+                        Log.w("QADA_DIAGNOSIS", "   1. No prayer logs exist for this user in this date range");
+                        Log.w("QADA_DIAGNOSIS", "   2. User ID mismatch (prayer logs saved with different userId)");
+                        Log.w("QADA_DIAGNOSIS", "   3. Date format mismatch in Firestore");
+                    }
+                    Log.d("QADA_DIAGNOSIS", "════════════════════════════════════════════════════════");
+                    
                     weeklyData.clear();
                     
                     // Convert PrayerLogInfo to PrayerLogData
@@ -1474,6 +1515,29 @@ public class QadaTrackerActivity extends AppCompatActivity {
     private void updateWeeklyCompletion() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return;
         
+        // ✅ 【诊断日志 4】weeklyData 的内容
+        Log.d("QADA_DIAGNOSIS", "════════════════════════════════════════════════════════");
+        Log.d("QADA_DIAGNOSIS", "📊 updateWeeklyCompletion() - START");
+        Log.d("QADA_DIAGNOSIS", "   weeklyData size: " + weeklyData.size() + " dates");
+        
+        if (weeklyData.isEmpty()) {
+            Log.w("QADA_DIAGNOSIS", "   ⚠️ weeklyData is EMPTY!");
+            Log.w("QADA_DIAGNOSIS", "   This means NO prayer logs were loaded from Firestore");
+            Log.w("QADA_DIAGNOSIS", "   Result: completionRate will be 0%");
+        } else {
+            Log.d("QADA_DIAGNOSIS", "   📋 weeklyData content:");
+            for (Map.Entry<String, Map<String, PrayerLogData>> dateEntry : weeklyData.entrySet()) {
+                String date = dateEntry.getKey();
+                Map<String, PrayerLogData> prayers = dateEntry.getValue();
+                Log.d("QADA_DIAGNOSIS", "   📆 " + date + ":");
+                
+                for (Map.Entry<String, PrayerLogData> prayerEntry : prayers.entrySet()) {
+                    Log.d("QADA_DIAGNOSIS", "      " + prayerEntry.getKey() + " -> " + prayerEntry.getValue().status);
+                }
+            }
+        }
+        Log.d("QADA_DIAGNOSIS", "════════════════════════════════════════════════════════");
+        
         LocalDate weekStart = currentDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
         LocalDate weekEnd = currentDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
         LocalDate today = LocalDate.now();
@@ -1535,6 +1599,32 @@ public class QadaTrackerActivity extends AppCompatActivity {
         }
         
         int completionRate = totalPrayers > 0 ? (completedPrayers * 100 / totalPrayers) : 0;
+        
+        // ✅ 【诊断日志 5】计算结果
+        Log.d("QADA_DIAGNOSIS", "════════════════════════════════════════════════════════");
+        Log.d("QADA_DIAGNOSIS", "📈 Completion Calculation:");
+        Log.d("QADA_DIAGNOSIS", "   Qada Start Date: " + (qadaStartDate != null ? qadaStartDate : "null"));
+        Log.d("QADA_DIAGNOSIS", "   Week Range: " + weekStart + " to " + weekEnd);
+        Log.d("QADA_DIAGNOSIS", "   Today: " + today);
+        Log.d("QADA_DIAGNOSIS", "   Total Prayers (denominator): " + totalPrayers);
+        Log.d("QADA_DIAGNOSIS", "   Completed Prayers (numerator): " + completedPrayers);
+        Log.d("QADA_DIAGNOSIS", "   Completion Rate: " + completionRate + "%");
+        Log.d("QADA_DIAGNOSIS", "   Formula: (" + completedPrayers + " / " + totalPrayers + ") * 100 = " + completionRate + "%");
+        
+        if (completionRate == 0 && totalPrayers > 0) {
+            Log.w("QADA_DIAGNOSIS", "   ⚠️ WARNING: 0% completion but totalPrayers > 0");
+            Log.w("QADA_DIAGNOSIS", "   This means weeklyData does NOT contain any completed prayers");
+            Log.w("QADA_DIAGNOSIS", "   Check if prayer names match between Firestore and code");
+        }
+        
+        if (totalPrayers == 0) {
+            Log.w("QADA_DIAGNOSIS", "   ℹ️ No prayers to count in this period");
+            Log.w("QADA_DIAGNOSIS", "   Possible reasons:");
+            Log.w("QADA_DIAGNOSIS", "   1. All days are before Qada start date");
+            Log.w("QADA_DIAGNOSIS", "   2. All days are in the future");
+            Log.w("QADA_DIAGNOSIS", "   3. Prayer windows have not started yet");
+        }
+        Log.d("QADA_DIAGNOSIS", "════════════════════════════════════════════════════════");
         
         Log.d(TAG, "Weekly completion: " + completedPrayers + "/" + totalPrayers + " = " + completionRate + "%");
         

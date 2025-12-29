@@ -1,0 +1,353 @@
+12-29 13:36:37.156  9617  9617 D PrayerLogRepository: 📡 getTodayPrayerLogsAsync called
+12-29 13:36:37.157  9617  9701 D PrayerLogRepository: 🔍 Querying prayer logs...
+12-29 13:36:37.934  9617  9701 D PrayerLogRepository: No Qada start date configured, returning empty summary
+12-29 13:36:37.935  9617  9617 D QadaDiagnosis:    ✅ Calculation Source: PrayerLogRepository.getQadaSummary()
+12-29 13:36:38.574  9617  9701 D PrayerLogRepository: Retrieved 1 prayer logs for today
+12-29 13:36:38.575  9617  9701 D PrayerLogRepository: 📥 Query returned 1 logs
+12-29 13:36:38.575  9617  9701 D PrayerLogRepository:   📝 Fajr -> ADA (Dl734gHM4r89Cf2ys2KC)
+12-29 13:36:38.576  9617  9617 D PrayerLogRepository: ✅ Calling callback with 1 logs
+12-29 13:36:39.190  9617  9701 D PrayerLogRepository: No Qada start date configured, returning empty summary
+12-29 13:36:39.193  9617  9617 D QadaDiagnosis:    ✅ Calculation Source: PrayerLogRepository.getQadaSummary()
+12-29 13:36:47.375  9617  9702 D PrayerLogRepository: Qada start date set to: 2025-12-28
+12-29 13:36:47.465  9617  9702 D PrayerLogRepository: Loading prayer logs with IDs from 2025-12-29 to 2026-01-04
+12-29 13:36:48.026  9617  9702 D PrayerLogRepository: ✅ 【统一计算规则】Computing Qada summary from 2025-12-28 to 2025-12-29 (including today's started prayers)
+12-29 13:36:48.026  9617  9702 D PrayerLogRepository:    📌 This calculation is shared between Salat page and Qada Tracker
+12-29 13:36:48.027  9617  9702 D PrayerLogRepository: Loading prayer logs with IDs from 2025-12-29 to 2026-01-04
+12-29 13:36:48.067  9617  9702 D PrayerLogRepository: Found 1 prayer logs in date range
+12-29 13:36:48.067  9617  9701 D PrayerLogRepository: Found 1 prayer logs in date range
+12-29 13:36:48.069  9617  9701 D PrayerLogRepository:   ✅ 2025-12-29 Fajr -> ADA (docId: Dl734gHM4r89Cf2ys2KC)
+12-29 13:36:48.069  9617  9702 D PrayerLogRepository:   ✅ 2025-12-29 Fajr -> ADA (docId: Dl734gHM4r89Cf2ys2KC)
+12-29 13:36:48.080  9617  9617 D PrayerLogRepository: ✅ Prayer: Fajr, Next: 17:23, Now: 13:36:48.080909, Started: false
+12-29 13:36:48.081  9617  9617 D PrayerLogRepository: ✅ Prayer: Dhuhr, Next: 20:27, Now: 13:36:48.081059, Started: false
+12-29 13:36:48.081  9617  9617 D PrayerLogRepository: ✅ Prayer: Asr, Next: 22:48, Now: 13:36:48.081109, Started: false
+12-29 13:36:48.081  9617  9617 D PrayerLogRepository: ✅ Prayer: Maghrib, Next: 00:03, Now: 13:36:48.081145, Started: false
+12-29 13:36:48.081  9617  9617 D PrayerLogRepository: ✅ Prayer: Isha, Next: 03:03, Now: 13:36:48.081181, Started: false
+12-29 13:36:48.081  9617  9617 D QadaDiagnosis:    ✅ Prayer Window Check: PrayerLogRepository.hasPrayerWindowStarted()
+12-29 13:36:48.082  9617  9701 D PrayerLogRepository: Loading prayer logs from 2025-12-22 to 2025-12-28
+12-29 13:36:48.093  9617  9617 D PrayerLogRepository: ✅ Prayer: Fajr, Next: 17:23, Now: 13:36:48.093260, Started: false
+12-29 13:36:48.093  9617  9617 D PrayerLogRepository: ✅ Prayer: Dhuhr, Next: 20:27, Now: 13:36:48.093377, Started: false
+12-29 13:36:48.093  9617  9617 D PrayerLogRepository: ✅ Prayer: Asr, Next: 22:48, Now: 13:36:48.093421, Started: false
+12-29 13:36:48.093  9617  9617 D PrayerLogRepository: ✅ Prayer: Maghrib, Next: 00:03, Now: 13:36:48.093462, Started: false
+12-29 13:36:48.093  9617  9617 D PrayerLogRepository: ✅ Prayer: Isha, Next: 03:03, Now: 13:36:48.093518, Started: false
+12-29 13:36:48.093  9617  9617 D QadaDiagnosis:    ✅ Prayer Window Check: PrayerLogRepository.hasPrayerWindowStarted()
+12-29 13:36:48.094  9617  9701 D PrayerLogRepository: Loading prayer logs from 2025-12-22 to 2025-12-28
+12-29 13:36:48.736  9617  9701 D PrayerLogRepository: 🔍 Processing TODAY (2025-12-29) prayers:
+12-29 13:36:48.736  9617  9701 D PrayerLogRepository:    todayPrayerTimes: ✅ Available
+12-29 13:36:48.736  9617  9701 D PrayerLogRepository:    todayPrayerTimes.timings: ✅ Available
+12-29 13:36:48.736  9617  9701 D PrayerLogRepository: ✅ Prayer: Fajr, Next: 17:23, Now: 13:36:48.736711, Started: false
+12-29 13:36:48.736  9617  9701 D PrayerLogRepository:    ⏭️ SKIPPED: Fajr (window not started)
+12-29 13:36:48.736  9617  9701 D PrayerLogRepository: ✅ Prayer: Dhuhr, Next: 20:27, Now: 13:36:48.736922, Started: false
+12-29 13:36:48.737  9617  9701 D PrayerLogRepository:    ⏭️ SKIPPED: Dhuhr (window not started)
+12-29 13:36:48.737  9617  9701 D PrayerLogRepository: ✅ Prayer: Asr, Next: 22:48, Now: 13:36:48.737120, Started: false
+12-29 13:36:48.737  9617  9701 D PrayerLogRepository:    ⏭️ SKIPPED: Asr (window not started)
+12-29 13:36:48.737  9617  9701 D PrayerLogRepository: ✅ Prayer: Maghrib, Next: 00:03, Now: 13:36:48.737302, Started: false
+12-29 13:36:48.737  9617  9701 D PrayerLogRepository:    ⏭️ SKIPPED: Maghrib (window not started)
+12-29 13:36:48.737  9617  9701 D PrayerLogRepository: ✅ Prayer: Isha, Next: 03:03, Now: 13:36:48.737483, Started: false
+12-29 13:36:48.737  9617  9701 D PrayerLogRepository:    ⏭️ SKIPPED: Isha (window not started)
+12-29 13:36:48.744  9617  9701 D PrayerLogRepository: Qada summary computed:
+12-29 13:36:48.744  9617  9701 D PrayerLogRepository:   Period: 2025-12-28 to 2025-12-29 (2 days)
+12-29 13:36:48.744  9617  9701 D PrayerLogRepository:   Total Counted Prayers: 5 (including today's started prayers)
+12-29 13:36:48.744  9617  9701 D PrayerLogRepository:   Missed/Pending: 5
+12-29 13:36:48.744  9617  9701 D PrayerLogRepository:   Qada' (completed): 0
+12-29 13:36:48.744  9617  9701 D PrayerLogRepository:   Ada' (on-time): 0
+12-29 13:36:48.744  9617  9701 D PrayerLogRepository:   Outstanding: 5
+12-29 13:36:48.744  9617  9701 D PrayerLogRepository:   Completed: 0
+12-29 13:36:48.744  9617  9701 D PrayerLogRepository:   Total Qada: 5
+12-29 13:36:48.744  9617  9701 D QadaDiagnosis:    ✅ Calculation Source: PrayerLogRepository.getQadaSummary()
+12-29 13:36:48.745  9617  9617 D QadaDiagnosis:    ✅ Calculation Source: PrayerLogRepository.getQadaSummary()
+12-29 13:36:48.766  9617  9701 D PrayerLogRepository: Found 0 prayer logs in date range
+12-29 13:36:48.766  9617  9702 D PrayerLogRepository: Found 0 prayer logs in date range
+12-29 13:36:55.083  9617  9701 D PrayerLogRepository: Loading prayer logs with IDs from 2025-12-29 to 2026-01-04
+12-29 13:36:56.080  9617  9701 D PrayerLogRepository: Found 2 prayer logs in date range
+12-29 13:36:56.087  9617  9701 D PrayerLogRepository:   ✅ 2025-12-29 Dhuhr -> ADA (docId: 9xiO7oJ2mEKoiYJLpQZW)
+12-29 13:36:56.089  9617  9701 D PrayerLogRepository:   ✅ 2025-12-29 Fajr -> ADA (docId: Dl734gHM4r89Cf2ys2KC)
+12-29 13:36:56.108  9617  9617 D PrayerLogRepository: ✅ Prayer: Fajr, Next: 17:23, Now: 13:36:56.108861, Started: false
+12-29 13:36:56.109  9617  9617 D PrayerLogRepository: ✅ Prayer: Dhuhr, Next: 20:27, Now: 13:36:56.109001, Started: false
+12-29 13:36:56.109  9617  9617 D PrayerLogRepository: ✅ Prayer: Asr, Next: 22:48, Now: 13:36:56.109045, Started: false
+12-29 13:36:56.109  9617  9617 D PrayerLogRepository: ✅ Prayer: Maghrib, Next: 00:03, Now: 13:36:56.109083, Started: false
+12-29 13:36:56.109  9617  9617 D PrayerLogRepository: ✅ Prayer: Isha, Next: 03:03, Now: 13:36:56.109116, Started: false
+12-29 13:36:56.109  9617  9617 D QadaDiagnosis:    ✅ Prayer Window Check: PrayerLogRepository.hasPrayerWindowStarted()
+12-29 13:36:56.110  9617  9701 D PrayerLogRepository: Loading prayer logs from 2025-12-22 to 2025-12-28
+12-29 13:36:56.720  9617  9701 D PrayerLogRepository: Found 0 prayer logs in date range
+12-29 13:37:11.907  9617  9617 D PrayerLogRepository: 📡 getTodayPrayerLogsAsync called
+12-29 13:37:11.908  9617  9701 D PrayerLogRepository: 🔍 Querying prayer logs...
+12-29 13:37:12.592  9617  9701 D PrayerLogRepository: Retrieved 2 prayer logs for today
+12-29 13:37:12.592  9617  9701 D PrayerLogRepository: 📥 Query returned 2 logs
+12-29 13:37:12.592  9617  9701 D PrayerLogRepository:   📝 Dhuhr -> ADA (9xiO7oJ2mEKoiYJLpQZW)
+12-29 13:37:12.592  9617  9701 D PrayerLogRepository:   📝 Fajr -> ADA (Dl734gHM4r89Cf2ys2KC)
+12-29 13:37:12.593  9617  9617 D PrayerLogRepository: ✅ Calling callback with 2 logs
+12-29 13:37:13.595  9617  9701 D PrayerLogRepository: ✅ 【统一计算规则】Computing Qada summary from 2025-12-28 to 2025-12-29 (including today's started prayers)
+12-29 13:37:13.595  9617  9701 D PrayerLogRepository:    📌 This calculation is shared between Salat page and Qada Tracker
+12-29 13:37:14.238  9617  9701 D PrayerLogRepository: 🔍 Processing TODAY (2025-12-29) prayers:
+12-29 13:37:14.238  9617  9701 D PrayerLogRepository:    todayPrayerTimes: ✅ Available
+12-29 13:37:14.238  9617  9701 D PrayerLogRepository:    todayPrayerTimes.timings: ✅ Available
+12-29 13:37:14.239  9617  9701 D PrayerLogRepository: ✅ Prayer: Fajr, Next: 17:23, Now: 13:37:14.238904, Started: false
+12-29 13:37:14.239  9617  9701 D PrayerLogRepository:    ⏭️ SKIPPED: Fajr (window not started)
+12-29 13:37:14.239  9617  9701 D PrayerLogRepository: ✅ Prayer: Dhuhr, Next: 20:27, Now: 13:37:14.239159, Started: false
+12-29 13:37:14.239  9617  9701 D PrayerLogRepository:    ⏭️ SKIPPED: Dhuhr (window not started)
+12-29 13:37:14.239  9617  9701 D PrayerLogRepository: ✅ Prayer: Asr, Next: 22:48, Now: 13:37:14.239321, Started: false
+12-29 13:37:14.239  9617  9701 D PrayerLogRepository:    ⏭️ SKIPPED: Asr (window not started)
+12-29 13:37:14.239  9617  9701 D PrayerLogRepository: ✅ Prayer: Maghrib, Next: 00:03, Now: 13:37:14.239496, Started: false
+12-29 13:37:14.239  9617  9701 D PrayerLogRepository:    ⏭️ SKIPPED: Maghrib (window not started)
+12-29 13:37:14.239  9617  9701 D PrayerLogRepository: ✅ Prayer: Isha, Next: 03:03, Now: 13:37:14.239632, Started: false
+12-29 13:37:14.239  9617  9701 D PrayerLogRepository:    ⏭️ SKIPPED: Isha (window not started)
+12-29 13:37:14.274  9617  9701 D PrayerLogRepository: Qada summary computed:
+12-29 13:37:14.274  9617  9701 D PrayerLogRepository:   Period: 2025-12-28 to 2025-12-29 (2 days)
+12-29 13:37:14.274  9617  9701 D PrayerLogRepository:   Total Counted Prayers: 5 (including today's started prayers)
+12-29 13:37:14.274  9617  9701 D PrayerLogRepository:   Missed/Pending: 5
+12-29 13:37:14.274  9617  9701 D PrayerLogRepository:   Qada' (completed): 0
+12-29 13:37:14.274  9617  9701 D PrayerLogRepository:   Ada' (on-time): 0
+12-29 13:37:14.274  9617  9701 D PrayerLogRepository:   Outstanding: 5
+12-29 13:37:14.274  9617  9701 D PrayerLogRepository:   Completed: 0
+12-29 13:37:14.274  9617  9701 D PrayerLogRepository:   Total Qada: 5
+12-29 13:37:14.274  9617  9701 D QadaDiagnosis:    ✅ Calculation Source: PrayerLogRepository.getQadaSummary()
+12-29 13:37:14.282  9617  9617 D QadaDiagnosis:    ✅ Calculation Source: PrayerLogRepository.getQadaSummary()
+12-29 13:37:35.373  9617  9617 D PrayerLogRepository: 📡 getTodayPrayerLogsAsync called
+12-29 13:37:35.374  9617  9701 D PrayerLogRepository: 🔍 Querying prayer logs...
+12-29 13:37:35.979  9617  9701 D PrayerLogRepository: ✅ 【统一计算规则】Computing Qada summary from 2025-12-28 to 2025-12-29 (including today's started prayers)
+12-29 13:37:35.979  9617  9701 D PrayerLogRepository:    📌 This calculation is shared between Salat page and Qada Tracker
+12-29 13:37:36.050  9617  9701 D PrayerLogRepository: Retrieved 3 prayer logs for today
+12-29 13:37:36.050  9617  9701 D PrayerLogRepository: 📥 Query returned 3 logs
+12-29 13:37:36.050  9617  9701 D PrayerLogRepository:   📝 Asr -> ADA (Z5mpGwSSbtTTyrWEyRiX)
+12-29 13:37:36.050  9617  9701 D PrayerLogRepository:   📝 Dhuhr -> ADA (9xiO7oJ2mEKoiYJLpQZW)
+12-29 13:37:36.050  9617  9701 D PrayerLogRepository:   📝 Fajr -> ADA (Dl734gHM4r89Cf2ys2KC)
+12-29 13:37:36.051  9617  9617 D PrayerLogRepository: ✅ Calling callback with 3 logs
+12-29 13:37:36.644  9617  9701 D PrayerLogRepository: 🔍 Processing TODAY (2025-12-29) prayers:
+12-29 13:37:36.644  9617  9701 D PrayerLogRepository:    todayPrayerTimes: ✅ Available
+12-29 13:37:36.644  9617  9701 D PrayerLogRepository:    todayPrayerTimes.timings: ✅ Available
+12-29 13:37:36.644  9617  9701 D PrayerLogRepository: ✅ Prayer: Fajr, Next: 17:23, Now: 13:37:36.644601, Started: false
+12-29 13:37:36.644  9617  9701 D PrayerLogRepository:    ⏭️ SKIPPED: Fajr (window not started)
+12-29 13:37:36.644  9617  9701 D PrayerLogRepository: ✅ Prayer: Dhuhr, Next: 20:27, Now: 13:37:36.644849, Started: false
+12-29 13:37:36.644  9617  9701 D PrayerLogRepository:    ⏭️ SKIPPED: Dhuhr (window not started)
+12-29 13:37:36.645  9617  9701 D PrayerLogRepository: ✅ Prayer: Asr, Next: 22:48, Now: 13:37:36.645019, Started: false
+12-29 13:37:36.645  9617  9701 D PrayerLogRepository:    ⏭️ SKIPPED: Asr (window not started)
+12-29 13:37:36.645  9617  9701 D PrayerLogRepository: ✅ Prayer: Maghrib, Next: 00:03, Now: 13:37:36.645172, Started: false
+12-29 13:37:36.645  9617  9701 D PrayerLogRepository:    ⏭️ SKIPPED: Maghrib (window not started)
+12-29 13:37:36.645  9617  9701 D PrayerLogRepository: ✅ Prayer: Isha, Next: 03:03, Now: 13:37:36.645331, Started: false
+12-29 13:37:36.645  9617  9701 D PrayerLogRepository:    ⏭️ SKIPPED: Isha (window not started)
+12-29 13:37:36.656  9617  9701 D PrayerLogRepository: Qada summary computed:
+12-29 13:37:36.656  9617  9701 D PrayerLogRepository:   Period: 2025-12-28 to 2025-12-29 (2 days)
+12-29 13:37:36.656  9617  9701 D PrayerLogRepository:   Total Counted Prayers: 5 (including today's started prayers)
+12-29 13:37:36.656  9617  9701 D PrayerLogRepository:   Missed/Pending: 5
+12-29 13:37:36.656  9617  9701 D PrayerLogRepository:   Qada' (completed): 0
+12-29 13:37:36.656  9617  9701 D PrayerLogRepository:   Ada' (on-time): 0
+12-29 13:37:36.656  9617  9701 D PrayerLogRepository:   Outstanding: 5
+12-29 13:37:36.656  9617  9701 D PrayerLogRepository:   Completed: 0
+12-29 13:37:36.656  9617  9701 D PrayerLogRepository:   Total Qada: 5
+12-29 13:37:36.656  9617  9701 D QadaDiagnosis:    ✅ Calculation Source: PrayerLogRepository.getQadaSummary()
+12-29 13:37:36.656  9617  1217 D PrayerLogRepository: ✅ 【统一计算规则】Computing Qada summary from 2025-12-28 to 2025-12-29 (including today's started prayers)
+12-29 13:37:36.657  9617  1217 D PrayerLogRepository:    📌 This calculation is shared between Salat page and Qada Tracker
+12-29 13:37:36.657  9617  9617 D QadaDiagnosis:    ✅ Calculation Source: PrayerLogRepository.getQadaSummary()
+12-29 13:37:37.269  9617  1217 D PrayerLogRepository: 🔍 Processing TODAY (2025-12-29) prayers:
+12-29 13:37:37.269  9617  1217 D PrayerLogRepository:    todayPrayerTimes: ✅ Available
+12-29 13:37:37.269  9617  1217 D PrayerLogRepository:    todayPrayerTimes.timings: ✅ Available
+12-29 13:37:37.269  9617  1217 D PrayerLogRepository: ✅ Prayer: Fajr, Next: 17:23, Now: 13:37:37.269489, Started: false
+12-29 13:37:37.269  9617  1217 D PrayerLogRepository:    ⏭️ SKIPPED: Fajr (window not started)
+12-29 13:37:37.269  9617  1217 D PrayerLogRepository: ✅ Prayer: Dhuhr, Next: 20:27, Now: 13:37:37.269749, Started: false
+12-29 13:37:37.269  9617  1217 D PrayerLogRepository:    ⏭️ SKIPPED: Dhuhr (window not started)
+12-29 13:37:37.269  9617  1217 D PrayerLogRepository: ✅ Prayer: Asr, Next: 22:48, Now: 13:37:37.269868, Started: false
+12-29 13:37:37.269  9617  1217 D PrayerLogRepository:    ⏭️ SKIPPED: Asr (window not started)
+12-29 13:37:37.270  9617  1217 D PrayerLogRepository: ✅ Prayer: Maghrib, Next: 00:03, Now: 13:37:37.269973, Started: false
+12-29 13:37:37.270  9617  1217 D PrayerLogRepository:    ⏭️ SKIPPED: Maghrib (window not started)
+12-29 13:37:37.270  9617  1217 D PrayerLogRepository: ✅ Prayer: Isha, Next: 03:03, Now: 13:37:37.270084, Started: false
+12-29 13:37:37.270  9617  1217 D PrayerLogRepository:    ⏭️ SKIPPED: Isha (window not started)
+12-29 13:37:37.278  9617  1217 D PrayerLogRepository: Qada summary computed:
+12-29 13:37:37.278  9617  1217 D PrayerLogRepository:   Period: 2025-12-28 to 2025-12-29 (2 days)
+12-29 13:37:37.278  9617  1217 D PrayerLogRepository:   Total Counted Prayers: 5 (including today's started prayers)
+12-29 13:37:37.278  9617  1217 D PrayerLogRepository:   Missed/Pending: 5
+12-29 13:37:37.278  9617  1217 D PrayerLogRepository:   Qada' (completed): 0
+12-29 13:37:37.278  9617  1217 D PrayerLogRepository:   Ada' (on-time): 0
+12-29 13:37:37.278  9617  1217 D PrayerLogRepository:   Outstanding: 5
+12-29 13:37:37.278  9617  1217 D PrayerLogRepository:   Completed: 0
+12-29 13:37:37.278  9617  1217 D PrayerLogRepository:   Total Qada: 5
+12-29 13:37:37.278  9617  1217 D QadaDiagnosis:    ✅ Calculation Source: PrayerLogRepository.getQadaSummary()
+12-29 13:37:37.279  9617  9617 D QadaDiagnosis:    ✅ Calculation Source: PrayerLogRepository.getQadaSummary()
+12-29 13:37:52.626  9617  9617 D PrayerLogRepository: 📡 getTodayPrayerLogsAsync called
+12-29 13:37:52.626  9617  1217 D PrayerLogRepository: 🔍 Querying prayer logs...
+12-29 13:37:53.333  9617  9698 D PrayerLogRepository: ✅ 【统一计算规则】Computing Qada summary from 2025-12-28 to 2025-12-29 (including today's started prayers)
+12-29 13:37:53.333  9617  9698 D PrayerLogRepository:    📌 This calculation is shared between Salat page and Qada Tracker
+12-29 13:37:53.361  9617  9698 D PrayerLogRepository: Retrieved 4 prayer logs for today
+12-29 13:37:53.362  9617  9698 D PrayerLogRepository: 📥 Query returned 4 logs
+12-29 13:37:53.362  9617  9698 D PrayerLogRepository:   📝 Maghrib -> ADA (lUeZxpwAurs40tYnPAJH)
+12-29 13:37:53.362  9617  9698 D PrayerLogRepository:   📝 Asr -> ADA (Z5mpGwSSbtTTyrWEyRiX)
+12-29 13:37:53.362  9617  9698 D PrayerLogRepository:   📝 Dhuhr -> ADA (9xiO7oJ2mEKoiYJLpQZW)
+12-29 13:37:53.362  9617  9698 D PrayerLogRepository:   📝 Fajr -> ADA (Dl734gHM4r89Cf2ys2KC)
+12-29 13:37:53.363  9617  9617 D PrayerLogRepository: ✅ Calling callback with 4 logs
+12-29 13:37:53.997  9617  9701 D PrayerLogRepository: ✅ 【统一计算规则】Computing Qada summary from 2025-12-28 to 2025-12-29 (including today's started prayers)
+12-29 13:37:53.997  9617  9701 D PrayerLogRepository:    📌 This calculation is shared between Salat page and Qada Tracker
+12-29 13:37:53.998  9617  9698 D PrayerLogRepository: 🔍 Processing TODAY (2025-12-29) prayers:
+12-29 13:37:53.998  9617  9698 D PrayerLogRepository:    todayPrayerTimes: ✅ Available
+12-29 13:37:53.998  9617  9698 D PrayerLogRepository:    todayPrayerTimes.timings: ✅ Available
+12-29 13:37:53.998  9617  9698 D PrayerLogRepository: ✅ Prayer: Fajr, Next: 17:23, Now: 13:37:53.998496, Started: false
+12-29 13:37:53.998  9617  9698 D PrayerLogRepository:    ⏭️ SKIPPED: Fajr (window not started)
+12-29 13:37:53.998  9617  9698 D PrayerLogRepository: ✅ Prayer: Dhuhr, Next: 20:27, Now: 13:37:53.998568, Started: false
+12-29 13:37:53.998  9617  9698 D PrayerLogRepository:    ⏭️ SKIPPED: Dhuhr (window not started)
+12-29 13:37:53.998  9617  9698 D PrayerLogRepository: ✅ Prayer: Asr, Next: 22:48, Now: 13:37:53.998647, Started: false
+12-29 13:37:53.998  9617  9698 D PrayerLogRepository:    ⏭️ SKIPPED: Asr (window not started)
+12-29 13:37:53.998  9617  9698 D PrayerLogRepository: ✅ Prayer: Maghrib, Next: 00:03, Now: 13:37:53.998696, Started: false
+12-29 13:37:53.998  9617  9698 D PrayerLogRepository:    ⏭️ SKIPPED: Maghrib (window not started)
+12-29 13:37:53.998  9617  9698 D PrayerLogRepository: ✅ Prayer: Isha, Next: 03:03, Now: 13:37:53.998763, Started: false
+12-29 13:37:53.998  9617  9698 D PrayerLogRepository:    ⏭️ SKIPPED: Isha (window not started)
+12-29 13:37:54.001  9617  9698 D PrayerLogRepository: Qada summary computed:
+12-29 13:37:54.001  9617  9698 D PrayerLogRepository:   Period: 2025-12-28 to 2025-12-29 (2 days)
+12-29 13:37:54.001  9617  9698 D PrayerLogRepository:   Total Counted Prayers: 5 (including today's started prayers)
+12-29 13:37:54.001  9617  9698 D PrayerLogRepository:   Missed/Pending: 5
+12-29 13:37:54.001  9617  9698 D PrayerLogRepository:   Qada' (completed): 0
+12-29 13:37:54.001  9617  9698 D PrayerLogRepository:   Ada' (on-time): 0
+12-29 13:37:54.001  9617  9698 D PrayerLogRepository:   Outstanding: 5
+12-29 13:37:54.001  9617  9698 D PrayerLogRepository:   Completed: 0
+12-29 13:37:54.001  9617  9698 D PrayerLogRepository:   Total Qada: 5
+12-29 13:37:54.001  9617  9698 D QadaDiagnosis:    ✅ Calculation Source: PrayerLogRepository.getQadaSummary()
+12-29 13:37:54.002  9617  9617 D QadaDiagnosis:    ✅ Calculation Source: PrayerLogRepository.getQadaSummary()
+12-29 13:37:54.661  9617  9698 D PrayerLogRepository: 🔍 Processing TODAY (2025-12-29) prayers:
+12-29 13:37:54.661  9617  9698 D PrayerLogRepository:    todayPrayerTimes: ✅ Available
+12-29 13:37:54.661  9617  9698 D PrayerLogRepository:    todayPrayerTimes.timings: ✅ Available
+12-29 13:37:54.661  9617  9698 D PrayerLogRepository: ✅ Prayer: Fajr, Next: 17:23, Now: 13:37:54.661432, Started: false
+12-29 13:37:54.661  9617  9698 D PrayerLogRepository:    ⏭️ SKIPPED: Fajr (window not started)
+12-29 13:37:54.661  9617  9698 D PrayerLogRepository: ✅ Prayer: Dhuhr, Next: 20:27, Now: 13:37:54.661625, Started: false
+12-29 13:37:54.661  9617  9698 D PrayerLogRepository:    ⏭️ SKIPPED: Dhuhr (window not started)
+12-29 13:37:54.661  9617  9698 D PrayerLogRepository: ✅ Prayer: Asr, Next: 22:48, Now: 13:37:54.661728, Started: false
+12-29 13:37:54.661  9617  9698 D PrayerLogRepository:    ⏭️ SKIPPED: Asr (window not started)
+12-29 13:37:54.661  9617  9698 D PrayerLogRepository: ✅ Prayer: Maghrib, Next: 00:03, Now: 13:37:54.661820, Started: false
+12-29 13:37:54.661  9617  9698 D PrayerLogRepository:    ⏭️ SKIPPED: Maghrib (window not started)
+12-29 13:37:54.661  9617  9698 D PrayerLogRepository: ✅ Prayer: Isha, Next: 03:03, Now: 13:37:54.661919, Started: false
+12-29 13:37:54.662  9617  9698 D PrayerLogRepository:    ⏭️ SKIPPED: Isha (window not started)
+12-29 13:37:54.667  9617  9698 D PrayerLogRepository: Qada summary computed:
+12-29 13:37:54.667  9617  9698 D PrayerLogRepository:   Period: 2025-12-28 to 2025-12-29 (2 days)
+12-29 13:37:54.667  9617  9698 D PrayerLogRepository:   Total Counted Prayers: 5 (including today's started prayers)
+12-29 13:37:54.667  9617  9698 D PrayerLogRepository:   Missed/Pending: 5
+12-29 13:37:54.667  9617  9698 D PrayerLogRepository:   Qada' (completed): 0
+12-29 13:37:54.667  9617  9698 D PrayerLogRepository:   Ada' (on-time): 0
+12-29 13:37:54.667  9617  9698 D PrayerLogRepository:   Outstanding: 5
+12-29 13:37:54.667  9617  9698 D PrayerLogRepository:   Completed: 0
+12-29 13:37:54.667  9617  9698 D PrayerLogRepository:   Total Qada: 5
+12-29 13:37:54.667  9617  9698 D QadaDiagnosis:    ✅ Calculation Source: PrayerLogRepository.getQadaSummary()
+12-29 13:37:54.668  9617  9617 D QadaDiagnosis:    ✅ Calculation Source: PrayerLogRepository.getQadaSummary()
+12-29 13:37:57.199  9617  9698 D PrayerLogRepository: Loading prayer logs with IDs from 2025-12-29 to 2026-01-04
+12-29 13:37:57.780  9617  9698 D PrayerLogRepository: Loading prayer logs with IDs from 2025-12-29 to 2026-01-04
+12-29 13:37:57.823  9617  9698 D PrayerLogRepository: Found 4 prayer logs in date range
+12-29 13:37:57.823  9617  9701 D PrayerLogRepository: Found 4 prayer logs in date range
+12-29 13:37:57.831  9617  9698 D PrayerLogRepository:   ✅ 2025-12-29 Maghrib -> ADA (docId: lUeZxpwAurs40tYnPAJH)
+12-29 13:37:57.831  9617  9701 D PrayerLogRepository:   ✅ 2025-12-29 Maghrib -> ADA (docId: lUeZxpwAurs40tYnPAJH)
+12-29 13:37:57.832  9617  9698 D PrayerLogRepository:   ✅ 2025-12-29 Asr -> ADA (docId: Z5mpGwSSbtTTyrWEyRiX)
+12-29 13:37:57.833  9617  9701 D PrayerLogRepository:   ✅ 2025-12-29 Asr -> ADA (docId: Z5mpGwSSbtTTyrWEyRiX)
+12-29 13:37:57.834  9617  9698 D PrayerLogRepository:   ✅ 2025-12-29 Dhuhr -> ADA (docId: 9xiO7oJ2mEKoiYJLpQZW)
+12-29 13:37:57.835  9617  9701 D PrayerLogRepository:   ✅ 2025-12-29 Dhuhr -> ADA (docId: 9xiO7oJ2mEKoiYJLpQZW)
+12-29 13:37:57.835  9617  9698 D PrayerLogRepository:   ✅ 2025-12-29 Fajr -> ADA (docId: Dl734gHM4r89Cf2ys2KC)
+12-29 13:37:57.836  9617  9701 D PrayerLogRepository:   ✅ 2025-12-29 Fajr -> ADA (docId: Dl734gHM4r89Cf2ys2KC)
+12-29 13:37:57.852  9617  9617 D PrayerLogRepository: ✅ Prayer: Fajr, Next: 17:23, Now: 13:37:57.852035, Started: false
+12-29 13:37:57.852  9617  9617 D PrayerLogRepository: ✅ Prayer: Dhuhr, Next: 20:27, Now: 13:37:57.852200, Started: false
+12-29 13:37:57.852  9617  9617 D PrayerLogRepository: ✅ Prayer: Asr, Next: 22:48, Now: 13:37:57.852280, Started: false
+12-29 13:37:57.852  9617  9617 D PrayerLogRepository: ✅ Prayer: Maghrib, Next: 00:03, Now: 13:37:57.852339, Started: false
+12-29 13:37:57.852  9617  9617 D PrayerLogRepository: ✅ Prayer: Isha, Next: 03:03, Now: 13:37:57.852428, Started: false
+12-29 13:37:57.852  9617  9617 D QadaDiagnosis:    ✅ Prayer Window Check: PrayerLogRepository.hasPrayerWindowStarted()
+12-29 13:37:57.853  9617  9701 D PrayerLogRepository: Loading prayer logs from 2025-12-22 to 2025-12-28
+12-29 13:37:57.868  9617  9617 D PrayerLogRepository: ✅ Prayer: Fajr, Next: 17:23, Now: 13:37:57.868679, Started: false
+12-29 13:37:57.868  9617  9617 D PrayerLogRepository: ✅ Prayer: Dhuhr, Next: 20:27, Now: 13:37:57.868825, Started: false
+12-29 13:37:57.868  9617  9617 D PrayerLogRepository: ✅ Prayer: Asr, Next: 22:48, Now: 13:37:57.868902, Started: false
+12-29 13:37:57.869  9617  9617 D PrayerLogRepository: ✅ Prayer: Maghrib, Next: 00:03, Now: 13:37:57.868993, Started: false
+12-29 13:37:57.869  9617  9617 D PrayerLogRepository: ✅ Prayer: Isha, Next: 03:03, Now: 13:37:57.869058, Started: false
+12-29 13:37:57.869  9617  9617 D QadaDiagnosis:    ✅ Prayer Window Check: PrayerLogRepository.hasPrayerWindowStarted()
+12-29 13:37:57.870  9617  9701 D PrayerLogRepository: Loading prayer logs from 2025-12-22 to 2025-12-28
+12-29 13:37:58.524  9617  9698 D PrayerLogRepository: Found 0 prayer logs in date range
+12-29 13:37:58.524  9617  9701 D PrayerLogRepository: Found 0 prayer logs in date range
+12-29 13:38:01.485  9617  9701 D PrayerLogRepository: Loading prayer logs with IDs from 2025-12-01 to 2025-12-31
+12-29 13:38:02.197  9617  9701 D PrayerLogRepository: Found 4 prayer logs in date range
+12-29 13:38:02.205  9617  9701 D PrayerLogRepository:   ✅ 2025-12-29 Maghrib -> ADA (docId: lUeZxpwAurs40tYnPAJH)
+12-29 13:38:02.206  9617  9701 D PrayerLogRepository:   ✅ 2025-12-29 Asr -> ADA (docId: Z5mpGwSSbtTTyrWEyRiX)
+12-29 13:38:02.208  9617  9701 D PrayerLogRepository:   ✅ 2025-12-29 Dhuhr -> ADA (docId: 9xiO7oJ2mEKoiYJLpQZW)
+12-29 13:38:02.209  9617  9701 D PrayerLogRepository:   ✅ 2025-12-29 Fajr -> ADA (docId: Dl734gHM4r89Cf2ys2KC)
+12-29 13:38:02.273  9617  9617 D PrayerLogRepository: ✅ Prayer: Fajr, Next: 17:23, Now: 13:38:02.273674, Started: false
+12-29 13:38:02.273  9617  9617 D PrayerLogRepository: ✅ Prayer: Dhuhr, Next: 20:27, Now: 13:38:02.273783, Started: false
+12-29 13:38:02.273  9617  9617 D PrayerLogRepository: ✅ Prayer: Asr, Next: 22:48, Now: 13:38:02.273846, Started: false
+12-29 13:38:02.273  9617  9617 D PrayerLogRepository: ✅ Prayer: Maghrib, Next: 00:03, Now: 13:38:02.273907, Started: false
+12-29 13:38:02.273  9617  9617 D PrayerLogRepository: ✅ Prayer: Isha, Next: 03:03, Now: 13:38:02.273962, Started: false
+12-29 13:38:02.274  9617  9617 D QadaDiagnosis:    ✅ Prayer Window Check: PrayerLogRepository.hasPrayerWindowStarted()
+12-29 13:38:09.113  9617  9617 D PrayerLogRepository: ✅ Prayer: Fajr, Next: 17:23, Now: 13:38:09.113418, Started: false
+12-29 13:38:09.113  9617  9617 D PrayerLogRepository: ✅ Prayer: Dhuhr, Next: 20:27, Now: 13:38:09.113509, Started: false
+12-29 13:38:09.113  9617  9617 D PrayerLogRepository: ✅ Prayer: Asr, Next: 22:48, Now: 13:38:09.113566, Started: false
+12-29 13:38:09.113  9617  9617 D PrayerLogRepository: ✅ Prayer: Maghrib, Next: 00:03, Now: 13:38:09.113626, Started: false
+12-29 13:38:09.113  9617  9617 D PrayerLogRepository: ✅ Prayer: Isha, Next: 03:03, Now: 13:38:09.113677, Started: false
+12-29 13:38:09.113  9617  9617 D QadaDiagnosis:    ✅ Prayer Window Check: PrayerLogRepository.hasPrayerWindowStarted()
+12-29 13:38:12.041  9617  9617 D PrayerLogRepository: ✅ Prayer: Fajr, Next: 17:23, Now: 13:38:12.041722, Started: false
+12-29 13:38:12.041  9617  9617 D PrayerLogRepository: ✅ Prayer: Dhuhr, Next: 20:27, Now: 13:38:12.041790, Started: false
+12-29 13:38:12.041  9617  9617 D PrayerLogRepository: ✅ Prayer: Asr, Next: 22:48, Now: 13:38:12.041833, Started: false
+12-29 13:38:12.041  9617  9617 D PrayerLogRepository: ✅ Prayer: Maghrib, Next: 00:03, Now: 13:38:12.041870, Started: false
+12-29 13:38:12.041  9617  9617 D PrayerLogRepository: ✅ Prayer: Isha, Next: 03:03, Now: 13:38:12.041925, Started: false
+12-29 13:38:12.042  9617  9617 D QadaDiagnosis:    ✅ Prayer Window Check: PrayerLogRepository.hasPrayerWindowStarted()
+12-29 13:38:15.006  9617  9617 D PrayerLogRepository: ✅ Prayer: Fajr, Next: 17:23, Now: 13:38:15.006034, Started: false
+12-29 13:38:15.006  9617  9617 D PrayerLogRepository: ✅ Prayer: Dhuhr, Next: 20:27, Now: 13:38:15.006114, Started: false
+12-29 13:38:15.006  9617  9617 D PrayerLogRepository: ✅ Prayer: Asr, Next: 22:48, Now: 13:38:15.006160, Started: false
+12-29 13:38:15.006  9617  9617 D PrayerLogRepository: ✅ Prayer: Maghrib, Next: 00:03, Now: 13:38:15.006257, Started: false
+12-29 13:38:15.006  9617  9617 D PrayerLogRepository: ✅ Prayer: Isha, Next: 03:03, Now: 13:38:15.006302, Started: false
+12-29 13:38:15.006  9617  9617 D QadaDiagnosis:    ✅ Prayer Window Check: PrayerLogRepository.hasPrayerWindowStarted()
+12-29 13:38:17.787  9617  9617 D PrayerLogRepository: ✅ Prayer: Fajr, Next: 17:23, Now: 13:38:17.786982, Started: false
+12-29 13:38:17.787  9617  9617 D PrayerLogRepository: ✅ Prayer: Dhuhr, Next: 20:27, Now: 13:38:17.787076, Started: false
+12-29 13:38:17.787  9617  9617 D PrayerLogRepository: ✅ Prayer: Asr, Next: 22:48, Now: 13:38:17.787150, Started: false
+12-29 13:38:17.787  9617  9617 D PrayerLogRepository: ✅ Prayer: Maghrib, Next: 00:03, Now: 13:38:17.787318, Started: false
+12-29 13:38:17.787  9617  9617 D PrayerLogRepository: ✅ Prayer: Isha, Next: 03:03, Now: 13:38:17.787538, Started: false
+12-29 13:38:17.787  9617  9617 D QadaDiagnosis:    ✅ Prayer Window Check: PrayerLogRepository.hasPrayerWindowStarted()
+12-29 13:38:21.142  9617  9701 D PrayerLogRepository: Loading prayer logs with IDs from 2025-12-29 to 2026-01-04
+12-29 13:38:21.805  9617  9701 D PrayerLogRepository: Found 4 prayer logs in date range
+12-29 13:38:21.815  9617  9701 D PrayerLogRepository:   ✅ 2025-12-29 Maghrib -> ADA (docId: lUeZxpwAurs40tYnPAJH)
+12-29 13:38:21.817  9617  9701 D PrayerLogRepository:   ✅ 2025-12-29 Asr -> ADA (docId: Z5mpGwSSbtTTyrWEyRiX)
+12-29 13:38:21.819  9617  9701 D PrayerLogRepository:   ✅ 2025-12-29 Dhuhr -> ADA (docId: 9xiO7oJ2mEKoiYJLpQZW)
+12-29 13:38:21.822  9617  9701 D PrayerLogRepository:   ✅ 2025-12-29 Fajr -> ADA (docId: Dl734gHM4r89Cf2ys2KC)
+12-29 13:38:21.849  9617  9617 D PrayerLogRepository: ✅ Prayer: Fajr, Next: 17:23, Now: 13:38:21.848900, Started: false
+12-29 13:38:21.849  9617  9617 D PrayerLogRepository: ✅ Prayer: Dhuhr, Next: 20:27, Now: 13:38:21.849095, Started: false
+12-29 13:38:21.849  9617  9617 D PrayerLogRepository: ✅ Prayer: Asr, Next: 22:48, Now: 13:38:21.849192, Started: false
+12-29 13:38:21.849  9617  9617 D PrayerLogRepository: ✅ Prayer: Maghrib, Next: 00:03, Now: 13:38:21.849255, Started: false
+12-29 13:38:21.849  9617  9617 D PrayerLogRepository: ✅ Prayer: Isha, Next: 03:03, Now: 13:38:21.849311, Started: false
+12-29 13:38:21.849  9617  9617 D QadaDiagnosis:    ✅ Prayer Window Check: PrayerLogRepository.hasPrayerWindowStarted()
+12-29 13:38:21.850  9617  9701 D PrayerLogRepository: Loading prayer logs from 2025-12-22 to 2025-12-28
+12-29 13:38:22.543  9617  9701 D PrayerLogRepository: Found 4 prayer logs in date range
+12-29 13:38:22.548  9617  9701 D PrayerLogRepository:   2025-12-28 Maghrib -> QADA
+12-29 13:38:22.549  9617  9701 D PrayerLogRepository:   2025-12-28 Asr -> QADA
+12-29 13:38:22.552  9617  9701 D PrayerLogRepository:   2025-12-28 Dhuhr -> QADA
+12-29 13:38:22.553  9617  9701 D PrayerLogRepository:   2025-12-28 Fajr -> QADA
+12-29 13:38:34.170  9617  9617 D PrayerLogRepository: 📡 getTodayPrayerLogsAsync called
+12-29 13:38:34.171  9617  9701 D PrayerLogRepository: 🔍 Querying prayer logs...
+12-29 13:38:34.807  9617  9701 D PrayerLogRepository: Retrieved 4 prayer logs for today
+12-29 13:38:34.807  9617  9701 D PrayerLogRepository: 📥 Query returned 4 logs
+12-29 13:38:34.807  9617  9701 D PrayerLogRepository:   📝 Maghrib -> ADA (lUeZxpwAurs40tYnPAJH)
+12-29 13:38:34.808  9617  9701 D PrayerLogRepository:   📝 Asr -> ADA (Z5mpGwSSbtTTyrWEyRiX)
+12-29 13:38:34.808  9617  9701 D PrayerLogRepository:   📝 Dhuhr -> ADA (9xiO7oJ2mEKoiYJLpQZW)
+12-29 13:38:34.808  9617  9701 D PrayerLogRepository:   📝 Fajr -> ADA (Dl734gHM4r89Cf2ys2KC)
+12-29 13:38:34.808  9617  9617 D PrayerLogRepository: ✅ Calling callback with 4 logs
+12-29 13:38:35.418  9617  9701 D PrayerLogRepository: ✅ 【统一计算规则】Computing Qada summary from 2025-12-28 to 2025-12-29 (including today's started prayers)
+12-29 13:38:35.418  9617  9701 D PrayerLogRepository:    📌 This calculation is shared between Salat page and Qada Tracker
+12-29 13:38:36.069  9617  9701 D PrayerLogRepository: 🔍 Processing TODAY (2025-12-29) prayers:
+12-29 13:38:36.069  9617  9701 D PrayerLogRepository:    todayPrayerTimes: ✅ Available
+12-29 13:38:36.069  9617  9701 D PrayerLogRepository:    todayPrayerTimes.timings: ✅ Available
+12-29 13:38:36.069  9617  9701 D PrayerLogRepository: ✅ Prayer: Fajr, Next: 17:23, Now: 13:38:36.069862, Started: false
+12-29 13:38:36.069  9617  9701 D PrayerLogRepository:    ⏭️ SKIPPED: Fajr (window not started)
+12-29 13:38:36.070  9617  9701 D PrayerLogRepository: ✅ Prayer: Dhuhr, Next: 20:27, Now: 13:38:36.069989, Started: false
+12-29 13:38:36.070  9617  9701 D PrayerLogRepository:    ⏭️ SKIPPED: Dhuhr (window not started)
+12-29 13:38:36.070  9617  9701 D PrayerLogRepository: ✅ Prayer: Asr, Next: 22:48, Now: 13:38:36.070093, Started: false
+12-29 13:38:36.070  9617  9701 D PrayerLogRepository:    ⏭️ SKIPPED: Asr (window not started)
+12-29 13:38:36.070  9617  9701 D PrayerLogRepository: ✅ Prayer: Maghrib, Next: 00:03, Now: 13:38:36.070238, Started: false
+12-29 13:38:36.070  9617  9701 D PrayerLogRepository:    ⏭️ SKIPPED: Maghrib (window not started)
+12-29 13:38:36.070  9617  9701 D PrayerLogRepository: ✅ Prayer: Isha, Next: 03:03, Now: 13:38:36.070348, Started: false
+12-29 13:38:36.070  9617  9701 D PrayerLogRepository:    ⏭️ SKIPPED: Isha (window not started)
+12-29 13:38:36.074  9617  9701 D PrayerLogRepository: Qada summary computed:
+12-29 13:38:36.074  9617  9701 D PrayerLogRepository:   Period: 2025-12-28 to 2025-12-29 (2 days)
+12-29 13:38:36.074  9617  9701 D PrayerLogRepository:   Total Counted Prayers: 5 (including today's started prayers)
+12-29 13:38:36.074  9617  9701 D PrayerLogRepository:   Missed/Pending: 1
+12-29 13:38:36.074  9617  9701 D PrayerLogRepository:   Qada' (completed): 4
+12-29 13:38:36.074  9617  9701 D PrayerLogRepository:   Ada' (on-time): 0
+12-29 13:38:36.074  9617  9701 D PrayerLogRepository:   Outstanding: 1
+12-29 13:38:36.074  9617  9701 D PrayerLogRepository:   Completed: 4
+12-29 13:38:36.074  9617  9701 D PrayerLogRepository:   Total Qada: 5
+12-29 13:38:36.074  9617  9701 D QadaDiagnosis:    ✅ Calculation Source: PrayerLogRepository.getQadaSummary()
+12-29 13:38:36.075  9617  9617 D QadaDiagnosis:    ✅ Calculation Source: PrayerLogRepository.getQadaSummary()
+12-29 13:38:45.481  9617  9701 D PrayerLogRepository: Loading prayer logs with IDs from 2025-12-29 to 2026-01-04
+12-29 13:38:46.062  9617  9701 D PrayerLogRepository: Loading prayer logs with IDs from 2025-12-29 to 2026-01-04
+12-29 13:38:46.143  9617  9701 D PrayerLogRepository: Found 4 prayer logs in date range
+12-29 13:38:46.143  9617  9698 D PrayerLogRepository: Found 4 prayer logs in date range
+12-29 13:38:46.150  9617  9698 D PrayerLogRepository:   ✅ 2025-12-29 Maghrib -> ADA (docId: lUeZxpwAurs40tYnPAJH)
+12-29 13:38:46.150  9617  9701 D PrayerLogRepository:   ✅ 2025-12-29 Maghrib -> ADA (docId: lUeZxpwAurs40tYnPAJH)
+12-29 13:38:46.152  9617  9698 D PrayerLogRepository:   ✅ 2025-12-29 Asr -> ADA (docId: Z5mpGwSSbtTTyrWEyRiX)
+12-29 13:38:46.152  9617  9701 D PrayerLogRepository:   ✅ 2025-12-29 Asr -> ADA (docId: Z5mpGwSSbtTTyrWEyRiX)
+12-29 13:38:46.153  9617  9698 D PrayerLogRepository:   ✅ 2025-12-29 Dhuhr -> ADA (docId: 9xiO7oJ2mEKoiYJLpQZW)
+12-29 13:38:46.154  9617  9701 D PrayerLogRepository:   ✅ 2025-12-29 Dhuhr -> ADA (docId: 9xiO7oJ2mEKoiYJLpQZW)
+12-29 13:38:46.155  9617  97

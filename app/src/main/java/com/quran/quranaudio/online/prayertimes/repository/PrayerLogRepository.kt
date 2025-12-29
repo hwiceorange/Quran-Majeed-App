@@ -674,13 +674,26 @@ class PrayerLogRepository {
         endDate: String
     ): Map<String, Map<String, PrayerLogInfo>> {
         val userId = auth.currentUser?.uid
+        
+        // ✅ 【诊断日志】Repository 层查询信息
+        Log.d(TAG, "════════════════════════════════════════════════════════")
+        Log.d(TAG, "🔍 getPrayerLogsByDateRangeWithIds()")
+        Log.d(TAG, "   🔐 Query Parameters:")
+        Log.d(TAG, "      User ID: $userId")
+        Log.d(TAG, "      Start Date: $startDate")
+        Log.d(TAG, "      End Date: $endDate")
+        Log.d(TAG, "      Collection: prayer_logs")
+        
         if (userId == null) {
-            Log.e(TAG, "User not authenticated")
+            Log.e(TAG, "❌ User not authenticated - returning empty map")
+            Log.e(TAG, "   This means FirebaseAuth.getCurrentUser() returned null")
+            Log.e(TAG, "   Check if anonymous/Google sign-in was successful")
+            Log.d(TAG, "════════════════════════════════════════════════════════")
             return emptyMap()
         }
         
         return try {
-            Log.d(TAG, "Loading prayer logs with IDs from $startDate to $endDate")
+            Log.d(TAG, "   → Querying Firestore...")
             
             val result = mutableMapOf<String, MutableMap<String, PrayerLogInfo>>()
             
@@ -692,7 +705,30 @@ class PrayerLogRepository {
                 .get()
                 .await()
             
-            Log.d(TAG, "Found ${snapshot.documents.size} prayer logs in date range")
+            Log.d(TAG, "   ✅ Firestore query completed")
+            Log.d(TAG, "   📦 Found ${snapshot.documents.size} documents")
+            
+            if (snapshot.documents.isEmpty()) {
+                Log.w(TAG, "   ⚠️ NO DOCUMENTS FOUND!")
+                Log.w(TAG, "   Possible reasons:")
+                Log.w(TAG, "   1. No prayer logs exist for userId=$userId in date range [$startDate, $endDate]")
+                Log.w(TAG, "   2. Prayer logs were saved with a different userId")
+                Log.w(TAG, "   3. Date format in Firestore doesn't match query format")
+                Log.w(TAG, "   4. Firestore rules are blocking the read")
+                Log.d(TAG, "════════════════════════════════════════════════════════")
+                return emptyMap()
+            }
+            
+            // ✅ 详细打印每个文档
+            Log.d(TAG, "   📄 Document Details:")
+            snapshot.documents.forEachIndexed { index, doc ->
+                Log.d(TAG, "   [$index] Document ID: ${doc.id}")
+                Log.d(TAG, "        userId: ${doc.getString("userId")}")
+                Log.d(TAG, "        date: ${doc.getString("date")}")
+                Log.d(TAG, "        prayerName: ${doc.getString("prayerName")}")
+                Log.d(TAG, "        status: ${doc.getString("status")}")
+                Log.d(TAG, "        loggedAt: ${doc.getTimestamp("loggedAt")}")
+            }
             
             // ✅ 先按 loggedAt 排序（最新的在前），然后去重
             val sortedDocs = snapshot.documents.sortedByDescending { doc ->
@@ -730,9 +766,17 @@ class PrayerLogRepository {
                 }
             }
             
+            Log.d(TAG, "   📊 Processing Summary:")
+            Log.d(TAG, "      Processed ${result.size} unique dates")
+            Log.d(TAG, "      Total unique prayers: ${result.values.sumOf { it.size }}")
+            Log.d(TAG, "════════════════════════════════════════════════════════")
+            
             result
         } catch (e: Exception) {
-            Log.e(TAG, "Error loading prayer logs with IDs", e)
+            Log.e(TAG, "❌ Error loading prayer logs with IDs", e)
+            Log.e(TAG, "   Exception: ${e.message}")
+            Log.e(TAG, "   Stack trace: ${e.stackTraceToString()}")
+            Log.d(TAG, "════════════════════════════════════════════════════════")
             emptyMap()
         }
     }
