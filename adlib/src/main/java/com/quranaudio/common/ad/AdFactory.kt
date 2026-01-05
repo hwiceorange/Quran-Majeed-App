@@ -38,35 +38,19 @@ object AdFactory : ActivityLifecycleCallbacks {
         application.registerActivityLifecycleCallbacks(this)
         AdConfig.isTest = testMode
         
-        // 🔍 Check for legacy SDKs that cause problems
-        if (LegacySDKDetector.hasLegacySDKs()) {
-            Log.w(TAG, "⚠️⚠️⚠️ LEGACY SDK DETECTED ⚠️⚠️⚠️")
-            Log.w(TAG, LegacySDKDetector.getLegacySDKWarningMessage() ?: "")
-            Log.w(TAG, "⚠️ Skipping AdMob initialization to prevent deadlock")
-            Log.w(TAG, "⚠️ User MUST uninstall and reinstall app for ads to work")
-            // Don't initialize ads - would cause deadlock with legacy StartApp
-            return
-        }
-        
-        // ✅ Initialize AdMob on main thread with delay (8 seconds - 增加延迟)
+        // ✅ Initialize AdMob on main thread with delay (8 seconds)
         // 
         // Delay rationale:
         // 1. App startup fully completes
-        // 2. All legacy/background SDKs finish (including StartApp if present)
-        // 3. WebView provider (Chrome) fully loaded and ready
-        // 4. All locks released
-        // 5. UI is interactive before ads load
+        // 2. WebView provider (Chrome) fully loaded and ready
+        // 3. All locks released
+        // 4. UI is interactive before ads load
         // 
-        // 🆕 延迟从5秒增加到8秒：
-        // - 确保 WebView 预初始化完全完成
-        // - 给 StartApp SDK 更多时间完成初始化
-        // - 降低死锁风险
-        // 
-        // Trade-off: Ads load 8 seconds after app start, NO DEADLOCK, NO ANR
+        // Trade-off: Ads load 8 seconds after app start for better stability
         android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
             Log.d(TAG, "🕐 8-second delay completed, starting AdMob initialization")
             initAdmobOnMainThread(application)
-        }, 8000) // ⚠️ 8 second delay - 确保 WebView 和所有 SDK 就绪
+        }, 8000) // ⚠️ 8 second delay - ensures WebView and all SDKs are ready
     }
     
 
@@ -76,16 +60,14 @@ object AdFactory : ActivityLifecycleCallbacks {
      * 
      * Protection mechanisms:
      * - Try-catch for all operations
-     * - Delayed initialization (5 seconds) to avoid lock contention
+     * - Delayed initialization to avoid lock contention
      * - Graceful failure handling
      * - IllegalStateException catch for WebView issues
-     * - ⚠️ WebView 预热已移除（防止主线程阻塞导致 ANR）
      * 
      * Note: We use a simple delay instead of background thread to avoid:
      * - Thread synchronization issues
-     * - Deadlock with other SDKs (e.g., legacy StartApp)
      * - Race conditions during initialization
-     * - Main thread ANR (removed WebView pre-warming)
+     * - Main thread ANR
      */
     private fun initAdmobOnMainThread(context: Context) {
         try {

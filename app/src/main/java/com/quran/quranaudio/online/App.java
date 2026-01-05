@@ -26,7 +26,6 @@ import androidx.work.WorkManager;
 
 import com.quran.quranaudio.quiz.base.BaseApp;
 import com.quranaudio.common.ad.AdFactory;
-import com.raiadnan.ads.sdk.format.AppOpenAdAppLovin;
 import com.raiadnan.ads.sdk.format.AppOpenAdManager;
 import com.raiadnan.ads.sdk.format.AppOpenAdMob;
 import com.raiadnan.ads.sdk.util.OnShowAdCompleteListener;
@@ -58,7 +57,6 @@ public class App extends BaseApp {
     //Ads
     private AppOpenAdMob appOpenAdMob;
     private AppOpenAdManager appOpenAdManager;
-    private AppOpenAdAppLovin appOpenAdAppLovin;
     Activity currentActivity;
 
 
@@ -309,7 +307,6 @@ public class App extends BaseApp {
             ProcessLifecycleOwner.get().getLifecycle().addObserver(lifecycleObserver);
             appOpenAdMob = new AppOpenAdMob();
             appOpenAdManager = new AppOpenAdManager();
-            appOpenAdAppLovin = new AppOpenAdAppLovin();
         } else {
             // 🔥 新增：使用新的AdFactory API处理热启动开屏广告
             android.util.Log.d("DIAGNOSE", "→ Using new AdFactory app open ad approach");
@@ -560,11 +557,8 @@ public class App extends BaseApp {
                                 break;
                             case APPLOVIN:
                             case APPLOVIN_MAX:
-                                if (!Constant.APPLOVIN_APP_OPEN_AP_ID.equals("0")) {
-                                    if (!currentActivity.getIntent().hasExtra("unique_id")) {
-                                        appOpenAdAppLovin.showAdIfAvailable(currentActivity, Constant.APPLOVIN_APP_OPEN_AP_ID);
-                                    }
-                                }
+                                // AppLovin SDK removed - no longer supported
+                                android.util.Log.d("App", "⚠️ AppLovin App Open Ad requested but SDK removed");
                                 break;
 
                         }
@@ -607,11 +601,7 @@ public class App extends BaseApp {
                             break;
                         case APPLOVIN:
                         case APPLOVIN_MAX:
-                            if (!Constant.APPLOVIN_APP_OPEN_AP_ID.equals("0")) {
-                                if (appOpenAdAppLovin != null && !appOpenAdAppLovin.isShowingAd) {
-                                    currentActivity = activity;
-                                }
-                            }
+                            // AppLovin SDK removed - no longer supported
                             break;
                     }
                 }
@@ -670,10 +660,8 @@ public class App extends BaseApp {
                         break;
                     case APPLOVIN:
                     case APPLOVIN_MAX:
-                        if (!Constant.APPLOVIN_APP_OPEN_AP_ID.equals("0")) {
-                            appOpenAdAppLovin.showAdIfAvailable(activity, Constant.APPLOVIN_APP_OPEN_AP_ID, onShowAdCompleteListener);
-                            Constant.isAppOpen = true;
-                        }
+                        // AppLovin SDK removed - no longer supported
+                        android.util.Log.w("App", "⚠️ AppLovin App Open Ad requested but SDK removed");
                         break;
                 }
             }
