@@ -130,5 +130,4 @@ public static *** e(...);
 -dontwarn org.chromium.**
 -keep class org.chromium.** { *; }
 
-# Prevent stripping of WebView support resources
--keepresources string/**, drawable/**, layout/**
+# Note: Resources are not processed by R8/ProGuard, they are handled by AAPT2
