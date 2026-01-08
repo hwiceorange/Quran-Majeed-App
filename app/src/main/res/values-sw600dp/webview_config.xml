@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 
+        🔥 修复崩溃：WebView Resources$NotFoundException (平板设备配置 - sw600dp)
+        
+        为最小宽度 >= 600dp 的设备（平板）提供正确的 WebView 配置资源
+        sw600dp 是 Android 推荐的平板判断标准
+        
+        崩溃信息：
+        android.content.res.Resources$NotFoundException: Resource ID #0x90c0006
+        at org.chromium.ui.base.DeviceFormFactor.isTablet()
+    -->
+    
+    <!-- WebView 设备类型判断所需的资源 - 平板模式 -->
+    <integer name="min_screen_width_bucket">1</integer>
+    
+    <!-- WebView 兼容性配置 - 标记为平板 -->
+    <bool name="is_tablet">true</bool>
+</resources>
+

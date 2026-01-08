@@ -1,0 +1,849 @@
+═══════════════════════════════════════════════════════
+崩溃分析摘要 - Thu Jan  8 00:00:16 CST 2026
+═══════════════════════════════════════════════════════
+
+设备信息：
+  型号: Pixel 7
+  Android: 16 (API 36)
+
+崩溃统计：
+  FATAL EXCEPTION: 22
+  Native Crash: 0
+0
+  dlopen failed: 0
+0
+  UnsatisfiedLinkError: 0
+0
+
+═══════════════ 完整 FATAL EXCEPTION ═══════════════
+01-07 23:59:48.122 E/AndroidRuntime(25662): FATAL EXCEPTION: Firebase Blocking Thread #0
+01-07 23:59:48.122 E/AndroidRuntime(25662): Process: com.quran.quranaudio.online, PID: 25662
+01-07 23:59:48.122 E/AndroidRuntime(25662): java.lang.NoSuchMethodError: No static method checkNotGoogleApiHandlerThread()V in class Lcom/google/android/gms/common/internal/Preconditions; or its super classes (declaration of 'com.google.android.gms.common.internal.Preconditions' appears in /data/app/~~hdbuVMpZGtin5LHAvni4ag==/com.quran.quranaudio.online-KPH8CIMyhFU6veuKU6wsKg==/base.apk!classes30.dex)
+01-07 23:59:48.122 E/AndroidRuntime(25662): 	at com.google.android.gms.tasks.Tasks.await(com.google.android.gms:play-services-tasks@@18.1.0:2)
+01-07 23:59:48.122 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.openHttpURLConnection(FirebaseInstallationServiceClient.java:487)
+01-07 23:59:48.122 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.createFirebaseInstallation(FirebaseInstallationServiceClient.java:163)
+01-07 23:59:48.122 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.registerFidWithServer(FirebaseInstallations.java:533)
+01-07 23:59:48.122 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.doNetworkCallIfNecessary(FirebaseInstallations.java:387)
+01-07 23:59:48.122 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.lambda$doRegistrationOrRefresh$3$com-google-firebase-installations-FirebaseInstallations(FirebaseInstallations.java:372)
+01-07 23:59:48.122 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+01-07 23:59:48.122 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$1.run(SequentialExecutor.java:117)
+01-07 23:59:48.122 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.workOnQueue(SequentialExecutor.java:229)
+01-07 23:59:48.122 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.run(SequentialExecutor.java:174)
+01-07 23:59:48.122 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+01-07 23:59:48.122 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+01-07 23:59:48.122 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-google-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+01-07 23:59:48.122 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+01-07 23:59:48.122 E/AndroidRuntime(25662): 	at java.lang.Thread.run(Thread.java:1563)
+01-07 23:59:48.122 D/CompatChangeReporter(25662): Compat change id reported: 312399441; UID 10547; state: ENABLED
+01-07 23:59:48.127 E/AndroidRuntime(25662): FATAL EXCEPTION: Firebase Blocking Thread #2
+01-07 23:59:48.127 E/AndroidRuntime(25662): Process: com.quran.quranaudio.online, PID: 25662
+01-07 23:59:48.127 E/AndroidRuntime(25662): java.lang.NoSuchMethodError: No static method checkNotGoogleApiHandlerThread()V in class Lcom/google/android/gms/common/internal/Preconditions; or its super classes (declaration of 'com.google.android.gms.common.internal.Preconditions' appears in /data/app/~~hdbuVMpZGtin5LHAvni4ag==/com.quran.quranaudio.online-KPH8CIMyhFU6veuKU6wsKg==/base.apk!classes30.dex)
+01-07 23:59:48.127 E/AndroidRuntime(25662): 	at com.google.android.gms.tasks.Tasks.await(com.google.android.gms:play-services-tasks@@18.1.0:2)
+01-07 23:59:48.127 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.openHttpURLConnection(FirebaseInstallationServiceClient.java:487)
+01-07 23:59:48.127 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.createFirebaseInstallation(FirebaseInstallationServiceClient.java:163)
+01-07 23:59:48.127 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.registerFidWithServer(FirebaseInstallations.java:533)
+01-07 23:59:48.127 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.doNetworkCallIfNecessary(FirebaseInstallations.java:387)
+01-07 23:59:48.127 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.lambda$doRegistrationOrRefresh$3$com-google-firebase-installations-FirebaseInstallations(FirebaseInstallations.java:372)
+01-07 23:59:48.127 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+01-07 23:59:48.127 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$1.run(SequentialExecutor.java:117)
+01-07 23:59:48.127 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.workOnQueue(SequentialExecutor.java:229)
+01-07 23:59:48.127 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.run(SequentialExecutor.java:174)
+01-07 23:59:48.127 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+01-07 23:59:48.127 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+01-07 23:59:48.127 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-google-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+01-07 23:59:48.127 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+01-07 23:59:48.127 E/AndroidRuntime(25662): 	at java.lang.Thread.run(Thread.java:1563)
+01-07 23:59:48.139 I/ranaudio.online(25662): hiddenapi: Accessing hidden method Ldalvik/system/VMStack;->getStackClass2()Ljava/lang/Class; (runtime_flags=0, domain=core-platform, api=unsupported) from Lm7/aox; (domain=app, TargetSdkVersion=35) using reflection: allowed
+01-07 23:59:48.141 W/BroadcastQueue( 1861): Ignoring finishReceiverLocked; no active broadcast for BroadcastProcessQueue{8849847 11893:com.lemon.lvoverseas/u0a297}
+01-07 23:59:48.143 I/PhenotypeResourceReader(11566): unable to find any Phenotype resource metadata for com.quran.quranaudio.online
+01-07 23:59:48.147 E/ranaudio.online(25662): No package ID 6a found for resource ID 0x6a0b0013.
+01-07 23:59:48.148 I/FA      (25662): App measurement initialized, version: 148000
+01-07 23:59:48.148 I/FA      (25662): To enable debug logging run: adb shell setprop log.tag.FA VERBOSE
+01-07 23:59:48.148 I/FA      (25662): To enable faster debug mode event logging run:
+01-07 23:59:48.148 I/FA      (25662):   adb shell setprop debug.firebase.analytics.app com.quran.quranaudio.online
+01-07 23:59:48.202 I/FirebaseCrashlytics(25662): No version control information found
+01-07 23:59:48.202 W/FirebaseCrashlytics(25662): Skipping session finalization because a crash has already occurred.
+01-07 23:59:48.202 W/FirebaseCrashlytics(25662): Previous sessions could not be finalized.
+01-07 23:59:48.239 D/FirebaseSessions(25662): Initializing Firebase Sessions SDK.
+01-07 23:59:48.250 I/FirebaseInitProvider(25662): FirebaseApp initialization successful
+01-07 23:59:48.251 W/FA      (25662): Failed to retrieve Firebase Instance Id
+01-07 23:59:48.252 D/LifecycleServiceBinder(25662): Binding service to application.
+01-07 23:59:48.255 E/AndroidRuntime(25662): FATAL EXCEPTION: Firebase Blocking Thread #1
+01-07 23:59:48.255 E/AndroidRuntime(25662): Process: com.quran.quranaudio.online, PID: 25662
+01-07 23:59:48.255 E/AndroidRuntime(25662): java.lang.NoSuchMethodError: No static method checkNotGoogleApiHandlerThread()V in class Lcom/google/android/gms/common/internal/Preconditions; or its super classes (declaration of 'com.google.android.gms.common.internal.Preconditions' appears in /data/app/~~hdbuVMpZGtin5LHAvni4ag==/com.quran.quranaudio.online-KPH8CIMyhFU6veuKU6wsKg==/base.apk!classes30.dex)
+01-07 23:59:48.255 E/AndroidRuntime(25662): 	at com.google.android.gms.tasks.Tasks.await(com.google.android.gms:play-services-tasks@@18.1.0:2)
+01-07 23:59:48.255 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.openHttpURLConnection(FirebaseInstallationServiceClient.java:487)
+01-07 23:59:48.255 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.createFirebaseInstallation(FirebaseInstallationServiceClient.java:163)
+01-07 23:59:48.255 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.registerFidWithServer(FirebaseInstallations.java:533)
+01-07 23:59:48.255 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.doNetworkCallIfNecessary(FirebaseInstallations.java:387)
+01-07 23:59:48.255 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.lambda$doRegistrationOrRefresh$3$com-google-firebase-installations-FirebaseInstallations(FirebaseInstallations.java:372)
+01-07 23:59:48.255 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+01-07 23:59:48.255 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$1.run(SequentialExecutor.java:117)
+01-07 23:59:48.255 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.workOnQueue(SequentialExecutor.java:229)
+01-07 23:59:48.255 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.run(SequentialExecutor.java:174)
+01-07 23:59:48.255 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+01-07 23:59:48.255 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+01-07 23:59:48.255 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-google-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+01-07 23:59:48.255 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+01-07 23:59:48.255 E/AndroidRuntime(25662): 	at java.lang.Thread.run(Thread.java:1563)
+01-07 23:59:48.259 I/logger  (25662): Adapter info -> AdNetwork: FACEBOOK, Adapter version: 1.1.1,  AdNetwork sdk version: 6.11.0
+01-07 23:59:48.260 I/logger  (25662): Adapter info -> AdNetwork: ADMOB, Adapter version: 1.1.0,  AdNetwork sdk version: 20.6.0
+01-07 23:59:48.262 D/BackgroundInstallControlService( 1861): Package event received: 0
+01-07 23:59:48.262 D/BackgroundInstallControlService( 1861): Package event received: 0
+01-07 23:59:48.265 W/FA      (25662): Failed to retrieve Firebase Instance Id
+01-07 23:59:48.266 W/FA      (25662): Failed to retrieve Firebase Instance Id
+01-07 23:59:48.268 E/AndroidRuntime(25662): FATAL EXCEPTION: Firebase Blocking Thread #5
+01-07 23:59:48.268 E/AndroidRuntime(25662): Process: com.quran.quranaudio.online, PID: 25662
+01-07 23:59:48.268 E/AndroidRuntime(25662): java.lang.NoSuchMethodError: No static method checkNotGoogleApiHandlerThread()V in class Lcom/google/android/gms/common/internal/Preconditions; or its super classes (declaration of 'com.google.android.gms.common.internal.Preconditions' appears in /data/app/~~hdbuVMpZGtin5LHAvni4ag==/com.quran.quranaudio.online-KPH8CIMyhFU6veuKU6wsKg==/base.apk!classes30.dex)
+01-07 23:59:48.268 E/AndroidRuntime(25662): 	at com.google.android.gms.tasks.Tasks.await(com.google.android.gms:play-services-tasks@@18.1.0:2)
+01-07 23:59:48.268 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.openHttpURLConnection(FirebaseInstallationServiceClient.java:487)
+01-07 23:59:48.268 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.createFirebaseInstallation(FirebaseInstallationServiceClient.java:163)
+01-07 23:59:48.268 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.registerFidWithServer(FirebaseInstallations.java:533)
+01-07 23:59:48.268 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.doNetworkCallIfNecessary(FirebaseInstallations.java:387)
+01-07 23:59:48.268 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.lambda$doRegistrationOrRefresh$3$com-google-firebase-installations-FirebaseInstallations(FirebaseInstallations.java:372)
+01-07 23:59:48.268 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+01-07 23:59:48.268 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$1.run(SequentialExecutor.java:117)
+01-07 23:59:48.268 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.workOnQueue(SequentialExecutor.java:229)
+01-07 23:59:48.268 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.run(SequentialExecutor.java:174)
+01-07 23:59:48.268 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+01-07 23:59:48.268 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+01-07 23:59:48.268 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-google-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+01-07 23:59:48.268 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+01-07 23:59:48.268 E/AndroidRuntime(25662): 	at java.lang.Thread.run(Thread.java:1563)
+01-07 23:59:48.269 E/AndroidRuntime(25662): FATAL EXCEPTION: Firebase Blocking Thread #6
+01-07 23:59:48.269 E/AndroidRuntime(25662): Process: com.quran.quranaudio.online, PID: 25662
+01-07 23:59:48.269 E/AndroidRuntime(25662): java.lang.NoSuchMethodError: No static method checkNotGoogleApiHandlerThread()V in class Lcom/google/android/gms/common/internal/Preconditions; or its super classes (declaration of 'com.google.android.gms.common.internal.Preconditions' appears in /data/app/~~hdbuVMpZGtin5LHAvni4ag==/com.quran.quranaudio.online-KPH8CIMyhFU6veuKU6wsKg==/base.apk!classes30.dex)
+01-07 23:59:48.269 E/AndroidRuntime(25662): 	at com.google.android.gms.tasks.Tasks.await(com.google.android.gms:play-services-tasks@@18.1.0:2)
+01-07 23:59:48.269 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.openHttpURLConnection(FirebaseInstallationServiceClient.java:487)
+01-07 23:59:48.269 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.createFirebaseInstallation(FirebaseInstallationServiceClient.java:163)
+01-07 23:59:48.269 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.registerFidWithServer(FirebaseInstallations.java:533)
+01-07 23:59:48.269 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.doNetworkCallIfNecessary(FirebaseInstallations.java:387)
+01-07 23:59:48.269 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.lambda$doRegistrationOrRefresh$3$com-google-firebase-installations-FirebaseInstallations(FirebaseInstallations.java:372)
+01-07 23:59:48.269 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+01-07 23:59:48.269 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$1.run(SequentialExecutor.java:117)
+01-07 23:59:48.269 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.workOnQueue(SequentialExecutor.java:229)
+01-07 23:59:48.269 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.run(SequentialExecutor.java:174)
+01-07 23:59:48.269 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+01-07 23:59:48.269 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+01-07 23:59:48.269 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-google-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+01-07 23:59:48.269 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+01-07 23:59:48.269 E/AndroidRuntime(25662): 	at java.lang.Thread.run(Thread.java:1563)
+01-07 23:59:48.289 I/logger  (25662): Mediation SDK version: 1.1.0
+01-07 23:59:48.298 I/logger  (25662): Adapter info -> AdNetwork: UNITY, Adapter version: 1.1.0,  AdNetwork sdk version: 4.4.1
+01-07 23:59:48.302 D/PERFORMANCE(25662): ========================================
+01-07 23:59:48.302 D/PERFORMANCE(25662): ⚡ App.onCreate() START (Optimized Version)
+01-07 23:59:48.302 D/PERFORMANCE(25662): ========================================
+01-07 23:59:48.303 D/PERFORMANCE(25662): ========================================
+01-07 23:59:48.303 D/PERFORMANCE(25662): ⚡ BaseApp.onCreate() START
+01-07 23:59:48.303 D/PERFORMANCE(25662): ========================================
+01-07 23:59:48.303 D/PERFORMANCE(25662): → Process check: isMainProcess = true
+01-07 23:59:48.303 E/lan_config(25662): 📱 从用户设置读取语言: en
+01-07 23:59:48.304 E/lan_config(25662): ✅ 最终使用语言: en (isID=false)
+01-07 23:59:48.304 D/PERFORMANCE(25662): ✅ Immediate init completed [1 ms]
+01-07 23:59:48.304 D/PERFORMANCE(25662): 🟡 [DELAY] Scheduling delayed tasks...
+01-07 23:59:48.304 D/PERFORMANCE(25662): ✅ [DELAY] 2 delayed tasks scheduled (500ms, 1s)
+01-07 23:59:48.304 D/PERFORMANCE(25662): ========================================
+01-07 23:59:48.304 D/PERFORMANCE(25662): ✅ BaseApp.onCreate() COMPLETED in 1 ms (target: <50ms)
+01-07 23:59:48.304 D/PERFORMANCE(25662): ========================================
+01-07 23:59:48.304 D/PERFORMANCE(25662): ✅ super.onCreate() completed [2ms]
+01-07 23:59:48.304 D/CRASH_DEBUG(25662): 🔄 Initializing WebView isolation...
+01-07 23:59:48.304 D/PERFORMANCE(25662): → [IMMEDIATE] WebView isolation...
+01-07 23:59:48.304 D/AnalyticsManager(25662): ✅ Event logged: app_workflow_step | params: {duration_from_start=0.0, step_name=app_start, timestamp=1767801588302}
+01-07 23:59:48.305 I/FA      (25662): Tag Manager is not found and thus will not be used
+01-07 23:59:48.309 I/WebViewFactory(25662): Loading com.google.android.webview version 143.0.7499.146 (code 749914633)
+01-07 23:59:48.310 W/FA      (25662): Failed to retrieve Firebase Instance Id
+01-07 23:59:48.312 W/FirebaseCrashlytics(25662): Unable to read App Quality Sessions session id.
+01-07 23:59:48.312 V/ResourcesManager(25662): The following library key has been added: ResourcesKey{ mHash=f7b7d83d mResDir=null mSplitDirs=[] mOverlayDirs=[] mLibDirs=[/data/app/~~rr0A7BClpOu6jhCorVtX5A==/com.google.android.webview-q5TcTp_IQ5WCmaxOHkGNtw==/base.apk,/data/app/~~s8OoMDD1TnN0LHb6YsTYCg==/com.google.android.trichromelibrary_749914633-Vnhd4XEfynlzeVKf2zCHQg==/base.apk,/system_ext/framework/androidx.window.extensions.jar] mDisplayId=0 mOverrideConfig=v36 mCompatInfo={420dpi always-compat} mLoaders=[]}
+01-07 23:59:48.313 E/AndroidRuntime(25662): FATAL EXCEPTION: Firebase Blocking Thread #8
+01-07 23:59:48.313 E/AndroidRuntime(25662): Process: com.quran.quranaudio.online, PID: 25662
+01-07 23:59:48.313 E/AndroidRuntime(25662): java.lang.NoSuchMethodError: No static method checkNotGoogleApiHandlerThread()V in class Lcom/google/android/gms/common/internal/Preconditions; or its super classes (declaration of 'com.google.android.gms.common.internal.Preconditions' appears in /data/app/~~hdbuVMpZGtin5LHAvni4ag==/com.quran.quranaudio.online-KPH8CIMyhFU6veuKU6wsKg==/base.apk!classes30.dex)
+01-07 23:59:48.313 E/AndroidRuntime(25662): 	at com.google.android.gms.tasks.Tasks.await(com.google.android.gms:play-services-tasks@@18.1.0:2)
+01-07 23:59:48.313 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.openHttpURLConnection(FirebaseInstallationServiceClient.java:487)
+01-07 23:59:48.313 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.createFirebaseInstallation(FirebaseInstallationServiceClient.java:163)
+01-07 23:59:48.313 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.registerFidWithServer(FirebaseInstallations.java:533)
+01-07 23:59:48.313 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.doNetworkCallIfNecessary(FirebaseInstallations.java:387)
+01-07 23:59:48.313 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.lambda$doRegistrationOrRefresh$3$com-google-firebase-installations-FirebaseInstallations(FirebaseInstallations.java:372)
+01-07 23:59:48.313 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+01-07 23:59:48.313 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$1.run(SequentialExecutor.java:117)
+01-07 23:59:48.313 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.workOnQueue(SequentialExecutor.java:229)
+01-07 23:59:48.313 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.run(SequentialExecutor.java:174)
+01-07 23:59:48.313 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+01-07 23:59:48.313 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+01-07 23:59:48.313 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-google-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+01-07 23:59:48.313 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+01-07 23:59:48.313 E/AndroidRuntime(25662): 	at java.lang.Thread.run(Thread.java:1563)
+01-07 23:59:48.313 W/ranaudio.online(25662): Failed to find entry 'classes.dex': Entry not found
+01-07 23:59:48.313 D/nativeloader(25662): Configuring clns-12 for other apk /data/app/~~s8OoMDD1TnN0LHb6YsTYCg==/com.google.android.trichromelibrary_749914633-Vnhd4XEfynlzeVKf2zCHQg==/base.apk. target_sdk_version=36, uses_libraries=ALL, library_path=/data/app/~~rr0A7BClpOu6jhCorVtX5A==/com.google.android.webview-q5TcTp_IQ5WCmaxOHkGNtw==/lib/arm64:/data/app/~~rr0A7BClpOu6jhCorVtX5A==/com.google.android.webview-q5TcTp_IQ5WCmaxOHkGNtw==/base.apk!/lib/arm64-v8a:/data/app/~~s8OoMDD1TnN0LHb6YsTYCg==/com.google.android.trichromelibrary_749914633-Vnhd4XEfynlzeVKf2zCHQg==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand
+01-07 23:59:48.314 D/ApplicationLoaders(25662): Returning zygote-cached class loader: /system_ext/framework/androidx.window.extensions.jar
+01-07 23:59:48.315 W/ranaudio.online(25662): Loading /data/app/~~rr0A7BClpOu6jhCorVtX5A==/com.google.android.webview-q5TcTp_IQ5WCmaxOHkGNtw==/oat/arm64/base.odex non-executable as it requires an image which we failed to load
+01-07 23:59:48.316 D/nativeloader(25662): Configuring clns-13 for other apk /data/app/~~rr0A7BClpOu6jhCorVtX5A==/com.google.android.webview-q5TcTp_IQ5WCmaxOHkGNtw==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~rr0A7BClpOu6jhCorVtX5A==/com.google.android.webview-q5TcTp_IQ5WCmaxOHkGNtw==/lib/arm64:/data/app/~~rr0A7BClpOu6jhCorVtX5A==/com.google.android.webview-q5TcTp_IQ5WCmaxOHkGNtw==/base.apk!/lib/arm64-v8a:/data/app/~~s8OoMDD1TnN0LHb6YsTYCg==/com.google.android.trichromelibrary_749914633-Vnhd4XEfynlzeVKf2zCHQg==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand
+01-07 23:59:48.330 I/cr_WVCFactoryProvider(25662): version=143.0.7499.146 (749914633) minSdkVersion=29 multiprocess=true packageId=2 splits=<none>
+01-07 23:59:48.334 D/FBAudienceNetwork(25662): SDK dex loading time: 34
+01-07 23:59:48.343 D/nativeloader(25662): Load /data/app/~~s8OoMDD1TnN0LHb6YsTYCg==/com.google.android.trichromelibrary_749914633-Vnhd4XEfynlzeVKf2zCHQg==/base.apk!/lib/arm64-v8a/libmonochrome_64.so using class loader ns clns-13 (caller=/data/app/~~rr0A7BClpOu6jhCorVtX5A==/com.google.android.webview-q5TcTp_IQ5WCmaxOHkGNtw==/base.apk): ok
+01-07 23:59:48.345 D/nativeloader(25662): Load /system/lib64/libwebviewchromium_plat_support.so using class loader ns clns-13 (caller=/data/app/~~rr0A7BClpOu6jhCorVtX5A==/com.google.android.webview-q5TcTp_IQ5WCmaxOHkGNtw==/base.apk): ok
+01-07 23:59:48.350 I/cr_LibraryLoader(25662): Successfully loaded native library
+01-07 23:59:48.351 I/cr_CachingUmaRecorder(25662): Flushed 20 samples from 20 histograms, 0 samples were dropped.
+01-07 23:59:48.351 W/FA      (25662): Failed to retrieve Firebase Instance Id
+01-07 23:59:48.353 I/cr_CombinedPProvider(25662): #registerProvider() provider:WV.jk@f49fcce isPolicyCacheEnabled:false policyProvidersSize:0
+01-07 23:59:48.353 E/AndroidRuntime(25662): FATAL EXCEPTION: Firebase Blocking Thread #9
+01-07 23:59:48.353 E/AndroidRuntime(25662): Process: com.quran.quranaudio.online, PID: 25662
+01-07 23:59:48.353 E/AndroidRuntime(25662): java.lang.NoSuchMethodError: No static method checkNotGoogleApiHandlerThread()V in class Lcom/google/android/gms/common/internal/Preconditions; or its super classes (declaration of 'com.google.android.gms.common.internal.Preconditions' appears in /data/app/~~hdbuVMpZGtin5LHAvni4ag==/com.quran.quranaudio.online-KPH8CIMyhFU6veuKU6wsKg==/base.apk!classes30.dex)
+01-07 23:59:48.353 E/AndroidRuntime(25662): 	at com.google.android.gms.tasks.Tasks.await(com.google.android.gms:play-services-tasks@@18.1.0:2)
+01-07 23:59:48.353 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.openHttpURLConnection(FirebaseInstallationServiceClient.java:487)
+01-07 23:59:48.353 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.createFirebaseInstallation(FirebaseInstallationServiceClient.java:163)
+01-07 23:59:48.353 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.registerFidWithServer(FirebaseInstallations.java:533)
+01-07 23:59:48.353 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.doNetworkCallIfNecessary(FirebaseInstallations.java:387)
+01-07 23:59:48.353 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.lambda$doRegistrationOrRefresh$3$com-google-firebase-installations-FirebaseInstallations(FirebaseInstallations.java:372)
+01-07 23:59:48.353 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+01-07 23:59:48.353 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$1.run(SequentialExecutor.java:117)
+01-07 23:59:48.353 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.workOnQueue(SequentialExecutor.java:229)
+01-07 23:59:48.353 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.run(SequentialExecutor.java:174)
+01-07 23:59:48.353 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+01-07 23:59:48.353 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+01-07 23:59:48.353 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-google-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+01-07 23:59:48.353 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+01-07 23:59:48.353 E/AndroidRuntime(25662): 	at java.lang.Thread.run(Thread.java:1563)
+01-07 23:59:48.353 I/cr_PolicyProvider(25662): #setManagerAndSource() 0
+01-07 23:59:48.354 I/WifiHAL ( 1415): Creating message to get link statistics; iface = 47
+01-07 23:59:48.354 I/cr_DisplayManager(25662): Is Display Topology available: false
+01-07 23:59:48.357 V/GrammaticalInflectionUtils( 1861): AttributionSource: android.content.AttributionSource@a7fc9a5 does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+01-07 23:59:48.359 D/DesktopModeFlags(25662): Toggle override initialized to: OVERRIDE_UNSET
+01-07 23:59:48.359 I/DisplayManager(25662): Implicitly registering for refresh rate
+01-07 23:59:48.367 I/cr_CombinedPProvider(25662): #linkNativeInternal() 1
+01-07 23:59:48.367 I/AiAiEcho( 5755): SmartspaceNotificationPredictor no parser can handle this notification or notification is invalid
+01-07 23:59:48.367 I/cr_AppResProvider(25662): #getApplicationRestrictionsFromUserManager() Bundle[EMPTY_PARCEL]
+01-07 23:59:48.367 I/cr_PolicyProvider(25662): #notifySettingsAvailable() 0
+01-07 23:59:48.367 I/cr_CombinedPProvider(25662): #onSettingsAvailable() 0
+01-07 23:59:48.367 I/cr_CombinedPProvider(25662): #flushPolicies()
+01-07 23:59:48.368 D/Zygote  ( 5620): Forked child process 25725
+01-07 23:59:48.369 W/system_server( 1861): Activation of cgroup controller +memory failed in path /sys/fs/cgroup/apps/uid_99766: Invalid argument
+01-07 23:59:48.370 I/ActivityManager( 1861): Start proc 25725:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0i766 for  {com.quran.quranaudio.online/org.chromium.content.app.SandboxedProcessService0:0}
+01-07 23:59:48.372 E/libc    (25725): SetHeapTaggingLevel: re-enabling tagging after it was disabled is not supported
+01-07 23:59:48.372 D/SsBaseTemplateCard( 4292): No date view can be set up
+01-07 23:59:48.372 I/SsBaseTemplateCard( 4292): setFormattedContentDescription: text=Rain and snow, iconDescription=Rain and snow, contentDescription=Rain and snow, Rain and snow
+01-07 23:59:48.372 D/SsBaseTemplateCard( 4292): Passed-in item info is null
+01-07 23:59:48.372 D/SsBaseTemplateCard( 4292): Passed-in item info is null
+01-07 23:59:48.375 I/Zygote  (25725): Process 25725 created for com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0
+01-07 23:59:48.375 I/ocessService0:0(25725): Using CollectorTypeCMC GC.
+01-07 23:59:48.381 D/nativeloader(25725): Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+01-07 23:59:48.390 W/chromium(25662): [WARNING:android_webview/browser/network_service/net_helpers.cc:143] HTTP Cache size is: 33554432
+01-07 23:59:48.391 D/BoundBrokerSvc(27767): onBind: Intent { act=com.google.android.gms.safetynet.service.START xflg=0x4 pkg=com.google.android.gms }
+01-07 23:59:48.391 D/BoundBrokerSvc(27767): Loading bound service for intent: Intent { act=com.google.android.gms.safetynet.service.START xflg=0x4 pkg=com.google.android.gms }
+01-07 23:59:48.391 D/BackgroundInstallControlService( 1861): Package event received: 0
+01-07 23:59:48.398 D/BoundBrokerSvc(27767): onBind: Intent { act=com.google.android.gms.safebrowsing.SafeBrowsingService.START dat=chimera-action:/... xflg=0x4 cmp=com.google.android.gms/.chimera.GmsBoundBrokerService }
+01-07 23:59:48.398 D/BoundBrokerSvc(27767): Loading bound service for intent: Intent { act=com.google.android.gms.safebrowsing.SafeBrowsingService.START dat=chimera-action:/... xflg=0x4 cmp=com.google.android.gms/.chimera.GmsBoundBrokerService }
+01-07 23:59:48.401 D/PERFORMANCE(25662): ✅ [LIGHTWEIGHT] UserAgent retrieved [96ms]
+01-07 23:59:48.401 D/PERFORMANCE(25662): ✅ [IMMEDIATE] WebView isolation [97ms]
+01-07 23:59:48.401 D/CRASH_DEBUG(25662): ✅ WebView isolation initialized
+01-07 23:59:48.401 D/CRASH_DEBUG(25662): 🔄 Initializing AdFactory...
+--
+01-07 23:59:48.439 E/AndroidRuntime(25662): FATAL EXCEPTION: Firebase Blocking Thread #10
+01-07 23:59:48.439 E/AndroidRuntime(25662): Process: com.quran.quranaudio.online, PID: 25662
+01-07 23:59:48.439 E/AndroidRuntime(25662): java.lang.NoSuchMethodError: No static method checkNotGoogleApiHandlerThread()V in class Lcom/google/android/gms/common/internal/Preconditions; or its super classes (declaration of 'com.google.android.gms.common.internal.Preconditions' appears in /data/app/~~hdbuVMpZGtin5LHAvni4ag==/com.quran.quranaudio.online-KPH8CIMyhFU6veuKU6wsKg==/base.apk!classes30.dex)
+01-07 23:59:48.439 E/AndroidRuntime(25662): 	at com.google.android.gms.tasks.Tasks.await(com.google.android.gms:play-services-tasks@@18.1.0:2)
+01-07 23:59:48.439 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.openHttpURLConnection(FirebaseInstallationServiceClient.java:487)
+01-07 23:59:48.439 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.createFirebaseInstallation(FirebaseInstallationServiceClient.java:163)
+01-07 23:59:48.439 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.registerFidWithServer(FirebaseInstallations.java:533)
+01-07 23:59:48.439 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.doNetworkCallIfNecessary(FirebaseInstallations.java:387)
+01-07 23:59:48.439 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.lambda$doRegistrationOrRefresh$3$com-google-firebase-installations-FirebaseInstallations(FirebaseInstallations.java:372)
+01-07 23:59:48.439 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+01-07 23:59:48.439 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$1.run(SequentialExecutor.java:117)
+01-07 23:59:48.439 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.workOnQueue(SequentialExecutor.java:229)
+01-07 23:59:48.439 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.run(SequentialExecutor.java:174)
+01-07 23:59:48.439 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+01-07 23:59:48.439 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+01-07 23:59:48.439 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-google-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+01-07 23:59:48.439 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+01-07 23:59:48.439 E/AndroidRuntime(25662): 	at java.lang.Thread.run(Thread.java:1563)
+01-07 23:59:48.440 W/adservices( 7693): Skip logging because Cobalt is disabled.
+01-07 23:59:48.440 W/adservices( 7693): Skip logging because Cobalt logger is null
+01-07 23:59:48.453 D/AppCompatDelegate(25662): Checking for metadata for AppLocalesMetadataHolderService : Service not found
+01-07 23:59:48.455 D/BackgroundInstallControlService( 1861): Package event received: 0
+01-07 23:59:48.456 I/TRuntime.CctTransportBackend(25662): Making request to: https://crashlyticsreports-pa.googleapis.com/v1/firelog/legacy/batchlog
+01-07 23:59:48.457 D/PERFORMANCE(25662): ========================================
+01-07 23:59:48.457 D/PERFORMANCE(25662): ⚡ SplashScreenActivity.onCreate() START
+01-07 23:59:48.457 D/PERFORMANCE(25662): ========================================
+01-07 23:59:48.458 D/AnalyticsManager(25662): ✅ Event logged: app_workflow_step | params: {duration_from_start=155.0, step_name=splash_start, timestamp=1767801588457}
+01-07 23:59:48.472 W/FA      (25662): Failed to retrieve Firebase Instance Id
+01-07 23:59:48.473 E/AndroidRuntime(25662): FATAL EXCEPTION: Firebase Blocking Thread #11
+01-07 23:59:48.473 E/AndroidRuntime(25662): Process: com.quran.quranaudio.online, PID: 25662
+01-07 23:59:48.473 E/AndroidRuntime(25662): java.lang.NoSuchMethodError: No static method checkNotGoogleApiHandlerThread()V in class Lcom/google/android/gms/common/internal/Preconditions; or its super classes (declaration of 'com.google.android.gms.common.internal.Preconditions' appears in /data/app/~~hdbuVMpZGtin5LHAvni4ag==/com.quran.quranaudio.online-KPH8CIMyhFU6veuKU6wsKg==/base.apk!classes30.dex)
+01-07 23:59:48.473 E/AndroidRuntime(25662): 	at com.google.android.gms.tasks.Tasks.await(com.google.android.gms:play-services-tasks@@18.1.0:2)
+01-07 23:59:48.473 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.openHttpURLConnection(FirebaseInstallationServiceClient.java:487)
+01-07 23:59:48.473 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.createFirebaseInstallation(FirebaseInstallationServiceClient.java:163)
+01-07 23:59:48.473 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.registerFidWithServer(FirebaseInstallations.java:533)
+01-07 23:59:48.473 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.doNetworkCallIfNecessary(FirebaseInstallations.java:387)
+01-07 23:59:48.473 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.lambda$doRegistrationOrRefresh$3$com-google-firebase-installations-FirebaseInstallations(FirebaseInstallations.java:372)
+01-07 23:59:48.473 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+01-07 23:59:48.473 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$1.run(SequentialExecutor.java:117)
+01-07 23:59:48.473 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.workOnQueue(SequentialExecutor.java:229)
+01-07 23:59:48.473 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.run(SequentialExecutor.java:174)
+01-07 23:59:48.473 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+01-07 23:59:48.473 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+01-07 23:59:48.473 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-google-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+01-07 23:59:48.473 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+01-07 23:59:48.473 E/AndroidRuntime(25662): 	at java.lang.Thread.run(Thread.java:1563)
+01-07 23:59:48.475 I/ranaudio.online(25662): hiddenapi: Accessing hidden field Landroid/view/LayoutInflater;->mFactory:Landroid/view/LayoutInflater$Factory; (runtime_flags=0, domain=platform, api=unsupported) from Lcom/noober/background/BackgroundLibrary; (domain=app, TargetSdkVersion=35) using reflection: allowed
+01-07 23:59:48.475 I/ranaudio.online(25662): hiddenapi: Accessing hidden field Landroid/view/LayoutInflater;->mFactory2:Landroid/view/LayoutInflater$Factory2; (runtime_flags=0, domain=platform, api=unsupported) from Lcom/noober/background/BackgroundLibrary; (domain=app, TargetSdkVersion=35) using reflection: allowed
+01-07 23:59:48.476 D/SubscriptionChecker(25662): 📊 Subscription check: false
+01-07 23:59:48.476 D/AdConfig(25662): 🔍 getAdIdByPosition: position=inter_ad, isTest=true, BuildConfig.DEBUG=true
+01-07 23:59:48.476 D/AdConfig(25662): 🔍 useTestAD()=true
+01-07 23:59:48.476 D/AdConfig(25662): ✅ Final ad ID for inter_ad: ca-app-pub-3940256099942544/1033173712
+01-07 23:59:48.484 I/DynamiteModule(25662): Considering local module com.google.android.gms.ads.dynamite:0 and remote module com.google.android.gms.ads.dynamite:254380203
+01-07 23:59:48.484 I/DynamiteModule(25662): Selected remote version of com.google.android.gms.ads.dynamite, version >= 254380203
+01-07 23:59:48.484 V/DynamiteModule(25662): Dynamite loader version >= 2, using loadModule2NoCrashUtils
+01-07 23:59:48.501 D/ConnectivityService( 1861): requestNetwork for uid/pid:10547/25662 activeRequest: null callbackRequest: 18484 [NetworkRequest [ REQUEST id=18485, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10547 RequestorUid: 10547 RequestorPkg: com.quran.quranaudio.online UnderlyingNetworks: Null] ]] callback flags: 0 order: 2147483647 isUidTracked: false declaredMethods: AVAIL|LOST
+01-07 23:59:48.503 I/Ads     (25662): Updating ad debug logging enablement.
+01-07 23:59:48.504 D/OemPaidWifiNetworkFactory( 1861): got request NetworkRequest [ REQUEST id=18485, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10547 RequestorUid: 10547 RequestorPkg: com.quran.quranaudio.online UnderlyingNetworks: Null] ]
+01-07 23:59:48.505 D/MultiInternetWifiNetworkFactory( 1861): got request NetworkRequest [ REQUEST id=18485, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10547 RequestorUid: 10547 RequestorPkg: com.quran.quranaudio.online UnderlyingNetworks: Null] ]
+01-07 23:59:48.505 D/UntrustedWifiNetworkFactory( 1861): got request NetworkRequest [ REQUEST id=18485, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10547 RequestorUid: 10547 RequestorPkg: com.quran.quranaudio.online UnderlyingNetworks: Null] ]
+01-07 23:59:48.505 D/ConnectivityService( 1861): NetReassign [18485 : null → 158] [c 0] [a 1] [i 2]
+01-07 23:59:48.506 D/BackgroundInstallControlService( 1861): Package event received: 0
+01-07 23:59:48.510 I/Ads     (25662): Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("45A1DB8F25D3B98F1011B36F9E0C00E3")) to get test ads on this device.
+01-07 23:59:48.514 D/ConnectivityService( 1861): requestNetwork for uid/pid:10547/25662 activeRequest: null callbackRequest: 18486 [NetworkRequest [ REQUEST id=18487, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10547 RequestorUid: 10547 RequestorPkg: com.quran.quranaudio.online UnderlyingNetworks: Null] ]] callback flags: 0 order: 2147483647 isUidTracked: false declaredMethods: AVAIL|LOST|NC
+01-07 23:59:48.517 D/OemPaidWifiNetworkFactory( 1861): got request NetworkRequest [ REQUEST id=18487, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10547 RequestorUid: 10547 RequestorPkg: com.quran.quranaudio.online UnderlyingNetworks: Null] ]
+01-07 23:59:48.518 D/MultiInternetWifiNetworkFactory( 1861): got request NetworkRequest [ REQUEST id=18487, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10547 RequestorUid: 10547 RequestorPkg: com.quran.quranaudio.online UnderlyingNetworks: Null] ]
+01-07 23:59:48.518 D/UntrustedWifiNetworkFactory( 1861): got request NetworkRequest [ REQUEST id=18487, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10547 RequestorUid: 10547 RequestorPkg: com.quran.quranaudio.online UnderlyingNetworks: Null] ]
+01-07 23:59:48.519 D/ConnectivityService( 1861): NetReassign [18487 : null → 158] [c 0] [a 2] [i 2]
+01-07 23:59:48.522 D/BackgroundInstallControlService( 1861): Package event received: 0
+01-07 23:59:48.533 D/BoundBrokerSvc(27767): onBind: Intent { act=com.google.android.gms.ads.identifier.service.EVENT_ATTESTATION xflg=0x4 pkg=com.google.android.gms }
+01-07 23:59:48.533 D/BoundBrokerSvc(27767): Loading bound service for intent: Intent { act=com.google.android.gms.ads.identifier.service.EVENT_ATTESTATION xflg=0x4 pkg=com.google.android.gms }
+01-07 23:59:48.535 D/CompatChangeReporter( 1861): Compat change id reported: 297989574; UID 10547; state: ENABLED
+01-07 23:59:48.541 E/ranaudio.online(25662): No package ID 6a found for resource ID 0x6a0b0013.
+01-07 23:59:48.542 D/nativeloader(25662): Configuring clns-14 for other apk . target_sdk_version=35, uses_libraries=ALL, library_path=, permitted_path=/data:/mnt/expand
+01-07 23:59:48.542 W/ServiceBindIntentUtils(25662): Dynamic lookup for intent failed for action: com.google.android.gms.ads.service.CACHE
+01-07 23:59:48.543 D/nativeloader(25662): Load /data/user/0/com.quran.quranaudio.online/app_pccache/5/362BAA1E742037C69CD8BF98C5D97909342864E7/pcam.jar!/libd3C69E579693B.so using isolated ns clns-14 (caller=/data/user/0/com.quran.quranaudio.online/app_pccache/5/362BAA1E742037C69CD8BF98C5D97909342864E7/pcam.jar): ok
+01-07 23:59:48.544 D/BackgroundInstallControlService( 1861): Package event received: 0
+01-07 23:59:48.536 W/AdWorker(Defaul(25662): type=1400 audit(0.0:78205): avc:  granted  { execute } for  path="/data/data/com.quran.quranaudio.online/app_pccache/5/362BAA1E742037C69CD8BF98C5D97909342864E7/pcam.jar" dev="dm-75" ino=202582 scontext=u:r:untrusted_app:s0:c35,c258,c512,c768 tcontext=u:object_r:app_data_file:s0:c35,c258,c512,c768 tclass=file app=com.quran.quranaudio.online
+01-07 23:59:48.545 D/SubscriptionChecker(25662): 📊 Subscription check: false
+--
+01-07 23:59:48.614 E/AndroidRuntime(25662): FATAL EXCEPTION: Firebase Blocking Thread #12
+01-07 23:59:48.614 E/AndroidRuntime(25662): Process: com.quran.quranaudio.online, PID: 25662
+01-07 23:59:48.614 E/AndroidRuntime(25662): java.lang.NoSuchMethodError: No static method checkNotGoogleApiHandlerThread()V in class Lcom/google/android/gms/common/internal/Preconditions; or its super classes (declaration of 'com.google.android.gms.common.internal.Preconditions' appears in /data/app/~~hdbuVMpZGtin5LHAvni4ag==/com.quran.quranaudio.online-KPH8CIMyhFU6veuKU6wsKg==/base.apk!classes30.dex)
+01-07 23:59:48.614 E/AndroidRuntime(25662): 	at com.google.android.gms.tasks.Tasks.await(com.google.android.gms:play-services-tasks@@18.1.0:2)
+01-07 23:59:48.614 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.openHttpURLConnection(FirebaseInstallationServiceClient.java:487)
+01-07 23:59:48.614 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.createFirebaseInstallation(FirebaseInstallationServiceClient.java:163)
+01-07 23:59:48.614 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.registerFidWithServer(FirebaseInstallations.java:533)
+01-07 23:59:48.614 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.doNetworkCallIfNecessary(FirebaseInstallations.java:387)
+01-07 23:59:48.614 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.lambda$doRegistrationOrRefresh$3$com-google-firebase-installations-FirebaseInstallations(FirebaseInstallations.java:372)
+01-07 23:59:48.614 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+01-07 23:59:48.614 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$1.run(SequentialExecutor.java:117)
+01-07 23:59:48.614 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.workOnQueue(SequentialExecutor.java:229)
+01-07 23:59:48.614 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.run(SequentialExecutor.java:174)
+01-07 23:59:48.614 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+01-07 23:59:48.614 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+01-07 23:59:48.614 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-google-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+01-07 23:59:48.614 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+01-07 23:59:48.614 E/AndroidRuntime(25662): 	at java.lang.Thread.run(Thread.java:1563)
+01-07 23:59:48.615 D/CompatChangeReporter(25662): Compat change id reported: 349153669; UID 10547; state: ENABLED
+01-07 23:59:48.623 D/SessionLifecycleService(25662): Service bound to new client on process 25662
+01-07 23:59:48.626 D/SessionLifecycleService(25662): App has not yet foregrounded. Using previously stored session: null
+01-07 23:59:48.626 D/SessionLifecycleService(25662): Client android.os.Messenger@77d4279 bound at 442135756. Clients: 1
+01-07 23:59:48.627 D/VRI[SplashScreenActivity](25662): WindowInsets changed: 1080x2400 statusBars:[0,136,0,0] navigationBars:[0,0,0,63] mandatorySystemGestures:[0,168,0,84] 
+01-07 23:59:48.628 W/Ads     (25662): Update ad debug logging enablement as false
+01-07 23:59:48.628 I/BroadcastQueue( 1861): BOOT_COMPLETED_BROADCAST_COMPLETION_LATENCY_REPORTED action:android.intent.action.BOOT_COMPLETED dispatchLatency:0 completeLatency:1119 dispatchRealLatency:0 completeRealLatency:1119 receiversSize:2 userId:0 userType:android.os.usertype.full.SYSTEM
+01-07 23:59:48.629 D/WindowOnBackDispatcher(25662): setTopOnBackInvokedCallback (unwrapped): android.view.ViewRootImpl$$ExternalSyntheticLambda12@47a036c
+01-07 23:59:48.629 D/CoreBackPreview( 1861): Window{293ce54 u0 com.quran.quranaudio.online/com.quran.quranaudio.online.SplashScreenActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@b31583e, mPriority=0, mIsAnimationCallback=false, mOverrideBehavior=0}
+01-07 23:59:48.632 W/Ads     (25662): Not retrying to fetch app settings
+01-07 23:59:48.634 W/SQLiteLog(27767): (28) double-quoted string literal: "1767628788634"
+01-07 23:59:48.634 W/SQLiteLog(27767): (28) double-quoted string literal: "1"
+01-07 23:59:48.635 W/ServiceBindIntentUtils(25662): Dynamic lookup for intent failed for action: com.google.android.gms.ads.service.START
+01-07 23:59:48.636 D/BackgroundInstallControlService( 1861): Package event received: 0
+01-07 23:59:48.637 D/BoundBrokerSvc(27767): onBind: Intent { act=com.google.android.gms.ads.service.START xflg=0x4 pkg=com.google.android.gms }
+01-07 23:59:48.637 D/BoundBrokerSvc(27767): Loading bound service for intent: Intent { act=com.google.android.gms.ads.service.START xflg=0x4 pkg=com.google.android.gms }
+01-07 23:59:48.642 D/BoundBrokerSvc(27767): onBind: Intent { act=com.google.android.gms.ads.identifier.service.EVENT_ATTESTATION dat=chimera-action:/... xflg=0x4 cmp=com.google.android.gms/.chimera.GmsBoundBrokerService }
+01-07 23:59:48.642 D/BoundBrokerSvc(27767): Loading bound service for intent: Intent { act=com.google.android.gms.ads.identifier.service.EVENT_ATTESTATION dat=chimera-action:/... xflg=0x4 cmp=com.google.android.gms/.chimera.GmsBoundBrokerService }
+01-07 23:59:48.654 I/NearbyDiscovery(11566): (REDACTED) BloomFilterAdvManager: Detected bloom filter but too far away, ignoring. %sm, %s
+01-07 23:59:48.654 I/NearbyDiscovery(11566): (REDACTED) loadFastPairModule: checkFeaturesAreAvailable:%d
+01-07 23:59:48.654 I/NearbyDiscovery(11566): loadFastPairModule: FastPair module is downloaded. [CONTEXT service_id=265 ]
+01-07 23:59:48.668 D/SessionLifecycleClient(25662): Connected to SessionLifecycleService. Queue size 1
+01-07 23:59:48.669 D/SessionLifecycleClient(25662): Sending lifecycle 1 to service
+01-07 23:59:48.669 D/SessionLifecycleService(25662): Activity foregrounding at 442135801.
+01-07 23:59:48.669 D/SessionLifecycleService(25662): Cold start detected.
+01-07 23:59:48.671 I/ActivityTaskManager( 1861): Displayed com.quran.quranaudio.online/.SplashScreenActivity for user 0: +1s228ms
+01-07 23:59:48.671 D/SessionLifecycleService(25662): Generated new session 3c1d3be04065417dbf4c67a56037ff29
+01-07 23:59:48.671 D/SessionLifecycleService(25662): Broadcasting new session: SessionDetails(sessionId=3c1d3be04065417dbf4c67a56037ff29, firstSessionId=3c1d3be04065417dbf4c67a56037ff29, sessionIndex=0, sessionStartTimestampUs=1767801588671000)
+01-07 23:59:48.673 D/SessionFirelogPublisher(25662): Data Collection is enabled for at least one Subscriber
+01-07 23:59:48.676 I/AdInternalSettings(25662): Test mode device hash: 370f2e63-976a-44b4-90c0-16fec7fdfc02
+01-07 23:59:48.676 I/AdInternalSettings(25662): When testing your app with Facebook's ad units you must specify the device hashed ID to ensure the delivery of test ads, add the following code before loading an ad: AdSettings.addTestDevice("370f2e63-976a-44b4-90c0-16fec7fdfc02");
+01-07 23:59:48.680 D/AdvertisingIdClient(27767): AdvertisingIdClient already created.
+01-07 23:59:48.680 D/AdvertisingIdClient(27767): AdvertisingIdClient is not bounded. Starting to bind it...
+01-07 23:59:48.680 E/AndroidRuntime(25662): FATAL EXCEPTION: Firebase Blocking Thread #13
+01-07 23:59:48.680 E/AndroidRuntime(25662): Process: com.quran.quranaudio.online, PID: 25662
+01-07 23:59:48.680 E/AndroidRuntime(25662): java.lang.NoSuchMethodError: No static method checkNotGoogleApiHandlerThread()V in class Lcom/google/android/gms/common/internal/Preconditions; or its super classes (declaration of 'com.google.android.gms.common.internal.Preconditions' appears in /data/app/~~hdbuVMpZGtin5LHAvni4ag==/com.quran.quranaudio.online-KPH8CIMyhFU6veuKU6wsKg==/base.apk!classes30.dex)
+01-07 23:59:48.680 E/AndroidRuntime(25662): 	at com.google.android.gms.tasks.Tasks.await(com.google.android.gms:play-services-tasks@@18.1.0:2)
+01-07 23:59:48.680 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.openHttpURLConnection(FirebaseInstallationServiceClient.java:487)
+01-07 23:59:48.680 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.createFirebaseInstallation(FirebaseInstallationServiceClient.java:163)
+01-07 23:59:48.680 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.registerFidWithServer(FirebaseInstallations.java:533)
+01-07 23:59:48.680 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.doNetworkCallIfNecessary(FirebaseInstallations.java:387)
+01-07 23:59:48.680 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.lambda$doRegistrationOrRefresh$3$com-google-firebase-installations-FirebaseInstallations(FirebaseInstallations.java:372)
+01-07 23:59:48.680 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+01-07 23:59:48.680 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$1.run(SequentialExecutor.java:117)
+01-07 23:59:48.680 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.workOnQueue(SequentialExecutor.java:229)
+01-07 23:59:48.680 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.run(SequentialExecutor.java:174)
+01-07 23:59:48.680 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+01-07 23:59:48.680 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+01-07 23:59:48.680 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-google-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+01-07 23:59:48.680 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+01-07 23:59:48.680 E/AndroidRuntime(25662): 	at java.lang.Thread.run(Thread.java:1563)
+01-07 23:59:48.684 D/EventGDTLogger(25662): Session Event: {"eventType":1,"sessionData":{"sessionId":"3c1d3be04065417dbf4c67a56037ff29","firstSessionId":"3c1d3be04065417dbf4c67a56037ff29","sessionIndex":0,"eventTimestampUs":1767801588671000,"dataCollectionStatus":{"performance":1,"crashlytics":2,"sessionSamplingRate":1.0},"firebaseInstallationId":"ezNlmiF7RXW1StAjcR5JLd"},"applicationInfo":{"appId":"1:517834286063:android:aea3c459125d4c2cd80c1a","deviceModel":"Pixel 7","sessionSdkVersion":"1.2.0","osVersion":"16","logEnvironment":3,"androidAppInfo":{"packageName":"com.quran.quranaudio.online","versionName":"1.9.28","appBuildVersion":"110","deviceManufacturer":"Google","currentProcessDetails":{"processName":"com.quran.quranaudio.online","pid":25662,"importance":100,"defaultProcess":true},"appProcessDetails":[{"processName":"com.quran.quranaudio.online","pid":25662,"importance":100,"defaultProcess":true}]}}}
+01-07 23:59:48.684 D/SessionFirelogPublisher(25662): Successfully logged Session Start event: 3c1d3be04065417dbf4c67a56037ff29
+01-07 23:59:48.686 D/AdvertisingIdClient(27767): AdvertisingIdClient is bounded
+01-07 23:59:48.687 I/AdvertisingIdClient(27767): shouldSendLog 793091150
+01-07 23:59:48.689 D/BoundBrokerSvc(11566): onRebind: Intent { act=com.google.android.gms.common.telemetry.service.START dat=chimera-action:/... xflg=0x4 cmp=com.google.android.gms/.chimera.PersistentApiService }
+01-07 23:59:48.690 I/AdvertisingIdClient(27767): GetInfoInternal elapse 7ms
+01-07 23:59:48.694 I/AdvertisingIdClient(27767): getting error as 17: API: ClientTelemetry.API is not available on this device. Connection failed with: ConnectionResult{statusCode=API_DISABLED_FOR_CONNECTION, resolution=null, message=null, clientMethodKey=null}
+01-07 23:59:48.699 D/SessionLifecycleClient(25662): Session update received: 3c1d3be04065417dbf4c67a56037ff29
+01-07 23:59:48.700 D/SessionLifecycleClient(25662): Notified CRASHLYTICS of new session 3c1d3be04065417dbf4c67a56037ff29
+01-07 23:59:48.701 D/PERFORMANCE(25662): ✅ [CONFIG] Config loaded (cached) [103ms]
+01-07 23:59:48.701 D/PERFORMANCE(25662): 📊 Progress: 40% - Config ready
+01-07 23:59:48.701 D/AdConfig(25662): 🔍 getAdIdByPosition: position=appopen, isTest=true, BuildConfig.DEBUG=true
+01-07 23:59:48.701 D/AdConfig(25662): 🔍 useTestAD()=true
+01-07 23:59:48.701 D/AdConfig(25662): ✅ Final ad ID for appopen: ca-app-pub-3940256099942544/9257395921
+01-07 23:59:48.701 D/PERFORMANCE(25662): 📊 Progress: 100% - Ready
+01-07 23:59:48.701 D/AdConfig(25662): 🔍 getAdIdByPosition: position=appopen, isTest=true, BuildConfig.DEBUG=true
+01-07 23:59:48.701 D/AdConfig(25662): 🔍 useTestAD()=true
+01-07 23:59:48.701 D/AdConfig(25662): ✅ Final ad ID for appopen: ca-app-pub-3940256099942544/9257395921
+01-07 23:59:48.701 D/SplashScreen(25662): ⚠️ [AD] No ad available, jumping to main
+01-07 23:59:48.701 D/SplashScreen(25662): ✅ Jumping to next activity
+01-07 23:59:48.701 E/ActivityThread(25662): Failed to find provider info for com.xiaomi.market.provider.DirectMailProvider
+01-07 23:59:48.701 D/SplashScreen(25662): 🎯 First launch - Showing Onboarding
+01-07 23:59:48.702 D/AnalyticsManager(25662): ✅ Event logged: app_workflow_step | params: {duration_from_start=399.0, step_name=onboarding_start, timestamp=1767801588701}
+01-07 23:59:48.702 D/BoundBrokerSvc(11566): onRebind: Intent { act=com.google.android.gms.presencemanager.service.START dat=chimera-action:/... xflg=0x4 cmp=com.google.android.gms/.chimera.PersistentApiService }
+01-07 23:59:48.702 V/WindowManager( 1861): DesktopModeLaunchParamsModifier: phase= 0 task=null activity=null desktop mode is not enabled, skipping
+01-07 23:59:48.702 V/WindowManager( 1861): TaskLaunchParamsModifier:phase=0 task=null activity=null display-area-from-source=DefaultTaskDisplayArea@25975029 display-id=0 task-display-area-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@25975029
+01-07 23:59:48.703 V/GrammaticalInflectionUtils( 1861): AttributionSource: android.content.AttributionSource@547ccc48 does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+01-07 23:59:48.704 V/WindowManager( 1861): DesktopModeLaunchParamsModifier: phase= 0 task=null activity=ActivityRecord{140436189 u0 com.quran.quranaudio.online/.quran_module.activities.ActivityOnboarding desktop mode is not enabled, skipping
+01-07 23:59:48.704 V/WindowManager( 1861): TaskLaunchParamsModifier:phase=0 task=null activity=ActivityRecord{140436189 u0 com.quran.quranaudio.online/.quran_module.activities.ActivityOnboarding t-1} display-area-from-source=DefaultTaskDisplayArea@25975029 display-id=0 task-display-area-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@25975029
+01-07 23:59:48.704 V/WindowManager( 1861): DesktopModeLaunchParamsModifier: phase= 3 task=Task{42c2667 #4968 type=standard A=10547:com.quran.quranaudio.online} activity=ActivityRecord{140436189 u0 com.quran.quranaudio.online/.quran_module.activities.ActivityOnboarding t-1} desktop mode is not enabled, skipping
+01-07 23:59:48.704 V/WindowManager( 1861): TaskLaunchParamsModifier:phase=3 task=Task{42c2667 #4968 type=standard A=10547:com.quran.quranaudio.online} activity=ActivityRecord{140436189 u0 com.quran.quranaudio.online/.quran_module.activities.ActivityOnboarding t-1} display-area-from-source=DefaultTaskDisplayArea@25975029 display-id=0 task-display-area-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@25975029 inherit-from-source=fullscreen non-freeform-task-display-area display-area=DefaultTaskDisplayArea@25975029 default-portrait freeform-size-mismatch=Rect(276, 696 - 805, 1776)
+01-07 23:59:48.704 V/WindowManager( 1861): DesktopModeLaunchParamsModifier: phase= 3 task=Task{42c2667 #4968 type=standard A=10547:com.quran.quranaudio.online} activity=ActivityRecord{140436189 u0 com.quran.quranaudio.online/.quran_module.activities.ActivityOnboarding t-1} desktop mode is not enabled, skipping
+01-07 23:59:48.704 V/WindowManager( 1861): TaskLaunchParamsModifier:phase=3 task=Task{42c2667 #4968 type=standard A=10547:com.quran.quranaudio.online} activity=ActivityRecord{140436189 u0 com.quran.quranaudio.online/.quran_module.activities.ActivityOnboarding t-1} display-area-from-source=DefaultTaskDisplayArea@25975029 display-id=0 task-display-area-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@25975029 inherit-from-source=fullscreen non-freeform-task-display-area display-area=DefaultTaskDisplayArea@25975029 default-portrait freeform-size-mismatch=Rect(276, 696 - 805, 1776)
+--
+01-07 23:59:48.814 E/AndroidRuntime(25662): FATAL EXCEPTION: Firebase Blocking Thread #7
+01-07 23:59:48.814 E/AndroidRuntime(25662): Process: com.quran.quranaudio.online, PID: 25662
+01-07 23:59:48.814 E/AndroidRuntime(25662): java.lang.NoSuchMethodError: No static method checkNotGoogleApiHandlerThread()V in class Lcom/google/android/gms/common/internal/Preconditions; or its super classes (declaration of 'com.google.android.gms.common.internal.Preconditions' appears in /data/app/~~hdbuVMpZGtin5LHAvni4ag==/com.quran.quranaudio.online-KPH8CIMyhFU6veuKU6wsKg==/base.apk!classes30.dex)
+01-07 23:59:48.814 E/AndroidRuntime(25662): 	at com.google.android.gms.tasks.Tasks.await(com.google.android.gms:play-services-tasks@@18.1.0:2)
+01-07 23:59:48.814 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.openHttpURLConnection(FirebaseInstallationServiceClient.java:487)
+01-07 23:59:48.814 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.createFirebaseInstallation(FirebaseInstallationServiceClient.java:163)
+01-07 23:59:48.814 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.registerFidWithServer(FirebaseInstallations.java:533)
+01-07 23:59:48.814 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.doNetworkCallIfNecessary(FirebaseInstallations.java:387)
+01-07 23:59:48.814 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.lambda$doRegistrationOrRefresh$3$com-google-firebase-installations-FirebaseInstallations(FirebaseInstallations.java:372)
+01-07 23:59:48.814 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+01-07 23:59:48.814 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$1.run(SequentialExecutor.java:117)
+01-07 23:59:48.814 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.workOnQueue(SequentialExecutor.java:229)
+01-07 23:59:48.814 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.run(SequentialExecutor.java:174)
+01-07 23:59:48.814 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+01-07 23:59:48.814 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+01-07 23:59:48.814 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-google-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+01-07 23:59:48.814 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+01-07 23:59:48.814 E/AndroidRuntime(25662): 	at java.lang.Thread.run(Thread.java:1563)
+01-07 23:59:48.817 I/Ads     (27767): SDK version: afma-sdk-a-v254380999.231004000.1
+01-07 23:59:48.818 I/Ads     (27767): HTTP timeout: 60000 milliseconds.
+01-07 23:59:48.822 E/AndroidRuntime(25662): FATAL EXCEPTION: Firebase Blocking Thread #4
+01-07 23:59:48.822 E/AndroidRuntime(25662): Process: com.quran.quranaudio.online, PID: 25662
+01-07 23:59:48.822 E/AndroidRuntime(25662): java.lang.NoSuchMethodError: No static method checkNotGoogleApiHandlerThread()V in class Lcom/google/android/gms/common/internal/Preconditions; or its super classes (declaration of 'com.google.android.gms.common.internal.Preconditions' appears in /data/app/~~hdbuVMpZGtin5LHAvni4ag==/com.quran.quranaudio.online-KPH8CIMyhFU6veuKU6wsKg==/base.apk!classes30.dex)
+01-07 23:59:48.822 E/AndroidRuntime(25662): 	at com.google.android.gms.tasks.Tasks.await(com.google.android.gms:play-services-tasks@@18.1.0:2)
+01-07 23:59:48.822 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.openHttpURLConnection(FirebaseInstallationServiceClient.java:487)
+01-07 23:59:48.822 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.createFirebaseInstallation(FirebaseInstallationServiceClient.java:163)
+01-07 23:59:48.822 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.registerFidWithServer(FirebaseInstallations.java:533)
+01-07 23:59:48.822 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.doNetworkCallIfNecessary(FirebaseInstallations.java:387)
+01-07 23:59:48.822 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.lambda$doRegistrationOrRefresh$3$com-google-firebase-installations-FirebaseInstallations(FirebaseInstallations.java:372)
+01-07 23:59:48.822 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+01-07 23:59:48.822 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.workOnQueue(SequentialExecutor.java:229)
+01-07 23:59:48.822 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.run(SequentialExecutor.java:174)
+01-07 23:59:48.822 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+01-07 23:59:48.822 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+01-07 23:59:48.822 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-google-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+01-07 23:59:48.822 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+01-07 23:59:48.822 E/AndroidRuntime(25662): 	at java.lang.Thread.run(Thread.java:1563)
+01-07 23:59:48.834 W/RecyclerView(25662): No adapter attached; skipping layout
+01-07 23:59:48.839 I/Ads     (27767): SDK version: afma-sdk-a-v254380999.231004000.1
+01-07 23:59:48.839 I/Ads     (27767): HTTP timeout: 60000 milliseconds.
+01-07 23:59:48.858 W/FA      (25662): Failed to retrieve Firebase Instance Id
+01-07 23:59:48.865 E/AndroidRuntime(25662): FATAL EXCEPTION: Firebase Blocking Thread #16
+01-07 23:59:48.865 E/AndroidRuntime(25662): Process: com.quran.quranaudio.online, PID: 25662
+01-07 23:59:48.865 E/AndroidRuntime(25662): java.lang.NoSuchMethodError: No static method checkNotGoogleApiHandlerThread()V in class Lcom/google/android/gms/common/internal/Preconditions; or its super classes (declaration of 'com.google.android.gms.common.internal.Preconditions' appears in /data/app/~~hdbuVMpZGtin5LHAvni4ag==/com.quran.quranaudio.online-KPH8CIMyhFU6veuKU6wsKg==/base.apk!classes30.dex)
+01-07 23:59:48.865 E/AndroidRuntime(25662): 	at com.google.android.gms.tasks.Tasks.await(com.google.android.gms:play-services-tasks@@18.1.0:2)
+01-07 23:59:48.865 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.openHttpURLConnection(FirebaseInstallationServiceClient.java:487)
+01-07 23:59:48.865 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.createFirebaseInstallation(FirebaseInstallationServiceClient.java:163)
+01-07 23:59:48.865 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.registerFidWithServer(FirebaseInstallations.java:533)
+01-07 23:59:48.865 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.doNetworkCallIfNecessary(FirebaseInstallations.java:387)
+01-07 23:59:48.865 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.lambda$doRegistrationOrRefresh$3$com-google-firebase-installations-FirebaseInstallations(FirebaseInstallations.java:372)
+01-07 23:59:48.865 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+01-07 23:59:48.865 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.workOnQueue(SequentialExecutor.java:229)
+01-07 23:59:48.865 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.run(SequentialExecutor.java:174)
+01-07 23:59:48.865 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+01-07 23:59:48.865 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+01-07 23:59:48.865 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-google-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+01-07 23:59:48.865 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+01-07 23:59:48.865 E/AndroidRuntime(25662): 	at java.lang.Thread.run(Thread.java:1563)
+01-07 23:59:48.869 E/hwc-display(  746): [PrimaryDisplay] resetColorMappingInfoForClientComp:: resetColorMappingInfo() idx=2 error(-22)
+01-07 23:59:48.869 E/hwc-display(  746): Fail to open file /data/vendor/log/hwc/PrimaryDisplay_hwc_error_log0.txt, error: Permission denied
+01-07 23:59:48.869 E/hwc-display(  746): Fail to open file /data/log/PrimaryDisplay_hwc_error_log0.txt, error: No such file or directory
+01-07 23:59:48.869 E/hwc-display(  746): Unable to open log file for PrimaryDisplay_hwc_error_log0.txt
+01-07 23:59:48.877 D/ActivityOnboarding(25662): 🎯 Navigation elements hidden - using fragment-level navigation
+01-07 23:59:48.881 W/FA      (25662): Failed to retrieve Firebase Instance Id
+01-07 23:59:48.883 E/AndroidRuntime(25662): FATAL EXCEPTION: Firebase Blocking Thread #17
+01-07 23:59:48.883 E/AndroidRuntime(25662): Process: com.quran.quranaudio.online, PID: 25662
+01-07 23:59:48.883 E/AndroidRuntime(25662): java.lang.NoSuchMethodError: No static method checkNotGoogleApiHandlerThread()V in class Lcom/google/android/gms/common/internal/Preconditions; or its super classes (declaration of 'com.google.android.gms.common.internal.Preconditions' appears in /data/app/~~hdbuVMpZGtin5LHAvni4ag==/com.quran.quranaudio.online-KPH8CIMyhFU6veuKU6wsKg==/base.apk!classes30.dex)
+01-07 23:59:48.883 E/AndroidRuntime(25662): 	at com.google.android.gms.tasks.Tasks.await(com.google.android.gms:play-services-tasks@@18.1.0:2)
+01-07 23:59:48.883 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.openHttpURLConnection(FirebaseInstallationServiceClient.java:487)
+01-07 23:59:48.883 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.createFirebaseInstallation(FirebaseInstallationServiceClient.java:163)
+01-07 23:59:48.883 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.registerFidWithServer(FirebaseInstallations.java:533)
+01-07 23:59:48.883 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.doNetworkCallIfNecessary(FirebaseInstallations.java:387)
+01-07 23:59:48.883 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.lambda$doRegistrationOrRefresh$3$com-google-firebase-installations-FirebaseInstallations(FirebaseInstallations.java:372)
+01-07 23:59:48.883 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+01-07 23:59:48.883 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.workOnQueue(SequentialExecutor.java:229)
+01-07 23:59:48.883 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.run(SequentialExecutor.java:174)
+01-07 23:59:48.883 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+01-07 23:59:48.883 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+01-07 23:59:48.883 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-google-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+01-07 23:59:48.883 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+01-07 23:59:48.883 E/AndroidRuntime(25662): 	at java.lang.Thread.run(Thread.java:1563)
+01-07 23:59:48.909 D/FragOnboardLanguage(25662): ═══════════════════════════════════════════════
+01-07 23:59:48.909 D/FragOnboardLanguage(25662): 🎬 onViewCreated() START
+01-07 23:59:48.909 D/FragOnboardLanguage(25662): ✅ super.onViewCreated() completed
+01-07 23:59:48.909 D/FragOnboardLanguage(25662): 🔍 Checking binding: true
+01-07 23:59:48.909 D/FragOnboardLanguage(25662): 🔍 Checking btnContinue: true
+01-07 23:59:48.909 D/FragOnboardLanguage(25662): ✅ Language arrays loaded: 7 languages
+01-07 23:59:48.909 D/AnalyticsManager(25662): ✅ Event logged: app_workflow_step | params: {duration_from_start=607.0, step_name=language_selection_view, timestamp=1767801588909}
+01-07 23:59:48.909 D/FragOnboardLanguage(25662): 🌐 Current saved language: en
+01-07 23:59:48.909 D/FragOnboardLanguage(25662): 🔧 Calling setupLanguageCards()...
+01-07 23:59:48.909 D/FragOnboardLanguage(25662): 🗺️ 语言卡片映射:
+01-07 23:59:48.909 W/FA      (25662): Failed to retrieve Firebase Instance Id
+01-07 23:59:48.909 D/FragOnboardLanguage(25662):    'en' → cardId=2131427736, checkId=2131427802
+01-07 23:59:48.909 D/FragOnboardLanguage(25662):    'id' → cardId=2131427738, checkId=2131427803
+01-07 23:59:48.909 D/FragOnboardLanguage(25662):    'ar' → cardId=2131427733, checkId=2131427800
+01-07 23:59:48.909 D/FragOnboardLanguage(25662):    'ur' → cardId=2131427750, checkId=2131427806
+01-07 23:59:48.909 D/FragOnboardLanguage(25662):    'ms' → cardId=2131427741, checkId=2131427804
+01-07 23:59:48.909 D/FragOnboardLanguage(25662):    'tr' → cardId=2131427749, checkId=2131427805
+01-07 23:59:48.909 D/FragOnboardLanguage(25662):    'bn' → cardId=2131427735, checkId=2131427801
+01-07 23:59:48.909 D/FragOnboardLanguage(25662):    ✅ 语言 'en' 的卡片已设置点击事件
+01-07 23:59:48.909 D/FragOnboardLanguage(25662):    ✅ 语言 'id' 的卡片已设置点击事件
+01-07 23:59:48.909 D/FragOnboardLanguage(25662):    ✅ 语言 'ar' 的卡片已设置点击事件
+01-07 23:59:48.909 D/FragOnboardLanguage(25662):    ✅ 语言 'ur' 的卡片已设置点击事件
+01-07 23:59:48.910 D/FragOnboardLanguage(25662):    ✅ 语言 'ms' 的卡片已设置点击事件
+01-07 23:59:48.910 D/FragOnboardLanguage(25662):    ✅ 语言 'tr' 的卡片已设置点击事件
+01-07 23:59:48.910 D/FragOnboardLanguage(25662):    ✅ 语言 'bn' 的卡片已设置点击事件
+01-07 23:59:48.910 D/FragOnboardLanguage(25662):   ✓ Card en: SELECTED (white bg, green border/text)
+01-07 23:59:48.910 D/FragOnboardLanguage(25662):   ○ Card id: UNSELECTED (dark green bg, white text)
+01-07 23:59:48.910 D/FragOnboardLanguage(25662):   ○ Card ar: UNSELECTED (dark green bg, white text)
+01-07 23:59:48.910 D/FragOnboardLanguage(25662):   ○ Card ur: UNSELECTED (dark green bg, white text)
+01-07 23:59:48.910 D/FragOnboardLanguage(25662):   ○ Card ms: UNSELECTED (dark green bg, white text)
+01-07 23:59:48.910 D/FragOnboardLanguage(25662):   ○ Card tr: UNSELECTED (dark green bg, white text)
+01-07 23:59:48.910 D/FragOnboardLanguage(25662):   ○ Card bn: UNSELECTED (dark green bg, white text)
+01-07 23:59:48.910 D/FragOnboardLanguage(25662): ✅ setupLanguageCards() completed
+01-07 23:59:48.910 D/FragOnboardLanguage(25662): 🔧 Calling setupContinueButton()...
+--
+01-07 23:59:48.910 E/AndroidRuntime(25662): FATAL EXCEPTION: Firebase Blocking Thread #18
+01-07 23:59:48.910 E/AndroidRuntime(25662): Process: com.quran.quranaudio.online, PID: 25662
+01-07 23:59:48.910 E/AndroidRuntime(25662): java.lang.NoSuchMethodError: No static method checkNotGoogleApiHandlerThread()V in class Lcom/google/android/gms/common/internal/Preconditions; or its super classes (declaration of 'com.google.android.gms.common.internal.Preconditions' appears in /data/app/~~hdbuVMpZGtin5LHAvni4ag==/com.quran.quranaudio.online-KPH8CIMyhFU6veuKU6wsKg==/base.apk!classes30.dex)
+01-07 23:59:48.910 E/AndroidRuntime(25662): 	at com.google.android.gms.tasks.Tasks.await(com.google.android.gms:play-services-tasks@@18.1.0:2)
+01-07 23:59:48.910 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.openHttpURLConnection(FirebaseInstallationServiceClient.java:487)
+01-07 23:59:48.910 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.createFirebaseInstallation(FirebaseInstallationServiceClient.java:163)
+01-07 23:59:48.910 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.registerFidWithServer(FirebaseInstallations.java:533)
+01-07 23:59:48.910 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.doNetworkCallIfNecessary(FirebaseInstallations.java:387)
+01-07 23:59:48.910 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.lambda$doRegistrationOrRefresh$3$com-google-firebase-installations-FirebaseInstallations(FirebaseInstallations.java:372)
+01-07 23:59:48.910 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+01-07 23:59:48.910 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.workOnQueue(SequentialExecutor.java:229)
+01-07 23:59:48.910 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.run(SequentialExecutor.java:174)
+01-07 23:59:48.910 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+01-07 23:59:48.910 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+01-07 23:59:48.910 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-google-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+01-07 23:59:48.910 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+01-07 23:59:48.910 E/AndroidRuntime(25662): 	at java.lang.Thread.run(Thread.java:1563)
+01-07 23:59:48.911 D/NATIVE_AD_TRACK(25662): ═══════════════════════════════════════════════
+01-07 23:59:48.911 D/NATIVE_AD_TRACK(25662): 🎯 Native Ad Request
+01-07 23:59:48.911 D/NATIVE_AD_TRACK(25662):    Caller: FragOnboardLanguage.setupNativeAd:327
+01-07 23:59:48.911 D/NATIVE_AD_TRACK(25662):    Activity: ActivityOnboarding
+01-07 23:59:48.911 D/NATIVE_AD_TRACK(25662):    Container: FrameLayout@196944569
+01-07 23:59:48.911 D/NATIVE_AD_TRACK(25662):    Layout ResId: 2131625331
+01-07 23:59:48.911 D/NATIVE_AD_TRACK(25662):    Container visibility: 8 (0=VISIBLE, 4=INVISIBLE, 8=GONE)
+01-07 23:59:48.911 D/NATIVE_AD_TRACK(25662):    Container parent: ConstraintLayout
+01-07 23:59:48.911 D/NATIVE_AD_TRACK(25662): ═══════════════════════════════════════════════
+01-07 23:59:48.911 D/NativeAdHelper(25662): 🔄 Attempting to display native ad with auto-load
+01-07 23:59:48.911 D/SubscriptionChecker(25662): 📊 Subscription check: false
+01-07 23:59:48.911 D/NativeAdManager(25662): ⚠️ No valid cached ad, adding to wait queue
+01-07 23:59:48.911 D/NativeAdManager(25662): 🔄 Starting dynamic ad load for callback
+01-07 23:59:48.911 E/NATIVE_AD_TRACK(25662): ❌ NativeAdManager.loadNewAd() - AppContext is null
+01-07 23:59:48.911 E/NativeAdManager(25662): ❌ AppContext is null, cannot load ad
+01-07 23:59:48.911 D/NATIVE_AD_TRACK(25662): → loadAdWithCallback() called, waiting for response...
+01-07 23:59:48.911 D/CRASH_DEBUG(25662): ✅ NativeAdHelper.displayNativeAdWithAutoLoad() completed
+01-07 23:59:48.911 D/CRASH_DEBUG(25662): ✅ setupNativeAd() END (ad may or may not be shown)
+01-07 23:59:48.911 D/FragOnboardLanguage(25662): ✅ setupNativeAd() completed
+01-07 23:59:48.911 D/FragOnboardLanguage(25662): 🎬 onViewCreated() END
+01-07 23:59:48.911 D/FragOnboardLanguage(25662): ═══════════════════════════════════════════════
+01-07 23:59:48.912 D/AnalyticsManager(25662): ✅ Event logged: ad_exposure_metric | params: {seconds_since_launch=0, ad_type=native, ad_location=onboarding_language, timestamp=1767801588911}
+01-07 23:59:48.916 D/FragOnboardLanguage(25662): 🔄 onResume: Refreshing native ad
+01-07 23:59:48.916 D/CRASH_DEBUG(25662): ╔══════════════════════════════════════════════════════
+01-07 23:59:48.916 D/CRASH_DEBUG(25662): ║ 🎯 setupNativeAd() START - Language Selection Page
+01-07 23:59:48.916 D/CRASH_DEBUG(25662): ╚══════════════════════════════════════════════════════
+01-07 23:59:48.916 D/CRASH_DEBUG(25662): ✅ Native ad container retrieved
+01-07 23:59:48.916 D/SubscriptionChecker(25662): 📊 Subscription check: false
+01-07 23:59:48.916 D/CRASH_DEBUG(25662): ✅ Subscription check: false
+01-07 23:59:48.916 D/CRASH_DEBUG(25662): 🔄 Preparing to load native ad...
+01-07 23:59:48.916 D/CRASH_DEBUG(25662):    Activity: ActivityOnboarding
+01-07 23:59:48.916 D/CRASH_DEBUG(25662):    Container: FrameLayout
+01-07 23:59:48.916 D/CRASH_DEBUG(25662): 🚀 Calling NativeAdHelper.displayNativeAdWithAutoLoad()...
+01-07 23:59:48.916 D/NATIVE_AD_TRACK(25662): ═══════════════════════════════════════════════
+--
+01-07 23:59:48.933 E/AndroidRuntime(25662): FATAL EXCEPTION: Firebase Blocking Thread #19
+01-07 23:59:48.933 E/AndroidRuntime(25662): Process: com.quran.quranaudio.online, PID: 25662
+01-07 23:59:48.933 E/AndroidRuntime(25662): java.lang.NoSuchMethodError: No static method checkNotGoogleApiHandlerThread()V in class Lcom/google/android/gms/common/internal/Preconditions; or its super classes (declaration of 'com.google.android.gms.common.internal.Preconditions' appears in /data/app/~~hdbuVMpZGtin5LHAvni4ag==/com.quran.quranaudio.online-KPH8CIMyhFU6veuKU6wsKg==/base.apk!classes30.dex)
+01-07 23:59:48.933 E/AndroidRuntime(25662): 	at com.google.android.gms.tasks.Tasks.await(com.google.android.gms:play-services-tasks@@18.1.0:2)
+01-07 23:59:48.933 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.openHttpURLConnection(FirebaseInstallationServiceClient.java:487)
+01-07 23:59:48.933 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.createFirebaseInstallation(FirebaseInstallationServiceClient.java:163)
+01-07 23:59:48.933 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.registerFidWithServer(FirebaseInstallations.java:533)
+01-07 23:59:48.933 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.doNetworkCallIfNecessary(FirebaseInstallations.java:387)
+01-07 23:59:48.933 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.lambda$doRegistrationOrRefresh$3$com-google-firebase-installations-FirebaseInstallations(FirebaseInstallations.java:372)
+01-07 23:59:48.933 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+01-07 23:59:48.933 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$1.run(SequentialExecutor.java:117)
+01-07 23:59:48.933 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.workOnQueue(SequentialExecutor.java:229)
+01-07 23:59:48.933 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.run(SequentialExecutor.java:174)
+01-07 23:59:48.933 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+01-07 23:59:48.933 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+01-07 23:59:48.933 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-google-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+01-07 23:59:48.933 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+01-07 23:59:48.933 E/AndroidRuntime(25662): 	at java.lang.Thread.run(Thread.java:1563)
+01-07 23:59:48.942 W/FA      (25662): Failed to retrieve Firebase Instance Id
+01-07 23:59:48.948 D/ActivityOnboarding(25662): 🔧 [POSTED] Setting ViewPager2 currentItem to: 0
+01-07 23:59:48.948 D/ActivityOnboarding(25662): ✅ [POSTED] ViewPager2 currentItem set complete to: 0
+01-07 23:59:48.949 E/AndroidRuntime(25662): FATAL EXCEPTION: Firebase Blocking Thread #20
+01-07 23:59:48.949 E/AndroidRuntime(25662): Process: com.quran.quranaudio.online, PID: 25662
+01-07 23:59:48.949 E/AndroidRuntime(25662): java.lang.NoSuchMethodError: No static method checkNotGoogleApiHandlerThread()V in class Lcom/google/android/gms/common/internal/Preconditions; or its super classes (declaration of 'com.google.android.gms.common.internal.Preconditions' appears in /data/app/~~hdbuVMpZGtin5LHAvni4ag==/com.quran.quranaudio.online-KPH8CIMyhFU6veuKU6wsKg==/base.apk!classes30.dex)
+01-07 23:59:48.949 E/AndroidRuntime(25662): 	at com.google.android.gms.tasks.Tasks.await(com.google.android.gms:play-services-tasks@@18.1.0:2)
+01-07 23:59:48.949 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.openHttpURLConnection(FirebaseInstallationServiceClient.java:487)
+01-07 23:59:48.949 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.createFirebaseInstallation(FirebaseInstallationServiceClient.java:163)
+01-07 23:59:48.949 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.registerFidWithServer(FirebaseInstallations.java:533)
+01-07 23:59:48.949 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.doNetworkCallIfNecessary(FirebaseInstallations.java:387)
+01-07 23:59:48.949 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.lambda$doRegistrationOrRefresh$3$com-google-firebase-installations-FirebaseInstallations(FirebaseInstallations.java:372)
+01-07 23:59:48.949 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+01-07 23:59:48.949 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$1.run(SequentialExecutor.java:117)
+01-07 23:59:48.949 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.workOnQueue(SequentialExecutor.java:229)
+01-07 23:59:48.949 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.run(SequentialExecutor.java:174)
+01-07 23:59:48.949 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+01-07 23:59:48.949 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+01-07 23:59:48.949 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-google-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+01-07 23:59:48.949 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+01-07 23:59:48.949 E/AndroidRuntime(25662): 	at java.lang.Thread.run(Thread.java:1563)
+01-07 23:59:48.952 I/ImeTracker( 1861): com.quran.quranaudio.online:f2e51058: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+01-07 23:59:48.956 D/InsetsController(25662): hide(ime())
+01-07 23:59:48.956 I/ImeTracker(25662): com.quran.quranaudio.online:f2e51058: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+01-07 23:59:48.956 I/GoogleInputMethodService( 4995): GoogleInputMethodService.onFinishInput():2092 
+01-07 23:59:48.957 I/Module  ( 4995): DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatus():103 repeatCheckTimes = 0, locked = false
+01-07 23:59:48.957 I/GoogleInputMethodService( 4995): GoogleInputMethodService.onStartInput():1349 onStartInput(EditorInfo{EditorInfo{packageName=com.quran.quranaudio.online, inputType=0, inputTypeString=NULL, enableLearning=false, autoCorrection=false, autoComplete=false, imeOptions=0, privateImeOptions=null, actionName=UNSPECIFIED, actionLabel=null, initialSelStart=-1, initialSelEnd=-1, initialCapsMode=0, label=null, fieldId=0, fieldName=null, extras=null, hintText=null, hintLocales=[]}}, false)
+01-07 23:59:48.958 I/Module  ( 4995): DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatus():103 repeatCheckTimes = 1, locked = false
+01-07 23:59:48.958 I/ImeTracker( 1861): system_server:2c81d33d: onRequestHide at ORIGIN_SERVER reason IME_REQUESTED_CHANGED_LISTENER fromUser false
+01-07 23:59:48.958 I/ImeTracker( 1861): system_server:2c81d33d: onCancelled at PHASE_SERVER_SHOULD_HIDE
+01-07 23:59:48.960 W/PackageConfigPersister( 1861): App-specific configuration not found for packageName: com.quran.quranaudio.online and userId: 0
+01-07 23:59:48.966 W/FA      (25662): Failed to retrieve Firebase Instance Id
+01-07 23:59:48.971 E/AndroidRuntime(25662): FATAL EXCEPTION: Firebase Blocking Thread #21
+01-07 23:59:48.971 E/AndroidRuntime(25662): Process: com.quran.quranaudio.online, PID: 25662
+01-07 23:59:48.971 E/AndroidRuntime(25662): java.lang.NoSuchMethodError: No static method checkNotGoogleApiHandlerThread()V in class Lcom/google/android/gms/common/internal/Preconditions; or its super classes (declaration of 'com.google.android.gms.common.internal.Preconditions' appears in /data/app/~~hdbuVMpZGtin5LHAvni4ag==/com.quran.quranaudio.online-KPH8CIMyhFU6veuKU6wsKg==/base.apk!classes30.dex)
+01-07 23:59:48.971 E/AndroidRuntime(25662): 	at com.google.android.gms.tasks.Tasks.await(com.google.android.gms:play-services-tasks@@18.1.0:2)
+01-07 23:59:48.971 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.openHttpURLConnection(FirebaseInstallationServiceClient.java:487)
+01-07 23:59:48.971 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.createFirebaseInstallation(FirebaseInstallationServiceClient.java:163)
+01-07 23:59:48.971 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.registerFidWithServer(FirebaseInstallations.java:533)
+01-07 23:59:48.971 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.doNetworkCallIfNecessary(FirebaseInstallations.java:387)
+01-07 23:59:48.971 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.lambda$doRegistrationOrRefresh$3$com-google-firebase-installations-FirebaseInstallations(FirebaseInstallations.java:372)
+01-07 23:59:48.971 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+01-07 23:59:48.971 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$1.run(SequentialExecutor.java:117)
+01-07 23:59:48.971 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.workOnQueue(SequentialExecutor.java:229)
+01-07 23:59:48.971 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.run(SequentialExecutor.java:174)
+01-07 23:59:48.971 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+01-07 23:59:48.971 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+01-07 23:59:48.971 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-google-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+01-07 23:59:48.971 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+01-07 23:59:48.971 E/AndroidRuntime(25662): 	at java.lang.Thread.run(Thread.java:1563)
+01-07 23:59:49.062 D/WindowOnBackDispatcher( 4292): setTopOnBackInvokedCallback (unwrapped): null
+01-07 23:59:49.062 D/CoreBackPreview( 1861): Window{7e25f2d u0 Splash Screen com.quran.quranaudio.online EXITING}: Setting back callback null
+01-07 23:59:49.122 I/FontLog (11566): (REDACTED) Received query %s, URI %s
+01-07 23:59:49.122 I/FontLog (11566): (REDACTED) Query [%s] resolved to %s
+01-07 23:59:49.127 I/FontLog (11566): (REDACTED) Fetch %s end status %s
+01-07 23:59:49.129 D/NetworkMonitor/159( 4442): PROBE_HTTPS https://www.google.com/generate_204 Probe failed with exception java.net.SocketTimeoutException: failed to connect to www.google.com/2001::1 (port 443) from /2409:8a00:18e7:f60:32c2:2a42:1db0:ec06 (port 41756) after 10000ms
+01-07 23:59:49.132 I/FontLog (11566): (REDACTED) Pulling font file for id = %d, cache size = %d
+01-07 23:59:49.144 I/FontLog (11566): (REDACTED) Pulling font file for id = %d, cache size = %d
+01-07 23:59:49.262 V/WindowManagerShell( 4292): Transition animation finished (aborted=false), notifying core (#3422) android.os.BinderProxy@53d6470@0
+01-07 23:59:49.265 V/WindowManager( 1861): Finish Transition (#3422): created at 01-07 23:59:48.703 collect-started=0.047ms request-sent=2.191ms started=3.67ms ready=9.358ms sent=76.359ms commit=13.484ms finished=560.885ms
+01-07 23:59:49.265 D/VRI[SplashScreenActivity](25662): visibilityChanged oldVisibility=true newVisibility=false
+01-07 23:59:49.266 V/WindowManagerShell( 4292): Track 0 became idle
+01-07 23:59:49.266 V/WindowManagerShell( 4292): All active transition animations finished
+01-07 23:59:49.290 E/ranaudio.online(25662): hiddenapi: Accessing hidden field Landroid/view/inputmethod/InputMethodManager;->mCurRootView:Landroid/view/ViewRootImpl; (runtime_flags=0, domain=platform, api=blocked) from Lcom/blankj/utilcode/util/KeyboardUtils; (domain=app, TargetSdkVersion=35) using reflection: denied
+01-07 23:59:49.290 E/ranaudio.online(25662): hiddenapi: Accessing hidden field Landroid/view/inputmethod/InputMethodManager;->mServedView:Landroid/view/View; (runtime_flags=0, domain=platform, api=blocked) from Lcom/blankj/utilcode/util/KeyboardUtils; (domain=app, TargetSdkVersion=35) using reflection: denied
+01-07 23:59:49.290 E/ranaudio.online(25662): hiddenapi: Accessing hidden field Landroid/view/inputmethod/InputMethodManager;->mNextServedView:Landroid/view/View; (runtime_flags=0, domain=platform, api=blocked) from Lcom/blankj/utilcode/util/KeyboardUtils; (domain=app, TargetSdkVersion=35) using reflection: denied
+01-07 23:59:49.290 I/ranaudio.online(25662): Compiler allocated 5145KB to compile void android.view.ViewRootImpl.performTraversals()
+01-07 23:59:49.290 E/AndroidRuntime(25662): FATAL EXCEPTION: pool-22-thread-1
+01-07 23:59:49.290 E/AndroidRuntime(25662): Process: com.quran.quranaudio.online, PID: 25662
+01-07 23:59:49.290 E/AndroidRuntime(25662): java.lang.NoSuchMethodError: No static method checkNotGoogleApiHandlerThread()V in class Lcom/google/android/gms/common/internal/Preconditions; or its super classes (declaration of 'com.google.android.gms.common.internal.Preconditions' appears in /data/app/~~hdbuVMpZGtin5LHAvni4ag==/com.quran.quranaudio.online-KPH8CIMyhFU6veuKU6wsKg==/base.apk!classes30.dex)
+01-07 23:59:49.290 E/AndroidRuntime(25662): 	at com.google.android.gms.tasks.Tasks.await(com.google.android.gms:play-services-tasks@@18.1.0:11)
+01-07 23:59:49.290 E/AndroidRuntime(25662): 	at com.google.firebase.perf.transport.TransportManager.updateFirebaseInstallationIdIfPossibleAndNeeded(TransportManager.java:567)
+01-07 23:59:49.290 E/AndroidRuntime(25662): 	at com.google.firebase.perf.transport.TransportManager.setApplicationInfoAndBuild(TransportManager.java:503)
+01-07 23:59:49.290 E/AndroidRuntime(25662): 	at com.google.firebase.perf.transport.TransportManager.syncLog(TransportManager.java:379)
+01-07 23:59:49.290 E/AndroidRuntime(25662): 	at com.google.firebase.perf.transport.TransportManager.lambda$log$2$com-google-firebase-perf-transport-TransportManager(TransportManager.java:301)
+01-07 23:59:49.290 E/AndroidRuntime(25662): 	at com.google.firebase.perf.transport.TransportManager$$ExternalSyntheticLambda2.run(D8$$SyntheticClass:0)
+01-07 23:59:49.290 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+01-07 23:59:49.290 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+01-07 23:59:49.290 E/AndroidRuntime(25662): 	at java.lang.Thread.run(Thread.java:1563)
+01-07 23:59:49.291 D/WindowOnBackDispatcher(25662): setTopOnBackInvokedCallback (unwrapped): null
+01-07 23:59:49.291 D/CoreBackPreview( 1861): Window{293ce54 u0 com.quran.quranaudio.online/com.quran.quranaudio.online.SplashScreenActivity}: Setting back callback null
+01-07 23:59:49.292 D/ViewRootImpl(25662): Skipping stats log for color mode
+01-07 23:59:49.296 D/BackgroundInstallControlService( 1861): Package event received: 0
+01-07 23:59:49.302 E/AndroidRuntime(25662): FATAL EXCEPTION: Firebase Blocking Thread #22
+01-07 23:59:49.302 E/AndroidRuntime(25662): Process: com.quran.quranaudio.online, PID: 25662
+01-07 23:59:49.302 E/AndroidRuntime(25662): java.lang.NoSuchMethodError: No static method checkNotGoogleApiHandlerThread()V in class Lcom/google/android/gms/common/internal/Preconditions; or its super classes (declaration of 'com.google.android.gms.common.internal.Preconditions' appears in /data/app/~~hdbuVMpZGtin5LHAvni4ag==/com.quran.quranaudio.online-KPH8CIMyhFU6veuKU6wsKg==/base.apk!classes30.dex)
+01-07 23:59:49.302 E/AndroidRuntime(25662): 	at com.google.android.gms.tasks.Tasks.await(com.google.android.gms:play-services-tasks@@18.1.0:2)
+01-07 23:59:49.302 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.openHttpURLConnection(FirebaseInstallationServiceClient.java:487)
+01-07 23:59:49.302 E/AndroidRuntime(25662): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.createFirebaseInstallation(FirebaseInstallationServiceClient.java:163)
+01-07 23:59:49.302 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.registerFidWithServer(FirebaseInstallations.java:533)
+01-07 23:59:49.302 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.doNetworkCallIfNecessary(FirebaseInstallations.java:387)
+01-07 23:59:49.302 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations.lambda$doRegistrationOrRefresh$3$com-google-firebase-installations-FirebaseInstallations(FirebaseInstallations.java:372)
+01-07 23:59:49.302 E/AndroidRuntime(25662): 	at com.google.firebase.installations.FirebaseInstallations$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+01-07 23:59:49.302 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$1.run(SequentialExecutor.java:117)
+01-07 23:59:49.302 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.workOnQueue(SequentialExecutor.java:229)
+01-07 23:59:49.302 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.run(SequentialExecutor.java:174)
+01-07 23:59:49.302 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+01-07 23:59:49.302 E/AndroidRuntime(25662): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+01-07 23:59:49.302 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-google-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+01-07 23:59:49.302 E/AndroidRuntime(25662): 	at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+01-07 23:59:49.302 E/AndroidRuntime(25662): 	at java.lang.Thread.run(Thread.java:1563)
+01-07 23:59:49.304 D/PERFORMANCE(25662): → [DELAY-1s] Quiz data preloading...
+01-07 23:59:49.307 D/QuestionTools(25662): 📦 Starting unZipBibleQuiz...
+01-07 23:59:49.307 D/QuestionTools(25662): 🔍 Checking if quiz already extracted: /data/user/0/com.quran.quranaudio.online/files/quiz/quiz_all_en.txt
+01-07 23:59:49.310 D/QuestionTools(25662): ✅ Quiz files already extracted, skipping
+01-07 23:59:49.310 D/PERFORMANCE(25662): ✅ [DELAY-1s] Quiz data preloaded [4 ms]
+01-07 23:59:49.381 I/AiAiEcho( 5755): SmartspaceNotificationPredictor no parser can handle this notification or notification is invalid
+01-07 23:59:49.398 D/SsBaseTemplateCard( 4292): No date view can be set up
+01-07 23:59:49.398 I/SsBaseTemplateCard( 4292): setFormattedContentDescription: text=Rain and snow, iconDescription=Rain and snow, contentDescription=Rain and snow, Rain and snow
+01-07 23:59:49.398 D/SsBaseTemplateCard( 4292): Passed-in item info is null
+01-07 23:59:49.398 D/SsBaseTemplateCard( 4292): Passed-in item info is null
+01-07 23:59:49.432 W/System  ( 4292): A resource failed to call release. 
+01-07 23:59:49.450 D/usf_sensor_hal( 1379): accelerometer: Enter Flush
+01-07 23:59:49.451 I/sensor-suez( 1379): Vendor atom [id = 100243] reported.
+01-07 23:59:49.451 D/usf_sensor_hal( 1379): gyroscope: Enter Flush
+01-07 23:59:49.451 I/sensor-suez( 1379): Vendor atom [id = 100243] reported.
+01-07 23:59:49.479 W/libbinder.Binder( 1861): Large reply transaction of 312612 bytes, interface descriptor android.content.pm.IPackageManager, code 3, flags 18
+01-07 23:59:49.485 W/libbinder.Binder(11893): Binder transaction to android.accounts.IAccountAuthenticator code 3 took 1500ms. Data bytes: 492 Reply bytes: 0 Flags: 17
+01-07 23:59:49.494 D/usf_sensor_hal( 1379): gyroscope: Enter Batch. Period = 200000000, latency = 0.
+01-07 23:59:49.494 D/usf_sensor_hal( 1379): IMU temperature: Enter Batch. Period = 533334000, latency = 0.
+01-07 23:59:49.495 D/BackgroundInstallControlService( 1861): Package event received: 0
+01-07 23:59:49.495 D/BackgroundInstallControlService( 1861): Package event received: 0
+01-07 23:59:49.495 D/BackgroundInstallControlService( 1861): Package event received: 0
+01-07 23:59:49.496 I/sensor-suez( 1379): Vendor atom [id = 100243] reported.
+01-07 23:59:49.499 D/BackgroundInstallControlService( 1861): Package event received: 0
+01-07 23:59:49.500 D/usf_sensor_hal( 1379): accelerometer: Enter Batch. Period = 200000000, latency = 0.
+01-07 23:59:49.500 D/usf_sensor_hal( 1379): IMU temperature: Enter Batch. Period = 533334000, latency = 0.
+01-07 23:59:49.500 I/sensor-suez( 1379): Vendor atom [id = 100243] reported.
+01-07 23:59:49.510 W/libbinder.Binder( 1861): Large reply transaction of 319792 bytes, interface descriptor android.content.pm.IPackageManager, code 3, flags 18
+01-07 23:59:49.540 W/ranaudio.online(25662): userfaultfd: MOVE ioctl seems unsupported: Connection timed out
+01-07 23:59:49.590 E/gcblocker(11893): too long GC blocking: 5
+01-07 23:59:49.590 E/gcblocker(11893): gc block end, 442136621,101
+01-07 23:59:49.653 I/bthal.activity( 1341): bt_power: LeAdvStat: 23:59:48:652 - 23:59:49:653, duration: 1000, le_adv_count: 2, total_le_adv_count: 82888, total_event_count: 2
+01-07 23:59:50.088 I/pixel-thermal( 2215): VIRTUAL-SKIN-CPU:32.2186 raw data: VIRTUAL-NEUTRAL-QUIET:31891.3 VIRTUAL-QUIET-DISP:30633.2 VIRTUAL-QUIET-QI:32218.6 VIRTUAL-SKIN:32218.6 VIRTUAL-SKIN-CPU:32218.6 VIRTUAL-USB-QUIET:31740.9 disp_therm:32329 neutral_therm:32952 qi_therm:34043 quiet_therm:32151 usb_pwr_therm:32306 
+--
+01-07 23:59:51.591 E/AndroidRuntime(25993): FATAL EXCEPTION: Firebase Blocking Thread #0
+01-07 23:59:51.591 E/AndroidRuntime(25993): Process: com.quran.quranaudio.online, PID: 25993
+01-07 23:59:51.591 E/AndroidRuntime(25993): java.lang.NoSuchMethodError: No static method checkNotGoogleApiHandlerThread()V in class Lcom/google/android/gms/common/internal/Preconditions; or its super classes (declaration of 'com.google.android.gms.common.internal.Preconditions' appears in /data/app/~~hdbuVMpZGtin5LHAvni4ag==/com.quran.quranaudio.online-KPH8CIMyhFU6veuKU6wsKg==/base.apk!classes30.dex)
+01-07 23:59:51.591 E/AndroidRuntime(25993): 	at com.google.android.gms.tasks.Tasks.await(com.google.android.gms:play-services-tasks@@18.1.0:2)
+01-07 23:59:51.591 E/AndroidRuntime(25993): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.openHttpURLConnection(FirebaseInstallationServiceClient.java:487)
+01-07 23:59:51.591 E/AndroidRuntime(25993): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.createFirebaseInstallation(FirebaseInstallationServiceClient.java:163)
+01-07 23:59:51.591 E/AndroidRuntime(25993): 	at com.google.firebase.installations.FirebaseInstallations.registerFidWithServer(FirebaseInstallations.java:533)
+01-07 23:59:51.591 E/AndroidRuntime(25993): 	at com.google.firebase.installations.FirebaseInstallations.doNetworkCallIfNecessary(FirebaseInstallations.java:387)
+01-07 23:59:51.591 E/AndroidRuntime(25993): 	at com.google.firebase.installations.FirebaseInstallations.lambda$doRegistrationOrRefresh$3$com-google-firebase-installations-FirebaseInstallations(FirebaseInstallations.java:372)
+01-07 23:59:51.591 E/AndroidRuntime(25993): 	at com.google.firebase.installations.FirebaseInstallations$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+01-07 23:59:51.591 E/AndroidRuntime(25993): 	at com.google.firebase.concurrent.SequentialExecutor$1.run(SequentialExecutor.java:117)
+01-07 23:59:51.591 E/AndroidRuntime(25993): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.workOnQueue(SequentialExecutor.java:229)
+01-07 23:59:51.591 E/AndroidRuntime(25993): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.run(SequentialExecutor.java:174)
+01-07 23:59:51.591 E/AndroidRuntime(25993): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+01-07 23:59:51.591 E/AndroidRuntime(25993): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+01-07 23:59:51.591 E/AndroidRuntime(25993): 	at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-google-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+01-07 23:59:51.591 E/AndroidRuntime(25993): 	at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+01-07 23:59:51.591 E/AndroidRuntime(25993): 	at java.lang.Thread.run(Thread.java:1563)
+01-07 23:59:51.593 E/CustomActivityOnCrash(25993): App has crashed, executing CustomActivityOnCrash's UncaughtExceptionHandler
+01-07 23:59:51.593 E/CustomActivityOnCrash(25993): java.lang.NoSuchMethodError: No static method checkNotGoogleApiHandlerThread()V in class Lcom/google/android/gms/common/internal/Preconditions; or its super classes (declaration of 'com.google.android.gms.common.internal.Preconditions' appears in /data/app/~~hdbuVMpZGtin5LHAvni4ag==/com.quran.quranaudio.online-KPH8CIMyhFU6veuKU6wsKg==/base.apk!classes30.dex)
+01-07 23:59:51.593 E/CustomActivityOnCrash(25993): 	at com.google.android.gms.tasks.Tasks.await(com.google.android.gms:play-services-tasks@@18.1.0:2)
+01-07 23:59:51.593 E/CustomActivityOnCrash(25993): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.openHttpURLConnection(FirebaseInstallationServiceClient.java:487)
+01-07 23:59:51.593 E/CustomActivityOnCrash(25993): 	at com.google.firebase.installations.remote.FirebaseInstallationServiceClient.createFirebaseInstallation(FirebaseInstallationServiceClient.java:163)
+01-07 23:59:51.593 E/CustomActivityOnCrash(25993): 	at com.google.firebase.installations.FirebaseInstallations.registerFidWithServer(FirebaseInstallations.java:533)
+01-07 23:59:51.593 E/CustomActivityOnCrash(25993): 	at com.google.firebase.installations.FirebaseInstallations.doNetworkCallIfNecessary(FirebaseInstallations.java:387)
+01-07 23:59:51.593 E/CustomActivityOnCrash(25993): 	at com.google.firebase.installations.FirebaseInstallations.lambda$doRegistrationOrRefresh$3$com-google-firebase-installations-FirebaseInstallations(FirebaseInstallations.java:372)
+01-07 23:59:51.593 E/CustomActivityOnCrash(25993): 	at com.google.firebase.installations.FirebaseInstallations$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+01-07 23:59:51.593 E/CustomActivityOnCrash(25993): 	at com.google.firebase.concurrent.SequentialExecutor$1.run(SequentialExecutor.java:117)
+01-07 23:59:51.593 E/CustomActivityOnCrash(25993): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.workOnQueue(SequentialExecutor.java:229)
+01-07 23:59:51.593 E/CustomActivityOnCrash(25993): 	at com.google.firebase.concurrent.SequentialExecutor$QueueWorker.run(SequentialExecutor.java:174)
+01-07 23:59:51.593 E/CustomActivityOnCrash(25993): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+01-07 23:59:51.593 E/CustomActivityOnCrash(25993): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+01-07 23:59:51.593 E/CustomActivityOnCrash(25993): 	at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-google-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+01-07 23:59:51.593 E/CustomActivityOnCrash(25993): 	at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+01-07 23:59:51.593 E/CustomActivityOnCrash(25993): 	at java.lang.Thread.run(Thread.java:1563)
+01-07 23:59:51.603 I/ActivityTaskManager( 1861): Displayed com.quran.quranaudio.online/cat.ereza.customactivityoncrash.activity.DefaultErrorActivity for user 0: +1s124ms
+01-07 23:59:51.604 V/WindowManager( 1861): Sent Transition (#3423) createdAt=01-07 23:59:50.474 via request=TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=4968 effectiveUid=10547 displayId=0 isRunning=true baseIntent=Intent { flg=0x10000000 cmp=com.quran.quranaudio.online/.SplashScreenActivity } baseActivity=ComponentInfo{com.quran.quranaudio.online/cat.ereza.customactivityoncrash.activity.DefaultErrorActivity} topActivity=ComponentInfo{com.quran.quranaudio.online/cat.ereza.customactivityoncrash.activity.DefaultErrorActivity} origActivity=null realActivity=ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.SplashScreenActivity} numActivities=1 lastActiveTime=794916478 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{RemoteToken{94873c8 Task{42c2667 #4968 type=standard A=10547:com.quran.quranaudio.online}}} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 136 - 0, 0) topActivityInfo=ActivityInfo{9866d2e cat.ereza.customactivityoncrash.activity.DefaultErrorActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=true isVisible=true isVisibleRequested=false isTopActivityNoDisplay=false isSleeping=false locusId=null displayAreaFeatureId=1 isTopActivityTransparent=false isActivityStackTransparent=false lastNonFullscreenBounds=Rect(276, 696 - 805, 1776) capturedLink=null capturedLinkTimestamp=0 requestedVisibleTypes=503 topActivityRequestOpenInBrowserEducationTimestamp=0 appCompatTaskInfo=AppCompatTaskInfo { topActivityInSizeCompat=false isLeafTask= true eligibleForLetterboxEducation= false isLetterboxEducationEnabled= false isLetterboxDoubleTapEnabled= false eligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 topActivityAppBounds=Rect(0, 0 - 1080, 2400) isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false hasMinAspectRatioOverride=false topActivityLetterboxBounds=null cameraCompatTaskInfo=CameraCompatTaskInfo { cameraCompatMode=undefinedundefined} topNonResizableActivityAspectRatio=-1.0} topActivityMainWindowFrame=null isAppBubble=false}, pipChange = null, remoteTransition = null, displayChange = null, requestedLocation = null, userChange = null, windowingLayerChange = null, flags = 0, debugId = 3423 }
+01-07 23:59:51.604 V/WindowManager( 1861):     startWCT=WindowContainerTransaction { changes= {} hops= [] errorCallbackToken=null taskFragmentOrganizer=null }
+01-07 23:59:51.605 V/WindowManager( 1861):     info={id=3423 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[
+01-07 23:59:51.605 V/WindowManager( 1861):         {m=OPEN f=FILLS_TASK leash=Surface(name=ActivityRecord{123120491 u0 com.quran.quranaudio.online/cat.ereza.customactivityoncrash.activity.DefaultErrorActivity t4968}#36456)/@0x89ae4e2 sb=Rect(0, 0 - 0, 0) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=-1->0 r=-1->0:-1 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/cat.ereza.customactivityoncrash.activity.DefaultErrorActivity}, taskId = 4968, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},
+01-07 23:59:51.605 V/WindowManager( 1861):         {m=CLOSE f=FILLS_TASK leash=Surface(name=ActivityRecord{140436189 u0 com.quran.quranaudio.online/.quran_module.activities.ActivityOnboarding t4968}#36445)/@0xa048b8b sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.quran_module.activities.ActivityOnboarding}, taskId = 4968, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}}
+01-07 23:59:51.605 V/WindowManager( 1861):     ]}
+01-07 23:59:51.605 E/ashmem  (25993): Pinning is deprecated since Android Q. Please use trim or other methods.
+01-07 23:59:51.606 V/WindowManagerShell( 4292): onTransitionReady(transaction=7992934767153)
+01-07 23:59:51.606 V/WindowManagerShell( 4292): onTransitionReady (#3423) android.os.BinderProxy@20ec216: {id=3423 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[
+01-07 23:59:51.606 V/WindowManagerShell( 4292):         {m=OPEN f=FILLS_TASK leash=Surface(name=ActivityRecord{123120491 u0 com.quran.quranaudio.online/cat.ereza.customactivityoncrash.activity.DefaultErrorActivity t4968}#36456)/@0x2724f69 sb=Rect(0, 0 - 0, 0) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=-1->0 r=-1->0:-1 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/cat.ereza.customactivityoncrash.activity.DefaultErrorActivity}, taskId = 4968, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},
+01-07 23:59:51.606 V/WindowManagerShell( 4292):         {m=CLOSE f=FILLS_TASK leash=Surface(name=ActivityRecord{140436189 u0 com.quran.quranaudio.online/.quran_module.activities.ActivityOnboarding t4968}#36445)/@0x313fdee sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.quran_module.activities.ActivityOnboarding}, taskId = 4968, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}}
+01-07 23:59:51.606 V/WindowManagerShell( 4292):     ]}
+01-07 23:59:51.606 V/WindowManagerShell( 4292): Playing animation for (#3423) android.os.BinderProxy@20ec216@0
+01-07 23:59:51.606 V/ShellRecents( 4292): RecentsTransitionHandler.startAnimation: no controller found
+01-07 23:59:51.607 V/WindowManagerShell( 4292): Transition doesn't have explicit remote, search filters for match for {id=3423 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{m=OPEN f=FILLS_TASK leash=Surface(name=ActivityRecord{123120491 u0 com.quran.quranaudio.online/cat.ereza.customactivityoncrash.activity.DefaultErrorActivity t4968}#36456)/@0x2724f69 sb=Rect(0, 0 - 0, 0) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=-1->0 r=-1->0:-1 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/cat.ereza.customactivityoncrash.activity.DefaultErrorActivity}, taskId = 4968, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}},{m=CLOSE f=FILLS_TASK leash=Surface(name=ActivityRecord{140436189 u0 com.quran.quranaudio.online/.quran_module.activities.ActivityOnboarding t4968}#36445)/@0x313fdee sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) epz=Point(1080, 2400) d=0 bc=ffffffff activity=ActivityTransitionInfo { component = ComponentInfo{com.quran.quranaudio.online/com.quran.quranaudio.online.quran_module.activities.ActivityOnboarding}, taskId = 4968, appCompatTransitionInfo = null } opt={t=FROM_STYLE mUserId=0}}]}
+
+═══════════════ 完整 Native Crash ═══════════════
+无
+
+═══════════════ UnsatisfiedLinkError ═══════════════
+无
+
+═══════════════ dlopen failed ═══════════════
+无
+
+═══════════════ CRASH_DEBUG 日志 ═══════════════
+01-07 23:59:48.304 D/CRASH_DEBUG(25662): 🔄 Initializing WebView isolation...
+01-07 23:59:48.401 D/CRASH_DEBUG(25662): ✅ WebView isolation initialized
+01-07 23:59:48.401 D/CRASH_DEBUG(25662): 🔄 Initializing AdFactory...
+01-07 23:59:48.407 D/CRASH_DEBUG(25662): ✅ AdFactory initialized
+01-07 23:59:48.407 D/CRASH_DEBUG(25662): 🔄 Initializing Activity lifecycle callbacks...
+01-07 23:59:48.407 D/CRASH_DEBUG(25662): ✅ Activity lifecycle callbacks initialized
+01-07 23:59:48.407 D/CRASH_DEBUG(25662): 🔄 Initializing crash handler...
+01-07 23:59:48.407 D/CRASH_DEBUG(25662): ✅ Crash handler initialized
+01-07 23:59:48.407 D/CRASH_DEBUG(25662): 🔄 Initializing notification channels...
+01-07 23:59:48.409 D/CRASH_DEBUG(25662): ✅ Notification channels initialized
+01-07 23:59:48.409 D/CRASH_DEBUG(25662): ✅ Immediate init completed [107ms]
+01-07 23:59:48.910 D/CRASH_DEBUG(25662): ╔══════════════════════════════════════════════════════
+01-07 23:59:48.910 D/CRASH_DEBUG(25662): ║ 🎯 setupNativeAd() START - Language Selection Page
+01-07 23:59:48.910 D/CRASH_DEBUG(25662): ╚══════════════════════════════════════════════════════
+01-07 23:59:48.910 D/CRASH_DEBUG(25662): ✅ Native ad container retrieved
+01-07 23:59:48.910 D/CRASH_DEBUG(25662): ✅ Subscription check: false
+01-07 23:59:48.910 D/CRASH_DEBUG(25662): 🔄 Preparing to load native ad...
+01-07 23:59:48.910 D/CRASH_DEBUG(25662):    Activity: ActivityOnboarding
+01-07 23:59:48.910 D/CRASH_DEBUG(25662):    Container: FrameLayout
+01-07 23:59:48.910 D/CRASH_DEBUG(25662): 🚀 Calling NativeAdHelper.displayNativeAdWithAutoLoad()...
+01-07 23:59:48.911 D/CRASH_DEBUG(25662): ✅ NativeAdHelper.displayNativeAdWithAutoLoad() completed
+01-07 23:59:48.911 D/CRASH_DEBUG(25662): ✅ setupNativeAd() END (ad may or may not be shown)
+01-07 23:59:48.916 D/CRASH_DEBUG(25662): ╔══════════════════════════════════════════════════════
+01-07 23:59:48.916 D/CRASH_DEBUG(25662): ║ 🎯 setupNativeAd() START - Language Selection Page
+01-07 23:59:48.916 D/CRASH_DEBUG(25662): ╚══════════════════════════════════════════════════════
+01-07 23:59:48.916 D/CRASH_DEBUG(25662): ✅ Native ad container retrieved
+01-07 23:59:48.916 D/CRASH_DEBUG(25662): ✅ Subscription check: false
+01-07 23:59:48.916 D/CRASH_DEBUG(25662): 🔄 Preparing to load native ad...
+01-07 23:59:48.916 D/CRASH_DEBUG(25662):    Activity: ActivityOnboarding
+01-07 23:59:48.916 D/CRASH_DEBUG(25662):    Container: FrameLayout
+01-07 23:59:48.916 D/CRASH_DEBUG(25662): 🚀 Calling NativeAdHelper.displayNativeAdWithAutoLoad()...
+01-07 23:59:48.916 D/CRASH_DEBUG(25662): ✅ NativeAdHelper.displayNativeAdWithAutoLoad() completed
+01-07 23:59:48.916 D/CRASH_DEBUG(25662): ✅ setupNativeAd() END (ad may or may not be shown)
+01-07 23:59:51.115 D/CRASH_DEBUG(25992): 🔄 Initializing WebView isolation...
+01-07 23:59:51.115 D/CRASH_DEBUG(25992): ✅ WebView isolation initialized
+01-07 23:59:51.115 D/CRASH_DEBUG(25992): 🔄 Initializing AdFactory...
+01-07 23:59:51.118 D/CRASH_DEBUG(25992): ✅ AdFactory initialized
+01-07 23:59:51.118 D/CRASH_DEBUG(25992): 🔄 Initializing Activity lifecycle callbacks...
+01-07 23:59:51.119 D/CRASH_DEBUG(25992): ✅ Activity lifecycle callbacks initialized
+01-07 23:59:51.119 D/CRASH_DEBUG(25992): 🔄 Initializing crash handler...
+01-07 23:59:51.119 D/CRASH_DEBUG(25992): ✅ Crash handler initialized
+01-07 23:59:51.119 D/CRASH_DEBUG(25992): 🔄 Initializing notification channels...
+01-07 23:59:51.122 D/CRASH_DEBUG(25992): ✅ Notification channels initialized
+01-07 23:59:51.122 D/CRASH_DEBUG(25992): ✅ Immediate init completed [11ms]

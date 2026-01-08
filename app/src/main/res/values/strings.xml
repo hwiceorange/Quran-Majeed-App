@@ -1509,6 +1509,7 @@
     <string name="prayer_log_failed_save">Failed to save: %s</string>
     <string name="prayer_log_failed_update">Failed to update: %s</string>
     <string name="prayer_log_login_required">Please login to save prayer logs</string>
+    <string name="prayer_log_sync_failed">Failed to sync prayer log: %s</string>
     
     <!-- Hadith Download Manager -->
     <string name="download_hadith_title">Download %s Hadith</string>

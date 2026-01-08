@@ -213,8 +213,19 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
         }
     }
 
+    // 🔥 优化：缓存 HTML 模板，避免每次都从 assets 读取
+    private var cachedBoilerPlateHTML: String? = null
+    
     private fun getBoilerPlateHTML(): String {
-        return ResUtils.readAssetsTextFile(this, "tafsir/tafsir_page.html")
+        if (cachedBoilerPlateHTML != null) {
+            android.util.Log.d("ActivityTafsir", "✅ 使用缓存的 HTML 模板")
+            return cachedBoilerPlateHTML!!
+        }
+        
+        val html = ResUtils.readAssetsTextFile(this, "tafsir/tafsir_page.html")
+        cachedBoilerPlateHTML = html
+        android.util.Log.d("ActivityTafsir", "📄 HTML 模板已缓存")
+        return html
     }
 
     private fun resolveDarkMode(): String {
@@ -359,61 +370,69 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
     private fun loadContent() {
         pageAlert.remove()
         binding.loader.visibility = View.VISIBLE
+        
+        val loadStartTime = System.currentTimeMillis()
+        android.util.Log.d("ActivityTafsir", "⏱️ [性能] loadContent 开始: $chapterNo:$verseNo")
 
         CoroutineScope(Dispatchers.IO).launch {
-            val tafsirFile = fileUtils.getTafsirFileSingleVerse(tafsirKey, chapterNo, verseNo)
-            val slug = com.quran.quranaudio.online.quran_module.utils.tafsir.TafsirUtils.getTafsirSlugFromKey(tafsirKey)
-
-            // 检查本地缓存
-            if (tafsirFile.length() > 0) {
-                val read = tafsirFile.readText()
-                val tafsir = JsonHelper.json.decodeFromString<TafsirModel>(read)
-                renderData(tafsir)
-                return@launch
-            }
-
-            // 检查网络连接
-            if (!NetworkStateReceiver.isNetworkConnected(this@ActivityTafsir)) {
-                runOnUiThread { 
-                    if (!isFinishing && !isDestroyed) {
-                        noInternet() 
-                    }
-                }
-                return@launch
-            }
-
             try {
-                // 根据 slug 选择 API 源
-                val tafsir = when {
-                    // 印尼语 Tafsir 从自定义服务器加载
-                    slug.startsWith("id-") -> {
-                        android.util.Log.d("ActivityTafsir", "📥 Loading Indonesian Tafsir from custom server: $slug")
-                        RetrofitInstance.customTafsir.getTafsir(slug, "$chapterNo:$verseNo")["tafsir"]!!
-                    }
-                    // 其他 Tafsir 从 Quran.com 加载
-                    else -> {
-                        android.util.Log.d("ActivityTafsir", "📥 Loading Tafsir from Quran.com: $slug")
-                        RetrofitInstance.quran.getTafsir(slug, "$chapterNo:$verseNo")["tafsir"]!!
-                    }
-                }
-
-                // 保存到缓存
-                fileUtils.createFile(tafsirFile)
-                tafsirFile.writeText(JsonHelper.json.encodeToString(tafsir))
-                android.util.Log.d("ActivityTafsir", "✅ Tafsir loaded and cached successfully")
+                // 🔥 优化：使用三级缓存（内存 → 文件 → 网络）
+                val tafsir = com.quran.quranaudio.online.quran_module.utils.tafsir.TafsirCacheManager.getTafsir(
+                    context = this@ActivityTafsir,
+                    tafsirKey = tafsirKey,
+                    chapterNo = chapterNo,
+                    verseNo = verseNo
+                )
                 
-                renderData(tafsir)
+                if (tafsir != null) {
+                    // ✅ 缓存命中，立即渲染
+                    val elapsed = System.currentTimeMillis() - loadStartTime
+                    android.util.Log.d("ActivityTafsir", "✅ [性能] Tafsir 从缓存加载成功 (${elapsed}ms)")
+                    renderData(tafsir)
+                    return@launch
+                }
+                
+                // 🔥 缓存不存在，检查网络
+                if (!NetworkStateReceiver.isNetworkConnected(this@ActivityTafsir)) {
+                    runOnUiThread { 
+                        if (!isFinishing && !isDestroyed) {
+                            noInternet() 
+                        }
+                    }
+                    return@launch
+                }
+                
+                // 🔥 从网络加载并缓存
+                val result = com.quran.quranaudio.online.quran_module.utils.tafsir.TafsirCacheManager.loadAndCacheTafsir(
+                    context = this@ActivityTafsir,
+                    tafsirKey = tafsirKey!!,
+                    chapterNo = chapterNo,
+                    verseNo = verseNo
+                )
+                
+                result.onSuccess { loadedTafsir ->
+                    val elapsed = System.currentTimeMillis() - loadStartTime
+                    android.util.Log.d("ActivityTafsir", "✅ [性能] Tafsir 从网络加载成功 (${elapsed}ms)")
+                    renderData(loadedTafsir)
+                }.onFailure { e ->
+                    val slug = com.quran.quranaudio.online.quran_module.utils.tafsir.TafsirUtils.getTafsirSlugFromKey(tafsirKey)
+                    val apiSource = if (slug.startsWith("id-")) "custom server (dochubai.com)" else "Quran.com"
+                    android.util.Log.e("ActivityTafsir", "❌ Failed to load tafsir from $apiSource: ${e.message}")
+                    Log.saveError(e, "ActivityTafsir")
+                    fail("Failed to load tafsir.", true)
+                }
+                
             } catch (e: Exception) {
-                val apiSource = if (slug.startsWith("id-")) "custom server (dochubai.com)" else "Quran.com"
-                android.util.Log.e("ActivityTafsir", "❌ Failed to load tafsir from $apiSource: ${e.message}")
-                Log.saveError(e, "ActivityTafsir")
-                e.printStackTrace()
+                android.util.Log.e("ActivityTafsir", "❌ Unexpected error: ${e.message}")
                 fail("Failed to load tafsir.", true)
             }
         }
     }
 
     private fun renderData(tafsir: TafsirModel) {
+        val renderStartTime = System.currentTimeMillis()
+        android.util.Log.d("ActivityTafsir", "⏱️ [性能] renderData 开始")
+        
         val map = mapOf(
             "{{THEME}}" to resolveDarkMode(),
             "{{CONTENT}}" to tafsir.text,
@@ -423,10 +442,16 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
 
         val pattern = Regex(pattern = map.keys.joinToString("|") { Regex.escape(it) })
         val html = pattern.replace(getBoilerPlateHTML()) { match -> map[match.value].orEmpty() }
+        
+        val replaceElapsed = System.currentTimeMillis() - renderStartTime
+        android.util.Log.d("ActivityTafsir", "⏱️ [性能] HTML 替换完成 (${replaceElapsed}ms)")
 
         runOnUiThread {
             if (!isFinishing && !isDestroyed) {
                 binding.webView.loadDataWithBaseURL(null, html, "text/html; charset=UTF-8", "utf-8", null)
+                
+                val totalElapsed = System.currentTimeMillis() - renderStartTime
+                android.util.Log.d("ActivityTafsir", "⏱️ [性能] renderData 完成 (${totalElapsed}ms)")
                 
                 // 内容加载完成后，检查解锁状态
                 checkUnlockStatus()
@@ -676,38 +701,68 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
     
     /**
      * 预加载激励广告
+     * ⚠️ 注意：只预加载，不自动播放（只有用户点击解锁按钮时才播放）
      */
+    private var isLoadingAd: Boolean = false
+    private var isUserRequestedAd: Boolean = false  // 标记是否是用户主动请求广告
+    private val adRetryHandler = android.os.Handler(android.os.Looper.getMainLooper())
+    private val adRetryRunnable = Runnable {
+        if (!isAdLoaded && !isLoadingAd) {
+            android.util.Log.d("ActivityTafsir", "🔄 Retrying rewarded ad preload after failure/close")
+            preloadRewardedAd()
+        }
+    }
+    
     private fun preloadRewardedAd() {
-        if (isAdLoaded) {
-            android.util.Log.d("ActivityTafsir", "✅ Ad already loaded")
+        if (isAdLoaded || isLoadingAd) {
+            android.util.Log.d("ActivityTafsir", "✅ Ad already loaded or loading")
             return
         }
         
         android.util.Log.d("ActivityTafsir", "📡 Preloading rewarded ad...")
+        isLoadingAd = true
+        adRetryHandler.removeCallbacks(adRetryRunnable)
         
         AdFactory.loadRewardAd(this, AdConfig.AD_TAFSIR_REWARD, object : com.quranaudio.common.ad.AdLoadCallback {
             override fun onAdLoaded(adItem: com.quranaudio.common.ad.model.AdItem?) {
                 isAdLoaded = true
+                isLoadingAd = false
                 android.util.Log.d("ActivityTafsir", "✅ Rewarded ad loaded successfully")
                 
-                // 如果Loading对话框还在显示，立即播放广告
-                adLoadingDialog?.onAdReadyToShow()
+                // ⚠️ 【关键修复】只有在用户主动点击解锁按钮时才自动播放
+                // 避免在滚动到底部或退出页面时意外播放广告
+                if (isUserRequestedAd && adLoadingDialog != null && adLoadingDialog!!.isShowing) {
+                    android.util.Log.d("ActivityTafsir", "✅ User requested ad, showing immediately")
+                    adLoadingDialog?.onAdReadyToShow()
+                } else {
+                    android.util.Log.d("ActivityTafsir", "ℹ️ Ad loaded but not user-requested, just caching")
+                }
             }
             
             override fun onAdFailedToLoad(adPosition: String?) {
                 isAdLoaded = false
+                isLoadingAd = false
                 android.util.Log.e("ActivityTafsir", "❌ Rewarded ad failed to load")
                 
                 // 如果Loading对话框还在显示，显示错误提示
-                adLoadingDialog?.showAdNotReadyError()
+                if (isUserRequestedAd && adLoadingDialog != null) {
+                    adLoadingDialog?.showAdNotReadyError()
+                }
+                
+                // 安排重试，防止缓存池为空
+                adRetryHandler.postDelayed(adRetryRunnable, 5000)
             }
         })
     }
     
     /**
      * 显示激励广告
+     * ⚠️ 只有在用户点击解锁按钮时调用
      */
     private fun showRewardedAd() {
+        // 标记为用户主动请求
+        isUserRequestedAd = true
+        
         if (isAdLoaded) {
             // 广告已加载，直接播放
             android.util.Log.d("ActivityTafsir", "▶️ Showing loaded ad immediately")
@@ -745,6 +800,7 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
                 // 用户关闭对话框
                 android.util.Log.d("ActivityTafsir", "❌ User dismissed loading dialog")
                 adLoadingDialog = null
+                isUserRequestedAd = false  // 重置用户请求标记
             }
         )
         
@@ -786,8 +842,12 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
                 override fun onAdClosed(p0: com.quranaudio.common.ad.model.AdItem?) {
                     android.util.Log.d("ActivityTafsir", "🚪 Ad closed")
                     
-                    // 重置广告加载状态
+                    // 重置广告加载状态和用户请求标记
                     isAdLoaded = false
+                    isUserRequestedAd = false
+                    
+                    // 预加载下一条广告（但不自动播放）
+                    preloadRewardedAd()
                 }
                 
                 override fun onShow(p0: com.quranaudio.common.ad.model.AdItem?) {
@@ -899,11 +959,35 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
     }
     
     /**
+     * ⚠️ 暂停时清理对话框状态，避免意外播放广告
+     */
+    override fun onPause() {
+        super.onPause()
+        
+        // 关闭广告加载对话框
+        if (adLoadingDialog != null && adLoadingDialog!!.isShowing) {
+            android.util.Log.d("ActivityTafsir", "⏸️ onPause: Dismissing ad loading dialog")
+            adLoadingDialog?.dismiss()
+        }
+        adLoadingDialog = null
+        
+        // 重置用户请求标记
+        isUserRequestedAd = false
+        
+        // 取消广告重试任务
+        adRetryHandler.removeCallbacks(adRetryRunnable)
+    }
+    
+    /**
      * 清理资源
      */
     override fun onDestroy() {
         super.onDestroy()
+        
+        // 清理广告相关资源
         adLoadingDialog?.dismiss()
         adLoadingDialog = null
+        adRetryHandler.removeCallbacks(adRetryRunnable)
+        isUserRequestedAd = false
     }
 }

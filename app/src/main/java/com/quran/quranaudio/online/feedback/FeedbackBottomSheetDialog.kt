@@ -122,7 +122,10 @@ class FeedbackBottomSheetDialog : BottomSheetDialogFragment() {
         
         // 延迟 300ms 切换到标签选择
         view?.postDelayed({
-            showStage(2)
+            // 🔥 修复崩溃：检查 Fragment 是否还 attached
+            if (isAdded && context != null) {
+                showStage(2)
+            }
         }, 300)
     }
     
@@ -130,9 +133,12 @@ class FeedbackBottomSheetDialog : BottomSheetDialogFragment() {
      * 高亮选中的情绪卡片
      */
     private fun highlightSelectedEmotion(emotion: FeedbackEmotion) {
-        val selectedColor = ContextCompat.getColor(requireContext(), R.color.feedback_card_selected)
-        val defaultColor = ContextCompat.getColor(requireContext(), R.color.feedback_card_bg)
-        val primaryColor = ContextCompat.getColor(requireContext(), R.color.feedback_primary)
+        // 🔥 修复崩溃：检查 Fragment 是否还 attached
+        val ctx = context ?: return
+        
+        val selectedColor = ContextCompat.getColor(ctx, R.color.feedback_card_selected)
+        val defaultColor = ContextCompat.getColor(ctx, R.color.feedback_card_bg)
+        val primaryColor = ContextCompat.getColor(ctx, R.color.feedback_primary)
         
         cardLove.setCardBackgroundColor(if (emotion == FeedbackEmotion.LOVE) selectedColor else defaultColor)
         cardNeutral.setCardBackgroundColor(if (emotion == FeedbackEmotion.NEUTRAL) selectedColor else defaultColor)
@@ -151,12 +157,19 @@ class FeedbackBottomSheetDialog : BottomSheetDialogFragment() {
      * 显示指定阶段
      */
     private fun showStage(stage: Int) {
+        // 🔥 修复崩溃：检查 Fragment 是否还 attached（避免 getString() 崩溃）
+        val ctx = context
+        if (!isAdded || ctx == null) {
+            android.util.Log.w(TAG, "⚠️ Cannot show stage $stage: Fragment not attached")
+            return
+        }
+        
         currentStage = stage
         
         when (stage) {
             1 -> {
                 // 阶段1：情绪选择
-                tvTitle.text = getString(R.string.feedback_title_emotion)
+                tvTitle.text = ctx.getString(R.string.feedback_title_emotion)
                 layoutEmotionSelection.visibility = View.VISIBLE
                 layoutTagSelection.visibility = View.GONE
                 layoutCommentInput.visibility = View.GONE
@@ -164,7 +177,7 @@ class FeedbackBottomSheetDialog : BottomSheetDialogFragment() {
             }
             2 -> {
                 // 阶段2：标签选择
-                tvTitle.text = getString(R.string.feedback_title_tags)
+                tvTitle.text = ctx.getString(R.string.feedback_title_tags)
                 layoutEmotionSelection.visibility = View.GONE
                 layoutTagSelection.visibility = View.VISIBLE
                 layoutCommentInput.visibility = View.GONE
@@ -175,7 +188,10 @@ class FeedbackBottomSheetDialog : BottomSheetDialogFragment() {
                 
                 // 延迟 500ms 显示评论输入框
                 view?.postDelayed({
-                    showStage(3)
+                    // 🔥 修复崩溃：检查 Fragment 是否还 attached
+                    if (isAdded && context != null) {
+                        showStage(3)
+                    }
                 }, 500)
             }
             3 -> {
@@ -189,27 +205,34 @@ class FeedbackBottomSheetDialog : BottomSheetDialogFragment() {
      * 加载标签
      */
     private fun loadTagsForEmotion(emotion: FeedbackEmotion) {
+        // 🔥 修复崩溃：检查 Fragment 是否还 attached
+        val ctx = context ?: return
+        
         chipGroupTags.removeAllViews()
         
         val tagResIds = FeedbackTags.getTagResIdsForEmotion(emotion)
         
         for (tagResId in tagResIds) {
-            val tagText = getString(tagResId)
-            val chip = Chip(requireContext()).apply {
+            // 🔥 修复崩溃：使用 context.getString() 而不是 Fragment.getString()
+            val tagText = ctx.getString(tagResId)
+            val chip = Chip(ctx).apply {
                 text = tagText
                 isCheckable = true
-                chipBackgroundColor = ContextCompat.getColorStateList(requireContext(), R.color.feedback_chip_bg)
-                setTextColor(ContextCompat.getColor(requireContext(), R.color.feedback_text_primary))
+                chipBackgroundColor = ContextCompat.getColorStateList(ctx, R.color.feedback_chip_bg)
+                setTextColor(ContextCompat.getColor(ctx, R.color.feedback_text_primary))
                 
                 setOnCheckedChangeListener { _, isChecked ->
+                    // 🔥 修复崩溃：在回调中也要检查 context
+                    val callbackCtx = context ?: return@setOnCheckedChangeListener
+                    
                     if (isChecked) {
                         selectedTags.add(tagText)
-                        chipBackgroundColor = ContextCompat.getColorStateList(requireContext(), R.color.feedback_chip_selected)
-                        setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
+                        chipBackgroundColor = ContextCompat.getColorStateList(callbackCtx, R.color.feedback_chip_selected)
+                        setTextColor(ContextCompat.getColor(callbackCtx, android.R.color.white))
                     } else {
                         selectedTags.remove(tagText)
-                        chipBackgroundColor = ContextCompat.getColorStateList(requireContext(), R.color.feedback_chip_bg)
-                        setTextColor(ContextCompat.getColor(requireContext(), R.color.feedback_text_primary))
+                        chipBackgroundColor = ContextCompat.getColorStateList(callbackCtx, R.color.feedback_chip_bg)
+                        setTextColor(ContextCompat.getColor(callbackCtx, R.color.feedback_text_primary))
                     }
                 }
             }
@@ -250,12 +273,17 @@ class FeedbackBottomSheetDialog : BottomSheetDialogFragment() {
         btnSubmit.isEnabled = false
         android.util.Log.d(TAG, "✅ Submit button disabled to prevent duplicate clicks")
         
+        // 🔥 修复崩溃：在 dismiss 前先获取 Context 引用和字符串（避免 Fragment detached 后崩溃）
+        val ctx = context ?: return
+        val appContext = ctx.applicationContext
+        val successMessage = ctx.getString(R.string.feedback_submit_success)
+        
         // 🔥 关键优化2：立即显示"成功"，无需等待
         android.util.Log.d(TAG, "💨 Showing immediate success feedback to user (optimistic)")
         dismiss() // 立即关闭弹窗
         Toast.makeText(
-            requireContext(),
-            getString(R.string.feedback_submit_success),
+            appContext,
+            successMessage,
             Toast.LENGTH_LONG
         ).show()
         
@@ -264,7 +292,7 @@ class FeedbackBottomSheetDialog : BottomSheetDialogFragment() {
         
         // 🔥 关键优化3：后台异步提交（不阻塞UI）
         FeedbackManager.Companion.getInstance().submitFeedbackAsync(
-            context = requireContext(),
+            context = appContext,
             emotion = emotion,
             selectedTags = selectedTags.toList(),
             comment = if (comment.isNullOrEmpty()) null else comment,
@@ -280,7 +308,7 @@ class FeedbackBottomSheetDialog : BottomSheetDialogFragment() {
                 
                 // 🔥 关键优化4：失败时保存到本地缓存，下次重试
                 FeedbackManager.Companion.getInstance().savePendingFeedback(
-                    context = requireContext(),
+                    context = appContext,
                     emotion = emotion,
                     selectedTags = selectedTags.toList(),
                     comment = if (comment.isNullOrEmpty()) null else comment

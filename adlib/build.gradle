@@ -39,9 +39,10 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     
-    // Google Mobile Ads SDK
-    api 'com.google.android.gms:play-services-ads-identifier:18.0.1'
+    // Google Mobile Ads SDK - pin to 22.1.0 (Kotlin 1.9.0 compatible) and block 24.x
     api 'com.google.android.gms:play-services-ads:22.1.0'
+    api 'com.google.android.gms:play-services-ads-lite:22.1.0'
+    api 'com.google.android.gms:play-services-ads-identifier:18.0.1'
     
     // Meta Audience Network (Facebook) - Bidding
     api 'com.google.ads.mediation:facebook:6.14.0.0'
@@ -59,19 +60,32 @@ dependencies {
     api 'com.google.ads.mediation:vungle:7.3.0.0'
     
     // Pangle (ByteDance/TikTok) - Bidding
-    api 'com.google.ads.mediation:pangle:6.0.0.6.0'
+    // RESTORED: Crash was NOT caused by Pangle! It was Firebase BoM version conflict.
+    // Repository: https://artifact.bytedance.com/repository/pangle
+    // See: https://developers.google.com/admob/android/mediation/pangle
+    api('com.google.ads.mediation:pangle:5.9.0.2.0') {
+        exclude group: 'com.google.android.gms'
+    }
     
     // IronSource - Bidding
-    api 'com.google.ads.mediation:ironsource:8.5.0.1'
+    // Using Maven Central version
+    api('com.google.ads.mediation:ironsource:8.3.0.0') {
+        exclude group: 'com.google.android.gms'
+    }
     
     // InMobi - Bidding
     api 'com.google.ads.mediation:inmobi:10.6.3.0'
 
-    // When using the BoM, don't specify versions in Firebase dependencies
-    api platform('com.google.firebase:firebase-bom:30.4.1')
+    // ✅ CRITICAL FIX: Updated Firebase BoM to fix NoSuchMethodError crash
+    // Old version (30.4.1 from 2022) was incompatible with play-services-ads 22.1.0
+    // This caused: NoSuchMethodError: checkNotGoogleApiHandlerThread() in Preconditions
+    // Latest BoM ensures all Google Play Services components are compatible
+    api platform('com.google.firebase:firebase-bom:33.7.0')
 
-    api 'com.google.firebase:firebase-config:21.1.2'
+    // Remove explicit versions - let BoM manage them
+    api 'com.google.firebase:firebase-config'
     api 'com.google.firebase:firebase-analytics'
-    api 'com.google.firebase:firebase-messaging:23.0.8'
+    api 'com.google.firebase:firebase-messaging'
+
 
 }

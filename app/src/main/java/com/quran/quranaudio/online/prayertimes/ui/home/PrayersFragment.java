@@ -751,6 +751,18 @@ public class PrayersFragment extends Fragment implements com.quran.quranaudio.on
      * @param initialStatus 初始状态（用于 Missed -> Qada 转换）
      */
     private void showPrayerLogBottomSheet(String prayerName, String existingLogId, PrayerLog.PrayerStatus initialStatus) {
+        // 🔥 修复崩溃：检查 Fragment 状态，避免在 onSaveInstanceState 后执行 Fragment 事务
+        if (!isAdded()) {
+            Log.w("PrayersFragment", "⚠️ Cannot show bottom sheet: Fragment not added");
+            return;
+        }
+        
+        // 🔥 检查 FragmentManager 状态
+        if (getChildFragmentManager().isStateSaved()) {
+            Log.w("PrayersFragment", "⚠️ Cannot show bottom sheet: FragmentManager state already saved");
+            return;
+        }
+        
         com.quran.quranaudio.online.prayertimes.ui.PrayerLogBottomSheet bottomSheet;
         
         if (existingLogId != null) {
@@ -761,7 +773,12 @@ public class PrayersFragment extends Fragment implements com.quran.quranaudio.on
             bottomSheet = com.quran.quranaudio.online.prayertimes.ui.PrayerLogBottomSheet.Companion.newInstance(prayerName, initialStatus, null);
         }
         
-        bottomSheet.show(getChildFragmentManager(), "PrayerLogBottomSheet");
+        try {
+            bottomSheet.show(getChildFragmentManager(), "PrayerLogBottomSheet");
+        } catch (IllegalStateException e) {
+            // 🔥 额外保护：即使检查通过，仍可能在极端情况下失败（极端边界条件）
+            Log.e("PrayersFragment", "❌ Failed to show bottom sheet: " + e.getMessage());
+        }
     }
     
     /**
@@ -1950,21 +1967,27 @@ public class PrayersFragment extends Fragment implements com.quran.quranaudio.on
     
     /**
      * Callback from PrayerLogBottomSheet when prayer is successfully logged
-     * Reloads prayer logs to update UI
+     * ⚡ 乐观更新：立即根据参数更新本地 UI，不重新查询 Firestore
      */
     @Override
     public void onPrayerLogged(String prayerName, String date, int newStatus, String logId) {
-        Log.d("PrayersFragment", "📝 onPrayerLogged callback received");
+        long timestamp = System.currentTimeMillis();
+        Log.d("PrayersFragment", "⚡ [OPTIMISTIC-" + timestamp + "] onPrayerLogged callback received");
         Log.d("PrayersFragment", "   Prayer: " + prayerName);
         Log.d("PrayersFragment", "   Date: " + date);
         Log.d("PrayersFragment", "   Status: " + newStatus);
         Log.d("PrayersFragment", "   LogId: " + logId);
         
-        // Reload prayer logs to refresh UI
-        loadTodayPrayerLogs();
+        // ⚡ 立即更新本地 UI（不等待 Firestore）
+        updatePrayerButtonStateOptimistic(prayerName, newStatus, logId);
         
-        // Reload Qada summary to reflect changes
-        loadQadaSummary();
+        // 🔄 后台刷新数据（确保最终一致性）
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            if (isAdded() && getActivity() != null) {
+                loadTodayPrayerLogs();
+                loadQadaSummary();
+            }
+        }, 500); // 500ms 后后台同步，确保 Firestore 写入完成
         
         // Also update SalahRecord for backwards compatibility
         if (salahViewModel != null) {
@@ -2007,9 +2030,154 @@ public class PrayersFragment extends Fragment implements com.quran.quranaudio.on
     
     @Override
     public void onQadaCountChanged(int delta) {
-        Log.d("PrayersFragment", "🔢 onQadaCountChanged callback received: delta=" + delta);
+        long timestamp = System.currentTimeMillis();
+        Log.d("PrayersFragment", "⚡ [OPTIMISTIC-" + timestamp + "] onQadaCountChanged callback received: delta=" + delta);
         
-        // Reload Qada summary immediately to reflect changes
-        loadQadaSummary();
+        // ⚡ 立即更新本地 Qada 计数（不等待 Firestore）
+        updateQadaTotalOptimistic(delta);
+        
+        // 🔄 后台刷新数据（确保最终一致性）
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            if (isAdded() && getActivity() != null) {
+                loadQadaSummary();
+            }
+        }, 500); // 500ms 后后台同步，确保 Firestore 写入完成
+    }
+    
+    /**
+     * ⚡ 乐观更新：立即更新祷告按钮状态
+     * @param prayerName 祷告名称（英文或本地化）
+     * @param newStatus 新状态 (0=Ada, 1=Qada, 2=Missed)
+     * @param logId 记录 ID
+     */
+    private void updatePrayerButtonStateOptimistic(String prayerName, int newStatus, String logId) {
+        if (!isAdded() || getActivity() == null) {
+            return;
+        }
+        
+        getActivity().runOnUiThread(() -> {
+            try {
+                // 转换祷告名称为英文（确保匹配）
+                String englishName = com.quran.quranaudio.online.prayertimes.models.PrayerName.toEnglishName(
+                    prayerName, requireContext()
+                );
+                
+                Log.d("PrayersFragment", "⚡ Updating button for prayer: " + englishName + " (status: " + newStatus + ", logId: " + logId + ")");
+                
+                // 根据祷告名称找到对应的按钮
+                MaterialButton button = null;
+                String prayerKey = null;
+                
+                if (fajrTrackButton != null && (englishName.equalsIgnoreCase("Fajr") || englishName.equalsIgnoreCase("Subuh"))) {
+                    button = fajrTrackButton;
+                    prayerKey = "Fajr";
+                } else if (dhuhrTrackButton != null && englishName.equalsIgnoreCase("Dhuhr")) {
+                    button = dhuhrTrackButton;
+                    prayerKey = "Dhuhr";
+                } else if (asrTrackButton != null && englishName.equalsIgnoreCase("Asr")) {
+                    button = asrTrackButton;
+                    prayerKey = "Asr";
+                } else if (maghribTrackButton != null && englishName.equalsIgnoreCase("Maghrib")) {
+                    button = maghribTrackButton;
+                    prayerKey = "Maghrib";
+                } else if (ishaTrackButton != null && (englishName.equalsIgnoreCase("Isha") || englishName.equalsIgnoreCase("Isya"))) {
+                    button = ishaTrackButton;
+                    prayerKey = "Isha";
+                }
+                
+                // 更新本地缓存
+                if (prayerKey != null) {
+                    if (newStatus == 2) { // Missed
+                        todayPrayerLogs.remove(prayerKey);
+                    } else {
+                        // 使用 Kotlin 构造函数创建 PrayerLog（Kotlin data class 所有字段都是 val）
+                        PrayerLog log = new PrayerLog(
+                            logId,  // id
+                            "",     // userId
+                            prayerKey,  // prayerName
+                            PrayerLog.PrayerStatus.values()[newStatus],  // status
+                            null,   // performedAt
+                            null,   // loggedAt
+                            "",     // notes
+                            "",     // date
+                            false,  // isToday
+                            java.util.Collections.emptyList()  // tags
+                        );
+                        todayPrayerLogs.put(prayerKey, log);
+                    }
+                }
+                
+                // ⚡ 重用现有的 UI 更新逻辑（避免重复代码和资源ID错误）
+                if (prayerKey != null) {
+                    // 找到对应的 SalahName
+                    SalahName salahName = null;
+                    if (prayerKey.equals("Fajr")) salahName = SalahName.FAJR;
+                    else if (prayerKey.equals("Dhuhr")) salahName = SalahName.DHUHR;
+                    else if (prayerKey.equals("Asr")) salahName = SalahName.ASR;
+                    else if (prayerKey.equals("Maghrib")) salahName = SalahName.MAGHRIB;
+                    else if (prayerKey.equals("Isha")) salahName = SalahName.ISHA;
+                    
+                    if (salahName != null) {
+                        PrayerLog updatedLog = todayPrayerLogs.get(prayerKey);
+                        updatePrayerStatusUI(salahName, updatedLog);
+                        Log.d("PrayersFragment", "✅ Prayer status UI updated immediately via existing method");
+                    }
+                } else {
+                    Log.w("PrayersFragment", "⚠️ Prayer key not found for: " + englishName);
+                }
+            } catch (Exception e) {
+                Log.e("PrayersFragment", "❌ Error updating button state", e);
+            }
+        });
+    }
+    
+    /**
+     * ⚡ 乐观更新：立即增减 Total Qada 计数
+     * @param delta 增减量（正数增加，负数减少）
+     */
+    private void updateQadaTotalOptimistic(int delta) {
+        if (!isAdded() || getActivity() == null || qadaCountTextView == null) {
+            return;
+        }
+        
+        getActivity().runOnUiThread(() -> {
+            try {
+                // 获取当前显示的 Total Qada 数值
+                // qadaCountTextView 的格式是 "X Prayers" 或 "No outstanding prayers"
+                String currentText = qadaCountTextView.getText().toString();
+                int currentTotal = 0;
+                
+                try {
+                    // 尝试从文本中提取数字（例如 "5 Prayers" -> 5）
+                    java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("(\\d+)");
+                    java.util.regex.Matcher matcher = pattern.matcher(currentText);
+                    if (matcher.find()) {
+                        currentTotal = Integer.parseInt(matcher.group(1));
+                    }
+                } catch (NumberFormatException e) {
+                    Log.w("PrayersFragment", "⚠️ Failed to parse current Qada total: " + currentText);
+                }
+                
+                // 计算新的总数
+                int newTotal = Math.max(0, currentTotal + delta); // 确保不为负数
+                
+                Log.d("PrayersFragment", "⚡ Qada total: " + currentTotal + " → " + newTotal + " (delta: " + delta + ")");
+                
+                // 立即更新 UI（使用与 updateQadaSummaryUI 相同的格式）
+                if (newTotal > 0) {
+                    String formatted = NumberFormat.getIntegerInstance().format(newTotal);
+                    String displayText = getString(R.string.qada_count_prayers, formatted);
+                    qadaCountTextView.setText(displayText);
+                    qadaCountTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.qada_alert_red));
+                } else {
+                    qadaCountTextView.setText(getString(R.string.qada_count_zero));
+                    qadaCountTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.bottom_nav_selected));
+                }
+                
+                Log.d("PrayersFragment", "✅ Qada total updated immediately");
+            } catch (Exception e) {
+                Log.e("PrayersFragment", "❌ Error updating Qada total", e);
+            }
+        });
     }
 }

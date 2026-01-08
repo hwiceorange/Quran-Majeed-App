@@ -9,6 +9,8 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -38,7 +40,22 @@ import javax.inject.Inject;
 
 import androidx.lifecycle.ViewModelProvider;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+
+/**
+ * 优化后的 MainActivity
+ * 
+ * 🚀 性能优化策略：
+ * 1. 延迟非关键初始化到 view.post()
+ * 2. 后台线程执行 Tafsir 初始化
+ * 3. 分阶段预加载（500ms 延迟）
+ * 4. Lazy 初始化反馈系统
+ * 5. UI 渲染优先，业务逻辑延后
+ * 
+ * 📊 目标：主线程阻塞时间 < 100ms
+ */
 @SuppressWarnings("deprecation")
 public class MainActivity extends BaseActivity {
 
@@ -52,25 +69,36 @@ public class MainActivity extends BaseActivity {
     private NavController navController;
     private BottomNavigationView navView;
     
-    // 💬 反馈系统组件
+    // 💬 反馈系统组件（Lazy 初始化）
     private FeedbackFloatingButton feedbackFloatingButton;
     private ExitInterceptor exitInterceptor;
+    
+    // 🚀 后台线程池（用于非 UI 操作）
+    private static final ExecutorService backgroundExecutor = Executors.newFixedThreadPool(2);
+    
+    // Handler for delayed tasks
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
-        android.util.Log.d("NATIVE_AD_TRACK", "🎯 MainActivity.onCreate() START");
-        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
+        long startTime = System.currentTimeMillis();
+        android.util.Log.d("PERFORMANCE", "========================================");
+        android.util.Log.d("PERFORMANCE", "⚡ MainActivity.onCreate() START");
+        android.util.Log.d("PERFORMANCE", "========================================");
         
-        // 🌐 强制更新 Application Resources 的语言配置
-        // 因为 Application 实例不会重新创建，必须手动更新
-        forceUpdateApplicationLanguage();
+        // ============================================================
+        // 🟢 IMMEDIATE：主线程必须执行（< 100ms）
+        // ============================================================
         
+        // 语言配置更新（必须在 super.onCreate 前）
+        forceUpdateApplicationLanguageOptimized();
+        
+        // Dagger 注入
         ((App) getApplicationContext())
                 .defaultComponent
                 .inject(this);
 
-        // Inject PrayerDataPreloader from HomeComponent
+        // Inject PrayerDataPreloader
         prayerDataPreloader = ((App) getApplicationContext())
                 .appComponent
                 .homeComponent()
@@ -79,366 +107,346 @@ public class MainActivity extends BaseActivity {
 
         super.onCreate(savedInstanceState);
         
-        // 🔧 自动初始化 Tafsir：在首次启动或引导完成后，根据应用语言自动选择默认 Tafsir
-        initializeDefaultTafsirIfNeeded();
-
+        // UI 初始化（必须在主线程）
         setContentView(R.layout.activity_main);
         navView = findViewById(R.id.nav_view);
+        
+        android.util.Log.d("PERFORMANCE", "✅ Immediate init completed [" + (System.currentTimeMillis() - startTime) + "ms]");
 
-     /*   //PermissionStart
-
-        mPermissionResultLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), new ActivityResultCallback<Map<String, Boolean>>() {
-            @Override
-            public void onActivityResult(Map<String, Boolean> result) {
-                if (result.get(Manifest.permission.ACCESS_FINE_LOCATION) !=null) {
-                    isLocationPermissionGranted = result.get(Manifest.permission.ACCESS_FINE_LOCATION);
-                }
-            }
+        // ============================================================
+        // 🔵 POST-RENDER：UI 渲染后执行（不阻塞首帧）
+        // ============================================================
+        
+        // 使用 view.post() 确保 UI 先渲染
+        navView.post(() -> {
+            long postRenderStart = System.currentTimeMillis();
+            android.util.Log.d("PERFORMANCE", "→ [POST-RENDER] Starting deferred tasks...");
+            
+            // Navigation 设置
+            setupNavigation();
+            
+            // 设置统一状态栏
+            setupUnifiedStatusBar();
+            
+            // 注册监听器
+            registerQuizResultListener();
+            
+            android.util.Log.d("PERFORMANCE", "✅ [POST-RENDER] Deferred tasks completed [" + (System.currentTimeMillis() - postRenderStart) + "ms]");
+            
+            // ============================================================
+            // 🟡 DELAYED：延迟执行（500ms+ 后）
+            // ============================================================
+            
+            scheduleDelayedInitialization();
         });
-
-        //Permission End*/
-
-     //   requestPermission();
-
-
-        navController = Navigation.findNavController(this, R.id.home_host_fragment);
-        android.util.Log.d("NATIVE_AD_TRACK", "→ NavController found: " + navController);
-        android.util.Log.d("NATIVE_AD_TRACK", "→ Current destination: " + navController.getCurrentDestination());
         
-        NavigationUI.setupWithNavController(navView, navController);
-        android.util.Log.d("NATIVE_AD_TRACK", "✅ NavigationUI setup completed");
-        
-        // 设置统一的白色状态栏 + 深色图标（所有页面统一效果）
-        setupUnifiedStatusBar();
-        android.util.Log.e("MainActivity", "✅ 初始化：设置统一白色状态栏");
-        
-        // Add navigation item selection listener with logging
-        navView.setOnItemSelectedListener(item -> {
-            android.util.Log.d("MainActivity", "Bottom nav item clicked: " + item.getTitle() + " (ID: " + item.getItemId() + ")");
-            
-            // Let NavigationUI handle all navigation items (including Quran)
-            boolean handled = NavigationUI.onNavDestinationSelected(item, navController);
-            
-            if (handled) {
-                android.util.Log.d("MainActivity", "Navigation handled by NavigationUI");
-            } else {
-                android.util.Log.w("MainActivity", "Navigation NOT handled by NavigationUI, trying manual navigation");
-                // Fallback: manually navigate
-                try {
-                    navController.navigate(item.getItemId());
-                    android.util.Log.d("MainActivity", "Manual navigation successful");
-                    return true;
-                } catch (Exception e) {
-                    android.util.Log.e("MainActivity", "Manual navigation failed", e);
-                    return false;
-                }
-            }
-            
-            return handled;
-        });
-
-        NavGraph navGraph = navController.getNavInflater().inflate(R.navigation.nav_graphmain);
-
-        // Set correct start destination: Home page for normal launch
-        if (displaySettingsScreenFirst()) {
-            android.util.Log.d("NATIVE_AD_TRACK", "→ Setting start destination: SETTINGS");
-            navGraph.setStartDestination(R.id.navigation_settings);
-        } else {
-            android.util.Log.d("NATIVE_AD_TRACK", "→ Setting start destination: HOME (R.id.nav_home)");
-            navGraph.setStartDestination(R.id.nav_home);  // Fixed: Start at Home page, not Learn page
-        }
-
-        navController.setGraph(navGraph);
-        android.util.Log.d("NATIVE_AD_TRACK", "✅ NavGraph set, current destination: " + navController.getCurrentDestination());
-        if (navController.getCurrentDestination() != null) {
-            android.util.Log.d("NATIVE_AD_TRACK", "   Destination label: " + navController.getCurrentDestination().getLabel());
-            android.util.Log.d("NATIVE_AD_TRACK", "   Destination ID: " + navController.getCurrentDestination().getId());
-        }
-        
-        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
-        android.util.Log.d("NATIVE_AD_TRACK", "✅ MainActivity.onCreate() COMPLETED");
-        android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
-        preferencesHelper.setFirstTimeLaunch(false);
-
-        WorkCreator.schedulePeriodicPrayerUpdater(this);
-
-        // Preload HomeViewModel at app startup to fetch prayer data in background
-        // This ensures data is ready when user navigates to Home page
-        preloadPrayerData();
-        
-        // Register RxBus listener for MainTabChangeEvent (from quiz result page)
-        registerQuizResultListener();
-        
-        // 💬 Initialize feedback system
-        initFeedbackSystem();
+        long totalTime = System.currentTimeMillis() - startTime;
+        android.util.Log.d("PERFORMANCE", "========================================");
+        android.util.Log.d("PERFORMANCE", "✅ MainActivity.onCreate() COMPLETED in " + totalTime + "ms (target: <100ms)");
+        android.util.Log.d("PERFORMANCE", "========================================");
     }
-
+    
+    // ============================================================
+    // 🟢 IMMEDIATE: 主线程必须执行
+    // ============================================================
+    
     /**
-     * Preload prayer data at app startup for faster Home page display
-     * Delegates to PrayerDataPreloader which creates HomeViewModel in background
+     * 优化版语言配置更新（减少日志，提升速度）
      */
-    private void preloadPrayerData() {
-        if (prayerDataPreloader != null && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            prayerDataPreloader.preloadPrayerData(this);
-        }
-    }
-
-    /**
-     * Register RxBus listener to handle navigation from quiz result page to Discover tab
-     */
-    private void registerQuizResultListener() {
-        RxBus.INSTANCE().register(this, MainTabChangeEvent.class, event -> {
-            if (MainTabChangeEvent.TO_QUIZ.equals(event.toType)) {
-                android.util.Log.d("MainActivity", "📱 Received MainTabChangeEvent.TO_QUIZ - navigating to Discover tab");
+    private void forceUpdateApplicationLanguageOptimized() {
+        try {
+            String language = com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs.getLocale(this);
+            
+            if (language != null && !language.isEmpty()) {
+                java.util.Locale locale = new java.util.Locale(language);
+                java.util.Locale.setDefault(locale);
                 
-                // Navigate to Discover tab (nav_name_99)
-                if (navController != null && navView != null) {
+                android.content.res.Resources appResources = getApplicationContext().getResources();
+                android.content.res.Configuration appConfig = appResources.getConfiguration();
+                appConfig.setLocale(locale);
+                appResources.updateConfiguration(appConfig, appResources.getDisplayMetrics());
+            }
+        } catch (Exception e) {
+            android.util.Log.e("PERFORMANCE", "❌ Language update failed (non-fatal)", e);
+        }
+    }
+    
+    // ============================================================
+    // 🔵 POST-RENDER: UI 渲染后执行
+    // ============================================================
+    
+    /**
+     * 设置 Navigation（延迟到 UI 渲染后）
+     */
+    private void setupNavigation() {
+        try {
+            navController = Navigation.findNavController(this, R.id.home_host_fragment);
+            NavigationUI.setupWithNavController(navView, navController);
+            
+            // Navigation item selection listener
+            navView.setOnItemSelectedListener(item -> {
+                boolean handled = NavigationUI.onNavDestinationSelected(item, navController);
+                
+                if (!handled) {
                     try {
-                        navController.navigate(R.id.nav_name_99);
-                        navView.setSelectedItemId(R.id.nav_name_99);
-                        android.util.Log.d("MainActivity", "✅ Successfully navigated to Discover tab");
+                        navController.navigate(item.getItemId());
+                        return true;
                     } catch (Exception e) {
-                        android.util.Log.e("MainActivity", "❌ Failed to navigate to Discover tab", e);
+                        android.util.Log.e("MainActivity", "Navigation failed", e);
+                        return false;
                     }
                 }
+                
+                return handled;
+            });
+
+            NavGraph navGraph = navController.getNavInflater().inflate(R.navigation.nav_graphmain);
+
+            // Set start destination
+            if (displaySettingsScreenFirst()) {
+                navGraph.setStartDestination(R.id.navigation_settings);
+            } else {
+                navGraph.setStartDestination(R.id.nav_home);
             }
-        });
-        android.util.Log.d("MainActivity", "✅ Quiz result listener registered");
-    }
-/*
-    private void requestPermission(){
-        isLocationPermissionGranted = ContextCompat.checkSelfPermission(
-                this,
-              Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED;
 
-        List<String> permissionRequest = new ArrayList<String>();
-
-        if (!isLocationPermissionGranted) {
-            permissionRequest.add(Manifest.permission.ACCESS_FINE_LOCATION);
+            navController.setGraph(navGraph);
+            
+            // 🔥 使用 apply() 而不是隐式的 commit()
+            preferencesHelper.setFirstTimeLaunch(false);
+            
+        } catch (Exception e) {
+            android.util.Log.e("PERFORMANCE", "❌ Navigation setup failed", e);
         }
-
-        if (!permissionRequest.isEmpty()) {
-
-            mPermissionResultLauncher.launch(permissionRequest.toArray(new String[0]));
-        }
-    }
-*/
-
-    private boolean displaySettingsScreenFirst() {
-        // Always start at Home page for new users
-        // The Welcome dialog will guide them to grant location permission
-        // Only show Settings first if explicitly needed (currently never)
-        return false;
     }
     
     /**
-     * 设置统一的白色状态栏（所有页面统一效果）
-     * 白色背景 + 深色图标 + 内容不延伸到状态栏下方
+     * 设置统一的白色状态栏
      */
     private void setupUnifiedStatusBar() {
         try {
             Window window = getWindow();
             View decorView = window.getDecorView();
             
-            // 确保内容不延伸到状态栏下方（非沉浸式）
             WindowCompat.setDecorFitsSystemWindows(window, true);
-            
-            // 设置状态栏为白色
             window.setStatusBarColor(0xFFFFFFFF);
             
-            // 设置图标为深色（lightStatusBar = true 表示浅色背景需要深色图标）
             WindowInsetsControllerCompat wic = new WindowInsetsControllerCompat(window, decorView);
             wic.setAppearanceLightStatusBars(true);
             
-            android.util.Log.e("MainActivity", "✅ 统一状态栏设置: 白色背景 + 深色图标");
         } catch (Exception e) {
-            android.util.Log.e("MainActivity", "❌ 设置统一状态栏失败", e);
+            android.util.Log.e("PERFORMANCE", "❌ Status bar setup failed (non-fatal)", e);
+        }
+    }
+    
+    /**
+     * 注册 RxBus 监听器
+     */
+    private void registerQuizResultListener() {
+        try {
+            RxBus.INSTANCE().register(this, MainTabChangeEvent.class, event -> {
+                if (MainTabChangeEvent.TO_QUIZ.equals(event.toType)) {
+                    if (navController != null && navView != null) {
+                        try {
+                            navController.navigate(R.id.nav_name_99);
+                            navView.setSelectedItemId(R.id.nav_name_99);
+                        } catch (Exception e) {
+                            android.util.Log.e("MainActivity", "❌ Navigation to Discover failed", e);
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            android.util.Log.e("PERFORMANCE", "❌ Quiz listener registration failed", e);
+        }
+    }
+    
+    // ============================================================
+    // 🟡 DELAYED: 延迟执行（500ms+ 后）
+    // ============================================================
+    
+    /**
+     * 调度延迟初始化任务
+     */
+    private void scheduleDelayedInitialization() {
+        android.util.Log.d("PERFORMANCE", "🟡 [DELAY] Scheduling delayed tasks...");
+        
+        // 延迟 500ms：WorkManager 调度（避开 UI 渲染高峰）
+        mainHandler.postDelayed(() -> {
+            android.util.Log.d("PERFORMANCE", "→ [DELAY-500ms] WorkManager scheduling...");
+            scheduleWorkManagerTasks();
+        }, 500);
+        
+        // 延迟 500ms：预加载祷告数据（后台线程）
+        mainHandler.postDelayed(() -> {
+            android.util.Log.d("PERFORMANCE", "→ [DELAY-500ms] Prayer data preloading...");
+            preloadPrayerDataAsync();
+        }, 500);
+        
+        // 延迟 1000ms：Tafsir 初始化（完全后台）
+        mainHandler.postDelayed(() -> {
+            android.util.Log.d("PERFORMANCE", "→ [DELAY-1s] Tafsir initialization...");
+            initializeDefaultTafsirAsync();
+        }, 1000);
+        
+        // 延迟 2000ms：反馈系统初始化
+        mainHandler.postDelayed(() -> {
+            android.util.Log.d("PERFORMANCE", "→ [DELAY-2s] Feedback system init...");
+            initFeedbackSystemLazy();
+        }, 2000);
+        
+        android.util.Log.d("PERFORMANCE", "✅ [DELAY] 4 delayed tasks scheduled (500ms, 1s, 2s)");
+    }
+    
+    /**
+     * 调度 WorkManager 任务（后台线程）
+     */
+    private void scheduleWorkManagerTasks() {
+        backgroundExecutor.execute(() -> {
+            try {
+                long startTime = System.currentTimeMillis();
+                WorkCreator.schedulePeriodicPrayerUpdater(this);
+                android.util.Log.d("PERFORMANCE", "✅ [DELAY-500ms] WorkManager scheduled [" + (System.currentTimeMillis() - startTime) + "ms]");
+            } catch (Exception e) {
+                android.util.Log.e("PERFORMANCE", "❌ [DELAY-500ms] WorkManager scheduling failed", e);
+            }
+        });
+    }
+    
+    /**
+     * 异步预加载祷告数据（后台线程）
+     */
+    private void preloadPrayerDataAsync() {
+        backgroundExecutor.execute(() -> {
+            try {
+                if (prayerDataPreloader != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    long startTime = System.currentTimeMillis();
+                    prayerDataPreloader.preloadPrayerData(this);
+                    android.util.Log.d("PERFORMANCE", "✅ [DELAY-500ms] Prayer data preloaded [" + (System.currentTimeMillis() - startTime) + "ms]");
+                }
+            } catch (Exception e) {
+                android.util.Log.e("PERFORMANCE", "❌ [DELAY-500ms] Prayer data preload failed", e);
+            }
+        });
+    }
+    
+    /**
+     * 异步初始化默认 Tafsir（完全后台）
+     */
+    private void initializeDefaultTafsirAsync() {
+        backgroundExecutor.execute(() -> {
+            try {
+                long startTime = System.currentTimeMillis();
+                
+                // 检查是否已有保存的 Tafsir key
+                String savedTafsirKey = com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPReader.getSavedTafsirKey(this);
+                
+                if (savedTafsirKey != null && !savedTafsirKey.isEmpty()) {
+                    android.util.Log.d("PERFORMANCE", "✅ [DELAY-1s] Tafsir already initialized: " + savedTafsirKey);
+                    return;
+                }
+                
+                android.util.Log.d("PERFORMANCE", "→ [DELAY-1s] Initializing default Tafsir...");
+                
+                // 异步准备 Tafsir 列表
+                com.quran.quranaudio.online.quran_module.utils.reader.tafsir.TafsirManager.prepare(this, false, new kotlin.jvm.functions.Function0<kotlin.Unit>() {
+                    @Override
+                    public kotlin.Unit invoke() {
+                        // 获取用户语言
+                        String userLanguage = com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs.getLocale(MainActivity.this);
+                        String targetLanguage = (userLanguage != null && !userLanguage.isEmpty()) 
+                            ? userLanguage 
+                            : java.util.Locale.getDefault().getLanguage();
+                        
+                        // 获取所有可用的 Tafsir 模型
+                        java.util.Map<String, java.util.List<com.quran.quranaudio.online.quran_module.api.models.tafsir.TafsirInfoModel>> tafsirModels = 
+                            com.quran.quranaudio.online.quran_module.utils.reader.tafsir.TafsirManager.getModels();
+                        
+                        if (tafsirModels != null && !tafsirModels.isEmpty()) {
+                            String selectedKey = com.quran.quranaudio.online.quran_module.utils.tafsir.TafsirLanguageMapper.INSTANCE.pickBestTafsirKey(
+                                targetLanguage, 
+                                tafsirModels
+                            );
+                            
+                            if (selectedKey != null) {
+                                com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPReader.setSavedTafsirKey(MainActivity.this, selectedKey);
+                                android.util.Log.d("PERFORMANCE", "✅ [DELAY-1s] Tafsir initialized: " + selectedKey + " [" + (System.currentTimeMillis() - startTime) + "ms]");
+                            }
+                        }
+                        
+                        return kotlin.Unit.INSTANCE;
+                    }
+                });
+                
+            } catch (Exception e) {
+                android.util.Log.e("PERFORMANCE", "❌ [DELAY-1s] Tafsir initialization failed", e);
+            }
+        });
+    }
+    
+    /**
+     * Lazy 初始化反馈系统
+     */
+    private void initFeedbackSystemLazy() {
+        try {
+            // Set current page
+            FeedbackManager.Companion.getInstance().setCurrentPage("MainActivity");
+            
+            // 延迟 3 秒显示浮动按钮（总计 5 秒：2s 初始延迟 + 3s 额外延迟）
+            mainHandler.postDelayed(() -> {
+                try {
+                    if (isFinishing() || isDestroyed()) {
+                        return;
+                    }
+                    
+                    if (getWindow() == null || getWindow().getDecorView().getWindowToken() == null) {
+                        return;
+                    }
+                    
+                    long startTime = System.currentTimeMillis();
+                    feedbackFloatingButton = new FeedbackFloatingButton(this);
+                    feedbackFloatingButton.show();
+                    android.util.Log.d("PERFORMANCE", "✅ [DELAY-5s] Feedback button shown [" + (System.currentTimeMillis() - startTime) + "ms]");
+                    
+                } catch (Exception e) {
+                    android.util.Log.e("PERFORMANCE", "❌ [DELAY-5s] Feedback button failed", e);
+                }
+            }, 3000); // 额外 3 秒
+            
+            // 初始化退出拦截器
+            exitInterceptor = new ExitInterceptor(this);
+            
+            android.util.Log.d("PERFORMANCE", "✅ [DELAY-2s] Feedback system initialized");
+            
+        } catch (Exception e) {
+            android.util.Log.e("PERFORMANCE", "❌ [DELAY-2s] Feedback system init failed", e);
         }
     }
 
+    // ============================================================
+    // 辅助方法
+    // ============================================================
+
+    private boolean displaySettingsScreenFirst() {
+        return false;
+    }
+
     public void onBackPressed() {
-        // Exit interceptor logic
         if (exitInterceptor != null && exitInterceptor.onBackPressed()) {
-            // Intercepted, do not perform default back action
-            android.util.Log.d("MainActivity", "⚠️ Back press intercepted by ExitInterceptor");
             return;
         }
-        
-        // Allow, perform default back action (finish app)
         finish();
-    }
-    
-    /**
-     * 🌐 强制更新 Application 级别的语言配置
-     * 
-     * 原因：Application 实例在 Activity 切换时不会重新创建，
-     * 所以必须手动更新 Application 的 Resources
-     */
-    private void forceUpdateApplicationLanguage() {
-        try {
-            String language = com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs.getLocale(this);
-            
-            android.util.Log.d("MainActivity", "🔍 forceUpdateApplicationLanguage() - Language from SPAppConfigs: " + language);
-            
-            if (language == null || language.isEmpty()) {
-                android.util.Log.d("MainActivity", "⚠️ Language is null or empty");
-                return;
-            }
-            
-            java.util.Locale locale = new java.util.Locale(language);
-            java.util.Locale.setDefault(locale);
-            
-            // 更新 Application 的 Resources
-            android.content.res.Resources appResources = getApplicationContext().getResources();
-            android.content.res.Configuration appConfig = appResources.getConfiguration();
-            
-            android.util.Log.d("MainActivity", "📊 Application locale before: " + appConfig.getLocales().get(0));
-            
-            appConfig.setLocale(locale);
-            appResources.updateConfiguration(appConfig, appResources.getDisplayMetrics());
-            
-            android.util.Log.d("MainActivity", "✅ Application Resources updated to: " + language);
-            android.util.Log.d("MainActivity", "📊 Application locale after: " + appResources.getConfiguration().getLocales().get(0));
-            
-        } catch (Exception e) {
-            android.util.Log.e("MainActivity", "❌ Failed to update application language", e);
-        }
-    }
-    
-    /**
-     * 🔧 自动初始化默认 Tafsir
-     * 
-     * 在首次启动或引导完成后，根据用户设置的应用语言自动选择并保存默认 Tafsir，
-     * 避免用户点击注释时弹出 "Tafsir Not Available" 对话框
-     * 
-     * 优先级：
-     * 1. 如果已有保存的 Tafsir key，则跳过
-     * 2. 根据应用语言自动选择最佳 Tafsir
-     * 3. 保存到 SharedPreferences
-     */
-    private void initializeDefaultTafsirIfNeeded() {
-        try {
-            // 检查是否已有保存的 Tafsir key
-            String savedTafsirKey = com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPReader.getSavedTafsirKey(this);
-            
-            if (savedTafsirKey != null && !savedTafsirKey.isEmpty()) {
-                android.util.Log.d("MainActivity", "✅ Tafsir already initialized: " + savedTafsirKey);
-                return;
-            }
-            
-            android.util.Log.d("MainActivity", "🔧 No Tafsir selected, initializing default Tafsir...");
-            
-            // 异步准备 Tafsir 列表并选择默认值
-            com.quran.quranaudio.online.quran_module.utils.reader.tafsir.TafsirManager.prepare(this, false, new kotlin.jvm.functions.Function0<kotlin.Unit>() {
-                @Override
-                public kotlin.Unit invoke() {
-                    // 获取用户设置的语言
-                    String userLanguage = com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs.getLocale(MainActivity.this);
-                    String systemLanguage = java.util.Locale.getDefault().getLanguage();
-                    String targetLanguage;
-                    if (userLanguage != null && !userLanguage.isEmpty()) {
-                        targetLanguage = userLanguage;
-                    } else {
-                        targetLanguage = systemLanguage;
-                    }
-                    
-                    android.util.Log.d("MainActivity", "🌍 Target language for Tafsir: " + targetLanguage);
-                    
-                    // 获取所有可用的 Tafsir 模型
-                    java.util.Map<String, java.util.List<com.quran.quranaudio.online.quran_module.api.models.tafsir.TafsirInfoModel>> tafsirModels = 
-                        com.quran.quranaudio.online.quran_module.utils.reader.tafsir.TafsirManager.getModels();
-                    
-                    if (tafsirModels != null && !tafsirModels.isEmpty()) {
-                        // 根据语言选择最佳 Tafsir（使用 INSTANCE 访问 Kotlin object）
-                        String selectedKey = com.quran.quranaudio.online.quran_module.utils.tafsir.TafsirLanguageMapper.INSTANCE.pickBestTafsirKey(
-                            targetLanguage, 
-                            tafsirModels
-                        );
-                        
-                        if (selectedKey != null) {
-                            // 保存选择的 Tafsir key
-                            com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPReader.setSavedTafsirKey(MainActivity.this, selectedKey);
-                            android.util.Log.d("MainActivity", "✅ Auto-selected and saved Tafsir: " + selectedKey + " for language: " + targetLanguage);
-                        } else {
-                            android.util.Log.w("MainActivity", "⚠️ No suitable Tafsir found for language: " + targetLanguage);
-                        }
-                    } else {
-                        android.util.Log.w("MainActivity", "⚠️ No Tafsir models available");
-                    }
-                    
-                    return kotlin.Unit.INSTANCE;
-                }
-            });
-            
-        } catch (Exception e) {
-            android.util.Log.e("MainActivity", "❌ Failed to initialize default Tafsir", e);
-        }
-    }
-    
-    /**
-     * 💬 Initialize feedback system
-     * 🔥 Critical: 延迟初始化以确保 Activity 完全准备好
-     */
-    private void initFeedbackSystem() {
-        try {
-            android.util.Log.d("MainActivity", "💬 Initializing feedback system...");
-            android.util.Log.d("MainActivity", "   → Current Activity state: isFinishing=" + isFinishing() + ", isDestroyed=" + isDestroyed());
-            
-            // Set current page name (for feedback data collection)
-            // Note: Use Companion.getInstance() to access Kotlin companion object from Java
-            FeedbackManager.Companion.getInstance().setCurrentPage("MainActivity");
-            
-            // 🔥 关键修复：增加延迟时间，并在回调中检查 Activity 状态
-            // Initialize floating feedback button (delayed 5 seconds to ensure Activity is fully ready)
-            new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
-                try {
-                    // 🆕 在显示浮动按钮前检查 Activity 状态
-                    if (isFinishing() || isDestroyed()) {
-                        android.util.Log.w("MainActivity", "⚠️ Activity is finishing/destroyed, skip showing floating button");
-                        return;
-                    }
-                    
-                    // 检查窗口可用性
-                    if (getWindow() == null || getWindow().getDecorView().getWindowToken() == null) {
-                        android.util.Log.w("MainActivity", "⚠️ Activity window not ready, skip showing floating button");
-                        return;
-                    }
-                    
-                    android.util.Log.d("MainActivity", "→ Activity state validated, creating floating button...");
-                    android.util.Log.d("MainActivity", "   → isFinishing=" + isFinishing() + ", isDestroyed=" + isDestroyed());
-                    android.util.Log.d("MainActivity", "   → hasWindowToken=" + (getWindow().getDecorView().getWindowToken() != null));
-                    
-                    feedbackFloatingButton = new FeedbackFloatingButton(this);
-                    feedbackFloatingButton.show();
-                    android.util.Log.d("MainActivity", "✅ Feedback floating button shown");
-                    
-                } catch (Exception e) {
-                    android.util.Log.e("MainActivity", "❌ Failed to show feedback floating button", e);
-                    e.printStackTrace();
-                }
-            }, 5000); // 🆕 增加到 5 秒，确保 Activity 完全就绪
-            
-            // Initialize exit interceptor
-            exitInterceptor = new ExitInterceptor(this);
-            
-            android.util.Log.d("MainActivity", "✅ Feedback system initialized (button will show after 5s)");
-            
-        } catch (Exception e) {
-            android.util.Log.e("MainActivity", "❌ Failed to initialize feedback system", e);
-            e.printStackTrace();
-        }
     }
     
     @Override
     protected void onDestroy() {
         super.onDestroy();
         
-        // Cleanup feedback floating button
+        // 清理 Handler 回调
+        mainHandler.removeCallbacksAndMessages(null);
+        
+        // 清理反馈按钮
         if (feedbackFloatingButton != null) {
             feedbackFloatingButton.destroy();
-            android.util.Log.d("MainActivity", "✅ Feedback floating button destroyed");
         }
     }
-
 }

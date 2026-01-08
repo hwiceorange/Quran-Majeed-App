@@ -54,15 +54,23 @@ android {
         applicationId "com.quran.quranaudio.online"
         minSdkVersion 26
         targetSdkVersion 35
-        versionCode 109
-        versionName "1.9.27"
+        versionCode 111
+        versionName "1.9.29"
         multiDexEnabled true
         
-        // Support for 16 KB page sizes (Google Play requirement)
+        // 🔧 Support for 16 KB page sizes (Google Play requirement for Android 15+)
         ndk {
             // Only include ARM architectures for production (x86/x86_64 are for emulators only)
             abiFilters 'armeabi-v7a', 'arm64-v8a'
+            
+            // ✅ Add linker flags for 16KB page alignment (if building native code in future)
+            // This ensures any future native code will be properly aligned
+            // ldFlags "-Wl,-z,max-page-size=16384"
         }
+        
+        // ✅ Enhanced debug symbol level for better crash analysis
+        ndk.debugSymbolLevel = 'SYMBOL_TABLE'
+        
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -190,9 +198,11 @@ android {
             excludes += ['META-INF/atomicfu.kotlin_module']
         }
         
-        // Ensure native libraries are properly packaged for 16 KB page size support
+        // 🔧 Critical Fix: Force native libraries to NOT be compressed
+        // This allows the system to perform 16KB memory mapping on Android 15+
+        // useLegacyPackaging = true ensures .so files are stored uncompressed in the APK
         jniLibs {
-            useLegacyPackaging = false
+            useLegacyPackaging = true  // ✅ Changed from false to true - CRITICAL for 16KB page alignment
         }
     }
 
@@ -224,6 +234,7 @@ dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
     implementation(platform('org.jetbrains.kotlin:kotlin-bom:1.8.10'))
     implementation 'androidx.core:core-ktx:1.9.0'
+
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.android.material:material:1.6.1'

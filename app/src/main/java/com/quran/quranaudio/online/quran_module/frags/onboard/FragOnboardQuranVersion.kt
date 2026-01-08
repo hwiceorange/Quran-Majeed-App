@@ -110,113 +110,124 @@ class FragOnboardQuranVersion : FragOnboardBase() {
     }
     
     /**
-     * 从服务端加载翻译版本列表（优先使用本地数据，后台加载API）
+     * ⚡ 优化版：从缓存/本地/API三级加载翻译版本列表，消除用户感知的延迟
      * 
-     * 优化方案：
-     * 1. 立即显示本地数据（无等待）
-     * 2. 后台异步加载API数据
-     * 3. 合并并更新列表
+     * 加载策略：
+     * 1. 缓存优先：检查 TranslationCacheManager 的内存缓存（由上一步预加载）
+     * 2. 本地兜底：如果缓存未命中，立即显示本地硬编码数据
+     * 3. 后台补充：仅在缓存不完整时，才后台加载API数据并平滑更新
+     * 
+     * 优化目标：
+     * - 消除 "先显示3个，1秒后刷新到10个" 的延迟感
+     * - 用户进入页面后，列表已是完整状态（由上一步预加载提供）
      */
     private fun loadTranslationVersions() {
-        android.util.Log.d("FragOnboardQuranVersion", "🚀 Fast loading: displaying local data immediately")
+        android.util.Log.d("FragOnboardQuranVersion", "═══════════════════════════════════════════════")
+        android.util.Log.d("FragOnboardQuranVersion", "⚡ [优化版] 三级加载策略启动")
         android.util.Log.d("FragOnboardQuranVersion", "📍 Selected language: $selectedLanguageCode")
         
-        // ⚡ 步骤1：立即加载并显示本地数据（无需等待，用户体验优先）
+        // Capture context early to avoid accessing it when fragment might be detached
+        val appContext = context?.applicationContext ?: return
+        
+        // ⚡ 第1级：检查缓存（由上一步 FragOnboardLanguage 预加载）
+        val cachedVersions = TranslationCacheManager.getTranslations(
+            appContext,
+            selectedLanguageCode,
+            forceRefresh = false
+        )
+        
+        if (cachedVersions != null && cachedVersions.isNotEmpty()) {
+            // 🎯 缓存命中！立即显示完整数据，无需后台加载
+            android.util.Log.d("FragOnboardQuranVersion", "✅ [第1级 - 缓存命中] 直接使用预加载数据: ${cachedVersions.size} 个版本")
+            android.util.Log.d("FragOnboardQuranVersion", "✅ 用户体验：列表立即完整显示，无延迟感")
+            
+            availableVersions.clear()
+            availableVersions.addAll(cachedVersions)
+            displayTranslationVersions()
+            
+            android.util.Log.d("FragOnboardQuranVersion", "═══════════════════════════════════════════════")
+            return // 🚀 缓存充足，跳过后台加载
+        }
+        
+        // ⚡ 第2级：本地硬编码数据兜底
+        android.util.Log.d("FragOnboardQuranVersion", "⚠️ [第1级 - 缓存未命中] 回退到本地数据")
         val localVersions = LocalTranslationData.getVersions(selectedLanguageCode)
-        android.util.Log.d("FragOnboardQuranVersion", "✅ Local data loaded: ${localVersions.size} versions")
+        android.util.Log.d("FragOnboardQuranVersion", "📦 [第2级 - 本地数据] 加载 ${localVersions.size} 个版本")
         
         // 立即显示本地版本
         availableVersions.clear()
         availableVersions.addAll(localVersions)
         displayTranslationVersions()
         
-        // Capture context early to avoid accessing it when fragment might be detached
-        val appContext = context?.applicationContext ?: return
-        
-        // 🌐 步骤2：后台异步加载API数据（不阻塞UI）
+        // 🌐 第3级：后台异步加载API数据（补充更多版本）
+        android.util.Log.d("FragOnboardQuranVersion", "🔄 [第3级 - 后台补充] 开始异步加载API数据...")
         lifecycleScope.launch(Dispatchers.IO) {
             try {
-                android.util.Log.d("FragOnboardQuranVersion", "🔄 Background: fetching API data for: $selectedLanguageCode")
-                
-                // 方案A：优先从缓存加载
-                var apiTranslations = TranslationCacheManager.getTranslations(
-                    appContext,
-                    selectedLanguageCode,
-                    forceRefresh = false
-                )
-                
-                if (apiTranslations != null) {
-                    android.util.Log.d("FragOnboardQuranVersion", "⚡ API data from cache: ${apiTranslations.size} translations")
-                } else {
-                    // 方案B：从主API获取
-                    apiTranslations = try {
-                        android.util.Log.d("FragOnboardQuranVersion", "📡 Fetching from primary API...")
-                        val responseBody = RetrofitInstance.github.getAvailableTranslations()
+                // 方案A：从主API获取
+                val apiTranslations = try {
+                    android.util.Log.d("FragOnboardQuranVersion", "📡 Fetching from primary API...")
+                    val responseBody = RetrofitInstance.github.getAvailableTranslations()
+                    val jsonString = responseBody.string()
+                    parseTranslationsJson(jsonString, selectedLanguageCode)
+                } catch (primaryError: Exception) {
+                    android.util.Log.e("FragOnboardQuranVersion", "❌ Primary API failed: ${primaryError.message}")
+                    
+                    // 方案B：尝试备用API
+                    try {
+                        android.util.Log.d("FragOnboardQuranVersion", "📡 Trying fallback API...")
+                        val languageMap = mapOf(
+                            "en" to "english",
+                            "id" to "indonesian",
+                            "ar" to "arabic",
+                            "ur" to "urdu",
+                            "ms" to "malay",
+                            "tr" to "turkish",
+                            "bn" to "bengali"
+                        )
+                        val apiLanguage = languageMap[selectedLanguageCode] ?: "english"
+                        val responseBody = RetrofitInstance.quranFoundation.getTranslations(apiLanguage)
                         val jsonString = responseBody.string()
-                        parseTranslationsJson(jsonString, selectedLanguageCode)
-                    } catch (primaryError: Exception) {
-                        android.util.Log.e("FragOnboardQuranVersion", "❌ Primary API failed: ${primaryError.message}")
-                        
-                        // 方案C：尝试备用API
-                        try {
-                            android.util.Log.d("FragOnboardQuranVersion", "📡 Trying fallback API...")
-                            val languageMap = mapOf(
-                                "en" to "english",
-                                "id" to "indonesian",
-                                "ar" to "arabic",
-                                "ur" to "urdu",
-                                "ms" to "malay",
-                                "tr" to "turkish",
-                                "bn" to "bengali"
-                            )
-                            val apiLanguage = languageMap[selectedLanguageCode] ?: "english"
-                            val responseBody = RetrofitInstance.quranFoundation.getTranslations(apiLanguage)
-                            val jsonString = responseBody.string()
-                            parseQuranFoundationTranslations(jsonString, selectedLanguageCode)
-                        } catch (fallbackError: Exception) {
-                            android.util.Log.e("FragOnboardQuranVersion", "❌ Fallback API failed: ${fallbackError.message}")
-                            emptyList()
-                        }
+                        parseQuranFoundationTranslations(jsonString, selectedLanguageCode)
+                    } catch (fallbackError: Exception) {
+                        android.util.Log.e("FragOnboardQuranVersion", "❌ Fallback API failed: ${fallbackError.message}")
+                        emptyList()
                     }
                 }
-                
-                // 使用安全的空值处理
-                val finalApiTranslations = apiTranslations ?: emptyList()
                 
                 withContext(Dispatchers.Main) {
                     // Only update UI if fragment is still attached
                     if (!isAdded || context == null) return@withContext
                     
-                    if (finalApiTranslations.isNotEmpty()) {
-                        // 🔄 步骤3：合并本地数据和API数据
-                        android.util.Log.d("FragOnboardQuranVersion", "🔄 Merging local (${localVersions.size}) + API (${finalApiTranslations.size}) versions")
-                        val mergedVersions = LocalTranslationData.mergeVersions(localVersions, finalApiTranslations)
+                    if (apiTranslations.isNotEmpty()) {
+                        // 🔄 合并本地数据和API数据
+                        android.util.Log.d("FragOnboardQuranVersion", "🔄 [第3级 - 后台补充] Merging local (${localVersions.size}) + API (${apiTranslations.size})")
+                        val mergedVersions = LocalTranslationData.mergeVersions(localVersions, apiTranslations)
                         
                         android.util.Log.d("FragOnboardQuranVersion", "✅ Merged total: ${mergedVersions.size} versions")
                         
                         // 只有真正有新版本时才刷新UI
-                        if (mergedVersions.size > localVersions.size) {
-                            android.util.Log.d("FragOnboardQuranVersion", "🔄 Found ${mergedVersions.size - localVersions.size} new versions, updating UI")
+                        if (mergedVersions.size > availableVersions.size) {
+                            android.util.Log.d("FragOnboardQuranVersion", "🔄 Found ${mergedVersions.size - availableVersions.size} new versions, updating UI smoothly")
                             
                             availableVersions.clear()
-                            availableVersions.addAll(mergedVersions) // 不排序，保持本地顺序
+                            availableVersions.addAll(mergedVersions)
                             
-                            // 刷新UI显示新版本
-                            displayTranslationVersions()
+                            // ⚡ 平滑刷新UI（使用淡入动画）
+                            displayTranslationVersionsSmoothly()
                         } else {
-                            android.util.Log.d("FragOnboardQuranVersion", "✓ No new versions from API, keeping local data unchanged")
+                            android.util.Log.d("FragOnboardQuranVersion", "✓ No new versions from API, keeping current data")
                         }
                     } else {
-                        // API无数据，保持本地数据
-                        android.util.Log.d("FragOnboardQuranVersion", "ℹ️ No API data, keeping local versions displayed")
+                        android.util.Log.d("FragOnboardQuranVersion", "ℹ️ [第3级 - 后台补充] No API data, keeping local versions")
                     }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                android.util.Log.e("FragOnboardQuranVersion", "❌ Background API load failed, but local data already displayed: ${e.message}")
-                // 用户已经看到本地数据，不影响用户体验
+                android.util.Log.e("FragOnboardQuranVersion", "❌ [第3级 - 后台补充] Failed, but local data already displayed: ${e.message}")
             }
         }
+        
+        android.util.Log.d("FragOnboardQuranVersion", "═══════════════════════════════════════════════")
     }
     
     /**
@@ -571,6 +582,64 @@ class FragOnboardQuranVersion : FragOnboardBase() {
             }
         }
         android.util.Log.d("FragOnboardQuranVersion", "═══════════════════════════════════════════════")
+    }
+    
+    /**
+     * ⚡ 平滑刷新翻译版本列表（使用淡入动画，避免突兀的列表跳动）
+     */
+    private fun displayTranslationVersionsSmoothly() {
+        android.util.Log.d("FragOnboardQuranVersion", "🎬 平滑刷新UI（淡入动画）")
+        
+        val container = binding.containerVersions
+        
+        // 记录之前选中的版本
+        val previouslySelectedVersionId = selectedVersion?.versionId
+        
+        // 保存当前滚动位置
+        val scrollView = binding.scrollVersions
+        val scrollY = scrollView.scrollY
+        
+        // 使用淡出动画
+        container.animate()
+            .alpha(0f)
+            .setDuration(150)
+            .withEndAction {
+                // 重新构建列表
+                container.removeAllViews()
+                versionCardViews.clear()
+                
+                val filteredVersions = availableVersions.filter { it.languageCode == selectedLanguageCode }
+                
+                if (filteredVersions.isNotEmpty()) {
+                    filteredVersions.forEachIndexed { index, version ->
+                        val cardView = createVersionCard(version)
+                        container.addView(cardView)
+                        
+                        // 恢复之前的选中状态
+                        if (version.versionId == previouslySelectedVersionId) {
+                            selectVersion(version)
+                        } else if (index == 0 && selectedVersion == null) {
+                            // 如果之前没有选中，默认选中第一个
+                            selectVersion(version)
+                        }
+                    }
+                    
+                    android.util.Log.d("FragOnboardQuranVersion", "✅ UI刷新完成: ${filteredVersions.size} 个版本")
+                }
+                
+                // 恢复滚动位置
+                scrollView.post {
+                    scrollView.scrollTo(0, scrollY)
+                }
+                
+                // 淡入动画
+                container.alpha = 0f
+                container.animate()
+                    .alpha(1f)
+                    .setDuration(200)
+                    .start()
+            }
+            .start()
     }
     
     /**

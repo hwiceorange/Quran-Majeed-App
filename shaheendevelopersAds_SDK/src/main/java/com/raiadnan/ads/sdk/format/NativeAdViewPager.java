@@ -29,12 +29,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
-import com.applovin.mediation.MaxAd;
-import com.applovin.mediation.MaxError;
-import com.applovin.mediation.nativeAds.MaxNativeAdListener;
-import com.applovin.mediation.nativeAds.MaxNativeAdLoader;
-import com.applovin.mediation.nativeAds.MaxNativeAdView;
-import com.applovin.mediation.nativeAds.MaxNativeAdViewBinder;
+// AppLovin SDK removed
+//import com.applovin.mediation.MaxAd;
+//import com.applovin.mediation.MaxError;
+//import com.applovin.mediation.nativeAds.MaxNativeAdListener;
+//import com.applovin.mediation.nativeAds.MaxNativeAdLoader;
+//import com.applovin.mediation.nativeAds.MaxNativeAdView;
+//import com.applovin.mediation.nativeAds.MaxNativeAdViewBinder;
 import com.facebook.ads.AdError;
 import com.facebook.ads.AdOptionsView;
 import com.facebook.ads.NativeAdLayout;
@@ -89,9 +90,12 @@ public class NativeAdViewPager {
         Button startappNativeButton;
         LinearLayout startappNativeBackground;
 
+        // AppLovin SDK removed
+        /*
         FrameLayout applovinNativeAd;
         MaxNativeAdLoader nativeAdLoader;
         MaxAd nativeAd;
+        */
 
         ProgressBar progressBarAd;
 
@@ -197,7 +201,7 @@ public class NativeAdViewPager {
                 startappNativeButton = view.findViewById(R.id.startapp_native_button);
                 startappNativeButton.setOnClickListener(v1 -> startappNativeAd.performClick());
                 startappNativeBackground = view.findViewById(R.id.startapp_native_background);
-                applovinNativeAd = view.findViewById(R.id.applovin_native_ad_container);
+                // applovinNativeAd = view.findViewById(R.id.applovin_native_ad_container); // AppLovin SDK removed
                 progressBarAd = view.findViewById(R.id.progress_bar_ad);
                 progressBarAd.setVisibility(View.VISIBLE);
 
@@ -377,8 +381,11 @@ public class NativeAdViewPager {
                         Log.w(TAG, "StartApp SDK has been removed");
                         break;
 
+                    /* AppLovin SDK removed
                     case APPLOVIN:
+                    /* AppLovin SDK removed
                     case APPLOVIN_MAX:
+                    /* AppLovin SDK removed
                     case FAN_BIDDING_APPLOVIN_MAX:
                         if (applovinNativeAd.getVisibility() != View.VISIBLE) {
                             nativeAdLoader = new MaxNativeAdLoader(appLovinNativeId, activity);
@@ -429,6 +436,7 @@ public class NativeAdViewPager {
                             progressBarAd.setVisibility(View.GONE);
                         }
                         break;
+                        */
 
                     case UNITY:
                         //do nothing
@@ -462,7 +470,7 @@ public class NativeAdViewPager {
                 startappNativeButton = view.findViewById(R.id.startapp_native_button);
                 startappNativeButton.setOnClickListener(v1 -> startappNativeAd.performClick());
                 startappNativeBackground = view.findViewById(R.id.startapp_native_background);
-                applovinNativeAd = view.findViewById(R.id.applovin_native_ad_container);
+                // applovinNativeAd = view.findViewById(R.id.applovin_native_ad_container); // AppLovin SDK removed
                 progressBarAd = view.findViewById(R.id.progress_bar_ad);
                 progressBarAd.setVisibility(View.VISIBLE);
 
@@ -644,8 +652,11 @@ public class NativeAdViewPager {
                         Log.w(TAG, "StartApp SDK has been removed");
                         break;
 
+                    /* AppLovin SDK removed
                     case APPLOVIN:
+                    /* AppLovin SDK removed
                     case APPLOVIN_MAX:
+                    /* AppLovin SDK removed
                     case FAN_BIDDING_APPLOVIN_MAX:
                         if (applovinNativeAd.getVisibility() != View.VISIBLE) {
                             nativeAdLoader = new MaxNativeAdLoader(appLovinNativeId, activity);
@@ -695,6 +706,7 @@ public class NativeAdViewPager {
                             progressBarAd.setVisibility(View.GONE);
                         }
                         break;
+                        */
 
                     case UNITY:
 
@@ -708,6 +720,7 @@ public class NativeAdViewPager {
 
         }
 
+        /* AppLovin SDK removed
         public MaxNativeAdView createNativeAdView() {
             MaxNativeAdViewBinder binder = new MaxNativeAdViewBinder.Builder(R.layout.gnt_applovin_large_template_view)
                     .setTitleTextViewId(R.id.title_text_view)
@@ -733,6 +746,7 @@ public class NativeAdViewPager {
                     .build();
             return new MaxNativeAdView(binder, activity);
         }
+        */
 
     }
 

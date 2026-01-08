@@ -857,20 +857,56 @@ public class QadaTrackerActivity extends AppCompatActivity {
                     @Override
                     public void onPrayerLogged(String prayer, String date, int newStatus, String logId) {
                         long timestamp = System.currentTimeMillis();
-                        Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "] onPrayerLogged() received");
-                        Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "] Prayer: " + prayer + ", Date: " + date + ", Status: " + newStatus);
-                        Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "] Current mode: " + currentMode);
+                        Log.d(TAG, "⚡ [OPTIMISTIC-" + timestamp + "] onPrayerLogged() received");
+                        Log.d(TAG, "⚡ [OPTIMISTIC-" + timestamp + "] Prayer: " + prayer + ", Date: " + date + ", Status: " + newStatus);
+                        Log.d(TAG, "⚡ [OPTIMISTIC-" + timestamp + "] Current mode: " + currentMode);
                         
-                        // Refresh data
-                        if (currentMode == ViewMode.WEEKLY) {
-                            Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "] Calling loadWeeklyData()");
-                            loadWeeklyData();
-                        } else {
-                            Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "] Calling loadMonthlyData()");
-                            loadMonthlyData();
+                        // ⚡ 乐观更新：立即更新本地缓存和 UI
+                        if (currentMode == ViewMode.MONTHLY) {
+                            // 确保 monthlyData 中有该日期的数据
+                            if (!monthlyData.containsKey(date)) {
+                                monthlyData.put(date, new HashMap<>());
+                            }
+                            
+                            // 将 Int 转换为 PrayerLog.PrayerStatus 枚举
+                            PrayerLog.PrayerStatus status = PrayerLog.PrayerStatus.values()[newStatus];
+                            
+                            // 立即更新本地缓存
+                            PrayerLogData logData = new PrayerLogData(logId, status);
+                            monthlyData.get(date).put(prayer, logData);
+                            
+                            Log.d(TAG, "⚡ [OPTIMISTIC-" + timestamp + "] Local cache updated immediately");
+                            
+                            // 立即刷新 UI
+                            runOnUiThread(() -> {
+                                buildMonthlyPrayerTable();
+                                updateMonthlyCompletion();
+                            });
+                            
+                            Log.d(TAG, "⚡ [OPTIMISTIC-" + timestamp + "] UI refreshed immediately");
+                        } else if (currentMode == ViewMode.WEEKLY) {
+                            // Weekly 模式也需要乐观更新
+                            updateWeeklyDataOptimistic(prayer, date, newStatus, logId);
+                            
+                            // 立即刷新 UI
+                            runOnUiThread(() -> {
+                                buildWeeklyPrayerGrid();
+                                updateWeeklyCompletion();
+                            });
+                            
+                            Log.d(TAG, "⚡ [OPTIMISTIC-" + timestamp + "] Weekly UI refreshed immediately");
                         }
                         
-                        Log.d(TAG, "🔍 [CALLBACK-" + timestamp + "] onPrayerLogged() completed");
+                        // 🔄 后台同步数据（确保最终一致性）
+                        new android.os.Handler().postDelayed(() -> {
+                            if (currentMode == ViewMode.WEEKLY) {
+                                loadWeeklyData();
+                            } else {
+                                loadMonthlyData();
+                            }
+                        }, 500);
+                        
+                        Log.d(TAG, "⚡ [OPTIMISTIC-" + timestamp + "] onPrayerLogged() completed");
                     }
                     
                     @Override
@@ -1208,6 +1244,25 @@ public class QadaTrackerActivity extends AppCompatActivity {
     private int dpToPx(int dp) {
         float density = getResources().getDisplayMetrics().density;
         return Math.round(dp * density);
+    }
+    
+    /**
+     * ⚡ 乐观更新：立即更新 Weekly 数据缓存
+     */
+    private void updateWeeklyDataOptimistic(String prayer, String date, int newStatus, String logId) {
+        // 确保 weeklyData 中有该日期的数据
+        if (!weeklyData.containsKey(date)) {
+            weeklyData.put(date, new HashMap<>());
+        }
+        
+        // 将 Int 转换为 PrayerLog.PrayerStatus 枚举
+        PrayerLog.PrayerStatus status = PrayerLog.PrayerStatus.values()[newStatus];
+        
+        // 立即更新本地缓存
+        PrayerLogData logData = new PrayerLogData(logId, status);
+        weeklyData.get(date).put(prayer, logData);
+        
+        Log.d(TAG, "⚡ Weekly data updated optimistically: " + date + " / " + prayer + " → " + status);
     }
     
     /**

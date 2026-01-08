@@ -13,6 +13,8 @@ import java.util.Objects;
  * Whatsapp: +923002375907
  * Email: officialshaheendevelopers@gmail.com
  * Portfolio: https://codecanyon.net/user/shaheendevelopers/portfolio
+ * 
+ * 🔥 Updated: Added getItemId and containsItem for proper state management
  */
 public class TimingTablePagerAdapter extends FragmentStateAdapter {
 
@@ -39,5 +41,22 @@ public class TimingTablePagerAdapter extends FragmentStateAdapter {
     @Override
     public int getItemCount() {
         return 2;
+    }
+    
+    /**
+     * 🔥 修复崩溃：提供稳定的 itemId，防止状态恢复错误
+     */
+    @Override
+    public long getItemId(int position) {
+        // 使用 position 作为稳定 ID（因为 Fragment 类型固定）
+        return position;
+    }
+    
+    /**
+     * 🔥 修复崩溃：正确判断 itemId 是否存在
+     */
+    @Override
+    public boolean containsItem(long itemId) {
+        return itemId >= 0 && itemId < 2;
     }
 }

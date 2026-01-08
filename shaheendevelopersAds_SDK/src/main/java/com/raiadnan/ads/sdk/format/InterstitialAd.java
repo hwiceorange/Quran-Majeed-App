@@ -25,17 +25,18 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.applovin.adview.AppLovinInterstitialAd;
-import com.applovin.adview.AppLovinInterstitialAdDialog;
-import com.applovin.mediation.MaxAd;
-import com.applovin.mediation.MaxAdListener;
-import com.applovin.mediation.MaxError;
-import com.applovin.mediation.ads.MaxInterstitialAd;
-import com.applovin.sdk.AppLovinAd;
-import com.applovin.sdk.AppLovinAdDisplayListener;
-import com.applovin.sdk.AppLovinAdLoadListener;
-import com.applovin.sdk.AppLovinAdSize;
-import com.applovin.sdk.AppLovinSdk;
+// AppLovin SDK removed
+//import com.applovin.adview.AppLovinInterstitialAd;
+//import com.applovin.adview.AppLovinInterstitialAdDialog;
+//import com.applovin.mediation.MaxAd;
+//import com.applovin.mediation.MaxAdListener;
+//import com.applovin.mediation.MaxError;
+//import com.applovin.mediation.ads.MaxInterstitialAd;
+//import com.applovin.sdk.AppLovinAd;
+//import com.applovin.sdk.AppLovinAdDisplayListener;
+//import com.applovin.sdk.AppLovinAdLoadListener;
+//import com.applovin.sdk.AppLovinAdSize;
+//import com.applovin.sdk.AppLovinSdk;
 import com.facebook.ads.InterstitialAdListener;
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
@@ -44,7 +45,8 @@ import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.admanager.AdManagerInterstitialAd;
 import com.google.android.gms.ads.admanager.AdManagerInterstitialAdLoadCallback;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
-import com.raiadnan.ads.sdk.helper.AppLovinCustomEventInterstitial;
+// AppLovin SDK removed
+//import com.raiadnan.ads.sdk.helper.AppLovinCustomEventInterstitial;
 import com.raiadnan.ads.sdk.util.OnInterstitialAdDismissedListener;
 import com.raiadnan.ads.sdk.util.OnInterstitialAdShowedListener;
 import com.raiadnan.ads.sdk.util.Tools;
@@ -76,9 +78,10 @@ public class InterstitialAd {
 
         // private StartAppAd startAppAd;
         private com.unity3d.mediation.InterstitialAd unityInterstitialAd;
-        private MaxInterstitialAd maxInterstitialAd;
-        public AppLovinInterstitialAdDialog appLovinInterstitialAdDialog;
-        public AppLovinAd appLovinAd;
+        // AppLovin SDK removed
+        // private MaxInterstitialAd maxInterstitialAd;
+        // public AppLovinInterstitialAdDialog appLovinInterstitialAdDialog;
+        // public AppLovinAd appLovinAd;
         private int retryAttempt;
         private int counter = 1;
 
@@ -344,8 +347,11 @@ public class InterstitialAd {
                         unityInterstitialAd.load(unityAdLoadListener);
                         break;
 
+                    /* AppLovin SDK removed
                     case APPLOVIN:
+                    /* AppLovin SDK removed
                     case APPLOVIN_MAX:
+                    /* AppLovin SDK removed
                     case FAN_BIDDING_APPLOVIN_MAX:
                         maxInterstitialAd = new MaxInterstitialAd(appLovinInterstitialId, activity);
                         maxInterstitialAd.setListener(new MaxAdListener() {
@@ -387,7 +393,9 @@ public class InterstitialAd {
                         // Load the first ad
                         maxInterstitialAd.loadAd();
                         break;
+                        */
 
+                    /* AppLovin SDK removed
                     case APPLOVIN_DISCOVERY:
                         AdRequest.Builder builder = new AdRequest.Builder();
                         Bundle interstitialExtras = new Bundle();
@@ -406,6 +414,7 @@ public class InterstitialAd {
                         });
                         appLovinInterstitialAdDialog = AppLovinInterstitialAd.create(AppLovinSdk.getInstance(activity), activity);
                         break;
+                        */
 
                     case MOPUB:
                         //Mopub has been acquired by AppLovin
@@ -560,8 +569,11 @@ public class InterstitialAd {
                         unityInterstitialAd.load(unityAdLoadListener);
                         break;
 
+                    /* AppLovin SDK removed
                     case APPLOVIN:
+                    /* AppLovin SDK removed
                     case APPLOVIN_MAX:
+                    /* AppLovin SDK removed
                     case FAN_BIDDING_APPLOVIN_MAX:
                         maxInterstitialAd = new MaxInterstitialAd(appLovinInterstitialId, activity);
                         maxInterstitialAd.setListener(new MaxAdListener() {
@@ -602,7 +614,9 @@ public class InterstitialAd {
                         // Load the first ad
                         maxInterstitialAd.loadAd();
                         break;
+                        */
 
+                    /* AppLovin SDK removed
                     case APPLOVIN_DISCOVERY:
                         AdRequest.Builder builder = new AdRequest.Builder();
                         Bundle interstitialExtras = new Bundle();
@@ -620,6 +634,7 @@ public class InterstitialAd {
                         });
                         appLovinInterstitialAdDialog = AppLovinInterstitialAd.create(AppLovinSdk.getInstance(activity), activity);
                         break;
+                        */
 
                     case MOPUB:
                         //Mopub has been acquired by AppLovin
@@ -702,8 +717,11 @@ public class InterstitialAd {
                             unityInterstitialAd.show(showListener);
                             break;
 
+                        /* AppLovin SDK removed
                         case APPLOVIN:
+                        /* AppLovin SDK removed
                         case APPLOVIN_MAX:
+                        /* AppLovin SDK removed
                         case FAN_BIDDING_APPLOVIN_MAX:
                             if (maxInterstitialAd != null && maxInterstitialAd.isReady()) {
                                 Log.d(TAG, "ready : " + counter);
@@ -713,12 +731,15 @@ public class InterstitialAd {
                                 showBackupInterstitialAd();
                             }
                             break;
+                            */
 
+                        /* AppLovin SDK removed
                         case APPLOVIN_DISCOVERY:
                             if (appLovinInterstitialAdDialog != null) {
                                 appLovinInterstitialAdDialog.showAndRender(appLovinAd);
                             }
                             break;
+                            */
 
                         case MOPUB:
                             //Mopub has been acquired by AppLovin
@@ -790,19 +811,25 @@ public class InterstitialAd {
                         unityInterstitialAd.show(showListener);
                         break;
 
+                    /* AppLovin SDK removed
                     case APPLOVIN:
+                    /* AppLovin SDK removed
                     case APPLOVIN_MAX:
+                    /* AppLovin SDK removed
                     case FAN_BIDDING_APPLOVIN_MAX:
                         if (maxInterstitialAd != null && maxInterstitialAd.isReady()) {
                             maxInterstitialAd.showAd();
                         }
                         break;
+                        */
 
+                    /* AppLovin SDK removed
                     case APPLOVIN_DISCOVERY:
                         if (appLovinInterstitialAdDialog != null) {
                             appLovinInterstitialAdDialog.showAndRender(appLovinAd);
                         }
                         break;
+                        */
 
                     case MOPUB:
                         //Mopub has been acquired by AppLovin
@@ -969,8 +996,11 @@ public class InterstitialAd {
                         unityInterstitialAd.load(unityAdLoadListener);
                         break;
 
+                    /* AppLovin SDK removed
                     case APPLOVIN:
+                    /* AppLovin SDK removed
                     case APPLOVIN_MAX:
+                    /* AppLovin SDK removed
                     case FAN_BIDDING_APPLOVIN_MAX:
                         maxInterstitialAd = new MaxInterstitialAd(appLovinInterstitialId, activity);
                         maxInterstitialAd.setListener(new MaxAdListener() {
@@ -1013,7 +1043,9 @@ public class InterstitialAd {
                         // Load the first ad
                         maxInterstitialAd.loadAd();
                         break;
+                        */
 
+                    /* AppLovin SDK removed
                     case APPLOVIN_DISCOVERY:
                         AdRequest.Builder builder = new AdRequest.Builder();
                         Bundle interstitialExtras = new Bundle();
@@ -1032,6 +1064,7 @@ public class InterstitialAd {
                         });
                         appLovinInterstitialAdDialog = AppLovinInterstitialAd.create(AppLovinSdk.getInstance(activity), activity);
                         break;
+                        */
 
                     case MOPUB:
                         //Mopub has been acquired by AppLovin
@@ -1193,8 +1226,11 @@ public class InterstitialAd {
                         unityInterstitialAd.load(unityAdLoadListener);
                         break;
 
+                    /* AppLovin SDK removed
                     case APPLOVIN:
+                    /* AppLovin SDK removed
                     case APPLOVIN_MAX:
+                    /* AppLovin SDK removed
                     case FAN_BIDDING_APPLOVIN_MAX:
                         maxInterstitialAd = new MaxInterstitialAd(appLovinInterstitialId, activity);
                         maxInterstitialAd.setListener(new MaxAdListener() {
@@ -1236,7 +1272,9 @@ public class InterstitialAd {
                         // Load the first ad
                         maxInterstitialAd.loadAd();
                         break;
+                        */
 
+                    /* AppLovin SDK removed
                     case APPLOVIN_DISCOVERY:
                         AdRequest.Builder builder = new AdRequest.Builder();
                         Bundle interstitialExtras = new Bundle();
@@ -1254,6 +1292,7 @@ public class InterstitialAd {
                         });
                         appLovinInterstitialAdDialog = AppLovinInterstitialAd.create(AppLovinSdk.getInstance(activity), activity);
                         break;
+                        */
 
                     case MOPUB:
                         //Mopub has been acquired by AppLovin
@@ -1337,8 +1376,11 @@ public class InterstitialAd {
                             unityInterstitialAd.show(showListener);
                             break;
 
+                        /* AppLovin SDK removed
                         case APPLOVIN:
+                        /* AppLovin SDK removed
                         case APPLOVIN_MAX:
+                        /* AppLovin SDK removed
                         case FAN_BIDDING_APPLOVIN_MAX:
                             if (maxInterstitialAd != null && maxInterstitialAd.isReady()) {
                                 Log.d(TAG, "ready : " + counter);
@@ -1349,7 +1391,9 @@ public class InterstitialAd {
                                 showBackupInterstitialAd(onInterstitialAdShowedListener, onInterstitialAdDismissedListener);
                             }
                             break;
+                            */
 
+                        /* AppLovin SDK removed
                         case APPLOVIN_DISCOVERY:
                             if (appLovinInterstitialAdDialog != null) {
                                 appLovinInterstitialAdDialog.setAdDisplayListener(new AppLovinAdDisplayListener() {
@@ -1366,6 +1410,7 @@ public class InterstitialAd {
                                 appLovinInterstitialAdDialog.showAndRender(appLovinAd);
                             }
                             break;
+                            */
 
                         case MOPUB:
                             //Mopub has been acquired by AppLovin
@@ -1442,15 +1487,20 @@ public class InterstitialAd {
                         unityInterstitialAd.show(showListener);
                         break;
 
+                    /* AppLovin SDK removed
                     case APPLOVIN:
+                    /* AppLovin SDK removed
                     case APPLOVIN_MAX:
+                    /* AppLovin SDK removed
                     case FAN_BIDDING_APPLOVIN_MAX:
                         if (maxInterstitialAd != null && maxInterstitialAd.isReady()) {
                             maxInterstitialAd.showAd();
                             onInterstitialAdShowedListener.onInterstitialAdShowed();
                         }
                         break;
+                        */
 
+                    /* AppLovin SDK removed
                     case APPLOVIN_DISCOVERY:
                         if (appLovinInterstitialAdDialog != null) {
                             appLovinInterstitialAdDialog.setAdDisplayListener(new AppLovinAdDisplayListener() {
@@ -1467,6 +1517,7 @@ public class InterstitialAd {
                             appLovinInterstitialAdDialog.showAndRender(appLovinAd);
                         }
                         break;
+                        */
 
                     case MOPUB:
                         //Mopub has been acquired by AppLovin

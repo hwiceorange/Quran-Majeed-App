@@ -23,6 +23,9 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Source;
 import com.quran.quranaudio.online.R;
 import com.quran.quranaudio.online.quests.data.DailyProgressModel;
 import com.quran.quranaudio.online.quests.data.StreakStats;
@@ -91,6 +94,10 @@ public class DailyQuestsManager {
     
     private HomeQuestsViewModel viewModel;
     
+    // ⚡ 缓存的学习状态（预加载优化）
+    private volatile DocumentSnapshot cachedLearningState = null;
+    private volatile boolean isPreloadingState = false;
+    
     public DailyQuestsManager(Fragment fragment, View rootView, QuestRepository questRepository) {
         this.fragment = fragment;
         this.rootView = rootView;
@@ -121,6 +128,9 @@ public class DailyQuestsManager {
                 // User is logged in - initialize repository and observe data
                 Log.d(TAG, "User logged in - initializing quest data");
                 viewModel.initializeRepository(questRepository);
+                
+                // ⚡ 预加载学习状态（优化 GO 按钮响应速度）
+                preloadUserLearningState(userId);
                 
                 // Observe quest configuration (will show Create Card or Quests Cards)
                 observeQuestConfig();
@@ -459,11 +469,17 @@ public class DailyQuestsManager {
                     Log.d(TAG, "Task 1 (Quran Reading) Go button clicked!");
                     Context context = fragment.requireContext();
                     
-                    // 🔥 从 Firestore 获取上次阅读位置
+                    // ⚡ 立即提供视觉反馈（禁用按钮，显示loading状态）
+                    btnTask1Go.setEnabled(false);
+                    btnTask1Go.setText(R.string.loading);  // "Loading..."
+                    
+                    // 🔥 从缓存或 Firestore 获取上次阅读位置
                     fetchUserLearningStateAndStartReaderForReading(context, config);
                     
                 } catch (Exception e) {
                     Log.e(TAG, "Failed to launch Quran Reader for reading", e);
+                    btnTask1Go.setEnabled(true);
+                    btnTask1Go.setText(R.string.go);
                     Toast.makeText(fragment.requireContext(), "Failed to start Quran reading: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
@@ -479,11 +495,17 @@ public class DailyQuestsManager {
                     Log.d(TAG, "Task 2 (Quran Listening) Go button clicked!");
                     Context context = fragment.requireContext();
                     
-                    // 从 Firestore 获取上次阅读位置
+                    // ⚡ 立即提供视觉反馈（禁用按钮，显示loading状态）
+                    btnTask2Go.setEnabled(false);
+                    btnTask2Go.setText(R.string.loading);  // "Loading..."
+                    
+                    // 从缓存或 Firestore 获取上次阅读位置
                     fetchUserLearningStateAndStartReader(context, config);
                     
                 } catch (Exception e) {
                     Log.e(TAG, "Failed to launch Quran Reader for listening", e);
+                    btnTask2Go.setEnabled(true);
+                    btnTask2Go.setText(R.string.go);
                     Toast.makeText(fragment.requireContext(), "Failed to start Quran listening: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
@@ -676,19 +698,35 @@ public class DailyQuestsManager {
         if (currentUser == null) {
             Log.w(TAG, "User not logged in, using default position (Surah 1, Ayah 1)");
             startQuranReaderWithAudio(context, 1, 1, config);
+            resetTask2Button();
             return;
         }
         
         String userId = currentUser.getUid();
-        Log.d(TAG, "🎧 Fetching LISTENING UserLearningState from Firestore for user: " + userId);
+        Log.d(TAG, "🎧 Fetching LISTENING UserLearningState for user: " + userId);
         
-        // 从 Firestore 异步获取学习状态
-        com.google.firebase.firestore.FirebaseFirestore.getInstance()
+        // ⚡ 优先使用预加载的缓存数据
+        if (cachedLearningState != null && cachedLearningState.exists()) {
+            Log.d(TAG, "⚡ [CACHE HIT] Using preloaded learning state for listening");
+            Integer lastListenSurah = cachedLearningState.getLong("lastListenSurah") != null 
+                ? cachedLearningState.getLong("lastListenSurah").intValue() : 1;
+            Integer lastListenAyah = cachedLearningState.getLong("lastListenAyah") != null 
+                ? cachedLearningState.getLong("lastListenAyah").intValue() : 1;
+            
+            Log.d(TAG, "🎧 Listening position (CACHE): Surah " + lastListenSurah + ", Ayah " + lastListenAyah);
+            startQuranReaderWithAudio(context, lastListenSurah, lastListenAyah, config);
+            resetTask2Button();
+            return;
+        }
+        
+        // 缓存未命中，从 Firestore 获取（使用 Source.CACHE 优先策略）
+        Log.d(TAG, "⚠️ [CACHE MISS] Fetching from Firestore with CACHE priority");
+        FirebaseFirestore.getInstance()
             .collection("users")
             .document(userId)
             .collection("learningState")
             .document("current")
-            .get()
+            .get(Source.CACHE)  // ⚡ 优先从 Firestore 本地缓存加载
             .addOnSuccessListener(documentSnapshot -> {
                 if (documentSnapshot.exists()) {
                     // 🔥 关键修复：听力模式应该读取 lastListenSurah 和 lastListenAyah，不是 lastReadSurah
@@ -697,18 +735,64 @@ public class DailyQuestsManager {
                     Integer lastListenAyah = documentSnapshot.getLong("lastListenAyah") != null 
                         ? documentSnapshot.getLong("lastListenAyah").intValue() : 1;
                     
-                    Log.d(TAG, "🎧 Listening position found: Surah " + lastListenSurah + ", Ayah " + lastListenAyah);
+                    Log.d(TAG, "🎧 Listening position found (Firestore CACHE): Surah " + lastListenSurah + ", Ayah " + lastListenAyah);
                     startQuranReaderWithAudio(context, lastListenSurah, lastListenAyah, config);
                 } else {
                     Log.d(TAG, "🎧 Listening position not found, using default (Surah 1, Ayah 1)");
                     startQuranReaderWithAudio(context, 1, 1, config);
                 }
+                resetTask2Button();
             })
             .addOnFailureListener(e -> {
-                Log.e(TAG, "❌ Failed to fetch listening position from Firestore", e);
+                Log.e(TAG, "❌ Failed to fetch listening position from Firestore CACHE, trying SERVER", e);
+                // Firestore 本地缓存未命中，从服务器获取
+                fetchListeningStateFromServer(context, config, userId);
+            });
+    }
+    
+    /**
+     * 从服务器获取听力位置（Firestore 本地缓存未命中时的后备方案）
+     */
+    private void fetchListeningStateFromServer(Context context, UserQuestConfig config, String userId) {
+        FirebaseFirestore.getInstance()
+            .collection("users")
+            .document(userId)
+            .collection("learningState")
+            .document("current")
+            .get(Source.SERVER)  // 强制从服务器获取
+            .addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                    Integer lastListenSurah = documentSnapshot.getLong("lastListenSurah") != null 
+                        ? documentSnapshot.getLong("lastListenSurah").intValue() : 1;
+                    Integer lastListenAyah = documentSnapshot.getLong("lastListenAyah") != null 
+                        ? documentSnapshot.getLong("lastListenAyah").intValue() : 1;
+                    
+                    Log.d(TAG, "🎧 Listening position found (SERVER): Surah " + lastListenSurah + ", Ayah " + lastListenAyah);
+                    startQuranReaderWithAudio(context, lastListenSurah, lastListenAyah, config);
+                } else {
+                    Log.d(TAG, "🎧 Listening position not found (SERVER), using default");
+                    startQuranReaderWithAudio(context, 1, 1, config);
+                }
+                resetTask2Button();
+            })
+            .addOnFailureListener(e -> {
+                Log.e(TAG, "❌ Failed to fetch listening position from SERVER", e);
                 Toast.makeText(context, "Failed to load listening position, starting from Surah 1", Toast.LENGTH_SHORT).show();
                 startQuranReaderWithAudio(context, 1, 1, config);
+                resetTask2Button();
             });
+    }
+    
+    /**
+     * 恢复 Task 2 按钮状态
+     */
+    private void resetTask2Button() {
+        if (btnTask2Go != null) {
+            btnTask2Go.post(() -> {
+                btnTask2Go.setEnabled(true);
+                btnTask2Go.setText(R.string.go);
+            });
+        }
     }
     
     /**
@@ -757,19 +841,37 @@ public class DailyQuestsManager {
         if (currentUser == null) {
             Log.w(TAG, "User not logged in, starting from default position");
             startReaderBasedOnReadingUnit(context, 1, 1, 1, config);  // 默认: Surah 1, Ayah 1, Juz 1
+            resetTask1Button();
             return;
         }
         
         String userId = currentUser.getUid();
-        Log.d(TAG, "Fetching UserLearningState from Firestore for Quran Reading - user: " + userId);
+        Log.d(TAG, "📖 Fetching UserLearningState for Quran Reading - user: " + userId);
         
-        // 从 Firestore 异步获取学习状态
-        com.google.firebase.firestore.FirebaseFirestore.getInstance()
+        // ⚡ 优先使用预加载的缓存数据
+        if (cachedLearningState != null && cachedLearningState.exists()) {
+            Log.d(TAG, "⚡ [CACHE HIT] Using preloaded learning state for reading");
+            Integer lastReadSurah = cachedLearningState.getLong("lastReadSurah") != null 
+                ? cachedLearningState.getLong("lastReadSurah").intValue() : 1;
+            Integer lastReadAyah = cachedLearningState.getLong("lastReadAyah") != null 
+                ? cachedLearningState.getLong("lastReadAyah").intValue() : 1;
+            Integer lastReadJuz = cachedLearningState.getLong("lastReadJuz") != null 
+                ? cachedLearningState.getLong("lastReadJuz").intValue() : 1;
+            
+            Log.d(TAG, "📖 Reading position (CACHE): Surah " + lastReadSurah + ", Ayah " + lastReadAyah + ", Juz " + lastReadJuz);
+            startReaderBasedOnReadingUnit(context, lastReadSurah, lastReadAyah, lastReadJuz, config);
+            resetTask1Button();
+            return;
+        }
+        
+        // 缓存未命中，从 Firestore 获取（使用 Source.CACHE 优先策略）
+        Log.d(TAG, "⚠️ [CACHE MISS] Fetching from Firestore with CACHE priority");
+        FirebaseFirestore.getInstance()
             .collection("users")
             .document(userId)
             .collection("learningState")
             .document("current")
-            .get()
+            .get(Source.CACHE)  // ⚡ 优先从 Firestore 本地缓存加载
             .addOnSuccessListener(documentSnapshot -> {
                 if (documentSnapshot.exists()) {
                     // 解析学习状态
@@ -780,18 +882,66 @@ public class DailyQuestsManager {
                     Integer lastReadJuz = documentSnapshot.getLong("lastReadJuz") != null 
                         ? documentSnapshot.getLong("lastReadJuz").intValue() : 1;
                     
-                    Log.d(TAG, "✅ UserLearningState found: Surah " + lastReadSurah + ", Ayah " + lastReadAyah + ", Juz " + lastReadJuz);
+                    Log.d(TAG, "✅ UserLearningState found (Firestore CACHE): Surah " + lastReadSurah + ", Ayah " + lastReadAyah + ", Juz " + lastReadJuz);
                     startReaderBasedOnReadingUnit(context, lastReadSurah, lastReadAyah, lastReadJuz, config);
                 } else {
                     Log.d(TAG, "UserLearningState not found, starting from default position");
                     startReaderBasedOnReadingUnit(context, 1, 1, 1, config);
                 }
+                resetTask1Button();
             })
             .addOnFailureListener(e -> {
-                Log.e(TAG, "Failed to fetch UserLearningState for Reading", e);
+                Log.e(TAG, "❌ Failed to fetch UserLearningState from Firestore CACHE, trying SERVER", e);
+                // Firestore 本地缓存未命中，从服务器获取
+                fetchReadingStateFromServer(context, config, userId);
+            });
+    }
+    
+    /**
+     * 从服务器获取阅读位置（Firestore 本地缓存未命中时的后备方案）
+     */
+    private void fetchReadingStateFromServer(Context context, UserQuestConfig config, String userId) {
+        FirebaseFirestore.getInstance()
+            .collection("users")
+            .document(userId)
+            .collection("learningState")
+            .document("current")
+            .get(Source.SERVER)  // 强制从服务器获取
+            .addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                    Integer lastReadSurah = documentSnapshot.getLong("lastReadSurah") != null 
+                        ? documentSnapshot.getLong("lastReadSurah").intValue() : 1;
+                    Integer lastReadAyah = documentSnapshot.getLong("lastReadAyah") != null 
+                        ? documentSnapshot.getLong("lastReadAyah").intValue() : 1;
+                    Integer lastReadJuz = documentSnapshot.getLong("lastReadJuz") != null 
+                        ? documentSnapshot.getLong("lastReadJuz").intValue() : 1;
+                    
+                    Log.d(TAG, "📖 Reading position found (SERVER): Surah " + lastReadSurah + ", Ayah " + lastReadAyah + ", Juz " + lastReadJuz);
+                    startReaderBasedOnReadingUnit(context, lastReadSurah, lastReadAyah, lastReadJuz, config);
+                } else {
+                    Log.d(TAG, "📖 Reading position not found (SERVER), using default");
+                    startReaderBasedOnReadingUnit(context, 1, 1, 1, config);
+                }
+                resetTask1Button();
+            })
+            .addOnFailureListener(e -> {
+                Log.e(TAG, "❌ Failed to fetch UserLearningState from SERVER", e);
                 Toast.makeText(context, "Failed to load reading position, starting from beginning", Toast.LENGTH_SHORT).show();
                 startReaderBasedOnReadingUnit(context, 1, 1, 1, config);
+                resetTask1Button();
             });
+    }
+    
+    /**
+     * 恢复 Task 1 按钮状态
+     */
+    private void resetTask1Button() {
+        if (btnTask1Go != null) {
+            btnTask1Go.post(() -> {
+                btnTask1Go.setEnabled(true);
+                btnTask1Go.setText(R.string.go);
+            });
+        }
     }
     
     /**
@@ -852,10 +1002,68 @@ public class DailyQuestsManager {
     }
     
     /**
+     * ⚡ 预加载用户学习状态（后台异步，不阻塞UI）
+     * 在页面初始化时执行，确保点击 GO 按钮时数据已在缓存中
+     */
+    private void preloadUserLearningState(String userId) {
+        if (isPreloadingState) {
+            Log.d(TAG, "⚡ Learning state already preloading, skip");
+            return;
+        }
+        
+        isPreloadingState = true;
+        Log.d(TAG, "⚡ [PRELOAD] Starting to preload learning state for user: " + userId);
+        
+        // 使用 Source.CACHE 优先策略，快速获取数据
+        FirebaseFirestore.getInstance()
+            .collection("users")
+            .document(userId)
+            .collection("learningState")
+            .document("current")
+            .get(Source.CACHE)  // ⚡ 优先从缓存加载
+            .addOnSuccessListener(documentSnapshot -> {
+                cachedLearningState = documentSnapshot;
+                Log.d(TAG, "✅ [PRELOAD] Learning state loaded from CACHE: " + (documentSnapshot.exists() ? "exists" : "not exists"));
+                
+                // 如果缓存未命中，从服务器加载并更新缓存
+                if (!documentSnapshot.exists() || documentSnapshot.getMetadata().isFromCache()) {
+                    fetchLearningStateFromServer(userId);
+                }
+            })
+            .addOnFailureListener(e -> {
+                Log.w(TAG, "⚠️ [PRELOAD] Cache miss, fetching from server: " + e.getMessage());
+                fetchLearningStateFromServer(userId);
+            });
+    }
+    
+    /**
+     * 从服务器获取学习状态（缓存未命中时的后备方案）
+     */
+    private void fetchLearningStateFromServer(String userId) {
+        FirebaseFirestore.getInstance()
+            .collection("users")
+            .document(userId)
+            .collection("learningState")
+            .document("current")
+            .get(Source.SERVER)  // 强制从服务器获取
+            .addOnSuccessListener(documentSnapshot -> {
+                cachedLearningState = documentSnapshot;
+                isPreloadingState = false;
+                Log.d(TAG, "✅ [PRELOAD] Learning state loaded from SERVER");
+            })
+            .addOnFailureListener(e -> {
+                isPreloadingState = false;
+                Log.e(TAG, "❌ [PRELOAD] Failed to load from server: " + e.getMessage());
+            });
+    }
+    
+    /**
      * Cleans up resources
      */
     public void onDestroy() {
         // Remove observers if needed
+        cachedLearningState = null;
+        isPreloadingState = false;
         Log.d(TAG, "Daily Quests manager destroyed");
     }
 }

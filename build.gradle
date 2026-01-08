@@ -7,8 +7,11 @@ buildscript {
         maven {url "https://maven.aliyun.com/repository/public"}
         maven {url "https://jitpack.io"}
         maven { url 'https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea'}
-        // Pangle SDK removed - not compatible with Android 13+ (targetSdkVersion 33+)
-        // maven { url 'https://artifact.bytedance.com/repository/pangle/' }
+        // Pangle SDK repository - Official repository from Pangle documentation
+        // See: https://www.pangleglobal.com/zh/integration/integrate-pangle-sdk-for-android
+        maven { url 'https://artifact.bytedance.com/repository/pangle' }
+        // IronSource SDK repository
+        maven { url 'https://android-sdk.is.com/' }
         maven { url 'https://artifacts.applovin.com/android' }
         maven { url 'https://mvnrepository.com/artifact/'}
 
@@ -17,7 +20,8 @@ buildscript {
 
         classpath libs.gradle
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.google.gms:google-services:4.3.13'
+        // 🔧 Update Google Services plugin to align with latest Firebase/Play Services
+        classpath 'com.google.gms:google-services:4.4.0'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.7.1'
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
         classpath 'com.google.android.gms:oss-licenses-plugin:0.10.6'
@@ -47,8 +51,11 @@ allprojects {
         maven { url "https://oss.jfrog.org/libs-snapshot" }
 
         maven { url 'https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea'}
-        // Pangle SDK removed - not compatible with Android 13+ (targetSdkVersion 33+)
-        // maven { url 'https://artifact.bytedance.com/repository/pangle/' }
+        // Pangle SDK repository - Official repository from Pangle documentation
+        // See: https://www.pangleglobal.com/zh/integration/integrate-pangle-sdk-for-android
+        maven { url 'https://artifact.bytedance.com/repository/pangle' }
+        // IronSource SDK repository
+        maven { url 'https://android-sdk.is.com/' }
        // maven { url 'https://artifacts.applovin.com/android' }
 
         flatDir { dirs '/app/libs' }
@@ -60,6 +67,11 @@ allprojects {
             force "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
             force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
             force "org.jetbrains.kotlin:kotlin-stdlib-common:$kotlin_version"
+
+            // 🔒 Pin Google Mobile Ads to 22.1.0 family to avoid pulling 24.x (Kotlin 2.1)
+            force 'com.google.android.gms:play-services-ads:22.1.0'
+            force 'com.google.android.gms:play-services-ads-lite:22.1.0'
+            force 'com.google.android.gms:play-services-ads-identifier:18.0.1'
         }
     }
 }

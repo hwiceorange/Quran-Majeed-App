@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 
+        🔥 修复崩溃：WebView Resources$NotFoundException (平板设备配置)
+        
+        为大屏幕设备（平板）提供正确的 WebView 配置资源
+        防止 Chrome WebView 在平板上访问错误的资源 ID
+    -->
+    
+    <!-- WebView 设备类型判断所需的资源 - 平板模式 -->
+    <integer name="min_screen_width_bucket">1</integer>
+    
+    <!-- WebView 兼容性配置 - 标记为平板 -->
+    <bool name="is_tablet">true</bool>
+</resources>
+

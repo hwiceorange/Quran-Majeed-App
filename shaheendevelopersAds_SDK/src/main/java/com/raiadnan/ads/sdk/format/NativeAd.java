@@ -31,16 +31,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
-import com.applovin.adview.AppLovinAdView;
-import com.applovin.mediation.MaxAd;
-import com.applovin.mediation.MaxError;
-import com.applovin.mediation.nativeAds.MaxNativeAdListener;
-import com.applovin.mediation.nativeAds.MaxNativeAdLoader;
-import com.applovin.mediation.nativeAds.MaxNativeAdView;
-import com.applovin.mediation.nativeAds.MaxNativeAdViewBinder;
-import com.applovin.sdk.AppLovinAd;
-import com.applovin.sdk.AppLovinAdLoadListener;
-import com.applovin.sdk.AppLovinAdSize;
+// AppLovin SDK removed
+//import com.applovin.adview.AppLovinAdView;
+//import com.applovin.mediation.MaxAd;
+//import com.applovin.mediation.MaxError;
+//import com.applovin.mediation.nativeAds.MaxNativeAdListener;
+//import com.applovin.mediation.nativeAds.MaxNativeAdLoader;
+//import com.applovin.mediation.nativeAds.MaxNativeAdView;
+//import com.applovin.mediation.nativeAds.MaxNativeAdViewBinder;
+//import com.applovin.sdk.AppLovinAd;
+//import com.applovin.sdk.AppLovinAdLoadListener;
+//import com.applovin.sdk.AppLovinAdSize;
 import com.facebook.ads.AdError;
 import com.facebook.ads.AdOptionsView;
 import com.facebook.ads.NativeAdLayout;
@@ -52,7 +53,8 @@ import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.nativead.MediaView;
 import com.google.android.gms.ads.nativead.NativeAdView;
 import com.raiadnan.ads.sdk.R;
-import com.raiadnan.ads.sdk.helper.AppLovinCustomEventBanner;
+// AppLovin SDK removed
+//import com.raiadnan.ads.sdk.helper.AppLovinCustomEventBanner;
 import com.raiadnan.ads.sdk.util.AdManagerTemplateView;
 import com.raiadnan.ads.sdk.util.Constant;
 import com.raiadnan.ads.sdk.util.NativeTemplateStyle;
@@ -97,12 +99,15 @@ public class NativeAd {
         Button startappNativeButton;
         LinearLayout startappNativeBackground;
 
+        // AppLovin SDK removed
+        /*
         MaxAd maxAd;
         FrameLayout applovinNativeAd;
         MaxNativeAdLoader nativeAdLoader;
 
         LinearLayout appLovinDiscoveryMrecAd;
         private AppLovinAdView appLovinAdView;
+        */
 
         FrameLayout wortiseNativeAd;
 
@@ -243,8 +248,8 @@ public class NativeAd {
                 startappNativeButton.setOnClickListener(v -> startappNativeAd.performClick());
                 startappNativeBackground = activity.findViewById(R.id.startapp_native_background);
 
-                applovinNativeAd = activity.findViewById(R.id.applovin_native_ad_container);
-                appLovinDiscoveryMrecAd = activity.findViewById(R.id.applovin_discovery_mrec_ad_container);
+                // applovinNativeAd = activity.findViewById(R.id.applovin_native_ad_container); // AppLovin SDK removed
+                // appLovinDiscoveryMrecAd = activity.findViewById(R.id.applovin_discovery_mrec_ad_container); // AppLovin SDK removed
 
                 wortiseNativeAd = activity.findViewById(R.id.wortise_native_ad_container);
 
@@ -437,8 +442,11 @@ public class NativeAd {
                         Log.w(TAG, "StartApp SDK has been removed");
                         break;
 
+                    /* AppLovin SDK removed
                     case APPLOVIN:
+                    /* AppLovin SDK removed
                     case APPLOVIN_MAX:
+                    /* AppLovin SDK removed
                     case FAN_BIDDING_APPLOVIN_MAX:
                         if (applovinNativeAd.getVisibility() != View.VISIBLE) {
                             nativeAdLoader = new MaxNativeAdLoader(appLovinNativeId, activity);
@@ -490,7 +498,9 @@ public class NativeAd {
                             Log.d(TAG, "AppLovin Native Ad has been loaded");
                         }
                         break;
+                        */
 
+                    /* AppLovin SDK removed
                     case APPLOVIN_DISCOVERY:
                         if (appLovinDiscoveryMrecAd.getVisibility() != View.VISIBLE) {
                             AdRequest.Builder builder = new AdRequest.Builder();
@@ -527,6 +537,7 @@ public class NativeAd {
                             Log.d(TAG, "AppLovin Discovery Mrec Ad has been loaded");
                         }
                         break;
+                        */
 
                     case UNITY:
                         //do nothing
@@ -560,8 +571,8 @@ public class NativeAd {
                 startappNativeButton.setOnClickListener(v -> startappNativeAd.performClick());
                 startappNativeBackground = activity.findViewById(R.id.startapp_native_background);
 
-                applovinNativeAd = activity.findViewById(R.id.applovin_native_ad_container);
-                appLovinDiscoveryMrecAd = activity.findViewById(R.id.applovin_discovery_mrec_ad_container);
+                // applovinNativeAd = activity.findViewById(R.id.applovin_native_ad_container); // AppLovin SDK removed
+                // appLovinDiscoveryMrecAd = activity.findViewById(R.id.applovin_discovery_mrec_ad_container); // AppLovin SDK removed
 
                 wortiseNativeAd = activity.findViewById(R.id.wortise_native_ad_container);
 
@@ -757,8 +768,11 @@ public class NativeAd {
                         Log.w(TAG, "StartApp SDK has been removed");
                         break;
 
+                    /* AppLovin SDK removed
                     case APPLOVIN:
+                    /* AppLovin SDK removed
                     case APPLOVIN_MAX:
+                    /* AppLovin SDK removed
                     case FAN_BIDDING_APPLOVIN_MAX:
                         if (applovinNativeAd.getVisibility() != View.VISIBLE) {
                             nativeAdLoader = new MaxNativeAdLoader(appLovinNativeId, activity);
@@ -807,7 +821,9 @@ public class NativeAd {
                             Log.d(TAG, "AppLovin Native Ad has been loaded");
                         }
                         break;
+                        */
 
+                    /* AppLovin SDK removed
                     case APPLOVIN_DISCOVERY:
                         if (appLovinDiscoveryMrecAd.getVisibility() != View.VISIBLE) {
                             AdRequest.Builder builder = new AdRequest.Builder();
@@ -843,6 +859,7 @@ public class NativeAd {
                             Log.d(TAG, "AppLovin Discovery Mrec Ad has been loaded");
                         }
                         break;
+                        */
 
                     case UNITY:
                     case NONE:
@@ -882,6 +899,7 @@ public class NativeAd {
             nativeAdViewContainer.setBackgroundResource(drawableBackground);
         }
 
+        /* AppLovin SDK removed
         public MaxNativeAdView createNativeAdView() {
             MaxNativeAdViewBinder binder;
             switch (nativeAdStyle) {
@@ -1010,6 +1028,7 @@ public class NativeAd {
             }
             return new MaxNativeAdView(binder, activity);
         }
+        */
 
         @SuppressWarnings("ConstantConditions")
         public void populateNativeAdView(com.google.android.gms.ads.nativead.NativeAd nativeAd, NativeAdView nativeAdView) {

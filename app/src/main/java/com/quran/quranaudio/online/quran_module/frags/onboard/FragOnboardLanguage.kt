@@ -264,6 +264,14 @@ class FragOnboardLanguage : FragOnboardBase() {
                 com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(requireContext())
                     .logWorkflowStep("language_selection_complete")
                 
+                // ⚡ 立即预加载翻译数据（在用户进入下一页前的空档期）
+                // forceRefresh=true 因为用户刚切换了语言
+                android.util.Log.d("FragOnboardLanguage", "🚀 Pre-fetching translations for: $selectedLanguageCode")
+                com.quran.quranaudio.online.quran_module.utils.TranslationCacheManager.preloadCurrentLanguage(
+                    requireContext(),
+                    forceRefresh = true
+                )
+                
                 try {
                     android.util.Log.d("FragOnboardLanguage", "🔄 Attempting to recreate activity...")
                     activity.recreateWithLanguageChange(1)
@@ -289,46 +297,80 @@ class FragOnboardLanguage : FragOnboardBase() {
      * Shows ad for unpaid users, loads dynamically if needed
      */
     private fun setupNativeAd() {
-        android.util.Log.d("DIAGNOSE", "→→ setupNativeAd() called")
-        
-        val container = binding.nativeAdContainer
-        android.util.Log.d("DIAGNOSE", "→→ Native ad container found: ${container != null}")
+        android.util.Log.d("CRASH_DEBUG", "╔══════════════════════════════════════════════════════")
+        android.util.Log.d("CRASH_DEBUG", "║ 🎯 setupNativeAd() START - Language Selection Page")
+        android.util.Log.d("CRASH_DEBUG", "╚══════════════════════════════════════════════════════")
         
         try {
-            // Check subscription status
-            val isSubscribed = com.quranaudio.common.ad.SubscriptionChecker.isUserSubscribed(requireContext())
-            android.util.Log.d("DIAGNOSE", "→→ User subscribed: $isSubscribed")
+            val container = binding.nativeAdContainer
+            android.util.Log.d("CRASH_DEBUG", "✅ Native ad container retrieved")
             
-            if (isSubscribed) {
-                android.util.Log.d("DIAGNOSE", "→→ User is subscribed, hiding ad container")
-                container.visibility = View.GONE
-                return
+            try {
+                // Check subscription status
+                val isSubscribed = com.quranaudio.common.ad.SubscriptionChecker.isUserSubscribed(requireContext())
+                android.util.Log.d("CRASH_DEBUG", "✅ Subscription check: $isSubscribed")
+                
+                if (isSubscribed) {
+                    android.util.Log.d("CRASH_DEBUG", "✅ User is subscriber, hiding ad")
+                    container.visibility = View.GONE
+                    return
+                }
+                
+                android.util.Log.d("CRASH_DEBUG", "🔄 Preparing to load native ad...")
+                android.util.Log.d("CRASH_DEBUG", "   Activity: ${requireActivity().javaClass.simpleName}")
+                android.util.Log.d("CRASH_DEBUG", "   Container: ${container.javaClass.simpleName}")
+                
+                // ⚠️ CRITICAL: Wrap ad display in multiple layers of protection
+                try {
+                    android.util.Log.d("CRASH_DEBUG", "🚀 Calling NativeAdHelper.displayNativeAdWithAutoLoad()...")
+                    
+                    com.quranaudio.common.ad.NativeAdHelper.displayNativeAdWithAutoLoad(
+                        requireActivity(),
+                        container,
+                        R.layout.native_ad_onboarding
+                    )
+                    
+                    android.util.Log.d("CRASH_DEBUG", "✅ NativeAdHelper.displayNativeAdWithAutoLoad() completed")
+                    
+                    // Analytics
+                    try {
+                        com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(requireContext())
+                            .logAdExposure("native", "onboarding_language")
+                    } catch (analyticsError: Exception) {
+                        android.util.Log.w("CRASH_DEBUG", "⚠️ Analytics failed (non-fatal): ${analyticsError.message}")
+                    }
+                    
+                } catch (nativeError: UnsatisfiedLinkError) {
+                    // Native library loading error - THIS IS THE CRASH!
+                    android.util.Log.e("CRASH_DEBUG", "❌❌❌ NATIVE LIBRARY ERROR DETECTED!")
+                    android.util.Log.e("CRASH_DEBUG", "❌ This is the 16KB page alignment crash!")
+                    android.util.Log.e("CRASH_DEBUG", "❌ Error: ${nativeError.message}", nativeError)
+                    android.util.Log.e("CRASH_DEBUG", "❌ Likely SDK: Pangle (now removed) or IronSource")
+                    container.visibility = View.GONE
+                } catch (adError: Exception) {
+                    android.util.Log.e("CRASH_DEBUG", "❌ Ad display error: ${adError.javaClass.name}")
+                    android.util.Log.e("CRASH_DEBUG", "❌ Message: ${adError.message}", adError)
+                    container.visibility = View.GONE
+                }
+                
+            } catch (innerError: Exception) {
+                android.util.Log.e("CRASH_DEBUG", "❌ Inner exception in setupNativeAd()", innerError)
+                try {
+                    container.visibility = View.GONE
+                } catch (e: Exception) {
+                    android.util.Log.e("CRASH_DEBUG", "❌ Can't even hide container: ${e.message}")
+                }
             }
             
-            android.util.Log.d("DIAGNOSE", "→→ Calling NativeAdHelper.displayNativeAdWithAutoLoad()")
-            android.util.Log.d("DIAGNOSE", "→→ Activity: ${requireActivity()}")
-            android.util.Log.d("DIAGNOSE", "→→ Container: $container")
-            android.util.Log.d("DIAGNOSE", "→→ Layout: R.layout.native_ad_onboarding")
-            
-            // Use new dynamic loading method
-            com.quranaudio.common.ad.NativeAdHelper.displayNativeAdWithAutoLoad(
-                requireActivity(),
-                container,
-                R.layout.native_ad_onboarding
-            )
-            
-            // 🎯 Firebase Analytics: 原生广告展示在语言选择页（可能影响新用户转化）
-            com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(requireContext())
-                .logAdExposure("native", "onboarding_language")
-            
-            android.util.Log.d("DIAGNOSE", "✅ NativeAdHelper.displayNativeAdWithAutoLoad() returned")
-        } catch (e: Exception) {
-            android.util.Log.e("DIAGNOSE_ERROR", "❌ setupNativeAd() FAILED", e)
-            android.util.Log.e("DIAGNOSE_ERROR", "❌ Exception type: ${e.javaClass.name}")
-            android.util.Log.e("DIAGNOSE_ERROR", "❌ Exception message: ${e.message}")
-            e.printStackTrace()
-            container.visibility = View.GONE
+        } catch (outerError: Throwable) {
+            // Ultimate safety net - catch EVERYTHING
+            android.util.Log.e("CRASH_DEBUG", "❌❌❌ CRITICAL ERROR in setupNativeAd()!", outerError)
+            android.util.Log.e("CRASH_DEBUG", "❌ Type: ${outerError.javaClass.name}")
+            android.util.Log.e("CRASH_DEBUG", "❌ Message: ${outerError.message}")
+            outerError.printStackTrace()
         }
+        
+        android.util.Log.d("CRASH_DEBUG", "✅ setupNativeAd() END (ad may or may not be shown)")
     }
     
     override fun onResume() {

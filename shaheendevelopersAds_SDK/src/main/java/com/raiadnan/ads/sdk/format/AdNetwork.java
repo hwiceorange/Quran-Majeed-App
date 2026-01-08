@@ -20,8 +20,9 @@ import static com.raiadnan.ads.sdk.util.Constant.UNITY;
 import android.app.Activity;
 import android.util.Log;
 
-import com.applovin.sdk.AppLovinMediationProvider;
-import com.applovin.sdk.AppLovinSdk;
+// AppLovin SDK removed
+//import com.applovin.sdk.AppLovinMediationProvider;
+//import com.applovin.sdk.AppLovinSdk;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.AdapterStatus;
 //import com.ironsource.mediationsdk.IronSource;
@@ -162,6 +163,7 @@ public class AdNetwork {
                                 }).build();
                         UnityMediation.initialize(configuration);
                         break;
+                    /* AppLovin SDK removed
                     case APPLOVIN:
                     case APPLOVIN_MAX:
                     case FAN_BIDDING_APPLOVIN_MAX:
@@ -174,6 +176,7 @@ public class AdNetwork {
                     case APPLOVIN_DISCOVERY:
                         AppLovinSdk.initializeSdk(activity);
                         break;
+                    */
 
                     case MOPUB:
                         //Mopub has been acquired by AppLovin
@@ -226,6 +229,7 @@ public class AdNetwork {
                                 }).build();
                         UnityMediation.initialize(configuration);
                         break;
+                    /* AppLovin SDK removed
                     case APPLOVIN:
                     case APPLOVIN_MAX:
                     case FAN_BIDDING_APPLOVIN_MAX:
@@ -238,6 +242,7 @@ public class AdNetwork {
                     case APPLOVIN_DISCOVERY:
                         AppLovinSdk.initializeSdk(activity);
                         break;
+                    */
 
                     case MOPUB:
                         //Mopub has been acquired by AppLovin

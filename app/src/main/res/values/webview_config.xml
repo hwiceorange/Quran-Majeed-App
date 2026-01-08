@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 
+        🔥 修复崩溃：WebView Resources$NotFoundException
+        
+        Chrome WebView 内部的 DeviceFormFactor.isTablet() 会尝试访问这些资源。
+        如果不提供这些资源，在某些设备上会导致 Resources$NotFoundException。
+        
+        崩溃信息：
+        android.content.res.Resources$NotFoundException: Resource ID #0x90c0006
+        at org.chromium.ui.base.DeviceFormFactor.isTablet()
+    -->
+    
+    <!-- WebView 设备类型判断所需的资源 -->
+    <!-- 0 = 手机模式, 1 = 平板模式 -->
+    <integer name="min_screen_width_bucket">0</integer>
+    
+    <!-- WebView 兼容性配置 -->
+    <bool name="is_tablet">false</bool>
+</resources>
+

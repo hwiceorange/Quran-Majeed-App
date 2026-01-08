@@ -14,10 +14,14 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.applovin.mediation.MaxAd;
-import com.applovin.mediation.MaxAdListener;
-import com.applovin.mediation.MaxError;
-import com.applovin.mediation.ads.MaxAppOpenAd;
+// AppLovin SDK removed
+//import com.applovin.mediation.MaxAd;
+// AppLovin SDK removed
+//import com.applovin.mediation.MaxAdListener;
+// AppLovin SDK removed
+//import com.applovin.mediation.MaxError;
+// AppLovin SDK removed
+//import com.applovin.mediation.ads.MaxAppOpenAd;
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.FullScreenContentCallback;
@@ -28,7 +32,8 @@ import com.raiadnan.ads.sdk.util.OnShowAdCompleteListener;
 @SuppressLint("StaticFieldLeak")
 public class AppOpenAd {
     public static com.google.android.gms.ads.appopen.AppOpenAd appOpenAd = null;
-    public static MaxAppOpenAd maxAppOpenAd = null;
+// AppLovin SDK removed: public static MaxAppOpenAd maxAppOpenAd = null;
+//    public static MaxAppOpenAd maxAppOpenAd = null;
     public static boolean isAppOpenAdLoaded = false;
 
     public static class Builder {
@@ -115,12 +120,15 @@ public class AppOpenAd {
                         }
                         break;
 
+                    /* AppLovin SDK removed
                     case APPLOVIN:
+                    /* AppLovin SDK removed
                     case APPLOVIN_MAX:
                         if (maxAppOpenAd != null) {
                             maxAppOpenAd = null;
                         }
                         break;
+                        */
 
                     default:
                         //do nothing
@@ -173,10 +181,13 @@ public class AppOpenAd {
                         });
                         break;
 
+                    /* AppLovin SDK removed
                     case APPLOVIN:
+                    /* AppLovin SDK removed
                     case APPLOVIN_MAX:
                         if (!applovinAppOpenId.equals("0")) {
-                            maxAppOpenAd = new MaxAppOpenAd(applovinAppOpenId, activity);
+// AppLovin SDK removed: maxAppOpenAd = new MaxAppOpenAd(applovinAppOpenId, activity);
+//                            maxAppOpenAd = new MaxAppOpenAd(applovinAppOpenId, activity);
                             maxAppOpenAd.setListener(new MaxAdListener() {
                                 @Override
                                 public void onAdLoaded(MaxAd ad) {
@@ -217,6 +228,7 @@ public class AppOpenAd {
                             loadBackupAppOpenAd(onShowAdCompleteListener);
                         }
                         break;
+                        */
 
 
                     default:
@@ -261,7 +273,9 @@ public class AppOpenAd {
                     }
                     break;
 
+                /* AppLovin SDK removed
                 case APPLOVIN:
+                /* AppLovin SDK removed
                 case APPLOVIN_MAX:
                     if (maxAppOpenAd != null) {
                         maxAppOpenAd.setListener(new MaxAdListener() {
@@ -303,6 +317,7 @@ public class AppOpenAd {
                         onShowAdCompleteListener.onShowAdComplete();
                     }
                     break;
+                    */
 
                 default:
                     onShowAdCompleteListener.onShowAdComplete();
@@ -355,9 +370,12 @@ public class AppOpenAd {
                         });
                         break;
 
+                    /* AppLovin SDK removed
                     case APPLOVIN:
+                    /* AppLovin SDK removed
                     case APPLOVIN_MAX:
-                        maxAppOpenAd = new MaxAppOpenAd(applovinAppOpenId, activity);
+// AppLovin SDK removed: maxAppOpenAd = new MaxAppOpenAd(applovinAppOpenId, activity);
+//                        maxAppOpenAd = new MaxAppOpenAd(applovinAppOpenId, activity);
                         maxAppOpenAd.setListener(new MaxAdListener() {
                             @Override
                             public void onAdLoaded(MaxAd ad) {
@@ -399,6 +417,7 @@ public class AppOpenAd {
                         });
                         maxAppOpenAd.loadAd();
                         break;
+                        */
 
                     default:
                         //do nothing
@@ -440,7 +459,9 @@ public class AppOpenAd {
                     }
                     break;
 
+                /* AppLovin SDK removed
                 case APPLOVIN:
+                /* AppLovin SDK removed
                 case APPLOVIN_MAX:
                     if (maxAppOpenAd != null) {
                         maxAppOpenAd.setListener(new MaxAdListener() {
@@ -485,6 +506,7 @@ public class AppOpenAd {
                         showBackupAppOpenAd();
                     }
                     break;
+                    */
 
                 default:
                     //do nothing
@@ -536,10 +558,13 @@ public class AppOpenAd {
                         });
                         break;
 
+                    /* AppLovin SDK removed
                     case APPLOVIN:
+                    /* AppLovin SDK removed
                     case APPLOVIN_MAX:
                         if (!applovinAppOpenId.equals("0")) {
-                            maxAppOpenAd = new MaxAppOpenAd(applovinAppOpenId, activity);
+// AppLovin SDK removed: maxAppOpenAd = new MaxAppOpenAd(applovinAppOpenId, activity);
+//                            maxAppOpenAd = new MaxAppOpenAd(applovinAppOpenId, activity);
                             maxAppOpenAd.setListener(new MaxAdListener() {
                                 @Override
                                 public void onAdLoaded(MaxAd ad) {
@@ -582,6 +607,7 @@ public class AppOpenAd {
                             showBackupAppOpenAd(onShowAdCompleteListener);
                         }
                         break;
+                        */
 
                     default:
                         onShowAdCompleteListener.onShowAdComplete();
@@ -625,7 +651,9 @@ public class AppOpenAd {
                     }
                     break;
 
+                /* AppLovin SDK removed
                 case APPLOVIN:
+                /* AppLovin SDK removed
                 case APPLOVIN_MAX:
                     if (maxAppOpenAd != null) {
                         maxAppOpenAd.setListener(new MaxAdListener() {
@@ -667,6 +695,7 @@ public class AppOpenAd {
                         onShowAdCompleteListener.onShowAdComplete();
                     }
                     break;
+                    */
 
 
 
@@ -721,9 +750,12 @@ public class AppOpenAd {
                         });
                         break;
 
+                    /* AppLovin SDK removed
                     case APPLOVIN:
+                    /* AppLovin SDK removed
                     case APPLOVIN_MAX:
-                        maxAppOpenAd = new MaxAppOpenAd(applovinAppOpenId, activity);
+// AppLovin SDK removed: maxAppOpenAd = new MaxAppOpenAd(applovinAppOpenId, activity);
+//                        maxAppOpenAd = new MaxAppOpenAd(applovinAppOpenId, activity);
                         maxAppOpenAd.setListener(new MaxAdListener() {
                             @Override
                             public void onAdLoaded(MaxAd ad) {
@@ -765,6 +797,7 @@ public class AppOpenAd {
                         });
                         maxAppOpenAd.loadAd();
                         break;
+                        */
 
                     default:
                         //do nothing
@@ -804,7 +837,9 @@ public class AppOpenAd {
                     }
                     break;
 
+                /* AppLovin SDK removed
                 case APPLOVIN:
+                /* AppLovin SDK removed
                 case APPLOVIN_MAX:
                     if (maxAppOpenAd != null) {
                         maxAppOpenAd.setListener(new MaxAdListener() {
@@ -847,6 +882,7 @@ public class AppOpenAd {
                         maxAppOpenAd.showAd();
                     }
                     break;
+                    */
 
 
                 default:

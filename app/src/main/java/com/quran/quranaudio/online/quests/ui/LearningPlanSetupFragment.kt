@@ -60,6 +60,8 @@ class LearningPlanSetupFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var googleAuthManager: GoogleAuthManager
     private lateinit var questRepository: QuestRepository
+    // 标记是否已从存储完成一次回显，避免后续范围更新时重置用户值
+    private var hasHydratedFromStorage: Boolean = false
 
     // ActivityResultLauncher for Google Sign-In
     private lateinit var signInLauncher: ActivityResultLauncher<Intent>
@@ -377,19 +379,27 @@ class LearningPlanSetupFragment : Fragment() {
             viewModel.sliderRange.observe(viewLifecycleOwner) { range ->
                 if (!isAdded || context == null) return@observe
                 
-                Log.d(TAG, "Slider range updated: ${range.min}-${range.max}, default: ${range.defaultValue}")
+                Log.d(TAG, "Slider range updated: ${range.min}-${range.max}, default: ${range.defaultValue}, hydrated=$hasHydratedFromStorage")
                 
                 // 更新 Slider 范围
                 binding.sbReadingGoal.valueFrom = range.min.toFloat()
                 binding.sbReadingGoal.valueTo = range.max.toFloat()
-                binding.sbReadingGoal.value = range.defaultValue.toFloat()
+                
+                // 如果已经完成一次回显，则保持当前值并夹紧到新范围，避免回显后被默认值覆盖
+                val currentValue = binding.sbReadingGoal.value
+                val targetValue = if (hasHydratedFromStorage) {
+                    currentValue.coerceIn(range.min.toFloat(), range.max.toFloat())
+                } else {
+                    range.defaultValue.toFloat()
+                }
+                binding.sbReadingGoal.value = targetValue
                 
                 // 更新范围标签
                 binding.tvSliderMin.text = range.min.toString()
                 binding.tvSliderMax.text = range.max.toString()
                 
-                // 更新显示
-                binding.tvReadingPagesValue.text = range.defaultValue.toString()
+                // 更新显示（保持与 slider 同步）
+                binding.tvReadingPagesValue.text = targetValue.toInt().toString()
             }
             
             // ===== 观察用户配置并回显到 UI =====
@@ -491,6 +501,9 @@ class LearningPlanSetupFragment : Fragment() {
                                     it.recitationMinutes,
                                     it.recitationEnabled
                                 )
+                                
+                                // 标记已完成一次回显，避免后续范围更新把用户值重置为默认
+                                hasHydratedFromStorage = true
                                 
                                 Log.d(TAG, "配置回显完成")
                             } ?: run {

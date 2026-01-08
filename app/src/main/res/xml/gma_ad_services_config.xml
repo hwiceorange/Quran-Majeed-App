@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ad-services-config>
+    <!-- This config file is required for AdMob's Privacy Sandbox integration on Android 13+ (API 33+) -->
+    <!-- It resolves conflicts between Firebase Analytics and Google Ads SDK -->
+    <!-- For more info: https://developers.google.com/admob/android/privacy/gma-config -->
+</ad-services-config>
+

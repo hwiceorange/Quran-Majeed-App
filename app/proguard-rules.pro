@@ -92,3 +92,43 @@ public static *** e(...);
     public *** println(...);
     public *** print(...);
 }
+
+# ============================================
+# 🔥 WebView Crash Fix - Resources$NotFoundException
+# ============================================
+# Fix for: android.content.res.Resources$NotFoundException: Resource ID #0x90c0006
+# at org.chromium.ui.base.DeviceFormFactor.isTablet()
+# 
+# WebView requires certain resources to be preserved and accessible
+# ============================================
+
+# Keep WebView resources
+-keep class android.webkit.** { *; }
+-keepclassmembers class android.webkit.** { *; }
+
+# Keep WebView JavaScript interfaces
+-keepclassmembers class * {
+    @android.webkit.JavascriptInterface <methods>;
+}
+
+# Keep WebView client classes
+-keep class com.quran.quranaudio.online.quran_module.utils.tafsir.TafsirWebViewClient { *; }
+-keep class com.quran.quranaudio.online.quran_module.utils.chapterInfo.ChapterInfoWebViewClient { *; }
+
+# Prevent resource obfuscation for WebView-related resources
+-keepclassmembers class **.R$* {
+    public static <fields>;
+}
+
+# Keep resource IDs that WebView might access
+-keep class **.R$integer { *; }
+-keep class **.R$bool { *; }
+-keep class **.R$drawable { *; }
+-keep class **.R$string { *; }
+
+# Chrome WebView specific
+-dontwarn org.chromium.**
+-keep class org.chromium.** { *; }
+
+# Prevent stripping of WebView support resources
+-keepresources string/**, drawable/**, layout/**

@@ -28,15 +28,16 @@ import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 
-import com.applovin.adview.AppLovinAdView;
-import com.applovin.mediation.MaxAd;
-import com.applovin.mediation.MaxAdViewAdListener;
-import com.applovin.mediation.MaxError;
-import com.applovin.mediation.ads.MaxAdView;
-import com.applovin.sdk.AppLovinAd;
-import com.applovin.sdk.AppLovinAdLoadListener;
-import com.applovin.sdk.AppLovinAdSize;
-import com.applovin.sdk.AppLovinSdkUtils;
+// AppLovin SDK removed
+//import com.applovin.adview.AppLovinAdView;
+//import com.applovin.mediation.MaxAd;
+//import com.applovin.mediation.MaxAdViewAdListener;
+//import com.applovin.mediation.MaxError;
+//import com.applovin.mediation.ads.MaxAdView;
+//import com.applovin.sdk.AppLovinAd;
+//import com.applovin.sdk.AppLovinAdLoadListener;
+//import com.applovin.sdk.AppLovinAdSize;
+//import com.applovin.sdk.AppLovinSdkUtils;
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdSize;
 import com.google.android.gms.ads.AdListener;
@@ -45,7 +46,8 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.admanager.AdManagerAdView;
 import com.raiadnan.ads.sdk.R;
-import com.raiadnan.ads.sdk.helper.AppLovinCustomEventBanner;
+// AppLovin SDK removed
+//import com.raiadnan.ads.sdk.helper.AppLovinCustomEventBanner;
 import com.raiadnan.ads.sdk.util.Tools;
 // StartApp SDK removed
 //import com.startapp.sdk.ads.banner.Banner;
@@ -64,7 +66,7 @@ public class MediumRectangleAd {
         private AdView adView;
         private AdManagerAdView adManagerAdView;
         private com.facebook.ads.AdView fanAdView;
-        private AppLovinAdView appLovinAdView;
+        // private AppLovinAdView appLovinAdView; // AppLovin SDK removed
 
 
         private String adStatus = "";
@@ -320,8 +322,11 @@ public class MediumRectangleAd {
                         Log.d(TAG, adNetwork + " Banner Ad unit Id : " + unityBannerId);
                         break;
 
+                    /* AppLovin SDK removed
                     case APPLOVIN:
+                    /* AppLovin SDK removed
                     case APPLOVIN_MAX:
+                    /* AppLovin SDK removed
                     case FAN_BIDDING_APPLOVIN_MAX:
                         RelativeLayout appLovinAdView = activity.findViewById(R.id.applovin_banner_view_container);
                         MaxAdView maxAdView = new MaxAdView(appLovinBannerId, activity);
@@ -380,7 +385,9 @@ public class MediumRectangleAd {
                         maxAdView.loadAd();
                         Log.d(TAG, adNetwork + " Banner Ad unit Id : " + appLovinBannerId);
                         break;
+                        */
 
+                    /* AppLovin SDK removed
                     case APPLOVIN_DISCOVERY:
                         RelativeLayout appLovinDiscoveryAdView = activity.findViewById(R.id.applovin_discovery_banner_view_container);
                         AdRequest.Builder builder = new AdRequest.Builder();
@@ -406,6 +413,7 @@ public class MediumRectangleAd {
                         appLovinDiscoveryAdView.addView(this.appLovinAdView);
                         this.appLovinAdView.loadNextAd();
                         break;
+                        */
 
                     case MOPUB:
                         //Mopub has been acquired by AppLovin
@@ -587,8 +595,11 @@ public class MediumRectangleAd {
                         Log.d(TAG, adNetwork + " Banner Ad unit Id : " + unityBannerId);
                         break;
 
+                    /* AppLovin SDK removed
                     case APPLOVIN:
+                    /* AppLovin SDK removed
                     case APPLOVIN_MAX:
+                    /* AppLovin SDK removed
                     case FAN_BIDDING_APPLOVIN_MAX:
                         RelativeLayout appLovinAdView = activity.findViewById(R.id.applovin_banner_view_container);
                         MaxAdView maxAdView = new MaxAdView(appLovinBannerId, activity);
@@ -646,7 +657,9 @@ public class MediumRectangleAd {
                         maxAdView.loadAd();
                         Log.d(TAG, adNetwork + " Banner Ad unit Id : " + appLovinBannerId);
                         break;
+                        */
 
+                    /* AppLovin SDK removed
                     case APPLOVIN_DISCOVERY:
                         RelativeLayout appLovinDiscoveryAdView = activity.findViewById(R.id.applovin_discovery_banner_view_container);
                         AdRequest.Builder builder = new AdRequest.Builder();
@@ -671,6 +684,7 @@ public class MediumRectangleAd {
                         appLovinDiscoveryAdView.addView(this.appLovinAdView);
                         this.appLovinAdView.loadNextAd();
                         break;
+                        */
 
                     case MOPUB:
                         //Mopub has been acquired by AppLovin

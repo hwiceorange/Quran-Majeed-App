@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import androidx.core.view.marginBottom
-import com.applovin.mediation.nativeAds.MaxNativeAdView
+// import com.applovin.mediation.nativeAds.MaxNativeAdView // AppLovin SDK removed
 import com.quran.quranaudio.quiz.extension.gone
 import com.quran.quranaudio.quiz.extension.isValid
 import com.quran.quranaudio.quiz.extension.reportEvent

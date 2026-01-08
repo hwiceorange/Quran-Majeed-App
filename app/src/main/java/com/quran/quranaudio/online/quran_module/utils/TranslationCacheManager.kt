@@ -12,15 +12,25 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
+import java.util.concurrent.Executors
+import kotlinx.coroutines.asCoroutineDispatcher
 
 /**
- * 古兰经翻译版本缓存管理器
+ * 古兰经翻译版本缓存管理器（优化版）
+ * 
+ * 🚀 性能优化策略：
+ * 1. 优先级加载：仅预加载用户当前语言
+ * 2. 延迟加载：其他语言延迟5秒后加载
+ * 3. 并发控制：限制并发数为2，使用低优先级线程
+ * 4. IdleHandler：在主线程空闲时加载
  * 
  * 功能：
- * 1. 应用启动时预加载所有支持语言的翻译列表
- * 2. 缓存到内存，避免用户在引导页等待API加载
- * 3. 支持手动刷新缓存
+ * 1. 应用启动时优先加载用户语言的翻译列表
+ * 2. 延迟加载其他语言，避免启动高峰
+ * 3. 缓存到内存，避免用户在引导页等待API加载
+ * 4. 支持手动刷新缓存
  * 
  * 使用场景：
  * - 新用户引导流程
@@ -28,27 +38,130 @@ import org.json.JSONObject
  */
 object TranslationCacheManager {
     
-    private const val TAG = "TranslationCacheManager"
+    private const val TAG = "TranslationCache"
     
-    // 协程作用域
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    // 低优先级线程池（并发限制为2）
+    private val lowPriorityExecutor = Executors.newFixedThreadPool(2) { r ->
+        Thread(r).apply {
+            priority = Thread.MIN_PRIORITY
+            name = "TranslationCache-LowPriority"
+        }
+    }
+    
+    // 协程作用域（使用低优先级调度器）
+    private val scope = CoroutineScope(SupervisorJob() + lowPriorityExecutor.asCoroutineDispatcher())
     
     // 内存缓存：语言代码 -> 翻译版本列表
     private val cache = mutableMapOf<String, List<QuranTranslationVersion>>()
     
-    // 缓存是否已加载完成
+    // 缓存加载状态
     @Volatile
-    private var isLoaded = false
+    private var isCurrentLanguageLoaded = false
+    
+    @Volatile
+    private var isAllLanguagesLoaded = false
     
     // 支持的语言列表（与 SPAppConfigs 保持一致）
     private val SUPPORTED_LANGUAGES = listOf("en", "id", "ar", "ur", "ms", "tr", "bn")
     
     /**
-     * 预加载所有语言的翻译列表
-     * 在应用启动时调用
+     * 🚀 优先级预加载：仅预加载用户当前语言（第一优先级）
+     * 在应用启动时立即调用，或在用户切换语言后调用
+     * 
+     * @param context Context
+     * @param forceRefresh 是否强制刷新（用于语言切换场景）
      */
+    fun preloadCurrentLanguage(context: Context, forceRefresh: Boolean = false) {
+        val currentLanguage = com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs.getLocale(context) ?: "en"
+        
+        // 检查缓存是否已存在
+        val isCached = synchronized(cache) {
+            cache.containsKey(currentLanguage) && cache[currentLanguage]?.isNotEmpty() == true
+        }
+        
+        if (!forceRefresh && isCached) {
+            Log.d(TAG, "📦 当前语言已缓存，跳过: $currentLanguage")
+            return
+        }
+        
+        Log.d(TAG, "🚀 [PRIORITY-1] 预加载当前语言: $currentLanguage (forceRefresh=$forceRefresh)")
+        
+        scope.launch {
+            try {
+                val startTime = System.currentTimeMillis()
+                val versions = loadTranslationsForLanguage(context, currentLanguage)
+                
+                synchronized(cache) {
+                    cache[currentLanguage] = versions
+                }
+                
+                isCurrentLanguageLoaded = true
+                val duration = System.currentTimeMillis() - startTime
+                Log.d(TAG, "✅ [PRIORITY-1] 当前语言加载完成: $currentLanguage (${versions.size} 个版本) [$duration ms]")
+                
+            } catch (e: Exception) {
+                Log.e(TAG, "❌ [PRIORITY-1] 当前语言加载失败: $currentLanguage", e)
+            }
+        }
+    }
+    
+    /**
+     * 📦 延迟预加载其他语言（第二优先级）
+     * 在主界面显示5秒后调用，或使用 IdleHandler 在主线程空闲时调用
+     */
+    fun preloadOtherLanguages(context: Context) {
+        if (isAllLanguagesLoaded) {
+            Log.d(TAG, "📦 所有语言已加载，跳过")
+            return
+        }
+        
+        val currentLanguage = com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs.getLocale(context) ?: "en"
+        val otherLanguages = SUPPORTED_LANGUAGES.filter { it != currentLanguage }
+        
+        Log.d(TAG, "🟡 [PRIORITY-2] 开始延迟加载其他语言: $otherLanguages")
+        
+        scope.launch {
+            try {
+                val startTime = System.currentTimeMillis()
+                
+                // 限制并发数为2，避免资源争用
+                val chunked = otherLanguages.chunked(2)
+                
+                for (chunk in chunked) {
+                    val jobs = chunk.map { languageCode ->
+                        async {
+                            try {
+                                val versions = loadTranslationsForLanguage(context, languageCode)
+                                synchronized(cache) {
+                                    cache[languageCode] = versions
+                                }
+                                Log.d(TAG, "  ✅ $languageCode: ${versions.size} 个版本")
+                            } catch (e: Exception) {
+                                Log.e(TAG, "  ❌ $languageCode 加载失败: ${e.message}")
+                            }
+                        }
+                    }
+                    
+                    jobs.awaitAll()
+                }
+                
+                isAllLanguagesLoaded = true
+                val duration = System.currentTimeMillis() - startTime
+                Log.d(TAG, "✅ [PRIORITY-2] 其他语言加载完成！总共缓存了 ${cache.size} 种语言 [$duration ms]")
+                
+            } catch (e: Exception) {
+                Log.e(TAG, "❌ [PRIORITY-2] 其他语言加载失败: ${e.message}", e)
+            }
+        }
+    }
+    
+    /**
+     * 📦 预加载所有语言的翻译列表（已弃用，保留兼容性）
+     * @deprecated 使用 preloadCurrentLanguage() + preloadOtherLanguages() 替代
+     */
+    @Deprecated("使用 preloadCurrentLanguage() + preloadOtherLanguages() 获得更好的性能")
     fun preloadAllTranslations(context: Context) {
-        if (isLoaded) {
+        if (isAllLanguagesLoaded) {
             Log.d(TAG, "📦 缓存已加载，跳过预加载")
             return
         }
@@ -74,7 +187,7 @@ object TranslationCacheManager {
                 
                 jobs.awaitAll()
                 
-                isLoaded = true
+                isAllLanguagesLoaded = true
                 Log.d(TAG, "✅ 预加载完成！总共缓存了 ${cache.size} 种语言的翻译版本")
                 
             } catch (e: Exception) {
@@ -119,7 +232,8 @@ object TranslationCacheManager {
         synchronized(cache) {
             cache.clear()
         }
-        isLoaded = false
+        isCurrentLanguageLoaded = false
+        isAllLanguagesLoaded = false
         Log.d(TAG, "🗑️ 缓存已清空")
     }
     
@@ -129,7 +243,7 @@ object TranslationCacheManager {
     private suspend fun loadTranslationsForLanguage(
         context: Context,
         languageCode: String
-    ): List<QuranTranslationVersion> {
+    ): List<QuranTranslationVersion> = withContext(Dispatchers.IO) {
         val versions = mutableListOf<QuranTranslationVersion>()
         
         try {
@@ -205,7 +319,7 @@ object TranslationCacheManager {
         // 3. 添加预装版本
         versions.addAll(getPrebuiltVersions(context, languageCode))
         
-        return versions
+        versions
     }
     
     /**
@@ -279,4 +393,3 @@ object TranslationCacheManager {
         )
     }
 }
-

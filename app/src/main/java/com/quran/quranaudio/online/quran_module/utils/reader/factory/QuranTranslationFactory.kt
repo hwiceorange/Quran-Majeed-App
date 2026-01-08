@@ -185,9 +185,13 @@ class QuranTranslationFactory(private val context: Context) : Closeable {
      *      [<Transl-of-Slug1>, <Transl-of-Slug2>, <Transl-of-Slug3>] -> verse 1:1
      * */
     fun getTranslationsSingleVerse(slugs: Set<String>, chapNo: Int, verseNo: Int): List<Translation> {
-        android.util.Log.d("QuranTranslationFactory", "═══════════════════════════════════════")
+        val startTime = System.currentTimeMillis()
         android.util.Log.d("QuranTranslationFactory", "📖 Getting translations for verse $chapNo:$verseNo")
         android.util.Log.d("QuranTranslationFactory", "   Requested slugs: $slugs")
+        
+        // 🔥 优化：使用内存缓存（通过 TranslationCacheHelper）
+        // 注意：这里不能直接调用 TranslationCacheHelper.getTranslationsSingleVerse
+        // 因为会导致循环调用。TranslationCacheHelper 会调用这个方法。
         
         val nSlugs = sortTranslationSlugs(validatePremierShip(slugs))
         android.util.Log.d("QuranTranslationFactory", "   After validation/sort: $nSlugs")
@@ -198,18 +202,14 @@ class QuranTranslationFactory(private val context: Context) : Closeable {
         val selectionArgs = arrayOf(chapNo.toString(), verseNo.toString())
 
         for ((slugIndex, slug) in nSlugs.withIndex()) {
-            android.util.Log.d("QuranTranslationFactory", "   🔍 Querying table '$slug'...")
             val translations = getTranslationsFromQuery(slug, selection, selectionArgs)
             if (!translations.isNullOrEmpty()) {
-                android.util.Log.d("QuranTranslationFactory", "      ✅ Found translation: ${translations[0].text.take(50)}...")
                 transls.add(slugIndex, translations[0])
-            } else {
-                android.util.Log.w("QuranTranslationFactory", "      ❌ No translation found in table '$slug'")
             }
         }
         
-        android.util.Log.d("QuranTranslationFactory", "   📊 Result: ${transls.size} translations found")
-        android.util.Log.d("QuranTranslationFactory", "═══════════════════════════════════════")
+        val elapsed = System.currentTimeMillis() - startTime
+        android.util.Log.d("QuranTranslationFactory", "   📊 Result: ${transls.size} translations found (${elapsed}ms)")
 
         return transls
     }

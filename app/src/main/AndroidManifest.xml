@@ -61,6 +61,13 @@
             android:name="android.adservices.AD_SERVICES_CONFIG"
             android:resource="@xml/gma_ad_services_config"
             tools:replace="android:resource" />
+        
+        <!-- Temporary workaround: Allow 16KB page size non-compliance for third-party SDKs -->
+        <!-- This prevents crashes on Android 15+ devices with 16KB page size enabled -->
+        <!-- Third-party SDK providers (Pangle, etc.) need to update their native libraries -->
+        <property
+            android:name="android.allow_non_16kb_aligned_page_size"
+            android:value="true" />
 
         <activity android:name="com.quran.quranaudio.online.SplashScreenActivity"
             android:theme="@style/LaunchTheme"
