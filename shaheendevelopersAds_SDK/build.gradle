@@ -24,6 +24,13 @@ android {
     lint {
         disable 'GradleDependency', 'ExpiringTargetSdkVersion'
     }
+    
+    // ===== 16 KB Page Size Support =====
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
 }
 
 dependencies {

@@ -59,17 +59,15 @@ android {
         multiDexEnabled true
         
         // 🔧 Support for 16 KB page sizes (Google Play requirement for Android 15+)
+        // Ref: https://developer.android.com/guide/practices/page-sizes
         ndk {
             // Only include ARM architectures for production (x86/x86_64 are for emulators only)
+            // arm64-v8a is the primary target for 16KB page size devices
             abiFilters 'armeabi-v7a', 'arm64-v8a'
             
-            // ✅ Add linker flags for 16KB page alignment (if building native code in future)
-            // This ensures any future native code will be properly aligned
-            // ldFlags "-Wl,-z,max-page-size=16384"
+            // Enhanced debug symbol level for better crash analysis
+            debugSymbolLevel 'SYMBOL_TABLE'
         }
-        
-        // ✅ Enhanced debug symbol level for better crash analysis
-        ndk.debugSymbolLevel = 'SYMBOL_TABLE'
         
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -190,6 +188,18 @@ android {
         language {
             enableSplit = false
         }
+        
+        // ===== 16 KB Page Size Bundle Configuration =====
+        // Ensure proper handling of native libraries in AAB format
+        // Native libraries will be stored uncompressed for 16KB page alignment
+        abi {
+            enableSplit = true  // Enable ABI splits for smaller download sizes
+        }
+        
+        // Density splits for optimized APK sizes
+        density {
+            enableSplit = true
+        }
     }
 
 
@@ -198,11 +208,15 @@ android {
             excludes += ['META-INF/atomicfu.kotlin_module']
         }
         
-        // 🔧 Critical Fix: Force native libraries to NOT be compressed
-        // This allows the system to perform 16KB memory mapping on Android 15+
-        // useLegacyPackaging = true ensures .so files are stored uncompressed in the APK
+        // ===== 16 KB Page Size Configuration =====
+        // Critical for Android 15+ and Google Play compliance
+        // Ref: https://developer.android.com/guide/practices/page-sizes
         jniLibs {
-            useLegacyPackaging = true  // ✅ Changed from false to true - CRITICAL for 16KB page alignment
+            // Store native libraries uncompressed in APK - REQUIRED for 16KB alignment
+            useLegacyPackaging = true
+            
+            // Keep all native libraries (don't strip debug symbols in debug builds)
+            keepDebugSymbols += ['**/*.so']
         }
     }
 

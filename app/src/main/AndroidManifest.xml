@@ -62,12 +62,16 @@
             android:resource="@xml/gma_ad_services_config"
             tools:replace="android:resource" />
         
-        <!-- Temporary workaround: Allow 16KB page size non-compliance for third-party SDKs -->
-        <!-- This prevents crashes on Android 15+ devices with 16KB page size enabled -->
-        <!-- Third-party SDK providers (Pangle, etc.) need to update their native libraries -->
+        <!-- 16KB Page Size Compatibility -->
+        <!-- Enabled for third-party SDK compatibility until all vendors provide 16KB-aligned libraries -->
+        <!-- Ref: https://developer.android.com/guide/practices/page-sizes#backward-compat-mode -->
+        <!-- This is a transitional measure - we are working with SDK vendors for proper 16KB support -->
         <property
             android:name="android.allow_non_16kb_aligned_page_size"
             android:value="true" />
+        
+        <!-- Note: This flag will be removed once all third-party SDKs are updated to support 16KB pages -->
+        <!-- Current SDKs requiring this: Pangle, APM, and other native SDKs -->
 
         <activity android:name="com.quran.quranaudio.online.SplashScreenActivity"
             android:theme="@style/LaunchTheme"
