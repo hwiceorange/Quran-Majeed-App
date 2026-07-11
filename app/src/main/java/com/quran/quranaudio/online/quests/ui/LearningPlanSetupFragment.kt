@@ -28,6 +28,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.quran.quranaudio.online.R
 import com.quran.quranaudio.online.databinding.FragmentLearningPlanSetupBinding
+import com.quranaudio.common.ad.NativeAdHelper
 import com.quran.quranaudio.online.quests.data.ReadingGoalUnit
 import com.quran.quranaudio.online.quests.data.UserQuestConfig
 import com.quran.quranaudio.online.quests.repository.QuestRepository
@@ -155,7 +156,8 @@ class LearningPlanSetupFragment : Fragment() {
 
             setupUI()
             observeViewModel()
-            
+            loadNativeAd()
+
             Log.d(TAG, "✅ onViewCreated completed successfully")
             
         } catch (e: Exception) {
@@ -235,6 +237,17 @@ class LearningPlanSetupFragment : Fragment() {
             }
         } catch (e: Exception) {
             Log.e(TAG, "❌ Failed to show bottom navigation", e)
+        }
+    }
+
+    private fun loadNativeAd() {
+        val container = binding.learningPlanNativeAdContainer
+        activity?.let {
+            NativeAdHelper.displayNativeAdWithAutoLoad(
+                it,
+                container,
+                com.quran.quranaudio.quiz.R.layout.layout_ad_native_small_wrapper
+            )
         }
     }
 

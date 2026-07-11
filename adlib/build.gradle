@@ -31,9 +31,12 @@ android {
     }
     
     // ===== 16 KB Page Size Support =====
+    // Required for Google Play compliance (Android 15+)
+    // Ref: https://developer.android.com/guide/practices/page-sizes
     packagingOptions {
         jniLibs {
             useLegacyPackaging = true
+            keepDebugSymbols += ['**/*.so']
         }
     }
 }
@@ -46,9 +49,8 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     
-    // Google Mobile Ads SDK - pin to 22.1.0 (Kotlin 1.9.0 compatible) and block 24.x
-    api 'com.google.android.gms:play-services-ads:22.1.0'
-    api 'com.google.android.gms:play-services-ads-lite:22.1.0'
+    // Google Mobile Ads SDK - Updated to 24.7.0 to match main project
+    api 'com.google.android.gms:play-services-ads:24.7.0'
     api 'com.google.android.gms:play-services-ads-identifier:18.0.1'
     
     // Meta Audience Network (Facebook) - Bidding
@@ -64,15 +66,16 @@ dependencies {
     api 'com.mbridge.msdk.oversea:mbbid:16.4.31'
     
     // Liftoff Monetize (Vungle) - Bidding
-    api 'com.google.ads.mediation:vungle:7.3.0.0'
+    // Updated to 7.6+ to resolve Google Play deprecation warning
+    // See: https://developers.google.com/admob/android/mediation/vungle
+    api 'com.google.ads.mediation:vungle:7.6.0.0'
     
     // Pangle (ByteDance/TikTok) - Bidding
-    // RESTORED: Crash was NOT caused by Pangle! It was Firebase BoM version conflict.
-    // Repository: https://artifact.bytedance.com/repository/pangle
-    // See: https://developers.google.com/admob/android/mediation/pangle
-    api('com.google.ads.mediation:pangle:5.9.0.2.0') {
-        exclude group: 'com.google.android.gms'
-    }
+    // OFFLINE TEMPORARILY: disabled to avoid 16KB page-size compliance rejection on Google Play.
+    // Re-enable only after confirming vendor SDK/adapter native libs pass 16KB checker.
+    // api('com.google.ads.mediation:pangle:5.9.0.2.0') {
+    //     exclude group: 'com.google.android.gms'
+    // }
     
     // IronSource - Bidding
     // Using Maven Central version

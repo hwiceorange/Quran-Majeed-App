@@ -54,6 +54,7 @@
         android:fullBackupContent="true"
         android:usesCleartextTraffic="true"
         android:largeHeap="true"
+        android:extractNativeLibs="false"
         tools:targetApi="s">
 
         <!-- Fix AD_SERVICES_CONFIG conflict between Firebase Analytics and Google Ads -->
@@ -61,17 +62,6 @@
             android:name="android.adservices.AD_SERVICES_CONFIG"
             android:resource="@xml/gma_ad_services_config"
             tools:replace="android:resource" />
-        
-        <!-- 16KB Page Size Compatibility -->
-        <!-- Enabled for third-party SDK compatibility until all vendors provide 16KB-aligned libraries -->
-        <!-- Ref: https://developer.android.com/guide/practices/page-sizes#backward-compat-mode -->
-        <!-- This is a transitional measure - we are working with SDK vendors for proper 16KB support -->
-        <property
-            android:name="android.allow_non_16kb_aligned_page_size"
-            android:value="true" />
-        
-        <!-- Note: This flag will be removed once all third-party SDKs are updated to support 16KB pages -->
-        <!-- Current SDKs requiring this: Pangle, APM, and other native SDKs -->
 
         <activity android:name="com.quran.quranaudio.online.SplashScreenActivity"
             android:theme="@style/LaunchTheme"
@@ -402,6 +392,29 @@
             <intent-filter>
                 <action android:name="android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED" />
             </intent-filter>
+        </receiver>
+
+        <!-- 每日经文通知（Fajr 后 1 小时，可在设置中关闭） -->
+        <receiver
+            android:name="com.quran.quranaudio.online.dailyverse.DailyVerseReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
+        <!-- 祈祷时间桌面 Widget（4x1：五番时间 + 下一番倒计时 + Hijri 日期） -->
+        <receiver
+            android:name="com.quran.quranaudio.online.prayertimes.widget.PrayerTimesWidgetProvider"
+            android:enabled="true"
+            android:exported="true"
+            android:label="@string/widget_prayer_times_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.LOCALE_CHANGED" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_prayer_times_info" />
         </receiver>
         <receiver
             android:name="com.quran.quranaudio.online.prayertimes.notifier.NotifierReceiver"

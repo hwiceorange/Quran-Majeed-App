@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = "1.9.0"
+    ext.kotlin_version = "2.0.21"
     repositories {
         google()
         mavenCentral()
@@ -62,16 +62,11 @@ allprojects {
     }
     configurations.all {
         resolutionStrategy {
-            // 强制所有 Kotlin 相关库使用你的目标版本（如 1.9.0）
+            // 强制所有 Kotlin 相关库使用你的目标版本（2.0.21）
             force "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
             force "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
             force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
             force "org.jetbrains.kotlin:kotlin-stdlib-common:$kotlin_version"
-
-            // 🔒 Pin Google Mobile Ads to 22.1.0 family to avoid pulling 24.x (Kotlin 2.1)
-            force 'com.google.android.gms:play-services-ads:22.1.0'
-            force 'com.google.android.gms:play-services-ads-lite:22.1.0'
-            force 'com.google.android.gms:play-services-ads-identifier:18.0.1'
         }
     }
 }

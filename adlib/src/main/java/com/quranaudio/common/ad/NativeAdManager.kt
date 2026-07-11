@@ -33,11 +33,12 @@ class NativeAdManager private constructor() {
     
     companion object {
         private const val TAG = "NativeAdManager"
-        private const val CACHE_POOL_SIZE = 3  // ✅ 从 1 提升到 3
-        private const val MIN_CACHE_THRESHOLD = 2  // ✅ 低于 2 立即补充
-        private const val RETRY_DELAY_MS = 30000L  // ✅ 失败后 30 秒重试
-        private const val AD_EXPIRATION_TIME_MS = 58 * 60 * 1000L  // 🆕 58 分钟过期（AdMob 60分钟限制）
-        private const val CLEANUP_INTERVAL_MS = 5 * 60 * 1000L  // 🆕 5 分钟清理一次过期广告
+        // ⚠️ 池子从 3 降回 1：实际展示速度远低于消费/补池速度，池 3 导致大量请求从未展示
+        private const val CACHE_POOL_SIZE = 1
+        private const val MIN_CACHE_THRESHOLD = 1  // 消费后池空则补充
+        private const val RETRY_DELAY_MS = 30000L  // 失败重试基准延迟，指数退避
+        private const val MAX_RETRY_COUNT = 3  // 连续失败最多重试 3 次
+        private const val AD_EXPIRATION_TIME_MS = 58 * 60 * 1000L  // 58 分钟过期（AdMob 60分钟限制）
         
         @Volatile
         private var instance: NativeAdManager? = null
@@ -81,6 +82,9 @@ class NativeAdManager private constructor() {
     
     // Loading state flag
     private var isLoading = false
+
+    // 连续加载失败次数，成功或新的用户触发加载时重置
+    private var retryCount = 0
     
     // Ad unit ID (reuse existing native ad ID from AdConfig)
     private val adUnitId: String
@@ -92,57 +96,14 @@ class NativeAdManager private constructor() {
     /**
      * Initialize the manager with application context.
      * Should be called in Application.onCreate().
-     * 
-     * 🆕 启动定期清理任务
+     *
+     * ⚠️ 不再启动定期清理任务：后台每 5 分钟轮询 + 过期即重载会让存活的后台进程
+     * 每小时白烧一池广告请求。过期广告已在消费时（getCachedAd/loadAdWithCallback）
+     * 检查并跳过，无需定时器。
      */
     fun initialize(context: Context) {
         appContext = context.applicationContext
         Log.d(TAG, "✅ NativeAdManager initialized")
-        
-        // 🆕 启动定期清理过期广告的任务
-        startPeriodicCleanup()
-    }
-    
-    /**
-     * 🆕 启动定期清理任务（5分钟一次）
-     */
-    private fun startPeriodicCleanup() {
-        Handler(Looper.getMainLooper()).post(object : Runnable {
-            override fun run() {
-                cleanupExpiredAds()
-                // 下次清理
-                Handler(Looper.getMainLooper()).postDelayed(this, CLEANUP_INTERVAL_MS)
-            }
-        })
-        Log.d(TAG, "🆕 Periodic cleanup task started (interval: ${CLEANUP_INTERVAL_MS / 60000} minutes)")
-    }
-    
-    /**
-     * 🆕 清理过期广告（58分钟以上）
-     */
-    private fun cleanupExpiredAds() {
-        val expiredAds = cachedNativeAds.filter { it.isExpired() }
-        
-        if (expiredAds.isNotEmpty()) {
-            Log.w(TAG, "⚠️ Found ${expiredAds.size} expired ads, cleaning up...")
-            
-            expiredAds.forEach { cachedAd ->
-                try {
-                    cachedAd.ad.destroy()
-                    Log.d(TAG, "🗑️ Destroyed expired ad (age: ${cachedAd.getAgeInMinutes()} minutes)")
-                } catch (e: Exception) {
-                    Log.e(TAG, "❌ Failed to destroy expired ad: ${e.message}")
-                }
-            }
-            
-            cachedNativeAds.removeAll(expiredAds)
-            
-            // 清理后如果缓存池变空，立即加载
-            if (cachedNativeAds.isEmpty()) {
-                Log.d(TAG, "📦 Cache empty after cleanup, loading new ads...")
-                loadNewAd()
-            }
-        }
     }
     
     /**
@@ -216,6 +177,7 @@ class NativeAdManager private constructor() {
                 val cachedAd = CachedNativeAd(nativeAd, System.currentTimeMillis())
                 cachedNativeAds.add(cachedAd)
                 isLoading = false
+                retryCount = 0
                 
                 android.util.Log.d("NATIVE_AD_TRACK", "✅ Ad added to cache pool (${cachedNativeAds.size}/$CACHE_POOL_SIZE)")
                 android.util.Log.d("NATIVE_AD_TRACK", "   Pending callbacks: ${pendingCallbacks.size}")
@@ -246,13 +208,23 @@ class NativeAdManager private constructor() {
                     // Notify pending callbacks with null
                     android.util.Log.d("NATIVE_AD_TRACK", "   Notifying ${pendingCallbacks.size} pending callbacks with null")
                     notifyPendingCallbacks(null)
-                    
-                    // ✅ 如果缓存池为空，延迟重试
+
+                    // ✅ 缓存池为空时重试：指数退避（30s/60s/120s），最多 3 次，后台不重试
                     if (cachedNativeAds.isEmpty()) {
-                        Log.d(TAG, "⏰ Pool empty, retrying in 30s...")
+                        if (retryCount >= MAX_RETRY_COUNT) {
+                            Log.w(TAG, "⛔ Max retries reached ($MAX_RETRY_COUNT), waiting for next ad request")
+                            return
+                        }
+                        val delay = RETRY_DELAY_MS shl retryCount
+                        retryCount++
+                        Log.d(TAG, "⏰ Pool empty, retrying in ${delay / 1000}s (attempt $retryCount/$MAX_RETRY_COUNT)")
                         Handler(Looper.getMainLooper()).postDelayed({
+                            if (!AdFactory.isAppInForeground()) {
+                                Log.d(TAG, "⏸️ App in background, skipping retry")
+                                return@postDelayed
+                            }
                             loadNewAd()
-                        }, RETRY_DELAY_MS)
+                        }, delay)
                     }
                 }
                 
@@ -351,9 +323,10 @@ class NativeAdManager private constructor() {
         Log.d(TAG, "⚠️ No valid cached ad, adding to wait queue")
         pendingCallbacks.add(callback)
         
-        // If not loading, start loading
+        // If not loading, start loading (fresh user demand, reset retry budget)
         if (!isLoading) {
             Log.d(TAG, "🔄 Starting dynamic ad load for callback")
+            retryCount = 0
             loadNewAd()
         } else {
             Log.d(TAG, "⏳ Ad is loading, callback queued (${pendingCallbacks.size} waiting)")
@@ -376,14 +349,11 @@ class NativeAdManager private constructor() {
      * @return NativeAd object if available, null otherwise
      */
     fun getCachedAd(activity: Activity): NativeAd? {
-        // 🆕 确保在主线程执行（UI 安全）
+        // ✅ 只允许主线程消费：原实现 post 到主线程后立即 return null，
+        // post 过去的那次调用会从池里取走一个广告然后丢弃（消费了却永远不展示）
         if (Looper.myLooper() != Looper.getMainLooper()) {
-            Log.w(TAG, "⚠️ getCachedAd called from background thread, switching to main thread")
-            var result: NativeAd? = null
-            Handler(Looper.getMainLooper()).post {
-                result = getCachedAd(activity)
-            }
-            return result
+            Log.w(TAG, "⚠️ getCachedAd called from background thread, returning null (call from main thread)")
+            return null
         }
         
         // Check subscription status
@@ -421,7 +391,8 @@ class NativeAdManager private constructor() {
         
         // ✅ 无可用缓存
         Log.d(TAG, "⚠️ No valid cached native ad available")
-        // ✅ 尝试补充缓存（异步）
+        // ✅ 尝试补充缓存（异步，新的用户需求重置重试预算）
+        retryCount = 0
         loadNewAd()
         return null
     }

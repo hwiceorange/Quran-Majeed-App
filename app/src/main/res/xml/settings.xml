@@ -17,6 +17,37 @@
 
     </PreferenceCategory>
 
+    <!-- 🏠 Prayer Times Home Screen Widget -->
+    <PreferenceCategory
+        android:icon="@drawable/ic_prayer_calendar"
+        android:layout="@layout/custom_preference_category"
+        android:title="@string/widget_prayer_times_label">
+
+        <Preference
+            android:key="ADD_PRAYER_WIDGET_PREFERENCE"
+            android:layout="@layout/custom_preference"
+            android:title="@string/widget_settings_entry_title"
+            android:summary="@string/widget_promo_message"
+            android:icon="@drawable/ic_prayer_calendar" />
+
+    </PreferenceCategory>
+
+    <!-- 📖 Daily Verse Notification -->
+    <PreferenceCategory
+        android:icon="@drawable/ic_notifications_on_24dp_blue"
+        android:layout="@layout/custom_preference_category"
+        android:title="@string/verse_of_day">
+
+        <SwitchPreferenceCompat
+            android:key="DAILY_VERSE_NOTIFICATION_ENABLED"
+            android:layout="@layout/custom_preference"
+            android:title="@string/daily_verse_settings_title"
+            android:summary="@string/daily_verse_settings_summary"
+            android:icon="@drawable/ic_notifications_on_24dp_blue"
+            android:defaultValue="true" />
+
+    </PreferenceCategory>
+
     <!-- 🌐 App Language Selection -->
     <PreferenceCategory
         android:icon="@drawable/dr_icon_language"

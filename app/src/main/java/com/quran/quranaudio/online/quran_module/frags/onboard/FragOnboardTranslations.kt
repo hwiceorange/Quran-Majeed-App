@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.quran.quranaudio.online.quran_module.components.transls.TranslBaseModel
 import com.quran.quranaudio.online.quran_module.frags.settings.FragSettingsTransl.LoadTranslsTask
+import com.quran.quranaudio.online.quran_module.utils.thread.runner.CallableTaskRunner
 
 class FragOnboardTranslations : FragOnboardBase() {
-    private val translTaskRunner =
-        com.quran.quranaudio.online.quran_module.utils.thread.runner.CallableTaskRunner<List<TranslBaseModel>>()
+    private val translTaskRunner = CallableTaskRunner<List<TranslBaseModel>>()
     private var translSlugs: Set<String> = HashSet()
 
     override fun onDestroy() {

@@ -208,6 +208,7 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
                     binding.loader.visibility = View.GONE
                     binding.tafsirHeader.btnPrevVerse.visibility = View.VISIBLE
                     binding.tafsirHeader.btnNextVerse.visibility = View.VISIBLE
+                    loadTafsirNativeAd()
                 }
             }
         }
@@ -981,6 +982,15 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
     /**
      * 清理资源
      */
+    private fun loadTafsirNativeAd() {
+        val container = binding.tafsirNativeAdContainer
+        com.quranaudio.common.ad.NativeAdHelper.displayNativeAdWithAutoLoad(
+            this,
+            container,
+            com.quran.quranaudio.quiz.R.layout.layout_ad_native_small_wrapper
+        )
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         

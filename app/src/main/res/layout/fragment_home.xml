@@ -65,13 +65,24 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/verse_of_day_card" />
 
+        <!-- Native Ad below Quiz Card -->
+        <FrameLayout
+            android:id="@+id/home_native_ad_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/quiz_entry_view" />
+
         <!-- Mecca Live Card -->
         <include
             android:id="@+id/mecca_live_card"
             layout="@layout/layout_live_stream_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/quiz_entry_view"
+            app:layout_constraintTop_toBottomOf="@id/home_native_ad_container"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

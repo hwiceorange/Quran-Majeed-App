@@ -141,6 +141,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private ImageView btnBookmark;
     private ProgressBar loadingIndicator;
     private FrameLayout votdNativeAdContainer;  // 🔥 原生广告容器
+    private FrameLayout homeNativeAdContainer;
     private int votdChapterNo = -1;
     private int votdVerseNo = -1;
 
@@ -592,6 +593,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             btnBookmark = verseOfDayCardView.findViewById(R.id.votd_bookmark);
             // loadingIndicator = verseOfDayCardView.findViewById(R.id.loading_indicator);  // Not in new layout
             votdNativeAdContainer = verseOfDayCardView.findViewById(R.id.votd_native_ad_container);  // 🔥 原生广告容器
+        }
+
+        homeNativeAdContainer = rootView.findViewById(R.id.home_native_ad_container);
+        if (homeNativeAdContainer != null && getActivity() != null) {
+            com.quranaudio.common.ad.NativeAdHelper.INSTANCE.displayNativeAdWithAutoLoad(
+                getActivity(),
+                homeNativeAdContainer,
+                com.quran.quranaudio.quiz.R.layout.layout_ad_native_small_wrapper
+            );
         }
 
         // Initialize Mecca Live Card Views

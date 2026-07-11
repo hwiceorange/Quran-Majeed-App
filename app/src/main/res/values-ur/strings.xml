@@ -2247,4 +2247,38 @@
     <string name="feedback_tag_clean_ui">صاف انٹرفیس</string>
     <string name="feedback_tag_good_learning">اچھی سیکھنے کی خصوصیات</string>
 
+    <string name="onboarding_prayer_reminders_enabled">نماز کے اوقات کی یاددہانیاں فعال ہیں</string>
+    <string name="widget_prayer_times_description">آج کی نمازوں کے اوقات، اگلی نماز کی الٹی گنتی اور ہجری تاریخ</string>
+    <string name="widget_tap_to_setup">نماز کے اوقات ترتیب دینے کے لیے ٹیپ کریں</string>
+    <string name="widget_prayer_times_label">اوقاتِ نماز</string>
+    <string name="widget_promo_title">ہوم اسکرین پر نماز کے اوقات</string>
+    <string name="widget_promo_message">ایپ کھولے بغیر آج کی نمازوں کے اوقات اور اگلی نماز کی الٹی گنتی ایک نظر میں دیکھیں۔</string>
+    <string name="widget_promo_add">شامل کریں</string>
+    <string name="widget_promo_later">ابھی نہیں</string>
+    <string name="widget_promo_manual_hint">ہوم اسکرین پر خالی جگہ کو دیر تک دبائیں، ویجٹس منتخب کریں، پھر اوقاتِ نماز چنیں۔</string>
+    <string name="widget_settings_entry_title">اوقاتِ نماز ویجٹ شامل کریں</string>
+    <string name="daily_verse_settings_title">روزانہ آیت کی اطلاع</string>
+    <string name="daily_verse_settings_summary">ہر صبح فجر کے تقریباً ایک گھنٹے بعد قرآن کی ایک آیت</string>
+    <string name="qibla_tab_map">نقشہ</string>
+    <string name="qibla_tab_compass">قطب نما</string>
+    <string name="qibla_map_your_location">آپ کا مقام</string>
+    <string name="qibla_map_kaaba">کعبہ</string>
+    <string name="qibla_map_type_toggle">نقشے کی قسم تبدیل کریں</string>
+    <string name="qibla_sensor_unreliable">قطب نما کی درستگی کم ہے۔ براہ کرم اپنا آلہ کیلبریٹ کریں۔</string>
+    <string name="qibla_calibrate_message">سب سے درست سمتِ قبلہ کے لیے، قطب نما کیلبریٹ کرنے کے لیے فون کو کئی بار 8 کی شکل میں حرکت دیں۔</string>
+    <string name="qibla_calibrate_manual">براہ کرم آلے کا قطب نما کیلبریٹ کریں (8 کی شکل میں حرکت دیں)۔</string>
+    <string name="compass_point_n">ش</string>
+    <string name="compass_point_ne">شمال مشرق</string>
+    <string name="compass_point_e">مشرق</string>
+    <string name="compass_point_se">جنوب مشرق</string>
+    <string name="compass_point_s">ج</string>
+    <string name="compass_point_sw">جنوب مغرب</string>
+    <string name="compass_point_w">مغرب</string>
+    <string name="compass_point_nw">شمال مغرب</string>
+    <string name="qibla_map_need_location">اپنے مقام سے کعبہ کی سمت دیکھنے کے لیے لوکیشن آن کریں۔</string>
+    <string name="qibla_map_enable_location">لوکیشن آن کریں</string>
+    <string name="qibla_intro_title">قبلہ کی سمت</string>
+    <string name="qibla_intro_message">نقشہ: نقشے پر کعبہ کی سمت دکھاتا ہے — کہیں بھی کام کرتا ہے، قطب نما کی ضرورت نہیں۔
+قطب نما: فون کا رخ کریں اور تیر کے مطابق براہِ راست کعبہ کی طرف رخ کریں۔</string>
+    <string name="qibla_intro_no_compass">آپ کے آلے میں قطب نما سینسر نہیں، اس لیے نقشہ استعمال کرنے کا مشورہ ہے۔</string>
 </resources>

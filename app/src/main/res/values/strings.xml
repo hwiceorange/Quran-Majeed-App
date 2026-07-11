@@ -1568,4 +1568,39 @@
     <string name="upgrade_account_link_now">Link Account Now</string>
     <string name="upgrade_account_remind_later">Remind Me Later</string>
     
+    <string name="onboarding_prayer_reminders_enabled">Prayer time reminders are on</string>
+    <string name="widget_prayer_times_description">Today\'s prayer times, next prayer countdown and Hijri date</string>
+    <string name="widget_tap_to_setup">Tap to set up prayer times</string>
+    <string name="widget_prayer_times_label">Prayer Times</string>
+    <string name="widget_time_placeholder" translatable="false">--:--</string>
+    <string name="widget_promo_title">Prayer times on your home screen</string>
+    <string name="widget_promo_message">See today\'s prayer times and the countdown to the next prayer at a glance — without opening the app.</string>
+    <string name="widget_promo_add">Add</string>
+    <string name="widget_promo_later">Not now</string>
+    <string name="widget_promo_manual_hint">Long-press an empty spot on your home screen, tap Widgets, then choose Prayer Times.</string>
+    <string name="widget_settings_entry_title">Add Prayer Times widget</string>
+    <string name="daily_verse_settings_title">Daily verse notification</string>
+    <string name="daily_verse_settings_summary">A verse from the Quran every morning, about an hour after Fajr</string>
+    <string name="qibla_tab_map">Map</string>
+    <string name="qibla_tab_compass">Compass</string>
+    <string name="qibla_map_your_location">Your location</string>
+    <string name="qibla_map_kaaba">Kaaba</string>
+    <string name="qibla_map_type_toggle">Switch map type</string>
+    <string name="qibla_sensor_unreliable">Compass accuracy is low. Please calibrate your device.</string>
+    <string name="qibla_calibrate_message">For the most accurate Qibla direction, move your phone in a figure-8 motion a few times to calibrate the compass.</string>
+    <string name="qibla_calibrate_manual">Please calibrate your device compass (move it in a figure-8).</string>
+    <string name="compass_point_n">N</string>
+    <string name="compass_point_ne">NE</string>
+    <string name="compass_point_e">E</string>
+    <string name="compass_point_se">SE</string>
+    <string name="compass_point_s">S</string>
+    <string name="compass_point_sw">SW</string>
+    <string name="compass_point_w">W</string>
+    <string name="compass_point_nw">NW</string>
+    <string name="qibla_map_need_location">Turn on location to see the direction to the Kaaba from where you are.</string>
+    <string name="qibla_map_enable_location">Enable location</string>
+    <string name="qibla_intro_title">Finding the Qibla</string>
+    <string name="qibla_intro_message">Map: shows the direction to the Kaaba on a map — works anywhere, no compass needed.
+Compass: point your phone and follow the arrow to the Kaaba in real time.</string>
+    <string name="qibla_intro_no_compass">Your device has no compass sensor, so the Map view is recommended.</string>
 </resources>

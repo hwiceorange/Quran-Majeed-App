@@ -139,7 +139,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
      */
     private void setupPremiumSubscriptionPreference() {
         Preference premiumPref = getPreferenceScreen().findPreference("PREMIUM_SUBSCRIPTION_PREFERENCE");
-        
+
         if (premiumPref != null) {
             premiumPref.setOnPreferenceClickListener(preference -> {
                 android.util.Log.d("SettingsFragment", "🌟 Premium subscription clicked");
@@ -149,6 +149,25 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             });
         } else {
             android.util.Log.w("SettingsFragment", "⚠️ Premium subscription preference not found");
+        }
+
+        setupAddPrayerWidgetPreference();
+    }
+
+    /**
+     * 🏠 桌面 Widget 添加入口（长尾兜底：促活弹窗拒绝过的用户随时可从这里添加）
+     */
+    private void setupAddPrayerWidgetPreference() {
+        Preference widgetPref = getPreferenceScreen().findPreference("ADD_PRAYER_WIDGET_PREFERENCE");
+
+        if (widgetPref != null) {
+            widgetPref.setOnPreferenceClickListener(preference -> {
+                if (getActivity() != null) {
+                    com.quran.quranaudio.online.prayertimes.widget.PrayerWidgetPromoHelper
+                            .requestAddFromSettings(getActivity());
+                }
+                return true;
+            });
         }
     }
 
@@ -255,6 +274,24 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             BaseActivity baseActivity = (BaseActivity) requireActivity();
             localeUtils.refreshLocale(requireContext(), baseActivity);
             requireActivity().recreate();
+        }
+
+        // 📖 每日经文开关：切换后立即生效（开→排下一次；关→取消已排闹钟）
+        if (com.quran.quranaudio.online.dailyverse.DailyVersePreferences.KEY_ENABLED.equals(key)) {
+            boolean enabled = sharedPreferences.getBoolean(
+                    com.quran.quranaudio.online.dailyverse.DailyVersePreferences.KEY_ENABLED, true);
+            if (enabled) {
+                com.quran.quranaudio.online.dailyverse.DailyVerseScheduler.scheduleNext(requireContext());
+            } else {
+                com.quran.quranaudio.online.dailyverse.DailyVerseScheduler.cancel(requireContext());
+            }
+            try {
+                java.util.Map<String, Object> params = new java.util.HashMap<>();
+                params.put("action", enabled ? "enabled" : "disabled");
+                com.quran.quranaudio.online.analytics.AnalyticsManager
+                        .getInstance(requireContext()).logEvent("daily_verse_funnel", params);
+            } catch (Exception ignored) {
+            }
         }
     }
 

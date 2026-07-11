@@ -2325,4 +2325,38 @@
     <string name="feedback_tag_clean_ui">Antara Muka Bersih</string>
     <string name="feedback_tag_good_learning">Ciri Pembelajaran Bagus</string>
 
+    <string name="onboarding_prayer_reminders_enabled">Peringatan waktu solat telah diaktifkan</string>
+    <string name="widget_prayer_times_description">Waktu solat hari ini, kiraan detik solat seterusnya dan tarikh Hijrah</string>
+    <string name="widget_tap_to_setup">Ketik untuk menetapkan waktu solat</string>
+    <string name="widget_prayer_times_label">Waktu Solat</string>
+    <string name="widget_promo_title">Waktu solat di skrin utama</string>
+    <string name="widget_promo_message">Lihat waktu solat hari ini dan kiraan detik solat seterusnya sepintas lalu — tanpa membuka aplikasi.</string>
+    <string name="widget_promo_add">Tambah</string>
+    <string name="widget_promo_later">Bukan sekarang</string>
+    <string name="widget_promo_manual_hint">Tekan lama ruang kosong pada skrin utama, pilih Widget, kemudian pilih Waktu Solat.</string>
+    <string name="widget_settings_entry_title">Tambah widget Waktu Solat</string>
+    <string name="daily_verse_settings_title">Pemberitahuan ayat harian</string>
+    <string name="daily_verse_settings_summary">Satu ayat Al-Quran setiap pagi, kira-kira sejam selepas Subuh</string>
+    <string name="qibla_tab_map">Peta</string>
+    <string name="qibla_tab_compass">Kompas</string>
+    <string name="qibla_map_your_location">Lokasi anda</string>
+    <string name="qibla_map_kaaba">Kaabah</string>
+    <string name="qibla_map_type_toggle">Tukar jenis peta</string>
+    <string name="qibla_sensor_unreliable">Ketepatan kompas rendah. Sila tentukur peranti anda.</string>
+    <string name="qibla_calibrate_message">Untuk arah kiblat paling tepat, gerakkan telefon dalam bentuk angka 8 beberapa kali untuk menentukur kompas.</string>
+    <string name="qibla_calibrate_manual">Sila tentukur kompas peranti (gerakkan dalam bentuk angka 8).</string>
+    <string name="compass_point_n">U</string>
+    <string name="compass_point_ne">TL</string>
+    <string name="compass_point_e">T</string>
+    <string name="compass_point_se">TG</string>
+    <string name="compass_point_s">S</string>
+    <string name="compass_point_sw">BD</string>
+    <string name="compass_point_w">B</string>
+    <string name="compass_point_nw">BL</string>
+    <string name="qibla_map_need_location">Hidupkan lokasi untuk melihat arah Kaabah dari tempat anda.</string>
+    <string name="qibla_map_enable_location">Hidupkan lokasi</string>
+    <string name="qibla_intro_title">Mencari Kiblat</string>
+    <string name="qibla_intro_message">Peta: menunjukkan arah Kaabah pada peta — berfungsi di mana-mana, tanpa kompas.
+Kompas: halakan telefon dan ikut anak panah ke arah Kaabah secara langsung.</string>
+    <string name="qibla_intro_no_compass">Peranti anda tiada sensor kompas, jadi paparan Peta disyorkan.</string>
 </resources>

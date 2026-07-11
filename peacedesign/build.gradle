@@ -30,6 +30,16 @@ android {
     kotlinOptions {
         jvmTarget = '17'
     }
+    
+    // ===== 16 KB Page Size Support =====
+    // Required for Google Play compliance (Android 15+)
+    // Ref: https://developer.android.com/guide/practices/page-sizes
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = true
+            keepDebugSymbols += ['**/*.so']
+        }
+    }
 }
 
 dependencies {

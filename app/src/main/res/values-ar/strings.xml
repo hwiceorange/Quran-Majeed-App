@@ -1487,6 +1487,40 @@
     <string name="feedback_tag_clean_ui">واجهة نظيفة</string>
     <string name="feedback_tag_good_learning">ميزات تعلم جيدة</string>
 
+    <string name="onboarding_prayer_reminders_enabled">تم تفعيل تنبيهات أوقات الصلاة</string>
+    <string name="widget_prayer_times_description">أوقات الصلاة اليوم والعد التنازلي للصلاة القادمة والتاريخ الهجري</string>
+    <string name="widget_tap_to_setup">اضغط لإعداد أوقات الصلاة</string>
+    <string name="widget_prayer_times_label">مواقيت الصلاة</string>
+    <string name="widget_promo_title">مواقيت الصلاة على شاشتك الرئيسية</string>
+    <string name="widget_promo_message">شاهد مواقيت الصلاة اليوم والعد التنازلي للصلاة القادمة بنظرة واحدة — دون فتح التطبيق.</string>
+    <string name="widget_promo_add">إضافة</string>
+    <string name="widget_promo_later">ليس الآن</string>
+    <string name="widget_promo_manual_hint">اضغط مطولًا على مكان فارغ في الشاشة الرئيسية، ثم اختر الأدوات (Widgets)، ثم اختر مواقيت الصلاة.</string>
+    <string name="widget_settings_entry_title">إضافة أداة مواقيت الصلاة</string>
+    <string name="daily_verse_settings_title">إشعار الآية اليومية</string>
+    <string name="daily_verse_settings_summary">آية من القرآن الكريم كل صباح، بعد الفجر بساعة تقريبًا</string>
+    <string name="qibla_tab_map">الخريطة</string>
+    <string name="qibla_tab_compass">البوصلة</string>
+    <string name="qibla_map_your_location">موقعك</string>
+    <string name="qibla_map_kaaba">الكعبة</string>
+    <string name="qibla_map_type_toggle">تبديل نوع الخريطة</string>
+    <string name="qibla_sensor_unreliable">دقة البوصلة منخفضة. يرجى معايرة جهازك.</string>
+    <string name="qibla_calibrate_message">للحصول على أدق اتجاه للقبلة، حرّك هاتفك على شكل رقم 8 عدة مرات لمعايرة البوصلة.</string>
+    <string name="qibla_calibrate_manual">يرجى معايرة بوصلة جهازك (حرّكه على شكل رقم 8).</string>
+    <string name="compass_point_n">شمال</string>
+    <string name="compass_point_ne">شمال شرق</string>
+    <string name="compass_point_e">شرق</string>
+    <string name="compass_point_se">جنوب شرق</string>
+    <string name="compass_point_s">جنوب</string>
+    <string name="compass_point_sw">جنوب غرب</string>
+    <string name="compass_point_w">غرب</string>
+    <string name="compass_point_nw">شمال غرب</string>
+    <string name="qibla_map_need_location">فعّل الموقع لرؤية اتجاه الكعبة من مكانك.</string>
+    <string name="qibla_map_enable_location">تفعيل الموقع</string>
+    <string name="qibla_intro_title">تحديد القبلة</string>
+    <string name="qibla_intro_message">الخريطة: تُظهر اتجاه الكعبة على الخريطة — تعمل في أي مكان دون الحاجة إلى بوصلة.
+البوصلة: وجّه هاتفك واتبع السهم نحو الكعبة مباشرةً.</string>
+    <string name="qibla_intro_no_compass">لا يحتوي جهازك على مستشعر بوصلة، لذا يُنصح باستخدام الخريطة.</string>
 </resources>
 
 

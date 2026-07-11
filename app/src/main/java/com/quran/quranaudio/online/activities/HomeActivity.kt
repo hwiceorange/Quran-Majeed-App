@@ -80,8 +80,9 @@ class HomeActivity : BaseActivity() {
             }
 
             R.id.nav_tasbih -> {
-              val mFragment = com.quran.quranaudio.online.tasbih.fragments.TasbihFragment.newInstance()
-                replaceFragment(mFragment)
+              // Tasbih module temporarily disabled
+              // val mFragment = com.quran.quranaudio.online.tasbih.fragments.TasbihFragment.newInstance()
+              // replaceFragment(mFragment)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.nav_app_settings -> {

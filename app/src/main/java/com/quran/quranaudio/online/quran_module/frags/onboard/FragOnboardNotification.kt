@@ -30,14 +30,32 @@ class FragOnboardNotification : FragOnboardBase() {
     private val notificationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
-        android.util.Log.d("FragOnboardNotification", if (isGranted) 
-            "✅ Notification permission granted" 
-        else 
+        android.util.Log.d("FragOnboardNotification", if (isGranted)
+            "✅ Notification permission granted"
+        else
             "❌ Notification permission denied"
         )
-        
+
+        if (isGranted) {
+            showRemindersEnabledConfirmation()
+        }
+
         // 无论用户是否授权，都导航到下一页
         navigateToNextPage()
+    }
+
+    /**
+     * 授权成功后的确认反馈。
+     * 内容是准确的：五番祈祷通知已默认开启（PreferencesHelper.ensureDefaultPrayerNotificationTypes），
+     * 进入主页获取位置后即完成当天闹钟调度。
+     */
+    private fun showRemindersEnabledConfirmation() {
+        val ctx = context ?: return
+        android.widget.Toast.makeText(
+            ctx,
+            com.quran.quranaudio.online.R.string.onboarding_prayer_reminders_enabled,
+            android.widget.Toast.LENGTH_SHORT
+        ).show()
     }
     
     override fun onCreateView(
@@ -71,7 +89,17 @@ class FragOnboardNotification : FragOnboardBase() {
         // Don't allow 按钮
         binding.btnDontAllow.setOnClickListener {
             android.util.Log.d("FragOnboardNotification", "❌ Don't allow button clicked")
-            
+
+            // Android 12 及以下没有系统通知权限门控，用户明确拒绝时必须在业务层
+            // 关闭祈祷通知，否则"说了不要却还收到通知"。
+            // Android 13+ 交给系统权限控制：用户之后在系统设置里授权，提醒即自动生效。
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                context?.let {
+                    com.quran.quranaudio.online.prayertimes.preferences.PreferencesHelper(it.applicationContext)
+                        .disableAllPrayerNotificationTypes()
+                }
+            }
+
             // 用户选择不允许，直接导航到下一页
             navigateToNextPage()
         }
@@ -90,6 +118,7 @@ class FragOnboardNotification : FragOnboardBase() {
                 ) == PackageManager.PERMISSION_GRANTED -> {
                     // 已经有权限
                     android.util.Log.d("FragOnboardNotification", "✅ Notification permission already granted")
+                    showRemindersEnabledConfirmation()
                     navigateToNextPage()
                 }
                 shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) -> {
@@ -104,8 +133,9 @@ class FragOnboardNotification : FragOnboardBase() {
                 }
             }
         } else {
-            // Android 12 及以下版本不需要请求通知权限
+            // Android 12 及以下版本不需要请求通知权限，提醒默认即生效
             android.util.Log.d("FragOnboardNotification", "✅ No notification permission needed (Android < 13)")
+            showRemindersEnabledConfirmation()
             navigateToNextPage()
         }
     }

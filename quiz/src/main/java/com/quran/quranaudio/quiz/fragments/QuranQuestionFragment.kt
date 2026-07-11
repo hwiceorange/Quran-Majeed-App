@@ -57,6 +57,7 @@ import com.quran.quranaudio.quiz.utils.UserInfoUtils
 import com.quran.quranaudio.quiz.utils.AppConfig
 import com.quranaudio.common.ad.AdConfig
 import com.quranaudio.common.ad.AdFactory
+import com.quranaudio.common.ad.NativeAdHelper
 import com.quran.quranaudio.quiz.QuestionBean
 import com.quran.quranaudio.quiz.databinding.FragmentQuestionBinding
 import kotlinx.coroutines.launch
@@ -94,6 +95,7 @@ class QuranQuestionFragment :
                         isSkipNextLevel = true
                         binding.quizNsv.gone()
                         binding.levelThoughtCl.root.visible()
+                        loadLevelUpNativeAd()
                     } else {
                         viewModel.showNextQuestion()
                     }
@@ -226,6 +228,7 @@ class QuranQuestionFragment :
                         binding.quizNsv.gone()
                         binding.levelThoughtCl.root.visible()
                         binding.levelThoughtCl.levelThoughtLav.playAnimation()
+                        loadLevelUpNativeAd()
                     } else {
                         viewModel.showNextQuestion()
                     }
@@ -323,6 +326,7 @@ class QuranQuestionFragment :
                     isSkipNextLevel = true
                     binding.quizNsv.gone()
                     binding.levelThoughtCl.root.visible()
+                    loadLevelUpNativeAd()
                 } else {
                     viewModel.showNextQuestion()
                 }
@@ -626,6 +630,17 @@ class QuranQuestionFragment :
         } else {
             timeStart()
             isSelected=true
+        }
+    }
+
+    private fun loadLevelUpNativeAd() {
+        val container = binding.levelThoughtCl.levelupNativeAdContainer
+        activity?.let {
+            NativeAdHelper.displayNativeAdWithAutoLoad(
+                it,
+                container,
+                R.layout.layout_ad_native_small_wrapper
+            )
         }
     }
 

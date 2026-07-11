@@ -84,9 +84,20 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
     
     // State variables
     private float currentAzimuth = 0f;
+    // 磁偏角（磁北与真北的夹角）。传感器方位角基于磁北，Qibla 方位角基于真北，
+    // 不校正会导致罗盘指针系统性偏差（磁偏角大的地区可达十几度）。
+    private float declination = 0f;
     private double qiblaDirection = 0d;
     private boolean isLocationReady = false;
     private android.os.Handler updateHandler;
+    // 对齐状态：仅在"未对齐→对齐"跳变时震动一次，避免持续对齐时反复震动
+    private boolean wasAligned = false;
+    // 指针平滑与节流：低端机上每个传感器事件全量重绘会掉帧。
+    // 用圆周低通滤波去抖，且方位变化 < RENDER_THRESHOLD 时跳过重绘。
+    private float smoothedAzimuth = Float.NaN;
+    private float lastRenderedAzimuth = Float.NaN;
+    private static final float SMOOTHING = 0.15f;      // 低通系数（越小越平滑）
+    private static final float RENDER_THRESHOLD = 1.0f; // 小于此角度变化不重绘
     private Runnable updateRunnable;
     
     // Calibration status related variables
@@ -276,7 +287,21 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
         
         // Save location
         LocationSave.putLocation(location.getLatitude(), location.getLongitude());
-        
+
+        // 根据经纬度/海拔/当前时间计算磁偏角，用于把磁北方位角转为真北
+        try {
+            android.hardware.GeomagneticField geoField = new android.hardware.GeomagneticField(
+                    (float) location.getLatitude(),
+                    (float) location.getLongitude(),
+                    (float) location.getAltitude(),
+                    System.currentTimeMillis());
+            declination = geoField.getDeclination();
+            Log.d(TAG, "Magnetic declination at location: " + declination + "°");
+        } catch (Exception e) {
+            Log.w(TAG, "Failed to compute magnetic declination, using 0", e);
+            declination = 0f;
+        }
+
         // Calculate Qibla direction
         calculateQiblaDirection();
         
@@ -422,7 +447,12 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
         if (imgCompassK != null) {
             imgCompassK.setRotation((float) relativeQiblaDirection);
         }
-        
+
+        // 对齐确认：指针指向麦加（容差 ±5°）时给一次震动 + 视觉反馈，
+        // 这是用户找到朝向的情感落点，避免用户盯着晃动的指针不确定"到底对没对上"。
+        boolean aligned = relativeQiblaDirection <= 5 || relativeQiblaDirection >= 355;
+        onQiblaAlignmentChanged(aligned);
+
         // Update direction text - show absolute Qibla direction from North
         if (tvHeading != null) {
             tvHeading.setText(String.format(Locale.ENGLISH, "%.1f°", qiblaDirection));
@@ -433,6 +463,58 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
         updateDistanceDisplay();
         
         Log.d(TAG, "Qibla UI updated - Direction: " + qiblaDirection + "°, Azimuth: " + currentAzimuth + "°, Relative: " + relativeQiblaDirection + "°");
+    }
+
+    /**
+     * 对齐状态变化处理：对准麦加时给指针染绿 + 一次性震动确认。
+     * 只在跳变边沿触发震动，持续对齐不重复震动。
+     */
+    private void onQiblaAlignmentChanged(boolean aligned) {
+        if (aligned == wasAligned) {
+            return;
+        }
+        wasAligned = aligned;
+
+        // 指针高亮：对齐变绿，未对齐清除着色
+        if (imgCompassK != null) {
+            if (aligned) {
+                imgCompassK.setColorFilter(0xFF2E9E7A, android.graphics.PorterDuff.Mode.SRC_IN);
+            } else {
+                imgCompassK.clearColorFilter();
+            }
+        }
+
+        if (aligned) {
+            try {
+                android.content.Context ctx = getContext();
+                if (ctx != null && isAlignmentHapticAllowed(ctx)) {
+                    android.os.Vibrator vibrator =
+                            (android.os.Vibrator) ctx.getSystemService(android.content.Context.VIBRATOR_SERVICE);
+                    if (vibrator != null && vibrator.hasVibrator()) {
+                        vibrator.vibrate(android.os.VibrationEffect.createOneShot(
+                                60, android.os.VibrationEffect.DEFAULT_AMPLITUDE));
+                    }
+                }
+            } catch (Exception e) {
+                Log.w(TAG, "Vibration on alignment failed", e);
+            }
+        }
+    }
+
+    /**
+     * 对齐震动是否允许：跟随系统响铃模式，静音（如清真寺内）时不震动，
+     * 避免在礼拜静默场景造成尴尬。响铃/震动模式下正常触觉反馈。
+     */
+    private boolean isAlignmentHapticAllowed(android.content.Context ctx) {
+        try {
+            android.media.AudioManager am =
+                    (android.media.AudioManager) ctx.getSystemService(android.content.Context.AUDIO_SERVICE);
+            if (am != null && am.getRingerMode() == android.media.AudioManager.RINGER_MODE_SILENT) {
+                return false;
+            }
+        } catch (Exception ignored) {
+        }
+        return true;
     }
 
     // Location update method
@@ -450,33 +532,39 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
     // EnhancedCompass.EnhancedCompassListener implementation
     @Override
     public void onAzimuthChanged(float azimuth) {
-        currentAzimuth = azimuth;
-        
-        // Update compass rotation
-        if (imgCompass != null) {
-            imgCompass.setRotation(-azimuth);
-        }
-        
-        // Update Qibla UI with real-time data
-        updateQiblaUI();
-        
-        // Force UI update on main thread
-        if (requireActivity() != null) {
-            requireActivity().runOnUiThread(() -> {
-                // Update direction display with current azimuth
-                if (tvHeading != null && isLocationReady) {
-                    // Show the absolute Qibla direction from North
-                    tvHeading.setText(String.format(Locale.ENGLISH, "%.1f°", qiblaDirection));
-                }
-                
-                // Update distance display
-                if (tvDistance != null && currentLocation != null) {
-                    updateDistanceDisplay();
-            }
-        });
-    }
+        // 磁北 → 真北：传感器方位角基于磁北，叠加磁偏角后与基于真北的 Qibla 方位角同基准，
+        // 否则罗盘指针会有系统性偏差（磁偏角大的地区可达十几度，影响礼拜朝向）。
+        float trueAzimuth = (azimuth + declination + 360f) % 360f;
 
-        Log.d(TAG, "Azimuth changed to: " + azimuth + "°, Qibla direction: " + qiblaDirection + "°");
+        // 圆周低通滤波（用向量分量避免 0/360 跳变时的抖动）
+        if (Float.isNaN(smoothedAzimuth)) {
+            smoothedAzimuth = trueAzimuth;
+        } else {
+            double curR = Math.toRadians(smoothedAzimuth);
+            double newR = Math.toRadians(trueAzimuth);
+            double sin = (1 - SMOOTHING) * Math.sin(curR) + SMOOTHING * Math.sin(newR);
+            double cos = (1 - SMOOTHING) * Math.cos(curR) + SMOOTHING * Math.cos(newR);
+            smoothedAzimuth = (float) ((Math.toDegrees(Math.atan2(sin, cos)) + 360) % 360);
+        }
+
+        // 节流：方位变化小于阈值则不重绘，显著降低低端机 UI 负载
+        if (!Float.isNaN(lastRenderedAzimuth)) {
+            float diff = Math.abs(smoothedAzimuth - lastRenderedAzimuth);
+            if (diff > 180) diff = 360 - diff;
+            if (diff < RENDER_THRESHOLD) {
+                return;
+            }
+        }
+        lastRenderedAzimuth = smoothedAzimuth;
+        currentAzimuth = smoothedAzimuth;
+
+        // 罗盘盘面旋转
+        if (imgCompass != null) {
+            imgCompass.setRotation(-currentAzimuth);
+        }
+
+        // 更新 Qibla 指针 + 方位/距离文本（内部已处理，无需再 runOnUiThread）
+        updateQiblaUI();
     }
 
     @Override
@@ -583,7 +671,7 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
         
         // If sensor accuracy is unreliable, show calibration suggestion
         if (accuracy == android.hardware.SensorManager.SENSOR_STATUS_UNRELIABLE) {
-            showMagneticWarning("Sensor accuracy unreliable, device calibration recommended");
+            showMagneticWarning(getString(R.string.qibla_sensor_unreliable));
         }
     }
 
@@ -672,10 +760,10 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
 
     private void showCalibrationDialog() {
         try {
-            new CalibrateCompassDialog(requireActivity(), "For the most accurate Qibla direction, please calibrate your device compass").show();
+            new CalibrateCompassDialog(requireActivity(), getString(R.string.qibla_calibrate_message)).show();
         } catch (Exception e) {
             Log.e(TAG, "Error showing calibration dialog: " + e.getMessage());
-            Toast.makeText(requireContext(), "Please manually calibrate device compass", Toast.LENGTH_LONG).show();
+            Toast.makeText(requireContext(), R.string.qibla_calibrate_manual, Toast.LENGTH_LONG).show();
         }
     }
 

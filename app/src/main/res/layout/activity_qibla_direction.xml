@@ -9,18 +9,6 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-
-    <FrameLayout
-        android:id="@+id/qibla_fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="0dp"
-        android:background="@color/white"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/custom_toolbar"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
     <!-- Toolbar (统一设计风格) -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/custom_toolbar"
@@ -35,5 +23,39 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Map / Compass 两 Tab -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/qibla_tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:tabIndicatorColor="#4B9B76"
+        app:tabSelectedTextColor="#4B9B76"
+        app:tabTextColor="#8A94A6"
+        app:tabMode="fixed"
+        app:layout_constraintTop_toBottomOf="@id/custom_toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/qibla_tab_map" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/qibla_tab_compass" />
+    </com.google.android.material.tabs.TabLayout>
+
+    <FrameLayout
+        android:id="@+id/qibla_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/qibla_tab_layout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -105,6 +105,11 @@ public class MainActivity extends BaseActivity {
                 .create()
                 .getPrayerDataPreloader();
 
+        // 🔔 为未配置的祈祷写入默认通知类型（提示音）。
+        // 必须在任何 UI（PrayersFragment 图标直接读这份 prefs）和闹钟调度之前执行，
+        // 保证"界面显示的开关状态"和"实际会响的闹钟"一致。幂等，重复调用无副作用。
+        preferencesHelper.ensureDefaultPrayerNotificationTypes();
+
         super.onCreate(savedInstanceState);
         
         // UI 初始化（必须在主线程）

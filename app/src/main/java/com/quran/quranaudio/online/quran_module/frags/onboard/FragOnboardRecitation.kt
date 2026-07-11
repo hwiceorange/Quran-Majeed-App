@@ -15,10 +15,10 @@ import com.quran.quranaudio.online.quran_module.utils.reader.recitation.Recitati
 import com.quran.quranaudio.online.quran_module.utils.reader.recitation.RecitationManager.prepare
 import com.quran.quranaudio.online.quran_module.utils.receivers.NetworkStateReceiver
 import com.quran.quranaudio.online.quran_module.widgets.PageAlert
+import com.quran.quranaudio.online.quran_module.utils.thread.runner.CallableTaskRunner
 
 class FragOnboardRecitation : FragOnboardBase() {
-    private val recitationTaskRunner =
-        com.quran.quranaudio.online.quran_module.utils.thread.runner.CallableTaskRunner<String>()
+    private val recitationTaskRunner = CallableTaskRunner<String>()
     private lateinit var binding: LytOnboardRecitationsBinding
     private lateinit var pageAlert: PageAlert
 

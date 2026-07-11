@@ -324,4 +324,12 @@
     <color name="colorNativeBackgroundDark">#424242</color>
     <!-- Quran_Module* -->
 
+
+    <!-- Prayer Times Widget（与品牌色 colorPrimary #4e8545 同族的深绿卡片 + 金色强调） -->
+    <color name="widget_prayer_bg_start">#F22C5231</color>
+    <color name="widget_prayer_bg_end">#F21B3A20</color>
+    <color name="widget_prayer_accent">#FFE9B44C</color>
+    <color name="widget_prayer_accent_pill">#33E9B44C</color>
+    <color name="widget_prayer_text_primary">#FFFFFFFF</color>
+    <color name="widget_prayer_text_secondary">#C0FFFFFF</color>
 </resources>

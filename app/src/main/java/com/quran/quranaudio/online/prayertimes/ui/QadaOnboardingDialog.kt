@@ -73,7 +73,12 @@ class QadaOnboardingDialog(
         val radioCustom: RadioButton = view.findViewById(R.id.radio_option_custom)
         val tvSelectedDate: TextView = view.findViewById(R.id.tv_selected_date)
         val btnConfirm: MaterialButton = view.findViewById(R.id.btn_confirm)
-        
+        val btnClose: android.widget.ImageButton = view.findViewById(R.id.btn_close)
+
+        btnClose.setOnClickListener {
+            dialog?.dismiss()
+        }
+
         // Option A: Start from Today (默认选中)
         cardOptionToday.setOnClickListener {
             selectOptionToday(cardOptionToday, cardOptionCustom, radioToday, radioCustom)

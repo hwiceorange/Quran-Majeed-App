@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    updatePeriodMillis = 30 分钟（系统允许的最小值），作为自维护刷新闹钟的兜底；
+    正常刷新由 Provider 在每个祈祷时间点/午夜自行调度的 AlarmManager 驱动。
+-->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="250dp"
+    android:minHeight="40dp"
+    android:minResizeWidth="180dp"
+    android:minResizeHeight="40dp"
+    android:targetCellWidth="4"
+    android:targetCellHeight="1"
+    android:updatePeriodMillis="1800000"
+    android:initialLayout="@layout/widget_prayer_times"
+    android:previewLayout="@layout/widget_prayer_times"
+    android:description="@string/widget_prayer_times_description"
+    android:resizeMode="horizontal|vertical"
+    android:widgetCategory="home_screen" />

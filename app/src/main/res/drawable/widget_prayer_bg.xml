@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Widget 卡片背景：品牌绿系深色渐变 + 圆角，与 App 主色 (#4e8545) 同族，
+     深色保证任何壁纸上白色/金色文字可读 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:angle="270"
+        android:startColor="@color/widget_prayer_bg_start"
+        android:endColor="@color/widget_prayer_bg_end" />
+    <corners android:radius="16dp" />
+</shape>

@@ -54,8 +54,8 @@ android {
         applicationId "com.quran.quranaudio.online"
         minSdkVersion 26
         targetSdkVersion 35
-        versionCode 112
-        versionName "1.9.30"
+        versionCode 119
+        versionName "1.9.37"
         multiDexEnabled true
         
         // 🔧 Support for 16 KB page sizes (Google Play requirement for Android 15+)
@@ -99,18 +99,88 @@ android {
 
 
     signingConfigs {
-
+        // Google Play 渠道签名配置（保持不变）
         release {
             storeFile file("quran_keystore")//hashcode 1961951595
             keyAlias "key0"
             storePassword "Huwei123"
             keyPassword "Huwei123"
         }
+        
+        // Transsion 渠道独立签名配置
+        transsionConfig {
+            def localProperties = new Properties()
+            def localPropertiesFile = rootProject.file('local.properties')
+            if (localPropertiesFile.exists()) {
+                localProperties.load(new FileInputStream(localPropertiesFile))
+            }
+            
+            def keystorePath = localProperties.getProperty('TRANS_STORE_FILE')
+            if (keystorePath != null && !keystorePath.startsWith('path/to/')) {
+                // 使用 rootProject.file() 从项目根目录解析路径
+                storeFile rootProject.file(keystorePath)
+                storePassword localProperties.getProperty('TRANS_STORE_PWD')
+                keyAlias localProperties.getProperty('TRANS_KEY_ALIAS')
+                keyPassword localProperties.getProperty('TRANS_KEY_PWD')
+            } else {
+                // 占位符配置，提醒用户填写
+                println "⚠️  WARNING: Transsion signing config not set in local.properties"
+                println "Please update TRANS_STORE_FILE, TRANS_STORE_PWD, TRANS_KEY_ALIAS, TRANS_KEY_PWD"
+            }
+        }
     }
 
     lintOptions {
         abortOnError false
         checkReleaseBuilds false
+    }
+    
+    // ===== Product Flavors Configuration =====
+    // 渠道配置：googleplay（原有渠道）和 transsion（传音渠道）
+    flavorDimensions "market"
+    
+    productFlavors {
+        // Google Play 渠道（保持原有配置）
+        googleplay {
+            dimension "market"
+            
+            // Google Play 使用原有的 release 签名
+            signingConfig signingConfigs.release
+            
+            // Google Play 原有的 AdMob App ID
+            manifestPlaceholders = [
+                admob_app_id: "ca-app-pub-3966802724737141~7853010339"
+            ]
+            
+            // 注入广告位 ID 到 BuildConfig（Google Play 原有配置）
+            buildConfigField "String", "ADMOB_APP_ID", '"ca-app-pub-3966802724737141~7853010339"'
+            buildConfigField "String", "AD_BANNER", '"ca-app-pub-3966802724737141/3067585143"'
+            buildConfigField "String", "AD_INTERSTITIAL", '"ca-app-pub-3966802724737141/5930208744"'
+            buildConfigField "String", "AD_NATIVE", '"ca-app-pub-3966802724737141/8016465974"'
+            buildConfigField "String", "AD_APP_OPEN", '"ca-app-pub-3966802724737141/9441421809"'
+            buildConfigField "String", "AD_REWARDED", '"ca-app-pub-3966802724737141/4492153931"'
+        }
+        
+        // Transsion 渠道（新增配置）
+        transsion {
+            dimension "market"
+            
+            // Transsion 渠道使用独立签名
+            signingConfig signingConfigs.transsionConfig
+            
+            // Transsion 专用的 AdMob App ID
+            manifestPlaceholders = [
+                admob_app_id: "ca-app-pub-3966802724737141~7853010339"
+            ]
+            
+            // 注入 Transsion 专用广告位 ID 到 BuildConfig
+            buildConfigField "String", "ADMOB_APP_ID", '"ca-app-pub-3966802724737141~7853010339"'
+            buildConfigField "String", "AD_BANNER", '"ca-app-pub-3966802724737141/3067585143"'
+            buildConfigField "String", "AD_INTERSTITIAL", '"ca-app-pub-3966802724737141/5930208744"'
+            buildConfigField "String", "AD_NATIVE", '"ca-app-pub-3966802724737141/8016465974"'
+            buildConfigField "String", "AD_APP_OPEN", '"ca-app-pub-3966802724737141/9441421809"'
+            buildConfigField "String", "AD_REWARDED", '"ca-app-pub-3966802724737141/4492153931"'
+        }
     }
     
     // AAPT options to fix resource packaging issues
@@ -149,7 +219,9 @@ android {
             shrinkResources true
             resValue "string", "cleartextTrafficPermitted", "false"
 
-            signingConfig signingConfigs.release
+            // 签名配置在 productFlavors 中设置
+            // Google Play 使用 release 签名，Transsion 使用 transsionConfig 签名
+            
             firebaseCrashlytics {
                 mappingFileUploadEnabled false
             }
@@ -244,7 +316,6 @@ dependencies {
 
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation files('libs/muslimdata-0.6.aar')
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
     implementation(platform('org.jetbrains.kotlin:kotlin-bom:1.8.10'))
     implementation 'androidx.core:core-ktx:1.9.0'
@@ -314,7 +385,6 @@ dependencies {
 
     implementation "androidx.activity:activity-ktx:1.6.1"
     implementation 'com.github.GwonHyeok:StickySwitch:0.0.16'
-    //implementation 'dev.kosrat.muslimdata:0.6'
     implementation 'com.github.ahmedeltaher:Azan:3.0'
     implementation "com.github.ssseasonnn:DownloadX:1.0.2"
     implementation 'com.github.mumayank:AirLocation:2.5.2'
@@ -332,12 +402,8 @@ dependencies {
 
 
     //Google map utility
-    implementation 'com.google.maps.android:android-maps-utils:2.4.0'
-    implementation 'com.google.maps.android:maps-utils-ktx:3.4.0'
-    implementation 'com.google.maps.android:maps-ktx:3.4.0'
 
     //Google Direction API
-    implementation 'com.google.maps:google-maps-services:2.1.2'
 
     // Ad Networks
     implementation 'com.facebook.android:audience-network-sdk:5.11.0'

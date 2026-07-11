@@ -34,6 +34,13 @@ object AdFactory : ActivityLifecycleCallbacks {
     //adId to AdItem
     private val adsCache = mutableMapOf<String, AdItem>()
 
+    // 前台 started Activity 计数：进程被推送/闹钟/Boot 拉起时为 0，此时不应加载任何广告
+    @Volatile
+    private var startedActivityCount = 0
+
+    @JvmStatic
+    fun isAppInForeground(): Boolean = startedActivityCount > 0
+
     fun init(application: Application, testMode: Boolean) {
         application.registerActivityLifecycleCallbacks(this)
         AdConfig.isTest = testMode
@@ -441,6 +448,10 @@ object AdFactory : ActivityLifecycleCallbacks {
     }
 
     fun showAppOpenAd(activity: Activity, adPosition: String, callback: AdShowCallback?) {
+        if (SubscriptionChecker.isUserSubscribed(activity)) {
+            callback?.onShowFail()
+            return
+        }
         val adId = AdConfig.getAdIdByPosition(adPosition)
         consumeAd(adId, AD_APP_OPEN_CACHE_MAX_TIME)?.let { adItem ->
             (adItem.ad as? AppOpenAd)?.let {
@@ -466,6 +477,10 @@ object AdFactory : ActivityLifecycleCallbacks {
         functionTag: String,
         callback: AdShowCallback?
     ) {
+        if (SubscriptionChecker.isUserSubscribed(activity)) {
+            callback?.onShowFail()
+            return
+        }
         val adId = AdConfig.getAdIdByPosition(adPosition)
         consumeAd(adId)?.let { adItem ->
             (adItem.ad as? RewardedAd)?.let {
@@ -663,14 +678,16 @@ object AdFactory : ActivityLifecycleCallbacks {
     }
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-        loadInterstitialAd(activity, AdConfig.AD_INTERS, null)
-//        loadInterstitialAd(activity, AdConfig.AD_INTERS_HIGH, null)
+        // ❌ 移除：loadInterstitialAd(activity, AdConfig.AD_INTERS, null)
+        // 该缓存池只有 Quiz 会消费，Quiz 已在 QuranQuestionFragment.initData() 按需预加载；
+        // 每个 Activity 创建都全局加载会造成大量"请求后从不展示"的浪费
         loadAppOpenAd(activity, AdConfig.AD_APPOPEN, null)
         // ❌ 移除：loadNativeAd(activity, AdConfig.AD_NATIVE, "", null, null)
         // ✅ 原生广告由 NativeAdManager 统一管理，不需要在这里加载
     }
 
     override fun onActivityStarted(activity: Activity) {
+        startedActivityCount++
     }
 
     override fun onActivityResumed(activity: Activity) {
@@ -680,6 +697,7 @@ object AdFactory : ActivityLifecycleCallbacks {
     }
 
     override fun onActivityStopped(activity: Activity) {
+        if (startedActivityCount > 0) startedActivityCount--
     }
 
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {

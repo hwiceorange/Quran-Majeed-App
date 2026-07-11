@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 
 import com.github.kayvannj.permission_utils.PermissionUtil;
 import com.quran.quranaudio.online.compass.fragment.QiblaFragment;
+import com.quran.quranaudio.online.compass.fragment.QiblaMapFragment;
 import com.quran.quranaudio.online.R;
 import com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs;
 
@@ -87,10 +88,116 @@ public class QiblaDirectionActivity extends AppCompatActivity {
         setupStatusBar();
         
         setContentView(R.layout.activity_qibla_direction);
-        loadFragment(new QiblaFragment()); // 使用增强版Fragment，移除地图依赖
 
         // 🔄 统一设计风格：使用 Toolbar 的导航按钮
         setupToolbar();
+
+        // 🧭 Map / Compass 两 Tab
+        setupTabs();
+    }
+
+    /**
+     * 设置 Map / Compass 两个 Tab。
+     *
+     * 默认落哪个 Tab 取决于设备是否有可用磁力计：
+     * - 无磁力计（大量 T3 低端机：Tecno/Infinix/itel 等）→ 默认 Map，避免落到不可用的罗盘；
+     * - 有磁力计 → 默认 Compass（传统体验，指哪拜哪更直观）。
+     */
+    private void setupTabs() {
+        com.google.android.material.tabs.TabLayout tabLayout = findViewById(R.id.qibla_tab_layout);
+
+        boolean hasMagnetometer = deviceHasMagnetometer();
+        // Tab 顺序：0=Map，1=Compass
+        int defaultTab = hasMagnetometer ? 1 : 0;
+
+        showTab(defaultTab);
+        showFirstTimeHintIfNeeded(hasMagnetometer);
+        if (tabLayout != null) {
+            com.google.android.material.tabs.TabLayout.Tab tab = tabLayout.getTabAt(defaultTab);
+            if (tab != null) {
+                tab.select();
+            }
+            tabLayout.addOnTabSelectedListener(
+                    new com.google.android.material.tabs.TabLayout.OnTabSelectedListener() {
+                        @Override
+                        public void onTabSelected(com.google.android.material.tabs.TabLayout.Tab tab) {
+                            showTab(tab.getPosition());
+                        }
+
+                        @Override
+                        public void onTabUnselected(com.google.android.material.tabs.TabLayout.Tab tab) {
+                        }
+
+                        @Override
+                        public void onTabReselected(com.google.android.material.tabs.TabLayout.Tab tab) {
+                        }
+                    });
+        }
+    }
+
+    private void showTab(int position) {
+        // 0=Map，1=Compass
+        // 缓存两个 Fragment 实例，用 show/hide 而非 replace，避免每次切 Tab 地图重载闪烁
+        androidx.fragment.app.FragmentManager fm = getSupportFragmentManager();
+        androidx.fragment.app.FragmentTransaction tx = fm.beginTransaction();
+
+        String targetTag = position == 0 ? TAG_MAP : TAG_COMPASS;
+        String otherTag = position == 0 ? TAG_COMPASS : TAG_MAP;
+
+        Fragment other = fm.findFragmentByTag(otherTag);
+        if (other != null) {
+            tx.hide(other);
+        }
+
+        Fragment target = fm.findFragmentByTag(targetTag);
+        if (target == null) {
+            target = position == 0 ? new QiblaMapFragment() : new QiblaFragment();
+            tx.add(R.id.qibla_fragment_container, target, targetTag);
+        } else {
+            tx.show(target);
+        }
+        tx.commit();
+    }
+
+    private static final String TAG_MAP = "qibla_map";
+    private static final String TAG_COMPASS = "qibla_compass";
+
+    /**
+     * 首次进入时一次性说明两个 Tab 的差异，帮助用户理解何时用地图、何时用罗盘。
+     * 通过 SharedPreferences 门控，只弹一次；无磁力计设备额外提示"本机建议用地图"。
+     */
+    private void showFirstTimeHintIfNeeded(boolean hasMagnetometer) {
+        try {
+            android.content.SharedPreferences sp =
+                    getSharedPreferences("QIBLA_PREFS", MODE_PRIVATE);
+            if (sp.getBoolean("hint_shown", false)) {
+                return;
+            }
+            sp.edit().putBoolean("hint_shown", true).apply();
+
+            String msg = getString(R.string.qibla_intro_message);
+            if (!hasMagnetometer) {
+                msg = msg + "\n\n" + getString(R.string.qibla_intro_no_compass);
+            }
+            new androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle(R.string.qibla_intro_title)
+                    .setMessage(msg)
+                    .setPositiveButton(android.R.string.ok, null)
+                    .show();
+        } catch (Exception e) {
+            // 引导失败绝不影响功能
+        }
+    }
+
+    private boolean deviceHasMagnetometer() {
+        try {
+            android.hardware.SensorManager sm =
+                    (android.hardware.SensorManager) getSystemService(SENSOR_SERVICE);
+            return sm != null
+                    && sm.getDefaultSensor(android.hardware.Sensor.TYPE_MAGNETIC_FIELD) != null;
+        } catch (Exception e) {
+            return false;
+        }
     }
     
     /**

@@ -174,6 +174,15 @@ public class App extends BaseApp {
         }
         
         try {
+            android.util.Log.d("CRASH_DEBUG", "🔄 Cleaning Vungle cache (prevent JSON crash)...");
+            cleanVungleCacheIfCorrupted();
+            android.util.Log.d("CRASH_DEBUG", "✅ Vungle cache cleaned");
+        } catch (Throwable e) {
+            android.util.Log.e("CRASH_DEBUG", "❌ CRASH in cleanVungleCacheIfCorrupted(): " + e.getMessage(), e);
+            // 继续执行，不要抛出异常
+        }
+        
+        try {
             android.util.Log.d("CRASH_DEBUG", "🔄 Initializing AdFactory...");
             initAdFactory();
             android.util.Log.d("CRASH_DEBUG", "✅ AdFactory initialized");
@@ -209,6 +218,15 @@ public class App extends BaseApp {
             // 继续执行，不要抛出异常
         }
         
+        try {
+            android.util.Log.d("CRASH_DEBUG", "🔄 Initializing WorkManager (SYNC - CRITICAL)...");
+            configureWorkManagerSync();
+            android.util.Log.d("CRASH_DEBUG", "✅ WorkManager initialized");
+        } catch (Throwable e) {
+            android.util.Log.e("CRASH_DEBUG", "❌ CRASH in configureWorkManagerSync(): " + e.getMessage(), e);
+            // 继续执行，不要抛出异常
+        }
+        
         app = this;
         
         android.util.Log.d("CRASH_DEBUG", "✅ Immediate init completed [" + (System.currentTimeMillis() - startTime) + "ms]");
@@ -239,6 +257,89 @@ public class App extends BaseApp {
     // ============================================================
     // 🟢 IMMEDIATE: 主线程必须执行的初始化
     // ============================================================
+    
+    /**
+     * 清理 Vungle SDK 损坏的缓存文件
+     * ⚠️ CRITICAL FIX: 防止 JSON 解析崩溃
+     * 
+     * 错误信息：
+     * kotlinx.serialization.json.internal.JsonDecodingException: 
+     * Expected start of the array '[', but had 'EOF' instead
+     * 
+     * 根本原因：
+     * Vungle SDK 的 FilePreferences 尝试读取损坏或空的 JSON 文件
+     * 
+     * 解决方案：
+     * 在 AdFactory 初始化前清理 Vungle 的缓存目录
+     */
+    private void cleanVungleCacheIfCorrupted() {
+        android.util.Log.d("VUNGLE_FIX", "→ Checking Vungle cache files...");
+        long startTime = System.currentTimeMillis();
+        
+        try {
+            // Vungle SDK 缓存目录路径
+            java.io.File vungleDir = new java.io.File(getFilesDir(), "vungle_cache");
+            
+            if (vungleDir.exists() && vungleDir.isDirectory()) {
+                android.util.Log.d("VUNGLE_FIX", "Found Vungle cache directory: " + vungleDir.getAbsolutePath());
+                
+                // 检查并清理损坏的 JSON 文件
+                java.io.File[] files = vungleDir.listFiles();
+                if (files != null) {
+                    int cleanedCount = 0;
+                    for (java.io.File file : files) {
+                        if (file.isFile() && file.getName().endsWith(".json")) {
+                            // 检查文件是否为空或损坏
+                            if (file.length() == 0) {
+                                android.util.Log.w("VUNGLE_FIX", "Found empty JSON file: " + file.getName() + ", deleting...");
+                                if (file.delete()) {
+                                    cleanedCount++;
+                                }
+                            } else {
+                                // 尝试读取文件内容验证 JSON 格式
+                                try {
+                                    java.io.FileInputStream fis = new java.io.FileInputStream(file);
+                                    byte[] buffer = new byte[10];
+                                    int bytesRead = fis.read(buffer);
+                                    fis.close();
+                                    
+                                    if (bytesRead > 0) {
+                                        String content = new String(buffer, 0, bytesRead);
+                                        // 检查是否以 [ 或 { 开头（有效的 JSON）
+                                        if (!content.trim().startsWith("[") && !content.trim().startsWith("{")) {
+                                            android.util.Log.w("VUNGLE_FIX", "Found corrupted JSON file: " + file.getName() + ", deleting...");
+                                            if (file.delete()) {
+                                                cleanedCount++;
+                                            }
+                                        }
+                                    }
+                                } catch (Exception e) {
+                                    android.util.Log.w("VUNGLE_FIX", "Error reading file: " + file.getName() + ", deleting...");
+                                    if (file.delete()) {
+                                        cleanedCount++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    if (cleanedCount > 0) {
+                        android.util.Log.i("VUNGLE_FIX", "✅ Cleaned " + cleanedCount + " corrupted Vungle cache files");
+                    } else {
+                        android.util.Log.d("VUNGLE_FIX", "✅ All Vungle cache files are valid");
+                    }
+                }
+            } else {
+                android.util.Log.d("VUNGLE_FIX", "Vungle cache directory not found (first launch or already clean)");
+            }
+            
+            android.util.Log.d("VUNGLE_FIX", "✅ Vungle cache check completed [" + (System.currentTimeMillis() - startTime) + "ms]");
+            
+        } catch (Exception e) {
+            android.util.Log.e("VUNGLE_FIX", "❌ Error cleaning Vungle cache (non-fatal)", e);
+            // 不要抛出异常，让应用继续运行
+        }
+    }
     
     /**
      * WebView 进程隔离 + 轻量级初始化
@@ -383,13 +484,10 @@ public class App extends BaseApp {
         // 任务1: 加载 Typeface（50-150ms，IO密集）
         backgroundExecutor.execute(this::loadTypefacesAsync);
         
-        // 任务2: WorkManager 初始化（50-100ms，数据库操作）
-        backgroundExecutor.execute(this::configureWorkManagerAsync);
-        
-        // 任务3: QuranData 注入（20-50ms，轻量）
+        // 任务2: QuranData 注入（20-50ms，轻量）
         backgroundExecutor.execute(this::injectQuranDataProviderAsync);
         
-        android.util.Log.d("PERFORMANCE", "✅ [ASYNC] 3 background tasks scheduled");
+        android.util.Log.d("PERFORMANCE", "✅ [ASYNC] 2 background tasks scheduled");
     }
     
     /**
@@ -416,11 +514,18 @@ public class App extends BaseApp {
     }
     
     /**
-     * 后台初始化 WorkManager
-     * 原阻塞时间: 50-100ms → 0ms (完全异步)
+     * 同步初始化 WorkManager（必须在主线程早期完成）
+     * ⚠️ CRITICAL FIX: WorkManager 必须在 onCreate() 中同步初始化
+     * 原因：系统可能在任何时候启动 SystemJobService，如果 WorkManager 未初始化会崩溃
+     * 
+     * 错误信息：
+     * java.lang.IllegalStateException: WorkManager needs to be initialized 
+     * via a ContentProvider#onCreate() or an Application#onCreate()
+     * 
+     * 解决方案：从异步改为同步初始化（阻塞时间 50-100ms 可接受）
      */
-    private void configureWorkManagerAsync() {
-        android.util.Log.d("PERFORMANCE", "→ [ASYNC] Configuring WorkManager...");
+    private void configureWorkManagerSync() {
+        android.util.Log.d("PERFORMANCE", "→ [IMMEDIATE] Configuring WorkManager (SYNC - CRITICAL)...");
         long startTime = System.currentTimeMillis();
         
         try {
@@ -431,17 +536,23 @@ public class App extends BaseApp {
                     .build();
 
             WorkManager.initialize(this, config);
+            android.util.Log.d("PERFORMANCE", "✅ [IMMEDIATE] WorkManager initialized [" + (System.currentTimeMillis() - startTime) + "ms]");
             
-            // 数据库清理
-            WorkManager workManager = WorkManager.getInstance(this);
-            workManager.pruneWork();
+            // 数据库清理和任务调度可以异步执行
+            backgroundExecutor.execute(() -> {
+                try {
+                    WorkManager workManager = WorkManager.getInstance(App.this);
+                    workManager.pruneWork();
+                    com.quran.quranaudio.online.prayertimes.job.WorkCreator.scheduleWorkManagerCleanup(App.this);
+                    android.util.Log.d("PERFORMANCE", "✅ [ASYNC] WorkManager cleanup scheduled");
+                } catch (Exception e) {
+                    android.util.Log.e("PERFORMANCE", "❌ [ASYNC] WorkManager cleanup FAILED", e);
+                }
+            });
             
-            // 调度定期清理任务
-            com.quran.quranaudio.online.prayertimes.job.WorkCreator.scheduleWorkManagerCleanup(this);
-            
-            android.util.Log.d("PERFORMANCE", "✅ [ASYNC] WorkManager configured [" + (System.currentTimeMillis() - startTime) + "ms]");
         } catch (Exception e) {
-            android.util.Log.e("PERFORMANCE", "❌ [ASYNC] WorkManager FAILED", e);
+            android.util.Log.e("PERFORMANCE", "❌ [IMMEDIATE] WorkManager initialization FAILED", e);
+            // 不要抛出异常，让应用继续运行
         }
     }
     
@@ -507,27 +618,29 @@ public class App extends BaseApp {
      */
     private void preloadAdsDelayed() {
         long startTime = System.currentTimeMillis();
-        
+
         try {
-            // Interstitial Ad
+            // initialize 只保存 applicationContext，必须无条件执行，
+            // 否则后台拉起的进程再被用户打开时，消费侧按需加载会因 context 为空而失效
             com.quranaudio.common.ad.InterstitialAdManager.Companion.getInstance().initialize(this);
-            com.quranaudio.common.ad.InterstitialAdManager.Companion.getInstance().preloadAd();
-            
-            // Native Ad
             com.quranaudio.common.ad.NativeAdManager.Companion.getInstance().initialize(this);
+
+            // ⚠️ 进程可能被 FCM/祈祷时间通知/BootReceiver/WorkManager 在后台拉起，
+            // 此时预加载的广告永远不会展示，只会浪费请求，直接跳过。
+            // 用户真正打开 App 后，消费侧（showAdIfAvailable/getCachedAd）会按需加载。
+            if (!com.quranaudio.common.ad.AdFactory.isAppInForeground()) {
+                android.util.Log.d("PERFORMANCE", "⏸️ [DELAY-3s] No foreground activity (background process start), skipping ad preload");
+                return;
+            }
+
+            // Interstitial Ad
+            com.quranaudio.common.ad.InterstitialAdManager.Companion.getInstance().preloadAd();
+
+            // Native Ad（池容量 1，preloadAd 一次即填满，不再额外补两次）
             com.quranaudio.common.ad.NativeAdManager.Companion.getInstance().preloadAd();
-            
+
             android.util.Log.d("PERFORMANCE", "✅ [DELAY-3s] Ads preloaded [" + (System.currentTimeMillis() - startTime) + "ms]");
-            
-            // 额外的原生广告（7秒、9秒后）
-            new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
-                com.quranaudio.common.ad.NativeAdManager.Companion.getInstance().loadNewAd();
-            }, 4000);
-            
-            new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
-                com.quranaudio.common.ad.NativeAdManager.Companion.getInstance().loadNewAd();
-            }, 6000);
-            
+
         } catch (Exception e) {
             android.util.Log.e("PERFORMANCE", "❌ [DELAY-3s] Ad preload FAILED", e);
         }
@@ -564,13 +677,25 @@ public class App extends BaseApp {
     
     /**
      * 延迟执行完整 WebView 初始化
-     * 原阻塞时间: 200-500ms → 0ms (延迟5秒)
+     * ⚠️ CRITICAL FIX: WebView 必须在主线程创建
+     * 
+     * 错误信息：
+     * java.lang.IllegalStateException: Calling View methods on another thread than the UI thread
+     * 
+     * 根本原因：
+     * 在后台线程中创建 WebView 实例
+     * 
+     * 解决方案：
+     * 使用 Handler.post() 在主线程中创建 WebView
      */
     private void initFullWebViewDelayed() {
-        backgroundExecutor.execute(() -> {
+        // ✅ 必须在主线程中创建 WebView
+        new android.os.Handler(android.os.Looper.getMainLooper()).post(() -> {
             long startTime = System.currentTimeMillis();
             
             try {
+                android.util.Log.d("PERFORMANCE", "→ [DELAY-5s] Creating WebView on main thread...");
+                
                 android.webkit.WebView tempWebView = new android.webkit.WebView(this);
                 android.webkit.WebSettings settings = tempWebView.getSettings();
                 
@@ -765,13 +890,10 @@ public class App extends BaseApp {
         public void onActivityResumed(@NonNull Activity activity) {
             // 🔥 更新当前Activity引用（用于热启动展示广告）
             currentActivity = activity;
-            
-            // ✅ 检查原生广告缓存池，不足则补充
-            int cacheSize = com.quranaudio.common.ad.NativeAdManager.Companion.getInstance().getCacheSize();
-            if (cacheSize < 2) {
-                android.util.Log.d("App", "⚠️ Native ad cache low (" + cacheSize + "), replenishing...");
-                com.quranaudio.common.ad.NativeAdManager.Companion.getInstance().loadNewAd();
-            }
+
+            // ❌ 移除：每次 resume 检查并补充原生广告缓存池。
+            // 页面切换频率远高于广告展示频率，这里补池会造成大量"加载后从不展示"；
+            // NativeAdManager 在消费时（getCachedAd/loadAdWithCallback）已自动补池。
         }
 
         @Override

@@ -46,8 +46,13 @@ public class PrayerAlarmScheduler {
     }
 
     public void scheduleAlarmsAndReminders(@NonNull DayPrayer dayPrayer) {
+        // Android 14+（targetSdk 33+）新安装默认不授予 SCHEDULE_EXACT_ALARM。
+        // 此前这里直接 return，导致新装机一条祈祷通知都不排（静默失效）。
+        // 现在改为：无精确闹钟权限时继续调度，scheduleAlarm() 内部降级为非精确闹钟
+        // （可能延迟几分钟，但远好于完全不提醒）；canScheduleExactAlarms() 仍会
+        // 弹出引导通知，用户授权后 AlarmPermissionReceiver 会自动重新精确调度。
         if (!canScheduleExactAlarms()) {
-            return;
+            Log.w(TAG, "⚠️ Exact alarm permission missing, falling back to inexact scheduling");
         }
 
         scheduleNextPrayerAlarms(dayPrayer);
@@ -68,7 +73,15 @@ public class PrayerAlarmScheduler {
             scheduleSilenter(dayPrayer);
         }
 
+        // 🏠 同步桌面 Widget：这里是所有祈祷时间重算路径的唯一汇聚点，
+        // 在此更新缓存可保证 Widget 与通知闹钟、App 内页面永远同源。
+        // Widget 异常绝不允许影响闹钟调度，内部已全量捕获。
+        com.quran.quranaudio.online.prayertimes.widget.PrayerTimesWidgetProvider
+                .notifyPrayerDataChanged(context, dayPrayer);
 
+        // 📖 每日经文通知：用当天真实 Fajr 校准下一次触发（Fajr+1h）。
+        // 必须在 Widget 缓存写入之后调用（它读同一份 DayPrayer 缓存）。
+        com.quran.quranaudio.online.dailyverse.DailyVerseScheduler.scheduleNext(context);
     }
 
     private boolean canScheduleExactAlarms() {
@@ -246,12 +259,28 @@ public class PrayerAlarmScheduler {
     }
 
     private void scheduleAlarm(LocalDateTime timingToSchedule, AlarmManager alarmMgr, PendingIntent pendingIntent) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, TimingUtils.getTimeInMilliIgnoringSeconds(timingToSchedule), pendingIntent);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            alarmMgr.setExact(AlarmManager.RTC_WAKEUP, TimingUtils.getTimeInMilliIgnoringSeconds(timingToSchedule), pendingIntent);
-        } else {
-            alarmMgr.set(AlarmManager.RTC_WAKEUP, TimingUtils.getTimeInMilliIgnoringSeconds(timingToSchedule), pendingIntent);
+        long triggerAtMillis = TimingUtils.getTimeInMilliIgnoringSeconds(timingToSchedule);
+
+        // Android 12+ 无精确闹钟权限时调用 setExact* 会抛 SecurityException，
+        // 降级为非精确闹钟保证通知仍会送达（系统可能延迟数分钟触发）
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+                && !((AlarmManager) context.getSystemService(Context.ALARM_SERVICE)).canScheduleExactAlarms()) {
+            alarmMgr.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent);
+            return;
+        }
+
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent);
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                alarmMgr.setExact(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent);
+            } else {
+                alarmMgr.set(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent);
+            }
+        } catch (SecurityException e) {
+            // 权限在检查与调用之间被回收的兜底
+            Log.e(TAG, "SecurityException on exact alarm, falling back to inexact", e);
+            alarmMgr.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent);
         }
     }
 }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 下一番祈祷的高亮胶囊背景（金色低透明度，与 widget_prayer_accent 同源） -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/widget_prayer_accent_pill" />
+    <corners android:radius="8dp" />
+</shape>

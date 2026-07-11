@@ -53,7 +53,7 @@ public class Constant {
     public static final boolean OPEN_ADS_ON_START = true; // 保留开屏广告
     public static final boolean OPEN_ADS_ON_RESUME = true; // 保留恢复时开屏广告
 
-    public static final int INTERSTITIAL_AD_INTERVAL = 999999; // 禁用插页式广告通过设置极大间隔
+    public static final int INTERSTITIAL_AD_INTERVAL = 3;
     public static final int NATIVE_AD_INDEX = 2;
     public static final int NATIVE_AD_INTERVAL = 8;
 

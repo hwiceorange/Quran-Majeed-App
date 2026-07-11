@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Qibla 地图视图：地图（用户位置 → 天房测地线）+ 底部方位/距离面板。
+    与罗盘 Tab 共用同一定位来源（LocationSave）与同一方位算法，保证两个 Tab 数字一致。
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <FrameLayout
+        android:id="@+id/qibla_map_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/qibla_map_info_panel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- 空状态引导：无缓存定位且无法取得定位时展示，避免面对空白地图 -->
+    <LinearLayout
+        android:id="@+id/qibla_map_empty_state"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="32dp"
+        android:background="@color/white"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@id/qibla_map_container"
+        app:layout_constraintBottom_toBottomOf="@id/qibla_map_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:src="@drawable/kaaba"
+            android:alpha="0.7"
+            android:contentDescription="@string/qibla_map_kaaba" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="@string/qibla_map_need_location"
+            android:textColor="#2D3A53"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/btn_qibla_map_enable_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:paddingStart="28dp"
+            android:paddingEnd="28dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:background="@drawable/widget_next_prayer_bg"
+            android:text="@string/qibla_map_enable_location"
+            android:textColor="#2D3A53"
+            android:textStyle="bold"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <!-- 地图/卫星图切换（T3 市场默认普通地图省流量，卫星图可选） -->
+    <ImageButton
+        android:id="@+id/btn_map_type_toggle"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_margin="12dp"
+        android:background="@drawable/widget_next_prayer_bg"
+        android:contentDescription="@string/qibla_map_type_toggle"
+        android:src="@drawable/ic_qibla_map_layers"
+        app:layout_constraintTop_toTopOf="@id/qibla_map_container"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- 底部信息面板：与罗盘页同一组字符串资源 -->
+    <LinearLayout
+        android:id="@+id/qibla_map_info_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="14dp"
+        android:paddingBottom="18dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/qibla_from_north"
+                android:textAllCaps="true"
+                android:textColor="#8A94A6"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_qibla_bearing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="--"
+                android:textColor="#2D3A53"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/qibla_distance"
+                android:textAllCaps="true"
+                android:textColor="#8A94A6"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_qibla_distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="--"
+                android:textColor="#2D3A53"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

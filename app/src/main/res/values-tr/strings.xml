@@ -2245,4 +2245,38 @@
     <string name="feedback_tag_clean_ui">Temiz Arayüz</string>
     <string name="feedback_tag_good_learning">İyi Öğrenme Özellikleri</string>
 
+    <string name="onboarding_prayer_reminders_enabled">Namaz vakti hatırlatıcıları açık</string>
+    <string name="widget_prayer_times_description">Bugünün namaz vakitleri, sonraki vakte geri sayım ve Hicri tarih</string>
+    <string name="widget_tap_to_setup">Namaz vakitlerini ayarlamak için dokunun</string>
+    <string name="widget_prayer_times_label">Namaz Vakitleri</string>
+    <string name="widget_promo_title">Namaz vakitleri ana ekranınızda</string>
+    <string name="widget_promo_message">Uygulamayı açmadan bugünün namaz vakitlerini ve sonraki vakte geri sayımı tek bakışta görün.</string>
+    <string name="widget_promo_add">Ekle</string>
+    <string name="widget_promo_later">Şimdi değil</string>
+    <string name="widget_promo_manual_hint">Ana ekranda boş bir alana uzun basın, Widget\'lar seçeneğine dokunun, ardından Namaz Vakitleri\'ni seçin.</string>
+    <string name="widget_settings_entry_title">Namaz Vakitleri widget\'ını ekle</string>
+    <string name="daily_verse_settings_title">Günlük ayet bildirimi</string>
+    <string name="daily_verse_settings_summary">Her sabah, sabah namazından yaklaşık bir saat sonra Kur\'an\'dan bir ayet</string>
+    <string name="qibla_tab_map">Harita</string>
+    <string name="qibla_tab_compass">Pusula</string>
+    <string name="qibla_map_your_location">Konumunuz</string>
+    <string name="qibla_map_kaaba">Kâbe</string>
+    <string name="qibla_map_type_toggle">Harita türünü değiştir</string>
+    <string name="qibla_sensor_unreliable">Pusula doğruluğu düşük. Lütfen cihazınızı kalibre edin.</string>
+    <string name="qibla_calibrate_message">En doğru kıble yönü için telefonunuzu birkaç kez 8 şeklinde hareket ettirerek pusulayı kalibre edin.</string>
+    <string name="qibla_calibrate_manual">Lütfen cihaz pusulasını kalibre edin (8 şeklinde hareket ettirin).</string>
+    <string name="compass_point_n">K</string>
+    <string name="compass_point_ne">KD</string>
+    <string name="compass_point_e">D</string>
+    <string name="compass_point_se">GD</string>
+    <string name="compass_point_s">G</string>
+    <string name="compass_point_sw">GB</string>
+    <string name="compass_point_w">B</string>
+    <string name="compass_point_nw">KB</string>
+    <string name="qibla_map_need_location">Bulunduğunuz yerden Kâbe yönünü görmek için konumu açın.</string>
+    <string name="qibla_map_enable_location">Konumu aç</string>
+    <string name="qibla_intro_title">Kıbleyi Bulma</string>
+    <string name="qibla_intro_message">Harita: Kâbe yönünü harita üzerinde gösterir — her yerde çalışır, pusula gerekmez.
+Pusula: telefonu doğrultun ve oku takip ederek Kâbe\'ye anlık yönelin.</string>
+    <string name="qibla_intro_no_compass">Cihazınızda pusula sensörü yok, bu nedenle Harita görünümü önerilir.</string>
 </resources>

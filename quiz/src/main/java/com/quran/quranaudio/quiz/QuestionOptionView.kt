@@ -51,8 +51,26 @@ class QuestionOptionView : LinearLayoutCompat {
 
     fun setData(questionBean: QuestionBean) {
         mQuestionBean = questionBean
-        if (questionBean.options.size != mOptionListView.size) {
-            throw IllegalAccessException("question content is error, option is not 4, is ${questionBean.options}")
+        
+        // ✅ CRITICAL FIX: Handle questions with incorrect number of options
+        // Some questions may have 5 options (A, B, C, D, E) or empty options
+        // Filter out empty options and take only first 4 valid options
+        val validOptions = questionBean.options.filter { it.value.isNotBlank() }
+        
+        if (validOptions.isEmpty()) {
+            android.util.Log.e("QuestionOptionView", "❌ No valid options found for question: ${questionBean.question}")
+            throw IllegalAccessException("question content is error, no valid options found")
+        }
+        
+        // If more than 4 options, take first 4
+        val optionsToUse = if (validOptions.size > mOptionListView.size) {
+            android.util.Log.w("QuestionOptionView", "⚠️ Question has ${validOptions.size} options, using first 4")
+            validOptions.entries.take(mOptionListView.size).associate { it.key to it.value }
+        } else if (validOptions.size < mOptionListView.size) {
+            android.util.Log.e("QuestionOptionView", "❌ Question has only ${validOptions.size} options, expected 4")
+            throw IllegalAccessException("question content is error, option count is ${validOptions.size}, expected 4")
+        } else {
+            validOptions
         }
         
         // 🎲 随机化选项内容，保持ABCD顺序
@@ -64,10 +82,12 @@ class QuestionOptionView : LinearLayoutCompat {
         
         // 按ABCD顺序显示，但内容已被随机打乱
         shuffledOptions.keys.forEachIndexed { index, key ->
-            mOptionListView[index]?.run {
-                resetStyle()
-                tag = key  // tag保存键名(A/B/C/D)
-                setData(key, shuffledOptions[key] ?: "")
+            if (index < mOptionListView.size) {
+                mOptionListView[index]?.run {
+                    resetStyle()
+                    tag = key  // tag保存键名(A/B/C/D)
+                    setData(key, shuffledOptions[key] ?: "")
+                }
             }
         }
     }

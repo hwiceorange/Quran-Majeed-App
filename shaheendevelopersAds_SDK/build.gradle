@@ -26,9 +26,12 @@ android {
     }
     
     // ===== 16 KB Page Size Support =====
+    // Required for Google Play compliance (Android 15+)
+    // Ref: https://developer.android.com/guide/practices/page-sizes
     packagingOptions {
         jniLibs {
             useLegacyPackaging = true
+            keepDebugSymbols += ['**/*.so']
         }
     }
 }
@@ -42,8 +45,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-appset:16.0.2'
     implementation 'com.google.android.gms:play-services-basement:18.2.0'
 
-    //Primary Ad Networks
-    implementation 'com.google.android.gms:play-services-ads:22.1.0'
+    //Primary Ad Networks - Updated to match main project version
+    implementation 'com.google.android.gms:play-services-ads:24.7.0'
     
     // Unity Ads - Bidding (统一版本)
     implementation 'com.unity3d.ads:unity-ads:4.8.0'

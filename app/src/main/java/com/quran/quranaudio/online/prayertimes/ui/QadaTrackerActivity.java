@@ -39,7 +39,9 @@ import com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs;
 // 插屏广告相关导入
 import com.quranaudio.common.ad.AdConfig;
 import com.quranaudio.common.ad.AdFactory;
+import com.quranaudio.common.ad.AdLoadCallback;
 import com.quranaudio.common.ad.AdShowCallback;
+import com.quranaudio.common.ad.NativeAdHelper;
 import com.quranaudio.common.ad.model.AdItem;
 import com.quranaudio.common.ad.model.RewardItem;
 import android.content.pm.PackageInfo;
@@ -291,13 +293,29 @@ public class QadaTrackerActivity extends AppCompatActivity {
                 // Post to message queue to ensure view is laid out
                 bannerAdContainerWeekly.post(() -> {
                 AdFactory.INSTANCE.loadBannerAd(
-                    this,                       // activity
-                    -1,                         // width (-1 for MREC 300x250)
-                    bannerAdContainerWeekly,    // container
-                    AdConfig.AD_BANNER,         // ad position
-                    "QadaTracker_Weekly",       // function tag
-                    null,                       // load callback
-                    null                        // show callback
+                    this,
+                    -1,
+                    bannerAdContainerWeekly,
+                    AdConfig.AD_BANNER,
+                    "QadaTracker_Weekly",
+                    new AdLoadCallback() {
+                        @Override
+                        public void onAdLoaded(AdItem adItem) {
+                            Log.d(TAG, "✅ Weekly banner ad loaded");
+                        }
+                        @Override
+                        public void onAdFailedToLoad(String adId) {
+                            Log.d(TAG, "⚠️ Weekly banner failed, falling back to native ad");
+                            bannerAdContainerWeekly.post(() ->
+                                NativeAdHelper.INSTANCE.displayNativeAdWithAutoLoad(
+                                    QadaTrackerActivity.this,
+                                    bannerAdContainerWeekly,
+                                    com.quran.quranaudio.quiz.R.layout.layout_ad_native_small_wrapper
+                                )
+                            );
+                        }
+                    },
+                    null
                 );
                 });
             } else {
@@ -328,13 +346,29 @@ public class QadaTrackerActivity extends AppCompatActivity {
                 // Post to message queue to ensure view is laid out
                 bannerAdContainerMonthly.post(() -> {
                 AdFactory.INSTANCE.loadBannerAd(
-                    this,                       // activity
-                    -1,                         // width (-1 for MREC 300x250)
-                    bannerAdContainerMonthly,   // container
-                    AdConfig.AD_BANNER,         // ad position
-                    "QadaTracker_Monthly",      // function tag
-                    null,                       // load callback
-                    null                        // show callback
+                    this,
+                    -1,
+                    bannerAdContainerMonthly,
+                    AdConfig.AD_BANNER,
+                    "QadaTracker_Monthly",
+                    new AdLoadCallback() {
+                        @Override
+                        public void onAdLoaded(AdItem adItem) {
+                            Log.d(TAG, "✅ Monthly banner ad loaded");
+                        }
+                        @Override
+                        public void onAdFailedToLoad(String adId) {
+                            Log.d(TAG, "⚠️ Monthly banner failed, falling back to native ad");
+                            bannerAdContainerMonthly.post(() ->
+                                NativeAdHelper.INSTANCE.displayNativeAdWithAutoLoad(
+                                    QadaTrackerActivity.this,
+                                    bannerAdContainerMonthly,
+                                    com.quran.quranaudio.quiz.R.layout.layout_ad_native_small_wrapper
+                                )
+                            );
+                        }
+                    },
+                    null
                 );
                 });
             } else {

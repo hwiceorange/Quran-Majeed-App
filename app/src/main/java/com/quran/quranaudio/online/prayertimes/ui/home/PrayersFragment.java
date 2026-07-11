@@ -416,9 +416,16 @@ public class PrayersFragment extends Fragment implements com.quran.quranaudio.on
         
         // 刷新所有祷告时间的通知图标（用户可能从通知设置页面返回）
         refreshAllNotificationIcons();
-        
+
         // 延迟3秒后检查通知权限
         scheduleNotificationPermissionRequest();
+
+        // 🏠 桌面 Widget 促活：第3次访问祈祷页（aha时刻）弹一次系统级添加引导；
+        // 内部与上面的通知权限请求流互斥、一生仅一次、Widget已添加时静默
+        if (getActivity() != null) {
+            com.quran.quranaudio.online.prayertimes.widget.PrayerWidgetPromoHelper
+                    .onPrayerTabVisible(getActivity());
+        }
     }
     
     /**
@@ -1984,7 +1991,6 @@ public class PrayersFragment extends Fragment implements com.quran.quranaudio.on
         // 🔄 后台刷新数据（确保最终一致性）
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             if (isAdded() && getActivity() != null) {
-                loadTodayPrayerLogs();
                 loadQadaSummary();
             }
         }, 500); // 500ms 后后台同步，确保 Firestore 写入完成

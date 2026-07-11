@@ -2255,4 +2255,38 @@
     <string name="feedback_tag_clean_ui">পরিষ্কার ইন্টারফেস</string>
     <string name="feedback_tag_good_learning">ভালো শেখার বৈশিষ্ট্য</string>
 
+    <string name="onboarding_prayer_reminders_enabled">নামাজের সময়ের রিমাইন্ডার চালু হয়েছে</string>
+    <string name="widget_prayer_times_description">আজকের নামাজের সময়, পরবর্তী নামাজের কাউন্টডাউন ও হিজরি তারিখ</string>
+    <string name="widget_tap_to_setup">নামাজের সময় সেট করতে ট্যাপ করুন</string>
+    <string name="widget_prayer_times_label">নামাজের সময়সূচি</string>
+    <string name="widget_promo_title">হোম স্ক্রিনে নামাজের সময়</string>
+    <string name="widget_promo_message">অ্যাপ না খুলেই এক নজরে আজকের নামাজের সময় ও পরবর্তী নামাজের কাউন্টডাউন দেখুন।</string>
+    <string name="widget_promo_add">যোগ করুন</string>
+    <string name="widget_promo_later">এখন নয়</string>
+    <string name="widget_promo_manual_hint">হোম স্ক্রিনের খালি জায়গায় দীর্ঘক্ষণ চাপ দিন, উইজেট নির্বাচন করুন, তারপর নামাজের সময়সূচি বেছে নিন।</string>
+    <string name="widget_settings_entry_title">নামাজের সময়সূচি উইজেট যোগ করুন</string>
+    <string name="daily_verse_settings_title">দৈনিক আয়াতের বিজ্ঞপ্তি</string>
+    <string name="daily_verse_settings_summary">প্রতিদিন সকালে ফজরের প্রায় এক ঘণ্টা পর কুরআনের একটি আয়াত</string>
+    <string name="qibla_tab_map">মানচিত্র</string>
+    <string name="qibla_tab_compass">কম্পাস</string>
+    <string name="qibla_map_your_location">আপনার অবস্থান</string>
+    <string name="qibla_map_kaaba">কাবা</string>
+    <string name="qibla_map_type_toggle">মানচিত্রের ধরন পরিবর্তন</string>
+    <string name="qibla_sensor_unreliable">কম্পাসের নির্ভুলতা কম। অনুগ্রহ করে আপনার ডিভাইস ক্যালিব্রেট করুন।</string>
+    <string name="qibla_calibrate_message">সবচেয়ে নির্ভুল কিবলা দিকের জন্য, কম্পাস ক্যালিব্রেট করতে ফোনটি কয়েকবার ৮-আকৃতিতে নাড়ান।</string>
+    <string name="qibla_calibrate_manual">অনুগ্রহ করে ডিভাইসের কম্পাস ক্যালিব্রেট করুন (৮-আকৃতিতে নাড়ান)।</string>
+    <string name="compass_point_n">উ</string>
+    <string name="compass_point_ne">উ-পূ</string>
+    <string name="compass_point_e">পূ</string>
+    <string name="compass_point_se">দ-পূ</string>
+    <string name="compass_point_s">দ</string>
+    <string name="compass_point_sw">দ-প</string>
+    <string name="compass_point_w">প</string>
+    <string name="compass_point_nw">উ-প</string>
+    <string name="qibla_map_need_location">আপনার অবস্থান থেকে কাবার দিক দেখতে অবস্থান চালু করুন।</string>
+    <string name="qibla_map_enable_location">অবস্থান চালু করুন</string>
+    <string name="qibla_intro_title">কিবলা নির্ণয়</string>
+    <string name="qibla_intro_message">মানচিত্র: মানচিত্রে কাবার দিক দেখায় — যেকোনো জায়গায় কাজ করে, কম্পাস লাগে না।
+কম্পাস: ফোন তাক করে সরাসরি কাবার দিকে তীর অনুসরণ করুন।</string>
+    <string name="qibla_intro_no_compass">আপনার ডিভাইসে কম্পাস সেন্সর নেই, তাই মানচিত্র ব্যবহারের পরামর্শ দেওয়া হচ্ছে।</string>
 </resources>

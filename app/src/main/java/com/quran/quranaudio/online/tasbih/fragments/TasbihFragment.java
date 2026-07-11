@@ -42,6 +42,7 @@ public class TasbihFragment extends BaseFragment {
     private int speakStatus;
     private ImageView tasbihView;
     private int total;
+    private int lastRewardedRound = 0; // 已展示激励广告的轮次（每33次/99次算一轮）
     private TextView tv33;
     private TextView tvCount;
     private TextView tvTotal;
@@ -243,6 +244,11 @@ public class TasbihFragment extends BaseFragment {
                     Utils.vibrator();
                 }
                 i = 33;
+                int currentRound = i2 / 33;
+                if (currentRound > lastRewardedRound && getActivity() != null) {
+                    lastRewardedRound = currentRound;
+                    showTasbihRewardedAd();
+                }
             }
         } else {
             int i3 = this.total;
@@ -252,6 +258,11 @@ public class TasbihFragment extends BaseFragment {
                     Utils.vibrator();
                 }
                 i = 99;
+                int currentRound = i3 / 99;
+                if (currentRound > lastRewardedRound && getActivity() != null) {
+                    lastRewardedRound = currentRound;
+                    showTasbihRewardedAd();
+                }
             }
         }
         TextView textView2 = this.tvCount;
@@ -264,6 +275,16 @@ public class TasbihFragment extends BaseFragment {
                 Utils.vibrator();
             }
         }
+    }
+
+    private void showTasbihRewardedAd() {
+        com.quranaudio.common.ad.AdFactory.INSTANCE.loadRewardAd(getActivity(), com.quranaudio.common.ad.AdConfig.AD_TAFSIR_REWARD, null);
+        com.quranaudio.common.ad.AdFactory.INSTANCE.showRewardAd(
+            getActivity(),
+            com.quranaudio.common.ad.AdConfig.AD_TAFSIR_REWARD,
+            "tasbih_round_complete",
+            null
+        );
     }
 
     private void playSound() {

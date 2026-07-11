@@ -94,10 +94,22 @@
         android:gravity="center"
         android:textColor="@color/white"
         android:textSize="@dimen/dp_18"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nextLevelAd"
+        app:layout_constraintBottom_toTopOf="@+id/levelup_native_ad_container"
         tools:text="Level5" />
+
+    <FrameLayout
+        android:id="@+id/levelup_native_ad_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_20"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nextLevelTv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -30,5 +30,10 @@ public class NotifierReceiver extends BroadcastReceiver {
             prayerNotification.createNotificationChannel();
             prayerNotification.createNotification(intent);
         }
+
+        // 🏠 祈祷到点的精确时刻同步刷新桌面 Widget（"下一番"高亮与倒计时切换），
+        // 与宣礼通知同一瞬间发生；无 Widget 时为空操作，异常不影响通知
+        com.quran.quranaudio.online.prayertimes.widget.PrayerTimesWidgetProvider
+                .requestRefresh(context);
     }
 }

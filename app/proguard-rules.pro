@@ -94,6 +94,70 @@ public static *** e(...);
 }
 
 # ============================================
+# 🔥 Firestore Data Models - Serialization Protection
+# ============================================
+# Firestore uses reflection to serialize/deserialize data classes
+# Keep all fields and constructors for Firestore models
+
+# Keep all Quest-related data models with all members
+-keep class com.quran.quranaudio.online.quests.data.** { *; }
+
+# Keep all Firestore model classes (any package)
+-keep class * {
+    @com.google.firebase.firestore.PropertyName *;
+}
+
+# Keep Firestore annotations
+-keepattributes RuntimeVisibleAnnotations
+-keepattributes RuntimeInvisibleAnnotations
+-keepattributes *Annotation*
+
+# Keep PropertyName annotations for Firestore
+-keep class com.google.firebase.firestore.PropertyName
+-keepclassmembers class * {
+    @com.google.firebase.firestore.PropertyName *;
+}
+
+# Prevent stripping of no-arg constructors (required by Firestore)
+-keepclassmembers class * {
+    public <init>();
+}
+
+# Keep all Kotlin data classes used with Firestore
+-keep class com.quran.quranaudio.online.quests.** { *; }
+-keep class com.quran.quranaudio.online.prayertimes.data.** { *; }
+-keep class com.quran.quranaudio.online.feedback.** { *; }
+
+# Keep Kotlin metadata for data classes
+-keepattributes *Annotation*,Signature,InnerClasses,EnclosingMethod
+
+# Keep Kotlin data class copy methods
+-keepclassmembers class * {
+    public ** copy(...);
+}
+
+# Keep Kotlin companion objects
+-keepclassmembers class * {
+    public static ** Companion;
+}
+
+# Firestore generic rules
+-keepclassmembers class * {
+    @com.google.firebase.firestore.Exclude <fields>;
+    @com.google.firebase.firestore.Exclude <methods>;
+}
+
+# Keep all fields in classes that might be used with Firestore
+-keepclassmembers class com.quran.quranaudio.online.quests.** {
+    <fields>;
+    <methods>;
+}
+
+# Prevent obfuscation of Firestore model classes
+-keepnames class com.quran.quranaudio.online.quests.data.**
+-keepnames class com.quran.quranaudio.online.prayertimes.data.**
+
+# ============================================
 # 🔥 WebView Crash Fix - Resources$NotFoundException
 # ============================================
 # Fix for: android.content.res.Resources$NotFoundException: Resource ID #0x90c0006

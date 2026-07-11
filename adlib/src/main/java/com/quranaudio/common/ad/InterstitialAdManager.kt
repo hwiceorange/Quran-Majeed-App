@@ -11,26 +11,24 @@ import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
-import java.util.Timer
-import java.util.TimerTask
 
 /**
- * Central manager for interstitial ads with caching, refresh, and display logic.
- * 
+ * Central manager for interstitial ads with caching and display logic.
+ *
  * Features:
  * - Maintains a cache pool with 1 available ad
- * - Preloads ad on cold start
+ * - Preloads ad on cold start (foreground only)
  * - Immediately requests new ad when one is consumed
- * - Deletes and refreshes ads older than 58 minutes
+ * - Discards ads older than 58 minutes at show time (no background refresh loop)
  * - Checks premium subscription status before loading/showing ads
  */
 class InterstitialAdManager private constructor() {
-    
+
     companion object {
         private const val TAG = "InterstitialAdManager"
         private const val AD_MAX_AGE_MILLIS = 58 * 60 * 1000L // 58 minutes
-        private const val TIMER_CHECK_INTERVAL = 5 * 60 * 1000L // Check every 5 minutes
-        private const val RETRY_DELAY_MILLIS = 30 * 1000L // 30 seconds retry delay
+        private const val RETRY_DELAY_MILLIS = 30 * 1000L // base retry delay, exponential backoff
+        private const val MAX_RETRY_COUNT = 3
         
         @Volatile
         private var instance: InterstitialAdManager? = null
@@ -51,12 +49,12 @@ class InterstitialAdManager private constructor() {
     
     // Timestamp when current ad was loaded
     private var loadTimeMillis: Long = 0L
-    
-    // Timer for periodic expiry checks
-    private var adRefreshTimer: Timer? = null
-    
+
     // Flag to prevent multiple simultaneous load requests
     private var isLoading: Boolean = false
+
+    // Consecutive load-failure count, reset on success or fresh user-triggered load
+    private var retryCount: Int = 0
     
     // Application context
     private var appContext: Context? = null
@@ -74,13 +72,13 @@ class InterstitialAdManager private constructor() {
     }
     
     /**
-     * Preload the first ad on cold start and start the refresh timer.
-     * Should be called in Application.onCreate()
+     * Preload the first ad on cold start.
+     * Should be called in Application.onCreate() (only when app is in foreground).
+     * Note: no background refresh timer anymore — expiry is checked at show time.
      */
     fun preloadAd() {
         loadNewAd()
-        startAdTimer()
-        Log.d(TAG, "✅ Preload initiated and timer started")
+        Log.d(TAG, "✅ Preload initiated")
     }
     
     /**
@@ -124,23 +122,22 @@ class InterstitialAdManager private constructor() {
             object : InterstitialAdLoadCallback() {
                 override fun onAdLoaded(interstitialAd: InterstitialAd) {
                     Log.d(TAG, "✅ Interstitial ad loaded successfully")
-                    
+
                     cachedAd = interstitialAd
                     loadTimeMillis = System.currentTimeMillis()
                     isLoading = false
-                    
+                    retryCount = 0
+
                     // Attach FullScreenContentCallback to monitor ad lifecycle
                     attachFullScreenCallback(interstitialAd)
                 }
-                
+
                 override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                     Log.e(TAG, "❌ Failed to load interstitial ad: ${loadAdError.message} (Code: ${loadAdError.code})")
-                    
+
                     cachedAd = null
                     isLoading = false
-                    
-                    // Retry after 30 seconds
-                    Log.d(TAG, "⏳ Retrying ad load in 30 seconds...")
+
                     scheduleRetry()
                 }
             }
@@ -171,58 +168,25 @@ class InterstitialAdManager private constructor() {
     }
     
     /**
-     * Start the periodic timer to check for expired ads.
-     * Checks every 5 minutes if cached ad is older than 58 minutes.
+     * Check if the cached ad has expired (> 58 minutes old) and discard it if so.
+     * Called at show time instead of a periodic background timer, so an idle
+     * process no longer burns one ad request per hour forever.
+     *
+     * @return true if an expired ad was discarded
      */
-    fun startAdTimer() {
-        // Cancel existing timer if any
-        adRefreshTimer?.cancel()
-        
-        adRefreshTimer = Timer("InterstitialAdRefreshTimer", true)
-        adRefreshTimer?.scheduleAtFixedRate(
-            object : TimerTask() {
-                override fun run() {
-                    checkAndRefreshExpiredAd()
-                }
-            },
-            TIMER_CHECK_INTERVAL, // Initial delay: 5 minutes
-            TIMER_CHECK_INTERVAL  // Repeat every 5 minutes
-        )
-        
-        Log.d(TAG, "⏰ Ad refresh timer started (checks every 5 minutes)")
-    }
-    
-    /**
-     * Check if cached ad has expired (> 58 minutes old).
-     * If expired, delete and request a new ad.
-     * Note: This is called from a background timer thread, so we must post to main thread.
-     */
-    private fun checkAndRefreshExpiredAd() {
-        if (cachedAd == null) {
-            Log.d(TAG, "🔍 No cached ad to check for expiry")
-            return
-        }
-        
-        val currentTime = System.currentTimeMillis()
-        val adAge = currentTime - loadTimeMillis
-        
+    private fun discardIfExpired(): Boolean {
+        if (cachedAd == null) return false
+
+        val adAge = System.currentTimeMillis() - loadTimeMillis
         if (adAge > AD_MAX_AGE_MILLIS) {
-            Log.d(TAG, "⏰ Cached ad expired (age: ${adAge / 1000 / 60} minutes), requesting new ad")
-            
-            // Delete expired ad and request new one on main thread
+            Log.d(TAG, "⏰ Cached ad expired (age: ${adAge / 1000 / 60} minutes), discarding")
             cachedAd = null
             loadTimeMillis = 0L
-            
-            // ✅ Post to main thread - Google Ads SDK requires main thread
-            mainHandler.post {
-                loadNewAd()
-            }
-        } else {
-            val remainingMinutes = (AD_MAX_AGE_MILLIS - adAge) / 1000 / 60
-            Log.d(TAG, "✅ Cached ad is still valid ($remainingMinutes minutes remaining)")
+            return true
         }
+        return false
     }
-    
+
     /**
      * Show the cached ad if available.
      * Immediately requests a new ad to maintain pool of 1 available ad.
@@ -239,10 +203,18 @@ class InterstitialAdManager private constructor() {
             return false
         }
         
+        // Discard expired cached ad (expiry is checked here instead of a background timer)
+        if (discardIfExpired()) {
+            retryCount = 0
+            loadNewAd()
+            return false
+        }
+
         val ad = cachedAd
         if (ad == null) {
             Log.d(TAG, "⚠️ No cached ad available to show")
-            // Still request a new ad if cache is empty
+            // Still request a new ad if cache is empty (fresh user demand, reset retry budget)
+            retryCount = 0
             loadNewAd()
             return false
         }
@@ -302,23 +274,26 @@ class InterstitialAdManager private constructor() {
     }
     
     /**
-     * Schedule a retry to load ad after 30 seconds delay.
-     * Note: Timer runs on background thread, so we must post to main thread.
+     * Schedule a retry with exponential backoff (30s, 60s, 120s), capped at
+     * [MAX_RETRY_COUNT] attempts. Skipped when the app is in the background —
+     * the next user-triggered show attempt resets the budget and reloads.
      */
     private fun scheduleRetry() {
-        Timer().schedule(
-            object : TimerTask() {
-                override fun run() {
-                    Log.d(TAG, "♻️ Retry: Loading ad after failure")
-                    
-                    // ✅ Post to main thread - Google Ads SDK requires main thread
-                    mainHandler.post {
-                        loadNewAd()
-                    }
-                }
-            },
-            RETRY_DELAY_MILLIS
-        )
+        if (retryCount >= MAX_RETRY_COUNT) {
+            Log.w(TAG, "⛔ Max retries reached ($MAX_RETRY_COUNT), waiting for next show attempt")
+            return
+        }
+        val delay = RETRY_DELAY_MILLIS shl retryCount // 30s, 60s, 120s
+        retryCount++
+        Log.d(TAG, "⏳ Retrying ad load in ${delay / 1000}s (attempt $retryCount/$MAX_RETRY_COUNT)")
+
+        mainHandler.postDelayed({
+            if (!AdFactory.isAppInForeground()) {
+                Log.d(TAG, "⏸️ App in background, skipping retry")
+                return@postDelayed
+            }
+            loadNewAd()
+        }, delay)
     }
     
     /**
@@ -340,13 +315,5 @@ class InterstitialAdManager private constructor() {
         return ((System.currentTimeMillis() - loadTimeMillis) / 1000 / 60).toInt()
     }
     
-    /**
-     * Stop the refresh timer (e.g., when app is destroyed).
-     */
-    fun stopTimer() {
-        adRefreshTimer?.cancel()
-        adRefreshTimer = null
-        Log.d(TAG, "⏹️ Ad refresh timer stopped")
-    }
 }
 

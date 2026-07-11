@@ -39,11 +39,70 @@ public class PreferencesHelper {
     public static final String TYPE_TEXT_TONE = "text_tone";
     public static final String TYPE_CLOCK = "clock";
 
+    // 新装机默认：五番祈祷都以"提示音通知"提醒。此前默认全关（TYPE_NONE），
+    // 用户不进设置逐个打开就永远收不到祈祷提醒，是留存的头号杀手。
+    public static final String DEFAULT_NOTIFICATION_TYPE = TYPE_TEXT_TONE;
+
+    private static final String NOTIFICATION_TYPE_SUFFIX = "_NOTIFICATION_TYPE";
+
     private final Context context;
 
     @Inject
     public PreferencesHelper(Context context) {
         this.context = context;
+    }
+
+    /**
+     * 为尚未配置通知类型的祈祷写入默认值（幂等，可在每次启动时调用）。
+     *
+     * 规则：
+     * - 已显式配置过 _NOTIFICATION_TYPE 的祈祷：不改动（尊重用户选择，包括手动关闭）。
+     * - 旧版开关打开过 Adhan 的祈祷：迁移为 TYPE_AZAN（不降级用户已有的宣礼声）。
+     * - 其余（从未配置）：写入 DEFAULT_NOTIFICATION_TYPE。
+     *
+     * 显式写入存储而不是改读取端的回退值，是为了让调度器、祈祷页图标、
+     * 通知设置页（它们各自直接读这份 SharedPreferences）看到同一份数据。
+     */
+    public void ensureDefaultPrayerNotificationTypes() {
+        final SharedPreferences prayerPrefs = context.getSharedPreferences(
+                PreferencesConstants.ADTHAN_CALLS_SHARED_PREFERENCES, MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = prayerPrefs.edit();
+        boolean changed = false;
+
+        for (PrayerEnum prayer : PrayerEnum.values()) {
+            String typeKey = prayer.toString() + NOTIFICATION_TYPE_SUFFIX;
+            if (!prayerPrefs.contains(typeKey)) {
+                boolean legacyAzanEnabled = prayerPrefs.getBoolean(
+                        prayer + PreferencesConstants.ADTHAN_CALL_ENABLED_KEY, false);
+                editor.putString(typeKey, legacyAzanEnabled ? TYPE_AZAN : DEFAULT_NOTIFICATION_TYPE);
+                changed = true;
+                android.util.Log.i("PreferencesHelper", "🔔 Default notification type set for "
+                        + prayer + ": " + (legacyAzanEnabled ? TYPE_AZAN : DEFAULT_NOTIFICATION_TYPE));
+            }
+        }
+
+        if (changed) {
+            editor.apply();
+        }
+    }
+
+    /**
+     * 显式关闭所有祈祷通知（覆盖写入 TYPE_NONE）。
+     * 用于 Android 12 及以下用户在引导页明确拒绝通知的场景——
+     * 低版本没有系统通知权限门控，必须在业务层尊重用户的选择。
+     * 用户之后仍可在祈祷页/通知设置页逐个重新开启。
+     */
+    public void disableAllPrayerNotificationTypes() {
+        final SharedPreferences prayerPrefs = context.getSharedPreferences(
+                PreferencesConstants.ADTHAN_CALLS_SHARED_PREFERENCES, MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = prayerPrefs.edit();
+        for (PrayerEnum prayer : PrayerEnum.values()) {
+            editor.putString(prayer.toString() + NOTIFICATION_TYPE_SUFFIX, TYPE_NONE);
+        }
+        editor.apply();
+        android.util.Log.i("PreferencesHelper", "🔕 All prayer notification types disabled by user choice");
     }
 
     public void setFirstTimeLaunch(boolean isFirstTime) {
@@ -375,12 +434,14 @@ public class PreferencesHelper {
             return notificationType;
         }
         
-        // 回退：检查旧的开关配置
+        // 回退：检查旧的开关配置；从未配置过的祈祷使用新默认（提示音通知）。
+        // 正常情况下 ensureDefaultPrayerNotificationTypes() 已在启动时写入存储，
+        // 这里只是极端时序下的兜底，需与其保持同一套规则。
         boolean callEnabled = prayerPrefs.getBoolean(
                 prayer + PreferencesConstants.ADTHAN_CALL_ENABLED_KEY, false);
-        
+
         android.util.Log.d("PreferencesHelper", "⚠️ " + prayer + " using legacy config, callEnabled: " + callEnabled);
-        return callEnabled ? TYPE_AZAN : TYPE_NONE;
+        return callEnabled ? TYPE_AZAN : DEFAULT_NOTIFICATION_TYPE;
     }
 
     /**
