@@ -2359,4 +2359,9 @@
     <string name="qibla_intro_message">Peta: menunjukkan arah Kaabah pada peta — berfungsi di mana-mana, tanpa kompas.
 Kompas: halakan telefon dan ikut anak panah ke arah Kaabah secara langsung.</string>
     <string name="qibla_intro_no_compass">Peranti anda tiada sensor kompas, jadi paparan Peta disyorkan.</string>
+    <string name="continue_reading_position_format">%1$s, Ayat %2$d</string>
+    <string name="sect_prompt_title">Pengiraan waktu solat</string>
+    <string name="sect_prompt_message">Waktu solat berbeza mengikut mazhab. Pengiraan mana yang ingin anda guna? Boleh diubah bila-bila masa dalam Tetapan.</string>
+    <string name="sect_prompt_sunni">Sunni (Liga Dunia Muslim)</string>
+    <string name="sect_prompt_shia">Syiah (Ja\'fari)</string>
 </resources>

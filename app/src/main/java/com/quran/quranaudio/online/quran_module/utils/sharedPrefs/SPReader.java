@@ -252,11 +252,30 @@ public abstract class SPReader {
     public static String getSavedScript(Context context) {
         SharedPreferences sp = context.getSharedPreferences(SP_SCRIPT, Context.MODE_PRIVATE);
 
+        // 首次默认脚本按设备语言绑定：阿拉伯母语用户(沙特/伊拉克/海湾)期望 Uthmani
+        // (标准 mushaf)，南亚用户(乌尔都等)习惯 IndoPak 字形。此前全员默认 IndoPak，
+        // 会让阿拉伯用户首次打开觉得"经文字形不对"，是阿拉伯市场的首印象流失点。
         if (!sp.contains(QuranScriptUtils.KEY_SCRIPT)) {
-            setSavedScript(context, QuranScriptUtils.SCRIPT_DEFAULT);
+            setSavedScript(context, defaultScriptForLanguage(context));
         }
 
         return sp.getString(QuranScriptUtils.KEY_SCRIPT, QuranScriptUtils.SCRIPT_DEFAULT);
+    }
+
+    private static String defaultScriptForLanguage(Context context) {
+        try {
+            // 优先用 App 内选定的语言(onboarding 选择，更准)，回退到系统语言
+            String lang = com.quran.quranaudio.online.quran_module.utils.sharedPrefs
+                    .SPAppConfigs.INSTANCE.getLocale(context);
+            if (lang == null || lang.isEmpty()) {
+                lang = java.util.Locale.getDefault().getLanguage();
+            }
+            if (lang != null && lang.toLowerCase(java.util.Locale.ENGLISH).startsWith("ar")) {
+                return QuranScriptUtils.SCRIPT_UTHMANI;
+            }
+        } catch (Exception ignored) {
+        }
+        return QuranScriptUtils.SCRIPT_DEFAULT; // IndoPak
     }
 
     public static void setSavedScript(Context context, String font) {

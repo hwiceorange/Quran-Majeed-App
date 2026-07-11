@@ -2279,4 +2279,10 @@
     <string name="qibla_intro_message">Harita: Kâbe yönünü harita üzerinde gösterir — her yerde çalışır, pusula gerekmez.
 Pusula: telefonu doğrultun ve oku takip ederek Kâbe\'ye anlık yönelin.</string>
     <string name="qibla_intro_no_compass">Cihazınızda pusula sensörü yok, bu nedenle Harita görünümü önerilir.</string>
+    <string name="continue_reading">Okumaya devam et</string>
+    <string name="continue_reading_position_format">%1$s, Ayet %2$d</string>
+    <string name="sect_prompt_title">Namaz vakti hesaplama</string>
+    <string name="sect_prompt_message">Namaz vakitleri mezhebe göre değişir. Hangi hesaplamayı kullanmak istersiniz? İstediğiniz zaman Ayarlar\'dan değiştirebilirsiniz.</string>
+    <string name="sect_prompt_sunni">Sünni (İslam Dünya Birliği)</string>
+    <string name="sect_prompt_shia">Şii (Caferi)</string>
 </resources>

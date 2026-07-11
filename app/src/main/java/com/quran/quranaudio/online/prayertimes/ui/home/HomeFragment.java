@@ -335,7 +335,86 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         });
 
         setOnClick(rootView);
+        setupContinueReading(rootView);
         return rootView;
+    }
+
+    // 首页"继续阅读"卡片相关视图
+    private View continueReadingCard;
+    private android.widget.TextView continueReadingPosition;
+
+    /**
+     * 初始化"继续阅读"卡片：从本地读取上次阅读位置(同步)，解析章名后展示，
+     * 点击直达阅读器该位置。无记录则整卡隐藏。这是古兰经 App 最强的日活回归钩子。
+     */
+    private void setupContinueReading(View rootView) {
+        try {
+            continueReadingCard = rootView.findViewById(R.id.continue_reading_card);
+            continueReadingPosition = rootView.findViewById(R.id.tv_continue_reading_position);
+            refreshContinueReading();
+        } catch (Exception e) {
+            android.util.Log.w("HomeFragment", "setupContinueReading failed", e);
+        }
+    }
+
+    private void refreshContinueReading() {
+        if (continueReadingCard == null || getContext() == null) return;
+        try {
+            final int surah = com.quran.quranaudio.online.features.Helper.LastSurahAndAyahHelper
+                    .getLastSurah(requireContext());
+            final int ayah = com.quran.quranaudio.online.features.Helper.LastSurahAndAyahHelper
+                    .getLastAyah(requireContext());
+
+            if (surah <= 0 || ayah <= 0) {
+                continueReadingCard.setVisibility(View.GONE);
+                return;
+            }
+
+            // 异步准备 QuranMeta 取本地化章名，避免阻塞
+            com.quran.quranaudio.online.quran_module.components.quran.QuranMeta.prepareInstance(
+                    requireContext(),
+                    quranMeta -> {
+                        if (getActivity() == null || continueReadingPosition == null) return;
+                        String chapterName = quranMeta.getChapterName(requireContext(), surah);
+                        String text = getString(R.string.continue_reading_position_format,
+                                chapterName, ayah);
+                        getActivity().runOnUiThread(() -> {
+                            continueReadingPosition.setText(text);
+                            continueReadingCard.setVisibility(View.VISIBLE);
+                            // 点击：打开整章并定位到上次的节(而非孤立单节视图)，
+                            // 让用户能从该节继续往下读——这才是"继续阅读"的正确语义
+                            continueReadingCard.setOnClickListener(v -> openContinueReading(quranMeta, surah, ayah));
+                        });
+                    });
+        } catch (Exception e) {
+            continueReadingCard.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * 打开整章并滚动到指定节。用 prepareLastVersesIntent(CHAPTER 模式 + PENDING_SCROLL)，
+     * 使用户可从该节继续向下阅读，而非只看孤立一节。失败时回退到单节视图。
+     */
+    private void openContinueReading(
+            com.quran.quranaudio.online.quran_module.components.quran.QuranMeta quranMeta,
+            int surah, int ayah) {
+        try {
+            android.content.Intent intent =
+                    com.quran.quranaudio.online.quran_module.utils.reader.factory.ReaderFactory
+                            .prepareLastVersesIntent(quranMeta, 0, surah, ayah, ayah,
+                                    com.quran.quranaudio.online.quran_module.reader_managers
+                                            .ReaderParams.READER_READ_TYPE_CHAPTER, -1);
+            if (intent != null) {
+                intent.setClass(requireContext(),
+                        com.quran.quranaudio.online.quran_module.activities.ActivityReader.class);
+                startActivity(intent);
+            } else {
+                com.quran.quranaudio.online.quran_module.utils.reader.factory.ReaderFactory
+                        .startVerse(requireContext(), surah, ayah);
+            }
+        } catch (Exception e) {
+            android.util.Log.w("HomeFragment", "open continue reading failed", e);
+        }
     }
 
     View.OnClickListener dialogListener=new View.OnClickListener() {
@@ -521,6 +600,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             allowRefresh=false;
             //call your initialization code here
         }
+
+        // 用户可能在其他页面读过经，回到首页刷新"继续阅读"位置
+        refreshContinueReading();
         bindCurrentQuizQuestion();
     }
 

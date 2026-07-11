@@ -1448,5 +1448,11 @@ seperti: Waktu Sholat Global, metode perhitungan yang berbeda, notifikasi, memba
     <string name="qibla_intro_message">Peta: menunjukkan arah Kakbah di peta — berfungsi di mana saja, tanpa kompas.
 Kompas: arahkan ponsel dan ikuti panah menuju Kakbah secara langsung.</string>
     <string name="qibla_intro_no_compass">Perangkat Anda tidak memiliki sensor kompas, jadi tampilan Peta disarankan.</string>
+    <string name="continue_reading">Lanjutkan membaca</string>
+    <string name="continue_reading_position_format">%1$s, Ayat %2$d</string>
+    <string name="sect_prompt_title">Perhitungan waktu salat</string>
+    <string name="sect_prompt_message">Waktu salat berbeda menurut mazhab. Perhitungan mana yang ingin Anda gunakan? Dapat diubah kapan saja di Pengaturan.</string>
+    <string name="sect_prompt_sunni">Suni (Liga Dunia Muslim)</string>
+    <string name="sect_prompt_shia">Syiah (Ja\'fari)</string>
 </resources>
 

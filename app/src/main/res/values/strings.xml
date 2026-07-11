@@ -1603,4 +1603,9 @@
     <string name="qibla_intro_message">Map: shows the direction to the Kaaba on a map — works anywhere, no compass needed.
 Compass: point your phone and follow the arrow to the Kaaba in real time.</string>
     <string name="qibla_intro_no_compass">Your device has no compass sensor, so the Map view is recommended.</string>
+    <string name="continue_reading_position_format">%1$s, Ayah %2$d</string>
+    <string name="sect_prompt_title">Prayer time calculation</string>
+    <string name="sect_prompt_message">Prayer times differ by school of thought. Which calculation would you like to use? You can change this anytime in Settings.</string>
+    <string name="sect_prompt_sunni">Sunni (Muslim World League)</string>
+    <string name="sect_prompt_shia">Shia (Ja\'fari)</string>
 </resources>

@@ -1521,6 +1521,12 @@
     <string name="qibla_intro_message">الخريطة: تُظهر اتجاه الكعبة على الخريطة — تعمل في أي مكان دون الحاجة إلى بوصلة.
 البوصلة: وجّه هاتفك واتبع السهم نحو الكعبة مباشرةً.</string>
     <string name="qibla_intro_no_compass">لا يحتوي جهازك على مستشعر بوصلة، لذا يُنصح باستخدام الخريطة.</string>
+    <string name="continue_reading">متابعة القراءة</string>
+    <string name="continue_reading_position_format">%1$s، الآية %2$d</string>
+    <string name="sect_prompt_title">حساب أوقات الصلاة</string>
+    <string name="sect_prompt_message">تختلف أوقات الصلاة حسب المذهب. أي طريقة حساب تودّ استخدامها؟ يمكنك تغييرها في أي وقت من الإعدادات.</string>
+    <string name="sect_prompt_sunni">سني (رابطة العالم الإسلامي)</string>
+    <string name="sect_prompt_shia">شيعي (جعفري)</string>
 </resources>
 
 

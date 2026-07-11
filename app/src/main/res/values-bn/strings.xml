@@ -2289,4 +2289,9 @@
     <string name="qibla_intro_message">মানচিত্র: মানচিত্রে কাবার দিক দেখায় — যেকোনো জায়গায় কাজ করে, কম্পাস লাগে না।
 কম্পাস: ফোন তাক করে সরাসরি কাবার দিকে তীর অনুসরণ করুন।</string>
     <string name="qibla_intro_no_compass">আপনার ডিভাইসে কম্পাস সেন্সর নেই, তাই মানচিত্র ব্যবহারের পরামর্শ দেওয়া হচ্ছে।</string>
+    <string name="continue_reading_position_format">%1$s, আয়াত %2$d</string>
+    <string name="sect_prompt_title">নামাজের সময় গণনা</string>
+    <string name="sect_prompt_message">মাযহাব অনুযায়ী নামাজের সময় ভিন্ন হয়। আপনি কোন গণনা ব্যবহার করতে চান? সেটিংসে যেকোনো সময় পরিবর্তন করতে পারবেন।</string>
+    <string name="sect_prompt_sunni">সুন্নি (মুসলিম ওয়ার্ল্ড লিগ)</string>
+    <string name="sect_prompt_shia">শিয়া (জাফরি)</string>
 </resources>

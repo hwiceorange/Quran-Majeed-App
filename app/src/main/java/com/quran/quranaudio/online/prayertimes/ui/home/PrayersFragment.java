@@ -345,10 +345,11 @@ public class PrayersFragment extends Fragment implements com.quran.quranaudio.on
                                 getResources().getString(R.string.location_alert_title),
                                 error));
 
+        final HomeViewModel homeViewModelRef = homeViewModel;
         homeViewModel.getDayPrayers().observe(getViewLifecycleOwner(), dayPrayer -> {
             // Store the day prayer for time checking
             currentDayPrayer = dayPrayer;
-            
+
             updateDatesTextViews(dayPrayer);
             updateNextPrayerViews(dayPrayer);
             updateTimingsTextViews(dayPrayer);
@@ -356,7 +357,14 @@ public class PrayersFragment extends Fragment implements com.quran.quranaudio.on
 
             skeleton.showOriginal();
 
-
+            // 🕌 混合教派国家(伊拉克/巴林/黎巴嫩/阿塞拜疆)首次展示一次教派/计算方法选择，
+            // 什叶用户可选 Ja'fari，避免默认逊尼时间不对导致的卸载。选择后重算祈祷时间。
+            if (getActivity() != null && getContext() != null) {
+                com.quran.quranaudio.online.prayertimes.ui.SectMethodPromptHelper.maybeShow(
+                        getActivity(),
+                        new com.quran.quranaudio.online.prayertimes.preferences.PreferencesHelper(requireContext()),
+                        () -> homeViewModelRef.forceRefreshLocation());
+            }
         });
 
         ViewTreeObserver observer = rootView.getViewTreeObserver();
