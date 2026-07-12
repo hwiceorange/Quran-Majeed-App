@@ -2372,4 +2372,7 @@ Kompas: halakan telefon dan ikut anak panah ke arah Kaabah secara langsung.</str
     <string name="tafsir_badge_free">PERCUMA</string>
     <string name="tafsir_badge_premium">★ PREMIUM</string>
     <string name="tafsir_read_free_instead">Baca tafsir percuma anda sahaja</string>
+    <string name="hifz_mode">Mod hafazan</string>
+    <string name="hifz_mode_on">Mod hafazan aktif — ketik ayat untuk paparkan</string>
+    <string name="hifz_mode_off">Mod hafazan dimatikan</string>
 </resources>

@@ -1614,4 +1614,7 @@ Compass: point your phone and follow the arrow to the Kaaba in real time.</strin
     <string name="tafsir_badge_free">FREE</string>
     <string name="tafsir_badge_premium">★ PREMIUM</string>
     <string name="tafsir_read_free_instead">Read your free tafsir instead</string>
+    <string name="hifz_mode">Memorization mode</string>
+    <string name="hifz_mode_on">Memorization mode on — tap a verse to reveal</string>
+    <string name="hifz_mode_off">Memorization mode off</string>
 </resources>

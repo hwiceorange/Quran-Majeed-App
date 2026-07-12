@@ -34,6 +34,19 @@ public abstract class SPReader {
     public static final String SP_SCRIPT = "sp_reader_script";
     public static final String SP_READER_STYLE = "sp_reader_style";
 
+    // Hifz 遮字记忆模式开关(默认关闭；开启后经文默认模糊，点击揭示自测)
+    private static final String KEY_HIFZ_MODE = "key.hifz.mode";
+
+    public static boolean isHifzMode(Context context) {
+        return context.getSharedPreferences(SP_READER_STYLE, Context.MODE_PRIVATE)
+                .getBoolean(KEY_HIFZ_MODE, false);
+    }
+
+    public static void setHifzMode(Context context, boolean enabled) {
+        context.getSharedPreferences(SP_READER_STYLE, Context.MODE_PRIVATE)
+                .edit().putBoolean(KEY_HIFZ_MODE, enabled).apply();
+    }
+
     public static float getSavedTextSizeMultArabic(Context context) {
         SharedPreferences sp = context.getSharedPreferences(SP_TEXT_STYLE, Context.MODE_PRIVATE);
 

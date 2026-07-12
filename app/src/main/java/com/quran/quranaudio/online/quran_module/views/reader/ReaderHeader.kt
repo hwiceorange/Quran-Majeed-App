@@ -66,6 +66,35 @@ class ReaderHeader @JvmOverloads constructor(context: Context, attrs: AttributeS
             ViewCompat.setTooltipText(it, context.getString(R.string.strTitleReaderSettings))
         }
 
+        // Hifz 图标：开启时高亮为主色，关闭时用默认图标色
+        fun refreshHifzIcon(view: android.widget.ImageView) {
+            val on = com.quran.quranaudio.online.quran_module.utils.sharedPrefs
+                .SPReader.isHifzMode(context)
+            view.setColorFilter(
+                androidx.core.content.ContextCompat.getColor(
+                    context, if (on) R.color.colorPrimary else R.color.colorIcon)
+            )
+        }
+
+        binding.btnHifz.let {
+            ViewCompat.setTooltipText(it, context.getString(R.string.hifz_mode))
+            refreshHifzIcon(it)
+            it.setOnClickListener { _ ->
+                val enabled = !com.quran.quranaudio.online.quran_module.utils.sharedPrefs
+                    .SPReader.isHifzMode(context)
+                com.quran.quranaudio.online.quran_module.utils.sharedPrefs
+                    .SPReader.setHifzMode(context, enabled)
+                refreshHifzIcon(it)
+                // 重绑所有节 → 重跑遮字逻辑(复用字号变更的刷新路径)
+                activity?.mBinding?.readerVerses?.adapter?.notifyDataSetChanged()
+                android.widget.Toast.makeText(
+                    context,
+                    context.getString(if (enabled) R.string.hifz_mode_on else R.string.hifz_mode_off),
+                    android.widget.Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
         binding.btnTranslLauncher.let {
             it.setOnClickListener { openReaderSetting(Activity_Quran_Settings.SETTINGS_TRANSLATION) }
             ViewCompat.setTooltipText(it, context.getString(R.string.strLabelSelectTranslations))

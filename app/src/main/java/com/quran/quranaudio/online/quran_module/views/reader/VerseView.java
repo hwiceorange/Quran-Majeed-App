@@ -228,7 +228,58 @@ public class VerseView extends FrameLayout implements BookmarkCallbacks {
         mBinding.verseHeader.verseSerial.setText(verseSerial);
 
         mBinding.textArabic.setText(mVerseDecorator.setupArabicText(verse, -1));
+        applyHifzMask(verse);
         setupTranslations(verse);
+    }
+
+    // Hifz 遮字：本节当前是否已揭示(每次 bind 重置为遮盖，符合"每次自测"的记忆逻辑)
+    private boolean mHifzRevealed = false;
+
+    /**
+     * Hifz 遮字记忆模式：开启时经文默认遮盖，用户凭记忆背诵后点击揭示自测。
+     * - 阿拉伯文与译文"一起遮"：只遮阿拉伯文时，译文会强提示回忆原文=作弊(问题1修复)。
+     * - 用整节文字视图透明度遮盖，硬件加速、低端机(Tecno/Infinix)流畅(问题2修复，替代软件层模糊)。
+     * - 关闭时/复用视图时恢复完全可见，完全等同现有渲染，不影响正常阅读。
+     */
+    private void applyHifzMask(Verse verse) {
+        if (mIsShowingAsReference) return; // 引用/分享等场景不遮
+
+        boolean hifz = com.quran.quranaudio.online.quran_module.utils.sharedPrefs
+                .SPReader.isHifzMode(getContext());
+        android.widget.TextView ar = mBinding.textArabic;
+
+        if (!hifz) {
+            setVerseHidden(false);
+            ar.setOnClickListener(null);
+            ar.setOnLongClickListener(null);
+            ar.setClickable(false);
+            ar.setLongClickable(false);
+            return;
+        }
+
+        mHifzRevealed = false;
+        setVerseHidden(true);
+
+        // 单击揭示/再遮(阿拉伯文不可选中，单击无冲突)
+        ar.setOnClickListener(v -> {
+            mHifzRevealed = !mHifzRevealed;
+            setVerseHidden(!mHifzRevealed);
+        });
+        // arabic 变 clickable 后会吞掉整节 root 的长按手势，手动把长按转发到 verse 选项(问题3修复)
+        ar.setOnLongClickListener(v -> {
+            if (mActivity != null && mVerse != null) {
+                mActivity.openVerseOptionDialog(mVerse, VerseView.this);
+                return true;
+            }
+            return false;
+        });
+    }
+
+    /** 遮盖=降低整节阿拉伯文+译文透明度(硬件加速)；揭示=恢复。 */
+    private void setVerseHidden(boolean hidden) {
+        float alpha = hidden ? 0.06f : 1f;
+        mBinding.textArabic.setAlpha(alpha);
+        mBinding.translTextSpannable.setAlpha(alpha);
     }
 
     private void setupTranslations(Verse verse) {

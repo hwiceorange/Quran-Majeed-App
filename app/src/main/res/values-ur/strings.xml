@@ -2297,4 +2297,7 @@
     <string name="tafsir_badge_free">مفت</string>
     <string name="tafsir_badge_premium">★ پریمیم</string>
     <string name="tafsir_read_free_instead">اس کے بجائے اپنی مفت تفسیر پڑھیں</string>
+    <string name="hifz_mode">حفظ موڈ</string>
+    <string name="hifz_mode_on">حفظ موڈ آن — آیت ظاہر کرنے کے لیے ٹیپ کریں</string>
+    <string name="hifz_mode_off">حفظ موڈ بند</string>
 </resources>

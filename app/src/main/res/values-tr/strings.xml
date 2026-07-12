@@ -2293,4 +2293,7 @@ Pusula: telefonu doğrultun ve oku takip ederek Kâbe\'ye anlık yönelin.</stri
     <string name="tafsir_badge_free">ÜCRETSİZ</string>
     <string name="tafsir_badge_premium">★ PREMIUM</string>
     <string name="tafsir_read_free_instead">Bunun yerine ücretsiz tefsirini oku</string>
+    <string name="hifz_mode">Ezber modu</string>
+    <string name="hifz_mode_on">Ezber modu açık — göstermek için ayete dokunun</string>
+    <string name="hifz_mode_off">Ezber modu kapalı</string>
 </resources>

@@ -1464,5 +1464,8 @@ Kompas: arahkan ponsel dan ikuti panah menuju Kakbah secara langsung.</string>
     <string name="tafsir_badge_free">GRATIS</string>
     <string name="tafsir_badge_premium">★ PREMIUM</string>
     <string name="tafsir_read_free_instead">Baca tafsir gratis Anda saja</string>
+    <string name="hifz_mode">Mode hafalan</string>
+    <string name="hifz_mode_on">Mode hafalan aktif — ketuk ayat untuk menampilkan</string>
+    <string name="hifz_mode_off">Mode hafalan nonaktif</string>
 </resources>
 

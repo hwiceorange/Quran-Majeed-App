@@ -2304,4 +2304,7 @@
     <string name="tafsir_badge_free">ফ্রি</string>
     <string name="tafsir_badge_premium">★ প্রিমিয়াম</string>
     <string name="tafsir_read_free_instead">পরিবর্তে আপনার ফ্রি তাফসির পড়ুন</string>
+    <string name="hifz_mode">হিফজ মোড</string>
+    <string name="hifz_mode_on">হিফজ মোড চালু — আয়াত দেখতে ট্যাপ করুন</string>
+    <string name="hifz_mode_off">হিফজ মোড বন্ধ</string>
 </resources>

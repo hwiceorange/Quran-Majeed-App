@@ -1537,6 +1537,9 @@
     <string name="tafsir_badge_free">مجاني</string>
     <string name="tafsir_badge_premium">★ مميّز</string>
     <string name="tafsir_read_free_instead">اقرأ تفسيرك المجاني بدلاً من ذلك</string>
+    <string name="hifz_mode">وضع الحفظ</string>
+    <string name="hifz_mode_on">وضع الحفظ مفعّل — اضغط على الآية لإظهارها</string>
+    <string name="hifz_mode_off">تم إيقاف وضع الحفظ</string>
 </resources>
 
 
