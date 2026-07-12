@@ -104,6 +104,21 @@ public class AnalyticsManager {
         });
     }
     
+    /**
+     * 设置 Firebase 用户属性，用于"X vs 留存"分群交叉分析（如通知开启率 vs 次留）。
+     * 用户属性会绑定到用户，Firebase 留存报告可据此分群对比。
+     */
+    public void setUserProperty(String name, String value) {
+        executorService.execute(() -> {
+            try {
+                firebaseAnalytics.setUserProperty(name, value);
+                Log.d(TAG, "✅ User property set: " + name + " = " + value);
+            } catch (Exception e) {
+                Log.e(TAG, "❌ Failed to set user property: " + name, e);
+            }
+        });
+    }
+
     // ==================== 1. 启动与漏斗打点 ====================
     
     /**

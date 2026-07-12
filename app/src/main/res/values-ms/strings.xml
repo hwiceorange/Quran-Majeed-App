@@ -2257,8 +2257,6 @@
     <string name="onboard_notification_dialog_desc">Notifikasi termasuk Azan, peringatan waktu Solat,\ndan motivasi Al-Quran harian.</string>
     <string name="onboard_notification_allow">BENARKAN</string>
     <string name="onboard_notification_dont_allow">JANGAN BENARKAN</string>
-    <string name="onboard_notification_review">"Alhamdulillah! Aplikasi ini sangat penting. Amaran waktu solat sentiasa tepat dan membantu saya kekal konsisten dengan penjejakan Qada\' saya."</string>
-    <string name="onboard_notification_review_name">Aisha K.</string>
     <string name="onboard_notification_review_verified">(Pengguna Disahkan)</string>
     
     <!-- Free Trial Onboarding Page -->
@@ -2364,4 +2362,11 @@ Kompas: halakan telefon dan ikut anak panah ke arah Kaabah secara langsung.</str
     <string name="sect_prompt_message">Waktu solat berbeza mengikut mazhab. Pengiraan mana yang ingin anda guna? Boleh diubah bila-bila masa dalam Tetapan.</string>
     <string name="sect_prompt_sunni">Sunni (Liga Dunia Muslim)</string>
     <string name="sect_prompt_shia">Syiah (Ja\'fari)</string>
+    <string name="juz_progress_format">Juzuk %1$d daripada %2$d</string>
+    <string name="unlock_full_content">Buka Kandungan Penuh</string>
+    <string name="unlock_description">Akses tafsir sepenuhnya</string>
+    <string name="watch_ad_to_unlock">Tonton iklan ringkas untuk membuka</string>
+    <string name="subscribe_to_unlock">Langgan untuk membuka selamanya</string>
+    <string name="tafsir_previous">Sebelumnya</string>
+    <string name="tafsir_next">Seterusnya</string>
 </resources>

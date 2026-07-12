@@ -115,7 +115,11 @@ public class MainActivity extends BaseActivity {
         // UI 初始化（必须在主线程）
         setContentView(R.layout.activity_main);
         navView = findViewById(R.id.nav_view);
-        
+
+        // 🕌 导航必须在首帧渲染前设置好起始页：布局已去掉 app:navGraph(不自动加载 nav_home)，
+        // 这里同步设置图与起始页，避免"先闪祈祷主页再切到古兰经"。导航设置很轻量，不影响启动。
+        setupNavigation();
+
         android.util.Log.d("PERFORMANCE", "✅ Immediate init completed [" + (System.currentTimeMillis() - startTime) + "ms]");
 
         // ============================================================
@@ -127,15 +131,15 @@ public class MainActivity extends BaseActivity {
             long postRenderStart = System.currentTimeMillis();
             android.util.Log.d("PERFORMANCE", "→ [POST-RENDER] Starting deferred tasks...");
             
-            // Navigation 设置
-            setupNavigation();
-            
             // 设置统一状态栏
             setupUnifiedStatusBar();
             
             // 注册监听器
             registerQuizResultListener();
-            
+
+            // 📊 P0 埋点：记录通知状态用户属性，用于"通知开启率 vs 留存"分群分析
+            reportNotificationUserProperties();
+
             android.util.Log.d("PERFORMANCE", "✅ [POST-RENDER] Deferred tasks completed [" + (System.currentTimeMillis() - postRenderStart) + "ms]");
             
             // ============================================================
@@ -185,7 +189,16 @@ public class MainActivity extends BaseActivity {
      */
     private void setupNavigation() {
         try {
-            navController = Navigation.findNavController(this, R.id.home_host_fragment);
+            // 用 NavHostFragment 直接取 NavController：在 onCreate 早期同步调用时可靠，
+            // 而 Navigation.findNavController 此时可能尚未就绪。
+            androidx.navigation.fragment.NavHostFragment navHostFragment =
+                    (androidx.navigation.fragment.NavHostFragment) getSupportFragmentManager()
+                            .findFragmentById(R.id.home_host_fragment);
+            if (navHostFragment == null) {
+                android.util.Log.e("PERFORMANCE", "❌ NavHostFragment not found");
+                return;
+            }
+            navController = navHostFragment.getNavController();
             NavigationUI.setupWithNavController(navView, navController);
             
             // Navigation item selection listener
@@ -210,6 +223,10 @@ public class MainActivity extends BaseActivity {
             // Set start destination
             if (displaySettingsScreenFirst()) {
                 navGraph.setStartDestination(R.id.navigation_settings);
+            } else if (shouldLandOnQuranFirst()) {
+                // 🕌 新用户首次进入落古兰经索引页，兑现"古兰经"App 的核心承诺、修正身份错乱
+                // (此前落祈祷仪表盘，Quran 埋在第三 tab)。仅一次，之后正常落祈祷首页(日常钩子)。
+                navGraph.setStartDestination(R.id.nav_quran);
             } else {
                 navGraph.setStartDestination(R.id.nav_home);
             }
@@ -243,6 +260,32 @@ public class MainActivity extends BaseActivity {
         }
     }
     
+    /**
+     * 📊 记录通知相关用户属性，供 Firebase 留存报告分群交叉分析：
+     * - notif_os_permission：系统级通知权限是否授予(true/false)
+     * - notif_prayer_enabled：是否至少一番祈祷会实际发通知(true/false)
+     * 每次会话更新，反映当前真实召回状态。
+     */
+    private void reportNotificationUserProperties() {
+        try {
+            boolean osGranted = true;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                osGranted = ContextCompat.checkSelfPermission(this,
+                        android.Manifest.permission.POST_NOTIFICATIONS)
+                        == android.content.pm.PackageManager.PERMISSION_GRANTED;
+            }
+            boolean prayerEnabled = preferencesHelper != null
+                    && preferencesHelper.hasAnyPrayerNotificationEnabled();
+
+            com.quran.quranaudio.online.analytics.AnalyticsManager am =
+                    com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(this);
+            am.setUserProperty("notif_os_permission", String.valueOf(osGranted));
+            am.setUserProperty("notif_prayer_enabled", String.valueOf(prayerEnabled));
+        } catch (Exception e) {
+            android.util.Log.w("MainActivity", "reportNotificationUserProperties failed", e);
+        }
+    }
+
     /**
      * 注册 RxBus 监听器
      */
@@ -433,6 +476,30 @@ public class MainActivity extends BaseActivity {
 
     private boolean displaySettingsScreenFirst() {
         return false;
+    }
+
+    /**
+     * 是否让本次启动落在古兰经索引页(仅新用户首次)。
+     *
+     * 逻辑：用专用标志位，只对"从未落过 Quran-first"的用户生效一次；
+     * 已有阅读记录或已保存国家的老用户视为已建立习惯，跳过，避免打扰其祈祷日常动线。
+     */
+    private boolean shouldLandOnQuranFirst() {
+        try {
+            android.content.SharedPreferences sp =
+                    getSharedPreferences("QURAN_FIRST_LANDING", MODE_PRIVATE);
+            if (sp.getBoolean("shown", false)) {
+                return false;
+            }
+            sp.edit().putBoolean("shown", true).apply();
+
+            // 老用户(已有阅读记录)不打扰，只对真正的新用户兑现 Quran-first
+            int lastSurah = com.quran.quranaudio.online.features.Helper.LastSurahAndAyahHelper
+                    .getLastSurah(this);
+            return lastSurah <= 0;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public void onBackPressed() {

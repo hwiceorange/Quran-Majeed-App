@@ -413,6 +413,19 @@ public class PreferencesHelper {
         return defaultSharedPreferences.getBoolean(PreferencesConstants.NOTIFICATIONS_ENABLED, true);
     }
 
+    /**
+     * 是否至少有一番祈祷会实际发出通知（类型 != none）。
+     * 用于"通知开启率 vs 留存"交叉分析，比全局主开关更能反映用户真实召回状态。
+     */
+    public boolean hasAnyPrayerNotificationEnabled() {
+        for (PrayerEnum prayer : PrayerEnum.values()) {
+            if (!TYPE_NONE.equals(getNotificationTypeForPrayer(prayer))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // ========================================
     // 🆕 每个祷告独立配置的读取方法（支持新通知设置页面）
     // ========================================

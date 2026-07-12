@@ -144,6 +144,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             premiumPref.setOnPreferenceClickListener(preference -> {
                 android.util.Log.d("SettingsFragment", "🌟 Premium subscription clicked");
                 Intent intent = new Intent(getContext(), SubscriptionActivity.class);
+                intent.putExtra(com.quran.quranaudio.online.subscription.SubscriptionActivity.EXTRA_SOURCE, "settings");
                 startActivity(intent);
                 return true;
             });
@@ -184,6 +185,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                     premiumButton.setOnClickListener(v -> {
                         android.util.Log.d("SettingsFragment", "🌟 Premium subscription button clicked");
                         Intent intent = new Intent(getContext(), SubscriptionActivity.class);
+                        intent.putExtra(com.quran.quranaudio.online.subscription.SubscriptionActivity.EXTRA_SOURCE, "settings");
                         startActivity(intent);
                     });
                 }
@@ -209,6 +211,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                     premiumButton.setOnClickListener(v -> {
                         android.util.Log.d("SettingsFragment", "🌟 Premium subscription button clicked");
                         Intent intent = new Intent(getContext(), SubscriptionActivity.class);
+                        intent.putExtra(com.quran.quranaudio.online.subscription.SubscriptionActivity.EXTRA_SOURCE, "settings");
                         startActivity(intent);
                     });
                 } else {

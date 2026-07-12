@@ -34,7 +34,36 @@
             android:layout_height="40dp"
             android:src="@drawable/ic_quran"
             android:contentDescription="@string/strTitleQuran"
+            android:visibility="gone"
             app:tint="#4E8545" />
+
+        <!-- Khatmah/Juz 进度环：读经进度(Juz N / 30)，斋月读经追踪的季节性回归引擎 -->
+        <FrameLayout
+            android:layout_width="44dp"
+            android:layout_height="44dp">
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/juz_progress_ring"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:max="30"
+                android:progress="0"
+                app:indicatorColor="#4E8545"
+                app:trackColor="#264E8545"
+                app:indicatorSize="44dp"
+                app:trackThickness="4dp"
+                app:indicatorInset="0dp" />
+
+            <TextView
+                android:id="@+id/tv_juz_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="#4E8545"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                tools:text="2" />
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -63,6 +92,16 @@
                 android:maxLines="1"
                 android:ellipsize="end"
                 tools:text="Al-Baqarah, Ayah 152" />
+
+            <TextView
+                android:id="@+id/tv_juz_progress_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:textColor="#8A94A6"
+                android:textSize="12sp"
+                android:maxLines="1"
+                tools:text="Juz 2 of 30" />
         </LinearLayout>
 
         <ImageView

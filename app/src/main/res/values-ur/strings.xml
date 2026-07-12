@@ -2180,8 +2180,8 @@
     <string name="onboard_notification_dialog_desc">اطلاعات میں اذان، نماز کے وقت کی یاد دہانیاں،\nاور روزانہ قرآنی حوصلہ افزائی شامل ہے۔</string>
     <string name="onboard_notification_allow">اجازت دیں</string>
     <string name="onboard_notification_dont_allow">اجازت نہ دیں</string>
-    <string name="onboard_notification_review">"الحمد للہ! یہ ایپ ضروری ہے۔ نماز کے وقت کی الرٹس ہمیشہ درست ہوتی ہیں اور مجھے اپنی قضا ٹریکنگ میں مستقل رہنے میں مدد کرتی ہیں۔"</string>
-    <string name="onboard_notification_review_name">عائشہ ک۔</string>
+    <string name="onboard_notification_review">"best aap reading Quran in easy way Masha Allah"</string>
+    <string name="onboard_notification_review_name">Sadia Shoukat</string>
     <string name="onboard_notification_review_verified">(تصدیق شدہ صارف)</string>
 
     <!-- Free Trial Onboarding Page -->
@@ -2287,4 +2287,11 @@
     <string name="sect_prompt_message">مسلک کے مطابق نماز کے اوقات مختلف ہوتے ہیں۔ آپ کون سا حساب استعمال کرنا چاہیں گے؟ اسے کسی بھی وقت سیٹنگز میں تبدیل کر سکتے ہیں۔</string>
     <string name="sect_prompt_sunni">سنی (مسلم ورلڈ لیگ)</string>
     <string name="sect_prompt_shia">شیعہ (جعفری)</string>
+    <string name="juz_progress_format">پارہ %1$d / %2$d</string>
+    <string name="unlock_full_content">مکمل مواد کھولیں</string>
+    <string name="unlock_description">مکمل تفسیر تک رسائی حاصل کریں</string>
+    <string name="watch_ad_to_unlock">کھولنے کے لیے مختصر اشتہار دیکھیں</string>
+    <string name="subscribe_to_unlock">ہمیشہ کے لیے کھولنے کو سبسکرائب کریں</string>
+    <string name="tafsir_previous">پچھلا</string>
+    <string name="tafsir_next">اگلا</string>
 </resources>

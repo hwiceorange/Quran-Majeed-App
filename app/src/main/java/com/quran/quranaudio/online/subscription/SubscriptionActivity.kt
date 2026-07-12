@@ -117,7 +117,19 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
         setupBillingManager()
         setupViews()
         setupListeners()
+
+        // 📊 订阅来源打点：记录本次订阅页从哪里打开(定位哪个触发点带来付费)
+        subscriptionSource = intent.getStringExtra(EXTRA_SOURCE) ?: "unknown"
+        try {
+            val params = HashMap<String, Any>()
+            params["source"] = subscriptionSource
+            com.quran.quranaudio.online.analytics.AnalyticsManager
+                .getInstance(this).logEvent("subscription_page_open", params)
+        } catch (_: Exception) {
+        }
     }
+
+    private var subscriptionSource: String = "unknown"
     
     /**
      * 设置返回键处理
@@ -328,6 +340,18 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
     override fun onPurchaseSuccess(purchase: Purchase) {
         lifecycleScope.launch {
             android.util.Log.d("SubscriptionActivity", "🎉 Purchase successful!")
+
+            // 📊 记录付费来源 + 产品，定位哪个触发点真正带来付费转化
+            try {
+                val params = HashMap<String, Any>()
+                params["source"] = subscriptionSource
+                params["product_id"] = purchase.products.firstOrNull() ?: "unknown"
+                com.quran.quranaudio.online.analytics.AnalyticsManager
+                    .getInstance(this@SubscriptionActivity)
+                    .logEvent("subscription_purchased", params)
+            } catch (_: Exception) {
+            }
+
             Toast.makeText(
                 this@SubscriptionActivity,
                 getString(R.string.subscription_message_success),
@@ -610,5 +634,6 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
 
     companion object {
         const val FREE_TRIAL_DAYS = 7
+        const val EXTRA_SOURCE = "subscription_source"
     }
 }

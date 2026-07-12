@@ -2179,8 +2179,8 @@
     <string name="onboard_notification_dialog_desc">বিজ্ঞপ্তিতে আজান, নামাজের সময় স্মরণকারী,\nএবং দৈনিক কুরআনিক অনুপ্রেরণা অন্তর্ভুক্ত।</string>
     <string name="onboard_notification_allow">অনুমতি দিন</string>
     <string name="onboard_notification_dont_allow">অনুমতি দেবেন না</string>
-    <string name="onboard_notification_review">"আলহামদুলিল্লাহ! এই অ্যাপটি অপরিহার্য। নামাজের সময় সতর্কতা সর্বদা সঠিক এবং আমাকে আমার কাজা ট্র্যাকিংয়ে ধারাবাহিক থাকতে সাহায্য করে।"</string>
-    <string name="onboard_notification_review_name">আয়েশা কে.</string>
+    <string name="onboard_notification_review">"রনি খান আপনারা যারা যারা ইসলামকে ভালোবাসেন তারা তারা তারা তারা তারা আমাকে সমর্থন করেন ধন্যবাদ আপনাদের সবাইকে"</string>
+    <string name="onboard_notification_review_name">lrtan</string>
     <string name="onboard_notification_review_verified">(যাচাইকৃত ব্যবহারকারী)</string>
     
     <!-- Free Trial Onboarding Page -->
@@ -2294,4 +2294,11 @@
     <string name="sect_prompt_message">মাযহাব অনুযায়ী নামাজের সময় ভিন্ন হয়। আপনি কোন গণনা ব্যবহার করতে চান? সেটিংসে যেকোনো সময় পরিবর্তন করতে পারবেন।</string>
     <string name="sect_prompt_sunni">সুন্নি (মুসলিম ওয়ার্ল্ড লিগ)</string>
     <string name="sect_prompt_shia">শিয়া (জাফরি)</string>
+    <string name="juz_progress_format">পারা %1$d / %2$d</string>
+    <string name="unlock_full_content">সম্পূর্ণ বিষয়বস্তু আনলক করুন</string>
+    <string name="unlock_description">সম্পূর্ণ তাফসির পড়ুন</string>
+    <string name="watch_ad_to_unlock">আনলক করতে একটি ছোট বিজ্ঞাপন দেখুন</string>
+    <string name="subscribe_to_unlock">চিরতরে আনলক করতে সাবস্ক্রাইব করুন</string>
+    <string name="tafsir_previous">পূর্ববর্তী</string>
+    <string name="tafsir_next">পরবর্তী</string>
 </resources>

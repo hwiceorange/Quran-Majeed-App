@@ -385,8 +385,8 @@
     <string name="onboard_notification_dialog_desc">Notifications include Adhan, Salah time\nreminders, and daily Quranic\nmotivation.</string>
     <string name="onboard_notification_allow">ALLOW</string>
     <string name="onboard_notification_dont_allow">DON\'T ALLOW</string>
-    <string name="onboard_notification_review">"Alhamdulillah! This app is essential. The prayer time alerts are always spot-on and help me stay consistent with my Qada\' tracking."</string>
-    <string name="onboard_notification_review_name">Aisha K.</string>
+    <string name="onboard_notification_review">"Amazing Muslim app for hifs quran i think its very easy way to understand and guideline to us."</string>
+    <string name="onboard_notification_review_name">Muskan</string>
     <string name="onboard_notification_review_verified">(Verified User)</string>
     
     <!-- Free Trial Onboarding Page -->
@@ -1473,9 +1473,9 @@
     <!-- Content Lock & Unlock Strings -->
     <string name="content_locked">Content Locked</string>
     <string name="unlock_full_content">Unlock Full Content</string>
-    <string name="unlock_description">Get access to complete tafsir content</string>
-    <string name="watch_ad_to_unlock">Watch Ad to Unlock</string>
-    <string name="subscribe_to_unlock">Subscribe Pro to Unlock</string>
+    <string name="unlock_description">Get access to the complete tafsir</string>
+    <string name="watch_ad_to_unlock">Watch a short ad to unlock</string>
+    <string name="subscribe_to_unlock">Subscribe to unlock forever</string>
     <string name="or">or</string>
     
     <!-- Rewarded Ad Loading Dialog -->
@@ -1608,4 +1608,7 @@ Compass: point your phone and follow the arrow to the Kaaba in real time.</strin
     <string name="sect_prompt_message">Prayer times differ by school of thought. Which calculation would you like to use? You can change this anytime in Settings.</string>
     <string name="sect_prompt_sunni">Sunni (Muslim World League)</string>
     <string name="sect_prompt_shia">Shia (Ja\'fari)</string>
+    <string name="juz_progress_format">Juz %1$d of %2$d</string>
+    <string name="tafsir_previous">Previous</string>
+    <string name="tafsir_next">Next</string>
 </resources>

@@ -77,6 +77,7 @@ class FragOnboardTrial : FragOnboardBase() {
         
         val intent = Intent(requireContext(), SubscriptionActivity::class.java)
         intent.putExtra("from_onboarding", true) // 标记来自引导流程
+        intent.putExtra(SubscriptionActivity.EXTRA_SOURCE, "onboarding")
         startActivity(intent)
         
         // 结束 ActivityOnboarding

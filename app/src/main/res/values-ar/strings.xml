@@ -1419,8 +1419,8 @@
     <string name="onboard_notification_dialog_desc">تتضمن الإشعارات الأذان، تذكيرات أوقات الصلاة،\nوالتحفيز القرآني اليومي.</string>
     <string name="onboard_notification_allow">السماح</string>
     <string name="onboard_notification_dont_allow">عدم السماح</string>
-    <string name="onboard_notification_review">"الحمد لله! هذا التطبيق ضروري. تنبيهات أوقات الصلاة دقيقة دائمًا وتساعدني على الاستمرار في تتبع القضاء."</string>
-    <string name="onboard_notification_review_name">عائشة ك.</string>
+    <string name="onboard_notification_review">"هذا كتاب الله يجب ان يكون كل المسلمين ياتون فيه يراجعون باستمرار"</string>
+    <string name="onboard_notification_review_name">عمر الشريف</string>
     <string name="onboard_notification_review_verified">(مستخدم موثق)</string>
 
   <!-- Free Trial Onboarding Page -->
@@ -1527,6 +1527,13 @@
     <string name="sect_prompt_message">تختلف أوقات الصلاة حسب المذهب. أي طريقة حساب تودّ استخدامها؟ يمكنك تغييرها في أي وقت من الإعدادات.</string>
     <string name="sect_prompt_sunni">سني (رابطة العالم الإسلامي)</string>
     <string name="sect_prompt_shia">شيعي (جعفري)</string>
+    <string name="juz_progress_format">الجزء %1$d من %2$d</string>
+    <string name="unlock_full_content">افتح المحتوى الكامل</string>
+    <string name="unlock_description">احصل على التفسير كاملاً</string>
+    <string name="watch_ad_to_unlock">شاهد إعلانًا قصيرًا للفتح</string>
+    <string name="subscribe_to_unlock">اشترك للفتح الدائم</string>
+    <string name="tafsir_previous">السابق</string>
+    <string name="tafsir_next">التالي</string>
 </resources>
 
 

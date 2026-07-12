@@ -71,9 +71,41 @@ class FragOnboardNotification : FragOnboardBase() {
         super.onViewCreated(view, savedInstanceState)
         
         android.util.Log.d("FragOnboardNotification", "🔔 Notification permission page displayed")
-        
+
         setupButtons()
         startHandPointerAnimation()
+        localizeTestimonialAvatar()
+    }
+
+    /**
+     * 证言头像：名字首字母 + 彩色圆圈(Google Play 风格)。
+     * 证言姓名/内容已按 locale 用真实 Google Play 评论本地化，头像首字母从姓名动态取，
+     * 颜色按姓名哈希从调色板选取，视觉与 Google Play 评论一致、真实可信、无需照片。
+     */
+    private fun localizeTestimonialAvatar() {
+        try {
+            val avatar = binding.imgUserAvatar
+            val name = getString(com.quran.quranaudio.online.R.string.onboard_notification_review_name).trim()
+            if (name.isEmpty()) return
+
+            // 首字母(兼容阿拉伯/孟加拉等非拉丁文字，取第一个字符)
+            avatar.text = name.substring(0, 1).uppercase()
+
+            // 颜色：按姓名哈希从 Google Play 风格调色板选取，保证同名同色、不同名多样
+            val palette = intArrayOf(
+                0xFF5E97F6.toInt(), 0xFF9CCC65.toInt(), 0xFFF06292.toInt(),
+                0xFF7E57C2.toInt(), 0xFF4DB6AC.toInt(), 0xFFFF8A65.toInt(),
+                0xFFA1887F.toInt(), 0xFF4FC3F7.toInt()
+            )
+            val color = palette[Math.abs(name.hashCode()) % palette.size]
+            val bg = android.graphics.drawable.GradientDrawable().apply {
+                shape = android.graphics.drawable.GradientDrawable.OVAL
+                setColor(color)
+            }
+            avatar.background = bg
+        } catch (e: Exception) {
+            android.util.Log.w("FragOnboardNotification", "localizeTestimonialAvatar failed", e)
+        }
     }
     
     /**

@@ -158,6 +158,14 @@ class ActivityOnboarding : com.quran.quranaudio.online.quran_module.activities.b
             it.offscreenPageLimit = ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT
             it.getChildAt(0).overScrollMode = View.OVER_SCROLL_NEVER
             it.isUserInputEnabled = false
+
+            // 📊 P0 埋点：onboarding 逐页曝光(用 onPageSelected 而非 onResume，
+            // 避免 ViewPager2 离屏预建导致的误报)。用于分析每页跳出率、定位真漏斗。
+            it.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    logOnboardingPageView(position)
+                }
+            })
             
             // 🚨 最终解决方案：使用 post 将 setCurrentItem 推迟到布局完成后执行
             // 避免被系统 FragmentManager 的状态恢复所覆盖
@@ -168,9 +176,40 @@ class ActivityOnboarding : com.quran.quranaudio.online.quran_module.activities.b
                 // 确保设置的是正确的值，防止索引超出范围
                 val finalIndex = currentPageIndex.coerceIn(0, adapter.itemCount - 1)
                 it.setCurrentItem(finalIndex, false)  // false = 不使用动画，直接跳转
-                
+
                 android.util.Log.d("ActivityOnboarding", "✅ [POSTED] ViewPager2 currentItem set complete to: $finalIndex")
+
+                // 显式记录入口页(初始 setCurrentItem 若位置不变可能不触发 onPageSelected)
+                logOnboardingPageView(finalIndex)
             }
+        }
+    }
+
+    // 去重：避免入口页显式记录与 onPageSelected 回调重复计数
+    private var lastLoggedOnboardingPage = -1
+
+    /**
+     * 📊 记录 onboarding 逐页曝光。step_name 形如 onboarding_page_0_language，
+     * 便于 Firebase 漏斗按顺序统计每页到达人数 → 逐页跳出率。
+     */
+    private fun logOnboardingPageView(position: Int) {
+        if (position == lastLoggedOnboardingPage) return
+        lastLoggedOnboardingPage = position
+
+        val name = when (position) {
+            0 -> "language"
+            1 -> "quran_version"
+            2 -> "istiqamah"
+            3 -> "notification"
+            4 -> "trial"
+            else -> "unknown"
+        }
+        try {
+            com.quran.quranaudio.online.analytics.AnalyticsManager
+                .getInstance(this)
+                .logWorkflowStep("onboarding_page_${position}_$name")
+        } catch (e: Exception) {
+            android.util.Log.w("ActivityOnboarding", "logOnboardingPageView failed", e)
         }
     }
     

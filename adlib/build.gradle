@@ -71,11 +71,13 @@ dependencies {
     api 'com.google.ads.mediation:vungle:7.6.0.0'
     
     // Pangle (ByteDance/TikTok) - Bidding
-    // OFFLINE TEMPORARILY: disabled to avoid 16KB page-size compliance rejection on Google Play.
-    // Re-enable only after confirming vendor SDK/adapter native libs pass 16KB checker.
-    // api('com.google.ads.mediation:pangle:5.9.0.2.0') {
-    //     exclude group: 'com.google.android.gms'
-    // }
+    // ✅ 16KB 合规版本：6.5.0.4.0 对应 Pangle SDK ads-sdk:6.5.0.4(实测 ELF 段 0x4000=16KB 对齐)。
+    //    选此版本原因：① 字节仓库中该 SDK 稳定可达(7.6.0.5 已下架、7.8.5.9 POM 访问超时)；
+    //    ② exclude gms 使项目 GMA 保持 24.7.0 不被顶版；③ 适配器(GMA 23.x)运行于更新的 GMA
+    //    属向前兼容方向，较稳。⚠️ 严禁用 6.2.0.4.0(旧 SDK 4KB 对齐 → 16KB 拒审)。
+    api('com.google.ads.mediation:pangle:6.5.0.4.0') {
+        exclude group: 'com.google.android.gms'
+    }
     
     // IronSource - Bidding
     // Using Maven Central version

@@ -272,14 +272,19 @@ class FragOnboardLanguage : FragOnboardBase() {
                     forceRefresh = true
                 )
                 
+                // 🕌 选择阿拉伯语的用户是阿拉伯母语读者，不需要经文译本，
+                // 跳过译本选择页(index 1)直接进下一页(index 2 Istiqamah)，减少无意义摩擦。
+                // 注意：这是基于用户"主动选择阿语"，英语用户会选英语，不受影响。
+                val targetPage = if (selectedLanguageCode == "ar") 2 else 1
                 try {
-                    android.util.Log.d("FragOnboardLanguage", "🔄 Attempting to recreate activity...")
-                    activity.recreateWithLanguageChange(1)
+                    android.util.Log.d("FragOnboardLanguage", "🔄 Attempting to recreate activity, target page: $targetPage")
+                    activity.recreateWithLanguageChange(targetPage)
                     android.util.Log.d("FragOnboardLanguage", "✅ recreateWithLanguageChange() called")
                 } catch (e: Exception) {
                     android.util.Log.e("FragOnboardLanguage", "❌ Failed to recreate: ${e.message}", e)
                     android.util.Log.d("FragOnboardLanguage", "   Falling back to direct navigation...")
                     activity.navigateToNextPage()
+                    if (selectedLanguageCode == "ar") activity.navigateToNextPage() // 再跳一页跳过译本
         }
             } else {
                 android.util.Log.e("FragOnboardLanguage", "❌ Activity is NOT ActivityOnboarding!")

@@ -55,9 +55,75 @@ object SubscriptionHelper {
     /**
      * 启动订阅页面
      */
-    fun launchSubscriptionPage(context: Context) {
+    @JvmOverloads
+    fun launchSubscriptionPage(context: Context, source: String = "unknown") {
         val intent = Intent(context, SubscriptionActivity::class.java)
+        intent.putExtra(SubscriptionActivity.EXTRA_SOURCE, source)
         context.startActivity(intent)
+    }
+
+    // ============================================================
+    // 情境化订阅触发（价值交付后再谈钱，替代仅首装硬弹）
+    // ============================================================
+    private const val PROMPT_PREFS = "subscription_prompt_prefs"
+    private const val KEY_PROMPT_COUNT = "prompt_count"
+    private const val KEY_LAST_PROMPT_TIME = "last_prompt_time"
+    private const val KEY_ENGAGED_SESSIONS = "engaged_sessions"
+
+    private const val MIN_INTERVAL_MS = 3L * 24 * 60 * 60 * 1000  // 两次提示最少间隔 3 天
+    private const val MAX_LIFETIME_PROMPTS = 3                     // 一生最多提示 3 次
+    // 在第 N 次"已产生阅读价值"的会话触发(错开、不打扰新用户首日)
+    private val TRIGGER_AT_SESSIONS = intArrayOf(3, 8, 20)
+
+    /**
+     * 情境化订阅提示：仅对"已体验价值的非订阅用户"在自然节点软性触发。
+     *
+     * 触发条件(全部满足)：
+     * - 未订阅
+     * - 已有阅读价值(hasReadingValue=true，如已读过经文)
+     * - 命中预设的第 N 次 engaged 会话
+     * - 距上次提示 >= 3 天，且一生提示 < 3 次
+     *
+     * 这修正了"仅首装硬弹付费墙"(价值交付前要钱、转化极低)的问题。
+     *
+     * @return true 表示本次展示了订阅页
+     */
+    fun maybeShowContextualPrompt(context: Context, hasReadingValue: Boolean): Boolean {
+        try {
+            if (isUserSubscribed(context) || !hasReadingValue) return false
+
+            val prefs = context.getSharedPreferences(PROMPT_PREFS, Context.MODE_PRIVATE)
+
+            // engaged 会话按"天"计：同一天多次回到首页/切 tab 只算一次，
+            // 使 {3,8,20} 对应使用的第 3/8/20 天，而非 onResume 次数(避免首日被 tab 切换灌满)
+            val today = (System.currentTimeMillis() / (24L * 60 * 60 * 1000)).toInt()
+            val lastDay = prefs.getInt("last_engaged_day", -1)
+            if (today == lastDay) return false  // 今天已计过，不再累加也不触发
+
+            val sessions = prefs.getInt(KEY_ENGAGED_SESSIONS, 0) + 1
+            prefs.edit()
+                .putInt(KEY_ENGAGED_SESSIONS, sessions)
+                .putInt("last_engaged_day", today)
+                .apply()
+
+            if (!TRIGGER_AT_SESSIONS.contains(sessions)) return false
+
+            val count = prefs.getInt(KEY_PROMPT_COUNT, 0)
+            if (count >= MAX_LIFETIME_PROMPTS) return false
+
+            val lastTime = prefs.getLong(KEY_LAST_PROMPT_TIME, 0L)
+            if (System.currentTimeMillis() - lastTime < MIN_INTERVAL_MS) return false
+
+            prefs.edit()
+                .putInt(KEY_PROMPT_COUNT, count + 1)
+                .putLong(KEY_LAST_PROMPT_TIME, System.currentTimeMillis())
+                .apply()
+
+            launchSubscriptionPage(context, "contextual_prompt")
+            return true
+        } catch (e: Exception) {
+            return false
+        }
     }
 
     /**

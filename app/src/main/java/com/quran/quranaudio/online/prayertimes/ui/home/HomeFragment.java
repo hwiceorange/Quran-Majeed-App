@@ -347,13 +347,43 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
      * 初始化"继续阅读"卡片：从本地读取上次阅读位置(同步)，解析章名后展示，
      * 点击直达阅读器该位置。无记录则整卡隐藏。这是古兰经 App 最强的日活回归钩子。
      */
+    private com.google.android.material.progressindicator.CircularProgressIndicator juzProgressRing;
+    private android.widget.TextView juzNumberText;
+    private android.widget.TextView juzProgressLabel;
+
     private void setupContinueReading(View rootView) {
         try {
             continueReadingCard = rootView.findViewById(R.id.continue_reading_card);
             continueReadingPosition = rootView.findViewById(R.id.tv_continue_reading_position);
+            juzProgressRing = rootView.findViewById(R.id.juz_progress_ring);
+            juzNumberText = rootView.findViewById(R.id.tv_juz_number);
+            juzProgressLabel = rootView.findViewById(R.id.tv_juz_progress_label);
             refreshContinueReading();
         } catch (Exception e) {
             android.util.Log.w("HomeFragment", "setupContinueReading failed", e);
+        }
+    }
+
+    /**
+     * 由(章,节)计算当前 Juz(1-30)。遍历该章所属的 Juz，命中节所在范围者即当前 Juz。
+     * 返回 0 表示无法判定(不显示进度环)。
+     */
+    private int computeJuz(com.quran.quranaudio.online.quran_module.components.quran.QuranMeta quranMeta,
+                           int surah, int ayah) {
+        try {
+            java.util.ArrayList<Integer> juzs = quranMeta.getChapterJuzs(surah);
+            if (juzs == null || juzs.isEmpty()) return 0;
+            for (Integer juz : juzs) {
+                kotlin.Pair<Integer, Integer> range =
+                        quranMeta.getVerseRangeOfChapterInJuz(juz, surah);
+                if (range != null && ayah >= range.getFirst() && ayah <= range.getSecond()) {
+                    return juz;
+                }
+            }
+            // 兜底：返回该章第一个 Juz
+            return juzs.get(0);
+        } catch (Exception e) {
+            return 0;
         }
     }
 
@@ -378,8 +408,25 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         String chapterName = quranMeta.getChapterName(requireContext(), surah);
                         String text = getString(R.string.continue_reading_position_format,
                                 chapterName, ayah);
+                        final int juz = computeJuz(quranMeta, surah, ayah);
                         getActivity().runOnUiThread(() -> {
                             continueReadingPosition.setText(text);
+
+                            // Khatmah 进度环：当前 Juz / 30
+                            if (juz > 0 && juzProgressRing != null) {
+                                juzProgressRing.setProgress(juz);
+                                if (juzNumberText != null) {
+                                    juzNumberText.setText(String.valueOf(juz));
+                                }
+                                if (juzProgressLabel != null) {
+                                    juzProgressLabel.setText(
+                                            getString(R.string.juz_progress_format, juz, 30));
+                                    juzProgressLabel.setVisibility(View.VISIBLE);
+                                }
+                                juzProgressRing.setVisibility(View.VISIBLE);
+                                if (juzNumberText != null) juzNumberText.setVisibility(View.VISIBLE);
+                            }
+
                             continueReadingCard.setVisibility(View.VISIBLE);
                             // 点击：打开整章并定位到上次的节(而非孤立单节视图)，
                             // 让用户能从该节继续往下读——这才是"继续阅读"的正确语义
@@ -603,6 +650,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         // 用户可能在其他页面读过经，回到首页刷新"继续阅读"位置
         refreshContinueReading();
+
+        // 💳 情境化订阅触发：仅对"已读过经文(产生价值)的非订阅用户"在自然节点软性提示，
+        // 替代此前"仅首装硬弹付费墙"(价值前收费、转化极低)。内部有频控与会话门控。
+        try {
+            if (getContext() != null) {
+                boolean hasReadingValue = com.quran.quranaudio.online.features.Helper
+                        .LastSurahAndAyahHelper.getLastSurah(requireContext()) > 0;
+                com.quran.quranaudio.online.subscription.SubscriptionHelper.INSTANCE
+                        .maybeShowContextualPrompt(requireContext(), hasReadingValue);
+            }
+        } catch (Exception e) {
+            android.util.Log.w("HomeFragment", "contextual subscription prompt failed", e);
+        }
         bindCurrentQuizQuestion();
     }
 

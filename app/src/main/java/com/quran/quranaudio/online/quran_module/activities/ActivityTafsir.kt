@@ -673,12 +673,15 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
         if (isContentUnlocked) {
             // 已解锁：隐藏覆盖层，显示完整内容，恢复滚动
             lockOverlay.visibility = View.GONE
+            binding.fontSize.visibility = View.VISIBLE // 解锁后恢复字号按钮
             webView.setOnTouchListener(null) // 恢复触摸事件
             webView.setOnScrollChangeListener(null) // 移除滚动监听
             android.util.Log.d("ActivityTafsir", "✅ Content unlocked, hiding overlay and enabling scroll")
         } else {
             // 未解锁：显示覆盖层（50%遮罩效果），限制滚动
             lockOverlay.visibility = View.VISIBLE
+            // 内容锁定时隐藏字号 FAB：锁定内容无法调整字号，且会浮在解锁卡片上造成视觉混乱
+            binding.fontSize.visibility = View.GONE
             
             // 限制WebView滚动到最多50%的内容高度
             webView.setOnScrollChangeListener { v, _, scrollY, _, _ ->
@@ -946,7 +949,7 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
      */
     private fun goToSubscriptionPage() {
         android.util.Log.d("ActivityTafsir", "🛒 Navigating to subscription page")
-        SubscriptionHelper.launchSubscriptionPage(this)
+        SubscriptionHelper.launchSubscriptionPage(this, "tafsir_unlock")
     }
     
     /**
