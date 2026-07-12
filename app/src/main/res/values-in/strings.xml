@@ -1455,11 +1455,14 @@ Kompas: arahkan ponsel dan ikuti panah menuju Kakbah secara langsung.</string>
     <string name="sect_prompt_sunni">Suni (Liga Dunia Muslim)</string>
     <string name="sect_prompt_shia">Syiah (Ja\'fari)</string>
     <string name="juz_progress_format">Juz %1$d dari %2$d</string>
-    <string name="unlock_full_content">Buka Konten Lengkap</string>
-    <string name="unlock_description">Akses tafsir selengkapnya</string>
+    <string name="unlock_full_content">Kedalaman studi lebih</string>
+    <string name="unlock_description">Bandingkan ulama klasik dan buka alat belajar lanjutan. Tafsir gratis Anda yang otoritatif selalu tersedia.</string>
     <string name="watch_ad_to_unlock">Tonton iklan singkat untuk membuka</string>
     <string name="subscribe_to_unlock">Berlangganan untuk membuka selamanya</string>
     <string name="tafsir_previous">Sebelumnya</string>
     <string name="tafsir_next">Berikutnya</string>
+    <string name="tafsir_badge_free">GRATIS</string>
+    <string name="tafsir_badge_premium">★ PREMIUM</string>
+    <string name="tafsir_read_free_instead">Baca tafsir gratis Anda saja</string>
 </resources>
 

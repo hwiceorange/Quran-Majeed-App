@@ -365,7 +365,9 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
 
-        header.tafsirTitle.text = TextUtils.concat(tafsirInfoModel.name, "\n", chapterInfo)
+        // 步骤5：Tafsir 名后加下拉指示 ▾ 并让标题可点，提升"可切换/对照"的发现性
+        header.tafsirTitle.text = TextUtils.concat(tafsirInfoModel.name, "  ▾", "\n", chapterInfo)
+        header.tafsirTitle.setOnClickListener { showTafsirSwitcher() }
     }
 
     private fun loadContent() {
@@ -600,6 +602,46 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
         }
     }
 
+    /**
+     * 步骤3：就地快速切换 Tafsir(底部弹窗)。
+     * 让"多 Tafsir 对照"从"跳整页设置(4步)"降到"点标题→选(1步)"，激活会员对照价值。
+     * 复用 ADPTafsir(已带免费/会员角标 + 付费否决门)；免费/已订阅即时切换重载。
+     */
+    private fun showTafsirSwitcher() {
+        try {
+            val currentModel = tafsirInfoModel ?: return
+            val allModels = com.quran.quranaudio.online.quran_module.utils.reader.tafsir
+                .TafsirManager.getModels() ?: return
+            val list = allModels[currentModel.langCode]?.toList() ?: return
+            if (list.isEmpty()) return
+
+            list.forEach { it.isChecked = (it.key == tafsirKey) }
+
+            val sheet = com.google.android.material.bottomsheet.BottomSheetDialog(this)
+            val recycler = androidx.recyclerview.widget.RecyclerView(this).apply {
+                layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this@ActivityTafsir)
+                setPadding(0, dimen(R.dimen.dmnCommonSize2), 0, dimen(R.dimen.dmnCommonSize2))
+                clipToPadding = false
+            }
+            recycler.adapter = com.quran.quranaudio.online.quran_module.adapters.tafsir
+                .ADPTafsir(list) { index ->
+                    // 选中的是免费/已订阅那部(付费门已在 ADPTafsir 内否决高级未订阅)
+                    val picked = list[index]
+                    if (picked.key != tafsirKey) {
+                        tafsirKey = picked.key
+                        tafsirInfoModel = picked
+                        initTafsirHeader(binding.tafsirHeader)
+                        loadContent()
+                    }
+                    sheet.dismiss()
+                }
+            sheet.setContentView(recycler)
+            sheet.show()
+        } catch (e: Exception) {
+            android.util.Log.w("ActivityTafsir", "showTafsirSwitcher failed", e)
+        }
+    }
+
     fun scrollToTop() {
         binding.webView.scrollTo(0, 0)
         binding.appBar.setExpanded(true)
@@ -625,6 +667,27 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
             android.util.Log.d("ActivityTafsir", "💳 Subscribe button clicked")
             goToSubscriptionPage()
         }
+
+        // 步骤4：逃生按钮 —— 一键切回该语言的免费权威注释，用户永不被"卡住"读不了
+        val btnReadFree = lockOverlay.findViewById<android.widget.TextView>(R.id.btnReadFreeTafsir)
+        btnReadFree?.setOnClickListener {
+            val freeKey = com.quran.quranaudio.online.quran_module.utils.tafsir
+                .TafsirLanguageMapper.resolvePreferredSlug(
+                    tafsirInfoModel?.langCode
+                        ?: com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs.getLocale(this))
+            val freeModel = freeKey?.let {
+                com.quran.quranaudio.online.quran_module.utils.reader.tafsir.TafsirManager.getModel(it)
+            }
+            if (freeModel != null) {
+                com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPReader.setSavedTafsirKey(this, freeModel.key)
+                tafsirKey = freeModel.key
+                tafsirInfoModel = freeModel
+                initTafsirHeader(binding.tafsirHeader)
+                loadContent()
+            } else {
+                showTafsirSwitcher()
+            }
+        }
     }
     
     /**
@@ -633,15 +696,21 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
     private fun checkUnlockStatus() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
+                // 方式0: 当前查看的是否为"免费首选注释"(每语言至少一部权威 Tafsir 永久免费)
+                // 只判断"当前看的这部"，不改用户选择，与现有默认/用户选择完全兼容
+                val isFreeTafsir = com.quran.quranaudio.online.quran_module.utils.tafsir
+                    .TafsirLanguageMapper.isFreeTafsir(tafsirKey)
+
                 // 方式1: 检查用户是否订阅
                 val isSubscribed = SubscriptionHelper.isUserSubscribed(this@ActivityTafsir)
-                
+
                 // 方式2: 检查该经文是否通过广告解锁
                 val isUnlockedByAd = unlockedContentRepository.isContentUnlocked(chapterNo, verseNo)
-                
-                isContentUnlocked = isSubscribed || isUnlockedByAd
-                
+
+                isContentUnlocked = isFreeTafsir || isSubscribed || isUnlockedByAd
+
                 android.util.Log.d("ActivityTafsir", "📊 Unlock Status Check:")
+                android.util.Log.d("ActivityTafsir", "  - Free Tafsir: $isFreeTafsir")
                 android.util.Log.d("ActivityTafsir", "  - Subscribed: $isSubscribed")
                 android.util.Log.d("ActivityTafsir", "  - Unlocked by Ad: $isUnlockedByAd")
                 android.util.Log.d("ActivityTafsir", "  - Final Status: $isContentUnlocked")

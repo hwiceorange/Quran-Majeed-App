@@ -2288,10 +2288,13 @@
     <string name="sect_prompt_sunni">سنی (مسلم ورلڈ لیگ)</string>
     <string name="sect_prompt_shia">شیعہ (جعفری)</string>
     <string name="juz_progress_format">پارہ %1$d / %2$d</string>
-    <string name="unlock_full_content">مکمل مواد کھولیں</string>
-    <string name="unlock_description">مکمل تفسیر تک رسائی حاصل کریں</string>
+    <string name="unlock_full_content">مطالعے کی مزید گہرائی</string>
+    <string name="unlock_description">کلاسیکی علماء کا موازنہ کریں اور جدید ٹولز کھولیں۔ آپ کی مفت مستند تفسیر ہمیشہ دستیاب ہے۔</string>
     <string name="watch_ad_to_unlock">کھولنے کے لیے مختصر اشتہار دیکھیں</string>
     <string name="subscribe_to_unlock">ہمیشہ کے لیے کھولنے کو سبسکرائب کریں</string>
     <string name="tafsir_previous">پچھلا</string>
     <string name="tafsir_next">اگلا</string>
+    <string name="tafsir_badge_free">مفت</string>
+    <string name="tafsir_badge_premium">★ پریمیم</string>
+    <string name="tafsir_read_free_instead">اس کے بجائے اپنی مفت تفسیر پڑھیں</string>
 </resources>

@@ -2363,10 +2363,13 @@ Kompas: halakan telefon dan ikut anak panah ke arah Kaabah secara langsung.</str
     <string name="sect_prompt_sunni">Sunni (Liga Dunia Muslim)</string>
     <string name="sect_prompt_shia">Syiah (Ja\'fari)</string>
     <string name="juz_progress_format">Juzuk %1$d daripada %2$d</string>
-    <string name="unlock_full_content">Buka Kandungan Penuh</string>
-    <string name="unlock_description">Akses tafsir sepenuhnya</string>
+    <string name="unlock_full_content">Kedalaman kajian lebih</string>
+    <string name="unlock_description">Bandingkan ulama klasik dan buka alat pembelajaran lanjutan. Tafsir percuma berautoriti anda sentiasa tersedia.</string>
     <string name="watch_ad_to_unlock">Tonton iklan ringkas untuk membuka</string>
     <string name="subscribe_to_unlock">Langgan untuk membuka selamanya</string>
     <string name="tafsir_previous">Sebelumnya</string>
     <string name="tafsir_next">Seterusnya</string>
+    <string name="tafsir_badge_free">PERCUMA</string>
+    <string name="tafsir_badge_premium">★ PREMIUM</string>
+    <string name="tafsir_read_free_instead">Baca tafsir percuma anda sahaja</string>
 </resources>

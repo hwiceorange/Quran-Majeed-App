@@ -39,6 +39,27 @@ object TafsirLanguageMapper {
         "ku" to listOf("ar", "en")
     )
 
+    /**
+     * 免费 Tafsir 的 slug 集合（商业模型：每语言至少一部权威 Tafsir 永久免费）。
+     *
+     * 唯一真相源 = preferredSlugByLanguage —— 即 App 本就为每种语言选定的"默认/首选"注释。
+     * 这样做保证与现有默认选择、用户在引导页/设置里的选择完全兼容：
+     * - 新用户默认落到首选注释 → 天然免费，首次打开不撞付费墙；
+     * - 用户若主动选了非首选(高级)注释 → 维持付费/看广告解锁，尊重其选择。
+     */
+    fun isFreeTafsir(keyOrSlug: String?): Boolean {
+        if (keyOrSlug.isNullOrEmpty()) return false
+        val freeSet = preferredSlugByLanguage.values
+        if (keyOrSlug in freeSet) return true
+        // tafsirKey 可能与 slug 不同，转成 slug 再判一次
+        val slug = try {
+            TafsirUtils.getTafsirSlugFromKey(keyOrSlug)
+        } catch (e: Exception) {
+            null
+        }
+        return slug != null && slug in freeSet
+    }
+
     fun pickBestTafsirKey(
         language: String?,
         available: Map<String, List<TafsirInfoModel>>?

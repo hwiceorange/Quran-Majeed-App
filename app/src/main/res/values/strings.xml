@@ -1472,8 +1472,8 @@
     
     <!-- Content Lock & Unlock Strings -->
     <string name="content_locked">Content Locked</string>
-    <string name="unlock_full_content">Unlock Full Content</string>
-    <string name="unlock_description">Get access to the complete tafsir</string>
+    <string name="unlock_full_content">More depth of study</string>
+    <string name="unlock_description">Compare classical scholars and unlock advanced study tools. Your free authoritative tafsir is always available.</string>
     <string name="watch_ad_to_unlock">Watch a short ad to unlock</string>
     <string name="subscribe_to_unlock">Subscribe to unlock forever</string>
     <string name="or">or</string>
@@ -1611,4 +1611,7 @@ Compass: point your phone and follow the arrow to the Kaaba in real time.</strin
     <string name="juz_progress_format">Juz %1$d of %2$d</string>
     <string name="tafsir_previous">Previous</string>
     <string name="tafsir_next">Next</string>
+    <string name="tafsir_badge_free">FREE</string>
+    <string name="tafsir_badge_premium">★ PREMIUM</string>
+    <string name="tafsir_read_free_instead">Read your free tafsir instead</string>
 </resources>

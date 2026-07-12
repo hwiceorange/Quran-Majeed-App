@@ -114,5 +114,17 @@
             app:iconTint="@color/colorPrimary"
             app:strokeColor="@color/colorPrimary"
             app:strokeWidth="1dp" />
+
+        <!-- 步骤4：逃生按钮 —— 你的免费权威注释随时可读，用户永远不会被"卡住" -->
+        <TextView
+            android:id="@+id/btnReadFreeTafsir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:padding="6dp"
+            android:text="@string/tafsir_read_free_instead"
+            android:textColor="@color/colorText2"
+            android:textSize="13sp"
+            android:textStyle="bold" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

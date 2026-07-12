@@ -2295,10 +2295,13 @@
     <string name="sect_prompt_sunni">সুন্নি (মুসলিম ওয়ার্ল্ড লিগ)</string>
     <string name="sect_prompt_shia">শিয়া (জাফরি)</string>
     <string name="juz_progress_format">পারা %1$d / %2$d</string>
-    <string name="unlock_full_content">সম্পূর্ণ বিষয়বস্তু আনলক করুন</string>
-    <string name="unlock_description">সম্পূর্ণ তাফসির পড়ুন</string>
+    <string name="unlock_full_content">আরও গভীর অধ্যয়ন</string>
+    <string name="unlock_description">বিশিষ্ট আলেমদের তাফসির তুলনা করুন ও উন্নত টুল আনলক করুন। আপনার ফ্রি নির্ভরযোগ্য তাফসির সবসময় উপলব্ধ।</string>
     <string name="watch_ad_to_unlock">আনলক করতে একটি ছোট বিজ্ঞাপন দেখুন</string>
     <string name="subscribe_to_unlock">চিরতরে আনলক করতে সাবস্ক্রাইব করুন</string>
     <string name="tafsir_previous">পূর্ববর্তী</string>
     <string name="tafsir_next">পরবর্তী</string>
+    <string name="tafsir_badge_free">ফ্রি</string>
+    <string name="tafsir_badge_premium">★ প্রিমিয়াম</string>
+    <string name="tafsir_read_free_instead">পরিবর্তে আপনার ফ্রি তাফসির পড়ুন</string>
 </resources>

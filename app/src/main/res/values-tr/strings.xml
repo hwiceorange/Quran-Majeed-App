@@ -2284,10 +2284,13 @@ Pusula: telefonu doğrultun ve oku takip ederek Kâbe\'ye anlık yönelin.</stri
     <string name="sect_prompt_sunni">Sünni (İslam Dünya Birliği)</string>
     <string name="sect_prompt_shia">Şii (Caferi)</string>
     <string name="juz_progress_format">%2$d cüzden %1$d. cüz</string>
-    <string name="unlock_full_content">Tüm İçeriği Aç</string>
-    <string name="unlock_description">Tefsirin tamamına erişin</string>
+    <string name="unlock_full_content">Daha derin çalışma</string>
+    <string name="unlock_description">Klasik âlimleri karşılaştır ve gelişmiş araçların kilidini aç. Ücretsiz güvenilir tefsirin her zaman mevcut.</string>
     <string name="watch_ad_to_unlock">Açmak için kısa bir reklam izleyin</string>
     <string name="subscribe_to_unlock">Kalıcı açmak için abone olun</string>
     <string name="tafsir_previous">Önceki</string>
     <string name="tafsir_next">Sonraki</string>
+    <string name="tafsir_badge_free">ÜCRETSİZ</string>
+    <string name="tafsir_badge_premium">★ PREMIUM</string>
+    <string name="tafsir_read_free_instead">Bunun yerine ücretsiz tefsirini oku</string>
 </resources>
