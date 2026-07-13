@@ -2307,4 +2307,17 @@
     <string name="hifz_mode">হিফজ মোড</string>
     <string name="hifz_mode_on">হিফজ মোড চালু — আয়াত দেখতে ট্যাপ করুন</string>
     <string name="hifz_mode_off">হিফজ মোড বন্ধ</string>
+    <string name="khatmah_title">খতম পরিকল্পনা</string>
+    <string name="khatmah_start_cta">শুরু করুন: ৩০ দিনে কুরআন খতম →</string>
+    <string name="khatmah_day_format">দিন %1$d / %2$d · পারা %3$d / %4$d</string>
+    <string name="khatmah_on_track">ঠিক আছে</string>
+    <string name="khatmah_ahead">এগিয়ে ✓</string>
+    <string name="khatmah_behind">%1$d পারা পিছিয়ে</string>
+    <string name="khatmah_completed">সম্পন্ন 🎉</string>
+    <string name="khatmah_notif_channel">খতম রিমাইন্ডার</string>
+    <string name="khatmah_notif_title">আপনার খতম</string>
+    <string name="khatmah_notif_ramadan_title">রমজান · দিন %1$d</string>
+    <string name="khatmah_notif_body">আজকের তিলাওয়াত: পারা %1$d। আল্লাহ কবুল করুন।</string>
+    <string name="wbw_title">শব্দে শব্দে</string>
+    <string name="wbw_unavailable">এই আয়াতের শব্দে-শব্দে অনুবাদ পাওয়া যায়নি।</string>
 </resources>

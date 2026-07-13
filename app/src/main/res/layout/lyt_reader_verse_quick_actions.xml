@@ -54,6 +54,19 @@
             android:visibility="visible" />
 
         <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/btnWordByWord"
+            android:layout_width="@dimen/dmnActionButtonSmall"
+            android:layout_height="@dimen/dmnActionButtonSmall"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/dr_bg_hover_round"
+            android:clickable="true"
+            android:contentDescription="@string/wbw_title"
+            android:focusable="true"
+            android:padding="6dp"
+            android:src="@drawable/ic_word_by_word"
+            app:tint="@color/colorIcon" />
+
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@id/btnBookmark"
             android:layout_width="@dimen/dmnActionButtonSmall"
             android:layout_height="@dimen/dmnActionButtonSmall"

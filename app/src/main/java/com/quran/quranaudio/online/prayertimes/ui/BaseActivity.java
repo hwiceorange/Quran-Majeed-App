@@ -50,10 +50,8 @@ public class BaseActivity extends AppCompatActivity {
         
         Locale locale = new Locale(resourceLanguage);
         Locale.setDefault(locale);
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N) {
-            return updateResourcesLocale(context, locale);
-        }
-        return updateResourcesLocaleLegacy(context, locale);
+        // minSdk 26：直接用现代 API(旧的 legacy 方法在 API 24+ 永不执行，已移除)
+        return updateResourcesLocale(context, locale);
     }
 
     @TargetApi(Build.VERSION_CODES.N_MR1)
@@ -61,15 +59,6 @@ public class BaseActivity extends AppCompatActivity {
         Configuration configuration = new Configuration(context.getResources().getConfiguration());
         configuration.setLocale(locale);
         return context.createConfigurationContext(configuration);
-    }
-
-    @SuppressWarnings("deprecation")
-    private Context updateResourcesLocaleLegacy(Context context, Locale locale) {
-        Resources resources = context.getResources();
-        Configuration configuration = resources.getConfiguration();
-        configuration.locale = locale;
-        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
-        return context;
     }
 
     @SuppressWarnings("deprecation")

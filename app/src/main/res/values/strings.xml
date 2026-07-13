@@ -1617,4 +1617,17 @@ Compass: point your phone and follow the arrow to the Kaaba in real time.</strin
     <string name="hifz_mode">Memorization mode</string>
     <string name="hifz_mode_on">Memorization mode on — tap a verse to reveal</string>
     <string name="hifz_mode_off">Memorization mode off</string>
+    <string name="khatmah_title">Khatmah plan</string>
+    <string name="khatmah_start_cta">Start: finish the Quran in 30 days →</string>
+    <string name="khatmah_day_format">Day %1$d of %2$d · Juz %3$d / %4$d</string>
+    <string name="khatmah_on_track">On track</string>
+    <string name="khatmah_ahead">Ahead ✓</string>
+    <string name="khatmah_behind">%1$d juz behind</string>
+    <string name="khatmah_completed">Completed 🎉</string>
+    <string name="khatmah_notif_channel">Khatmah reminder</string>
+    <string name="khatmah_notif_title">Your Khatmah</string>
+    <string name="khatmah_notif_ramadan_title">Ramadan · Day %1$d</string>
+    <string name="khatmah_notif_body">Today\'s recitation: Juz %1$d. May Allah accept it.</string>
+    <string name="wbw_title">Word by word</string>
+    <string name="wbw_unavailable">Word-by-word not available for this verse.</string>
 </resources>

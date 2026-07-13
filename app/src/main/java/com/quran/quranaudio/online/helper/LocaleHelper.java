@@ -21,11 +21,8 @@ public class LocaleHelper {
     public static Context setLocale(Context context, String language) {
         persist(context, language);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return updateResources(context, language);
-        }
-
-        return updateResourcesLegacy(context, language);
+        // minSdk 26：直接用现代 API(旧的 updateResourcesLegacy 在 API 24+ 永不执行，已移除)
+        return updateResources(context, language);
     }
 
     private static String getPersistedData(Context context, String defaultLanguage) {
@@ -53,20 +50,6 @@ public class LocaleHelper {
         return context.createConfigurationContext(configuration);
     }
 
-    @SuppressWarnings("deprecation")
-    private static Context updateResourcesLegacy(Context context, String language) {
-        Locale locale = new Locale(language);
-        Locale.setDefault(locale);
-
-        Resources resources = context.getResources();
-
-        Configuration configuration = resources.getConfiguration();
-        configuration.locale = locale;
-
-        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
-
-        return context;
-    }
 }
 
 

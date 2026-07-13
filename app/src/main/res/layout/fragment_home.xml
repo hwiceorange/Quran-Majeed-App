@@ -53,13 +53,24 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
+        <!-- Khatmah 通读计划卡片(斋月引擎；无计划且无阅读记录时 GONE) -->
+        <include
+            android:id="@+id/khatmah_card_include"
+            layout="@layout/layout_khatmah_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/continue_reading_card_include"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
         <!-- Verse of the Day Card -->
         <include
             android:id="@+id/verse_of_day_card"
             layout="@layout/layout_verse_of_day_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/continue_reading_card_include"
+            app:layout_constraintTop_toBottomOf="@id/khatmah_card_include"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

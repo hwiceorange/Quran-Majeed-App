@@ -54,10 +54,7 @@ public class QiblaDirectionActivity extends AppCompatActivity {
         Locale locale = new Locale(language);
         Locale.setDefault(locale);
         
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return updateResourcesLocale(context, locale);
-        }
-        return updateResourcesLocaleLegacy(context, locale);
+        return updateResourcesLocale(context, locale);
     }
 
     /**
@@ -69,18 +66,7 @@ public class QiblaDirectionActivity extends AppCompatActivity {
         return context.createConfigurationContext(configuration);
     }
 
-    /**
-     * 🌐 Update resources for Android M and below
-     */
-    private Context updateResourcesLocaleLegacy(Context context, Locale locale) {
-        Resources resources = context.getResources();
-        Configuration configuration = resources.getConfiguration();
-        configuration.locale = locale;
-        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
-        return context;
-    }
-
-    @Override
+@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         

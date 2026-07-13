@@ -165,6 +165,15 @@ public class VerseView extends FrameLayout implements BookmarkCallbacks {
         verseHeader.btnTafsir.setOnClickListener(v -> ReaderFactory.startTafsir(ctx, chapterNo, verseNo));
         ViewCompat.setTooltipText(verseHeader.btnTafsir, ctx.getString(R.string.strTitleTafsir));
 
+        // 逐词翻译：点击打开该节逐词面板(按需拉取 + 缓存，不影响经文渲染)
+        verseHeader.btnWordByWord.setOnClickListener(v -> {
+            if (mActivity != null) {
+                com.quran.quranaudio.online.quran_module.views.reader.WordByWordSheet
+                        .show(mActivity, chapterNo, verseNo);
+            }
+        });
+        ViewCompat.setTooltipText(verseHeader.btnWordByWord, ctx.getString(R.string.wbw_title));
+
         onBookmarkChanged(mActivity.isBookmarked(chapterNo, verseNo, verseNo));
         verseHeader.btnBookmark.setOnClickListener(v -> {
             if (mActivity.isBookmarked(chapterNo, verseNo, verseNo)) {

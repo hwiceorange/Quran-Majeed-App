@@ -2375,4 +2375,17 @@ Kompas: halakan telefon dan ikut anak panah ke arah Kaabah secara langsung.</str
     <string name="hifz_mode">Mod hafazan</string>
     <string name="hifz_mode_on">Mod hafazan aktif — ketik ayat untuk paparkan</string>
     <string name="hifz_mode_off">Mod hafazan dimatikan</string>
+    <string name="khatmah_title">Pelan khatam</string>
+    <string name="khatmah_start_cta">Mula: khatam Al-Quran dalam 30 hari →</string>
+    <string name="khatmah_day_format">Hari %1$d dari %2$d · Juzuk %3$d / %4$d</string>
+    <string name="khatmah_on_track">Ikut jadual</string>
+    <string name="khatmah_ahead">Lebih awal ✓</string>
+    <string name="khatmah_behind">Ketinggalan %1$d juzuk</string>
+    <string name="khatmah_completed">Selesai 🎉</string>
+    <string name="khatmah_notif_channel">Peringatan khatam</string>
+    <string name="khatmah_notif_title">Khatam anda</string>
+    <string name="khatmah_notif_ramadan_title">Ramadan · Hari %1$d</string>
+    <string name="khatmah_notif_body">Bacaan hari ini: Juzuk %1$d. Semoga Allah menerimanya.</string>
+    <string name="wbw_title">Perkataan demi perkataan</string>
+    <string name="wbw_unavailable">Terjemahan perkataan demi perkataan tiada untuk ayat ini.</string>
 </resources>

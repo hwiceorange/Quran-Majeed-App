@@ -64,11 +64,8 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
         val locale = Locale(resourceLanguage)
         Locale.setDefault(locale)
         
-        return if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N) {
-            updateResourcesLocale(context, locale)
-        } else {
-            updateResourcesLocaleLegacy(context, locale)
-        }
+        // minSdk 26：直接用现代 API(旧的 legacy 方法在 API 24+ 永不执行，已移除)
+        return updateResourcesLocale(context, locale)
     }
 
     /**
@@ -79,18 +76,6 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
         val configuration = Configuration(context.resources.configuration)
         configuration.setLocale(locale)
         return context.createConfigurationContext(configuration)
-    }
-
-    /**
-     * 🌐 更新资源配置 (旧版本 Android)
-     */
-    @Suppress("DEPRECATION")
-    private fun updateResourcesLocaleLegacy(context: Context, locale: Locale): Context {
-        val resources = context.resources
-        val configuration = resources.configuration
-        configuration.locale = locale
-        resources.updateConfiguration(configuration, resources.displayMetrics)
-        return context
     }
 
     /**

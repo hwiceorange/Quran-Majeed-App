@@ -1540,6 +1540,19 @@
     <string name="hifz_mode">وضع الحفظ</string>
     <string name="hifz_mode_on">وضع الحفظ مفعّل — اضغط على الآية لإظهارها</string>
     <string name="hifz_mode_off">تم إيقاف وضع الحفظ</string>
+    <string name="khatmah_title">خطة الختمة</string>
+    <string name="khatmah_start_cta">ابدأ: اختم القرآن في 30 يومًا ←</string>
+    <string name="khatmah_day_format">اليوم %1$d من %2$d · الجزء %3$d / %4$d</string>
+    <string name="khatmah_on_track">في المسار</string>
+    <string name="khatmah_ahead">متقدّم ✓</string>
+    <string name="khatmah_behind">متأخّر %1$d أجزاء</string>
+    <string name="khatmah_completed">اكتملت 🎉</string>
+    <string name="khatmah_notif_channel">تذكير الختمة</string>
+    <string name="khatmah_notif_title">ختمتك</string>
+    <string name="khatmah_notif_ramadan_title">رمضان · اليوم %1$d</string>
+    <string name="khatmah_notif_body">تلاوة اليوم: الجزء %1$d. تقبّل الله منك.</string>
+    <string name="wbw_title">كلمة بكلمة</string>
+    <string name="wbw_unavailable">الترجمة كلمة بكلمة غير متوفرة لهذه الآية.</string>
 </resources>
 
 

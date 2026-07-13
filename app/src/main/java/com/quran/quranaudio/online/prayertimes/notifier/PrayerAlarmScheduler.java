@@ -82,6 +82,9 @@ public class PrayerAlarmScheduler {
         // 📖 每日经文通知：用当天真实 Fajr 校准下一次触发（Fajr+1h）。
         // 必须在 Widget 缓存写入之后调用（它读同一份 DayPrayer 缓存）。
         com.quran.quranaudio.online.dailyverse.DailyVerseScheduler.scheduleNext(context);
+
+        // 📿 Khatmah 每日提醒：用当天真实 Fajr 校准下一次触发（Fajr+3h）。
+        com.quran.quranaudio.online.dailyverse.KhatmahReminderScheduler.scheduleNext(context);
     }
 
     private boolean canScheduleExactAlarms() {

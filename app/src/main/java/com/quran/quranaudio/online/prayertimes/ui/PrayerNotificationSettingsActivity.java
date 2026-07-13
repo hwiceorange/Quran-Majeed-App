@@ -157,34 +157,17 @@ public class PrayerNotificationSettingsActivity extends AppCompatActivity {
     private Context updateBaseContextLocale(Context context) {
         String locale = SPAppConfigs.getLocale(context);
         if (locale != null && !locale.isEmpty()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                return updateResourcesLocale(context, locale);
-            } else {
-                return updateResourcesLocaleLegacy(context, locale);
-            }
+            // minSdk 26：直接用现代 API(旧的 legacy 方法在 API 24+ 永不执行，已移除)
+            return updateResourcesLocale(context, locale);
         }
         return context;
     }
 
     private Context updateResourcesLocale(Context context, String localeCode) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            java.util.Locale locale = new java.util.Locale(localeCode);
-            android.content.res.Configuration configuration = new android.content.res.Configuration(context.getResources().getConfiguration());
-            configuration.setLocale(locale);
-            return context.createConfigurationContext(configuration);
-        }
-        return context;
-    }
-
-    @SuppressWarnings("deprecation")
-    private Context updateResourcesLocaleLegacy(Context context, String localeCode) {
         java.util.Locale locale = new java.util.Locale(localeCode);
-        java.util.Locale.setDefault(locale);
-        android.content.res.Resources resources = context.getResources();
-        android.content.res.Configuration configuration = resources.getConfiguration();
-        configuration.locale = locale;
-        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
-        return context;
+        android.content.res.Configuration configuration = new android.content.res.Configuration(context.getResources().getConfiguration());
+        configuration.setLocale(locale);
+        return context.createConfigurationContext(configuration);
     }
     
     /**

@@ -66,4 +66,17 @@ interface QuranFoundationApi {
      */
     @GET("api/v4/quran/translations/{translation_id}")
     suspend fun getQuranTranslation(@Path("translation_id") translationId: Int): ResponseBody
+
+    /**
+     * 逐词翻译：获取某节经文的逐词数据(阿拉伯文 + 词义 + 转写)。
+     * ⚠️ 词义语言参数是 language(不是 word_translation_language，后者会被忽略、静默回退英文)。
+     * https://api.quran.com/api/v4/verses/by_key/2:255?words=true&language=ur
+     */
+    @GET("api/v4/verses/by_key/{verse_key}")
+    suspend fun getVerseWords(
+        @Path("verse_key") verseKey: String,
+        @Query("words") words: Boolean = true,
+        @Query("language") language: String = "en",
+        @Query("word_fields") wordFields: String = "text_uthmani,transliteration"
+    ): ResponseBody
 }

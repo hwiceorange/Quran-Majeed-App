@@ -351,13 +351,30 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private android.widget.TextView juzNumberText;
     private android.widget.TextView juzProgressLabel;
 
+    // Khatmah 计划卡片视图
+    private View khatmahCard;
+    private android.widget.TextView khatmahStatus;
+    private android.widget.TextView khatmahCta;
+    private View khatmahActiveGroup;
+    private android.widget.TextView khatmahDay;
+    private com.google.android.material.progressindicator.LinearProgressIndicator khatmahProgress;
+
     private void setupContinueReading(View rootView) {
         try {
-            continueReadingCard = rootView.findViewById(R.id.continue_reading_card);
+            // 注意：<include android:id> 会覆盖被包含布局的根 id，故根卡片用 _include id
+            continueReadingCard = rootView.findViewById(R.id.continue_reading_card_include);
             continueReadingPosition = rootView.findViewById(R.id.tv_continue_reading_position);
             juzProgressRing = rootView.findViewById(R.id.juz_progress_ring);
             juzNumberText = rootView.findViewById(R.id.tv_juz_number);
             juzProgressLabel = rootView.findViewById(R.id.tv_juz_progress_label);
+
+            khatmahCard = rootView.findViewById(R.id.khatmah_card_include);
+            khatmahStatus = rootView.findViewById(R.id.tv_khatmah_status);
+            khatmahCta = rootView.findViewById(R.id.khatmah_cta);
+            khatmahActiveGroup = rootView.findViewById(R.id.khatmah_active_group);
+            khatmahDay = rootView.findViewById(R.id.tv_khatmah_day);
+            khatmahProgress = rootView.findViewById(R.id.khatmah_progress);
+
             refreshContinueReading();
         } catch (Exception e) {
             android.util.Log.w("HomeFragment", "setupContinueReading failed", e);
@@ -387,6 +404,85 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * Khatmah 通读计划卡片：
+     * - 有计划：显示第几天/目标、已读 Juz、进度条、领先/落后状态；
+     * - 无计划但已有阅读：显示"开始 30 天读完古兰经" CTA；
+     * - 无计划且无阅读：整卡隐藏(不打扰 day-0 用户)。
+     * 全部基于 SharedPreferences 计划 + 已算好的 actualJuz，不碰数据库。
+     */
+    private void refreshKhatmahUI(int actualJuz) {
+        if (khatmahCard == null || getContext() == null) return;
+        try {
+            final android.content.Context ctx = requireContext();
+
+            // 记录今日进度(供每日提醒判断"今天是否已读"，已读则不再打扰)
+            com.quran.quranaudio.online.quran_module.utils.KhatmahPlanManager
+                    .recordProgress(ctx, actualJuz);
+
+            final boolean active = com.quran.quranaudio.online.quran_module.utils
+                    .KhatmahPlanManager.isActive(ctx);
+
+            if (!active && actualJuz <= 0) {
+                khatmahCard.setVisibility(View.GONE);
+                return;
+            }
+            khatmahCard.setVisibility(View.VISIBLE);
+
+            if (!active) {
+                // 无计划：CTA，点击开始 30 天计划
+                khatmahCta.setVisibility(View.VISIBLE);
+                khatmahActiveGroup.setVisibility(View.GONE);
+                khatmahStatus.setText("");
+                khatmahCard.setOnClickListener(v -> {
+                    com.quran.quranaudio.online.quran_module.utils.KhatmahPlanManager
+                            .startPlan(ctx, com.quran.quranaudio.online.quran_module.utils
+                                    .KhatmahPlanManager.DEFAULT_TARGET_DAYS);
+                    // 开始计划即排下一次温和提醒(Fajr+3h)
+                    com.quran.quranaudio.online.dailyverse.KhatmahReminderScheduler.scheduleNext(ctx);
+                    refreshKhatmahUI(actualJuz);
+                });
+                return;
+            }
+
+            // 有计划：进度 + 状态
+            khatmahCta.setVisibility(View.GONE);
+            khatmahActiveGroup.setVisibility(View.VISIBLE);
+            khatmahCard.setOnClickListener(null);
+
+            int target = com.quran.quranaudio.online.quran_module.utils.KhatmahPlanManager.getTargetDays(ctx);
+            int day = com.quran.quranaudio.online.quran_module.utils.KhatmahPlanManager.getElapsedDay(ctx);
+            khatmahDay.setText(getString(R.string.khatmah_day_format, Math.min(day, target), target, actualJuz, 30));
+            khatmahProgress.setProgress(actualJuz);
+
+            com.quran.quranaudio.online.quran_module.utils.KhatmahPlanManager.Status status =
+                    com.quran.quranaudio.online.quran_module.utils.KhatmahPlanManager.getStatus(ctx, actualJuz);
+            switch (status) {
+                case COMPLETED:
+                    khatmahStatus.setText(getString(R.string.khatmah_completed));
+                    khatmahStatus.setTextColor(0xFF4E8545);
+                    break;
+                case AHEAD:
+                    khatmahStatus.setText(getString(R.string.khatmah_ahead));
+                    khatmahStatus.setTextColor(0xFF4E8545);
+                    break;
+                case ON_TRACK:
+                    khatmahStatus.setText(getString(R.string.khatmah_on_track));
+                    khatmahStatus.setTextColor(0xFF4E8545);
+                    break;
+                case BEHIND:
+                    int behind = com.quran.quranaudio.online.quran_module.utils
+                            .KhatmahPlanManager.getBehindBy(ctx, actualJuz);
+                    khatmahStatus.setText(getString(R.string.khatmah_behind, behind));
+                    khatmahStatus.setTextColor(0xFFD9822B);
+                    break;
+            }
+        } catch (Exception e) {
+            android.util.Log.w("HomeFragment", "refreshKhatmahUI failed", e);
+            if (khatmahCard != null) khatmahCard.setVisibility(View.GONE);
+        }
+    }
+
     private void refreshContinueReading() {
         if (continueReadingCard == null || getContext() == null) return;
         try {
@@ -395,21 +491,30 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             final int ayah = com.quran.quranaudio.online.features.Helper.LastSurahAndAyahHelper
                     .getLastAyah(requireContext());
 
-            if (surah <= 0 || ayah <= 0) {
-                continueReadingCard.setVisibility(View.GONE);
-                return;
-            }
+            final boolean hasReading = surah > 0 && ayah > 0;
 
-            // 异步准备 QuranMeta 取本地化章名，避免阻塞
+            // 始终准备 QuranMeta 以计算 Juz(Khatmah 卡在无阅读记录时也需展示"开始计划")
             com.quran.quranaudio.online.quran_module.components.quran.QuranMeta.prepareInstance(
                     requireContext(),
                     quranMeta -> {
-                        if (getActivity() == null || continueReadingPosition == null) return;
-                        String chapterName = quranMeta.getChapterName(requireContext(), surah);
-                        String text = getString(R.string.continue_reading_position_format,
-                                chapterName, ayah);
-                        final int juz = computeJuz(quranMeta, surah, ayah);
+                        // 回调可能在冷启动时异步/延后触发：此时 Fragment 可能已分离，
+                        // 必须用 isAdded() 守卫 + try-catch，避免 requireContext() 抛异常导致崩溃
+                        if (!isAdded() || getActivity() == null || continueReadingPosition == null) return;
+                        try {
+                        final int juz = hasReading ? computeJuz(quranMeta, surah, ayah) : 0;
+                        final String text = hasReading
+                                ? getString(R.string.continue_reading_position_format,
+                                        quranMeta.getChapterName(requireContext(), surah), ayah)
+                                : "";
                         getActivity().runOnUiThread(() -> {
+                            // Khatmah 计划卡(独立于继续阅读卡)
+                            refreshKhatmahUI(juz);
+
+                            if (!hasReading) {
+                                continueReadingCard.setVisibility(View.GONE);
+                                return;
+                            }
+
                             continueReadingPosition.setText(text);
 
                             // Khatmah 进度环：当前 Juz / 30
@@ -432,6 +537,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                             // 让用户能从该节继续往下读——这才是"继续阅读"的正确语义
                             continueReadingCard.setOnClickListener(v -> openContinueReading(quranMeta, surah, ayah));
                         });
+                        } catch (Exception e) {
+                            android.util.Log.w("HomeFragment", "continue-reading callback failed", e);
+                        }
                     });
         } catch (Exception e) {
             continueReadingCard.setVisibility(View.GONE);

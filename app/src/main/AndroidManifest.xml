@@ -400,6 +400,12 @@
             android:enabled="true"
             android:exported="false" />
 
+        <!-- Khatmah 每日提醒（Fajr 后 3 小时；今日已读/斋月最后10夜/关闭时不发） -->
+        <receiver
+            android:name="com.quran.quranaudio.online.dailyverse.KhatmahReminderReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
         <!-- 祈祷时间桌面 Widget（4x1：五番时间 + 下一番倒计时 + Hijri 日期） -->
         <receiver
             android:name="com.quran.quranaudio.online.prayertimes.widget.PrayerTimesWidgetProvider"

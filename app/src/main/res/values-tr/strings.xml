@@ -2296,4 +2296,17 @@ Pusula: telefonu doğrultun ve oku takip ederek Kâbe\'ye anlık yönelin.</stri
     <string name="hifz_mode">Ezber modu</string>
     <string name="hifz_mode_on">Ezber modu açık — göstermek için ayete dokunun</string>
     <string name="hifz_mode_off">Ezber modu kapalı</string>
+    <string name="khatmah_title">Hatim planı</string>
+    <string name="khatmah_start_cta">Başla: Kur\'an\'ı 30 günde hatmet →</string>
+    <string name="khatmah_day_format">%2$d günün %1$d. günü · Cüz %3$d / %4$d</string>
+    <string name="khatmah_on_track">Yolunda</string>
+    <string name="khatmah_ahead">İleride ✓</string>
+    <string name="khatmah_behind">%1$d cüz geride</string>
+    <string name="khatmah_completed">Tamamlandı 🎉</string>
+    <string name="khatmah_notif_channel">Hatim hatırlatıcısı</string>
+    <string name="khatmah_notif_title">Hatmin</string>
+    <string name="khatmah_notif_ramadan_title">Ramazan · %1$d. gün</string>
+    <string name="khatmah_notif_body">Bugünün okuması: %1$d. cüz. Allah kabul etsin.</string>
+    <string name="wbw_title">Kelime kelime</string>
+    <string name="wbw_unavailable">Bu ayet için kelime kelime çeviri mevcut değil.</string>
 </resources>

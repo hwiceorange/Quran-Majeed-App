@@ -153,17 +153,10 @@ public class QadaTrackerActivity extends AppCompatActivity {
         Locale locale = new Locale(resourceLanguage);
         Locale.setDefault(locale);
         
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N) {
-            Configuration configuration = new Configuration(context.getResources().getConfiguration());
-            configuration.setLocale(locale);
-            return context.createConfigurationContext(configuration);
-        } else {
-            Resources resources = context.getResources();
-            Configuration configuration = resources.getConfiguration();
-            configuration.locale = locale;
-            resources.updateConfiguration(configuration, resources.getDisplayMetrics());
-            return context;
-        }
+        // minSdk 26：直接用现代 API(旧的 else 分支在 API 24+ 永不执行，已移除)
+        Configuration configuration = new Configuration(context.getResources().getConfiguration());
+        configuration.setLocale(locale);
+        return context.createConfigurationContext(configuration);
     }
     
     @SuppressWarnings("deprecation")

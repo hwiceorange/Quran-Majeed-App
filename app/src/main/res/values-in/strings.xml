@@ -1467,5 +1467,18 @@ Kompas: arahkan ponsel dan ikuti panah menuju Kakbah secara langsung.</string>
     <string name="hifz_mode">Mode hafalan</string>
     <string name="hifz_mode_on">Mode hafalan aktif — ketuk ayat untuk menampilkan</string>
     <string name="hifz_mode_off">Mode hafalan nonaktif</string>
+    <string name="khatmah_title">Rencana khatam</string>
+    <string name="khatmah_start_cta">Mulai: khatam Al-Qur\'an dalam 30 hari →</string>
+    <string name="khatmah_day_format">Hari %1$d dari %2$d · Juz %3$d / %4$d</string>
+    <string name="khatmah_on_track">Sesuai target</string>
+    <string name="khatmah_ahead">Lebih cepat ✓</string>
+    <string name="khatmah_behind">Tertinggal %1$d juz</string>
+    <string name="khatmah_completed">Selesai 🎉</string>
+    <string name="khatmah_notif_channel">Pengingat khatam</string>
+    <string name="khatmah_notif_title">Khatam Anda</string>
+    <string name="khatmah_notif_ramadan_title">Ramadan · Hari %1$d</string>
+    <string name="khatmah_notif_body">Bacaan hari ini: Juz %1$d. Semoga Allah menerimanya.</string>
+    <string name="wbw_title">Kata per kata</string>
+    <string name="wbw_unavailable">Terjemahan kata per kata tidak tersedia untuk ayat ini.</string>
 </resources>
 

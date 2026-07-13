@@ -61,9 +61,8 @@ public class LocaleHelper {
                     activity.getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
                 }
             }
-        } else {
-            config.locale = locale;
         }
+        // 旧的 else { config.locale = locale } 在 minSdk 26(>=17)下永不执行，已移除
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             context.createConfigurationContext(config);

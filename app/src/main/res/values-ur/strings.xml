@@ -2300,4 +2300,17 @@
     <string name="hifz_mode">حفظ موڈ</string>
     <string name="hifz_mode_on">حفظ موڈ آن — آیت ظاہر کرنے کے لیے ٹیپ کریں</string>
     <string name="hifz_mode_off">حفظ موڈ بند</string>
+    <string name="khatmah_title">ختم منصوبہ</string>
+    <string name="khatmah_start_cta">شروع کریں: 30 دن میں قرآن ختم کریں ←</string>
+    <string name="khatmah_day_format">دن %1$d / %2$d · پارہ %3$d / %4$d</string>
+    <string name="khatmah_on_track">درست راہ پر</string>
+    <string name="khatmah_ahead">آگے ✓</string>
+    <string name="khatmah_behind">%1$d پارے پیچھے</string>
+    <string name="khatmah_completed">مکمل 🎉</string>
+    <string name="khatmah_notif_channel">ختم یاد دہانی</string>
+    <string name="khatmah_notif_title">آپ کا ختم</string>
+    <string name="khatmah_notif_ramadan_title">رمضان · دن %1$d</string>
+    <string name="khatmah_notif_body">آج کی تلاوت: پارہ %1$d۔ اللہ قبول فرمائے۔</string>
+    <string name="wbw_title">لفظ بہ لفظ</string>
+    <string name="wbw_unavailable">اس آیت کے لیے لفظ بہ لفظ ترجمہ دستیاب نہیں۔</string>
 </resources>
