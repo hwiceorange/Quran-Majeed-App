@@ -66,6 +66,26 @@
             android:textSize="14sp" />
     </LinearLayout>
 
+    <!-- 实时对准提示 HUD：显示"左转/右转 X°"，对准（±阈值）时变绿+震动 -->
+    <TextView
+        android:id="@+id/tv_qibla_align_hud"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_qibla_hud"
+        android:backgroundTint="#CC2D3A53"
+        android:paddingStart="18dp"
+        android:paddingEnd="18dp"
+        android:paddingTop="9dp"
+        android:paddingBottom="9dp"
+        android:textColor="#FFFFFFFF"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@id/qibla_map_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <!-- 地图/卫星图切换（T3 市场默认普通地图省流量，卫星图可选） -->
     <ImageButton
         android:id="@+id/btn_map_type_toggle"

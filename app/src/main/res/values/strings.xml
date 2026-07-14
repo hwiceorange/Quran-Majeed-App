@@ -699,6 +699,15 @@
     <string name="qibla_weak_signal">Weak magnetic field signal</string>
     <string name="qibla_strong_interference">Strong magnetic field interference</string>
     <string name="qibla_magnetic_interference">Magnetic interference detected</string>
+    <string name="compass_weak_field">Weak magnetic field signal, please stay away from metal objects</string>
+    <string name="compass_strong_field">Strong magnetic field signal, please stay away from magnetic devices</string>
+    <string name="compass_interference">Magnetic interference detected, please calibrate compass for accuracy</string>
+    <string name="compass_calibrate_generic">Please calibrate compass for more accurate direction</string>
+    <string name="qibla_location_permission_required">Location permission required to calculate Qibla direction</string>
+    <string name="qibla_facing_kaaba">Facing the Kaaba ✓</string>
+    <string name="qibla_turn_left">Turn left %1$d°</string>
+    <string name="qibla_turn_right">Turn right %1$d°</string>
+    <string name="qibla_align_hint">Rotate your device to align</string>
 
     <string name="school_adjustment_method_shafii">Shafii (Default)</string>
     <string name="school_adjustment_method_hanafi">Hanafi</string>
@@ -1371,6 +1380,8 @@
     
     <!-- Prayer Card & Tasbih -->
     <string name="your_location_label">Your Location</string>
+    <string name="getting_location">Getting location…</string>
+    <string name="guest_user">Guest User</string>
     <string name="tasbih_total">Total : </string>
     
     <!-- Challenge Days -->

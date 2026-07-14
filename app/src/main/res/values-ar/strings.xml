@@ -1553,6 +1553,39 @@
     <string name="khatmah_notif_body">تلاوة اليوم: الجزء %1$d. تقبّل الله منك.</string>
     <string name="wbw_title">كلمة بكلمة</string>
     <string name="wbw_unavailable">الترجمة كلمة بكلمة غير متوفرة لهذه الآية.</string>
+
+    <!-- خطة التعلم: وحدات الهدف اليومي / مدة التلاوة / مدة التحدي -->
+    <string name="unit_pages">صفحات</string>
+    <string name="unit_verses">آيات</string>
+    <string name="unit_juz">أجزاء</string>
+    <string name="minutes_15">15 دقيقة يوميًا</string>
+    <string name="minutes_30">30 دقيقة يوميًا</string>
+    <string name="minutes_45">45 دقيقة يوميًا</string>
+    <string name="minutes_60">60 دقيقة يوميًا</string>
+    <string name="challenge_days_format">%d يومًا</string>
+
+    <!-- بوصلة القبلة: رسائل المعايرة والمجال المغناطيسي -->
+    <string name="compass_weak_field">إشارة المجال المغناطيسي ضعيفة، يرجى الابتعاد عن الأجسام المعدنية</string>
+    <string name="compass_strong_field">إشارة المجال المغناطيسي قوية، يرجى الابتعاد عن الأجهزة المغناطيسية</string>
+    <string name="compass_interference">تم رصد تشويش مغناطيسي، يرجى معايرة البوصلة لضمان الدقة</string>
+    <string name="compass_calibrate_generic">يرجى معايرة البوصلة للحصول على اتجاه أدق</string>
+    <string name="qibla_location_permission_required">إذن الموقع مطلوب لحساب اتجاه القبلة</string>
+    <string name="qibla_facing_kaaba">أنت تواجه الكعبة ✓</string>
+    <string name="qibla_turn_left">استدر يسارًا %1$d°</string>
+    <string name="qibla_turn_right">استدر يمينًا %1$d°</string>
+    <string name="qibla_align_hint">أدِر جهازك حتى المحاذاة</string>
+
+    <!-- بطاقة الصلاة: تسمية الموقع وحالات التحديث -->
+    <string name="your_location_label">موقعك</string>
+    <string name="getting_location">جارٍ تحديد الموقع…</string>
+    <string name="guest_user">زائر</string>
+
+    <!-- بطاقة عدّاد التسبيح -->
+    <string name="remember_allah">اذكر الله</string>
+    <string name="start_tasbih_counter">ابدأ عدّاد\nالتسبيح</string>
+    <string name="start_tasbih_line1">ابدأ التسبيح</string>
+    <string name="start_tasbih_line2">العدّاد</string>
+    <string name="get_start_now">ابدأ الآن</string>
 </resources>
 
 

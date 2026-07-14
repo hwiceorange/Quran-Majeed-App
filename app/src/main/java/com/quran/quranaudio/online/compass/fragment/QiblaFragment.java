@@ -775,7 +775,7 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
     private void requestLocationPermission() {
         // TODO: Implement permission request logic
         // For simplicity, show a message
-                    Toast.makeText(requireContext(), "Location permission required to calculate Qibla direction", Toast.LENGTH_LONG).show();
+                    Toast.makeText(requireContext(), getString(R.string.qibla_location_permission_required), Toast.LENGTH_LONG).show();
     }
 
     @Override

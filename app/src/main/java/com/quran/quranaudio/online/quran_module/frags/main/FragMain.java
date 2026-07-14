@@ -1316,12 +1316,12 @@ public class FragMain extends BaseFragment {
         try {
             // Set loading state to indicate refresh is in progress
             if (tvNextPrayerName != null) {
-                tvNextPrayerName.setText("Updating...");
+                tvNextPrayerName.setText(getString(R.string.strTextUpdating));
                 tvNextPrayerName.setAlpha(0.6f);
                 Log.d(TAG, "✅ Prayer name set to 'Updating...'");
             }
             if (tvLocationPrayer != null) {
-                tvLocationPrayer.setText("Getting location...");
+                tvLocationPrayer.setText(getString(R.string.getting_location));
                 tvLocationPrayer.setAlpha(0.6f);
                 Log.d(TAG, "✅ Location text set to 'Getting location...'");
             }

@@ -66,7 +66,10 @@ public class EnhancedCompass implements SensorEventListener {
         DISTURBED   // Magnetic interference
     }
     
+    private final Context context;
+
     public EnhancedCompass(Context context) {
+        this.context = context.getApplicationContext();
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         
         // Initialize sensors
@@ -81,19 +84,27 @@ public class EnhancedCompass implements SensorEventListener {
     }
     
     public void start() {
-        Log.d(TAG, "Start enhanced compass");
-        
+        start(SensorManager.SENSOR_DELAY_UI);
+    }
+
+    /**
+     * 以指定采样率启动。地图页用 {@link SensorManager#SENSOR_DELAY_GAME}（约 20ms）以获得更跟手的
+     * 实时朝向;罗盘页保持默认 UI 速率。
+     */
+    public void start(int sensorDelay) {
+        Log.d(TAG, "Start enhanced compass, delay=" + sensorDelay);
+
         if (accelerometer != null) {
-            sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
+            sensorManager.registerListener(this, accelerometer, sensorDelay);
         }
-        
+
         if (magnetometer != null) {
-            sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI);
+            sensorManager.registerListener(this, magnetometer, sensorDelay);
         }
-        
+
         // Prefer rotation vector sensor (if available)
         if (rotationVectorSensor != null) {
-            sensorManager.registerListener(this, rotationVectorSensor, SensorManager.SENSOR_DELAY_UI);
+            sensorManager.registerListener(this, rotationVectorSensor, sensorDelay);
             Log.d(TAG, "Using rotation vector sensor for more stable orientation data");
         }
     }
@@ -190,7 +201,8 @@ public class EnhancedCompass implements SensorEventListener {
         if (!SensorManager.getRotationMatrix(rotationMatrix, null, accelerometerData, magnetometerData)) {
             Log.w(TAG, "无法获取旋转矩阵，可能存在磁场干扰");
             if (listener != null) {
-                listener.onCalibrationNeeded("旋转矩阵计算失败，可能存在磁场干扰");
+                listener.onCalibrationNeeded(
+                        context.getString(com.quran.quranaudio.online.R.string.compass_interference));
             }
             return;
         }
@@ -279,13 +291,13 @@ public class EnhancedCompass implements SensorEventListener {
     private String getCalibrationReason(MagneticFieldStatus status) {
         switch (status) {
             case WEAK:
-                return "Weak magnetic field signal, please stay away from metal objects";
+                return context.getString(com.quran.quranaudio.online.R.string.compass_weak_field);
             case STRONG:
-                return "Strong magnetic field signal, please stay away from magnetic devices";
+                return context.getString(com.quran.quranaudio.online.R.string.compass_strong_field);
             case DISTURBED:
-                return "Magnetic interference detected, please calibrate compass for accuracy";
+                return context.getString(com.quran.quranaudio.online.R.string.compass_interference);
             default:
-                return "Please calibrate compass for more accurate direction";
+                return context.getString(com.quran.quranaudio.online.R.string.compass_calibrate_generic);
         }
     }
     
@@ -303,7 +315,8 @@ public class EnhancedCompass implements SensorEventListener {
         // 如果精度太低，建议校准
         if (accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE) {
             if (listener != null) {
-                listener.onCalibrationNeeded(sensorName + "精度不可靠，请校准设备");
+                listener.onCalibrationNeeded(
+                        context.getString(com.quran.quranaudio.online.R.string.compass_calibrate_generic));
             }
         }
     }

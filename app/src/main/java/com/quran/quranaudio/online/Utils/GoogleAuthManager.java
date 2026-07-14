@@ -281,7 +281,7 @@ public class GoogleAuthManager {
         
         // Anonymous user
         if (user.isAnonymous()) {
-            return "Guest User";
+            return context.getString(com.quran.quranaudio.online.R.string.guest_user);
         }
         
         // Google user with display name
