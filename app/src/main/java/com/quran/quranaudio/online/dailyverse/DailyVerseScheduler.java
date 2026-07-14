@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.quran.quranaudio.online.prayertimes.common.PrayerEnum;
-import com.quran.quranaudio.online.prayertimes.timings.DayPrayer;
 import com.quran.quranaudio.online.prayertimes.widget.PrayerTimesWidgetData;
 
 import java.time.LocalDateTime;
@@ -92,14 +90,11 @@ public final class DailyVerseScheduler {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime candidate = null;
 
-        DayPrayer dayPrayer = PrayerTimesWidgetData.load(context);
-        if (dayPrayer != null && dayPrayer.getTimings() != null) {
-            LocalDateTime fajr = dayPrayer.getTimings().get(PrayerEnum.FAJR);
-            if (fajr != null) {
-                // 缓存可能是昨天的：把 Fajr 平移到今天再算
-                LocalDateTime todayFajr = LocalDateTime.of(now.toLocalDate(), fajr.toLocalTime());
-                candidate = todayFajr.plusHours(HOURS_AFTER_FAJR);
-            }
+        LocalDateTime fajr = PrayerTimesWidgetData.getFajr(PrayerTimesWidgetData.load(context));
+        if (fajr != null) {
+            // 缓存可能是昨天的：把 Fajr 平移到今天再算
+            LocalDateTime todayFajr = LocalDateTime.of(now.toLocalDate(), fajr.toLocalTime());
+            candidate = todayFajr.plusHours(HOURS_AFTER_FAJR);
         }
 
         if (candidate == null) {

@@ -126,6 +126,15 @@ public class ActivityQuran_Search extends BaseActivity {
     protected void onActivityInflated(@NonNull View activityView, @Nullable Bundle savedInstanceState) {
         mBinding = ActivityAppSearchBinding.bind(activityView);
 
+        // 为 header 加状态栏高度的顶部 padding：targetSdk 35 默认边到边（Android 15），
+        // 否则搜索框会顶进系统状态栏与其图标重叠、无法点击。与 Reader 索引页同一处理范式。
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(mBinding.header, (v, insets) -> {
+            int statusBarHeight = insets.getInsets(
+                    androidx.core.view.WindowInsetsCompat.Type.systemBars()).top;
+            v.setPadding(v.getPaddingLeft(), statusBarHeight, v.getPaddingRight(), v.getPaddingBottom());
+            return insets;
+        });
+
         QuranMeta.prepareInstance(this, quranMeta -> {
             mQuranMeta = quranMeta;
 
@@ -450,6 +459,9 @@ public class ActivityQuran_Search extends BaseActivity {
     }
 
     public ArrayList<SearchResultModelBase> prepareJumper(QuranMeta quranMeta, String query) throws NumberFormatException {
+        // 阿语输入归一化(ة/ه、أإآ/ا、ى/ي、去音符)：抹平埃及/海湾/伊拉克用户常见拼写差异；
+        // 只动阿语字符，不影响数字跳转与拉丁转写。被搜文本(tags)侧同样归一化(见下)。
+        query = StringUtils.normalizeArabicForSearch(query);
         query = StringUtils.escapeRegex(query);
 
         ArrayList<SearchResultModelBase> jumperSuggCollection = new ArrayList<>();
@@ -541,7 +553,7 @@ public class ActivityQuran_Search extends BaseActivity {
         QuranUtils.iterateChapterNo(chapterNo -> {
             QuranMeta.ChapterMeta chapterMeta = quranMeta.getChapterMeta(chapterNo);
             if (chapterMeta != null) {
-                String destination = chapterMeta.tags;
+                String destination = StringUtils.normalizeArabicForSearch(chapterMeta.tags);
                 Matcher mtchrQuery = patternQuery.matcher(destination);
                 if (mtchrQuery.find()) {
                     makeChapterSuggestion(quranMeta, jumperSuggCollection, chapterNo);

@@ -54,8 +54,8 @@ android {
         applicationId "com.quran.quranaudio.online"
         minSdkVersion 26
         targetSdkVersion 35
-        versionCode 124
-        versionName "1.9.42"
+        versionCode 125
+        versionName "1.9.43"
         multiDexEnabled true
         
         // 🔧 Support for 16 KB page sizes (Google Play requirement for Android 15+)

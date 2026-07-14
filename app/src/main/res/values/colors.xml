@@ -332,4 +332,5 @@
     <color name="widget_prayer_accent_pill">#33E9B44C</color>
     <color name="widget_prayer_text_primary">#FFFFFFFF</color>
     <color name="widget_prayer_text_secondary">#C0FFFFFF</color>
+    <color name="widget_prayer_divider">#1FFFFFFF</color>
 </resources>

@@ -1,5 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="quran_no_ad_tips">لم يتم تحميل الإعلان، حاول مرة أخرى لاحقًا</string>
+    <string name="quran_loading_ad">جارٍ تحميل الإعلان...</string>
+    <string name="quiz_review_default_explanation">تقدّم هذه الآية إرشادًا مهمًا. تدبّرها جيدًا لفهم معناها وتطبيقها.</string>
+    <string name="quran_correct">صحيح</string>
+    <string name="quran_wrong">خطأ</string>
+    <string name="quran_question">سؤال %1$s</string>
+    <string name="quran_level">المستوى %1$s</string>
+    <string name="quran_not_enough_gems">الجواهر غير كافية</string>
+    <string name="quran_no_thanks">لا، شكرًا</string>
+    <string name="quran_recovery">استعادة</string>
+    <string name="quran_quiz_revival_ad_tips">واصِل المحاولة، واسعَ للفوز المتتالي.</string>
+    <string name="quran_quiz_revival_gem_tips">لا تستسلم، سلسلة انتصاراتك على وشك أن تنقطع!</string>
+    <string name="quran_skip_question">تخطّي السؤال</string>
+    <string name="quran_try_again">حاول مرة أخرى</string>
+    <string name="quran_quit">خروج</string>
+    <string name="quran_tip">تلميح</string>
+    <string name="quran_plan_title">الخطة</string>
+    <string name="quran_gnt_ad">إعلان</string>
+    <string name="quran_question_fail">إجابة خاطئة</string>
+    <string name="quran_quiz_notify_tips">عذرًا، الإجابة غير صحيحة.</string>
+    <string name="quran_correct_answer">الإجابة الصحيحة</string>
+    <string name="quran_quiz_notify_correct_msg">أحسنت! إجابة صحيحة.</string>
+    <string name="quran_quiz_notify_correct_title">بارك الله فيك</string>
+    <string name="quran_play_more">العب المزيد</string>
+    <string name="quran_level_up">ارتقاء المستوى</string>
+    <string name="quran_reward">مكافأة</string>
+    <string name="quran_download">تنزيل</string>
+    <string name="quran_cancel">إلغاء</string>
+    <string name="quran_ok">حسنًا</string>
+    <string name="quran_day_1">اليوم الأول</string>
+    <string name="quran_day_2">اليوم الثاني</string>
+    <string name="quran_day_3">اليوم الثالث</string>
+    <string name="quran_day_4">اليوم الرابع</string>
+    <string name="quran_day_5">اليوم الخامس</string>
+    <string name="quran_day_6">اليوم السادس</string>
+    <string name="quran_day_7">اليوم السابع</string>
+    <string name="quran_get_gem_with_video">احصل على 30 جوهرة</string>
+    <string name="quran_daily_surprise">مفاجأة</string>
+    <string name="quran_daily_reward">مكافأة يومية</string>
+    <string name="quran_free_diamonds">جواهر مجانية</string>
+    <string name="quran_watch_video_free_diamonds">شاهد الفيديو واحصل على 5 جواهر</string>
+    <string name="quran_watch">مشاهدة</string>
+
     <!-- Quiz Review & Learn Page - Arabic -->
     <string name="quiz_review_header">مراجعة وتعلم</string>
     <string name="quiz_review_title">تأمل ومراجعة</string>
@@ -13,4 +56,3 @@
     <string name="quiz_skip_btn">تخطي</string>
     <string name="quiz_quit_level_btn">إنهاء المستوى</string>
 </resources>
-

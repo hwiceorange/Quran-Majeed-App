@@ -69,12 +69,12 @@
         app:layout_constraintTop_toBottomOf="@id/statusBarDummy"
         app:tint="@color/colorIcon" />
 
-    <!-- Hifz 遮字记忆模式开关 -->
+    <!-- Hifz 遮字记忆模式开关(接在翻译图标左侧，避免与其重叠) -->
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/btnHifz"
         android:layout_width="@dimen/dmnActionButton"
         android:layout_height="@dimen/dmnActionButton"
-        android:layout_marginEnd="4dp"
+        android:layout_marginEnd="10dp"
         android:background="@drawable/dr_bg_action_round"
         android:clickable="true"
         android:contentDescription="@string/hifz_mode"
@@ -82,7 +82,7 @@
         android:padding="7dp"
         android:src="@drawable/ic_hifz_eye"
         app:layout_constraintBottom_toBottomOf="@id/readerSetting"
-        app:layout_constraintEnd_toStartOf="@id/readerSetting"
+        app:layout_constraintEnd_toStartOf="@id/btnTranslLauncher"
         app:layout_constraintTop_toTopOf="@id/readerSetting"
         app:tint="@color/colorIcon" />
 </androidx.constraintlayout.widget.ConstraintLayout>

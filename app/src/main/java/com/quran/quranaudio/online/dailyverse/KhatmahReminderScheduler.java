@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.quran.quranaudio.online.prayertimes.common.PrayerEnum;
-import com.quran.quranaudio.online.prayertimes.timings.DayPrayer;
 import com.quran.quranaudio.online.prayertimes.widget.PrayerTimesWidgetData;
 import com.quran.quranaudio.online.quran_module.utils.KhatmahPlanManager;
 
@@ -71,13 +69,10 @@ public final class KhatmahReminderScheduler {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime candidate = null;
 
-        DayPrayer dayPrayer = PrayerTimesWidgetData.load(context);
-        if (dayPrayer != null && dayPrayer.getTimings() != null) {
-            LocalDateTime fajr = dayPrayer.getTimings().get(PrayerEnum.FAJR);
-            if (fajr != null) {
-                LocalDateTime todayFajr = LocalDateTime.of(now.toLocalDate(), fajr.toLocalTime());
-                candidate = todayFajr.plusHours(HOURS_AFTER_FAJR);
-            }
+        LocalDateTime fajr = PrayerTimesWidgetData.getFajr(PrayerTimesWidgetData.load(context));
+        if (fajr != null) {
+            LocalDateTime todayFajr = LocalDateTime.of(now.toLocalDate(), fajr.toLocalTime());
+            candidate = todayFajr.plusHours(HOURS_AFTER_FAJR);
         }
         if (candidate == null) {
             candidate = LocalDateTime.of(now.toLocalDate(), FALLBACK_TIME);

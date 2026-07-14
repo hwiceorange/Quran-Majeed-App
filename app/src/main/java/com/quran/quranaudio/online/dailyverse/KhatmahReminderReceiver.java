@@ -13,7 +13,6 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.quran.quranaudio.online.R;
-import com.quran.quranaudio.online.prayertimes.timings.DayPrayer;
 import com.quran.quranaudio.online.prayertimes.widget.PrayerTimesWidgetData;
 import com.quran.quranaudio.online.quran_module.utils.KhatmahPlanManager;
 
@@ -72,10 +71,10 @@ public class KhatmahReminderReceiver extends BroadcastReceiver {
 
     private boolean isRamadanLastTenNights(Context context) {
         try {
-            DayPrayer dp = PrayerTimesWidgetData.load(context);
+            PrayerTimesWidgetData.Snapshot dp = PrayerTimesWidgetData.load(context);
             if (dp == null) return false;
-            return dp.getHijriMonthNumber() == RAMADAN_HIJRI_MONTH
-                    && dp.getHijriDay() >= LAST_TEN_NIGHTS_START_DAY;
+            return dp.hijriMonthNumber == RAMADAN_HIJRI_MONTH
+                    && dp.hijriDay >= LAST_TEN_NIGHTS_START_DAY;
         } catch (Exception e) {
             return false;
         }
@@ -83,8 +82,8 @@ public class KhatmahReminderReceiver extends BroadcastReceiver {
 
     private boolean isRamadan(Context context) {
         try {
-            DayPrayer dp = PrayerTimesWidgetData.load(context);
-            return dp != null && dp.getHijriMonthNumber() == RAMADAN_HIJRI_MONTH;
+            PrayerTimesWidgetData.Snapshot dp = PrayerTimesWidgetData.load(context);
+            return dp != null && dp.hijriMonthNumber == RAMADAN_HIJRI_MONTH;
         } catch (Exception e) {
             return false;
         }

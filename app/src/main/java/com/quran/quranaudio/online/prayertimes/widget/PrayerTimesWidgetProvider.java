@@ -23,10 +23,10 @@ import com.quran.quranaudio.online.prayertimes.utils.TimingUtils;
 import com.quran.quranaudio.online.prayertimes.utils.UiUtils;
 import android.widget.RemoteViews;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Map;
 
 /**
  * 祈祷时间桌面 Widget（4x1）：五番时间 + 下一番倒计时 + Hijri 日期。
@@ -182,8 +182,8 @@ public class PrayerTimesWidgetProvider extends AppWidgetProvider {
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         views.setOnClickPendingIntent(R.id.widget_root, launchPendingIntent);
 
-        DayPrayer dayPrayer = PrayerTimesWidgetData.load(context);
-        if (dayPrayer == null) {
+        PrayerTimesWidgetData.Snapshot snapshot = PrayerTimesWidgetData.load(context);
+        if (snapshot == null || snapshot.prayerMillis == null) {
             // 空状态：App 还没算出过祈祷时间（未完成定位），引导用户点击进入
             views.setViewVisibility(R.id.widget_empty_state, android.view.View.VISIBLE);
             views.setViewVisibility(R.id.widget_content, android.view.View.GONE);
@@ -193,38 +193,39 @@ public class PrayerTimesWidgetProvider extends AppWidgetProvider {
         views.setViewVisibility(R.id.widget_empty_state, android.view.View.GONE);
         views.setViewVisibility(R.id.widget_content, android.view.View.VISIBLE);
 
-        Map<PrayerEnum, LocalDateTime> timings = dayPrayer.getTimings();
         PrayerEnum[] prayers = PrayerEnum.values();
-        LocalDateTime now = LocalDateTime.now();
+        long[] prayerMillis = snapshot.prayerMillis;
+        long nowMillis = System.currentTimeMillis();
 
         // 找下一番：今天第一个还没到的；五番都过了则指向明日 Fajr
         int nextIndex = -1;
-        for (int i = 0; i < prayers.length; i++) {
-            LocalDateTime timing = timings.get(prayers[i]);
-            if (timing != null && now.isBefore(timing)) {
+        for (int i = 0; i < prayers.length && i < prayerMillis.length; i++) {
+            long m = prayerMillis[i];
+            if (m > 0 && nowMillis < m) {
                 nextIndex = i;
                 break;
             }
         }
 
-        LocalDateTime nextTiming;
+        long nextTimingMillis;
         if (nextIndex >= 0) {
-            nextTiming = timings.get(prayers[nextIndex]);
+            nextTimingMillis = prayerMillis[nextIndex];
         } else {
             // Icha 之后：明日 Fajr ≈ 今日 Fajr + 1 天（逐日偏移约1分钟，
             // 午夜数据刷新后即精确；倒计时短暂近似优于无内容）
             nextIndex = 0;
-            LocalDateTime todayFajr = timings.get(PrayerEnum.FAJR);
-            nextTiming = (todayFajr != null) ? todayFajr.plusDays(1) : now.plusHours(1);
+            long todayFajr = prayerMillis.length > 0 ? prayerMillis[0] : 0L;
+            nextTimingMillis = (todayFajr > 0)
+                    ? todayFajr + 86_400_000L
+                    : nowMillis + 3_600_000L;
         }
 
         // 五番名称与时间；下一番列高亮
         for (int i = 0; i < prayers.length; i++) {
             views.setTextViewText(NAME_IDS[i], getPrayerDisplayName(context, prayers[i]));
 
-            LocalDateTime timing = timings.get(prayers[i]);
-            views.setTextViewText(TIME_IDS[i],
-                    timing != null ? TimingUtils.formatTiming(timing) : "--:--");
+            long m = (i < prayerMillis.length) ? prayerMillis[i] : 0L;
+            views.setTextViewText(TIME_IDS[i], m > 0 ? formatMillis(m) : "--:--");
 
             boolean isNext = (i == nextIndex);
             views.setInt(CELL_IDS[i], "setBackgroundResource",
@@ -239,24 +240,29 @@ public class PrayerTimesWidgetProvider extends AppWidgetProvider {
         views.setTextViewText(R.id.widget_next_prayer_name,
                 getPrayerDisplayName(context, prayers[nextIndex]));
 
-        long nextTimingMillis = nextTiming.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
         views.setChronometerCountDown(R.id.widget_countdown, true);
         views.setChronometer(R.id.widget_countdown,
                 SystemClock.elapsedRealtime() + (nextTimingMillis - System.currentTimeMillis()),
                 null, true);
 
-        // Hijri 日期：直接使用 DayPrayer 内与 App 一致的（含用户校准）三元组
-        views.setTextViewText(R.id.widget_hijri_date, formatHijriDate(context, dayPrayer));
+        // Hijri 日期：直接使用与 App 一致的（含用户校准）三元组
+        views.setTextViewText(R.id.widget_hijri_date, formatHijriDate(context, snapshot));
 
         // 在下一番到点后 60s（或午夜后 90s，取先到者）自刷新
         scheduleNextRefresh(context, nextTimingMillis);
 
         // 缓存跨天了：触发一次后台重算（复用现有 PrayerUpdater），期间先展示缓存值
-        if (!PrayerTimesWidgetData.isForToday(dayPrayer)) {
+        if (!PrayerTimesWidgetData.isForToday(snapshot)) {
             enqueueDataRefresh(context);
         }
 
         return views;
+    }
+
+    private static String formatMillis(long epochMillis) {
+        LocalDateTime ldt = LocalDateTime.ofInstant(
+                Instant.ofEpochMilli(epochMillis), ZoneId.systemDefault());
+        return TimingUtils.formatTiming(ldt);
     }
 
     private static String getPrayerDisplayName(Context context, PrayerEnum prayer) {
@@ -265,16 +271,16 @@ public class PrayerTimesWidgetProvider extends AppWidgetProvider {
         return resId != 0 ? context.getString(resId) : prayer.toString();
     }
 
-    private static String formatHijriDate(Context context, DayPrayer dayPrayer) {
+    private static String formatHijriDate(Context context, PrayerTimesWidgetData.Snapshot snapshot) {
         try {
             int monthResId = context.getResources().getIdentifier(
-                    "hijri_month_" + dayPrayer.getHijriMonthNumber(), "string",
+                    "hijri_month_" + snapshot.hijriMonthNumber, "string",
                     context.getPackageName());
             String monthName = monthResId != 0
                     ? context.getString(monthResId)
-                    : String.valueOf(dayPrayer.getHijriMonthNumber());
+                    : String.valueOf(snapshot.hijriMonthNumber);
             return UiUtils.formatHijriDate(
-                    dayPrayer.getHijriDay(), monthName, dayPrayer.getHijriYear());
+                    snapshot.hijriDay, monthName, snapshot.hijriYear);
         } catch (Exception e) {
             Log.e(TAG, "formatHijriDate failed", e);
             return "";

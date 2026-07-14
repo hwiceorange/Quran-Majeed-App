@@ -46,6 +46,10 @@ public final class PrayerWidgetPromoHelper {
 
     private static final int MIN_PRAYER_TAB_VISITS = 3;
 
+    // 进程内一次性护栏：防止同一时刻两个触点（通知开启回调 + onResume 访问计数）
+    // 同时弹出、叠加两个弹窗。KEY_PROMO_DECIDED 仅在用户操作后写入，无法覆盖这段竞态窗口。
+    private static volatile boolean promoShownThisProcess = false;
+
     private PrayerWidgetPromoHelper() {
     }
 
@@ -54,7 +58,8 @@ public final class PrayerWidgetPromoHelper {
     // ============================================================
 
     /**
-     * 祈祷页每次可见时调用：累计访问次数，条件满足则弹促活弹窗。
+     * 祈祷页每次可见时调用：累计访问次数，第 {@link #MIN_PRAYER_TAB_VISITS} 次起且条件满足
+     * 则弹促活弹窗。作为"通知开启后触发"的长尾兜底（覆盖没开任何通知、但常来看时间的用户）。
      */
     public static void onPrayerTabVisible(Activity activity) {
         try {
@@ -62,14 +67,30 @@ public final class PrayerWidgetPromoHelper {
             int visits = prefs.getInt(KEY_PRAYER_TAB_VISITS, 0) + 1;
             prefs.edit().putInt(KEY_PRAYER_TAB_VISITS, visits).apply();
 
-            if (!shouldShowPromo(activity, visits)) {
+            if (visits < MIN_PRAYER_TAB_VISITS) {
                 return;
             }
-
-            showPromoDialog(activity);
+            if (passesCommonGuards(activity)) {
+                showPromoDialog(activity, "prayer_tab_visit");
+            }
         } catch (Exception e) {
             // 引导绝不允许影响祈祷页本身
             Log.e(TAG, "onPrayerTabVisible failed", e);
+        }
+    }
+
+    /**
+     * 用户刚配置/开启祈祷通知后调用（最高意图时刻：他已明确要"祈祷提醒"，Widget 是天然补全，
+     * 且此刻通知权限必已授予）。不受访问次数门槛限制，可在首个会话即触达。
+     */
+    public static void onPrayerNotificationEnabled(Activity activity) {
+        try {
+            if (passesCommonGuards(activity)) {
+                showPromoDialog(activity, "notification_enabled");
+            }
+        } catch (Exception e) {
+            // 引导绝不允许影响调用方
+            Log.e(TAG, "onPrayerNotificationEnabled failed", e);
         }
     }
 
@@ -99,8 +120,11 @@ public final class PrayerWidgetPromoHelper {
     // 促活弹窗
     // ============================================================
 
-    private static boolean shouldShowPromo(Activity activity, int visits) {
-        if (visits < MIN_PRAYER_TAB_VISITS) {
+    /**
+     * 与触发时机无关的通用护栏（一生一次 / 已在桌面 / 支持 Pin / 通知权限已授予 / Activity 存活）。
+     */
+    private static boolean passesCommonGuards(Activity activity) {
+        if (promoShownThisProcess) {
             return false;
         }
         if (getPrefs(activity).getBoolean(KEY_PROMO_DECIDED, false)) {
@@ -114,7 +138,7 @@ public final class PrayerWidgetPromoHelper {
         if (!isPinSupported(activity)) {
             return false;
         }
-        // 与通知权限请求流互斥：Android 13+ 权限未授予时本会话让位（不消耗促活机会）
+        // Android 13+ 通知权限未授予时让位（不消耗促活机会）。通知开启后触发路径此时必已授予。
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
                 && ContextCompat.checkSelfPermission(activity, Manifest.permission.POST_NOTIFICATIONS)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -123,12 +147,16 @@ public final class PrayerWidgetPromoHelper {
         return !activity.isFinishing() && !activity.isDestroyed();
     }
 
-    private static void showPromoDialog(Activity activity) {
-        logEvent(activity, "promo_shown");
+    private static void showPromoDialog(Activity activity, String trigger) {
+        promoShownThisProcess = true;
+        logShown(activity, trigger);
+
+        // 自定义内容视图：内嵌与真实 Widget 同构的预览卡（Show-don't-tell）
+        android.view.View content = activity.getLayoutInflater()
+                .inflate(R.layout.dialog_widget_promo, null);
 
         new AlertDialog.Builder(activity)
-                .setTitle(R.string.widget_promo_title)
-                .setMessage(R.string.widget_promo_message)
+                .setView(content)
                 .setPositiveButton(R.string.widget_promo_add, (dialog, which) -> {
                     markDecided(activity);
                     logEvent(activity, "promo_accept");
@@ -211,6 +239,22 @@ public final class PrayerWidgetPromoHelper {
                     .getInstance(context).logEvent("prayer_widget_funnel", params);
         } catch (Exception e) {
             Log.e(TAG, "logEvent failed", e);
+        }
+    }
+
+    /**
+     * 曝光埋点带上触发来源（notification_enabled / prayer_tab_visit），
+     * 便于分析哪个时机的 promo_shown→widget_added 转化更高。
+     */
+    private static void logShown(Context context, String trigger) {
+        try {
+            Map<String, Object> params = new HashMap<>();
+            params.put("action", "promo_shown");
+            params.put("trigger", trigger);
+            com.quran.quranaudio.online.analytics.AnalyticsManager
+                    .getInstance(context).logEvent("prayer_widget_funnel", params);
+        } catch (Exception e) {
+            Log.e(TAG, "logShown failed", e);
         }
     }
 }

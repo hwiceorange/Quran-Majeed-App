@@ -216,6 +216,13 @@ public class PrayersFragment extends Fragment implements com.quran.quranaudio.on
                     
                     // 刷新通知图标
                     refreshAllNotificationIcons();
+
+                    // 🏠 Widget 促活（最高意图时机）：用户刚配置通知、且当前至少开启了一个祈祷通知，
+                    // 此刻是引导添加 Widget 的最佳时刻（意图强、通知权限必已授予）。内部一生仅一次。
+                    if (getActivity() != null && hasAnyPrayerNotificationEnabled()) {
+                        com.quran.quranaudio.online.prayertimes.widget.PrayerWidgetPromoHelper
+                                .onPrayerNotificationEnabled(getActivity());
+                    }
                 } else {
                     Log.d("PrayersFragment", "ℹ️ Notification settings not changed");
                 }
@@ -1713,7 +1720,28 @@ public class PrayersFragment extends Fragment implements com.quran.quranaudio.on
             notificationSettingsLauncher.launch(intent);
         });
     }
-    
+
+    /**
+     * 当前是否至少有一个祈祷开启了通知（类型非 "none"）。
+     * 仅在此为真时才引导添加 Widget——避免用户把通知全关成 none 时反而弹促活。
+     */
+    private boolean hasAnyPrayerNotificationEnabled() {
+        try {
+            SharedPreferences notificationPrefs = requireContext().getSharedPreferences(
+                    PreferencesConstants.ADTHAN_CALLS_SHARED_PREFERENCES, MODE_PRIVATE);
+            for (PrayerEnum prayerEnum : PrayerEnum.values()) {
+                String type = notificationPrefs.getString(
+                        prayerEnum.toString() + "_NOTIFICATION_TYPE", "none");
+                if (type != null && !"none".equals(type)) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            Log.e("PrayersFragment", "hasAnyPrayerNotificationEnabled failed", e);
+        }
+        return false;
+    }
+
     private String getPrayerNameString(PrayerEnum prayerEnum) {
         switch (prayerEnum) {
             case FAJR:

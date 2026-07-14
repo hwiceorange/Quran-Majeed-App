@@ -255,6 +255,29 @@ public abstract class StringUtils {
         return Pattern.quote(string);
     }
 
+    /**
+     * 阿拉伯文搜索归一化：抹平真实用户(沙特/埃及/伊拉克等)最常见的输入差异，
+     * 让"الفاتحه"(用 ه 代 ة，尤埃及习惯)也能命中"الفاتحة"。
+     * 处理：去 tashkeel(音符)与 tatweel、统一 hamza 形态的 alef、ة→ه、ى→ي、ؤ/ئ 去座。
+     * 只影响阿拉伯字符，拉丁转写(如 alfatiha)不受影响。对 query 与被搜文本两侧同样应用。
+     */
+    public static String normalizeArabicForSearch(String string) {
+        if (string == null || string.isEmpty()) {
+            return string;
+        }
+        // 去除 tashkeel(U+064B–U+0652, U+0670)与 tatweel(U+0640)
+        String s = string.replaceAll("[ً-ْٰـ]", "");
+        s = s.replace('أ', 'ا')  // أ → ا
+             .replace('إ', 'ا')  // إ → ا
+             .replace('آ', 'ا')  // آ → ا
+             .replace('ٱ', 'ا')  // ٱ → ا
+             .replace('ة', 'ه')  // ة → ه
+             .replace('ى', 'ي')  // ى → ي
+             .replace('ؤ', 'و')  // ؤ → و
+             .replace('ئ', 'ي'); // ئ → ي
+        return s;
+    }
+
     public static String readInputStream(InputStream inputStream) throws IOException {
         StringBuilder sb = new StringBuilder();
 
