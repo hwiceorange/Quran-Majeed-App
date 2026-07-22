@@ -317,18 +317,17 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
             }
             updateTrialAvailability()
             updateAnnualSavings()
-            
+
             setLoadingState(false)
-            
+
             if (products.isEmpty()) {
                 android.util.Log.e("SubscriptionActivity", "❌ No products found!")
+                // 加载失败：付费按钮保持禁用，避免用户点到没有价格的坏按钮；弹友好重试对话框。
+                binding.btnSubscribe.isEnabled = false
+                binding.btnSubscribe.alpha = 0.6f
                 showDetailedError(
                     getString(R.string.subscription_error_no_products_title),
-                    getString(
-                        R.string.subscription_error_no_products_message,
-                        BillingManager.MONTHLY_PLAN_ID,
-                        BillingManager.YEARLY_PLAN_ID
-                    )
+                    getString(R.string.subscription_error_no_products_message)
                 )
             } else {
                 android.util.Log.d("SubscriptionActivity", "✅ Products loaded successfully")
@@ -448,13 +447,19 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
         }
     }
 
-    private fun paidRecurringPhase(product: ProductDetails) =
-        product.subscriptionOfferDetails
+    /**
+     * 订阅页永远展示「原价」：取无限续订相（真实续订价）。合规关键——绝不能把折扣 offer 的
+     * 首月/首年折后价泄漏到订阅页醒目位置（那正是被 Play 拒审的原因）。若无无限相则兜底取
+     * 价格最高的付费相（折扣价一定更低，取最高即原价）。
+     */
+    private fun paidRecurringPhase(product: ProductDetails): ProductDetails.PricingPhase? {
+        val paid = product.subscriptionOfferDetails
             ?.flatMap { it.pricingPhases.pricingPhaseList }
-            ?.firstOrNull { it.priceAmountMicros > 0 && it.recurrenceMode == 1 }
-            ?: product.subscriptionOfferDetails
-                ?.flatMap { it.pricingPhases.pricingPhaseList }
-                ?.firstOrNull { it.priceAmountMicros > 0 }
+            ?.filter { it.priceAmountMicros > 0 }
+            ?: return null
+        return paid.firstOrNull { it.recurrenceMode == 1 }
+            ?: paid.maxByOrNull { it.priceAmountMicros }
+    }
 
     private fun updateTrialAvailability() {
         // ProductDetails only contains offers this Play account is eligible for. Do not bind
@@ -669,19 +674,25 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
      * 折扣 offer 由 Play 实际下发决定：拿不到就不拦截，绝不显示虚假折扣。
      */
     private fun maybeInterceptWithDiscount() {
-        val discountOffer = DiscountManager.findDiscountOffer(yearlyProduct)
+        // 按用户关闭时所选方案区分：取消月订阅→月5折挽回页；取消年订阅→年5折挽回页。
+        val plan = if (isYearlySelected) DiscountManager.Plan.YEARLY else DiscountManager.Plan.MONTHLY
+        val product = if (isYearlySelected) yearlyProduct else monthlyProduct
+        val discountOffer = DiscountManager.findDiscountOffer(product, plan)
         val isSubscribed = SubscriptionHelper.isUserSubscribed(this)
-        if (!DiscountManager.shouldInterceptClose(this, discountOffer != null, isSubscribed)) {
+        if (!DiscountManager.shouldInterceptClose(this, plan, discountOffer != null, isSubscribed)) {
             return
         }
-        // 启动 1 小时窗口（只写一次），随后拉起挽回页。
-        if (!DiscountManager.startWindow(this)) return
+        // 启动该方案 1 小时窗口（只写一次），随后拉起对应挽回页。
+        if (!DiscountManager.startWindow(this, plan)) return
         // 缓存真实折扣百分比供主页角标显示（不硬编码）。
         DiscountManager.computePercent(discountOffer!!)?.let {
-            DiscountManager.cacheDiscountPercent(this, it)
+            DiscountManager.cacheDiscountPercent(this, plan, it)
         }
-        android.util.Log.d("SubscriptionActivity", "💡 Intercepting close with discount recovery page")
-        startActivity(Intent(this, DiscountActivity::class.java))
+        android.util.Log.d("SubscriptionActivity", "💡 Intercepting close with ${plan.key} discount recovery page")
+        startActivity(
+            Intent(this, DiscountActivity::class.java)
+                .putExtra(DiscountActivity.EXTRA_PLAN, plan.key)
+        )
     }
     
     /**

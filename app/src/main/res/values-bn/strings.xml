@@ -496,7 +496,7 @@
 
     <string name="our_portfolio">Our Portfolio</string>
 
-    <string name="privacy_policy_title">Privacy Policy</string>
+    <string name="privacy_policy_title">গোপনীয়তা নীতি</string>
 
     <string name="custom_work">Contact me on Whatsapp for custom work.</string>
 
@@ -2122,27 +2122,27 @@
     <string name="subscription_context_view">প্রিমিয়াম দেখুন</string>
     <string name="subscription_context_not_now">এখন নয়</string>
     <string name="subscription_continue_free">বিনামূল্যের সংস্করণ চালিয়ে যান</string>
-    <string name="subscription_enable_trial">আমি বিনামূল্যে চেষ্টা করতে চাই</string>
-    <string name="subscription_best_value">সেরা মূল্য!</string>
+    <string name="subscription_enable_trial">৭ দিন বিনামূল্যে ব্যবহার করুন</string>
+    <string name="subscription_best_value">সেরা মূল্য</string>
     <string name="subscription_price_yearly">$17.99 / বছরে</string>
     <string name="subscription_save_vs_monthly">মাসিকের তুলনায় ৫০%% সাশ্রয় করুন</string>
     <string name="subscription_price_monthly">$2.99 / মাসে</string>
-    <string name="subscription_free_trial_badge">৭ দিনের ফ্রি ট্রায়াল</string>
-    <string name="subscription_monthly_sub_text">তারপর %1$s প্রতি মাসে। এখন কোনো পেমেন্ট নেই</string>
+    <string name="subscription_free_trial_badge">৭ দিন ফ্রি, এরপর মাসিক</string>
+    <string name="subscription_monthly_sub_text">এরপর %1$s/মাস · আজ কোনো পেমেন্ট নেই</string>
     <string name="subscription_yearly_sub_text">তারপর %1$s প্রতি বছর</string>
     <string name="subscription_info_trial_monthly">আপনি যদি ৭ দিনের ট্রায়াল শেষ হওয়ার আগে বাতিল না করেন, তবে মাসিক সাবস্ক্রিপশনের মূল্য নেওয়া হবে।</string>
     <string name="subscription_info_trial_yearly">আপনি যদি ৭ দিনের ট্রায়াল শেষ হওয়ার আগে বাতিল না করেন, তবে বার্ষিক সাবস্ক্রিপশনের মূল্য নেওয়া হবে।</string>
     <string name="subscription_info_autorenew_yearly">আপনার সাবস্ক্রিপশন বাতিল না করলে প্রতি বছর স্বয়ংক্রিয়ভাবে নবায়ন হবে।</string>
     <string name="subscription_info_autorenew_monthly">আপনার সাবস্ক্রিপশন বাতিল না করলে প্রতি মাসে স্বয়ংক্রিয়ভাবে নবায়ন হবে।</string>
-    <string name="subscription_cta_trial">ট্রায়াল ও প্ল্যান শুরু করুন</string>
-    <string name="subscription_cta_premium">এখনই প্রিমিয়াম নিন</string>
+    <string name="subscription_cta_trial">আমার ৭ দিনের ফ্রি ট্রায়াল শুরু করুন</string>
+    <string name="subscription_cta_premium">প্রিমিয়াম আনলক করুন</string>
     <string name="subscription_loading">লোড হচ্ছে...</string>
     <string name="subscription_no_payment_now">এখন কোনো পেমেন্ট নেই</string>
     <string name="subscription_legal_info">অ্যাপ ব্যবহার চালিয়ে গেলে আপনি আমাদের ব্যবহার বিধি ও গোপনীয়তা নীতিতে সম্মতি দিচ্ছেন</string>
-    <string name="subscription_error_billing_title">বিলিং সংযোগ ব্যর্থ হয়েছে</string>
-    <string name="subscription_error_billing_message">Google Play বিলিংয়ের সাথে সংযোগ করা যায়নি।\n\nসম্ভাব্য কারণ:\n- Google Play Store ইনস্টল বা আপডেট করা নেই\n- নেটওয়ার্ক সংযোগ সমস্যা\n- Google Play সেবা নিষ্ক্রিয়\n\nদয়া করে পরীক্ষা করে আবার চেষ্টা করুন।</string>
-    <string name="subscription_error_no_products_title">কোনো সাবস্ক্রিপশন প্ল্যান উপলভ্য নয়</string>
-    <string name="subscription_error_no_products_message">সাবস্ক্রিপশন প্ল্যান লোড করা যায়নি।\n\nপ্রয়োজনীয় পণ্য আইডি:\n- মাসিক: %1$s\n- বার্ষিক: %2$s\n\nসেটআপ ধাপ:\n1. এই পণ্যগুলো Google Play Console-এ তৈরি করুন\n2. তাদের অবস্থা Active করুন\n3. অ্যাপকে একটি টেস্ট ট্র্যাকে (অভ্যন্তরীণ/বন্ধ) প্রকাশ করুন\n4. Google Play Console-এ টেস্ট অ্যাকাউন্ট যোগ করুন\n5. সক্রিয় হতে ১-২ ঘণ্টা অপেক্ষা করুন\n\nপরীক্ষার জন্য সাইন করা রিলিজ বিল্ড ব্যবহার করুন।</string>
+    <string name="subscription_error_billing_title">প্ল্যান লোড করা যায়নি</string>
+    <string name="subscription_error_billing_message">আমরা Google Play-এ পৌঁছাতে পারিনি। আপনার ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।</string>
+    <string name="subscription_error_no_products_title">প্ল্যান লোড করা যায়নি</string>
+    <string name="subscription_error_no_products_message">আপনার ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।</string>
     <string name="subscription_error_plan_title">প্ল্যান উপলভ্য নয়</string>
     <string name="subscription_message_success">সাবস্ক্রিপশন সফলভাবে সক্রিয় হয়েছে!</string>
     <string name="subscription_message_already_owned">আপনি ইতিমধ্যেই এই সাবস্ক্রিপশনটি মালিকানাধীন</string>
@@ -2341,13 +2341,13 @@
     <string name="subscription_monthly_plan_label">মাসিক প্ল্যান</string>
     <string name="subscription_annual_plan_label">বার্ষিক প্ল্যান</string>
     <string name="subscription_save_percent">মাসিকের তুলনায় %1$d%% সাশ্রয়</string>
-    <string name="google_play_terms_title">Google Play-এর শর্তাবলি</string>
-    <string name="subscription_trial_unavailable">এই অ্যাকাউন্টের জন্য বিনামূল্যে ট্রায়াল এখন উপলভ্য নয়।</string>
-    <string name="subscription_legal_links">গোপনীয়তা নীতি · Google Play-এর শর্তাবলি</string>
-    <string name="subscription_monthly_price">প্রতি মাসে %1$s</string>
-    <string name="subscription_yearly_price">প্রতি বছরে %1$s</string>
-    <string name="subscription_disclosure">এটি স্বয়ংক্রিয়ভাবে নবায়নযোগ্য সাবসক্রিপশন। নির্বাচিত মূল্য ও বিলিং সময়কাল উপরে দেখানো এবং কেনার আগে Google Play নিশ্চিত করবে। Google Play থেকে যেকোনো সময় বাতিল করুন; অ্যাপ আনইনস্টল করলে সাবসক্রিপশন বাতিল হয় না। Premium ঐচ্ছিক এবং বিনামূল্যের ফিচারগুলো চালু থাকবে।</string>
-    <string name="subscription_trial_unavailable_label">বিনামূল্যে ট্রায়াল এখন উপলভ্য নয়</string>
+    <string name="google_play_terms_title">Google Play শর্তাবলী</string>
+    <string name="subscription_trial_unavailable">এই অ্যাকাউন্টের জন্য ফ্রি ট্রায়াল এখন উপলব্ধ নয়।</string>
+    <string name="subscription_legal_links">গোপনীয়তা নীতি · Google Play শর্তাবলী</string>
+    <string name="subscription_monthly_price">%1$s/মাস · যেকোনো সময় বাতিল</string>
+    <string name="subscription_yearly_price">%1$s/বছর · যেকোনো সময় বাতিল</string>
+    <string name="subscription_disclosure">স্বয়ংক্রিয়ভাবে নবায়নযোগ্য সাবস্ক্রিপশন। নির্বাচিত মূল্য ও বিলিং সময়কাল উপরে দেখানো হয়েছে এবং কেনার আগে Google Play নিশ্চিত করে। Google Play-তে যেকোনো সময় বাতিল করুন; অ্যাপ আনইনস্টল করলে সাবস্ক্রিপশন বাতিল হয় না। প্রিমিয়াম ঐচ্ছিক এবং ফ্রি ফিচারগুলো উপলব্ধ থাকে।</string>
+    <string name="subscription_trial_unavailable_label">ফ্রি ট্রায়াল এখন উপলব্ধ নয়</string>
     <!-- 折扣挽回页 -->
     <string name="discount_title">আপনার কুরআন যাত্রা চালিয়ে যান</string>
     <string name="discount_percent_big">%1$d%% ছাড়</string>
@@ -2357,8 +2357,11 @@
     <string name="discount_price_period">/ প্রথম বছর</string>
     <string name="discount_cta">আমার অফার নিন</string>
     <string name="discount_cta_percent">আমার %1$d%% ছাড় নিন</string>
-    <string name="discount_disclosure">প্রথম বছর %1$s, তারপর প্রতি বছর %2$s। নবায়নের অন্তত ২৪ ঘণ্টা আগে বাতিল না করলে প্রতি বছর স্বয়ংক্রিয়ভাবে নবায়ন হবে। কেনার আগে Google Play নিশ্চিত করে; যেকোনো সময় Google Play-তে বাতিল করুন। অ্যাপ আনইনস্টল করলে সাবস্ক্রিপশন বাতিল হয় না।</string>
-    <string name="discount_unavailable">এই অফারটি এই মুহূর্তে উপলব্ধ নয়।</string>
+    <string name="discount_disclosure">প্রথম বছর %1$s, এরপর প্রতি বছর %2$s। নবায়নের অন্তত ২৪ ঘণ্টা আগে বাতিল না করলে প্রতি বছর স্বয়ংক্রিয়ভাবে নবায়ন হয়। কেনার আগে Google Play নিশ্চিত করে; Google Play-তে যেকোনো সময় বাতিল করুন। আনইনস্টল করলে বাতিল হয় না।</string>
+    <string name="discount_unavailable">এই অফারটি এখন উপলব্ধ নয়।</string>
     <string name="discount_expired">এই অফারটি শেষ হয়ে গেছে।</string>
     <string name="discount_badge_percent">৫০% ছাড়</string>
+    <string name="discount_first_month_caption">আপনার প্রথম মাসে</string>
+    <string name="discount_price_period_month">/ প্রথম মাস</string>
+    <string name="discount_disclosure_month">প্রথম মাস %1$s, এরপর প্রতি মাসে %2$s। নবায়নের অন্তত ২৪ ঘণ্টা আগে বাতিল না করলে প্রতি মাসে স্বয়ংক্রিয়ভাবে নবায়ন হয়। কেনার আগে Google Play নিশ্চিত করে; Google Play-তে যেকোনো সময় বাতিল করুন। আনইনস্টল করলে বাতিল হয় না।</string>
 </resources>

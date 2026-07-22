@@ -25,20 +25,26 @@ import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 /**
- * 折扣挽回页（年订阅首次 5 折）。
+ * 折扣挽回页（按方案：月订阅首月5折 / 年订阅首年5折）。
  *
  * 合规要点：
- *  - 折扣百分比、划线原价、折后价全部取自 Play 返回的 `off` offer，无任何硬编码价格。
+ *  - 折扣百分比、划线原价、折后价全部取自 Play 返回的折扣 offer，无任何硬编码价格。
  *  - offer 拿不到（Play 未下发或账号无资格）→ 直接关闭本页，绝不展示虚假折扣。
  *  - 倒计时读 [DiscountManager] 的持久化剩余时间，关掉重进不重置；归零即失效并结束。
  *  - 续订条款购买前明示；关闭按钮首帧即可见可点。
  */
 class DiscountActivity : AppCompatActivity(), BillingManager.BillingListener {
 
+    companion object {
+        /** Intent extra：方案 key（"monthly" / "yearly"）。缺省按年订阅。 */
+        const val EXTRA_PLAN = "discount_plan"
+    }
+
     private lateinit var binding: ActivityDiscountBinding
     private lateinit var billingManager: BillingManager
 
-    private var yearlyProduct: ProductDetails? = null
+    private lateinit var plan: DiscountManager.Plan
+    private var product: ProductDetails? = null
     private var discountOffer: ProductDetails.SubscriptionOfferDetails? = null
     private var countdownTimer: CountDownTimer? = null
     private var contentReady = false
@@ -76,11 +82,24 @@ class DiscountActivity : AppCompatActivity(), BillingManager.BillingListener {
         binding = ActivityDiscountBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // 方案：默认年订阅（兼容旧入口）。
+        plan = DiscountManager.Plan.of(intent.getStringExtra(EXTRA_PLAN)) ?: DiscountManager.Plan.YEARLY
+
         // 窗口已过期/已消费的兜底：即便被误拉起也立即退出，不展示过期折扣。
-        if (!DiscountManager.isActive(this)) {
+        if (!DiscountManager.isActive(this, plan)) {
             finish()
             return
         }
+
+        // 方案相关文案（首月/首年）。
+        binding.tvDiscountCaption.setText(
+            if (plan == DiscountManager.Plan.MONTHLY) R.string.discount_first_month_caption
+            else R.string.discount_first_year_caption
+        )
+        binding.tvPricePeriod.setText(
+            if (plan == DiscountManager.Plan.MONTHLY) R.string.discount_price_period_month
+            else R.string.discount_price_period
+        )
 
         binding.btnClose.setOnClickListener { finish() }
         setupLegalLinks()
@@ -111,8 +130,8 @@ class DiscountActivity : AppCompatActivity(), BillingManager.BillingListener {
     }
 
     override fun onProductsLoaded(products: List<ProductDetails>) = runOnUiThread {
-        yearlyProduct = products.firstOrNull { it.productId == BillingManager.YEARLY_PLAN_ID }
-        discountOffer = DiscountManager.findDiscountOffer(yearlyProduct)
+        product = products.firstOrNull { it.productId == plan.productId }
+        discountOffer = DiscountManager.findDiscountOffer(product, plan)
         if (discountOffer == null) {
             // Play 没有下发折扣 offer —— 绝不显示假折扣，直接退出。
             android.util.Log.w("DiscountActivity", "⚠️ No discount offer returned by Play; closing.")
@@ -163,9 +182,11 @@ class DiscountActivity : AppCompatActivity(), BillingManager.BillingListener {
         binding.tvOriginalPrice.paintFlags =
             binding.tvOriginalPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
 
-        // 续订条款：首年折扣价，之后按原价自动续订，购买前明示。
+        // 续订条款：首月/首年折扣价，之后按原价自动续订，购买前明示。
         binding.tvDisclosure.text = getString(
-            R.string.discount_disclosure, discountedPrice, originalPrice
+            if (plan == DiscountManager.Plan.MONTHLY) R.string.discount_disclosure_month
+            else R.string.discount_disclosure,
+            discountedPrice, originalPrice
         )
 
         binding.btnSubscribe.setOnClickListener { launchPurchase() }
@@ -179,15 +200,16 @@ class DiscountActivity : AppCompatActivity(), BillingManager.BillingListener {
     }
 
     private fun launchPurchase() {
-        val product = yearlyProduct
+        val p = product
         val offer = discountOffer
-        if (!contentReady || product == null || offer == null) {
+        if (!contentReady || p == null || offer == null) {
             Toast.makeText(this, R.string.discount_unavailable, Toast.LENGTH_SHORT).show()
             return
         }
+        // 用折扣 offer 的 token 发起付费 —— 结算即折后价，与页面醒目价一致。
         billingManager.launchPurchaseFlow(
             activity = this,
-            productDetails = product,
+            productDetails = p,
             offerToken = offer.offerToken
         )
     }
@@ -195,7 +217,7 @@ class DiscountActivity : AppCompatActivity(), BillingManager.BillingListener {
     // ---- 倒计时 ----
 
     private fun startCountdown() {
-        val remaining = DiscountManager.remainingMillis(this)
+        val remaining = DiscountManager.remainingMillis(this, plan)
         if (remaining <= 0) {
             finish()
             return
@@ -219,8 +241,7 @@ class DiscountActivity : AppCompatActivity(), BillingManager.BillingListener {
     }
 
     private fun markConsumed() {
-        getSharedPreferences("discount_recovery_prefs", Context.MODE_PRIVATE)
-            .edit().putBoolean("consumed", true).apply()
+        DiscountManager.markConsumed(this, plan)
     }
 
     // ---- 法务链接 ----

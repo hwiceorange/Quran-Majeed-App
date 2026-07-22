@@ -496,7 +496,7 @@
 
     <string name="our_portfolio">Our Portfolio</string>
 
-    <string name="privacy_policy_title">Privacy Policy</string>
+    <string name="privacy_policy_title">پرائیویسی پالیسی</string>
 
     <string name="custom_work">Contact me on Whatsapp for custom work.</string>
 
@@ -2124,27 +2124,27 @@
     <string name="subscription_context_view">پریمیم دیکھیں</string>
     <string name="subscription_context_not_now">ابھی نہیں</string>
     <string name="subscription_continue_free">مفت ورژن کے ساتھ جاری رکھیں</string>
-    <string name="subscription_enable_trial">میں مفت آزمانا چاہتا ہوں</string>
-    <string name="subscription_best_value">بہترین قدر!</string>
+    <string name="subscription_enable_trial">7 دن مفت آزمائیں</string>
+    <string name="subscription_best_value">بہترین ویلیو</string>
     <string name="subscription_price_yearly">$17.99 / سالانہ</string>
     <string name="subscription_save_vs_monthly">ماہانہ کے مقابلے میں 50٪ بچت کریں</string>
     <string name="subscription_price_monthly">$2.99 / ماہانہ</string>
-    <string name="subscription_free_trial_badge">7 دن کی مفت آزمائش</string>
-    <string name="subscription_monthly_sub_text">پھر %1$s ماہانہ۔ ابھی کوئی ادائیگی نہیں</string>
+    <string name="subscription_free_trial_badge">7 دن مفت، پھر ماہانہ</string>
+    <string name="subscription_monthly_sub_text">پھر %1$s/ماہ · آج کوئی ادائیگی نہیں</string>
     <string name="subscription_yearly_sub_text">پھر %1$s سالانہ</string>
     <string name="subscription_info_trial_monthly">اگر آپ نے 7 دن کی آزمائش ختم ہونے سے پہلے منسوخ نہ کیا تو ماہانہ سبسکرپشن کی قیمت وصول کی جائے گی۔</string>
     <string name="subscription_info_trial_yearly">اگر آپ نے 7 دن کی آزمائش ختم ہونے سے پہلے منسوخ نہ کیا تو سالانہ سبسکرپشن کی قیمت وصول کی جائے گی۔</string>
     <string name="subscription_info_autorenew_yearly">آپ کی سبسکرپشن ہر سال خود بخود تجدید ہو جائے گی جب تک منسوخ نہ کی جائے۔</string>
     <string name="subscription_info_autorenew_monthly">آپ کی سبسکرپشن ہر ماہ خود بخود تجدید ہو جائے گی جب تک منسوخ نہ کی جائے۔</string>
-    <string name="subscription_cta_trial">آزمائش اور منصوبہ شروع کریں</string>
-    <string name="subscription_cta_premium">فوراً پریمیم حاصل کریں</string>
+    <string name="subscription_cta_trial">میرا 7 دن کا مفت ٹرائل شروع کریں</string>
+    <string name="subscription_cta_premium">پریمیم اَن لاک کریں</string>
     <string name="subscription_loading">لوڈ ہو رہا ہے...</string>
     <string name="subscription_no_payment_now">فی الحال ادائیگی نہیں</string>
     <string name="subscription_legal_info">ایپ کا استعمال جاری رکھنے سے آپ ہماری شرائطِ استعمال اور رازداری کی پالیسی کو قبول کرتے ہیں</string>
-    <string name="subscription_error_billing_title">بلنگ کنکشن ناکام</string>
-    <string name="subscription_error_billing_message">Google Play بلنگ سے کنکشن قائم نہیں ہو سکا۔\n\nممکنہ وجوہات:\n- Google Play Store انسٹال یا اپ ڈیٹ نہیں ہے\n- نیٹ ورک کنکشن میں مسئلہ\n- Google Play سروسز غیر فعال ہیں\n\nبراہ کرم چیک کریں اور دوبارہ کوشش کریں۔</string>
-    <string name="subscription_error_no_products_title">کوئی سبسکرپشن پلان دستیاب نہیں</string>
-    <string name="subscription_error_no_products_message">سبسکرپشن پلانز لوڈ نہیں ہو سکے۔\n\nدرکار پراڈکٹ آئی ڈیز:\n- ماہانہ: %1$s\n- سالانہ: %2$s\n\nترتیب کے اقدامات:\n1. ان پراڈکٹس کو Google Play Console میں بنائیں\n2. انہیں فعال حیثیت پر سیٹ کریں\n3. ایپ کو کسی ٹیسٹ ٹریک (اندرونی/بند) پر شائع کریں\n4. Google Play Console میں ٹیسٹ اکاؤنٹ شامل کریں\n5. فعال ہونے کے لیے 1-2 گھنٹے انتظار کریں\n\nٹیسٹنگ کے لیے دستخط شدہ ریلیز بلڈ استعمال کریں۔</string>
+    <string name="subscription_error_billing_title">پلانز لوڈ نہیں ہو سکے</string>
+    <string name="subscription_error_billing_message">ہم Google Play تک نہیں پہنچ سکے۔ براہ کرم اپنا انٹرنیٹ کنکشن چیک کریں اور دوبارہ کوشش کریں۔</string>
+    <string name="subscription_error_no_products_title">پلانز لوڈ نہیں ہو سکے</string>
+    <string name="subscription_error_no_products_message">براہ کرم اپنا انٹرنیٹ کنکشن چیک کریں اور دوبارہ کوشش کریں۔</string>
     <string name="subscription_error_plan_title">پلان دستیاب نہیں</string>
     <string name="subscription_error_plan_message">منتخب کردہ %1$s پلان دستیاب نہیں ہے۔\n\nپراڈکٹ آئی ڈی: %2$s\n\nمسئلہ حل کرنے کے اقدامات:\n1. چیک کریں کہ پراڈکٹ Google Play Console میں موجود ہے\n2. یقینی بنائیں کہ پراڈکٹ آئی ڈی بالکل مماثل ہے\n3. تصدیق کریں کہ پراڈکٹ کو فعال پر سیٹ کیا گیا ہے\n4. یقینی بنائیں کہ ایپ ٹیسٹ ٹریک پر شائع کی گئی ہے\n\nکوئی دوسرا پلان منتخب کریں یا سپورٹ سے رابطہ کریں۔</string>
     <string name="subscription_plan_yearly">سالانہ</string>
@@ -2333,25 +2333,28 @@
     <string name="delete_account_failed">اکاؤنٹ حذف نہیں ہو سکا: %1$s</string>
     <string name="subscription_monthly_plan_label">ماہانہ پلان</string>
     <string name="subscription_annual_plan_label">سالانہ پلان</string>
-    <string name="subscription_save_percent">ماہانہ پلان کے مقابلے میں %1$d%% بچت</string>
-    <string name="google_play_terms_title">Google Play کی شرائط</string>
-    <string name="subscription_trial_unavailable">اس اکاؤنٹ کے لیے مفت ٹرائل فی الحال دستیاب نہیں۔</string>
-    <string name="subscription_legal_links">رازداری کی پالیسی · Google Play کی شرائط</string>
-    <string name="subscription_monthly_price">فی ماہ %1$s</string>
-    <string name="subscription_yearly_price">فی سال %1$s</string>
-    <string name="subscription_disclosure">یہ خودکار تجدید والی سبسکرپشن ہے۔ منتخب قیمت اور بلنگ کی مدت اوپر دکھائی گئی ہے اور خریداری سے پہلے Google Play تصدیق کرے گا۔ Google Play میں کسی بھی وقت منسوخ کریں؛ ایپ ہٹانے سے سبسکرپشن منسوخ نہیں ہوتی۔ Premium اختیاری ہے اور مفت فیچرز دستیاب رہیں گے۔</string>
+    <string name="subscription_save_percent">ماہانہ کے مقابلے %1$d%% بچائیں</string>
+    <string name="google_play_terms_title">Google Play شرائط</string>
+    <string name="subscription_trial_unavailable">اس اکاؤنٹ کے لیے مفت ٹرائل فی الحال دستیاب نہیں ہے۔</string>
+    <string name="subscription_legal_links">پرائیویسی پالیسی · Google Play شرائط</string>
+    <string name="subscription_monthly_price">%1$s/ماہ · کسی بھی وقت منسوخ کریں</string>
+    <string name="subscription_yearly_price">%1$s/سال · کسی بھی وقت منسوخ کریں</string>
+    <string name="subscription_disclosure">خودکار تجدید ہونے والی سبسکرپشن۔ منتخب قیمت اور بلنگ مدت اوپر دکھائی گئی ہیں اور خریداری سے پہلے Google Play انہیں تصدیق کرتا ہے۔ Google Play میں کسی بھی وقت منسوخ کریں؛ ایپ کو اَن انسٹال کرنے سے سبسکرپشن منسوخ نہیں ہوتی۔ پریمیم اختیاری ہے اور مفت فیچرز دستیاب رہتے ہیں۔</string>
     <string name="subscription_trial_unavailable_label">مفت ٹرائل فی الحال دستیاب نہیں</string>
     <!-- 折扣挽回页 -->
-    <string name="discount_title">اپنا قرآنی سفر جاری رکھیں</string>
+    <string name="discount_title">اپنا قرآن سفر جاری رکھیں</string>
     <string name="discount_percent_big">%1$d%% رعایت</string>
     <string name="discount_percent_value">-%1$d%%</string>
     <string name="discount_first_year_caption">آپ کے پہلے سال پر</string>
-    <string name="discount_countdown_label">پیشکش ختم ہونے میں</string>
+    <string name="discount_countdown_label">آفر ختم ہونے میں</string>
     <string name="discount_price_period">/ پہلا سال</string>
-    <string name="discount_cta">میری پیشکش حاصل کریں</string>
-    <string name="discount_cta_percent">%1$d%% رعایت حاصل کریں</string>
-    <string name="discount_disclosure">پہلا سال %1$s، پھر %2$s سالانہ۔ تجدید سے کم از کم 24 گھنٹے پہلے منسوخ نہ کرنے پر ہر سال خودکار تجدید ہوگی۔ خریداری سے پہلے Google Play تصدیق کرتا ہے؛ کسی بھی وقت Google Play میں منسوخ کریں۔ ایپ ان انسٹال کرنے سے سبسکرپشن منسوخ نہیں ہوتی۔</string>
-    <string name="discount_unavailable">یہ پیشکش فی الحال دستیاب نہیں ہے۔</string>
-    <string name="discount_expired">یہ پیشکش ختم ہو چکی ہے۔</string>
+    <string name="discount_cta">میری آفر حاصل کریں</string>
+    <string name="discount_cta_percent">میری %1$d%% رعایت حاصل کریں</string>
+    <string name="discount_disclosure">پہلا سال %1$s، پھر %2$s سالانہ۔ تجدید سے کم از کم 24 گھنٹے پہلے منسوخ نہ کرنے پر ہر سال خودکار تجدید ہوتی ہے۔ خریداری سے پہلے Google Play تصدیق کرتا ہے؛ Google Play میں کسی بھی وقت منسوخ کریں۔ اَن انسٹال کرنے سے منسوخ نہیں ہوتی۔</string>
+    <string name="discount_unavailable">یہ آفر اس وقت دستیاب نہیں ہے۔</string>
+    <string name="discount_expired">یہ آفر ختم ہو گئی ہے۔</string>
     <string name="discount_badge_percent">50% رعایت</string>
+    <string name="discount_first_month_caption">آپ کے پہلے مہینے پر</string>
+    <string name="discount_price_period_month">/ پہلا مہینہ</string>
+    <string name="discount_disclosure_month">پہلا مہینہ %1$s، پھر %2$s ماہانہ۔ تجدید سے کم از کم 24 گھنٹے پہلے منسوخ نہ کرنے پر ہر ماہ خودکار تجدید ہوتی ہے۔ خریداری سے پہلے Google Play تصدیق کرتا ہے؛ Google Play میں کسی بھی وقت منسوخ کریں۔ اَن انسٹال کرنے سے منسوخ نہیں ہوتی۔</string>
 </resources>

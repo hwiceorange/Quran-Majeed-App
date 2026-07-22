@@ -987,13 +987,15 @@ public class FragMain extends BaseFragment {
         boolean subscribed = com.quran.quranaudio.online.subscription.SubscriptionHelper.INSTANCE
                 .isUserSubscribed(requireContext());
 
-        long remaining = mgr.remainingMillis(requireContext());
-        if (subscribed || remaining <= 0) {
+        com.quran.quranaudio.online.subscription.DiscountManager.Plan active =
+                mgr.activePlan(requireContext());
+        long remaining = active == null ? 0 : mgr.remainingMillis(requireContext(), active);
+        if (subscribed || active == null || remaining <= 0) {
             discountBadge.setVisibility(View.GONE);
             return;
         }
 
-        int percent = mgr.cachedDiscountPercent(requireContext());
+        int percent = mgr.cachedDiscountPercent(requireContext(), active);
         if (tvDiscountBadgePercent != null) {
             tvDiscountBadgePercent.setText(percent > 0
                     ? getString(R.string.discount_percent_value, percent)
@@ -1066,12 +1068,16 @@ public class FragMain extends BaseFragment {
                     com.quran.quranaudio.online.subscription.SubscriptionHelper.INSTANCE
                         .isUserSubscribed(requireContext()) ? View.GONE : View.VISIBLE);
                 btnPremium.setOnClickListener(v -> {
-                    // 折扣窗口有效期内，点击 Premium 入口直接进折扣挽回页；否则进常规订阅页。
-                    if (getContext() != null
-                            && com.quran.quranaudio.online.subscription.DiscountManager.INSTANCE
-                                    .isActive(requireContext())) {
+                    // 折扣窗口有效期内，点击 Premium 入口直接进对应方案的折扣挽回页；否则进常规订阅页。
+                    com.quran.quranaudio.online.subscription.DiscountManager.Plan active =
+                            getContext() == null ? null
+                            : com.quran.quranaudio.online.subscription.DiscountManager.INSTANCE
+                                    .activePlan(requireContext());
+                    if (active != null) {
                         startActivity(new Intent(getContext(),
-                                com.quran.quranaudio.online.subscription.DiscountActivity.class));
+                                com.quran.quranaudio.online.subscription.DiscountActivity.class)
+                                .putExtra(com.quran.quranaudio.online.subscription.DiscountActivity.EXTRA_PLAN,
+                                        active.getKey()));
                     } else {
                         com.quran.quranaudio.online.subscription.SubscriptionHelper.INSTANCE
                                 .launchSubscriptionPage(requireContext(), "home_header_legacy");

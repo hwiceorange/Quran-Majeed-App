@@ -496,7 +496,7 @@
 
     <string name="our_portfolio">Our Portfolio</string>
 
-    <string name="privacy_policy_title">Privacy Policy</string>
+    <string name="privacy_policy_title">Gizlilik Politikası</string>
 
     <string name="custom_work">Contact me on Whatsapp for custom work.</string>
 
@@ -2161,27 +2161,27 @@
     <string name="subscription_context_view">Premium\'u Gör</string>
     <string name="subscription_context_not_now">Şimdi değil</string>
     <string name="subscription_continue_free">Ücretsiz sürümle devam et</string>
-    <string name="subscription_enable_trial">Ücretsiz denemek istiyorum</string>
-    <string name="subscription_best_value">En İyi Değer!</string>
+    <string name="subscription_enable_trial">7 gün ücretsiz deneyin</string>
+    <string name="subscription_best_value">EN İYİ DEĞER</string>
     <string name="subscription_price_yearly">$17.99 / yıl</string>
     <string name="subscription_save_vs_monthly">Aylığa göre %%50 tasarruf edin</string>
     <string name="subscription_price_monthly">$2.99 / ay</string>
-    <string name="subscription_free_trial_badge">7 günlük ücretsiz deneme</string>
-    <string name="subscription_monthly_sub_text">Ardından aylık %1$s. Şimdi ödeme yok</string>
+    <string name="subscription_free_trial_badge">7 gün ÜCRETSİZ, sonra aylık</string>
+    <string name="subscription_monthly_sub_text">Sonra %1$s/ay · Bugün ödeme yok</string>
     <string name="subscription_yearly_sub_text">Ardından yıllık %1$s</string>
     <string name="subscription_info_trial_monthly">7 günlük deneme bitmeden iptal etmezseniz, aylık abonelik ücreti tahsil edilecektir.</string>
     <string name="subscription_info_trial_yearly">7 günlük deneme bitmeden iptal etmezseniz, yıllık abonelik ücreti tahsil edilecektir.</string>
     <string name="subscription_info_autorenew_yearly">Aboneliğiniz iptal edilmedikçe her yıl otomatik yenilenecektir.</string>
     <string name="subscription_info_autorenew_monthly">Aboneliğiniz iptal edilmedikçe her ay otomatik yenilenecektir.</string>
-    <string name="subscription_cta_trial">Denemeyi ve planı başlat</string>
-    <string name="subscription_cta_premium">Hemen Premium\'a Geç</string>
+    <string name="subscription_cta_trial">7 günlük ücretsiz denememi başlat</string>
+    <string name="subscription_cta_premium">Premium\'un Kilidini Aç</string>
     <string name="subscription_loading">Yükleniyor...</string>
     <string name="subscription_no_payment_now">ŞİMDİ ÖDEME YOK</string>
     <string name="subscription_legal_info">Uygulamayı kullanmaya devam ederek Kullanım Şartlarımızı ve Gizlilik Politikamızı kabul edersiniz</string>
-    <string name="subscription_error_billing_title">Faturalandırma Bağlantısı Başarısız</string>
-    <string name="subscription_error_billing_message">Google Play Faturalandırmasına bağlanılamadı.\n\nOlası nedenler:\n- Google Play Store yüklü değil veya güncel değil\n- Ağ bağlantı sorunu\n- Google Play hizmetleri devre dışı bırakılmış\n\nLütfen kontrol edip tekrar deneyin.</string>
-    <string name="subscription_error_no_products_title">Kullanılabilir Abonelik Planı Yok</string>
-    <string name="subscription_error_no_products_message">Abonelik planları yüklenemedi.\n\nGerekli ürün kimlikleri:\n- Aylık: %1$s\n- Yıllık: %2$s\n\nGerekli adımlar:\n1. Bu ürünleri Google Play Console\'da oluşturun\n2. Durumlarını Aktif olarak ayarlayın\n3. Uygulamayı bir test kanalına (iç/dış) yayınlayın\n4. Google Play Console\'a test hesabı ekleyin\n5. Yayılması için 1-2 saat bekleyin\n\nTest için imzalı yayın derlemesi kullanın.</string>
+    <string name="subscription_error_billing_title">Planlar yüklenemedi</string>
+    <string name="subscription_error_billing_message">Google Play\'e ulaşamadık. Lütfen internet bağlantınızı kontrol edip tekrar deneyin.</string>
+    <string name="subscription_error_no_products_title">Planlar yüklenemedi</string>
+    <string name="subscription_error_no_products_message">Lütfen internet bağlantınızı kontrol edip tekrar deneyin.</string>
     <string name="subscription_error_plan_title">Plan Kullanılamıyor</string>
     <string name="subscription_error_plan_message">Seçilen %1$s planı kullanılabilir değil.\n\nÜrün kimliği: %2$s\n\nSorun giderme:\n1. Ürünün Google Play Console\'da mevcut olduğundan emin olun\n2. Ürün kimliğinin tamamen eşleştiğini doğrulayın\n3. Ürünün Aktif olarak ayarlandığını kontrol edin\n4. Uygulamanın bir test kanalında yayınlandığını onaylayın\n\nBaşka bir plan seçin veya destekle iletişime geçin.</string>
     <string name="subscription_plan_yearly">Yıllık</string>
@@ -2329,25 +2329,28 @@ Pusula: telefonu doğrultun ve oku takip ederek Kâbe\'ye anlık yönelin.</stri
     <string name="delete_account_failed">Hesap silinemedi: %1$s</string>
     <string name="subscription_monthly_plan_label">Aylık plan</string>
     <string name="subscription_annual_plan_label">Yıllık plan</string>
-    <string name="subscription_save_percent">Aylık plana göre %1$d%% tasarruf</string>
+    <string name="subscription_save_percent">Aylığa göre %1$d%% tasarruf</string>
     <string name="google_play_terms_title">Google Play Şartları</string>
-    <string name="subscription_trial_unavailable">Ücretsiz deneme şu anda bu hesap için kullanılamıyor.</string>
+    <string name="subscription_trial_unavailable">Bu hesap için ücretsiz deneme şu anda kullanılamıyor.</string>
     <string name="subscription_legal_links">Gizlilik Politikası · Google Play Şartları</string>
-    <string name="subscription_monthly_price">Aylık %1$s</string>
-    <string name="subscription_yearly_price">Yıllık %1$s</string>
-    <string name="subscription_disclosure">Abonelik otomatik olarak yenilenir. Seçilen fiyat ve faturalandırma dönemi yukarıda gösterilir ve satın alma öncesinde Google Play tarafından onaylanır. Google Play\'den istediğiniz zaman iptal edebilirsiniz; uygulamayı kaldırmak aboneliği iptal etmez. Premium isteğe bağlıdır ve ücretsiz özellikler kullanılabilir kalır.</string>
+    <string name="subscription_monthly_price">%1$s/ay · İstediğiniz zaman iptal</string>
+    <string name="subscription_yearly_price">%1$s/yıl · İstediğiniz zaman iptal</string>
+    <string name="subscription_disclosure">Otomatik yenilenen abonelik. Seçilen fiyat ve faturalandırma dönemi yukarıda gösterilir ve satın alma öncesinde Google Play tarafından onaylanır. Google Play\'de istediğiniz zaman iptal edin; uygulamayı kaldırmak aboneliği iptal etmez. Premium isteğe bağlıdır ve ücretsiz özellikler kullanılabilir kalır.</string>
     <string name="subscription_trial_unavailable_label">Ücretsiz deneme şu anda kullanılamıyor</string>
     <!-- 折扣挽回页 -->
     <string name="discount_title">Kur\'an yolculuğunuza devam edin</string>
-    <string name="discount_percent_big">%%%1$d İNDİRİM</string>
+    <string name="discount_percent_big">%1$d%% İNDİRİM</string>
     <string name="discount_percent_value">-%1$d%%</string>
     <string name="discount_first_year_caption">ilk yılınızda</string>
-    <string name="discount_countdown_label">TEKLİFİN BİTMESİNE</string>
+    <string name="discount_countdown_label">TEKLİF BİTİMİNE</string>
     <string name="discount_price_period">/ ilk yıl</string>
     <string name="discount_cta">Teklifimi al</string>
-    <string name="discount_cta_percent">%%%1$d indirimimi al</string>
-    <string name="discount_disclosure">İlk yıl %1$s, sonra yılda %2$s. Yenilemeden en az 24 saat önce iptal edilmediği sürece her yıl otomatik yenilenir. Satın almadan önce Google Play tarafından onaylanır; Google Play\'de istediğiniz zaman iptal edebilirsiniz. Uygulamayı kaldırmak aboneliği iptal etmez.</string>
+    <string name="discount_cta_percent">%1$d%% indirimimi al</string>
+    <string name="discount_disclosure">İlk yıl %1$s, sonra yılda %2$s. Yenilemeden en az 24 saat önce iptal edilmezse her yıl otomatik yenilenir. Satın almadan önce Google Play tarafından onaylanır; Google Play\'de istediğiniz zaman iptal edin. Kaldırmak iptal etmez.</string>
     <string name="discount_unavailable">Bu teklif şu anda kullanılamıyor.</string>
     <string name="discount_expired">Bu teklif sona erdi.</string>
     <string name="discount_badge_percent">%50 İNDİRİM</string>
+    <string name="discount_first_month_caption">ilk ayınızda</string>
+    <string name="discount_price_period_month">/ ilk ay</string>
+    <string name="discount_disclosure_month">İlk ay %1$s, sonra ayda %2$s. Yenilemeden en az 24 saat önce iptal edilmezse her ay otomatik yenilenir. Satın almadan önce Google Play tarafından onaylanır; Google Play\'de istediğiniz zaman iptal edin. Kaldırmak iptal etmez.</string>
 </resources>

@@ -522,7 +522,7 @@
 
     <string name="our_portfolio">Our Portfolio</string>
 
-    <string name="privacy_policy_title">Privacy Policy</string>
+    <string name="privacy_policy_title">Dasar Privasi</string>
 
     <string name="custom_work">Contact me on Whatsapp for custom work.</string>
 
@@ -2201,27 +2201,27 @@
     <string name="subscription_context_view">Lihat Premium</string>
     <string name="subscription_context_not_now">Bukan sekarang</string>
     <string name="subscription_continue_free">Teruskan dengan versi percuma</string>
-    <string name="subscription_enable_trial">Saya ingin mencuba percuma</string>
-    <string name="subscription_best_value">Nilai Terbaik!</string>
+    <string name="subscription_enable_trial">Cuba percuma 7 hari</string>
+    <string name="subscription_best_value">NILAI TERBAIK</string>
     <string name="subscription_price_yearly">$17.99 / tahun</string>
     <string name="subscription_save_vs_monthly">Jimat 50%% berbanding Bulanan</string>
     <string name="subscription_price_monthly">$2.99 / bulan</string>
-    <string name="subscription_free_trial_badge">Ujian percuma 7 hari</string>
-    <string name="subscription_monthly_sub_text">Kemudian %1$s sebulan. Tiada bayaran sekarang</string>
+    <string name="subscription_free_trial_badge">Percuma 7 hari, kemudian bulanan</string>
+    <string name="subscription_monthly_sub_text">Kemudian %1$s/bulan · Tiada bayaran hari ini</string>
     <string name="subscription_yearly_sub_text">Kemudian %1$s setahun</string>
     <string name="subscription_info_trial_monthly">Jika anda tidak membatalkan sebelum ujian 7 hari tamat, harga langganan bulanan akan dikenakan.</string>
     <string name="subscription_info_trial_yearly">Jika anda tidak membatalkan sebelum ujian 7 hari tamat, harga langganan tahunan akan dikenakan.</string>
     <string name="subscription_info_autorenew_yearly">Langganan anda akan diperbaharui secara automatik setiap tahun melainkan dibatalkan.</string>
     <string name="subscription_info_autorenew_monthly">Langganan anda akan diperbaharui secara automatik setiap bulan melainkan dibatalkan.</string>
-    <string name="subscription_cta_trial">Mulakan ujian &amp; pelan</string>
-    <string name="subscription_cta_premium">Naik Taraf Premium Sekarang</string>
+    <string name="subscription_cta_trial">Mulakan percubaan percuma 7 hari</string>
+    <string name="subscription_cta_premium">Buka Kunci Premium</string>
     <string name="subscription_loading">Memuatkan...</string>
     <string name="subscription_no_payment_now">TIADA BAYARAN SEKARANG</string>
     <string name="subscription_legal_info">Dengan meneruskan penggunaan aplikasi, anda menerima Terma penggunaan dan Dasar Privasi kami</string>
-    <string name="subscription_error_billing_title">Sambungan Pengebilan Gagal</string>
-    <string name="subscription_error_billing_message">Tidak dapat menyambung ke Google Play Billing.\n\nKemungkinan sebab:\n- Google Play Store tidak dipasang atau dikemas kini\n- Masalah sambungan rangkaian\n- Perkhidmatan Google Play dinyahaktifkan\n\nSila semak dan cuba lagi.</string>
-    <string name="subscription_error_no_products_title">Tiada Pelan Langganan Tersedia</string>
-    <string name="subscription_error_no_products_message">Tidak dapat memuatkan pelan langganan.\n\nID produk diperlukan:\n- Bulanan: %1$s\n- Tahunan: %2$s\n\nLangkah persediaan:\n1. Cipta produk ini dalam Google Play Console\n2. Tetapkan status kepada status Active\n3. Terbitkan aplikasi ke trek ujian (dalaman/tertutup)\n4. Tambah akaun ujian dalam Google Play Console\n5. Tunggu 1-2 jam untuk penyebaran\n\nUntuk ujian, gunakan binaan keluaran yang ditandatangani.</string>
+    <string name="subscription_error_billing_title">Tidak dapat memuatkan pelan</string>
+    <string name="subscription_error_billing_message">Kami tidak dapat menghubungi Google Play. Sila semak sambungan internet anda dan cuba lagi.</string>
+    <string name="subscription_error_no_products_title">Tidak dapat memuatkan pelan</string>
+    <string name="subscription_error_no_products_message">Sila semak sambungan internet anda dan cuba lagi.</string>
     <string name="subscription_error_plan_title">Pelan Tidak Tersedia</string>
     <string name="subscription_error_plan_message">Pelan %1$s yang dipilih tidak tersedia.\n\nID produk: %2$s\n\nLangkah penyelesaian masalah:\n1. Semak sama ada produk wujud dalam Google Play Console\n2. Pastikan ID produk sepadan tepat\n3. Pastikan produk ditetapkan kepada status Active\n4. Sahkan aplikasi diterbitkan pada trek ujian\n\nCuba pilih pelan lain atau hubungi sokongan.</string>
     <string name="subscription_plan_yearly">Tahunan</string>
@@ -2412,10 +2412,10 @@ Kompas: halakan telefon dan ikut anak panah ke arah Kaabah secara langsung.</str
     <string name="google_play_terms_title">Terma Google Play</string>
     <string name="subscription_trial_unavailable">Percubaan percuma tidak tersedia untuk akaun ini buat masa ini.</string>
     <string name="subscription_legal_links">Dasar Privasi · Terma Google Play</string>
-    <string name="subscription_monthly_price">%1$s sebulan</string>
-    <string name="subscription_yearly_price">%1$s setahun</string>
-    <string name="subscription_disclosure">Langganan diperbaharui secara automatik. Harga dan tempoh bil yang dipilih dipaparkan di atas dan disahkan oleh Google Play sebelum pembelian. Batalkan pada bila-bila masa di Google Play; menyahpasang aplikasi tidak membatalkan langganan. Premium adalah pilihan dan ciri percuma kekal tersedia.</string>
-    <string name="subscription_trial_unavailable_label">Percubaan percuma tidak tersedia sekarang</string>
+    <string name="subscription_monthly_price">%1$s/bulan · Batal bila-bila masa</string>
+    <string name="subscription_yearly_price">%1$s/tahun · Batal bila-bila masa</string>
+    <string name="subscription_disclosure">Langganan diperbaharui secara automatik. Harga dan tempoh pengebilan yang dipilih dipaparkan di atas dan disahkan oleh Google Play sebelum pembelian. Batal bila-bila masa di Google Play; menyahpasang aplikasi tidak membatalkan langganan. Premium adalah pilihan dan ciri percuma kekal tersedia.</string>
+    <string name="subscription_trial_unavailable_label">Percubaan percuma tidak tersedia buat masa ini</string>
     <!-- 折扣挽回页 -->
     <string name="discount_title">Teruskan perjalanan al-Quran anda</string>
     <string name="discount_percent_big">Diskaun %1$d%%</string>
@@ -2423,10 +2423,13 @@ Kompas: halakan telefon dan ikut anak panah ke arah Kaabah secara langsung.</str
     <string name="discount_first_year_caption">untuk tahun pertama anda</string>
     <string name="discount_countdown_label">TAWARAN TAMAT DALAM</string>
     <string name="discount_price_period">/ tahun pertama</string>
-    <string name="discount_cta">Dapatkan tawaran saya</string>
-    <string name="discount_cta_percent">Dapatkan diskaun %1$d%% saya</string>
-    <string name="discount_disclosure">Tahun pertama %1$s, kemudian %2$s setahun. Diperbaharui secara automatik setiap tahun melainkan dibatalkan sekurang-kurangnya 24 jam sebelum pembaharuan. Disahkan oleh Google Play sebelum pembelian; batalkan bila-bila masa di Google Play. Menyahpasang aplikasi tidak membatalkan langganan.</string>
-    <string name="discount_unavailable">Tawaran ini tidak tersedia buat masa ini.</string>
+    <string name="discount_cta">Tuntut tawaran saya</string>
+    <string name="discount_cta_percent">Tuntut diskaun %1$d%% saya</string>
+    <string name="discount_disclosure">Tahun pertama %1$s, kemudian %2$s setahun. Diperbaharui automatik setiap tahun melainkan dibatalkan sekurang-kurangnya 24 jam sebelum pembaharuan. Disahkan oleh Google Play sebelum pembelian; batal bila-bila masa di Google Play. Menyahpasang tidak membatalkan.</string>
+    <string name="discount_unavailable">Tawaran ini tidak tersedia sekarang.</string>
     <string name="discount_expired">Tawaran ini telah tamat.</string>
     <string name="discount_badge_percent">Diskaun 50%</string>
+    <string name="discount_first_month_caption">untuk bulan pertama anda</string>
+    <string name="discount_price_period_month">/ bulan pertama</string>
+    <string name="discount_disclosure_month">Bulan pertama %1$s, kemudian %2$s sebulan. Diperbaharui automatik setiap bulan melainkan dibatalkan sekurang-kurangnya 24 jam sebelum pembaharuan. Disahkan oleh Google Play sebelum pembelian; batal bila-bila masa di Google Play. Menyahpasang tidak membatalkan.</string>
 </resources>
