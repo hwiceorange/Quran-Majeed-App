@@ -6,6 +6,12 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
+import android.content.Intent
+import android.net.Uri
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -34,6 +40,7 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
     private var monthlyProduct: ProductDetails? = null
     private var yearlyProduct: ProductDetails? = null
     private var isLoading = false
+    private var trialOfferAvailable = false
 
     /**
      * 🌐 应用语言配置
@@ -176,24 +183,31 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
 
         // 免费试用开关
         binding.switchFreeTrial.setOnCheckedChangeListener { _, isChecked ->
-            isFreeTrialEnabled = isChecked
-            
-            // 开启试用时自动切换到月套餐，关闭时切换回年套餐
-            if (isChecked) {
-                selectMonthlyPlan()
-            } else {
-                selectYearlyPlan()
+            if (isChecked && !trialOfferAvailable) {
+                binding.switchFreeTrial.isChecked = false
+                Toast.makeText(this, R.string.subscription_trial_unavailable, Toast.LENGTH_SHORT).show()
+                return@setOnCheckedChangeListener
             }
-            
+            isFreeTrialEnabled = isChecked
+            if (isChecked && isYearlySelected) selectMonthlyPlan(keepTrialSelection = true)
             updateSubscriptionInfo()
             updateButtonText()
             updateNoPaymentVisibility()
+        }
+
+        // The whole row is a touch target. This restores the familiar behaviour from the
+        // previous paywall and is considerably easier to use than targeting the switch alone.
+        binding.freeTrialCard.setOnClickListener {
+            // Always toggle; the listener above is the single place that decides eligibility.
+            binding.switchFreeTrial.toggle()
         }
 
         // 订阅按钮
         binding.btnSubscribe.setOnClickListener {
             handleSubscription()
         }
+
+        setupLegalLinks()
     }
 
     private fun selectYearlyPlan() {
@@ -210,14 +224,17 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
         updateNoPaymentVisibility()
     }
 
-    private fun selectMonthlyPlan() {
+    private fun selectMonthlyPlan(keepTrialSelection: Boolean = false) {
         isYearlySelected = false
         binding.radioYearly.isChecked = false
         binding.radioMonthly.isChecked = true
         
-        // 选择月套餐时开启试用开关
-        binding.switchFreeTrial.isChecked = true
-        isFreeTrialEnabled = true
+        // Restore the established flow: an eligible monthly plan includes the advertised trial.
+        // If the account is not eligible, the same card remains available at its normal price.
+        if (!keepTrialSelection) {
+            isFreeTrialEnabled = trialOfferAvailable
+            binding.switchFreeTrial.isChecked = trialOfferAvailable
+        }
         
         updateSubscriptionInfo()
         updateButtonText()
@@ -232,6 +249,7 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
             else -> R.string.subscription_info_autorenew_monthly
         }
         binding.tvSubscriptionInfo.setText(infoRes)
+        updateDisplayedPlanPrices()
     }
 
     private fun updateButtonText() {
@@ -297,6 +315,8 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
                     }
                 }
             }
+            updateTrialAvailability()
+            updateAnnualSavings()
             
             setLoadingState(false)
             
@@ -343,8 +363,8 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
                 Toast.LENGTH_LONG
             ).show()
             
-            // 订阅成功后导航到主页
-            navigateToMainActivity()
+            // Never interrupt a successful purchase with an advertisement.
+            proceedToMainActivity()
         }
     }
 
@@ -399,23 +419,116 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
         
         if (price != null) {
             // 更新月度套餐价格显示 - 使用占位符格式化字符串
-            val subText = getString(R.string.subscription_monthly_sub_text, price)
-            binding.tvMonthlySubText.text = subText
-            android.util.Log.d("SubscriptionActivity", "💰 Monthly price updated: $subText")
+            updateDisplayedPlanPrices()
+            android.util.Log.d("SubscriptionActivity", "💰 Monthly price updated: $price")
         }
     }
 
     private fun updateYearlyPlanUI(product: ProductDetails) {
-        // 获取价格信息
-        val offer = product.subscriptionOfferDetails?.firstOrNull()
-        val price = offer?.pricingPhases?.pricingPhaseList?.firstOrNull()?.formattedPrice
+        val price = paidRecurringPhase(product)?.formattedPrice
         
         if (price != null) {
             // 更新年度套餐价格显示 - 使用占位符格式化字符串
-            val subText = getString(R.string.subscription_yearly_sub_text, price)
-            binding.tvYearlySubText.text = subText
-            android.util.Log.d("SubscriptionActivity", "💰 Yearly price updated: $subText")
+            updateDisplayedPlanPrices()
+            android.util.Log.d("SubscriptionActivity", "💰 Yearly price updated: $price")
         }
+    }
+
+    /** Always show the exact Play-localized charge for the currently selected terms. */
+    private fun updateDisplayedPlanPrices() {
+        monthlyProduct?.let(::paidRecurringPhase)?.formattedPrice?.let { price ->
+            binding.tvMonthlySubText.text = getString(
+                if (isFreeTrialEnabled) R.string.subscription_monthly_sub_text
+                else R.string.subscription_monthly_price,
+                price
+            )
+        }
+        yearlyProduct?.let(::paidRecurringPhase)?.formattedPrice?.let { price ->
+            binding.tvYearlySubText.text = getString(R.string.subscription_yearly_price, price)
+        }
+    }
+
+    private fun paidRecurringPhase(product: ProductDetails) =
+        product.subscriptionOfferDetails
+            ?.flatMap { it.pricingPhases.pricingPhaseList }
+            ?.firstOrNull { it.priceAmountMicros > 0 && it.recurrenceMode == 1 }
+            ?: product.subscriptionOfferDetails
+                ?.flatMap { it.pricingPhases.pricingPhaseList }
+                ?.firstOrNull { it.priceAmountMicros > 0 }
+
+    private fun updateTrialAvailability() {
+        // ProductDetails only contains offers this Play account is eligible for. Do not bind
+        // eligibility to a console offerId: migrated/base-plan offers may have a different ID,
+        // and Play commonly represents seven days as P1W rather than P7D.
+        trialOfferAvailable = monthlyProduct?.let(::eligibleTrialOffer) != null
+        // Dump exactly what Play returned so trial eligibility can be told apart from a
+        // detection bug: an ineligible account legitimately receives no free-price phase.
+        android.util.Log.d("SubscriptionActivity", "🎁 trialOfferAvailable=$trialOfferAvailable")
+        listOfNotNull(monthlyProduct, yearlyProduct).forEach { product ->
+            android.util.Log.d("SubscriptionActivity", "🎁 product=${product.productId}")
+            product.subscriptionOfferDetails?.forEachIndexed { i, offer ->
+                android.util.Log.d("SubscriptionActivity", "  offer[$i] basePlanId=${offer.basePlanId} offerId=${offer.offerId} tags=${offer.offerTags}")
+                offer.pricingPhases.pricingPhaseList.forEachIndexed { p, phase ->
+                    android.util.Log.d("SubscriptionActivity", "    phase[$p] price=${phase.formattedPrice} micros=${phase.priceAmountMicros} period=${phase.billingPeriod} recurrence=${phase.recurrenceMode} cycles=${phase.billingCycleCount}")
+                }
+            }
+        }
+        // The trial is a headline selling point, so the row stays on screen for everyone. What
+        // changes is the promise: Play only returns offers this account can actually claim, so an
+        // ineligible account is told the trial is unavailable rather than shown an offer that
+        // would silently bill at full price on purchase.
+        binding.freeTrialCard.visibility = View.VISIBLE
+        // Stay enabled even when ineligible — a disabled switch swallows the touch and reads as a
+        // broken paywall. The guard in the listener explains the situation instead.
+        binding.switchFreeTrial.isEnabled = true
+        binding.freeTrialCard.isClickable = true
+        binding.freeTrialCard.alpha = if (trialOfferAvailable) 0.85f else 0.62f
+        binding.tvFreeTrialLabel.setText(
+            if (trialOfferAvailable) R.string.subscription_enable_trial
+            else R.string.subscription_trial_unavailable_label
+        )
+        if (!trialOfferAvailable) {
+            isFreeTrialEnabled = false
+            binding.switchFreeTrial.isChecked = false
+            binding.tvMonthlyMainText.setText(R.string.subscription_monthly_plan_label)
+            updateSubscriptionInfo()
+            updateButtonText()
+            updateNoPaymentVisibility()
+        } else {
+            binding.tvMonthlyMainText.setText(R.string.subscription_free_trial_badge)
+        }
+    }
+
+    private fun updateAnnualSavings() {
+        val monthlyMicros = monthlyProduct?.let(::paidRecurringPhase)?.priceAmountMicros ?: return
+        val yearlyMicros = yearlyProduct?.let(::paidRecurringPhase)?.priceAmountMicros ?: return
+        val annualizedMonthly = monthlyMicros * 12
+        if (annualizedMonthly > yearlyMicros) {
+            val percent = (((annualizedMonthly - yearlyMicros) * 100) / annualizedMonthly).toInt()
+            binding.tvYearlyMainText.text = getString(R.string.subscription_save_percent, percent)
+        } else {
+            binding.tvYearlyMainText.setText(R.string.subscription_annual_plan_label)
+        }
+    }
+
+    private fun setupLegalLinks() {
+        val privacy = getString(R.string.privacy_policy_title)
+        val terms = getString(R.string.google_play_terms_title)
+        val text = "$privacy  •  $terms"
+        val spannable = SpannableString(text)
+        fun link(label: String, url: String) {
+            val start = text.indexOf(label)
+            spannable.setSpan(object : ClickableSpan() {
+                override fun onClick(widget: View) {
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                }
+            }, start, start + label.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        link(privacy, getString(R.string.privacy_policy_url))
+        link(terms, getString(R.string.google_play_terms_url))
+        binding.tvLegalLinks.text = spannable
+        binding.tvLegalLinks.movementMethod = LinkMovementMethod.getInstance()
+        binding.tvLegalLinks.highlightColor = android.graphics.Color.TRANSPARENT
     }
 
     private fun handleSubscription() {
@@ -442,18 +555,7 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
 
         // 获取 offer token
         val offerToken = if (isFreeTrialEnabled && !isYearlySelected) {
-            // 🔑 月订阅的免费试用：通过特定的 offer ID 来查找
-            android.util.Log.d("SubscriptionActivity", "🔍 Looking for trial offer with ID '${BillingManager.FREE_TRIAL_OFFER_ID}'...")
-            
-            val trialOffer = selectedProduct.subscriptionOfferDetails?.firstOrNull { offer ->
-                // 查找特定的免费试用优惠 ID
-                val hasTrialOfferId = offer.offerId == BillingManager.FREE_TRIAL_OFFER_ID
-                
-                android.util.Log.d("SubscriptionActivity", "  Checking offer: basePlanId=${offer.basePlanId}, offerId=${offer.offerId}")
-                
-                hasTrialOfferId
-            }
-            
+            val trialOffer = eligibleTrialOffer(selectedProduct)
             if (trialOffer != null) {
                 android.util.Log.d("SubscriptionActivity", "✅ Found trial offer: basePlanId=${trialOffer.basePlanId}, offerId=${trialOffer.offerId}")
                 
@@ -464,40 +566,35 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
                 
                 trialOffer.offerToken
             } else {
-                android.util.Log.w("SubscriptionActivity", "⚠️ No trial offer with ID '${BillingManager.FREE_TRIAL_OFFER_ID}' found")
+                android.util.Log.w("SubscriptionActivity", "⚠️ Play returned no eligible seven-day trial offer")
                 
                 // 打印所有可用的offers用于调试
                 selectedProduct.subscriptionOfferDetails?.forEachIndexed { index, offer ->
                     android.util.Log.d("SubscriptionActivity", "  Available offer $index: basePlanId=${offer.basePlanId}, offerId=${offer.offerId}")
                 }
                 
-                // 回退到基础方案（没有offerId的offer）
-                val basePlanOffer = selectedProduct.subscriptionOfferDetails?.firstOrNull { offer ->
-                    offer.offerId.isNullOrEmpty()
-                }
-                
-                if (basePlanOffer != null) {
-                    android.util.Log.d("SubscriptionActivity", "📦 Using base plan offer: basePlanId=${basePlanOffer.basePlanId}")
-                    basePlanOffer.offerToken
-                } else {
-                    android.util.Log.w("SubscriptionActivity", "⚠️ No base plan offer found, using first available")
-                    selectedProduct.subscriptionOfferDetails?.firstOrNull()?.offerToken
-                }
+                // Never replace a promised free trial with a paid base plan.
+                Toast.makeText(this, R.string.subscription_trial_unavailable, Toast.LENGTH_LONG).show()
+                null
             }
         } else {
             // 年订阅或未启用免费试用：选择基础方案（没有offerId的offer）
             android.util.Log.d("SubscriptionActivity", "📦 Looking for base plan offer (no trial)...")
             
             val basePlanOffer = selectedProduct.subscriptionOfferDetails?.firstOrNull { offer ->
-                offer.offerId.isNullOrEmpty()
+                offer.offerId.isNullOrEmpty() && offer.pricingPhases.pricingPhaseList.none {
+                    it.priceAmountMicros == 0L
+                }
+            } ?: selectedProduct.subscriptionOfferDetails?.firstOrNull { offer ->
+                offer.pricingPhases.pricingPhaseList.none { it.priceAmountMicros == 0L }
             }
             
             if (basePlanOffer != null) {
                 android.util.Log.d("SubscriptionActivity", "✅ Found base plan: basePlanId=${basePlanOffer.basePlanId}")
                 basePlanOffer.offerToken
             } else {
-                android.util.Log.w("SubscriptionActivity", "⚠️ No base plan found, using first available")
-                selectedProduct.subscriptionOfferDetails?.firstOrNull()?.offerToken
+                android.util.Log.w("SubscriptionActivity", "⚠️ No non-trial offer is eligible")
+                null
             }
         }
 
@@ -530,24 +627,61 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
         )
     }
 
+    private fun eligibleTrialOffer(product: ProductDetails) =
+        // Play only returns offers this account is eligible for, so any free phase it hands back
+        // is a genuinely claimable trial. Match the console offer ID first (this is the mapping
+        // production 1.9.35 shipped), then fall back to any zero-price phase regardless of how
+        // Play spells the period — P1W, P7D and localized base-plan variants are all valid.
+        product.subscriptionOfferDetails?.firstOrNull { offer ->
+            offer.offerId == BillingManager.FREE_TRIAL_OFFER_ID &&
+                offer.pricingPhases.pricingPhaseList.any { it.priceAmountMicros == 0L }
+        } ?: product.subscriptionOfferDetails?.firstOrNull { offer ->
+            offer.pricingPhases.pricingPhaseList.any { it.priceAmountMicros == 0L }
+        }
+
     /**
      * 处理关闭按钮和返回键
      */
     private fun handleClose() {
         android.util.Log.d("SubscriptionActivity", "🔙 User closed subscription page")
-        
+
         // 检查是否来自引导流程
         val fromOnboarding = intent.getBooleanExtra("from_onboarding", false)
-        
+
+        // 先把付费页底下的目标屏（引导流程需先落到主页）安排好，再决定是否叠加折扣挽回页，
+        // 这样用户关闭折扣页后回到的是 App 而不是付费页。
         if (fromOnboarding) {
-            // 来自引导流程，导航到主页
             android.util.Log.d("SubscriptionActivity", "📱 From onboarding, navigating to MainActivity")
             navigateToMainActivity()
-        } else {
-            // 普通页面打开，直接关闭
-            android.util.Log.d("SubscriptionActivity", "❌ Normal close, finishing activity")
+        }
+
+        // 💡 折扣挽回：用户主动关闭付费页时，若从未挽回过且 Play 确有折扣 offer，
+        // 叠加一次 5 折挽回页（一生只弹一次，功修时段避让）。
+        maybeInterceptWithDiscount()
+
+        if (!fromOnboarding) {
             finish()
         }
+    }
+
+    /**
+     * 关闭付费页时尝试叠加折扣挽回页。
+     * 折扣 offer 由 Play 实际下发决定：拿不到就不拦截，绝不显示虚假折扣。
+     */
+    private fun maybeInterceptWithDiscount() {
+        val discountOffer = DiscountManager.findDiscountOffer(yearlyProduct)
+        val isSubscribed = SubscriptionHelper.isUserSubscribed(this)
+        if (!DiscountManager.shouldInterceptClose(this, discountOffer != null, isSubscribed)) {
+            return
+        }
+        // 启动 1 小时窗口（只写一次），随后拉起挽回页。
+        if (!DiscountManager.startWindow(this)) return
+        // 缓存真实折扣百分比供主页角标显示（不硬编码）。
+        DiscountManager.computePercent(discountOffer!!)?.let {
+            DiscountManager.cacheDiscountPercent(this, it)
+        }
+        android.util.Log.d("SubscriptionActivity", "💡 Intercepting close with discount recovery page")
+        startActivity(Intent(this, DiscountActivity::class.java))
     }
     
     /**
@@ -556,32 +690,8 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
      */
     private fun navigateToMainActivity() {
         android.util.Log.d("SubscriptionActivity", "🏠 Navigating to MainActivity")
-        
-        // 🎯 Check if this is from onboarding flow (only show ad in onboarding flow)
-        val fromOnboarding = intent.getBooleanExtra("from_onboarding", false)
-        
-        if (fromOnboarding) {
-            android.util.Log.d("SubscriptionActivity", "🎯 From onboarding - attempting to show interstitial ad")
-            
-            // Try to show interstitial ad with callback (handles subscription check internally)
-            val adShown = com.quranaudio.common.ad.InterstitialAdManager.getInstance().showAdIfAvailable(this) {
-                // This callback is invoked when user dismisses the ad or ad fails to show
-                android.util.Log.d("SubscriptionActivity", "✅ Ad closed by user, proceeding to MainActivity")
-                proceedToMainActivity()
-            }
-            
-            if (!adShown) {
-                // No ad available or user subscribed - navigate immediately
-                android.util.Log.d("SubscriptionActivity", "⚠️ No ad shown (subscribed or unavailable), navigating immediately")
-                proceedToMainActivity()
-            } else {
-                android.util.Log.d("SubscriptionActivity", "✅ Interstitial ad shown, waiting for user to close it")
-            }
-        } else {
-            // Not from onboarding - navigate directly without ad
-            android.util.Log.d("SubscriptionActivity", "📱 Not from onboarding, navigating directly")
-            proceedToMainActivity()
-        }
+        // Closing the onboarding paywall is part of the first-run journey, not an ad break.
+        proceedToMainActivity()
     }
     
     /**

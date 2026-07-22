@@ -2,6 +2,9 @@ package com.quran.quranaudio.online.subscription
 
 import android.content.Context
 import android.content.Intent
+import android.app.Activity
+import androidx.appcompat.app.AlertDialog
+import com.quran.quranaudio.online.R
 
 /**
  * 订阅功能辅助类
@@ -71,9 +74,9 @@ object SubscriptionHelper {
     private const val KEY_ENGAGED_SESSIONS = "engaged_sessions"
 
     private const val MIN_INTERVAL_MS = 3L * 24 * 60 * 60 * 1000  // 两次提示最少间隔 3 天
-    private const val MAX_LIFETIME_PROMPTS = 3                     // 一生最多提示 3 次
+    private const val MAX_LIFETIME_PROMPTS = 6
     // 在第 N 次"已产生阅读价值"的会话触发(错开、不打扰新用户首日)
-    private val TRIGGER_AT_SESSIONS = intArrayOf(3, 8, 20)
+    private val TRIGGER_AT_SESSIONS = intArrayOf(2, 5, 10, 21, 45, 90)
 
     /**
      * 情境化订阅提示：仅对"已体验价值的非订阅用户"在自然节点软性触发。
@@ -91,6 +94,8 @@ object SubscriptionHelper {
     fun maybeShowContextualPrompt(context: Context, hasReadingValue: Boolean): Boolean {
         try {
             if (isUserSubscribed(context) || !hasReadingValue) return false
+            val activity = context as? Activity ?: return false
+            if (activity.isFinishing || activity.isDestroyed) return false
 
             val prefs = context.getSharedPreferences(PROMPT_PREFS, Context.MODE_PRIVATE)
 
@@ -119,7 +124,15 @@ object SubscriptionHelper {
                 .putLong(KEY_LAST_PROMPT_TIME, System.currentTimeMillis())
                 .apply()
 
-            launchSubscriptionPage(context, "contextual_prompt")
+            // A soft invitation after value delivery avoids breaking reading, prayer or dhikr.
+            AlertDialog.Builder(activity)
+                .setTitle(R.string.subscription_context_title)
+                .setMessage(R.string.subscription_context_message)
+                .setPositiveButton(R.string.subscription_context_view) { _, _ ->
+                    launchSubscriptionPage(activity, "reading_value_prompt")
+                }
+                .setNegativeButton(R.string.subscription_context_not_now, null)
+                .show()
             return true
         } catch (e: Exception) {
             return false
@@ -150,4 +163,3 @@ object SubscriptionHelper {
         }
     }
 }
-

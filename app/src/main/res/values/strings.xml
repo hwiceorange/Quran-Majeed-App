@@ -915,10 +915,16 @@
     <string name="go_premium">Go Premium</string>
     <string name="unlock_premium_features">Unlock all premium features</string>
     <string name="subscription_heading">Unlock Your Personal\nQuranic Mentor</string>
-    <string name="subscription_feature_ai">AI-Powered Learning Paths</string>
-    <string name="subscription_feature_ad_free">Ad-Free Devotion</string>
+    <string name="subscription_feature_ai">Personal Quran Plans &amp; Progress</string>
+    <string name="subscription_feature_ad_free">A Calm, Ad-Free Quran Experience</string>
     <string name="subscription_feature_tafsir">Deep Tafsir &amp; Context</string>
-    <string name="subscription_feature_quiz">Full Quiz Library</string>
+    <string name="subscription_feature_quiz">Quran Quizzes &amp; Progress Insights</string>
+    <string name="subscription_home_entry">Quran Premium</string>
+    <string name="subscription_context_title">Continue your Quran journey</string>
+    <string name="subscription_context_message">Explore a calmer ad-free experience, personal Quran plans, deeper Tafsir and learning tools.</string>
+    <string name="subscription_context_view">View Premium</string>
+    <string name="subscription_context_not_now">Not now</string>
+    <string name="subscription_continue_free">Continue with the free version</string>
     <string name="subscription_enable_trial">I want to try free</string>
     <string name="subscription_best_value">Best Value!</string>
     <string name="subscription_price_yearly">$17.99 / year</string>
@@ -927,6 +933,8 @@
     <string name="subscription_free_trial_badge">7-day free trial</string>
     <string name="subscription_monthly_sub_text">Then %1$s per month. No payment now</string>
     <string name="subscription_yearly_sub_text">Then %1$s per year</string>
+    <string name="subscription_monthly_price">%1$s per month</string>
+    <string name="subscription_yearly_price">%1$s per year</string>
     <string name="subscription_info_trial_monthly">Cancel before the 7-day trial ends to avoid the monthly subscription charge.</string>
     <string name="subscription_info_trial_yearly">Cancel before the 7-day trial ends to avoid the annual subscription charge.</string>
     <string name="subscription_info_autorenew_yearly">Your subscription auto-renews annually unless canceled.</string>
@@ -936,6 +944,7 @@
     <string name="subscription_loading">Loading...</string>
     <string name="subscription_no_payment_now">NO PAYMENT NOW</string>
     <string name="subscription_legal_info">By continuing to use the app, you accept our Terms of use and Privacy policy</string>
+    <string name="subscription_disclosure">Auto-renewing subscription. The selected price and billing period are shown above and confirmed by Google Play before purchase. Cancel anytime in Google Play; uninstalling the app does not cancel. Premium is optional and free features remain available.</string>
     <string name="subscription_error_billing_title">Billing Connection Failed</string>
     <string name="subscription_error_billing_message">Unable to connect to Google Play Billing.\n\nPossible reasons:\n- Google Play Store is not installed or updated\n- Network connection issue\n- Google Play services are disabled\n\nPlease check and try again.</string>
     <string name="subscription_error_no_products_title">No Subscription Plans Available</string>
@@ -1610,6 +1619,11 @@
     <string name="compass_point_nw">NW</string>
     <string name="qibla_map_need_location">Turn on location to see the direction to the Kaaba from where you are.</string>
     <string name="qibla_map_enable_location">Enable location</string>
+    <string name="qibla_map_recenter">Show your location and the Kaaba</string>
+    <string name="qibla_map_locating">Finding your location…</string>
+    <string name="qibla_map_location_ready">Your location and Qibla route</string>
+    <string name="qibla_map_location_unavailable">Location unavailable. Tap to try again.</string>
+    <string name="qibla_map_location_off">Turn on device location to continue.</string>
     <string name="qibla_intro_title">Finding the Qibla</string>
     <string name="qibla_intro_message">Map: shows the direction to the Kaaba on a map — works anywhere, no compass needed.
 Compass: point your phone and follow the arrow to the Kaaba in real time.</string>
@@ -1641,4 +1655,45 @@ Compass: point your phone and follow the arrow to the Kaaba in real time.</strin
     <string name="khatmah_notif_body">Today\'s recitation: Juz %1$d. May Allah accept it.</string>
     <string name="wbw_title">Word by word</string>
     <string name="wbw_unavailable">Word-by-word not available for this verse.</string>
+    <string name="account_and_subscription_title">Account &amp; subscription</string>
+    <string name="manage_subscription_title">Manage or cancel subscription</string>
+    <string name="manage_subscription_summary">Open Google Play to change or cancel your plan</string>
+    <string name="delete_account_title">Delete account</string>
+    <string name="delete_account_summary">Permanently delete your account and synced cloud data</string>
+    <string name="delete_account_dialog_title">Delete your account?</string>
+    <string name="delete_account_dialog_message">Your synced prayer logs, learning progress, streaks and account identity will be permanently deleted. Downloads and prayer settings stored only on this device will remain. A Google Play subscription must be canceled separately.</string>
+    <string name="delete_account_confirm">Delete permanently</string>
+    <string name="delete_account_auth_required">For your security, confirm your Google account to continue.</string>
+    <string name="delete_account_progress">Deleting account and synced data…</string>
+    <string name="delete_account_success">Your account and synced data were deleted.</string>
+    <string name="delete_account_failed">We couldn’t delete the account: %1$s</string>
+    <string name="subscription_monthly_plan_label">Monthly plan</string>
+    <string name="subscription_annual_plan_label">Annual plan</string>
+    <string name="subscription_save_percent">Save %1$d%% vs monthly</string>
+    <string name="google_play_terms_title">Google Play Terms</string>
+    <string name="subscription_trial_unavailable">Free trial is not currently available for this account.</string>
+    <string name="subscription_trial_unavailable_label">Free trial currently unavailable</string>
+    <string name="subscription_legal_links">Privacy Policy · Google Play Terms</string>
+    <string name="google_play_terms_url" translatable="false">https://play.google.com/about/play-terms/</string>
+
+    <!-- 折扣挽回页（年订阅首次 5 折） -->
+    <string name="discount_title">Continue your Quran journey</string>
+    <string name="discount_percent_placeholder">50% OFF</string>
+    <!-- %1$d = 折扣百分比 -->
+    <string name="discount_percent_big">%1$d%% OFF</string>
+    <!-- 主页角标用的紧凑折扣（如 -50%） -->
+    <string name="discount_percent_value">-%1$d%%</string>
+    <string name="discount_first_year_caption">on your first year</string>
+    <string name="discount_countdown_placeholder">60:00</string>
+    <string name="discount_countdown_label">OFFER ENDS IN</string>
+    <string name="discount_price_period">/ first year</string>
+    <string name="discount_cta">Claim my offer</string>
+    <!-- %1$d = 折扣百分比 -->
+    <string name="discount_cta_percent">Claim my %1$d%% off</string>
+    <!-- %1$s = 首年折后价, %2$s = 之后每年原价 -->
+    <string name="discount_disclosure">First year %1$s, then %2$s per year. Auto-renews yearly unless canceled at least 24 hours before renewal. Confirmed by Google Play before purchase; cancel anytime in Google Play. Uninstalling does not cancel.</string>
+    <string name="discount_unavailable">This offer is not available right now.</string>
+    <string name="discount_expired">This offer has ended.</string>
+    <!-- 主页订阅图标角标 -->
+    <string name="discount_badge_percent">50% OFF</string>
 </resources>

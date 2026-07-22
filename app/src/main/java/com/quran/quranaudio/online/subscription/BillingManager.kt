@@ -265,19 +265,25 @@ class BillingManager(
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     Log.d(TAG, "✅ Found ${purchasesList.size} existing purchases")
                     
-                    if (purchasesList.isEmpty()) {
+                    val activePurchase = purchasesList.firstOrNull {
+                        it.purchaseState == Purchase.PurchaseState.PURCHASED
+                    }
+                    if (activePurchase == null) {
+                        // A successful Play response is authoritative. Clear stale entitlement
+                        // only here; transient billing/network failures keep the last known state.
+                        saveSubscriptionStatus(false, "")
                         billingListener?.onSubscriptionStatusChanged(false, null)
                     } else {
-                        purchasesList.forEach { purchase ->
-                            if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
-                                Log.d(TAG, "✅ Active subscription: ${purchase.products}")
-                                updateSubscriptionStatus(purchase)
-                            }
+                        Log.d(TAG, "✅ Active subscription: ${activePurchase.products}")
+                        if (!activePurchase.isAcknowledged) {
+                            acknowledgePurchase(activePurchase)
+                        } else {
+                            updateSubscriptionStatus(activePurchase)
                         }
                     }
                 } else {
                     Log.e(TAG, "❌ Query purchases failed: ${billingResult.debugMessage}")
-                    billingListener?.onSubscriptionStatusChanged(false, null)
+                    // Do not revoke a paid entitlement because Google Play is temporarily unavailable.
                 }
             }
         }
@@ -334,4 +340,3 @@ class BillingManager(
         isConnected = false
     }
 }
-

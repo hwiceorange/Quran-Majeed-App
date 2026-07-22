@@ -1353,10 +1353,16 @@
     <string name="go_premium">الترقية إلى بريميوم</string>
     <string name="unlock_premium_features">افتح جميع المزايا المميزة</string>
     <string name="subscription_heading">افتح مرشدك القرآني\nالشخصي</string>
-    <string name="subscription_feature_ai">مسارات تعليمية مدعومة بالذكاء الاصطناعي</string>
-    <string name="subscription_feature_ad_free">عبادة خالية من الإعلانات</string>
+    <string name="subscription_feature_ai">خطط قرآنية شخصية ومتابعة التقدم</string>
+    <string name="subscription_feature_ad_free">تجربة قرآنية هادئة بلا إعلانات</string>
     <string name="subscription_feature_tafsir">تفسير عميق وسياق</string>
-    <string name="subscription_feature_quiz">مكتبة اختبارات كاملة</string>
+    <string name="subscription_feature_quiz">اختبارات قرآنية ورؤى حول التقدم</string>
+    <string name="subscription_home_entry">قرآن بريميوم</string>
+    <string name="subscription_context_title">واصل رحلتك مع القرآن</string>
+    <string name="subscription_context_message">اكتشف تجربة هادئة بلا إعلانات، وخططًا قرآنية شخصية، وتفسيرًا وأدوات تعلم أعمق.</string>
+    <string name="subscription_context_view">عرض بريميوم</string>
+    <string name="subscription_context_not_now">ليس الآن</string>
+    <string name="subscription_continue_free">المتابعة بالنسخة المجانية</string>
     <string name="subscription_enable_trial">أريد التجربة مجاناً</string>
     <string name="subscription_best_value">أفضل قيمة!</string>
     <string name="subscription_price_yearly">$17.99 / سنويًا</string>
@@ -1586,7 +1592,39 @@
     <string name="start_tasbih_line1">ابدأ التسبيح</string>
     <string name="start_tasbih_line2">العدّاد</string>
     <string name="get_start_now">ابدأ الآن</string>
+    <string name="account_and_subscription_title">الحساب والاشتراك</string>
+    <string name="manage_subscription_title">إدارة الاشتراك أو إلغاؤه</string>
+    <string name="manage_subscription_summary">افتح Google Play لتغيير خطتك أو إلغائها</string>
+    <string name="delete_account_title">حذف الحساب</string>
+    <string name="delete_account_summary">حذف حسابك وبياناتك السحابية المتزامنة نهائيًا</string>
+    <string name="delete_account_dialog_title">هل تريد حذف حسابك؟</string>
+    <string name="delete_account_dialog_message">سيتم حذف سجلات الصلاة وتقدم التعلم وسلاسل الإنجاز وهوية الحساب المتزامنة نهائيًا. ستبقى التنزيلات وإعدادات الصلاة المحفوظة على هذا الجهاز. يجب إلغاء اشتراك Google Play بشكل منفصل.</string>
+    <string name="delete_account_confirm">حذف نهائي</string>
+    <string name="delete_account_auth_required">لأمانك، أكّد حساب Google للمتابعة.</string>
+    <string name="delete_account_progress">جارٍ حذف الحساب والبيانات المتزامنة…</string>
+    <string name="delete_account_success">تم حذف حسابك وبياناتك المتزامنة.</string>
+    <string name="delete_account_failed">تعذّر حذف الحساب: %1$s</string>
+    <string name="subscription_monthly_plan_label">الخطة الشهرية</string>
+    <string name="subscription_annual_plan_label">الخطة السنوية</string>
+    <string name="subscription_save_percent">وفّر %1$d%% مقارنةً بالخطة الشهرية</string>
+    <string name="google_play_terms_title">شروط Google Play</string>
+    <string name="subscription_trial_unavailable">التجربة المجانية غير متاحة حاليًا لهذا الحساب.</string>
+    <string name="subscription_legal_links">سياسة الخصوصية · شروط Google Play</string>
+    <string name="subscription_monthly_price">%1$s شهريًا</string>
+    <string name="subscription_yearly_price">%1$s سنويًا</string>
+    <string name="subscription_disclosure">اشتراك يتجدد تلقائيًا. يظهر السعر ودورة الفوترة أعلاه ويؤكدهما Google Play قبل الشراء. يمكنك الإلغاء في أي وقت من Google Play؛ حذف التطبيق لا يلغي الاشتراك. Premium اختياري وتظل الميزات المجانية متاحة.</string>
+    <string name="subscription_trial_unavailable_label">التجربة المجانية غير متاحة حاليًا</string>
+    <!-- 折扣挽回页 -->
+    <string name="discount_title">واصل رحلتك مع القرآن</string>
+    <string name="discount_percent_big">خصم %1$d%%</string>
+    <string name="discount_percent_value">-%1$d%%</string>
+    <string name="discount_first_year_caption">على سنتك الأولى</string>
+    <string name="discount_countdown_label">ينتهي العرض خلال</string>
+    <string name="discount_price_period">/ السنة الأولى</string>
+    <string name="discount_cta">احصل على العرض</string>
+    <string name="discount_cta_percent">احصل على خصم %1$d%%</string>
+    <string name="discount_disclosure">السنة الأولى %1$s، ثم %2$s سنويًا. يتجدد الاشتراك تلقائيًا كل عام ما لم يُلغَ قبل 24 ساعة على الأقل من التجديد. يتم التأكيد عبر Google Play قبل الشراء؛ يمكنك الإلغاء في أي وقت من Google Play. إلغاء تثبيت التطبيق لا يُلغي الاشتراك.</string>
+    <string name="discount_unavailable">هذا العرض غير متاح حاليًا.</string>
+    <string name="discount_expired">انتهى هذا العرض.</string>
+    <string name="discount_badge_percent">خصم 50%</string>
 </resources>
-
-
-

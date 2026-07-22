@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <!-- 品牌绿渐变背景 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_subscription_gradient" />
+
+    <!-- 顶部清真寺剪影（低透明度，仅作氛围） -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_gravity="top"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_junaid"
+        android:alpha="0.35"
+        android:contentDescription="@string/app_name" />
+
+    <!-- 关闭按钮：首帧即可见可点 -->
+    <ImageView
+        android:id="@+id/btn_close"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_gravity="top|start"
+        android:layout_margin="10dp"
+        android:padding="11dp"
+        android:src="@drawable/dr_icon_close"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/strLabelClose"
+        app:tint="@android:color/white"
+        android:elevation="10dp" />
+
+    <!-- 核心内容：垂直居中，聚焦折扣 + 倒计时 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingStart="28dp"
+        android:paddingEnd="28dp">
+
+        <!-- 简短价值锚定标题（次要，一行） -->
+        <TextView
+            android:id="@+id/tv_discount_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/discount_title"
+            android:textColor="#EAF3EE"
+            android:textSize="18sp"
+            android:gravity="center" />
+
+        <!-- 主角 1：折扣百分比（超大） -->
+        <TextView
+            android:id="@+id/tv_discount_percent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/discount_percent_placeholder"
+            android:textColor="#FFD54F"
+            android:textSize="88sp"
+            android:textStyle="bold"
+            android:includeFontPadding="false"
+            android:letterSpacing="-0.02"
+            android:gravity="center"
+            tools:text="50% OFF" />
+
+        <TextView
+            android:id="@+id/tv_discount_caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/discount_first_year_caption"
+            android:textColor="#EAF3EE"
+            android:textSize="16sp"
+            android:letterSpacing="0.02"
+            android:gravity="center" />
+
+        <!-- 主角 2：倒计时（大号） -->
+        <TextView
+            android:id="@+id/tv_countdown_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="@string/discount_countdown_label"
+            android:textColor="#C9DBCF"
+            android:textSize="13sp"
+            android:letterSpacing="0.06"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/tv_countdown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/discount_countdown_placeholder"
+            android:textColor="@android:color/white"
+            android:textSize="56sp"
+            android:textStyle="bold"
+            android:fontFeatureSettings="tnum"
+            android:includeFontPadding="false"
+            android:letterSpacing="0.02"
+            tools:text="59:12" />
+
+        <!-- 价格：紧凑一行，划线原价 + 折后价 -->
+        <LinearLayout
+            android:id="@+id/price_row"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tv_original_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:textColor="#A9C0B2"
+                android:textSize="18sp"
+                tools:text="HK$78.00" />
+
+            <TextView
+                android:id="@+id/tv_discounted_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                tools:text="HK$39.00" />
+
+            <TextView
+                android:id="@+id/tv_price_period"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="@string/discount_price_period"
+                android:textColor="#C9DBCF"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- 主 CTA：金色、满宽、醒目 -->
+        <TextView
+            android:id="@+id/btn_subscribe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:background="@drawable/bg_subscription_button"
+            android:paddingTop="18dp"
+            android:paddingBottom="18dp"
+            android:text="@string/discount_cta"
+            android:textColor="#1A1A1A"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:elevation="2dp" />
+
+    </LinearLayout>
+
+    <!-- 底部合规区：续订披露 + 法务链接（精简、贴底） -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingStart="26dp"
+        android:paddingEnd="26dp"
+        android:paddingBottom="14dp">
+
+        <TextView
+            android:id="@+id/tv_disclosure"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#B9CCBF"
+            android:textSize="10sp"
+            android:gravity="center"
+            android:lineSpacingExtra="1dp" />
+
+        <TextView
+            android:id="@+id/tv_legal_links"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/subscription_legal_links"
+            android:textColor="#F3D680"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:gravity="center" />
+    </LinearLayout>
+
+</FrameLayout>

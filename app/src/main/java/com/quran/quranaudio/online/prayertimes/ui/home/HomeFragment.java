@@ -116,6 +116,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private TextView tvGreeting;
     private TextView tvUserName;
     private ImageView btnSearch;
+    private ImageView btnPremium;
+    // 折扣挽回角标（折扣窗口有效期内显示 -50% 与倒计时）
+    private View discountBadge;
+    private TextView tvDiscountBadgePercent;
+    private TextView tvDiscountBadgeTimer;
+    private final android.os.Handler discountBadgeHandler = new android.os.Handler(android.os.Looper.getMainLooper());
+    private Runnable discountBadgeTicker;
     private CardView cardAvatar;
     private ImageView imgAvatarDefault;
     private ImageView imgAvatarUser;
@@ -270,8 +277,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         mPermissionResultLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), new ActivityResultCallback<Map<String, Boolean>>() {
             @Override
             public void onActivityResult(Map<String, Boolean> result) {
-                if (result.get(Manifest.permission.ACCESS_FINE_LOCATION) !=null) {
-                    isLocationPermissionGranted = result.get(Manifest.permission.ACCESS_FINE_LOCATION);
+                if (result.containsKey(Manifest.permission.ACCESS_FINE_LOCATION)
+                        || result.containsKey(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                    isLocationPermissionGranted = Boolean.TRUE.equals(
+                            result.get(Manifest.permission.ACCESS_FINE_LOCATION))
+                            || Boolean.TRUE.equals(result.get(Manifest.permission.ACCESS_COARSE_LOCATION));
                     
                     if (isLocationPermissionGranted) {
                         // Permission granted - close warning dialog and refresh data
@@ -585,8 +595,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     Dialog dialogWarning;
     private boolean checkLocationPermission(){
         isLocationPermissionGranted = ContextCompat.checkSelfPermission(requireContext(),
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED;
+            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            || ContextCompat.checkSelfPermission(requireContext(),
+            Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
         return isLocationPermissionGranted;
     }
     private void showPermissionWarning(){
@@ -610,6 +621,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         if (!isLocationPermissionGranted) {
             permissionRequest.add(Manifest.permission.ACCESS_FINE_LOCATION);
+            permissionRequest.add(Manifest.permission.ACCESS_COARSE_LOCATION);
         }
 
         if (!permissionRequest.isEmpty()) {
@@ -758,6 +770,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         // 用户可能在其他页面读过经，回到首页刷新"继续阅读"位置
         refreshContinueReading();
+        updatePremiumEntryVisibility();
+        startDiscountBadgeTicker();
 
         // 💳 情境化订阅触发：仅对"已读过经文(产生价值)的非订阅用户"在自然节点软性提示，
         // 替代此前"仅首装硬弹付费墙"(价值前收费、转化极低)。内部有频控与会话门控。
@@ -779,6 +793,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         super.onPause();
         if (!allowRefresh)
             allowRefresh = true;
+        stopDiscountBadgeTicker();
     }
 
     private void initializeQuizEntry(View rootView) {
@@ -808,6 +823,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             tvGreeting = headerView.findViewById(R.id.tv_greeting);
             tvUserName = headerView.findViewById(R.id.tv_user_name);
             btnSearch = headerView.findViewById(R.id.btn_search);
+            btnPremium = headerView.findViewById(R.id.btn_premium);
+            discountBadge = headerView.findViewById(R.id.discount_badge);
+            tvDiscountBadgePercent = headerView.findViewById(R.id.tv_discount_badge_percent);
+            tvDiscountBadgeTimer = headerView.findViewById(R.id.tv_discount_badge_timer);
             cardAvatar = headerView.findViewById(R.id.card_avatar);
             imgAvatarDefault = headerView.findViewById(R.id.img_avatar_default);
             imgAvatarUser = headerView.findViewById(R.id.img_avatar_user);
@@ -1213,6 +1232,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
      * Initialize Header click listeners
      */
     private void initializeHeaderListeners() {
+        if (btnPremium != null) {
+            btnPremium.setOnClickListener(v -> {
+                // 折扣窗口有效期内，点击 Premium 入口直接进折扣挽回页；否则进常规订阅页。
+                if (getContext() != null
+                        && com.quran.quranaudio.online.subscription.DiscountManager.INSTANCE
+                                .isActive(requireContext())) {
+                    startActivity(new Intent(getContext(),
+                            com.quran.quranaudio.online.subscription.DiscountActivity.class));
+                } else {
+                    com.quran.quranaudio.online.subscription.SubscriptionHelper.INSTANCE
+                            .launchSubscriptionPage(requireContext(), "home_header");
+                }
+            });
+        }
         if (btnSearch != null) {
             btnSearch.setOnClickListener(v -> {
                 // Navigate to Global Search
@@ -1232,6 +1265,65 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     googleSignInLauncher.launch(signInIntent);
                 }
             });
+        }
+    }
+
+    private void updatePremiumEntryVisibility() {
+        if (btnPremium != null && getContext() != null) {
+            btnPremium.setVisibility(
+                    com.quran.quranaudio.online.subscription.SubscriptionHelper.INSTANCE
+                            .isUserSubscribed(requireContext()) ? View.GONE : View.VISIBLE);
+        }
+    }
+
+    /**
+     * 刷新折扣角标：折扣窗口有效期内显示 -50% 与 MM:SS 倒计时，过期或未订阅态变化时自动隐藏。
+     * 每秒由 discountBadgeTicker 驱动。
+     */
+    private void updateDiscountBadge() {
+        if (discountBadge == null || getContext() == null) return;
+
+        com.quran.quranaudio.online.subscription.DiscountManager mgr =
+                com.quran.quranaudio.online.subscription.DiscountManager.INSTANCE;
+        boolean subscribed = com.quran.quranaudio.online.subscription.SubscriptionHelper.INSTANCE
+                .isUserSubscribed(requireContext());
+
+        long remaining = mgr.remainingMillis(requireContext());
+        if (subscribed || remaining <= 0) {
+            discountBadge.setVisibility(View.GONE);
+            return;
+        }
+
+        int percent = mgr.cachedDiscountPercent(requireContext());
+        if (tvDiscountBadgePercent != null) {
+            tvDiscountBadgePercent.setText(percent > 0
+                    ? getString(R.string.discount_percent_value, percent)
+                    : getString(R.string.discount_badge_percent));
+        }
+        if (tvDiscountBadgeTimer != null) {
+            long minutes = remaining / 60000L;
+            long seconds = (remaining / 1000L) % 60L;
+            tvDiscountBadgeTimer.setText(String.format(java.util.Locale.US, "%02d:%02d", minutes, seconds));
+        }
+        discountBadge.setVisibility(View.VISIBLE);
+    }
+
+    private void startDiscountBadgeTicker() {
+        stopDiscountBadgeTicker();
+        discountBadgeTicker = new Runnable() {
+            @Override
+            public void run() {
+                updateDiscountBadge();
+                discountBadgeHandler.postDelayed(this, 1000L);
+            }
+        };
+        discountBadgeHandler.post(discountBadgeTicker);
+    }
+
+    private void stopDiscountBadgeTicker() {
+        if (discountBadgeTicker != null) {
+            discountBadgeHandler.removeCallbacks(discountBadgeTicker);
+            discountBadgeTicker = null;
         }
     }
 
@@ -1307,6 +1399,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private void updateHeaderPrayerInfo(DayPrayer dayPrayer) {
         // Removed: Prayer info now displayed in separate Prayer Card
         // Header only shows greeting, user name, search icon, and avatar
+
+        // 顺手缓存今日礼拜时间戳，供折扣挽回页做功修避让（±10 分钟内不打扰）。
+        try {
+            if (getContext() == null || dayPrayer == null || dayPrayer.getTimings() == null) return;
+            java.util.List<Long> epochs = new java.util.ArrayList<>();
+            for (java.time.LocalDateTime t : dayPrayer.getTimings().values()) {
+                if (t != null) {
+                    epochs.add(t.atZone(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli());
+                }
+            }
+            com.quran.quranaudio.online.subscription.DiscountManager.INSTANCE
+                    .cacheTodayPrayerEpochs(requireContext(), epochs);
+        } catch (Exception e) {
+            android.util.Log.w("HomeFragment", "cache prayer epochs failed", e);
+        }
     }
 
     /**

@@ -107,6 +107,13 @@ public class FragMain extends BaseFragment {
     private TextView tvGreeting;
     private TextView tvUserName;
     private ImageView btnSearch;
+    private ImageView btnPremium;
+    // 折扣挽回角标（折扣窗口有效期内显示 -50% 与倒计时）
+    private View discountBadge;
+    private TextView tvDiscountBadgePercent;
+    private TextView tvDiscountBadgeTimer;
+    private final android.os.Handler discountBadgeHandler = new android.os.Handler(android.os.Looper.getMainLooper());
+    private Runnable discountBadgeTicker;
     private CardView cardAvatar;
     private ImageView imgAvatarDefault;
     private ImageView imgAvatarUser;
@@ -209,8 +216,11 @@ public class FragMain extends BaseFragment {
                     Log.d(TAG, "========================================");
                     Log.d(TAG, "Result map: " + result);
                     
-                    if (result.get(Manifest.permission.ACCESS_FINE_LOCATION) != null) {
-                        isLocationPermissionGranted = result.get(Manifest.permission.ACCESS_FINE_LOCATION);
+                    if (result.containsKey(Manifest.permission.ACCESS_FINE_LOCATION)
+                            || result.containsKey(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                        isLocationPermissionGranted = Boolean.TRUE.equals(
+                                result.get(Manifest.permission.ACCESS_FINE_LOCATION))
+                                || Boolean.TRUE.equals(result.get(Manifest.permission.ACCESS_COARSE_LOCATION));
                         userHasRespondedToLocationPermission = true; // User has made a choice
                         
                         Log.d(TAG, "📍 Location permission granted: " + isLocationPermissionGranted);
@@ -365,6 +375,7 @@ public class FragMain extends BaseFragment {
     @Override
     public void onPause() {
         super.onPause();
+        stopDiscountBadgeTicker();
     }
 
     @Override
@@ -374,6 +385,8 @@ public class FragMain extends BaseFragment {
         Log.d(TAG, "========================================");
         Log.d(TAG, "📱 onResume() called");
         Log.d(TAG, "========================================");
+
+        startDiscountBadgeTicker();
         
         // CRITICAL: If user is in Settings page, skip ALL logic and wait for callback
         if (isUserInSettingsForPermission) {
@@ -640,8 +653,9 @@ public class FragMain extends BaseFragment {
         }
         
         isLocationPermissionGranted = ContextCompat.checkSelfPermission(context,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED;
+            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            || ContextCompat.checkSelfPermission(context,
+            Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
         return isLocationPermissionGranted;
     }
     /**
@@ -748,6 +762,7 @@ public class FragMain extends BaseFragment {
 
         if (!isLocationPermissionGranted) {
             permissionRequest.add(Manifest.permission.ACCESS_FINE_LOCATION);
+            permissionRequest.add(Manifest.permission.ACCESS_COARSE_LOCATION);
         }
 
         if (!permissionRequest.isEmpty()) {
@@ -961,6 +976,74 @@ public class FragMain extends BaseFragment {
     }
 
     /**
+     * 刷新折扣角标：折扣窗口有效期内显示 -50% 与 MM:SS 倒计时，过期或订阅态变化时自动隐藏。
+     * 每秒由 discountBadgeTicker 驱动。
+     */
+    private void updateDiscountBadge() {
+        if (discountBadge == null || getContext() == null) return;
+
+        com.quran.quranaudio.online.subscription.DiscountManager mgr =
+                com.quran.quranaudio.online.subscription.DiscountManager.INSTANCE;
+        boolean subscribed = com.quran.quranaudio.online.subscription.SubscriptionHelper.INSTANCE
+                .isUserSubscribed(requireContext());
+
+        long remaining = mgr.remainingMillis(requireContext());
+        if (subscribed || remaining <= 0) {
+            discountBadge.setVisibility(View.GONE);
+            return;
+        }
+
+        int percent = mgr.cachedDiscountPercent(requireContext());
+        if (tvDiscountBadgePercent != null) {
+            tvDiscountBadgePercent.setText(percent > 0
+                    ? getString(R.string.discount_percent_value, percent)
+                    : getString(R.string.discount_badge_percent));
+        }
+        if (tvDiscountBadgeTimer != null) {
+            long minutes = remaining / 60000L;
+            long seconds = (remaining / 1000L) % 60L;
+            tvDiscountBadgeTimer.setText(String.format(java.util.Locale.US, "%02d:%02d", minutes, seconds));
+        }
+        discountBadge.setVisibility(View.VISIBLE);
+    }
+
+    /** 缓存今日礼拜时间戳，供折扣挽回页做功修避让（±10 分钟内不打扰）。 */
+    private void cacheTodayPrayerEpochs(DayPrayer dayPrayer) {
+        try {
+            if (getContext() == null || dayPrayer == null || dayPrayer.getTimings() == null) return;
+            java.util.List<Long> epochs = new java.util.ArrayList<>();
+            for (LocalDateTime t : dayPrayer.getTimings().values()) {
+                if (t != null) {
+                    epochs.add(t.atZone(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli());
+                }
+            }
+            com.quran.quranaudio.online.subscription.DiscountManager.INSTANCE
+                    .cacheTodayPrayerEpochs(requireContext(), epochs);
+        } catch (Exception e) {
+            Log.w(TAG, "cache prayer epochs failed", e);
+        }
+    }
+
+    private void startDiscountBadgeTicker() {
+        stopDiscountBadgeTicker();
+        discountBadgeTicker = new Runnable() {
+            @Override
+            public void run() {
+                updateDiscountBadge();
+                discountBadgeHandler.postDelayed(this, 1000L);
+            }
+        };
+        discountBadgeHandler.post(discountBadgeTicker);
+    }
+
+    private void stopDiscountBadgeTicker() {
+        if (discountBadgeTicker != null) {
+            discountBadgeHandler.removeCallbacks(discountBadgeTicker);
+            discountBadgeTicker = null;
+        }
+    }
+
+    /**
      * Initialize Header Views and Click Listeners
      */
     private void initializeHeaderViews() {
@@ -969,11 +1052,33 @@ public class FragMain extends BaseFragment {
             tvGreeting = headerView.findViewById(R.id.tv_greeting);
             tvUserName = headerView.findViewById(R.id.tv_user_name);
             btnSearch = headerView.findViewById(R.id.btn_search);
+            btnPremium = headerView.findViewById(R.id.btn_premium);
+            discountBadge = headerView.findViewById(R.id.discount_badge);
+            tvDiscountBadgePercent = headerView.findViewById(R.id.tv_discount_badge_percent);
+            tvDiscountBadgeTimer = headerView.findViewById(R.id.tv_discount_badge_timer);
             cardAvatar = headerView.findViewById(R.id.card_avatar);
             imgAvatarDefault = headerView.findViewById(R.id.img_avatar_default);
             imgAvatarUser = headerView.findViewById(R.id.img_avatar_user);
 
             // Set up Search button click listener
+            if (btnPremium != null) {
+                btnPremium.setVisibility(
+                    com.quran.quranaudio.online.subscription.SubscriptionHelper.INSTANCE
+                        .isUserSubscribed(requireContext()) ? View.GONE : View.VISIBLE);
+                btnPremium.setOnClickListener(v -> {
+                    // 折扣窗口有效期内，点击 Premium 入口直接进折扣挽回页；否则进常规订阅页。
+                    if (getContext() != null
+                            && com.quran.quranaudio.online.subscription.DiscountManager.INSTANCE
+                                    .isActive(requireContext())) {
+                        startActivity(new Intent(getContext(),
+                                com.quran.quranaudio.online.subscription.DiscountActivity.class));
+                    } else {
+                        com.quran.quranaudio.online.subscription.SubscriptionHelper.INSTANCE
+                                .launchSubscriptionPage(requireContext(), "home_header_legacy");
+                    }
+                });
+            }
+
             if (btnSearch != null) {
                 btnSearch.setOnClickListener(v -> {
                     // Navigate to search page
@@ -1213,9 +1318,10 @@ public class FragMain extends BaseFragment {
             // Observe prayer times data
             homeViewModel.getDayPrayers().observe(getViewLifecycleOwner(), dayPrayer -> {
                 if (dayPrayer != null) {
-                    Log.d(TAG, "Prayer data received - City: " + dayPrayer.getCity() + 
+                    Log.d(TAG, "Prayer data received - City: " + dayPrayer.getCity() +
                         ", Timings count: " + (dayPrayer.getTimings() != null ? dayPrayer.getTimings().size() : 0));
                     updatePrayerCard(dayPrayer);
+                    cacheTodayPrayerEpochs(dayPrayer);
                 } else {
                     Log.w(TAG, "Received null dayPrayer data");
                 }

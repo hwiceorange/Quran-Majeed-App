@@ -54,8 +54,8 @@ android {
         applicationId "com.quran.quranaudio.online"
         minSdkVersion 26
         targetSdkVersion 35
-        versionCode 126
-        versionName "1.9.44"
+        versionCode 127
+        versionName "1.9.45"
         multiDexEnabled true
         
         // 🔧 Support for 16 KB page sizes (Google Play requirement for Android 15+)
@@ -99,12 +99,25 @@ android {
 
 
     signingConfigs {
-        // Google Play 渠道签名配置（保持不变）
+        // Google Play signing credentials are local-only or supplied by CI environment variables.
         release {
-            storeFile file("quran_keystore")//hashcode 1961951595
-            keyAlias "key0"
-            storePassword "Huwei123"
-            keyPassword "Huwei123"
+            def signingProperties = new Properties()
+            def signingPropertiesFile = file("signing.properties")
+            if (signingPropertiesFile.exists()) {
+                signingProperties.load(new FileInputStream(signingPropertiesFile))
+            }
+            def releaseStoreFile = signingProperties.getProperty("storeFile") ?: System.getenv("QURAN_STORE_FILE")
+            def releaseStorePassword = signingProperties.getProperty("storePassword") ?: System.getenv("QURAN_STORE_PASSWORD")
+            def releaseKeyAlias = signingProperties.getProperty("keyAlias") ?: System.getenv("QURAN_KEY_ALIAS")
+            def releaseKeyPassword = signingProperties.getProperty("keyPassword") ?: System.getenv("QURAN_KEY_PASSWORD")
+            if (releaseStoreFile && releaseStorePassword && releaseKeyAlias && releaseKeyPassword) {
+                storeFile file(releaseStoreFile)
+                storePassword releaseStorePassword
+                keyAlias releaseKeyAlias
+                keyPassword releaseKeyPassword
+            } else {
+                throw new GradleException("Missing Google Play signing credentials. Copy app/signing.properties locally or set QURAN_* environment variables.")
+            }
         }
         
         // Transsion 渠道独立签名配置
