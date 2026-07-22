@@ -47,15 +47,15 @@ if (secretsPropertiesFile.exists()) {
 }
 
 android {
-    compileSdk 35
+    compileSdk 36
     ndkVersion "27.0.12077973"
 
     defaultConfig {
         applicationId "com.quran.quranaudio.online"
         minSdkVersion 26
-        targetSdkVersion 35
-        versionCode 127
-        versionName "1.9.45"
+        targetSdkVersion 36
+        versionCode 129
+        versionName "1.9.47"
         multiDexEnabled true
         
         // 🔧 Support for 16 KB page sizes (Google Play requirement for Android 15+)
@@ -297,9 +297,11 @@ android {
         // Critical for Android 15+ and Google Play compliance
         // Ref: https://developer.android.com/guide/practices/page-sizes
         jniLibs {
-            // Store native libraries uncompressed in APK - REQUIRED for 16KB alignment
-            useLegacyPackaging = true
-            
+            // 16KB 合规必需：false = 未压缩且按页对齐存储（extractNativeLibs=false），
+            // 库可直接 mmap。切勿设为 true —— true 是旧式压缩打包，会导致 .so 被压缩、
+            // 破坏 16KB 页对齐，是此前"16KB 不支持"反复出现的根因。
+            useLegacyPackaging = false
+
             // Keep all native libraries (don't strip debug symbols in debug builds)
             keepDebugSymbols += ['**/*.so']
         }

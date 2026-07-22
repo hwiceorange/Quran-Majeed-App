@@ -14,6 +14,16 @@
 /app/src/debug/res/values/google_maps_api.xml
 /app/release/app-release.aab
 
+# Local release signing credentials (never commit)
+/app/signing.properties
+/app/SIGNING_CREDENTIALS.local.md
+
+# Local-only dev reference (keys / version history / changelog) — never commit, never package
+/PROJECT_NOTES.local.md
+*.local.md
+/app/quran_transsion_release.jks
+*.jks
+
 # Firebase Service Account Keys (IMPORTANT: Do not commit)
 serviceAccountKey.json
 *-firebase-adminsdk-*.json

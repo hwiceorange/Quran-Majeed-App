@@ -367,8 +367,10 @@ abstract class PeaceCompoundButton @JvmOverloads constructor(
         }
     }
 
+    // API 36 起 OnCheckedChangeListener.onCheckedChanged 的 buttonView 参数为 @NonNull，
+    // override 需匹配非空签名（方法体未使用该参数，运行行为不变）。
     @CallSuper
-    override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
+    override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
         background?.state = intArrayOf(
             if (isChecked) android.R.attr.state_checked else -android.R.attr.state_checked
         )

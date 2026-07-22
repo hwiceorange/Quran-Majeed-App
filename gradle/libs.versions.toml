@@ -1,6 +1,7 @@
 [versions]
 coreKtx = "1.9.0"
-gradle = "8.3.2"
+# AGP 8.9.1：支持 compileSdk 36 (Android 16) 的最低版本；需 Gradle 8.11.1+、JDK 17。
+gradle = "8.9.1"
 lifecycle = "2.5.1"
 desugaring = "1.1.5"
 annotation = "1.5.0"
