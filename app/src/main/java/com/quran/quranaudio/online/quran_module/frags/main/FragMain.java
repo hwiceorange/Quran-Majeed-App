@@ -1328,6 +1328,17 @@ public class FragMain extends BaseFragment {
                         ", Timings count: " + (dayPrayer.getTimings() != null ? dayPrayer.getTimings().size() : 0));
                     updatePrayerCard(dayPrayer);
                     cacheTodayPrayerEpochs(dayPrayer);
+                    // 🏠 直接写入桌面 Widget 数据：FragMain 是当前活跃首页但此前不触发任何
+                    // widget 数据 worker，导致 widget 长期停在「Tap to set up」占位。这里拿到
+                    // 真实 dayPrayer 时立即写缓存并刷新，不依赖 WorkManager（异常内部已全量捕获）。
+                    try {
+                        if (getContext() != null) {
+                            com.quran.quranaudio.online.prayertimes.widget.PrayerTimesWidgetProvider
+                                    .notifyPrayerDataChanged(requireContext(), dayPrayer);
+                        }
+                    } catch (Exception e) {
+                        Log.w(TAG, "widget notify failed", e);
+                    }
                 } else {
                     Log.w(TAG, "Received null dayPrayer data");
                 }
