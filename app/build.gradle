@@ -54,8 +54,8 @@ android {
         applicationId "com.quran.quranaudio.online"
         minSdkVersion 26
         targetSdkVersion 36
-        versionCode 130
-        versionName "1.9.48"
+        versionCode 131
+        versionName "1.9.49"
         multiDexEnabled true
         
         // 🔧 Support for 16 KB page sizes (Google Play requirement for Android 15+)
@@ -434,9 +434,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:24.10.0'
     implementation 'com.google.firebase:firebase-database-ktx:20.3.0'
     
-    // Google Play Billing Library for subscriptions (Updated to 7.1.1 for compliance)
-    implementation 'com.android.billingclient:billing:7.1.1'
-    implementation 'com.android.billingclient:billing-ktx:7.1.1'
+    // Google Play Billing Library for subscriptions (8.0.0+ required by Play from 2026-08-31)
+    implementation 'com.android.billingclient:billing:8.0.0'
+    implementation 'com.android.billingclient:billing-ktx:8.0.0'
     
     //ExoPLayer
     implementation 'com.google.android.exoplayer:exoplayer:2.18.7'

@@ -52,7 +52,10 @@ class BillingManager(
         
         billingClient = BillingClient.newBuilder(context)
             .setListener(this)
-            .enablePendingPurchases()
+            // Billing 8：enablePendingPurchases 需显式传入 PendingPurchasesParams。
+            .enablePendingPurchases(
+                PendingPurchasesParams.newBuilder().enableOneTimeProducts().build()
+            )
             .build()
 
         startConnection()
@@ -113,7 +116,9 @@ class BillingManager(
             .build()
 
         coroutineScope.launch {
-            billingClient?.queryProductDetailsAsync(params) { billingResult, productDetailsList ->
+            billingClient?.queryProductDetailsAsync(params) { billingResult, queryResult ->
+                // Billing 8：回调第二参由 List<ProductDetails> 改为 QueryProductDetailsResult。
+                val productDetailsList = queryResult.productDetailsList
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     Log.d(TAG, "✅ Found ${productDetailsList.size} products")
                     productDetailsList.forEach { product ->
