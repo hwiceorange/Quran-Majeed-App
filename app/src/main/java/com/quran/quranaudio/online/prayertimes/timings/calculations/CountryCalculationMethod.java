@@ -2,16 +2,34 @@ package com.quran.quranaudio.online.prayertimes.timings.calculations;
 
 import android.location.Address;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 
 public class CountryCalculationMethod {
 
     private static final Map<String, CalculationMethodEnum> CALCULATION_METHOD_BY_COUNTRY = createMap();
 
+    /**
+     * Hanafi 学派压倒性占多数的国家/地区。这些地区当地清真寺普遍按 Hanafi 计算 Asr
+     * （影长2倍，比 Standard 晚约30–60分钟）。首次初始化时据此把 Asr 默认设为 Hanafi，
+     * 更贴合本地体验；用户仍可在设置中随时改回。
+     * 覆盖：南亚（巴/印/孟/阿富汗）、土耳其、中亚五国。
+     */
+    private static final Set<String> HANAFI_MAJORITY_COUNTRIES = new HashSet<>(Arrays.asList(
+            "PK", "IN", "BD", "AF", "TR", "UZ", "TM", "TJ", "KG", "KZ"));
+
     private CountryCalculationMethod() {
+    }
+
+    /** 该国是否 Hanafi 学派占压倒性多数（用于 Asr 默认学派）。 */
+    public static boolean isHanafiMajorityCountry(String countryCode) {
+        return countryCode != null
+                && HANAFI_MAJORITY_COUNTRIES.contains(countryCode.trim().toUpperCase());
     }
 
     private static Map<String, CalculationMethodEnum> createMap() {

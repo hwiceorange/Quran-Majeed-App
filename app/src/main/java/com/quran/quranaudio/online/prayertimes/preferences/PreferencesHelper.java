@@ -269,8 +269,16 @@ public class PreferencesHelper {
         updateTimingAdjustmentPreference(calculationMethodEnum.name());
 
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        defaultSharedPreferences.edit()
-                .putBoolean(PreferencesConstants.CALCULATION_PREFERENCES_INITIALIZED, true)
+        SharedPreferences.Editor editor = defaultSharedPreferences.edit();
+
+        // Asr 学派地区默认：Hanafi 主导地区（南亚/土耳其/中亚）首次默认 Hanafi，
+        // 贴合本地清真寺的 Asr 时间。仅在初始化时设定，之后完全交给用户。
+        if (CountryCalculationMethod.isHanafiMajorityCountry(countryCode)) {
+            editor.putString(PreferencesConstants.SCHOOL_ADJUSTMENT_METHOD_PREFERENCE,
+                    SchoolAdjustmentMethod.HANAFI.name());
+        }
+
+        editor.putBoolean(PreferencesConstants.CALCULATION_PREFERENCES_INITIALIZED, true)
                 .apply();
     }
 
