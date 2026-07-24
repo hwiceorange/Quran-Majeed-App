@@ -1592,6 +1592,12 @@
     <string name="widget_prayer_times_description">Today\'s prayer times, next prayer countdown and Hijri date</string>
     <string name="widget_tap_to_setup">Tap to set up prayer times</string>
     <string name="widget_prayer_times_label">Prayer Times</string>
+    <!-- 常驻倒计时通知 -->
+    <string name="persistent_notif_title">Prayer countdown notification</string>
+    <string name="persistent_notif_summary">Always show the next prayer and a live countdown in your notifications</string>
+    <string name="persistent_notif_channel">Prayer countdown</string>
+    <string name="persistent_notif_next">Next: %1$s</string>
+    <string name="persistent_notif_turn_off">Turn off</string>
     <string name="widget_time_placeholder" translatable="false">--:--</string>
     <string name="widget_promo_title">Prayer times on your home screen</string>
     <string name="widget_promo_message">See today\'s prayer times and the countdown to the next prayer at a glance — without opening the app.</string>

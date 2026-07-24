@@ -17,6 +17,28 @@
 
     </PreferenceCategory>
 
+    <!-- Account and subscription controls required by Google Play policies. -->
+    <PreferenceCategory
+        android:icon="@drawable/ic_settings_24dp"
+        android:layout="@layout/custom_preference_category"
+        android:title="@string/account_and_subscription_title">
+
+        <Preference
+            android:key="MANAGE_SUBSCRIPTION_PREFERENCE"
+            android:layout="@layout/custom_preference"
+            android:title="@string/manage_subscription_title"
+            android:summary="@string/manage_subscription_summary"
+            android:icon="@drawable/ic_premium" />
+
+        <Preference
+            android:key="DELETE_ACCOUNT_PREFERENCE"
+            android:layout="@layout/custom_preference"
+            android:title="@string/delete_account_title"
+            android:summary="@string/delete_account_summary"
+            android:icon="@drawable/dr_icon_close" />
+
+    </PreferenceCategory>
+
     <!-- 🏠 Prayer Times Home Screen Widget -->
     <PreferenceCategory
         android:icon="@drawable/ic_prayer_calendar"
@@ -29,6 +51,14 @@
             android:title="@string/widget_settings_entry_title"
             android:summary="@string/widget_promo_message"
             android:icon="@drawable/ic_prayer_calendar" />
+
+        <SwitchPreferenceCompat
+            android:key="PERSISTENT_PRAYER_NOTIFICATION"
+            android:layout="@layout/custom_preference"
+            android:title="@string/persistent_notif_title"
+            android:summary="@string/persistent_notif_summary"
+            android:icon="@drawable/ic_prayer_calendar"
+            android:defaultValue="false" />
 
     </PreferenceCategory>
 

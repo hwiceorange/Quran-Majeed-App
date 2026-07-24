@@ -46,6 +46,9 @@ public class PrayerTimesWidgetProvider extends AppWidgetProvider {
     private static final String TAG = "PrayerTimesWidget";
     private static final String ACTION_REFRESH =
             "com.quran.quranaudio.online.widget.ACTION_PRAYER_WIDGET_REFRESH";
+    /** 常驻倒计时通知的「Turn off」动作。 */
+    public static final String ACTION_DISABLE_PERSISTENT =
+            "com.quran.quranaudio.online.widget.ACTION_DISABLE_PERSISTENT_NOTIF";
     private static final String WORK_NAME_WIDGET_DATA_REFRESH = "WIDGET_PRAYER_DATA_REFRESH";
     private static final int REFRESH_ALARM_REQUEST_CODE = 900731;
 
@@ -95,11 +98,18 @@ public class PrayerTimesWidgetProvider extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
         String action = intent.getAction();
+        if (ACTION_DISABLE_PERSISTENT.equals(action)) {
+            // 用户从通知点了「Turn off」：关闭常驻通知开关并移除。
+            PersistentPrayerNotification.setEnabled(context, false);
+            return;
+        }
         if (ACTION_REFRESH.equals(action)
                 || Intent.ACTION_TIMEZONE_CHANGED.equals(action)
                 || Intent.ACTION_TIME_CHANGED.equals(action)
                 || Intent.ACTION_LOCALE_CHANGED.equals(action)) {
             renderAll(context);
+            // 到点/时间变更时，常驻通知也滚动到下一番（复用同一刷新时机）。
+            PersistentPrayerNotification.update(context);
         }
     }
 
@@ -117,6 +127,8 @@ public class PrayerTimesWidgetProvider extends AppWidgetProvider {
             if (hasActiveWidgets(context)) {
                 renderAll(context);
             }
+            // 常驻倒计时通知（若开启）与 Widget 同源刷新。
+            PersistentPrayerNotification.update(context);
         } catch (Exception e) {
             Log.e(TAG, "notifyPrayerDataChanged failed", e);
         }

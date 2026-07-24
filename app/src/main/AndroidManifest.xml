@@ -23,6 +23,9 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- Android 13+ 「闹钟类」应用自动授予，保证邦克准时无需用户手动授权；
+         SCHEDULE_EXACT_ALARM 作为 API 31-32 的回退。礼拜应用符合 USE_EXACT_ALARM 适用类别。 -->
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>

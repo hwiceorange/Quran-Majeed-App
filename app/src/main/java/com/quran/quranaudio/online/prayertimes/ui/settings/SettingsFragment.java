@@ -1,7 +1,9 @@
 package com.quran.quranaudio.online.prayertimes.ui.settings;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -13,6 +15,9 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.DialogFragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
@@ -33,6 +38,9 @@ import com.quran.quranaudio.online.prayertimes.utils.LocaleHelper;
 import com.quran.quranaudio.online.R;
 import com.quran.quranaudio.online.prayertimes.ui.BaseActivity;
 import com.quran.quranaudio.online.subscription.SubscriptionActivity;
+import com.quran.quranaudio.online.Utils.GoogleAuthManager;
+import com.quran.quranaudio.online.account.AccountDeletionManager;
+import com.google.firebase.auth.FirebaseAuth;
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 
 import javax.inject.Inject;
@@ -44,6 +52,25 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
     @Inject
     LocaleHelper localeUtils;
+
+    private GoogleAuthManager googleAuthManager;
+    private AlertDialog deletionProgressDialog;
+    private final ActivityResultLauncher<Intent> deletionAuthLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() != Activity.RESULT_OK || googleAuthManager == null) {
+                    return;
+                }
+                googleAuthManager.reauthenticateCurrentUser(result.getData(), new GoogleAuthManager.AuthCallback() {
+                    @Override public void onSuccess(com.google.firebase.auth.FirebaseUser user) {
+                        performAccountDeletion();
+                    }
+
+                    @Override public void onFailure(String error) {
+                        showDeletionError(error);
+                    }
+                });
+            });
 
 
     @Override
@@ -72,9 +99,105 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         
         // 🌟 Setup Premium Subscription Preference
         setupPremiumSubscriptionPreference();
+        setupAccountAndSubscriptionPreferences();
 
         SharedPreferences sharedPreferences = getPreferenceScreen().getSharedPreferences();
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    private void setupAccountAndSubscriptionPreferences() {
+        Preference manageSubscription = getPreferenceScreen().findPreference("MANAGE_SUBSCRIPTION_PREFERENCE");
+        if (manageSubscription != null) {
+            manageSubscription.setOnPreferenceClickListener(preference -> {
+                Uri uri = Uri.parse("https://play.google.com/store/account/subscriptions?package="
+                        + requireContext().getPackageName());
+                startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                return true;
+            });
+        }
+
+        Preference deleteAccount = getPreferenceScreen().findPreference("DELETE_ACCOUNT_PREFERENCE");
+        if (deleteAccount != null) {
+            deleteAccount.setVisible(FirebaseAuth.getInstance().getCurrentUser() != null);
+            deleteAccount.setOnPreferenceClickListener(preference -> {
+                showDeleteAccountConfirmation();
+                return true;
+            });
+        }
+    }
+
+    private void showDeleteAccountConfirmation() {
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.delete_account_dialog_title)
+                .setMessage(R.string.delete_account_dialog_message)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(R.string.delete_account_confirm, (dialog, which) -> beginVerifiedDeletion())
+                .show();
+    }
+
+    private void beginVerifiedDeletion() {
+        com.google.firebase.auth.FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            showDeletionError(getString(R.string.delete_account_failed, "No signed-in account"));
+            return;
+        }
+        if (user.isAnonymous()) {
+            performAccountDeletion();
+            return;
+        }
+        googleAuthManager = new GoogleAuthManager(requireContext());
+        android.widget.Toast.makeText(requireContext(), R.string.delete_account_auth_required,
+                android.widget.Toast.LENGTH_LONG).show();
+        deletionAuthLauncher.launch(googleAuthManager.getSignInIntent());
+    }
+
+    private void performAccountDeletion() {
+        deletionProgressDialog = new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+                .setMessage(R.string.delete_account_progress)
+                .setCancelable(false)
+                .show();
+        AccountDeletionManager.deleteCurrentAccount(requireContext(), new AccountDeletionManager.Callback() {
+            @Override public void onSuccess() {
+                dismissDeletionProgress();
+                if (!isAdded()) return;
+                android.widget.Toast.makeText(requireContext(), R.string.delete_account_success,
+                        android.widget.Toast.LENGTH_LONG).show();
+                if (googleAuthManager != null) {
+                    googleAuthManager.revokeAccess(SettingsFragment.this::restartAfterAccountDeletion);
+                } else {
+                    restartAfterAccountDeletion();
+                }
+            }
+
+            @Override public void onError(String message) {
+                dismissDeletionProgress();
+                showDeletionError(message);
+            }
+        });
+    }
+
+    private void dismissDeletionProgress() {
+        if (deletionProgressDialog != null) {
+            deletionProgressDialog.dismiss();
+            deletionProgressDialog = null;
+        }
+    }
+
+    private void showDeletionError(String message) {
+        if (!isAdded()) return;
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.delete_account_dialog_title)
+                .setMessage(getString(R.string.delete_account_failed, message))
+                .setPositiveButton(android.R.string.ok, null)
+                .show();
+    }
+
+    private void restartAfterAccountDeletion() {
+        if (!isAdded()) return;
+        Intent intent = new Intent(requireContext(), com.quran.quranaudio.online.SplashScreenActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        requireActivity().finish();
     }
 
     /**
@@ -166,6 +289,19 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 if (getActivity() != null) {
                     com.quran.quranaudio.online.prayertimes.widget.PrayerWidgetPromoHelper
                             .requestAddFromSettings(getActivity());
+                }
+                return true;
+            });
+        }
+
+        // 常驻倒计时通知开关：切换时立即发/取消通知。
+        Preference persistentPref = getPreferenceScreen().findPreference(
+                com.quran.quranaudio.online.prayertimes.widget.PersistentPrayerNotification.PREF_KEY);
+        if (persistentPref != null) {
+            persistentPref.setOnPreferenceChangeListener((preference, newValue) -> {
+                if (getContext() != null) {
+                    com.quran.quranaudio.online.prayertimes.widget.PersistentPrayerNotification
+                            .setEnabled(getContext(), Boolean.TRUE.equals(newValue));
                 }
                 return true;
             });
