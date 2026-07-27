@@ -422,10 +422,16 @@ class QuizReviewLearnActivity :
      * 经文数据在新用户安装时已下载并存储在本地，可以直接调用，实现即时、0延迟加载
      */
     private fun loadVerseData(surahId: Int, ayahId: Int) {
+        // 通用知识/无单一经文的题目（surah 或 ayah 为 0）不显示"相关经文"卡，避免"Verse not found"
+        if (surahId <= 0 || ayahId <= 0) {
+            binding.relatedVerseCard.visibility = android.view.View.GONE
+            return
+        }
+        binding.relatedVerseCard.visibility = android.view.View.VISIBLE
         // 立即显示章节引用（使用多语言格式化字符串）
         binding.verseReferenceTv.text = getString(R.string.quiz_verse_reference, surahId, ayahId)
         binding.verseReferenceTv.visibility = android.view.View.VISIBLE
-        
+
         // 🔧 预加载当前及前后3条Verse的Tafsir，实现0延迟
         try {
             Class.forName("com.quran.quranaudio.online.quran_module.utils.tafsir.TafsirPreloader")
@@ -446,9 +452,15 @@ class QuizReviewLearnActivity :
                     ayahId
                 )
                 
+                // 若数据不可用（未下载等），整卡隐藏而非显示"Verse not found"
+                if (verseData.arabicText == "Verse not found" || verseData.arabicText == "Error loading verse") {
+                    binding.relatedVerseCard.visibility = android.view.View.GONE
+                    return@launch
+                }
+
                 // 更新UI - 阿拉伯语经文
                 binding.verseArabicTv.text = verseData.arabicText
-                
+
                 // 更新UI - 翻译文本
                 if (verseData.translationText.isNotEmpty()) {
                     binding.verseTranslationTv.text = verseData.translationText

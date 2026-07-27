@@ -3,8 +3,8 @@
     <string name="quran_no_ad_tips">Ad not loaded, try again later</string>
     <string name="quran_loading_ad">Loading Ad...</string>
     <string name="quiz_review_default_explanation">This verse provides important guidance. Study it carefully to understand its meaning and application.</string>
-    <string name="quran_correct">Correct</string>
-    <string name="quran_wrong">Wrong</string>
+    <string name="quran_correct">MashaAllah!</string>
+    <string name="quran_wrong">Not quite</string>
     <string name="quran_question">Question %1$s</string>
     <string name="quran_level">Level %1$s</string>
     <string name="quran_not_enough_gems">Not enough gems</string>
@@ -24,7 +24,9 @@
     <string name="quran_quiz_notify_correct_msg">Well done! That’s correct.</string>
     <string name="quran_quiz_notify_correct_title">May God bless you</string>
     <string name="quran_play_more">Play More</string>
-    <string name="quran_level_up">Level Up</string>
+    <string name="quran_level_up">MashaAllah!</string>
+    <string name="quran_level_up_subtitle">Level complete — keep growing in knowledge</string>
+    <string name="quran_level_streak">🔥 %1$s levels in a row, MashaAllah</string>
     <string name="quran_reward">Reward</string>
     <string name="quran_download">Download</string>
     <string name="quran_cancel">Cancel</string>
@@ -56,4 +58,8 @@
     <string name="quiz_skip_btn">Skip</string>
     <string name="quiz_quit_level_btn">Quit Level</string>
 
+    <string name="quiz_surah_title">Surah Quiz</string>
+    <string name="quiz_surah_done">Done</string>
+    <string name="quiz_surah_not_enough">Not enough questions for this surah yet</string>
+    <string name="quiz_surah_test_btn">Test this Surah</string>
 </resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 观看视频标识：圆角方框轮廓 + 播放三角(参考通用激励视频按钮设计)。白色，配按钮文字色。 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- 圆角方框轮廓 -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.2"
+        android:strokeLineJoin="round"
+        android:pathData="M6.5,5 L17.5,5 A3.5,3.5 0 0 1 21,8.5 L21,15.5 A3.5,3.5 0 0 1 17.5,19 L6.5,19 A3.5,3.5 0 0 1 3,15.5 L3,8.5 A3.5,3.5 0 0 1 6.5,5 Z" />
+    <!-- 播放三角 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M10,8.8 L16,12 L10,15.2 Z" />
+</vector>

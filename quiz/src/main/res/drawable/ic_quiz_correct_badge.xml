@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 答对徽章：金环 + 白盘 + 绿勾。白=noor之光，绿=App主色，金环=庄重点缀。 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="96dp"
+    android:height="96dp"
+    android:viewportWidth="96"
+    android:viewportHeight="96">
+    <!-- 金色外环 -->
+    <path
+        android:fillColor="#F4C95D"
+        android:pathData="M48,48 m-46,0 a46,46 0 1,0 92,0 a46,46 0 1,0 -92,0 z" />
+    <!-- 白色内盘 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M48,48 m-41,0 a41,41 0 1,0 82,0 a41,41 0 1,0 -82,0 z" />
+    <!-- 绿色对勾 -->
+    <path
+        android:strokeColor="#2E9E6B"
+        android:strokeWidth="8"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M30,49 L43,63 L68,34" />
+</vector>

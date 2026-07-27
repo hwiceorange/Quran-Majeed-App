@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 情境化"本章测验"独立屏。轻量：只取本章题目、逐题作答、末尾出成绩。复用 QuestionOptionView。 -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_quiz">
+
+    <ImageView
+        android:id="@+id/sqBack"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="@dimen/dp_8"
+        android:layout_marginTop="@dimen/dp_8"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="10dp"
+        android:src="@drawable/ic_quiz_hide_option"
+        android:contentDescription="@null"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/white" />
+
+    <TextView
+        android:id="@+id/sqTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dp_12"
+        android:fontFamily="@font/montserrat_bold"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp_18"
+        app:layout_constraintBottom_toBottomOf="@+id/sqBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/sqBack"
+        app:layout_constraintTop_toTopOf="@+id/sqBack"
+        tools:text="Al-Fatiha" />
+
+    <TextView
+        android:id="@+id/sqProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_16"
+        android:background="@drawable/bg_quiz_progress"
+        android:fontFamily="@font/montserrat_bold"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp_10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sqBack"
+        tools:text="Question 1/5" />
+
+    <TextView
+        android:id="@+id/sqQuestion"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dp_25"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@drawable/bg_quiz_content"
+        android:fontFamily="@font/montserrat_bold"
+        android:gravity="start|center_vertical"
+        android:lineSpacingExtra="@dimen/dp_6"
+        android:minLines="3"
+        android:padding="@dimen/dp_15"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp_22"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sqProgress"
+        tools:text="Which surah do Muslims recite in every rak'ah?" />
+
+    <com.quranaudio.quiz.quiz.QuestionOptionView
+        android:id="@+id/sqOptions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_20"
+        app:divider="@drawable/bg_quiz_option"
+        app:layout_constraintTop_toBottomOf="@+id/sqQuestion"
+        app:showDividers="middle" />
+
+    <!-- 成绩结算层（默认隐藏） -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/sqResult"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_quiz"
+        android:visibility="gone"
+        tools:visibility="gone">
+
+        <ImageView
+            android:id="@+id/sqResultGlow"
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:src="@drawable/ic_quiz_noor_glow"
+            android:importantForAccessibility="no"
+            app:layout_constraintBottom_toTopOf="@+id/sqScoreTv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/ic_quiz_level_quran"
+            android:importantForAccessibility="no"
+            app:layout_constraintBottom_toBottomOf="@+id/sqResultGlow"
+            app:layout_constraintEnd_toEndOf="@+id/sqResultGlow"
+            app:layout_constraintStart_toStartOf="@+id/sqResultGlow"
+            app:layout_constraintTop_toTopOf="@+id/sqResultGlow" />
+
+        <TextView
+            android:id="@+id/sqScoreTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_8"
+            android:fontFamily="@font/montserrat_bold"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sqResultGlow"
+            tools:text="4 / 5" />
+
+        <TextView
+            android:id="@+id/sqRetry"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_52"
+            android:layout_marginHorizontal="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_40"
+            android:background="@drawable/btn_levelup_reward_secondary"
+            android:fontFamily="@font/montserrat_semi_bold"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp_16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sqScoreTv"
+            tools:text="Try Again" />
+
+        <TextView
+            android:id="@+id/sqDone"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_52"
+            android:layout_marginHorizontal="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_12"
+            android:background="@drawable/btn_levelup_continue_primary"
+            android:fontFamily="@font/montserrat_bold"
+            android:gravity="center"
+            android:textColor="#1E7A54"
+            android:textSize="@dimen/dp_18"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sqRetry"
+            tools:text="Done" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

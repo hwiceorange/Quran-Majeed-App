@@ -769,13 +769,26 @@ public class QiblaFragment extends BaseFragment implements EnhancedCompass.Enhan
 
     private boolean hasLocationPermission() {
         return requireActivity().checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) 
+            == android.content.pm.PackageManager.PERMISSION_GRANTED
+            || requireActivity().checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION)
             == android.content.pm.PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestLocationPermission() {
-        // TODO: Implement permission request logic
-        // For simplicity, show a message
-                    Toast.makeText(requireContext(), getString(R.string.qibla_location_permission_required), Toast.LENGTH_LONG).show();
+        requestPermissions(new String[]{
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+        }, 4803);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 4803 && hasLocationPermission()) {
+            getCurrentLocation();
+            startLocationUpdates();
+        }
     }
 
     @Override

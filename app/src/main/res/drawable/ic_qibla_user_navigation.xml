@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Brand-aligned map heading marker. The arrow path is shared with ic_navigation;
+     the white keyline keeps it readable over satellite and road map tiles. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="52dp"
+    android:height="52dp"
+    android:viewportWidth="52"
+    android:viewportHeight="52">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M26,1 A25,25 0,1 1,25.99,1 Z" />
+    <path
+        android:fillColor="#FF4B9B76"
+        android:pathData="M26,4 A22,22 0,1 1,25.99,4 Z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M26,10 L15.5,40.2 L26,35.6 L36.5,40.2 Z" />
+    <path
+        android:fillColor="#FFDAA520"
+        android:pathData="M26,14 L22.2,34.2 L26,32.5 L29.8,34.2 Z" />
+</vector>

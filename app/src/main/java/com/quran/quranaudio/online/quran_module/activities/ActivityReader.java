@@ -468,8 +468,61 @@ public class ActivityReader extends ReaderPossessingActivity {
                 android.util.Log.d("ActivityReader", "🎧 Listening tracking started (player already playing)");
             }
         }
+
+        // 情境化"本章测验"入口（纯增量，全 try-catch 兜底，任何异常都不影响阅读器）
+        // 章为异步加载，分几次幂等重试以确保拿到 currChapter
+        updateSurahQuizEntry();
+        try {
+            new Handler().postDelayed(this::updateSurahQuizEntry, 500);
+            new Handler().postDelayed(this::updateSurahQuizEntry, 1500);
+        } catch (Throwable ignored) {}
     }
-    
+
+    /**
+     * 情境化联动：若当前章题量足够(≥3)，显示"本章测验"入口；点击启动独立的 SurahQuizActivity。
+     * 全程 try-catch，任何异常都只是不显示入口，绝不影响阅读器现有功能/交互/数据/登录/UIUX。
+     */
+    private void updateSurahQuizEntry() {
+        try {
+            if (mBinding == null || mBinding.btnSurahQuizEntry == null) return;
+            com.quran.quranaudio.online.quran_module.components.quran.subcomponents.Chapter ch =
+                    (mReaderParams != null) ? mReaderParams.currChapter : null;
+            if (ch == null) {
+                mBinding.btnSurahQuizEntry.setVisibility(android.view.View.GONE);
+                return;
+            }
+            final int chNo = ch.getChapterNumber();
+            final String chName = ch.getName();
+            com.quranaudio.quiz.quiz.QuestionResponse.countBySurahAsync(chNo, count -> {
+                try {
+                    if (isFinishing() || isDestroyed() || mBinding == null || mBinding.btnSurahQuizEntry == null) return;
+                    if (count >= 3) {
+                        mBinding.btnSurahQuizEntry.setVisibility(android.view.View.VISIBLE);
+                        mBinding.btnSurahQuizEntry.setOnClickListener(v -> {
+                            try {
+                                // 点击时读取实时当前章，保证滚动到别章后仍正确
+                                com.quran.quranaudio.online.quran_module.components.quran.subcomponents.Chapter live =
+                                        (mReaderParams != null) ? mReaderParams.currChapter : null;
+                                int liveNo = (live != null) ? live.getChapterNumber() : chNo;
+                                String liveName = (live != null) ? live.getName() : chName;
+                                com.quran.quranaudio.quiz.activity.SurahQuizActivity.Companion.start(
+                                        ActivityReader.this, liveNo, liveName);
+                            } catch (Throwable t) {
+                                android.util.Log.e("ActivityReader", "surah quiz launch failed", t);
+                            }
+                        });
+                    } else {
+                        mBinding.btnSurahQuizEntry.setVisibility(android.view.View.GONE);
+                    }
+                } catch (Throwable t) {
+                    android.util.Log.e("ActivityReader", "surah quiz entry update failed", t);
+                }
+            });
+        } catch (Throwable t) {
+            android.util.Log.e("ActivityReader", "surah quiz entry failed", t);
+        }
+    }
+
     /**
      * 更新当前阅读的页码和经文位置（用于Daily Quest追踪）
      */
@@ -972,43 +1025,9 @@ public class ActivityReader extends ReaderPossessingActivity {
     @Override
     public void onBackPressed() {
         if (isTaskRoot()) {
-            // 🎯 Check reading duration before showing ad
-            long sessionDuration = 0;
-            if (sessionStartTime > 0) {
-                sessionDuration = System.currentTimeMillis() - sessionStartTime;
-            }
-            long sessionDurationSeconds = sessionDuration / 1000;
-            
-            android.util.Log.d("ActivityReader", "🎯 User exiting to MainActivity");
-            android.util.Log.d("ActivityReader", "📊 Reading duration: " + sessionDurationSeconds + " seconds");
-            
-            // Only show ad if reading duration > 30 seconds for unpaid users
-            final long MIN_READING_DURATION_SECONDS = 30;
-
-            if (sessionDurationSeconds >= MIN_READING_DURATION_SECONDS) {
-                android.util.Log.d("ActivityReader", "✅ Reading duration >= 30 seconds, attempting to show interstitial ad");
-                boolean adShown = com.quranaudio.common.ad.InterstitialAdManager.Companion.getInstance().showAdIfAvailable(this);
-
-                if (adShown) {
-                    android.util.Log.d("ActivityReader", "✅ Exit ad shown to unpaid user, delaying finish to allow ad to display");
-                    // CRITICAL: Delay finish() to allow ad to render and display properly
-                    // Ad needs the Activity context to remain alive
-                    new Handler().postDelayed(() -> {
+            // This is an app/task exit, so it must never be monetized with an interstitial.
             launchMainActivity();
             finish();
-                    }, 500); // 500ms delay to ensure ad renders
-                } else {
-                    android.util.Log.d("ActivityReader", "⚠️ No exit ad shown (subscribed or unavailable), finishing immediately");
-                    // No ad shown - navigate immediately
-                    launchMainActivity();
-                    finish();
-                }
-            } else {
-                android.util.Log.d("ActivityReader", "⏱️ Reading duration < 30 seconds (" + sessionDurationSeconds + "s), skipping ad, finishing immediately");
-                // Reading duration too short - skip ad and navigate immediately
-                launchMainActivity();
-                finish();
-            }
 
             return;
         }

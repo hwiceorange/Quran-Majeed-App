@@ -435,17 +435,42 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
 
     /** Always show the exact Play-localized charge for the currently selected terms. */
     private fun updateDisplayedPlanPrices() {
-        monthlyProduct?.let(::paidRecurringPhase)?.formattedPrice?.let { price ->
-            binding.tvMonthlySubText.text = getString(
-                if (isFreeTrialEnabled) R.string.subscription_monthly_sub_text
-                else R.string.subscription_monthly_price,
-                price
-            )
+        val monthlyPhase = monthlyProduct?.let(::paidRecurringPhase)
+        monthlyPhase?.formattedPrice?.let { price ->
+            // 左侧：试用时提示试用条款；非试用时只留「随时取消」，价格交给右侧单价列（避免重复）。
+            binding.tvMonthlySubText.text =
+                if (isFreeTrialEnabled) getString(R.string.subscription_monthly_sub_text, price)
+                else getString(R.string.subscription_cancel_anytime)
+            // 右侧：月订阅本身即每月真实价。
+            binding.tvMonthlyPermonth.text = price
         }
-        yearlyProduct?.let(::paidRecurringPhase)?.formattedPrice?.let { price ->
-            binding.tvYearlySubText.text = getString(R.string.subscription_yearly_price, price)
+
+        val yearlyPhase = yearlyProduct?.let(::paidRecurringPhase)
+        yearlyPhase?.formattedPrice?.let { price ->
+            // 左侧：真实年费全额（加大醒目）；「随时取消」在下方独立成行（合规：真实计费金额始终完整展示）。
+            binding.tvYearlySubText.text = getString(R.string.subscription_amount_per_year, price)
+        }
+        // 右侧：年费拆算到「每月」，与月订阅同单位直接对比（对比锚点，非计费金额）。
+        yearlyPhase?.let { phase ->
+            perUnitPrice(phase.priceCurrencyCode, phase.priceAmountMicros, 12)?.let {
+                binding.tvYearlyPermonth.text = it
+            }
         }
     }
+
+    /**
+     * 把整期价格按 Play 返回的币种/金额换算成「每单位」价（如年费÷12=每月），
+     * 用系统货币格式化以匹配 Play 的本地化符号与小数位。仅用于对比展示，不用于计费。
+     */
+    private fun perUnitPrice(currencyCode: String, totalMicros: Long, divisor: Int): String? =
+        try {
+            val amount = totalMicros.toDouble() / 1_000_000.0 / divisor
+            val formatter = java.text.NumberFormat.getCurrencyInstance()
+            formatter.currency = java.util.Currency.getInstance(currencyCode)
+            formatter.format(amount)
+        } catch (e: Exception) {
+            null
+        }
 
     /**
      * 订阅页永远展示「原价」：取无限续订相（真实续订价）。合规关键——绝不能把折扣 offer 的
@@ -505,15 +530,9 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
     }
 
     private fun updateAnnualSavings() {
-        val monthlyMicros = monthlyProduct?.let(::paidRecurringPhase)?.priceAmountMicros ?: return
-        val yearlyMicros = yearlyProduct?.let(::paidRecurringPhase)?.priceAmountMicros ?: return
-        val annualizedMonthly = monthlyMicros * 12
-        if (annualizedMonthly > yearlyMicros) {
-            val percent = (((annualizedMonthly - yearlyMicros) * 100) / annualizedMonthly).toInt()
-            binding.tvYearlyMainText.text = getString(R.string.subscription_save_percent, percent)
-        } else {
-            binding.tvYearlyMainText.setText(R.string.subscription_annual_plan_label)
-        }
+        // 年卡主标题与月卡平级用「Annual plan」，避免左上过挤；省钱感由右侧每月单价对比
+        // （HK$6.50/月 vs HK$23.00/月）传达，无需重复文字。
+        binding.tvYearlyMainText.setText(R.string.subscription_annual_plan_label)
     }
 
     private fun setupLegalLinks() {

@@ -220,7 +220,7 @@ public class NetworkModule {
 
     private String getAdhanAPIBaseUrl() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            return "http://api.aladhan.com/v1/";
+            return "https://api.aladhan.com/v1/";
         }
         return "https://api.aladhan.com/v1/";
     }

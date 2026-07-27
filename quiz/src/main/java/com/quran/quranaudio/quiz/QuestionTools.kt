@@ -15,6 +15,20 @@ object QuestionTools {
     private const val BIBLE_QUIZ_ZIP_PW = "a2p2MjAyM3F1aXo="
 
     /**
+     * 题库内容版本。每次更新 assets/quiz.zip 里的题目内容都要 +1，
+     * 触发老装机强制覆盖解压（否则 unZipBibleQuiz 见到旧文件存在就跳过，新题库上不了线）。
+     * v2 = 精编分层题库（易→难，意义/主题/故事/词汇/填空，覆盖多章）。
+     * v3 = 第1关开场题重排(礼拜/常念，温暖易答) + 去冗余(Ummul-Kitab/Maliki填空)。
+     * v4 = densify：常读短章补深度题(63→90, 30关)，6章≥5题以支撑情境化。
+     * v5 = 续densify(90→108,36关,25章) + 页面改进配套。
+     * v6 = 印尼语(id)多语言适配：108题精编库译为印尼语。
+     * v7 = 阿拉伯语(ar)多语言：108题译为阿语，27填空题经文逐字取自App自带乌斯玛尼源。
+     * v8 = 乌尔都语(ur)多语言：108题，填空经文取自源，界面提示乌尔都语。
+     */
+    private const val CONTENT_VERSION = 8
+    private const val SP_KEY_CONTENT_VERSION = "quiz_content_version"
+
+    /**
      * 根据应用语言获取题目内容
      * - 英语 (en): quiz_all_en.txt
      * - 印尼语 (id/in): quiz_all_id.txt
@@ -58,6 +72,7 @@ object QuestionTools {
         return when (languageCode) {
             "id", "in" -> "quiz_all_id.txt"  // 印尼语
             "ar" -> "quiz_all_ar.txt"         // 阿拉伯语
+            "ur" -> "quiz_all_ur.txt"         // 乌尔都语
             else -> "quiz_all_en.txt"          // 英语（默认）
         }
     }
@@ -75,13 +90,19 @@ object QuestionTools {
         try {
             val verifyFilePath = "${saveRootPath}${File.separator}quiz${File.separator}quiz_all_en.txt"
             android.util.Log.d("QuestionTools", "🔍 Checking if quiz already extracted: $verifyFilePath")
-            
+
             val fileExists = FileUtils.isFileExists(verifyFilePath)
-            if (fileExists) {
-                android.util.Log.d("QuestionTools", "✅ Quiz files already extracted, skipping")
+            val extractedVersion = com.quran.quranaudio.quiz.extension.SPTools.getInt(SP_KEY_CONTENT_VERSION, 1)
+            if (fileExists && extractedVersion >= CONTENT_VERSION) {
+                android.util.Log.d("QuestionTools", "✅ Quiz files already extracted (v$extractedVersion), skipping")
                 return
             }
-            
+            if (fileExists) {
+                // 内容版本升级：清掉旧题库目录，确保新题库覆盖生效
+                android.util.Log.d("QuestionTools", "♻️ Content version $extractedVersion -> $CONTENT_VERSION, re-extracting")
+                FileUtils.delete("${saveRootPath}${File.separator}quiz")
+            }
+
             android.util.Log.d("QuestionTools", "📂 Quiz not found, starting extraction...")
             android.util.Log.d("QuestionTools", "   Save root path: $saveRootPath")
             
@@ -108,6 +129,8 @@ object QuestionTools {
                 val zipFile = ZipFile(filePath, null)
                 zipFile.extractAll(saveRootPath)
                 android.util.Log.d("QuestionTools", "✅ Extraction completed")
+                // 记录已解压的内容版本，供下次启动判断是否需要覆盖更新
+                com.quran.quranaudio.quiz.extension.SPTools.put(SP_KEY_CONTENT_VERSION, CONTENT_VERSION)
                 
                 // Verify extraction
                 val extractedFiles = File("${saveRootPath}${File.separator}quiz").listFiles()

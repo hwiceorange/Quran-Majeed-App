@@ -130,6 +130,10 @@ class NativeAdManager private constructor() {
      * - 加载失败自动重试
      */
     fun loadNewAd() {
+        if (!ConsentManager.canRequestAds()) {
+            Log.w(TAG, "Consent not ready; blocking native ad request")
+            return
+        }
         val context = appContext
         if (context == null) {
             android.util.Log.e("NATIVE_AD_TRACK", "❌ NativeAdManager.loadNewAd() - AppContext is null")
@@ -432,4 +436,3 @@ class NativeAdManager private constructor() {
         Log.d(TAG, "🗑️ NativeAdManager destroyed")
     }
 }
-

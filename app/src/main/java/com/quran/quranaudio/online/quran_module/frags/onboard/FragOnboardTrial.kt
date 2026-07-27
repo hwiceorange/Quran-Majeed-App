@@ -38,6 +38,15 @@ class FragOnboardTrial : FragOnboardBase() {
         android.util.Log.d("FragOnboardTrial", "🎁 7-day trial page displayed")
         
         setupTryFreeButton()
+        binding.btnContinueFree.setOnClickListener {
+            markOnboardingComplete()
+            val intent = Intent(
+                requireContext(),
+                com.quran.quranaudio.online.prayertimes.ui.MainActivity::class.java
+            ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+            activity?.finish()
+        }
     }
     
     /**
@@ -89,4 +98,3 @@ class FragOnboardTrial : FragOnboardBase() {
         _binding = null
     }
 }
-

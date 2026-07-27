@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- noor 柔光：由中心暖金白向外透明的径向光晕，作为答对/成就的"光"氛围。 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="220dp"
+    android:height="220dp"
+    android:viewportWidth="220"
+    android:viewportHeight="220">
+    <path android:pathData="M0,0 h220 v220 h-220 z">
+        <aapt:attr xmlns:aapt="http://schemas.android.com/aapt" name="android:fillColor">
+            <gradient
+                android:type="radial"
+                android:centerX="110"
+                android:centerY="110"
+                android:gradientRadius="110"
+                android:startColor="#B3FFF3D6"
+                android:centerColor="#4DFCE9A8"
+                android:endColor="#00FCE9A8" />
+        </aapt:attr>
+    </path>
+</vector>

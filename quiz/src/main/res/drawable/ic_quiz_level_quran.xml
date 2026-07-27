@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 升级里程碑：曲线敞开的古兰经(mushaf) + 顶部金色新月(hilal)。
+     扁平精致，金+绿+米白，与答对徽章同一设计语言；新月一眼即"伊斯兰/夜/祝福"，庄重温暖。 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="160dp"
+    android:height="160dp"
+    android:viewportWidth="160"
+    android:viewportHeight="160">
+
+    <!-- 顶部金色新月(外圆减去偏移内圆，evenOdd 挖出弯月) -->
+    <path
+        android:fillColor="#F0BE45"
+        android:fillType="evenOdd"
+        android:pathData="M80,42 m-15,0 a15,15 0 1,0 30,0 a15,15 0 1,0 -30,0 Z M84.5,37.5 m-12.5,0 a12.5,12.5 0 1,0 25,0 a12.5,12.5 0 1,0 -25,0 Z" />
+
+    <!-- 绿色书封底座 -->
+    <path
+        android:fillColor="#2E9E6B"
+        android:pathData="M18,108 C46,101 114,101 142,108 L137,122 C112,116 48,116 23,122 Z" />
+
+    <!-- 左页（米白，带曲线） -->
+    <path
+        android:fillColor="#ECE0C4"
+        android:pathData="M80,72 C58,64 37,66 23,74 L27,110 C43,104 62,104 80,109 Z" />
+    <!-- 右页（更亮米白） -->
+    <path
+        android:fillColor="#F7EFDC"
+        android:pathData="M80,72 C102,64 123,66 137,74 L133,110 C117,104 98,104 80,109 Z" />
+    <!-- 书脊高光 -->
+    <path
+        android:fillColor="#D9A93A"
+        android:pathData="M78,71 L82,71 L82,110 L78,110 Z" />
+
+    <!-- 页面文字线（左） -->
+    <path android:strokeColor="#C3B893" android:strokeWidth="2.4" android:strokeLineCap="round"
+        android:pathData="M36,88 L66,84 M38,96 L66,93" />
+    <!-- 页面文字线（右） -->
+    <path android:strokeColor="#C9BE99" android:strokeWidth="2.4" android:strokeLineCap="round"
+        android:pathData="M94,84 L124,88 M94,93 L122,96" />
+</vector>

@@ -69,6 +69,29 @@ object QuestionResponse {
         allQuestions
     }
 
+    /** 情境化联动：按 surah 过滤该章题目（供阅读器"本章测验"使用）。当前语言题库。 */
+    suspend fun getQuestionsBySurah(surahId: Int): List<QuestionBean> = withContext(Dispatchers.Default) {
+        getAllQuestion().filter { it.surah_id == surahId }
+    }
+
+    /** 该章可用题目数——用于决定是否展示"本章测验"入口（题量太少不值得展示）。 */
+    suspend fun countBySurah(surahId: Int): Int = getQuestionsBySurah(surahId).size
+
+    /** Java 友好回调接口（供阅读器等 Java 侧使用）。 */
+    fun interface CountCallback { fun onCount(count: Int) }
+
+    /**
+     * Java 友好：异步统计该章题量并在主线程回调。供阅读器决定是否显示"本章测验"入口。
+     * 任何异常都回调 0（调用方据此不显示入口），绝不影响调用方。
+     */
+    @JvmStatic
+    fun countBySurahAsync(surahId: Int, cb: CountCallback) {
+        GlobalScope.launch(Dispatchers.Main) {
+            val n = try { getQuestionsBySurah(surahId).size } catch (e: Exception) { 0 }
+            cb.onCount(n)
+        }
+    }
+
     private suspend fun initAllQuestions(): List<QuestionBean> = withContext(Dispatchers.IO) {
         val questionStr = QuestionTools.getQuestionStr()
         if (questionStr.isEmpty()) {

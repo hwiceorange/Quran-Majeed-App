@@ -11,7 +11,7 @@
  <fragment
         android:id="@+id/nav_name_99"
         android:name="com.quran.quranaudio.quiz.fragments.QuranQuestionFragment"
-        android:label="Name99Fragment" />
+        android:label="@string/learn" />
 
     <fragment
         android:id="@+id/nav_home"

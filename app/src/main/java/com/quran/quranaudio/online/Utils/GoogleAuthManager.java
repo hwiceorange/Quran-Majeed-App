@@ -335,6 +335,42 @@ public class GoogleAuthManager {
     public Intent getSignInIntent() {
         return googleSignInClient.getSignInIntent();
     }
+
+    /** Refreshes Firebase credentials before a sensitive operation such as account deletion. */
+    public void reauthenticateCurrentUser(@Nullable Intent data, @NonNull AuthCallback callback) {
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if (currentUser == null) {
+            callback.onFailure("No account is currently signed in");
+            return;
+        }
+        if (currentUser.isAnonymous()) {
+            callback.onSuccess(currentUser);
+            return;
+        }
+        if (data == null) {
+            callback.onFailure("Google authentication was canceled");
+            return;
+        }
+        try {
+            GoogleSignInAccount account = GoogleSignIn.getSignedInAccountFromIntent(data)
+                    .getResult(ApiException.class);
+            if (account == null || account.getIdToken() == null) {
+                callback.onFailure("Unable to verify the Google account");
+                return;
+            }
+            AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+            currentUser.reauthenticate(credential).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    callback.onSuccess(firebaseAuth.getCurrentUser());
+                } else {
+                    Exception error = task.getException();
+                    callback.onFailure(error != null ? error.getMessage() : "Authentication failed");
+                }
+            });
+        } catch (ApiException error) {
+            callback.onFailure(error.getMessage() != null ? error.getMessage() : "Authentication failed");
+        }
+    }
     
     /**
      * Log detailed diagnostics for Google Sign-In failures
@@ -504,4 +540,3 @@ public class GoogleAuthManager {
         });
     }
 }
-

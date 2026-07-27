@@ -2346,6 +2346,9 @@
     <string name="subscription_legal_links">গোপনীয়তা নীতি · Google Play শর্তাবলী</string>
     <string name="subscription_monthly_price">%1$s/মাস · যেকোনো সময় বাতিল</string>
     <string name="subscription_yearly_price">%1$s/বছর · যেকোনো সময় বাতিল</string>
+    <string name="subscription_per_month">প্রতি মাসে</string>
+    <string name="subscription_cancel_anytime">যেকোনো সময় বাতিল</string>
+    <string name="subscription_amount_per_year">%1$s/বছর</string>
     <string name="subscription_disclosure">স্বয়ংক্রিয়ভাবে নবায়নযোগ্য সাবস্ক্রিপশন। নির্বাচিত মূল্য ও বিলিং সময়কাল উপরে দেখানো হয়েছে এবং কেনার আগে Google Play নিশ্চিত করে। Google Play-তে যেকোনো সময় বাতিল করুন; অ্যাপ আনইনস্টল করলে সাবস্ক্রিপশন বাতিল হয় না। প্রিমিয়াম ঐচ্ছিক এবং ফ্রি ফিচারগুলো উপলব্ধ থাকে।</string>
     <string name="subscription_trial_unavailable_label">ফ্রি ট্রায়াল এখন উপলব্ধ নয়</string>
     <!-- 折扣挽回页 -->
@@ -2364,4 +2367,9 @@
     <string name="discount_first_month_caption">আপনার প্রথম মাসে</string>
     <string name="discount_price_period_month">/ প্রথম মাস</string>
     <string name="discount_disclosure_month">প্রথম মাস %1$s, এরপর প্রতি মাসে %2$s। নবায়নের অন্তত ২৪ ঘণ্টা আগে বাতিল না করলে প্রতি মাসে স্বয়ংক্রিয়ভাবে নবায়ন হয়। কেনার আগে Google Play নিশ্চিত করে; Google Play-তে যেকোনো সময় বাতিল করুন। আনইনস্টল করলে বাতিল হয় না।</string>
+    <string name="discount_then_year">এরপর %1$s/বছর · যেকোনো সময় বাতিল করুন</string>
+    <string name="discount_then_month">এরপর %1$s/মাস · যেকোনো সময় বাতিল করুন</string>
+    <string name="discount_limited_pill">সীমিত সময়ের অফার</string>
+    <string name="asma_ul_husna">আল্লাহর ৯৯ নাম</string>
+    <string name="names99_home">৯৯ নাম</string>
 </resources>

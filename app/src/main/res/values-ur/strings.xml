@@ -2339,6 +2339,9 @@
     <string name="subscription_legal_links">پرائیویسی پالیسی · Google Play شرائط</string>
     <string name="subscription_monthly_price">%1$s/ماہ · کسی بھی وقت منسوخ کریں</string>
     <string name="subscription_yearly_price">%1$s/سال · کسی بھی وقت منسوخ کریں</string>
+    <string name="subscription_per_month">ماہانہ</string>
+    <string name="subscription_cancel_anytime">کسی بھی وقت منسوخ کریں</string>
+    <string name="subscription_amount_per_year">%1$s/سال</string>
     <string name="subscription_disclosure">خودکار تجدید ہونے والی سبسکرپشن۔ منتخب قیمت اور بلنگ مدت اوپر دکھائی گئی ہیں اور خریداری سے پہلے Google Play انہیں تصدیق کرتا ہے۔ Google Play میں کسی بھی وقت منسوخ کریں؛ ایپ کو اَن انسٹال کرنے سے سبسکرپشن منسوخ نہیں ہوتی۔ پریمیم اختیاری ہے اور مفت فیچرز دستیاب رہتے ہیں۔</string>
     <string name="subscription_trial_unavailable_label">مفت ٹرائل فی الحال دستیاب نہیں</string>
     <!-- 折扣挽回页 -->
@@ -2357,4 +2360,9 @@
     <string name="discount_first_month_caption">آپ کے پہلے مہینے پر</string>
     <string name="discount_price_period_month">/ پہلا مہینہ</string>
     <string name="discount_disclosure_month">پہلا مہینہ %1$s، پھر %2$s ماہانہ۔ تجدید سے کم از کم 24 گھنٹے پہلے منسوخ نہ کرنے پر ہر ماہ خودکار تجدید ہوتی ہے۔ خریداری سے پہلے Google Play تصدیق کرتا ہے؛ Google Play میں کسی بھی وقت منسوخ کریں۔ اَن انسٹال کرنے سے منسوخ نہیں ہوتی۔</string>
+    <string name="discount_then_year">پھر %1$s/سال · کسی بھی وقت منسوخ کریں</string>
+    <string name="discount_then_month">پھر %1$s/مہینہ · کسی بھی وقت منسوخ کریں</string>
+    <string name="discount_limited_pill">محدود وقت کی پیشکش</string>
+    <string name="asma_ul_husna">اللہ کے 99 نام</string>
+    <string name="names99_home">99 نام</string>
 </resources>

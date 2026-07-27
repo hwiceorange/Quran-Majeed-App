@@ -45,14 +45,21 @@
         android:paddingStart="28dp"
         android:paddingEnd="28dp">
 
-        <!-- 简短价值锚定标题（次要，一行） -->
+        <!-- 限时药丸：框定「限时领取」语义（与计费期彻底分开，避免歧义） -->
         <TextView
-            android:id="@+id/tv_discount_title"
+            android:id="@+id/tv_limited_pill"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/discount_title"
-            android:textColor="#EAF3EE"
-            android:textSize="18sp"
+            android:background="@drawable/bg_discount_pill"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:text="@string/discount_limited_pill"
+            android:textColor="#1B5E20"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.02"
             android:gravity="center" />
 
         <!-- 主角 1：折扣百分比（超大） -->
@@ -60,7 +67,7 @@
             android:id="@+id/tv_discount_percent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="20dp"
             android:text="@string/discount_percent_placeholder"
             android:textColor="#FFD54F"
             android:textSize="88sp"
@@ -70,6 +77,7 @@
             android:gravity="center"
             tools:text="50% OFF" />
 
+        <!-- 优惠范围（首月/首年）：明确优惠仅限首期 -->
         <TextView
             android:id="@+id/tv_discount_caption"
             android:layout_width="wrap_content"
@@ -80,31 +88,72 @@
             android:letterSpacing="0.02"
             android:gravity="center" />
 
-        <!-- 主角 2：倒计时（大号） -->
+        <!-- 价值/情感锚定（精神共鸣，竞品给不了的差异化） -->
         <TextView
-            android:id="@+id/tv_countdown_label"
+            android:id="@+id/tv_discount_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="@string/discount_countdown_label"
-            android:textColor="#C9DBCF"
-            android:textSize="13sp"
-            android:letterSpacing="0.06"
+            android:layout_marginTop="10dp"
+            android:text="@string/discount_title"
+            android:textColor="#D6E6DB"
+            android:textSize="16sp"
             android:gravity="center" />
 
-        <TextView
-            android:id="@+id/tv_countdown"
+        <!-- 主角 2：倒计时数字卡（分段，从容不焦虑） -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="@string/discount_countdown_placeholder"
-            android:textColor="@android:color/white"
-            android:textSize="56sp"
-            android:textStyle="bold"
-            android:fontFeatureSettings="tnum"
-            android:includeFontPadding="false"
-            android:letterSpacing="0.02"
-            tools:text="59:12" />
+            android:layout_marginTop="26dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tv_countdown_min"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="92dp"
+                android:background="@drawable/bg_countdown_card"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:text="60"
+                android:textColor="#14543F"
+                android:textSize="48sp"
+                android:textStyle="bold"
+                android:fontFeatureSettings="tnum"
+                android:includeFontPadding="false"
+                android:gravity="center"
+                android:elevation="3dp"
+                tools:text="59" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:text=":"
+                android:textColor="@android:color/white"
+                android:textSize="40sp"
+                android:textStyle="bold"
+                android:includeFontPadding="false" />
+
+            <TextView
+                android:id="@+id/tv_countdown_sec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="92dp"
+                android:background="@drawable/bg_countdown_card"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:text="00"
+                android:textColor="#14543F"
+                android:textSize="48sp"
+                android:textStyle="bold"
+                android:fontFeatureSettings="tnum"
+                android:includeFontPadding="false"
+                android:gravity="center"
+                android:elevation="3dp"
+                tools:text="55" />
+        </LinearLayout>
 
         <!-- 价格：紧凑一行，划线原价 + 折后价 -->
         <LinearLayout
@@ -143,6 +192,17 @@
                 android:textSize="14sp" />
         </LinearLayout>
 
+        <!-- 合规：优惠结束后的原价 + 取消方式，醒目展示（不埋进小字披露） -->
+        <TextView
+            android:id="@+id/tv_then_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:gravity="center"
+            tools:text="Then HK$78.00/year after · Cancel anytime" />
+
         <!-- 主 CTA：金色、满宽、醒目 -->
         <TextView
             android:id="@+id/btn_subscribe"
@@ -176,10 +236,10 @@
             android:id="@+id/tv_disclosure"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#B9CCBF"
-            android:textSize="10sp"
+            android:textColor="#ECF3EE"
+            android:textSize="12sp"
             android:gravity="center"
-            android:lineSpacingExtra="1dp" />
+            android:lineSpacingExtra="2dp" />
 
         <TextView
             android:id="@+id/tv_legal_links"

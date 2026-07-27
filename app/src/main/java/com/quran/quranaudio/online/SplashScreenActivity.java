@@ -88,15 +88,22 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Force the platform decor/content container to be created before AppCompat installs its
+        // sub-decor. Some Android 15/16 builds can otherwise race during a cold launcher start and
+        // throw "Window couldn't find content container view" from setContentView().
+        getWindow().getDecorView();
+        super.onCreate(savedInstanceState);
+
         long startTime = System.currentTimeMillis();
         android.util.Log.d("PERFORMANCE", "========================================");
         android.util.Log.d("PERFORMANCE", "⚡ SplashScreenActivity.onCreate() START");
         android.util.Log.d("PERFORMANCE", "========================================");
-        
-        com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(this).logWorkflowStep("splash_start");
-        
-        super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_splash);
+
+        // Activity/window initialization must finish before SDK initialization or analytics work.
+        com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(this)
+                .logWorkflowStep("splash_start");
         
         sharedPref = new SharedPref(this);
         progressBar = findViewById(R.id.progressbar);
@@ -117,11 +124,19 @@ public class SplashScreenActivity extends AppCompatActivity {
         // 任务1: 异步加载配置（2秒超时）
         loadConfigAsync();
         
-        // 任务2: 异步加载广告
-        loadAdAsync();
-        
-        // 任务3: 启动总闸超时保护（5秒）
-        startMaxWaitTimeout();
+        // 任务2: 先完成 UMP 同意流程，再请求任何广告（避免缺失 TC string）
+        AdFactory.gatherConsent(this, canRequestAds -> {
+            if (canRequestAds) {
+                loadAdAsync();
+            } else {
+                android.util.Log.w(TAG, "[CONSENT] Ads are not allowed; continuing without ads");
+                updateProgress(80, "Privacy choice applied");
+                checkAndProceed();
+            }
+
+            // 同意界面不计入启动超时，避免用户选择时 Splash 被强制跳转
+            startMaxWaitTimeout();
+        });
     }
     
     // ============================================================
@@ -252,7 +267,9 @@ public class SplashScreenActivity extends AppCompatActivity {
         }
         
         // 检查是否所有任务完成
-        if (isConfigLoaded && (isAdLoaded || !AdFactory.INSTANCE.hasAppOpenAd(AdConfig.AD_APPOPEN))) {
+        if (isConfigLoaded && (isAdLoaded
+                || AdFactory.INSTANCE.hasFullScreenNativeFallback(this)
+                || !AdFactory.INSTANCE.hasAppOpenAd(AdConfig.AD_APPOPEN))) {
             // 配置已加载，且（广告已加载 或 没有广告）
             updateProgress(100, "Ready");
             proceedToShowAdOrMain();
@@ -270,7 +287,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         // 取消总闸超时（因为已经准备好了）
         handler.removeCallbacks(maxWaitTimeoutRunnable);
         
-        if (AdFactory.INSTANCE.hasAppOpenAd(AdConfig.AD_APPOPEN)) {
+        if (AdFactory.INSTANCE.hasAppOpenAd(AdConfig.AD_APPOPEN)
+                || AdFactory.INSTANCE.hasFullScreenNativeFallback(this)) {
             // 广告已就绪，展示广告
             showAd();
         } else {

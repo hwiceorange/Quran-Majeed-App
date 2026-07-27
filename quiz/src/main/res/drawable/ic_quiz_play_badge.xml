@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 激励视频标识：深色圆底 + 金环 + 白色播放三角。告知用户"观看视频获得奖励"，符合 AdMob 激励视频政策 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="20dp"
+    android:height="20dp"
+    android:viewportWidth="20"
+    android:viewportHeight="20">
+    <!-- 金色外环 -->
+    <path
+        android:fillColor="#F0BE45"
+        android:pathData="M10,10 m-10,0 a10,10 0 1,0 20,0 a10,10 0 1,0 -20,0 z" />
+    <!-- 深色圆底 -->
+    <path
+        android:fillColor="#1C1C1C"
+        android:pathData="M10,10 m-8.2,0 a8.2,8.2 0 1,0 16.4,0 a8.2,8.2 0 1,0 -16.4,0 z" />
+    <!-- 白色播放三角 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M7.5,6 L14,10 L7.5,14 Z" />
+</vector>

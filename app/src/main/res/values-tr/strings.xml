@@ -2335,6 +2335,9 @@ Pusula: telefonu doğrultun ve oku takip ederek Kâbe\'ye anlık yönelin.</stri
     <string name="subscription_legal_links">Gizlilik Politikası · Google Play Şartları</string>
     <string name="subscription_monthly_price">%1$s/ay · İstediğiniz zaman iptal</string>
     <string name="subscription_yearly_price">%1$s/yıl · İstediğiniz zaman iptal</string>
+    <string name="subscription_per_month">aylık</string>
+    <string name="subscription_cancel_anytime">İstediğiniz zaman iptal</string>
+    <string name="subscription_amount_per_year">%1$s/yıl</string>
     <string name="subscription_disclosure">Otomatik yenilenen abonelik. Seçilen fiyat ve faturalandırma dönemi yukarıda gösterilir ve satın alma öncesinde Google Play tarafından onaylanır. Google Play\'de istediğiniz zaman iptal edin; uygulamayı kaldırmak aboneliği iptal etmez. Premium isteğe bağlıdır ve ücretsiz özellikler kullanılabilir kalır.</string>
     <string name="subscription_trial_unavailable_label">Ücretsiz deneme şu anda kullanılamıyor</string>
     <!-- 折扣挽回页 -->
@@ -2353,4 +2356,9 @@ Pusula: telefonu doğrultun ve oku takip ederek Kâbe\'ye anlık yönelin.</stri
     <string name="discount_first_month_caption">ilk ayınızda</string>
     <string name="discount_price_period_month">/ ilk ay</string>
     <string name="discount_disclosure_month">İlk ay %1$s, sonra ayda %2$s. Yenilemeden en az 24 saat önce iptal edilmezse her ay otomatik yenilenir. Satın almadan önce Google Play tarafından onaylanır; Google Play\'de istediğiniz zaman iptal edin. Kaldırmak iptal etmez.</string>
+    <string name="discount_then_year">Sonra yılda %1$s · İstediğiniz zaman iptal edin</string>
+    <string name="discount_then_month">Sonra ayda %1$s · İstediğiniz zaman iptal edin</string>
+    <string name="discount_limited_pill">Sınırlı süreli teklif</string>
+    <string name="asma_ul_husna">Allah\'ın 99 İsmi</string>
+    <string name="names99_home">99 İsim</string>
 </resources>

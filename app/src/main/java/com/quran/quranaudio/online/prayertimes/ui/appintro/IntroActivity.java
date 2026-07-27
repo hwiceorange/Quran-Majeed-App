@@ -72,18 +72,16 @@ public class IntroActivity extends AppIntro {
                 Color.WHITE
         ));
 
-        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
+        // Android 12+ requires fine and coarse to be requested together so the user can choose
+        // precise or approximate location. Both are sufficient for city-level prayer times.
+        String[] permissions = {
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+        };
         askForPermissions(
                 permissions,
                 3,
                 false);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            askForPermissions(
-                    new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION},
-                    4,
-                    false);
-        }
 
         AppIntroPageTransformerType.Parallax parallax = new AppIntroPageTransformerType.Parallax(
                 1.0,

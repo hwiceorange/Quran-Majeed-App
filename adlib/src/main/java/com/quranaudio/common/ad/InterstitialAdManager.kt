@@ -89,6 +89,10 @@ class InterstitialAdManager private constructor() {
      * - Retries on failure after 30 seconds
      */
     fun loadNewAd() {
+        if (!ConsentManager.canRequestAds()) {
+            Log.w(TAG, "Consent not ready; blocking interstitial ad request")
+            return
+        }
         val context = appContext
         if (context == null) {
             Log.e(TAG, "❌ AppContext is null, cannot load ad")
@@ -207,7 +211,7 @@ class InterstitialAdManager private constructor() {
         if (discardIfExpired()) {
             retryCount = 0
             loadNewAd()
-            return false
+            return showNativeFallback(activity, onAdClosed)
         }
 
         val ad = cachedAd
@@ -216,7 +220,7 @@ class InterstitialAdManager private constructor() {
             // Still request a new ad if cache is empty (fresh user demand, reset retry budget)
             retryCount = 0
             loadNewAd()
-            return false
+            return showNativeFallback(activity, onAdClosed)
         }
         
         Log.d(TAG, "📺 Showing interstitial ad")
@@ -272,6 +276,18 @@ class InterstitialAdManager private constructor() {
         
         return true
     }
+
+    private fun showNativeFallback(activity: Activity, onAdClosed: (() -> Unit)?): Boolean {
+        val fallbackCallback = if (onAdClosed == null) null else object : AdShowCallback {
+            override fun onAdImpression(adItem: com.quranaudio.common.ad.model.AdItem?) = Unit
+            override fun onAdClicked(adItem: com.quranaudio.common.ad.model.AdItem?) = Unit
+            override fun onUserEarnedReward(adItem: com.quranaudio.common.ad.model.AdItem?, rewardItem: com.quranaudio.common.ad.model.RewardItem?) = Unit
+            override fun onAdClosed(adItem: com.quranaudio.common.ad.model.AdItem?) = onAdClosed.invoke()
+            override fun onShow(adItem: com.quranaudio.common.ad.model.AdItem?) = Unit
+            override fun onShowFail() = Unit
+        }
+        return FullScreenNativeAdManager.showIfAvailable(activity, fallbackCallback)
+    }
     
     /**
      * Schedule a retry with exponential backoff (30s, 60s, 120s), capped at
@@ -316,4 +332,3 @@ class InterstitialAdManager private constructor() {
     }
     
 }
-

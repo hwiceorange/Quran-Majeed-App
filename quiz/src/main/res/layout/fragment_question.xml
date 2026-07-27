@@ -328,6 +328,25 @@
             app:layout_constraintTop_toTopOf="@+id/watchAdIv"
             tools:text="+5" />
 
+        <!-- 激励视频标识：告知这些道具按钮通过观看视频获得奖励(AdMob 政策) -->
+        <ImageView
+            android:id="@+id/hideOptionPlayBadge"
+            android:layout_width="@dimen/dp_18"
+            android:layout_height="@dimen/dp_18"
+            android:src="@drawable/ic_quiz_play_badge"
+            android:importantForAccessibility="no"
+            app:layout_constraintBottom_toBottomOf="@+id/hideOptionIv"
+            app:layout_constraintStart_toStartOf="@+id/hideOptionIv" />
+
+        <ImageView
+            android:id="@+id/addTimePlayBadge"
+            android:layout_width="@dimen/dp_18"
+            android:layout_height="@dimen/dp_18"
+            android:src="@drawable/ic_quiz_play_badge"
+            android:importantForAccessibility="no"
+            app:layout_constraintBottom_toBottomOf="@+id/addTimeIv"
+            app:layout_constraintStart_toStartOf="@+id/addTimeIv" />
+
         <androidx.constraintlayout.helper.widget.Flow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -347,19 +366,39 @@
         android:visibility="gone"
         tools:visibility="gone" />
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/correctLav"
+    <!-- 答对庆祝动画约束在顶部区域，避免遮挡下方选项（进程由2秒定时器驱动，与动画无关） -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/correctLavBottomGuide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:scaleType="centerCrop"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.42" />
+
+    <!-- noor 柔光（衬底） -->
+    <ImageView
+        android:id="@+id/correctGlowIv"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
+        android:src="@drawable/ic_quiz_noor_glow"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:importantForAccessibility="no"
+        app:layout_constraintBottom_toBottomOf="@+id/correctLavBottomGuide"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:lottie_autoPlay="false"
-        app:lottie_fileName="quiz_correct/lottie.json"
-        app:lottie_imageAssetsFolder="quiz_correct/images" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- 答对徽章（金环+白盘+绿勾） -->
+    <ImageView
+        android:id="@+id/correctBadgeIv"
+        android:layout_width="92dp"
+        android:layout_height="92dp"
+        android:src="@drawable/ic_quiz_correct_badge"
+        android:visibility="gone"
+        android:importantForAccessibility="no"
+        app:layout_constraintBottom_toBottomOf="@+id/correctLavBottomGuide"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/adGemAnimatorIv"

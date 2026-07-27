@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 广告标识底：半透明深色小胶囊。清晰可辨(符合广告标注要求)但不突兀，白字在其上易读 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners android:radius="3dp" />
+    <solid android:color="#59000000" />
+</shape>

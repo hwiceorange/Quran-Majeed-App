@@ -10,6 +10,8 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.Log;
@@ -22,12 +24,21 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.IntentSenderRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.location.Priority;
+import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.tasks.CancellationTokenSource;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -71,14 +82,32 @@ public class QiblaMapFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap googleMap;
     private FusedLocationProviderClient fusedLocationClient;
+    private LatLng userLatLng;
+    private LocationCallback mapLocationCallback;
+    private final Handler locationHandler = new Handler(Looper.getMainLooper());
+    private boolean locationRequestActive;
+    private static final long LOCATION_TIMEOUT_MS = 15_000L;
+    private final Runnable locationTimeoutRunnable = () -> {
+        if (!locationRequestActive) return;
+        stopMapLocationUpdates();
+        if (userLatLng == null && isAdded()) {
+            Log.w(TAG, "Timed out waiting for a fresh device location");
+            showEmptyState(true);
+            setMapStatus(R.string.qibla_map_location_unavailable, true);
+        }
+    };
 
     private TextView tvBearing;
     private TextView tvDistance;
     private TextView tvAlignHud;
     private ImageButton btnMapTypeToggle;
+    private ImageButton btnRecenter;
+    private TextView tvMapStatus;
 
     private boolean satelliteMode = false;
-    private LatLng userLatLng;
+    private final ActivityResultLauncher<IntentSenderRequest> locationSettingsLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartIntentSenderForResult(),
+                    result -> resolveLocationThenDraw());
 
     // ===== 实时朝向指示（复用罗盘页的传感器融合 EnhancedCompass）=====
     private EnhancedCompass compass;
@@ -110,6 +139,8 @@ public class QiblaMapFragment extends Fragment implements OnMapReadyCallback {
         tvDistance = view.findViewById(R.id.tv_qibla_distance);
         tvAlignHud = view.findViewById(R.id.tv_qibla_align_hud);
         btnMapTypeToggle = view.findViewById(R.id.btn_map_type_toggle);
+        btnRecenter = view.findViewById(R.id.btn_qibla_recenter);
+        tvMapStatus = view.findViewById(R.id.tv_qibla_map_status);
 
         vibrator = (Vibrator) requireContext().getSystemService(Context.VIBRATOR_SERVICE);
 
@@ -133,6 +164,15 @@ public class QiblaMapFragment extends Fragment implements OnMapReadyCallback {
         }
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
+        mapLocationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(@NonNull LocationResult result) {
+                Location location = result.getLastLocation();
+                if (location != null) {
+                    acceptDeviceLocation(location, "updates");
+                }
+            }
+        };
 
         SupportMapFragment mapFragment = (SupportMapFragment)
                 getChildFragmentManager().findFragmentById(R.id.qibla_map_container);
@@ -145,6 +185,16 @@ public class QiblaMapFragment extends Fragment implements OnMapReadyCallback {
         mapFragment.getMapAsync(this);
 
         btnMapTypeToggle.setOnClickListener(v -> toggleMapType());
+        btnRecenter.setOnClickListener(v -> {
+            if (userLatLng != null) {
+                fitUserAndKaaba(userLatLng, true);
+            } else {
+                requestLocationForMap();
+            }
+        });
+        if (tvMapStatus != null) {
+            tvMapStatus.setOnClickListener(v -> requestLocationForMap());
+        }
 
         View emptyBtn = view.findViewById(R.id.btn_qibla_map_enable_location);
         if (emptyBtn != null) {
@@ -160,6 +210,10 @@ public class QiblaMapFragment extends Fragment implements OnMapReadyCallback {
             // GAME 采样率：更跟手的实时朝向（约 20ms）
             compass.start(SensorManager.SENSOR_DELAY_GAME);
         }
+        // Permission/settings may have changed while the app was in the background.
+        if (googleMap != null && !locationRequestActive) {
+            resolveLocationThenDraw();
+        }
     }
 
     @Override
@@ -168,6 +222,7 @@ public class QiblaMapFragment extends Fragment implements OnMapReadyCallback {
         if (compass != null) {
             compass.stop();
         }
+        stopMapLocationUpdates();
     }
 
     @Override
@@ -176,6 +231,7 @@ public class QiblaMapFragment extends Fragment implements OnMapReadyCallback {
         if (compass != null) {
             compass.stop();
         }
+        stopMapLocationUpdates();
         userHeadingMarker = null;
     }
 
@@ -260,6 +316,10 @@ public class QiblaMapFragment extends Fragment implements OnMapReadyCallback {
         map.getUiSettings().setMapToolbarEnabled(false);
         map.getUiSettings().setZoomControlsEnabled(false);
         map.getUiSettings().setRotateGesturesEnabled(false);
+        map.getUiSettings().setCompassEnabled(true);
+
+        // The destination must remain visible even before location succeeds.
+        drawKaabaOnly();
 
         // 若定位在地图就绪前已拿到（按钮触发/缓存），此刻补画标注
         if (userLatLng != null) {
@@ -267,6 +327,23 @@ public class QiblaMapFragment extends Fragment implements OnMapReadyCallback {
         }
 
         resolveLocationThenDraw();
+    }
+
+    private void drawKaabaOnly() {
+        if (googleMap == null || !isAdded()) return;
+        googleMap.clear();
+        MarkerOptions kaabaMarker = new MarkerOptions()
+                .position(KAABA)
+                .anchor(0.5f, 0.5f)
+                .zIndex(3f)
+                .title(getString(R.string.qibla_map_kaaba));
+        try {
+            kaabaMarker.icon(bitmapFromDrawableSized(R.drawable.ic_kaba, 42));
+        } catch (Exception e) {
+            kaabaMarker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+        }
+        googleMap.addMarker(kaabaMarker);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(KAABA, 5.5f));
     }
 
     private void toggleMapType() {
@@ -280,6 +357,7 @@ public class QiblaMapFragment extends Fragment implements OnMapReadyCallback {
      * 再异步取一次最新定位刷新，避免用户等待白屏。
      */
     private void resolveLocationThenDraw() {
+        setMapStatus(R.string.qibla_map_locating, true);
         // 立即用"已知定位"出图：优先罗盘 Tab 写入的定位，其次复用 App 祈祷时间已解析的定位。
         // 后者最关键——中国等地 Google fused 定位常失败/超时，而祈祷时间那套定位已经成功过，
         // 直接复用可保证地图立刻显示天房+方向+距离，而不是干等 fused 或卡空状态。
@@ -295,8 +373,9 @@ public class QiblaMapFragment extends Fragment implements OnMapReadyCallback {
                 Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
 
         if (granted) {
+            enableMyLocationLayer();
             // 已有种子定位则仅"尽力刷新"（拿不到不回退空状态）；无种子则必须靠 fused 出图
-            fetchFreshLocationAndDraw(hasCached);
+            ensureLocationSettingsThenFetch(hasCached);
         } else if (!hasCached) {
             showEmptyState(true);
         }
@@ -310,7 +389,7 @@ public class QiblaMapFragment extends Fragment implements OnMapReadyCallback {
     private LatLng getSeedLocation() {
         double lat = LocationSave.getLat();
         double lon = LocationSave.getLon();
-        if (lat != 0.0 && lon != 0.0) {
+        if (isValidCoordinate(lat, lon)) {
             return new LatLng(lat, lon);
         }
         try {
@@ -318,12 +397,56 @@ public class QiblaMapFragment extends Fragment implements OnMapReadyCallback {
                     .getSharedPreferences(PreferencesConstants.LOCATION, Context.MODE_PRIVATE);
             double plat = UserPreferencesUtils.getDouble(p, PreferencesConstants.LAST_KNOWN_LATITUDE, 0);
             double plon = UserPreferencesUtils.getDouble(p, PreferencesConstants.LAST_KNOWN_LONGITUDE, 0);
-            if (plat != 0.0 && plon != 0.0) {
+            if (isValidCoordinate(plat, plon)) {
                 return new LatLng(plat, plon);
             }
         } catch (Exception ignored) {
         }
         return null;
+    }
+
+    private boolean isValidCoordinate(double lat, double lon) {
+        return !Double.isNaN(lat) && !Double.isNaN(lon)
+                && lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180
+                && !(lat == 0.0 && lon == 0.0);
+    }
+
+    @SuppressLint("MissingPermission")
+    private void enableMyLocationLayer() {
+        if (googleMap == null) return;
+        try {
+            googleMap.setMyLocationEnabled(true);
+            googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+        } catch (SecurityException ignored) {
+        }
+    }
+
+    private void ensureLocationSettingsThenFetch(boolean hasCached) {
+        LocationRequest request = new LocationRequest.Builder(
+                Priority.PRIORITY_HIGH_ACCURACY, 1500L)
+                .setMaxUpdates(1)
+                .build();
+        LocationSettingsRequest settingsRequest = new LocationSettingsRequest.Builder()
+                .addLocationRequest(request)
+                .setAlwaysShow(true)
+                .build();
+        SettingsClient settingsClient = LocationServices.getSettingsClient(requireActivity());
+        settingsClient.checkLocationSettings(settingsRequest)
+                .addOnSuccessListener(response -> fetchFreshLocationAndDraw(hasCached))
+                .addOnFailureListener(error -> {
+                    if (error instanceof ResolvableApiException && isAdded()) {
+                        try {
+                            setMapStatus(R.string.qibla_map_location_off, true);
+                            IntentSenderRequest resolutionRequest = new IntentSenderRequest.Builder(
+                                    ((ResolvableApiException) error).getResolution()).build();
+                            locationSettingsLauncher.launch(resolutionRequest);
+                        } catch (Exception ignored) {
+                            fetchFreshLocationAndDraw(hasCached);
+                        }
+                    } else {
+                        fetchFreshLocationAndDraw(hasCached);
+                    }
+                });
     }
 
     /**
@@ -337,17 +460,20 @@ public class QiblaMapFragment extends Fragment implements OnMapReadyCallback {
     @SuppressLint("MissingPermission")
     private void fetchFreshLocationAndDraw(boolean hasCached) {
         try {
+            startMapLocationUpdates();
             fusedLocationClient.getCurrentLocation(
-                    Priority.PRIORITY_BALANCED_POWER_ACCURACY, new CancellationTokenSource().getToken())
+                    Priority.PRIORITY_HIGH_ACCURACY, new CancellationTokenSource().getToken())
                     .addOnSuccessListener(current -> {
                         if (current != null && isAdded()) {
-                            LocationSave.putLocation(current.getLatitude(), current.getLongitude());
-                            drawForLocation(new LatLng(current.getLatitude(), current.getLongitude()));
+                            acceptDeviceLocation(current, "current");
                         } else {
                             fallbackToLastLocation(hasCached);
                         }
                     })
-                    .addOnFailureListener(e -> fallbackToLastLocation(hasCached));
+                    .addOnFailureListener(e -> {
+                        Log.w(TAG, "getCurrentLocation failed; live updates remain active", e);
+                        fallbackToLastLocation(hasCached);
+                    });
         } catch (SecurityException e) {
             Log.w(TAG, "Location permission revoked at runtime", e);
             if (!hasCached && isAdded()) showEmptyState(true);
@@ -359,18 +485,65 @@ public class QiblaMapFragment extends Fragment implements OnMapReadyCallback {
         try {
             fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
                 if (location != null && isAdded()) {
-                    LocationSave.putLocation(location.getLatitude(), location.getLongitude());
-                    drawForLocation(new LatLng(location.getLatitude(), location.getLongitude()));
-                } else if (!hasCached && isAdded()) {
-                    Log.w(TAG, "Both getCurrentLocation and getLastLocation returned null despite permission granted");
-                    showEmptyState(true);
+                    acceptDeviceLocation(location, "last-known");
+                } else if (!hasCached) {
+                    // Do not show a false failure yet: requestLocationUpdates is still waiting for
+                    // the first GNSS/network fix and the timeout runnable owns the final state.
+                    Log.w(TAG, "No cached fused location; waiting for a live update");
                 }
             }).addOnFailureListener(e -> {
-                if (!hasCached && isAdded()) showEmptyState(true);
+                Log.w(TAG, "getLastLocation failed; waiting for a live update", e);
             });
         } catch (SecurityException e) {
             if (!hasCached && isAdded()) showEmptyState(true);
         }
+    }
+
+    @SuppressLint("MissingPermission")
+    private void startMapLocationUpdates() {
+        if (locationRequestActive || fusedLocationClient == null || mapLocationCallback == null) return;
+        try {
+            LocationRequest request = new LocationRequest.Builder(
+                    Priority.PRIORITY_HIGH_ACCURACY, 2_000L)
+                    .setMinUpdateIntervalMillis(750L)
+                    .setMaxUpdates(3)
+                    .build();
+            locationRequestActive = true;
+            locationHandler.removeCallbacks(locationTimeoutRunnable);
+            locationHandler.postDelayed(locationTimeoutRunnable, LOCATION_TIMEOUT_MS);
+            fusedLocationClient.requestLocationUpdates(
+                    request, mapLocationCallback, Looper.getMainLooper())
+                    .addOnFailureListener(e -> {
+                        Log.w(TAG, "requestLocationUpdates failed", e);
+                        stopMapLocationUpdates();
+                        if (userLatLng == null && isAdded()) {
+                            showEmptyState(true);
+                            setMapStatus(R.string.qibla_map_location_unavailable, true);
+                        }
+                    });
+            Log.d(TAG, "Started live location updates for Qibla map");
+        } catch (SecurityException e) {
+            locationRequestActive = false;
+            Log.w(TAG, "Location permission revoked while starting updates", e);
+        }
+    }
+
+    private void stopMapLocationUpdates() {
+        locationHandler.removeCallbacks(locationTimeoutRunnable);
+        if (!locationRequestActive) return;
+        locationRequestActive = false;
+        if (fusedLocationClient != null && mapLocationCallback != null) {
+            fusedLocationClient.removeLocationUpdates(mapLocationCallback);
+        }
+    }
+
+    private void acceptDeviceLocation(@NonNull Location location, @NonNull String source) {
+        if (!isAdded() || !isValidCoordinate(location.getLatitude(), location.getLongitude())) return;
+        Log.i(TAG, "Device location received from " + source + ": "
+                + location.getLatitude() + ", " + location.getLongitude());
+        stopMapLocationUpdates();
+        LocationSave.putLocation(location.getLatitude(), location.getLongitude());
+        drawForLocation(new LatLng(location.getLatitude(), location.getLongitude()));
     }
 
     private void requestLocationForMap() {
@@ -447,6 +620,7 @@ public class QiblaMapFragment extends Fragment implements OnMapReadyCallback {
 
         // 有定位即隐藏空状态引导 + 先出方位/距离（都不依赖地图对象）
         showEmptyState(false);
+        setMapStatus(R.string.qibla_map_location_ready, false);
         updateInfoPanel(user);
 
         if (googleMap != null) {
@@ -470,9 +644,10 @@ public class QiblaMapFragment extends Fragment implements OnMapReadyCallback {
                 .anchor(0.5f, 0.5f)
                 .flat(true)
                 .rotation(initialRotation)
+                .zIndex(4f)
                 .title(getString(R.string.qibla_map_your_location));
         try {
-            userMarker.icon(bitmapFromVector(R.drawable.ic_qibla_user_arrow));
+            userMarker.icon(bitmapFromDrawableSized(R.drawable.ic_qibla_user_navigation, 40));
         } catch (Exception e) {
             userMarker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
         }
@@ -481,9 +656,11 @@ public class QiblaMapFragment extends Fragment implements OnMapReadyCallback {
         // 天房标记：使用可辨识的 Kaaba 图标（回退到绿针，保证任何情况都有标记）
         MarkerOptions kaabaMarker = new MarkerOptions()
                 .position(KAABA)
+                .anchor(0.5f, 0.5f)
+                .zIndex(3f)
                 .title(getString(R.string.qibla_map_kaaba));
         try {
-            kaabaMarker.icon(BitmapDescriptorFactory.fromResource(R.drawable.kaaba));
+            kaabaMarker.icon(bitmapFromDrawableSized(R.drawable.ic_kaba, 42));
         } catch (Exception e) {
             kaabaMarker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
         }
@@ -497,12 +674,25 @@ public class QiblaMapFragment extends Fragment implements OnMapReadyCallback {
                 .geodesic(true));
 
         // 取景：同时容纳用户与天房；跨度过大时回退到以用户为中心
-        try {
-            LatLngBounds bounds = new LatLngBounds.Builder().include(user).include(KAABA).build();
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 120));
-        } catch (Exception e) {
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(user, 4f));
-        }
+        fitUserAndKaaba(user, false);
+    }
+
+    private void fitUserAndKaaba(LatLng user, boolean animate) {
+        if (googleMap == null || getView() == null) return;
+        getView().post(() -> {
+            if (googleMap == null || getView() == null) return;
+            try {
+                LatLngBounds bounds = new LatLngBounds.Builder().include(user).include(KAABA).build();
+                int width = Math.max(getView().getWidth(), 1);
+                View mapContainer = getView().findViewById(R.id.qibla_map_container);
+                int height = mapContainer != null ? Math.max(mapContainer.getHeight(), 1) : width;
+                com.google.android.gms.maps.CameraUpdate update =
+                        CameraUpdateFactory.newLatLngBounds(bounds, width, height, 96);
+                if (animate) googleMap.animateCamera(update); else googleMap.moveCamera(update);
+            } catch (Exception e) {
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(user, 5f));
+            }
+        });
     }
 
     /**
@@ -557,16 +747,36 @@ public class QiblaMapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     /**
-     * 矢量 drawable → BitmapDescriptor（GoogleMap 标记不接受矢量资源直接使用）。
+     * Render either vector or bitmap resources at a stable dp size. Map markers otherwise use the
+     * source PNG pixel dimensions, which made the old 44px Kaaba tiny and high-resolution assets
+     * excessively large on different screen densities.
      */
-    private com.google.android.gms.maps.model.BitmapDescriptor bitmapFromVector(int drawableId) {
+    private com.google.android.gms.maps.model.BitmapDescriptor bitmapFromDrawableSized(
+            int drawableId, int sizeDp) {
         android.graphics.drawable.Drawable d =
                 androidx.core.content.ContextCompat.getDrawable(requireContext(), drawableId);
         if (d == null) {
             return BitmapDescriptorFactory.defaultMarker();
         }
-        int w = d.getIntrinsicWidth() > 0 ? d.getIntrinsicWidth() : 96;
-        int h = d.getIntrinsicHeight() > 0 ? d.getIntrinsicHeight() : 96;
+        int w;
+        int h;
+        if (sizeDp > 0) {
+            float density = getResources().getDisplayMetrics().density;
+            int target = Math.max(1, Math.round(sizeDp * density));
+            int intrinsicW = Math.max(1, d.getIntrinsicWidth());
+            int intrinsicH = Math.max(1, d.getIntrinsicHeight());
+            float aspect = intrinsicW / (float) intrinsicH;
+            if (aspect >= 1f) {
+                w = target;
+                h = Math.max(1, Math.round(target / aspect));
+            } else {
+                h = target;
+                w = Math.max(1, Math.round(target * aspect));
+            }
+        } else {
+            w = d.getIntrinsicWidth() > 0 ? d.getIntrinsicWidth() : 96;
+            h = d.getIntrinsicHeight() > 0 ? d.getIntrinsicHeight() : 96;
+        }
         d.setBounds(0, 0, w, h);
         android.graphics.Bitmap bmp =
                 android.graphics.Bitmap.createBitmap(w, h, android.graphics.Bitmap.Config.ARGB_8888);
@@ -581,8 +791,18 @@ public class QiblaMapFragment extends Fragment implements OnMapReadyCallback {
         View root = getView();
         if (root == null) return;
         View emptyView = root.findViewById(R.id.qibla_map_empty_state);
-        View panel = root.findViewById(R.id.qibla_map_info_panel);
         if (emptyView != null) emptyView.setVisibility(show ? View.VISIBLE : View.GONE);
-        if (panel != null) panel.setVisibility(show ? View.GONE : View.VISIBLE);
     }
+
+    private void setMapStatus(int textRes, boolean persistent) {
+        if (tvMapStatus == null) return;
+        tvMapStatus.setText(textRes);
+        tvMapStatus.setVisibility(View.VISIBLE);
+        tvMapStatus.removeCallbacks(hideStatusRunnable);
+        if (!persistent) tvMapStatus.postDelayed(hideStatusRunnable, 2200L);
+    }
+
+    private final Runnable hideStatusRunnable = () -> {
+        if (tvMapStatus != null) tvMapStatus.setVisibility(View.GONE);
+    };
 }

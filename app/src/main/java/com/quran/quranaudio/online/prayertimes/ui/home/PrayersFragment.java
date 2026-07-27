@@ -1802,6 +1802,9 @@ public class PrayersFragment extends Fragment implements com.quran.quranaudio.on
         return ContextCompat.checkSelfPermission(
             requireContext(),
             android.Manifest.permission.ACCESS_FINE_LOCATION
+        ) == android.content.pm.PackageManager.PERMISSION_GRANTED
+            || ContextCompat.checkSelfPermission(requireContext(),
+            android.Manifest.permission.ACCESS_COARSE_LOCATION
         ) == android.content.pm.PackageManager.PERMISSION_GRANTED;
     }
     
@@ -1848,7 +1851,8 @@ public class PrayersFragment extends Fragment implements com.quran.quranaudio.on
             .setMessage("This app needs location permission to show accurate prayer times and Qibla direction for your area.")
             .setPositiveButton("Grant Permission", (dialog, which) -> {
                 requestPermissions(
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION,
+                            android.Manifest.permission.ACCESS_COARSE_LOCATION},
                     1001
                 );
             })

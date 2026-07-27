@@ -108,6 +108,7 @@ class DiscountActivity : AppCompatActivity(), BillingManager.BillingListener {
         // 折扣数字与价格在拿到真实 offer 前一律隐藏，杜绝占位「50% OFF」闪现。
         binding.tvDiscountPercent.visibility = View.INVISIBLE
         binding.priceRow.visibility = View.INVISIBLE
+        binding.tvThenPrice.visibility = View.INVISIBLE
         binding.btnSubscribe.visibility = View.INVISIBLE
         binding.tvDisclosure.visibility = View.INVISIBLE
 
@@ -182,6 +183,13 @@ class DiscountActivity : AppCompatActivity(), BillingManager.BillingListener {
         binding.tvOriginalPrice.paintFlags =
             binding.tvOriginalPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
 
+        // 合规：把「优惠结束后的原价 + 可随时取消」醒目展示（不只埋在小字披露里）。
+        binding.tvThenPrice.text = getString(
+            if (plan == DiscountManager.Plan.MONTHLY) R.string.discount_then_month
+            else R.string.discount_then_year,
+            originalPrice
+        )
+
         // 续订条款：首月/首年折扣价，之后按原价自动续订，购买前明示。
         binding.tvDisclosure.text = getString(
             if (plan == DiscountManager.Plan.MONTHLY) R.string.discount_disclosure_month
@@ -195,6 +203,7 @@ class DiscountActivity : AppCompatActivity(), BillingManager.BillingListener {
         // 真实价格到位，显示折扣数字/价格/CTA/续订披露。
         binding.tvDiscountPercent.visibility = View.VISIBLE
         binding.priceRow.visibility = View.VISIBLE
+        binding.tvThenPrice.visibility = View.VISIBLE
         binding.btnSubscribe.visibility = View.VISIBLE
         binding.tvDisclosure.visibility = View.VISIBLE
     }
@@ -237,7 +246,8 @@ class DiscountActivity : AppCompatActivity(), BillingManager.BillingListener {
     private fun renderCountdown(millis: Long) {
         val minutes = TimeUnit.MILLISECONDS.toMinutes(millis)
         val seconds = TimeUnit.MILLISECONDS.toSeconds(millis) % 60
-        binding.tvCountdown.text = String.format(Locale.US, "%02d:%02d", minutes, seconds)
+        binding.tvCountdownMin.text = String.format(Locale.US, "%02d", minutes)
+        binding.tvCountdownSec.text = String.format(Locale.US, "%02d", seconds)
     }
 
     private fun markConsumed() {

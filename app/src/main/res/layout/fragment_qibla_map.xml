@@ -19,24 +19,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- 空状态引导：无缓存定位且无法取得定位时展示，避免面对空白地图 -->
+    <!-- 定位引导卡片不遮挡地图：即使未授权，用户仍能看到天房位置 -->
     <LinearLayout
         android:id="@+id/qibla_map_empty_state"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="16dp"
         android:orientation="vertical"
         android:gravity="center"
-        android:padding="32dp"
-        android:background="@color/white"
+        android:padding="20dp"
+        android:background="@drawable/bg_qibla_hud"
+        android:backgroundTint="#F2FFFFFF"
+        android:elevation="6dp"
         android:visibility="gone"
-        app:layout_constraintTop_toTopOf="@id/qibla_map_container"
         app:layout_constraintBottom_toBottomOf="@id/qibla_map_container"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
-            android:layout_width="72dp"
-            android:layout_height="72dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:src="@drawable/kaaba"
             android:alpha="0.7"
             android:contentDescription="@string/qibla_map_kaaba" />
@@ -44,7 +48,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="10dp"
             android:gravity="center"
             android:text="@string/qibla_map_need_location"
             android:textColor="#2D3A53"
@@ -54,7 +58,7 @@
             android:id="@+id/btn_qibla_map_enable_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="14dp"
             android:paddingStart="28dp"
             android:paddingEnd="28dp"
             android:paddingTop="12dp"
@@ -97,6 +101,38 @@
         android:src="@drawable/ic_qibla_map_layers"
         app:layout_constraintTop_toTopOf="@id/qibla_map_container"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageButton
+        android:id="@+id/btn_qibla_recenter"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/widget_next_prayer_bg"
+        android:contentDescription="@string/qibla_map_recenter"
+        android:padding="10dp"
+        android:src="@drawable/ic_my_location"
+        app:layout_constraintTop_toBottomOf="@id/btn_map_type_toggle"
+        app:layout_constraintEnd_toEndOf="@id/btn_map_type_toggle" />
+
+    <TextView
+        android:id="@+id/tv_qibla_map_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_qibla_hud"
+        android:backgroundTint="#EFFFFFFF"
+        android:elevation="4dp"
+        android:maxWidth="260dp"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:text="@string/qibla_map_locating"
+        android:textColor="#2D3A53"
+        android:textSize="13sp"
+        app:layout_constraintTop_toTopOf="@id/qibla_map_container"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <!-- 底部信息面板：与罗盘页同一组字符串资源 -->
     <LinearLayout

@@ -37,6 +37,8 @@ object AdFactory : ActivityLifecycleCallbacks {
     // 前台 started Activity 计数：进程被推送/闹钟/Boot 拉起时为 0，此时不应加载任何广告
     @Volatile
     private var startedActivityCount = 0
+    @Volatile
+    private var admobInitializationStarted = false
 
     @JvmStatic
     fun isAppInForeground(): Boolean = startedActivityCount > 0
@@ -44,20 +46,20 @@ object AdFactory : ActivityLifecycleCallbacks {
     fun init(application: Application, testMode: Boolean) {
         application.registerActivityLifecycleCallbacks(this)
         AdConfig.isTest = testMode
-        
-        // ✅ Initialize AdMob on main thread with delay (8 seconds)
-        // 
-        // Delay rationale:
-        // 1. App startup fully completes
-        // 2. WebView provider (Chrome) fully loaded and ready
-        // 3. All locks released
-        // 4. UI is interactive before ads load
-        // 
-        // Trade-off: Ads load 8 seconds after app start for better stability
-        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
-            Log.d(TAG, "🕐 8-second delay completed, starting AdMob initialization")
-            initAdmobOnMainThread(application)
-        }, 8000) // ⚠️ 8 second delay - ensures WebView and all SDKs are ready
+        ConsentManager.initialize(application)
+    }
+
+    @JvmStatic
+    fun gatherConsent(activity: Activity, callback: ConsentResultCallback) {
+        ConsentManager.gatherConsent(activity) { canRequestAds ->
+            if (canRequestAds) {
+                initAdmobOnMainThread(activity.applicationContext)
+                // A slow consent decision may finish after the scheduled preload was blocked.
+                InterstitialAdManager.getInstance().preloadAd()
+                NativeAdManager.getInstance().preloadAd()
+            }
+            callback.onConsentResult(canRequestAds)
+        }
     }
     
 
@@ -77,6 +79,10 @@ object AdFactory : ActivityLifecycleCallbacks {
      * - Main thread ANR
      */
     private fun initAdmobOnMainThread(context: Context) {
+        synchronized(this) {
+            if (admobInitializationStarted) return
+            admobInitializationStarted = true
+        }
         try {
             // ✅ Verify we're on main thread
             if (android.os.Looper.myLooper() != android.os.Looper.getMainLooper()) {
@@ -86,9 +92,9 @@ object AdFactory : ActivityLifecycleCallbacks {
             
             Log.d(TAG, "🔄 Initializing AdMob on main thread")
             
-            // 🔥 终极修复：所有 AdMob 操作延迟 2 秒后在主线程统一执行
+            // 所有 AdMob 操作延迟 2 秒后在主线程统一执行
             // 完全避免后台线程，因为后台线程的 setRequestConfiguration 仍可能与主线程死锁
-            // 策略：等待足够长时间（App启动8秒 + 这里2秒 = 总共10秒），确保所有SDK和WebView就绪
+            // 同意流程完成后再等待 2 秒，确保启动 UI 和 WebView 就绪
             android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
                 try {
                     Log.d(TAG, "🚀 Starting AdMob configuration (after 2s delay)")
@@ -167,6 +173,12 @@ object AdFactory : ActivityLifecycleCallbacks {
         callback: AdLoadCallback?,
         showCallback: AdShowCallback?
     ) {
+        if (!ConsentManager.canRequestAds()) {
+            Log.w(TAG, "Consent not ready; blocking banner ad request")
+            bannerContainer?.visibility = View.GONE
+            callback?.onAdFailedToLoad("consent_not_ready")
+            return
+        }
         // Check if user is subscribed (premium user)
         if (SubscriptionChecker.isUserSubscribed(activity)) {
             Log.d(TAG, "🎁 User is subscribed, skipping banner ad for $functionTag")
@@ -229,6 +241,11 @@ object AdFactory : ActivityLifecycleCallbacks {
     }
 
     fun loadAppOpenAd(activity: Activity, adPosition: String, callback: AdLoadCallback?) {
+        if (!ConsentManager.canRequestAds()) {
+            Log.w(TAG, "Consent not ready; blocking app-open ad request")
+            callback?.onAdFailedToLoad("consent_not_ready")
+            return
+        }
         // Check if user is subscribed (premium user)
         if (SubscriptionChecker.isUserSubscribed(activity)) {
             Log.d(TAG, "🎁 User is subscribed, skipping app open ad")
@@ -290,6 +307,11 @@ object AdFactory : ActivityLifecycleCallbacks {
     }
 
     fun loadInterstitialAd(activity: Activity, adPosition: String, callback: AdLoadCallback?) {
+        if (!ConsentManager.canRequestAds()) {
+            Log.w(TAG, "Consent not ready; blocking interstitial ad request")
+            callback?.onAdFailedToLoad("consent_not_ready")
+            return
+        }
         // Check if user is subscribed (premium user)
         if (SubscriptionChecker.isUserSubscribed(activity)) {
             Log.d(TAG, "🎁 User is subscribed, skipping interstitial ad")
@@ -358,6 +380,11 @@ object AdFactory : ActivityLifecycleCallbacks {
     }
 
     fun loadRewardAd(activity: Activity, adPosition: String, callback: AdLoadCallback?) {
+        if (!ConsentManager.canRequestAds()) {
+            Log.w(TAG, "Consent not ready; blocking rewarded ad request")
+            callback?.onAdFailedToLoad("consent_not_ready")
+            return
+        }
         // Check if user is subscribed (premium user)
         if (SubscriptionChecker.isUserSubscribed(activity)) {
             Log.d(TAG, "🎁 User is subscribed, skipping reward ad")
@@ -444,6 +471,10 @@ object AdFactory : ActivityLifecycleCallbacks {
                 return
             }
         }
+        if (FullScreenNativeAdManager.showIfAvailable(activity, callback)) {
+            Log.d(TAG, "Showing full-screen native fallback for interstitial: $adPosition")
+            return
+        }
         callback?.onShowFail()
     }
 
@@ -467,6 +498,10 @@ object AdFactory : ActivityLifecycleCallbacks {
                 it.show(activity)
                 return
             }
+        }
+        if (FullScreenNativeAdManager.showIfAvailable(activity, callback)) {
+            Log.d(TAG, "Showing full-screen native fallback for app-open: $adPosition")
+            return
         }
         callback?.onShowFail()
     }
@@ -588,6 +623,12 @@ object AdFactory : ActivityLifecycleCallbacks {
         showCallback: AdShowCallback?
     ) {
         Log.w(TAG, "⚠️ DEPRECATED: loadNativeAd() called. Use NativeAdManager instead.")
+        if (!ConsentManager.canRequestAds()) {
+            Log.w(TAG, "Consent not ready; blocking native ad request")
+            callback?.onAdFailedToLoad("consent_not_ready")
+            showCallback?.onShowFail()
+            return
+        }
         
         // Check if user is subscribed (premium user)
         if (SubscriptionChecker.isUserSubscribed(activity)) {
@@ -669,6 +710,9 @@ object AdFactory : ActivityLifecycleCallbacks {
         return false
     }
 
+    fun hasFullScreenNativeFallback(activity: Activity): Boolean =
+        FullScreenNativeAdManager.hasCachedAd(activity)
+
     fun hasRewardAd(adPosition: String): Boolean {
         val adId = AdConfig.getAdIdByPosition(adPosition)
         adsCache[adId]?.let {
@@ -681,7 +725,9 @@ object AdFactory : ActivityLifecycleCallbacks {
         // ❌ 移除：loadInterstitialAd(activity, AdConfig.AD_INTERS, null)
         // 该缓存池只有 Quiz 会消费，Quiz 已在 QuranQuestionFragment.initData() 按需预加载；
         // 每个 Activity 创建都全局加载会造成大量"请求后从不展示"的浪费
-        loadAppOpenAd(activity, AdConfig.AD_APPOPEN, null)
+        gatherConsent(activity) { canRequestAds ->
+            if (canRequestAds) loadAppOpenAd(activity, AdConfig.AD_APPOPEN, null)
+        }
         // ❌ 移除：loadNativeAd(activity, AdConfig.AD_NATIVE, "", null, null)
         // ✅ 原生广告由 NativeAdManager 统一管理，不需要在这里加载
     }

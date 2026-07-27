@@ -15,6 +15,11 @@
             android:name="com.quran.quranaudio.quiz.activity.QuizReviewLearnActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <!-- 情境化"本章测验"独立页 -->
+        <activity
+            android:name="com.quran.quranaudio.quiz.activity.SurahQuizActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
     </application>
 

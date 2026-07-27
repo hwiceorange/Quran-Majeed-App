@@ -194,6 +194,13 @@ class QuranQuestionFragment :
         } else if (isShowQuizUseInterAd && currentLevel < 10) {
             android.util.Log.d(TAG, "🚫 Skipping interstitial ad - Level $currentLevel < 10")
         }
+        // 🎯 预加载关卡间「继续」用的插屏(AD_INTERS)。此前从未预加载，导致每次都回退到全屏原生兜底。
+        activity?.let {
+            if (!hasInterAdByPool(AdConfig.AD_INTERS)) {
+                AdFactory.loadInterstitialAd(it, AdConfig.AD_INTERS, null)
+                android.util.Log.d(TAG, "✅ Preloading inter-level interstitial (AD_INTERS)")
+            }
+        }
         lifecycleScope.launch {
             viewModel.currentQuestionBean.collect {
                 currentBean = it
@@ -205,20 +212,11 @@ class QuranQuestionFragment :
                 }
             }
         }
-        binding.correctLav.addAnimatorListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator) {
-                super.onAnimationEnd(animation)
-                if (activity.isValid()) {
-                    binding.correctLav.gone()
-                }
-            }
-        })
         binding.optionsView.setAnswerResultListener { isRight, _ ->
             timePause()
             setAnswerResultStyle(isRight)
             if (isRight) {
-                binding.correctLav.visible()
-                binding.correctLav.playAnimation()
+                playCorrectFeedback()
                 Tasks.postDelayedByUI({
                     if (viewModel.isLastQuestionInLevel()) {
                         // todo Notification
@@ -227,7 +225,13 @@ class QuranQuestionFragment :
                         reportQuizLevelUp(currentLevel)
                         binding.quizNsv.gone()
                         binding.levelThoughtCl.root.visible()
-                        binding.levelThoughtCl.levelThoughtLav.playAnimation()
+                        bumpAndShowWinStreak()
+                        binding.levelThoughtCl.levelThoughtLav.apply {
+                            alpha = 0f; scaleX = 0.6f; scaleY = 0.6f
+                            animate().alpha(1f).scaleX(1f).scaleY(1f)
+                                .setInterpolator(android.view.animation.OvershootInterpolator(1.6f))
+                                .setDuration(420).start()
+                        }
                         loadLevelUpNativeAd()
                     } else {
                         viewModel.showNextQuestion()
@@ -289,6 +293,8 @@ class QuranQuestionFragment :
                     )
                 },
                 {
+                    // 展示后重新预加载，保证下一关「继续」仍有插屏库存，不再回退全屏原生
+                    activity?.let { act -> AdFactory.loadInterstitialAd(act, AdConfig.AD_INTERS, null) }
                     isSkipNextLevel = false
                     viewModel.intoNextLevel()
                 })
@@ -326,6 +332,7 @@ class QuranQuestionFragment :
                     isSkipNextLevel = true
                     binding.quizNsv.gone()
                     binding.levelThoughtCl.root.visible()
+                    bumpAndShowWinStreak()
                     loadLevelUpNativeAd()
                 } else {
                     viewModel.showNextQuestion()
@@ -337,6 +344,7 @@ class QuranQuestionFragment :
                 return@register
             }
             if (it.failStatus == QuestionFail.QUIT_LEVEL) {
+                resetWinStreak()
                 viewModel.tryAgainQuestion()
             }
         }
@@ -483,6 +491,57 @@ class QuranQuestionFragment :
         binding.addTimePropCountTv.text = "${QuizGemManager.getAddTimePropCount()}"
     }
 
+    /**
+     * 答对反馈：noor 柔光扩散 + 徽章回弹淡入（庄重、温暖、不遮挡选项）。
+     * 取代原祈祷手 Lottie。进程由外层 2 秒定时器驱动，与此动画解耦。
+     */
+    /** 连胜：每通过一关 +1，连续 ≥2 关时在升级页展示，强化习惯；放弃本关(Quit)时清零。 */
+    private fun bumpAndShowWinStreak() {
+        val streak = SPTools.getInt("quiz_win_streak", 0) + 1
+        SPTools.put("quiz_win_streak", streak)
+        val tv = binding.levelThoughtCl.levelStreakTv
+        if (streak >= 2) {
+            tv.text = R.string.quran_level_streak.getResString(streak.toString())
+            tv.visible()
+        } else {
+            tv.gone()
+        }
+    }
+
+    private fun resetWinStreak() {
+        SPTools.put("quiz_win_streak", 0)
+    }
+
+    private fun playCorrectFeedback() {
+        val badge = binding.correctBadgeIv
+        val glow = binding.correctGlowIv
+        // 徽章：0.5→1 带回弹，淡入
+        badge.visible()
+        badge.alpha = 0f
+        badge.scaleX = 0.5f
+        badge.scaleY = 0.5f
+        badge.animate().alpha(1f).scaleX(1f).scaleY(1f)
+            .setInterpolator(android.view.animation.OvershootInterpolator(2.2f))
+            .setDuration(360).start()
+        // noor 光晕：扩散后淡出
+        glow.visible()
+        glow.alpha = 0f
+        glow.scaleX = 0.7f
+        glow.scaleY = 0.7f
+        glow.animate().alpha(0.9f).scaleX(1.35f).scaleY(1.35f)
+            .setDuration(520)
+            .withEndAction { glow.animate().alpha(0f).setDuration(420).start() }
+            .start()
+        // 统一收尾
+        Tasks.postDelayedByUI({
+            if (activity.isValid()) {
+                badge.animate().alpha(0f).setDuration(220)
+                    .withEndAction { badge.gone() }.start()
+                glow.gone()
+            }
+        }, 1150)
+    }
+
     private fun setAnswerResultStyle(isRight: Boolean) {
         binding.answerResultTv.visible()
         binding.questionContentTv.invisible()
@@ -507,7 +566,7 @@ class QuranQuestionFragment :
         
         countValueAnimator?.pause()
         countValueAnimator = getQuizCountTimeAnimator(STAY_TIME)
-        binding.levelThoughtCl.levelThoughtLav.cancelAnimation()
+        binding.levelThoughtCl.levelThoughtLav.animate().cancel()
         binding.answerResultTv.invisible()
         binding.questionContentTv.visible()
         binding.levelThoughtCl.root.gone()

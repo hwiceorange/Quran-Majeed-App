@@ -53,4 +53,23 @@
             android:layout_width="match_parent"
             android:layout_height="0dp" />
     </LinearLayout>
+
+    <!-- 情境化"本章测验"入口浮层：默认隐藏，仅当本章题量足够时显示（ActivityReader 中控制）。纯增量，不影响任何现有视图。 -->
+    <TextView
+        android:id="@+id/btnSurahQuizEntry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="210dp"
+        android:background="@drawable/bg_surah_quiz_pill"
+        android:drawablePadding="6dp"
+        android:elevation="8dp"
+        android:fontFamily="sans-serif-medium"
+        android:paddingHorizontal="18dp"
+        android:paddingVertical="10dp"
+        android:text="@string/quiz_surah_test_btn"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        android:visibility="gone" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

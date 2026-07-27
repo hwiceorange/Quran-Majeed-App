@@ -1612,6 +1612,9 @@
     <string name="subscription_legal_links">سياسة الخصوصية · شروط Google Play</string>
     <string name="subscription_monthly_price">%1$s/شهر · إلغاء في أي وقت</string>
     <string name="subscription_yearly_price">%1$s/سنة · إلغاء في أي وقت</string>
+    <string name="subscription_per_month">شهريًا</string>
+    <string name="subscription_cancel_anytime">إلغاء في أي وقت</string>
+    <string name="subscription_amount_per_year">%1$s/سنة</string>
     <string name="subscription_disclosure">اشتراك يتجدّد تلقائيًا. السعر المحدد وفترة الفوترة معروضان أعلاه ويؤكدهما Google Play قبل الشراء. يمكنك الإلغاء في أي وقت عبر Google Play؛ إلغاء تثبيت التطبيق لا يُلغي الاشتراك. النسخة المميزة اختيارية وتبقى الميزات المجانية متاحة.</string>
     <string name="subscription_trial_unavailable_label">التجربة المجانية غير متاحة حاليًا</string>
     <!-- 折扣挽回页 -->
@@ -1630,4 +1633,9 @@
     <string name="discount_first_month_caption">في شهرك الأول</string>
     <string name="discount_price_period_month">/ الشهر الأول</string>
     <string name="discount_disclosure_month">الشهر الأول %1$s، ثم %2$s شهريًا. يتجدّد تلقائيًا كل شهر ما لم يُلغَ قبل 24 ساعة على الأقل من التجديد. يؤكده Google Play قبل الشراء؛ يمكنك الإلغاء في أي وقت عبر Google Play. إلغاء التثبيت لا يُلغي الاشتراك.</string>
+    <string name="discount_then_year">بعد ذلك %1$s/السنة · يمكنك الإلغاء في أي وقت</string>
+    <string name="discount_then_month">بعد ذلك %1$s/الشهر · يمكنك الإلغاء في أي وقت</string>
+    <string name="discount_limited_pill">عرض لوقت محدود</string>
+    <string name="asma_ul_husna">أسماء الله الحسنى</string>
+    <string name="names99_home">أسماء الله</string>
 </resources>

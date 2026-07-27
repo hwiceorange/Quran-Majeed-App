@@ -6,63 +6,115 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_quiz">
 
-    <com.airbnb.lottie.LottieAnimationView
+    <!-- 里程碑图标：noor 光晕 + 敞开古兰经。固定尺寸置顶，下方元素依次排布不重叠 -->
+    <FrameLayout
         android:id="@+id/levelThoughtLav"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/nextLevelAd"
-        app:layout_constraintDimensionRatio="1:1"
+        android:layout_width="210dp"
+        android:layout_height="210dp"
+        android:layout_marginTop="@dimen/dp_50"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        app:lottie_autoPlay="false"
-        app:lottie_fileName="quiz_level/lottie.json"
-        app:lottie_imageAssetsFolder="quiz_level/images" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_quiz_noor_glow"
+            android:importantForAccessibility="no" />
+
+        <ImageView
+            android:id="@+id/levelThoughtIcon"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_quiz_level_quran"
+            android:importantForAccessibility="no" />
+    </FrameLayout>
 
     <TextView
         android:id="@+id/levelPassTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_34"
+        android:layout_marginTop="@dimen/dp_4"
         android:fontFamily="@font/montserrat_bold"
         android:text="@string/quran_level_up"
         android:textColor="@color/white"
         android:textSize="@dimen/dp_24"
-        app:layout_constraintBottom_toBottomOf="@+id/levelThoughtLav"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/levelThoughtLav" />
 
+    <TextView
+        android:id="@+id/levelPassSubtitleTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_marginHorizontal="@dimen/dp_32"
+        android:fontFamily="@font/montserrat_semi_bold"
+        android:gravity="center"
+        android:text="@string/quran_level_up_subtitle"
+        android:textColor="#CCFFFFFF"
+        android:textSize="@dimen/dp_13"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/levelPassTv" />
+
+    <!-- 连胜提示：仅连续通关 ≥2 关时显示(gone 时自动塌缩，下方按钮上移，无叠压) -->
+    <TextView
+        android:id="@+id/levelStreakTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_12"
+        android:background="@drawable/btn_levelup_reward_secondary"
+        android:fontFamily="@font/montserrat_bold"
+        android:paddingHorizontal="@dimen/dp_16"
+        android:paddingVertical="@dimen/dp_6"
+        android:textColor="#FFE9B0"
+        android:textSize="@dimen/dp_13"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/levelPassSubtitleTv"
+        tools:text="🔥 3 levels in a row, MashaAllah"
+        tools:visibility="visible" />
+
+    <!-- 次级操作：观看视频领奖励 -->
     <FrameLayout
         android:id="@+id/nextLevelAd"
         android:layout_width="0dp"
         android:layout_height="@dimen/dp_52"
         android:layout_marginHorizontal="@dimen/dp_20"
-        android:layout_marginTop="@dimen/dp_50"
+        android:layout_marginTop="@dimen/dp_28"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/levelThoughtLav"
-        app:layout_constraintBottom_toTopOf="@id/nextLevelTv">
+        app:layout_constraintTop_toBottomOf="@+id/levelStreakTv">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/btn_level_up_reward"
-            android:fontFamily="@font/montserrat_bold"
+            android:background="@drawable/btn_levelup_reward_secondary"
+            android:fontFamily="@font/montserrat_semi_bold"
             android:gravity="center"
+            android:drawableStart="@drawable/ic_quiz_video_play"
+            android:drawablePadding="@dimen/dp_8"
             android:textColor="@color/white"
-            android:textSize="@dimen/dp_18"
+            android:textSize="@dimen/dp_16"
             android:text="@string/quran_reward" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/quran_gnt_ad"
-            android:textColor="@color/white"
+            android:textColor="#F2FFFFFF"
             android:textSize="@dimen/dp_10"
-            android:layout_marginStart="@dimen/dp_12"
-            android:layout_marginTop="@dimen/dp_6"/>
+            android:background="@drawable/bg_ad_label"
+            android:paddingHorizontal="@dimen/dp_5"
+            android:paddingVertical="@dimen/dp_1"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_8" />
     </FrameLayout>
 
+    <!-- +5 宝石徽章：贴在 Reward 按钮右上角，不再与文字叠压 -->
     <TextView
         android:id="@+id/next_level_reward"
         android:layout_width="wrap_content"
@@ -75,29 +127,28 @@
         android:fontFamily="sans-serif-medium"
         android:gravity="center"
         android:background="@drawable/bg_quiz_watch_ad_gem"
-        android:layout_marginEnd="@dimen/dp_20"
-        android:layout_marginTop="@dimen/dp_38"
+        android:layout_marginEnd="@dimen/dp_12"
         android:paddingStart="@dimen/dp_7"
         android:paddingEnd="@dimen/dp_10"
-        app:layout_constraintEnd_toEndOf="@id/nextLevelAd"
-        app:layout_constraintTop_toBottomOf="@id/levelThoughtLav"
-        />
+        app:layout_constraintTop_toTopOf="@id/nextLevelAd"
+        app:layout_constraintBottom_toTopOf="@id/nextLevelAd"
+        app:layout_constraintEnd_toEndOf="@id/nextLevelAd" />
 
+    <!-- 主操作：继续下一关 -->
     <TextView
         android:id="@+id/nextLevelTv"
         android:layout_width="0dp"
         android:layout_height="@dimen/dp_52"
         android:layout_marginHorizontal="@dimen/dp_20"
         android:layout_marginTop="@dimen/dp_20"
-        android:background="@drawable/btn_amen_select"
+        android:background="@drawable/btn_levelup_continue_primary"
         android:fontFamily="@font/montserrat_bold"
         android:gravity="center"
-        android:textColor="@color/white"
+        android:textColor="#1E7A54"
         android:textSize="@dimen/dp_18"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nextLevelAd"
-        app:layout_constraintBottom_toTopOf="@+id/levelup_native_ad_container"
         tools:text="Level5" />
 
     <FrameLayout

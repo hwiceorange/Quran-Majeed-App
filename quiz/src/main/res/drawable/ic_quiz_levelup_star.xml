@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 升级成就徽章：伊斯兰八角星(Khatam)。金色渐变主星 + 米色内星叠影，勋章质感，扁平庄重。 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="150dp"
+    android:height="150dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <!-- 主星：金色渐变 -->
+    <path
+        android:pathData="M60,6 L70.7,34.1 L98.18,21.82 L85.87,49.3 L114,60 L85.87,70.7 L98.18,98.18 L70.7,85.87 L60,114 L49.3,85.87 L21.82,98.18 L34.13,70.7 L6,60 L34.13,49.3 L21.82,21.82 L49.3,34.13 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="20" android:startY="14"
+                android:endX="100" android:endY="106"
+                android:startColor="#F7DA92"
+                android:centerColor="#EFC163"
+                android:endColor="#DAA23A" />
+        </aapt:attr>
+    </path>
+    <!-- 内星：米色叠影，制造层次 -->
+    <path
+        android:fillColor="#FBEDC8"
+        android:pathData="M60,30.3 L65.9,45.8 L81,39 L74.2,54.1 L89.7,60 L74.2,65.9 L81,81 L65.9,74.2 L60,89.7 L54.1,74.2 L39,81 L45.8,65.9 L30.3,60 L45.8,54.1 L39,39 L54.1,45.8 Z" />
+    <!-- 中心圆点 -->
+    <path
+        android:fillColor="#E0A93B"
+        android:pathData="M60,60 m-11,0 a11,11 0 1,0 22,0 a11,11 0 1,0 -22,0 z" />
+</vector>

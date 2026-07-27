@@ -1,11 +1,14 @@
 package com.quran.quranaudio.online.prayertimes.location.tracker;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -14,10 +17,17 @@ import com.google.android.gms.tasks.CancellationTokenSource;
 import com.quran.quranaudio.online.prayertimes.exceptions.LocationException;
 import com.quran.quranaudio.online.prayertimes.preferences.PreferencesConstants;
 import com.quran.quranaudio.online.R;
+import com.quran.quranaudio.online.compass.helper.LocationSave;
 import com.quran.quranaudio.online.prayertimes.utils.UserPreferencesUtils;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.core.SingleEmitter;
@@ -50,6 +60,9 @@ public class LocationHelper {
     // 若在主线程执行可能 ANR。用后台线程执行回调，保证发射及下游都在工作线程。
     private static final java.util.concurrent.Executor CALLBACK_EXECUTOR =
             java.util.concurrent.Executors.newCachedThreadPool();
+    private static final ScheduledExecutorService TIMEOUT_EXECUTOR =
+            Executors.newSingleThreadScheduledExecutor();
+    private static final long CURRENT_LOCATION_TIMEOUT_SECONDS = 15L;
 
     private final Context context;
 
@@ -67,14 +80,38 @@ public class LocationHelper {
                 UserPreferencesUtils.getDouble(sharedPreferences, PreferencesConstants.LAST_KNOWN_LONGITUDE, 0);
 
         return Single.create(emitter -> {
+            boolean granted = ContextCompat.checkSelfPermission(context,
+                    Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                    || ContextCompat.checkSelfPermission(context,
+                    Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+            if (!granted) {
+                emitter.onError(new LocationException(
+                        context.getResources().getString(R.string.location_service_unavailable)));
+                return;
+            }
             try {
                 FusedLocationProviderClient fused =
                         LocationServices.getFusedLocationProviderClient(context);
                 CancellationTokenSource cts = new CancellationTokenSource();
+                AtomicBoolean currentRequestFinished = new AtomicBoolean(false);
+                emitter.setCancellable(cts::cancel);
 
-                fused.getCurrentLocation(Priority.PRIORITY_BALANCED_POWER_ACCURACY, cts.getToken())
+                // getCurrentLocation has no caller-defined timeout and can remain pending on a
+                // first install with an empty provider cache. Always terminate into fallbacks.
+                ScheduledFuture<?> timeout = TIMEOUT_EXECUTOR.schedule(() -> {
+                    if (currentRequestFinished.compareAndSet(false, true) && !emitter.isDisposed()) {
+                        Log.w(TAG, "Current location timed out; trying provider/cache fallbacks");
+                        cts.cancel();
+                        fallbackToFusedLastLocation(fused, emitter,
+                                lastKnownLatitude, lastKnownLongitude);
+                    }
+                }, CURRENT_LOCATION_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+
+                fused.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, cts.getToken())
                         .addOnSuccessListener(CALLBACK_EXECUTOR, current -> {
-                            if (current != null) {
+                            if (!currentRequestFinished.compareAndSet(false, true)) return;
+                            timeout.cancel(false);
+                            if (current != null && isUsable(current)) {
                                 Log.i(TAG, "Fresh location from FusedLocationProvider: "
                                         + current.getLatitude() + ", " + current.getLongitude());
                                 emitSuccess(emitter, current);
@@ -84,6 +121,8 @@ public class LocationHelper {
                             }
                         })
                         .addOnFailureListener(CALLBACK_EXECUTOR, e -> {
+                            if (!currentRequestFinished.compareAndSet(false, true)) return;
+                            timeout.cancel(false);
                             Log.w(TAG, "getCurrentLocation failed, falling back", e);
                             fallbackToFusedLastLocation(fused, emitter, lastKnownLatitude, lastKnownLongitude);
                         });
@@ -102,7 +141,7 @@ public class LocationHelper {
         try {
             fused.getLastLocation()
                     .addOnSuccessListener(CALLBACK_EXECUTOR, last -> {
-                        if (last != null) {
+                        if (isUsable(last)) {
                             Log.i(TAG, "Using fused last-location fallback");
                             emitSuccess(emitter, last);
                         } else {
@@ -124,7 +163,7 @@ public class LocationHelper {
             GPSTracker gpsTracker = new GPSTracker(context);
             if (gpsTracker.canGetLocation()) {
                 Location legacy = gpsTracker.getLocation();
-                if (legacy != null) {
+                if (isUsable(legacy)) {
                     Log.w(TAG, "Using legacy LocationManager last-known fallback");
                     emitSuccess(emitter, legacy);
                     return;
@@ -134,7 +173,7 @@ public class LocationHelper {
             // 继续退到缓存
         }
 
-        if (lastLat != 0.0 && lastLng != 0.0) {
+        if (isUsable(lastLat, lastLng)) {
             Log.w(TAG, "Using cached last-known location from preferences");
             emitSuccess(emitter, buildLocation(lastLat, lastLng));
             return;
@@ -147,9 +186,31 @@ public class LocationHelper {
     }
 
     private void emitSuccess(SingleEmitter<Location> emitter, Location location) {
+        if (!isUsable(location)) return;
+        // Persist coordinates immediately. Reverse geocoding is best-effort and must never gate
+        // Qibla, prayer calculations, widgets, or another screen's access to the location.
+        SharedPreferences prefs = context.getSharedPreferences(PreferencesConstants.LOCATION, MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        UserPreferencesUtils.putDouble(editor, PreferencesConstants.LAST_KNOWN_LATITUDE,
+                location.getLatitude());
+        UserPreferencesUtils.putDouble(editor, PreferencesConstants.LAST_KNOWN_LONGITUDE,
+                location.getLongitude());
+        editor.apply();
+        LocationSave.putLocation(location.getLatitude(), location.getLongitude());
         if (!emitter.isDisposed()) {
             emitter.onSuccess(location);
         }
+    }
+
+    private boolean isUsable(Location location) {
+        return location != null && isUsable(location.getLatitude(), location.getLongitude());
+    }
+
+    private boolean isUsable(double latitude, double longitude) {
+        return !Double.isNaN(latitude) && !Double.isNaN(longitude)
+                && latitude >= -90 && latitude <= 90
+                && longitude >= -180 && longitude <= 180
+                && !(latitude == 0.0 && longitude == 0.0);
     }
 
     @NonNull

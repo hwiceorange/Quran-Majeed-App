@@ -246,21 +246,27 @@
                 <ImageView
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/ic_99"
+                    android:padding="2dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_name_99"
                     app:tint="#4B9B76"
-                    android:contentDescription="@string/learn" />
+                    android:contentDescription="@string/asma_ul_husna" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="@string/learn"
+                    android:paddingStart="2dp"
+                    android:paddingEnd="2dp"
+                    android:text="@string/names99_home"
                     android:textColor="#4B9B76"
-                    android:textSize="14sp"
                     android:textStyle="bold"
                     android:maxLines="1"
                     android:gravity="center"
-                    android:ellipsize="end" />
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="9sp"
+                    app:autoSizeMaxTextSize="14sp"
+                    app:autoSizeStepGranularity="1sp" />
 
             </LinearLayout>
 

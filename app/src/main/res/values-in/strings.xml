@@ -1506,6 +1506,9 @@ Kompas: arahkan ponsel dan ikuti panah menuju Kakbah secara langsung.</string>
     <string name="subscription_legal_links">Kebijakan Privasi · Ketentuan Google Play</string>
     <string name="subscription_monthly_price">%1$s/bulan · Batalkan kapan saja</string>
     <string name="subscription_yearly_price">%1$s/tahun · Batalkan kapan saja</string>
+    <string name="subscription_per_month">per bulan</string>
+    <string name="subscription_cancel_anytime">Batalkan kapan saja</string>
+    <string name="subscription_amount_per_year">%1$s/tahun</string>
     <string name="subscription_disclosure">Langganan yang diperpanjang otomatis. Harga dan periode penagihan yang dipilih ditampilkan di atas dan dikonfirmasi oleh Google Play sebelum pembelian. Batalkan kapan saja di Google Play; menghapus aplikasi tidak membatalkan langganan. Premium bersifat opsional dan fitur gratis tetap tersedia.</string>
     <string name="subscription_trial_unavailable_label">Uji coba gratis tidak tersedia saat ini</string>
     <!-- 折扣挽回页 -->
@@ -1524,4 +1527,9 @@ Kompas: arahkan ponsel dan ikuti panah menuju Kakbah secara langsung.</string>
     <string name="discount_first_month_caption">untuk bulan pertama Anda</string>
     <string name="discount_price_period_month">/ bulan pertama</string>
     <string name="discount_disclosure_month">Bulan pertama %1$s, lalu %2$s per bulan. Diperpanjang otomatis setiap bulan kecuali dibatalkan setidaknya 24 jam sebelum perpanjangan. Dikonfirmasi oleh Google Play sebelum pembelian; batalkan kapan saja di Google Play. Menghapus aplikasi tidak membatalkan.</string>
+    <string name="discount_then_year">Lalu %1$s/tahun setelahnya · Batalkan kapan saja</string>
+    <string name="discount_then_month">Lalu %1$s/bulan setelahnya · Batalkan kapan saja</string>
+    <string name="discount_limited_pill">Penawaran waktu terbatas</string>
+    <string name="asma_ul_husna">99 Nama Allah</string>
+    <string name="names99_home">99 Nama</string>
 </resources>

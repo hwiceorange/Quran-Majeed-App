@@ -734,9 +734,15 @@ public class FragMain extends BaseFragment {
                 R.drawable.tasbih_bg
             };
             
-            // Select random image
-            int randomIndex = new java.util.Random().nextInt(backgroundImages.length);
-            int selectedImage = backgroundImages[randomIndex];
+            // 背景按天缓存：同一天回到主页保持同一张背景，不再每次随机重载
+            android.content.SharedPreferences vp =
+                    requireContext().getSharedPreferences("home_votd_cache", android.content.Context.MODE_PRIVATE);
+            int selectedIndex = (vp.getInt("bg_date", -1) == todayKey()) ? vp.getInt("bg_idx", -1) : -1;
+            if (selectedIndex < 0 || selectedIndex >= backgroundImages.length) {
+                selectedIndex = new java.util.Random().nextInt(backgroundImages.length);
+                vp.edit().putInt("bg_date", todayKey()).putInt("bg_idx", selectedIndex).apply();
+            }
+            int selectedImage = backgroundImages[selectedIndex];
             
             // Load image without blur, 30% opacity for subtle atmosphere
             // 无模糊 + 30%透明度，清晰的背景氛围效果
@@ -757,6 +763,12 @@ public class FragMain extends BaseFragment {
         }
     }
     
+    /** 今日键（年*1000+一年中的第几天），用于 VOTD 背景/内容按天缓存。 */
+    private int todayKey() {
+        java.util.Calendar c = java.util.Calendar.getInstance();
+        return c.get(java.util.Calendar.YEAR) * 1000 + c.get(java.util.Calendar.DAY_OF_YEAR);
+    }
+
     private void requestPermission(){
         List<String> permissionRequest = new ArrayList<String>();
 
@@ -1673,26 +1685,19 @@ public class FragMain extends BaseFragment {
             
             // Learn Icon - Trigger bottom nav Discover/Learn item
             if (btnNavLearn != null) {
+                // 首页宫格该位改为「99 圣名」一步直达（Learn/quiz 仍在底部 tab）
                 btnNavLearn.setOnClickListener(v -> {
                     try {
-                        // Find BottomNavigationView at click time (not initialization time)
-                        com.google.android.material.bottomnavigation.BottomNavigationView bottomNav = 
-                            requireActivity().findViewById(R.id.nav_view);
-                        
-                        if (bottomNav != null) {
-                            // Trigger the bottom navigation item click for Learn/Discover
-                            bottomNav.setSelectedItemId(R.id.nav_name_99);
-                            Log.d(TAG, "Triggered bottom nav: Learn/Discover page");
-                        } else {
-                            Log.e(TAG, "Bottom navigation view not found");
-                        }
+                        startActivity(new Intent(requireActivity(),
+                                com.quran.quranaudio.online.activities.AllahNameActivity.class));
+                        Log.d(TAG, "Launched 99 Names of Allah from home shortcut");
                     } catch (Exception e) {
-                        Log.e(TAG, "Error navigating to Learn page", e);
+                        Log.e(TAG, "Error launching 99 Names of Allah", e);
                     }
                 });
-                Log.d(TAG, "Learn button click listener registered");
+                Log.d(TAG, "99 Names shortcut click listener registered");
             } else {
-                Log.w(TAG, "Learn navigation button not found");
+                Log.w(TAG, "99 Names navigation button not found");
             }
             
             // Tools Icon - Show tools menu bottom sheet
@@ -1761,6 +1766,23 @@ public class FragMain extends BaseFragment {
             loadVOTDNativeAd();
             android.util.Log.d("NATIVE_AD_TRACK", "✅ loadVOTDNativeAd() completed");
             
+            // 即时显示今日缓存的经文，消除每次回主页的"空白→加载"闪烁（随后仍刷新为带格式版）
+            try {
+                android.content.SharedPreferences vp =
+                        requireContext().getSharedPreferences("home_votd_cache", android.content.Context.MODE_PRIVATE);
+                String cachedText = vp.getInt("verse_date", -1) == todayKey() ? vp.getString("verse_text", null) : null;
+                if (cachedText != null && tvVotdContentText != null) {
+                    tvVotdContentText.setText(cachedText);
+                    String cachedRef = vp.getString("verse_ref", "");
+                    if (tvVotdReference != null && !cachedRef.isEmpty()) {
+                        android.text.SpannableString sp = new android.text.SpannableString(cachedRef);
+                        sp.setSpan(new android.text.style.UnderlineSpan(), 0, cachedRef.length(),
+                                android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        tvVotdReference.setText(sp);
+                    }
+                }
+            } catch (Exception ignored) {}
+
             // Load QuranMeta and initialize VOTD
             QuranMeta.prepareInstance(requireContext(), quranMeta -> {
                 if (votdViewEmbedded != null) {
@@ -1896,8 +1918,21 @@ public class FragMain extends BaseFragment {
                 );
                 tvVotdReference.setText(spannableReference);
                 Log.d(TAG, "VOTD reference set: " + referenceText);
+
+                // 缓存今日经文(纯文本)供下次回主页即时展示，避免"空白→加载"闪烁
+                try {
+                    if (tvVotdContentText != null && tvVotdContentText.getText() != null
+                            && tvVotdContentText.getText().length() > 0 && !referenceText.isEmpty()) {
+                        requireContext().getSharedPreferences("home_votd_cache", android.content.Context.MODE_PRIVATE)
+                                .edit()
+                                .putInt("verse_date", todayKey())
+                                .putString("verse_text", tvVotdContentText.getText().toString())
+                                .putString("verse_ref", referenceText)
+                                .apply();
+                    }
+                } catch (Exception ignored) {}
             }
-            
+
             // Extract chapter and verse numbers using reflection (to access private fields)
             try {
                 java.lang.reflect.Field chapterField = VOTDView.class.getDeclaredField("mChapterNo");

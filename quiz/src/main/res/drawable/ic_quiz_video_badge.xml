@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 激励视频标识：白圆 + 绿色播放三角。清晰告知"观看视频得奖励"，符合 AdMob 激励政策。 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="22dp"
+    android:height="22dp"
+    android:viewportWidth="28"
+    android:viewportHeight="28">
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M14,14 m-13,0 a13,13 0 1,0 26,0 a13,13 0 1,0 -26,0 z" />
+    <path
+        android:fillColor="#2E9E6B"
+        android:pathData="M11,8 L11,20 L21,14 Z" />
+</vector>

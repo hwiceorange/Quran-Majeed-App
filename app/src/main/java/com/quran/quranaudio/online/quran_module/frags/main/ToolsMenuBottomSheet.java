@@ -50,6 +50,16 @@ public class ToolsMenuBottomSheet extends BottomSheetDialogFragment {
         // Close button
         view.findViewById(R.id.btn_close).setOnClickListener(v -> dismiss());
 
+        View premiumEntry = view.findViewById(R.id.tool_quran_premium);
+        boolean subscribed = com.quran.quranaudio.online.subscription.SubscriptionHelper.INSTANCE
+                .isUserSubscribed(requireContext());
+        premiumEntry.setVisibility(subscribed ? View.GONE : View.VISIBLE);
+        premiumEntry.setOnClickListener(v -> {
+            com.quran.quranaudio.online.subscription.SubscriptionHelper.INSTANCE
+                    .launchSubscriptionPage(requireContext(), "tools_menu");
+            dismiss();
+        });
+
         // Hadith Books
         LinearLayout toolHadithBooks = view.findViewById(R.id.tool_hadith_books);
         toolHadithBooks.setOnClickListener(v -> {
@@ -107,6 +117,20 @@ public class ToolsMenuBottomSheet extends BottomSheetDialogFragment {
                 Log.d(TAG, "Launched Islamic Calendar");
             } catch (Exception e) {
                 Log.e(TAG, "Error launching Calendar", e);
+            }
+        });
+
+        // 99 Names of Allah (Asma ul Husna)
+        LinearLayout tool99Names = view.findViewById(R.id.tool_99_names);
+        tool99Names.setOnClickListener(v -> {
+            try {
+                Intent intent = new Intent(requireActivity(),
+                        com.quran.quranaudio.online.activities.AllahNameActivity.class);
+                startActivity(intent);
+                dismiss();
+                Log.d(TAG, "Launched 99 Names of Allah");
+            } catch (Exception e) {
+                Log.e(TAG, "Error launching 99 Names of Allah", e);
             }
         });
 
@@ -199,7 +223,8 @@ public class ToolsMenuBottomSheet extends BottomSheetDialogFragment {
             .setMessage("This app needs location permission to show accurate prayer times and Qibla direction for your area.")
             .setPositiveButton("Grant Permission", (dialog, which) -> {
                 requestPermissions(
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION},
                     1001
                 );
             })
@@ -210,4 +235,3 @@ public class ToolsMenuBottomSheet extends BottomSheetDialogFragment {
             .show();
     }
 }
-

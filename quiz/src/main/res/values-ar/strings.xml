@@ -3,8 +3,8 @@
     <string name="quran_no_ad_tips">لم يتم تحميل الإعلان، حاول مرة أخرى لاحقًا</string>
     <string name="quran_loading_ad">جارٍ تحميل الإعلان...</string>
     <string name="quiz_review_default_explanation">تقدّم هذه الآية إرشادًا مهمًا. تدبّرها جيدًا لفهم معناها وتطبيقها.</string>
-    <string name="quran_correct">صحيح</string>
-    <string name="quran_wrong">خطأ</string>
+    <string name="quran_correct">ما شاء الله!</string>
+    <string name="quran_wrong">ليس تمامًا</string>
     <string name="quran_question">سؤال %1$s</string>
     <string name="quran_level">المستوى %1$s</string>
     <string name="quran_not_enough_gems">الجواهر غير كافية</string>
@@ -24,7 +24,9 @@
     <string name="quran_quiz_notify_correct_msg">أحسنت! إجابة صحيحة.</string>
     <string name="quran_quiz_notify_correct_title">بارك الله فيك</string>
     <string name="quran_play_more">العب المزيد</string>
-    <string name="quran_level_up">ارتقاء المستوى</string>
+    <string name="quran_level_up">ما شاء الله!</string>
+    <string name="quran_level_up_subtitle">أكملت المستوى — واصل نموّك في العلم</string>
+    <string name="quran_level_streak">🔥 %1$s مستويات متتالية، ما شاء الله</string>
     <string name="quran_reward">مكافأة</string>
     <string name="quran_download">تنزيل</string>
     <string name="quran_cancel">إلغاء</string>
@@ -55,4 +57,8 @@
     <string name="quiz_try_again_btn">حاول مرة أخرى</string>
     <string name="quiz_skip_btn">تخطي</string>
     <string name="quiz_quit_level_btn">إنهاء المستوى</string>
+    <string name="quiz_surah_title">اختبار السورة</string>
+    <string name="quiz_surah_done">تم</string>
+    <string name="quiz_surah_not_enough">لا توجد أسئلة كافية لهذه السورة بعد</string>
+    <string name="quiz_surah_test_btn">اختبر هذه السورة</string>
 </resources>

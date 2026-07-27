@@ -595,6 +595,7 @@ public class App extends BaseApp {
         new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
             android.util.Log.d("PERFORMANCE", "→ [DELAY-3s] Starting anonymous auth...");
             performAnonymousAuthDelayed();
+            com.quran.quranaudio.online.subscription.SubscriptionEntitlementSync.syncIfNeeded(this);
         }, 3000);
         
         // 延迟 5 秒：完整 WebView 初始化（200-500ms，资源密集）
@@ -735,6 +736,14 @@ public class App extends BaseApp {
     // 🔥 用于热启动（从后台恢复）时展示开屏广告的生命周期观察器
     LifecycleObserver resumeAdObserver = new DefaultLifecycleObserver() {
         private boolean isFirstLaunch = true;
+        private long backgroundStartedAt = 0L;
+        private static final long MIN_BACKGROUND_DURATION_MS = 2 * 60 * 1000L;
+
+        @Override
+        public void onStop(@NonNull LifecycleOwner owner) {
+            DefaultLifecycleObserver.super.onStop(owner);
+            backgroundStartedAt = System.currentTimeMillis();
+        }
         
         @Override
         public void onStart(@NonNull LifecycleOwner owner) {
@@ -749,6 +758,13 @@ public class App extends BaseApp {
                 }
                 return;
             }
+
+            long backgroundDuration = backgroundStartedAt == 0L
+                    ? 0L : System.currentTimeMillis() - backgroundStartedAt;
+            if (backgroundDuration < MIN_BACKGROUND_DURATION_MS) {
+                android.util.Log.d("App", "⏱️ Skip app-open ad after short background visit: " + backgroundDuration + "ms");
+                return;
+            }
             
             // 🔥 检查当前Activity是否有效
             if (currentActivity == null) {
@@ -760,7 +776,8 @@ public class App extends BaseApp {
             android.util.Log.d("App", "🔄 App onStart, current: " + activityName);
             
             // 🔥 只排除SplashScreenActivity（避免重复展示）
-            if (activityName.equals("SplashScreenActivity")) {
+            if (activityName.equals("SplashScreenActivity")
+                    || activityName.equals("SubscriptionActivity")) {
                 android.util.Log.d("App", "🚫 Skip ad on SplashScreenActivity");
                 return;
             }
@@ -768,7 +785,8 @@ public class App extends BaseApp {
             // 🔥 所有其他页面都展示开屏广告
             android.util.Log.d("App", "✅ Showing app open ad on: " + activityName);
             
-            if (AdFactory.INSTANCE.hasAppOpenAd(com.quranaudio.common.ad.AdConfig.AD_APPOPEN)) {
+            if (AdFactory.INSTANCE.hasAppOpenAd(com.quranaudio.common.ad.AdConfig.AD_APPOPEN)
+                    || AdFactory.INSTANCE.hasFullScreenNativeFallback(currentActivity)) {
                 android.util.Log.d("App", "📱 Ad ready, showing...");
                 AdFactory.INSTANCE.showAppOpenAd(currentActivity, com.quranaudio.common.ad.AdConfig.AD_APPOPEN, new com.quranaudio.common.ad.AdShowCallback() {
                     @Override

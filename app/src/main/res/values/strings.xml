@@ -13,6 +13,10 @@
     <string name="juz_index">Juz Index</string>
     <string name="bookmark"><![CDATA[           Bookmark]]></string>
     <string name="names99">Discover</string>
+    <!-- 99 圣名(Asma ul Husna):工具面板/首页入口标题 -->
+    <string name="asma_ul_husna">99 Names of Allah</string>
+    <!-- 首页快捷宫格用的短标签 -->
+    <string name="names99_home">99 Names</string>
     <string name="names_of_allah">99 Names of Allah</string>
     <string name="qibla_direction">Qibla Direction</string>
     <string name="wudu_guide">Wudu Guide</string>
@@ -935,6 +939,11 @@
     <string name="subscription_yearly_sub_text">Then %1$s per year</string>
     <string name="subscription_monthly_price">%1$s/month · Cancel anytime</string>
     <string name="subscription_yearly_price">%1$s/year · Cancel anytime</string>
+    <!-- 右侧每月单价对比：年费拆算 vs 月费真实价（老年友好，一眼对比） -->
+    <string name="subscription_per_month">per month</string>
+    <string name="subscription_cancel_anytime">Cancel anytime</string>
+    <!-- 年卡左侧醒目年费全额（与「Cancel anytime」分行，不折行） -->
+    <string name="subscription_amount_per_year">%1$s/year</string>
     <string name="subscription_info_trial_monthly">Cancel before the 7-day trial ends to avoid the monthly subscription charge.</string>
     <string name="subscription_info_trial_yearly">Cancel before the 7-day trial ends to avoid the annual subscription charge.</string>
     <string name="subscription_info_autorenew_yearly">Your subscription auto-renews annually unless canceled.</string>
@@ -1693,8 +1702,13 @@ Compass: point your phone and follow the arrow to the Kaaba in real time.</strin
     <string name="discount_first_month_caption">on your first month</string>
     <string name="discount_countdown_placeholder">60:00</string>
     <string name="discount_countdown_label">OFFER ENDS IN</string>
+    <!-- 限时药丸：表达「限时领取窗口」，与计费期无关 -->
+    <string name="discount_limited_pill">Limited time offer</string>
     <string name="discount_price_period">/ first year</string>
     <string name="discount_price_period_month">/ first month</string>
+    <!-- 醒目展示的优惠后原价 + 取消（%1$s=原价） -->
+    <string name="discount_then_year">Then %1$s/year after · Cancel anytime</string>
+    <string name="discount_then_month">Then %1$s/month after · Cancel anytime</string>
     <string name="discount_cta">Claim my offer</string>
     <!-- %1$d = 折扣百分比 -->
     <string name="discount_cta_percent">Claim my %1$d%% off</string>

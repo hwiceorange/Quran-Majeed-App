@@ -377,19 +377,25 @@ public class QadaTrackerActivity extends AppCompatActivity {
      * 所有未付费用户退出时显示插屏广告
      */
     private void handleExit() {
-        // 🎯 Show interstitial ad before exiting (only for unpaid users)
-        Log.d(TAG, "🎯 User exiting Qada Tracker, attempting to show exit interstitial ad");
+        // A task-root back press exits the app and must never display an advertisement.
+        if (isTaskRoot()) {
+            finish();
+            return;
+        }
+
+        // Returning to the in-app prayer list is a natural content transition.
+        Log.d(TAG, "🎯 Returning from Qada Tracker to the previous in-app screen");
         boolean adShown = com.quranaudio.common.ad.InterstitialAdManager.Companion.getInstance().showAdIfAvailable(this);
         
         if (adShown) {
-            Log.d(TAG, "✅ Exit ad shown to unpaid user, delaying finish to allow ad to display");
+            Log.d(TAG, "✅ In-app transition ad shown, delaying finish to allow ad to display");
             // CRITICAL: Delay finish() to allow ad to render and display properly
             // Ad needs the Activity context to remain alive
             new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
                     finish();
             }, 500); // 500ms delay to ensure ad renders
         } else {
-            Log.d(TAG, "⚠️ No exit ad shown (subscribed or unavailable), finishing immediately");
+            Log.d(TAG, "⚠️ No transition ad shown (subscribed or unavailable), finishing immediately");
                     finish();
                 }
     }
