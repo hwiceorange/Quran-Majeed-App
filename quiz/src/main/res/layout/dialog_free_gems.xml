@@ -93,6 +93,17 @@
             android:layout_marginStart="@dimen/dp_20"
             android:gravity="center"
             android:drawablePadding="@dimen/dp_5"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_8"
+            android:background="@drawable/bg_ad_label"
+            android:paddingHorizontal="@dimen/dp_5"
+            android:paddingVertical="@dimen/dp_1"
+            android:text="@string/quran_gnt_ad"
+            android:textColor="#F2FFFFFF"
+            android:textSize="@dimen/dp_10" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

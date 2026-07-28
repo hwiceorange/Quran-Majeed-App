@@ -57,11 +57,14 @@ class FeedbackFloatingButton(private val activity: Activity) {
                 null
             )
             
-            // 计算合适的 Y 坐标（避免遮挡底部导航栏）
-            // 底部导航栏高度约 56dp + 悬浮按钮高度 56dp + 额外安全边距 16dp = 128dp
-            val bottomMarginDp = 128
+            // 计算合适的 Y 坐标（避免遮挡 App 底部导航栏 + 系统导航栏）
+            // 悬浮窗为独立 Window，不会自动避让系统导航栏，需手动把其高度加上，
+            // 否则在带底部导航的页面(如首页 Learn 标签)会压住导航项。
             val density = activity.resources.displayMetrics.density
-            val bottomMarginPx = (bottomMarginDp * density).toInt()
+            val sysNavResId = activity.resources.getIdentifier("navigation_bar_height", "dimen", "android")
+            val sysNavPx = if (sysNavResId > 0) activity.resources.getDimensionPixelSize(sysNavResId) else 0
+            // App 底部导航栏(~64dp) + 悬浮按钮(56dp) + 安全边距(16dp) = 136dp，再叠加系统导航栏高度
+            val bottomMarginPx = (136 * density).toInt() + sysNavPx
             
             // 🔥 关键修复3：设置布局参数（使用 token 关联到 Activity）
             params = WindowManager.LayoutParams(
@@ -98,7 +101,7 @@ class FeedbackFloatingButton(private val activity: Activity) {
             }
             
             isShowing = true
-            android.util.Log.d("FeedbackFloatingButton", "✅ Floating button shown successfully at y=$bottomMarginPx (${bottomMarginDp}dp)")
+            android.util.Log.d("FeedbackFloatingButton", "✅ Floating button shown successfully at y=$bottomMarginPx (sysNav=$sysNavPx)")
             
         } catch (e: android.view.WindowManager.BadTokenException) {
             android.util.Log.e("FeedbackFloatingButton", "❌ BadTokenException: Activity window token invalid", e)

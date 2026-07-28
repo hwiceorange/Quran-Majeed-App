@@ -248,36 +248,98 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Action Buttons -->
-            <TextView
+            <!-- Action Buttons：播放图标 + 文字 + AD 标识，一行内居中，RTL 安全不重叠 -->
+            <FrameLayout
                 android:id="@+id/tryAgainBtn"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_52"
                 android:layout_marginTop="@dimen/dp_24"
                 android:background="@drawable/btn_quiz_green_primary"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center"
-                android:text="@string/quiz_try_again_btn"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/dp_16"
-                android:drawableStart="@drawable/ic_rewarded_video"
-                android:drawablePadding="@dimen/dp_8"
-                tools:ignore="HardcodedText" />
+                android:clickable="true"
+                android:focusable="true">
 
-            <TextView
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="@dimen/dp_20"
+                        android:layout_height="@dimen/dp_20"
+                        android:layout_marginEnd="@dimen/dp_8"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_rewarded_video" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="@string/quiz_try_again_btn"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/dp_16"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="@dimen/dp_14"
+                    android:background="@drawable/bg_ad_label"
+                    android:paddingHorizontal="@dimen/dp_5"
+                    android:paddingVertical="@dimen/dp_1"
+                    android:text="@string/quran_gnt_ad"
+                    android:textColor="#F2FFFFFF"
+                    android:textSize="@dimen/dp_10" />
+            </FrameLayout>
+
+            <FrameLayout
                 android:id="@+id/skipBtn"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_52"
                 android:layout_marginTop="@dimen/dp_12"
                 android:background="@drawable/btn_quiz_green_secondary"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center"
-                android:text="@string/quiz_skip_btn"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/dp_16"
-                android:drawableStart="@drawable/ic_rewarded_video"
-                android:drawablePadding="@dimen/dp_8"
-                tools:ignore="HardcodedText" />
+                android:clickable="true"
+                android:focusable="true">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="@dimen/dp_20"
+                        android:layout_height="@dimen/dp_20"
+                        android:layout_marginEnd="@dimen/dp_8"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_rewarded_video" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="@string/quiz_skip_btn"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/dp_16"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="@dimen/dp_14"
+                    android:background="@drawable/bg_ad_label"
+                    android:paddingHorizontal="@dimen/dp_5"
+                    android:paddingVertical="@dimen/dp_1"
+                    android:text="@string/quran_gnt_ad"
+                    android:textColor="#F2FFFFFF"
+                    android:textSize="@dimen/dp_10" />
+            </FrameLayout>
 
             <TextView
                 android:id="@+id/quitBtn"

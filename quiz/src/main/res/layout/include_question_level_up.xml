@@ -78,40 +78,52 @@
         tools:text="🔥 3 levels in a row, MashaAllah"
         tools:visibility="visible" />
 
-    <!-- 次级操作：观看视频领奖励 -->
+    <!-- 次级操作：观看视频领奖励。图标+文字居中，AD 标识钉在按钮右侧边缘（垂直居中），RTL 下整体镜像不重叠。 -->
     <FrameLayout
         android:id="@+id/nextLevelAd"
         android:layout_width="0dp"
         android:layout_height="@dimen/dp_52"
         android:layout_marginHorizontal="@dimen/dp_20"
         android:layout_marginTop="@dimen/dp_28"
+        android:background="@drawable/btn_levelup_reward_secondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/levelStreakTv">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/btn_levelup_reward_secondary"
-            android:fontFamily="@font/montserrat_semi_bold"
-            android:gravity="center"
-            android:drawableStart="@drawable/ic_quiz_video_play"
-            android:drawablePadding="@dimen/dp_8"
-            android:textColor="@color/white"
-            android:textSize="@dimen/dp_16"
-            android:text="@string/quran_reward" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/dp_20"
+                android:layout_height="@dimen/dp_20"
+                android:layout_marginEnd="@dimen/dp_8"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_quiz_video_play" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_semi_bold"
+                android:text="@string/quran_reward"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp_16" />
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/quran_gnt_ad"
-            android:textColor="#F2FFFFFF"
-            android:textSize="@dimen/dp_10"
+            android:layout_gravity="center_vertical|start"
+            android:layout_marginStart="@dimen/dp_14"
             android:background="@drawable/bg_ad_label"
             android:paddingHorizontal="@dimen/dp_5"
             android:paddingVertical="@dimen/dp_1"
-            android:layout_marginStart="@dimen/dp_10"
-            android:layout_marginTop="@dimen/dp_8" />
+            android:text="@string/quran_gnt_ad"
+            android:textColor="#F2FFFFFF"
+            android:textSize="@dimen/dp_10" />
     </FrameLayout>
 
     <!-- +5 宝石徽章：贴在 Reward 按钮右上角，不再与文字叠压 -->
