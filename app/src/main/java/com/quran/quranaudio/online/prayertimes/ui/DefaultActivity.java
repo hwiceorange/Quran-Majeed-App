@@ -6,8 +6,6 @@ import android.os.Bundle;
 import com.quran.quranaudio.online.App;
 import com.quran.quranaudio.online.SplashScreenActivity;
 import com.quran.quranaudio.online.prayertimes.preferences.PreferencesHelper;
-import com.quran.quranaudio.online.quran_module.activities.ActivityOnboarding;
-import com.quran.quranaudio.online.quran_module.activities.ActivityOnboarding;
 
 import javax.inject.Inject;
 
@@ -25,12 +23,10 @@ public class DefaultActivity extends BaseActivity {
 
         super.onCreate(savedInstanceState);
 
-        if (preferencesHelper.isFirstLaunch()) {
-            Intent intent = new Intent(getApplicationContext(), ActivityOnboarding.class);
-            startActivity(intent);
-        } else {
-            Intent intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
-            startActivity(intent);
-        }
+        // All entries share the same splash policy. Splash handles first-launch language
+        // initialization and routes directly to Quran without the legacy onboarding gate.
+        Intent intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

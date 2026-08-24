@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 主 CTA：胶囊形（圆角 = 按钮高度 52dp 的一半），与参考卡片一致 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="#2E7D5B" />
+    <corners android:radius="26dp" />
+</shape>

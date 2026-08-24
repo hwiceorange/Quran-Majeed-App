@@ -114,6 +114,26 @@ class SurahQuizActivity : AppCompatActivity() {
     private fun showResult() {
         scoreTv.text = "$score / ${questions.size}"
         resultView.visibility = View.VISIBLE
+
+        // 插屏场景 A：答题结算页。
+        //
+        // 这是本 App 里少数的「世俗区」——答题是游戏化功能，一局结束时展示广告
+        // 符合用户在这类场景下的既有预期，不触碰宗教情绪高点
+        // （古兰经正文、礼拜中、Adhan、Tasbih、Qibla 都是明确红线）。
+        //
+        // 是否真的展示由 InterstitialAdManager 统一裁决：
+        // 订阅/买断去广告用户直接跳过，并受新装保护期与频控约束。
+        // 先让结算结果渲染出来，再叠广告，避免用户还没看到分数就被挡住。
+        resultView.post {
+            try {
+                if (!isFinishing && !isDestroyed) {
+                    com.quranaudio.common.ad.InterstitialAdManager.getInstance()
+                        .showAdIfAvailable(this)
+                }
+            } catch (t: Throwable) {
+                android.util.Log.w("SurahQuizActivity", "quiz result interstitial failed", t)
+            }
+        }
     }
 
     override fun onDestroy() {

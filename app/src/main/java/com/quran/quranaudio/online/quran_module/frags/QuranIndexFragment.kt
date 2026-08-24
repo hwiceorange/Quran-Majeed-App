@@ -44,6 +44,14 @@ class QuranIndexFragment : Fragment() {
         
         // 初始化页面（复用 ActivityReaderIndexPage 的所有逻辑）
         pageHelper.init()
+
+        // First-launch now lands directly here. Seeing a usable Quran index is the first
+        // delivered value, and the sticky event lets retention reports compare users who
+        // reached content with users who left during startup.
+        com.quran.quranaudio.online.analytics.RetentionFunnel.firstValue(
+            requireContext(),
+            "quran_index"
+        )
     }
     
     override fun onResume() {
@@ -70,4 +78,3 @@ class QuranIndexFragment : Fragment() {
         fun newInstance() = QuranIndexFragment()
     }
 }
-

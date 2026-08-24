@@ -294,14 +294,14 @@
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
-                <!-- 真实年费全额：加大加粗醒目 -->
+                <!-- 真实年费全额：白色、加大加粗，保持为年卡主价格 -->
                 <TextView
                     android:id="@+id/tv_yearly_sub_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
-                    android:textColor="#FFFFFF"
-                    android:textSize="19sp"
+                    android:textColor="@android:color/white"
+                    android:textSize="24sp"
                     android:textStyle="bold"
                     android:singleLine="true"
                     android:layout_marginTop="2dp"
@@ -318,7 +318,7 @@
                     android:layout_marginTop="2dp" />
             </LinearLayout>
 
-            <!-- 右侧每月单价：年费拆算到每月（对比锚点），真实年费在左侧完整展示 -->
+            <!-- 右侧月均换算仅作辅助对比：白色，但比月卡主价格小 1sp -->
             <LinearLayout
                 android:id="@+id/yearly_price_col"
                 android:layout_width="wrap_content"
@@ -334,9 +334,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
-                    android:textColor="#FFD54F"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
+                    android:textColor="@android:color/white"
+                    android:textSize="21sp"
                     android:gravity="end"
                     tools:text="HK$6.50" />
 
@@ -345,8 +344,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/subscription_per_month"
-                    android:textColor="#E6EFE9"
-                    android:textSize="12sp"
+                    android:textColor="#B8CBC0"
+                    android:textSize="11sp"
                     android:gravity="end" />
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,6 +24,13 @@ class ActivityOnboarding : com.quran.quranaudio.online.quran_module.activities.b
 
     private val lastPageIndex get() = titles.size - 1
     private var currentPageIndex = 0
+
+    // 逐页漏斗用的游标：记录上一页是哪一页、什么时候进入的，
+    // 以便在翻页时补一条「上一页走完了 + 停留多久」。
+    private var pageEnterAtMs = 0L
+    private var lastPageIndexSeen = -1
+    private var lastPageName = ""
+    private var onboardingStartMs = 0L
     
     companion object {
         const val KEY_START_PAGE = "start_page_index"
@@ -205,9 +212,24 @@ class ActivityOnboarding : com.quran.quranaudio.online.quran_module.activities.b
             else -> "unknown"
         }
         try {
-            com.quran.quranaudio.online.analytics.AnalyticsManager
-                .getInstance(this)
-                .logWorkflowStep("onboarding_page_${position}_$name")
+            // 逐页漏斗：把「看到这一页」和「走完这一页」分开记。
+            //
+            // 此前只有 language_selected（点语言卡片才触发），
+            // 于是 first_open 42,641 → language_selected 14,266 这个巨大缺口
+            // 无法区分是「没点卡片直接过」还是「压根没走到引导」。
+            // 现在 rf_onb_page(index) 减 rf_onb_next(index) 就是该页的真实流失。
+            val now = System.currentTimeMillis()
+            if (pageEnterAtMs > 0L && lastPageName.isNotEmpty()) {
+                com.quran.quranaudio.online.analytics.RetentionFunnel
+                    .onbNext(this, lastPageIndexSeen, lastPageName, now - pageEnterAtMs)
+            }
+            pageEnterAtMs = now
+            lastPageIndexSeen = position
+            lastPageName = name
+            if (onboardingStartMs == 0L) {
+                onboardingStartMs = now
+            }
+            com.quran.quranaudio.online.analytics.RetentionFunnel.onbPage(this, position, name)
         } catch (e: Exception) {
             android.util.Log.w("ActivityOnboarding", "logOnboardingPageView failed", e)
         }
@@ -259,6 +281,22 @@ class ActivityOnboarding : com.quran.quranaudio.online.quran_module.activities.b
 
     private fun takeOff() {
         setRequireOnboarding(this, false)
+
+        try {
+            // 最后一页也要记「走完」，否则末页流失看不出来
+            if (pageEnterAtMs > 0L && lastPageName.isNotEmpty()) {
+                com.quran.quranaudio.online.analytics.RetentionFunnel.onbNext(
+                    this, lastPageIndexSeen, lastPageName,
+                    System.currentTimeMillis() - pageEnterAtMs
+                )
+            }
+            com.quran.quranaudio.online.analytics.RetentionFunnel.onbDone(
+                this,
+                if (onboardingStartMs > 0L) System.currentTimeMillis() - onboardingStartMs else -1L
+            )
+        } catch (e: Exception) {
+            android.util.Log.w("ActivityOnboarding", "onboarding done tracking failed", e)
+        }
 
         launchMainActivity()
         finish()

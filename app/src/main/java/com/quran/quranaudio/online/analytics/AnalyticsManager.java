@@ -30,6 +30,12 @@ public class AnalyticsManager {
     
     // 应用启动时间戳（用于计算各步骤耗时）
     private long appStartTimestamp = 0;
+
+    /**
+     * 本进程创建时刻（单调时钟）。类加载即固定，不可被重置，也不受用户改系统时间影响。
+     * logWorkflowStep 的耗时基于它，语义明确：距本进程创建多久。
+     */
+    private static final long PROCESS_START_ELAPSED = android.os.SystemClock.elapsedRealtime();
     
     private AnalyticsManager(Context context) {
         firebaseAnalytics = FirebaseAnalytics.getInstance(context.getApplicationContext());
@@ -129,11 +135,26 @@ public class AnalyticsManager {
      *                 onboarding_complete, home_view, main_content_loaded
      */
     public void logWorkflowStep(String stepName) {
-        logEvent("app_workflow_step", Map.of(
-            "step_name", stepName,
-            "duration_from_start", (double) getTimeSinceStart(),
-            "timestamp", System.currentTimeMillis()
-        ));
+        // 修复记录（此前该事件在 GA4 里达到 1,317 万条 / 每用户 127 次，数据不可用）：
+        //
+        // 1. 删除 timestamp 参数。GA4 本就给每条事件自带时间戳，这个参数完全冗余；
+        //    而且它每条都是唯一值（高基数），作为数值型参数还会白占自定义指标配额
+        //    （GA4 每媒体资源自定义维度/指标各上限 50 个），注册它毫无意义、不注册则纯属浪费。
+        //
+        // 2. duration_from_start 改用单调时钟。原实现基于 System.currentTimeMillis()，
+        //    用户改系统时间或 NTP 校时都会污染它，甚至出现负值；
+        //    SystemClock.elapsedRealtime() 不受这些影响。
+        //    语义也更正为「距本进程创建」——原来的 appStartTimestamp 是
+        //    AnalyticsManager 单例首次创建的时刻，在后台被闹钟/Widget 拉起的进程里
+        //    和「应用启动」毫无关系，还能被 resetStartTimestamp() 任意重置。
+        //
+        // 3. 调用点污染（已在 App.java 修复）：Application.onCreate 里那两条会在
+        //    每次进程创建时上报，包括后台唤醒，这是 127 次/人的主因。
+        java.util.Map<String, Object> params = new java.util.HashMap<>();
+        params.put("step_name", stepName);
+        params.put("ms_since_process_start",
+                android.os.SystemClock.elapsedRealtime() - PROCESS_START_ELAPSED);
+        logEvent("app_workflow_step", params);
     }
     
     // ==================== 2. 登录门槛分析 ====================

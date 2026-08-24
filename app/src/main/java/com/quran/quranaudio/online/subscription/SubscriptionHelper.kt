@@ -5,6 +5,7 @@ import android.content.Intent
 import android.app.Activity
 import androidx.appcompat.app.AlertDialog
 import com.quran.quranaudio.online.R
+import com.quran.quranaudio.online.analytics.RetentionFunnel
 
 /**
  * 订阅功能辅助类
@@ -125,14 +126,30 @@ object SubscriptionHelper {
                 .apply()
 
             // A soft invitation after value delivery avoids breaking reading, prayer or dhikr.
-            AlertDialog.Builder(activity)
+            RetentionFunnel.subscription(
+                activity, "prompt_shown", "reading_value_prompt", "none", "none", "shown"
+            )
+            val dialog = AlertDialog.Builder(activity)
                 .setTitle(R.string.subscription_context_title)
                 .setMessage(R.string.subscription_context_message)
                 .setPositiveButton(R.string.subscription_context_view) { _, _ ->
+                    RetentionFunnel.subscription(
+                        activity, "prompt_action", "reading_value_prompt", "none", "none", "view"
+                    )
                     launchSubscriptionPage(activity, "reading_value_prompt")
                 }
-                .setNegativeButton(R.string.subscription_context_not_now, null)
-                .show()
+                .setNegativeButton(R.string.subscription_context_not_now) { _, _ ->
+                    RetentionFunnel.subscription(
+                        activity, "prompt_action", "reading_value_prompt", "none", "none", "not_now"
+                    )
+                }
+                .create()
+            dialog.setOnCancelListener {
+                RetentionFunnel.subscription(
+                    activity, "prompt_action", "reading_value_prompt", "none", "none", "dismissed"
+                )
+            }
+            dialog.show()
             return true
         } catch (e: Exception) {
             return false

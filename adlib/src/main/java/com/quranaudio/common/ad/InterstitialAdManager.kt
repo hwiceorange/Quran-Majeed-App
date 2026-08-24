@@ -38,6 +38,17 @@ class InterstitialAdManager private constructor() {
                 instance ?: InterstitialAdManager().also { instance = it }
             }
         }
+
+        /**
+         * 插屏被用户关闭后的回调（仅在广告真的展示并被关闭时触发，展示失败不触发）。
+         *
+         * adlib 不能反向依赖 app 模块，所以用这个钩子把「关闭插屏」这个时机
+         * 交给 app 侧决定做什么——目前用于弹去广告买断弹窗。
+         * 由 App.onCreate 注册；未注册时这里为 null，行为与改动前一致。
+         */
+        @JvmStatic
+        @Volatile
+        var afterDismissListener: ((Activity) -> Unit)? = null
     }
     
     // Ad Unit ID - reusing existing interstitial ID from AdConfig
@@ -105,7 +116,7 @@ class InterstitialAdManager private constructor() {
         }
         
         // Check subscription status
-        if (SubscriptionChecker.isUserSubscribed(context)) {
+        if (SubscriptionChecker.shouldHideAds(context)) {
             Log.d(TAG, "🎁 User is subscribed, skipping ad load")
             return
         }
@@ -202,11 +213,19 @@ class InterstitialAdManager private constructor() {
     @JvmOverloads
     fun showAdIfAvailable(activity: Activity, onAdClosed: (() -> Unit)? = null): Boolean {
         // Check subscription status
-        if (SubscriptionChecker.isUserSubscribed(activity)) {
+        if (SubscriptionChecker.shouldHideAds(activity)) {
             Log.d(TAG, "🎁 User is subscribed, skipping ad display")
             return false
         }
-        
+
+        // 频控。此前这里完全没有：没有最小间隔、没有会话/单日上限、没有新装保护期，
+        // 只要触发点命中就播，一个活跃新用户 D0 就可能吃到 4~5 个全屏广告。
+        val block = InterstitialFrequencyCap.blockReason(activity)
+        if (block != null) {
+            Log.d(TAG, "⛔ Interstitial blocked by frequency cap: $block")
+            return false
+        }
+
         // Discard expired cached ad (expiry is checked here instead of a background timer)
         if (discardIfExpired()) {
             retryCount = 0
@@ -229,52 +248,59 @@ class InterstitialAdManager private constructor() {
         val adLocation = activity.javaClass.simpleName
         Log.d(TAG, "📍 Ad location: $adLocation")
         
-        // Attach callback to handle ad dismissal
-        if (onAdClosed != null) {
-            ad.fullScreenContentCallback = object : FullScreenContentCallback() {
-                override fun onAdDismissedFullScreenContent() {
-                    Log.d(TAG, "✅ Ad dismissed by user")
-                    cachedAd = null
-                    loadTimeMillis = 0L
-                    loadNewAd()
-                    
-                    // Invoke callback on main thread
-                    Handler(Looper.getMainLooper()).post {
-                        onAdClosed.invoke()
-                    }
-                }
-                
-                override fun onAdFailedToShowFullScreenContent(adError: AdError) {
-                    Log.e(TAG, "❌ Ad failed to show: ${adError.message}")
-                    cachedAd = null
-                    loadTimeMillis = 0L
-                    loadNewAd()
-                    
-                    // Invoke callback on main thread
-                    Handler(Looper.getMainLooper()).post {
-                        onAdClosed.invoke()
-                    }
-                }
-                
-                override fun onAdShowedFullScreenContent() {
-                    Log.d(TAG, "📺 Ad showed full screen content at $adLocation")
+        // 总是挂回调。
+        //
+        // 原实现只在 onAdClosed != null 时才挂 FullScreenContentCallback，
+        // 于是绝大多数调用点（都不传 onAdClosed）根本检测不到「广告被关闭」，
+        // 缓存清理靠 show() 之后立即执行，也无法在关闭时机做任何事。
+        // 现在统一挂上：既保证缓存/预加载行为一致，也让
+        // afterDismissListener（去广告弹窗）有可靠的触发点。
+        ad.fullScreenContentCallback = object : FullScreenContentCallback() {
+            override fun onAdDismissedFullScreenContent() {
+                Log.d(TAG, "✅ Ad dismissed by user")
+                cachedAd = null
+                loadTimeMillis = 0L
+                loadNewAd()
+
+                Handler(Looper.getMainLooper()).post {
+                    onAdClosed?.invoke()
+                    // 用户刚被一个全屏广告打断，正是「原来可以永久去掉」最有说服力的时刻。
+                    // 是否真弹由 app 侧判定（订阅/已买断用户不弹、24h 间隔、累计关闭 3 次后不再弹）。
+                    notifyAfterDismiss(activity)
                 }
             }
+
+            override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                Log.e(TAG, "❌ Ad failed to show: ${adError.message}")
+                cachedAd = null
+                loadTimeMillis = 0L
+                loadNewAd()
+
+                Handler(Looper.getMainLooper()).post {
+                    onAdClosed?.invoke()
+                    // 广告没展示成功就不打扰用户谈付费，这里不触发弹窗
+                }
+            }
+
+            override fun onAdShowedFullScreenContent() {
+                Log.d(TAG, "📺 Ad showed full screen content at $adLocation")
+            }
         }
-        
+
         // Show the ad
         ad.show(activity)
-        
-        // Clear cache and immediately request new ad to maintain pool (if no callback)
-        if (onAdClosed == null) {
-            cachedAd = null
-            loadTimeMillis = 0L
-            loadNewAd()
-            
-            Log.d(TAG, "📺 Interstitial ad shown at ${activity.javaClass.simpleName}")
-        }
-        
+        // 推进频控计数（会话数 / 单日数 / 上次展示时刻）
+        InterstitialFrequencyCap.onShown(activity)
+
         return true
+    }
+
+    private fun notifyAfterDismiss(activity: Activity) {
+        try {
+            afterDismissListener?.invoke(activity)
+        } catch (t: Throwable) {
+            Log.w(TAG, "afterDismissListener failed", t)
+        }
     }
 
     private fun showNativeFallback(activity: Activity, onAdClosed: (() -> Unit)?): Boolean {

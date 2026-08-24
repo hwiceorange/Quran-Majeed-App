@@ -195,3 +195,13 @@ public static *** e(...);
 -keep class org.chromium.** { *; }
 
 # Note: Resources are not processed by R8/ProGuard, they are handled by AAPT2
+# ============================================================
+# WorkManager 按需初始化（on-demand initialization）
+# App 实现 androidx.work.Configuration.Provider，
+# getWorkManagerConfiguration() 由 WorkManagerImpl.getInstance(Context)
+# 通过接口反向调用。显式保留该实现，避免 R8 收缩时移除导致运行时
+# "WorkManager is not initialized properly" 崩溃。
+# ============================================================
+-keepclassmembers class * implements androidx.work.Configuration$Provider {
+    public androidx.work.Configuration getWorkManagerConfiguration();
+}

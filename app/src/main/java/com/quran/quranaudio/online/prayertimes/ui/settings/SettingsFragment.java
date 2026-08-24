@@ -275,7 +275,45 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             android.util.Log.w("SettingsFragment", "⚠️ Premium subscription preference not found");
         }
 
+        setupAdFreePreference();
         setupAddPrayerWidgetPreference();
+    }
+
+    /**
+     * 去广告买断（removeads）的固定入口。
+     *
+     * 自动弹窗有防骚扰限制（24h 间隔、累计关闭 3 次后不再弹），
+     * 所以必须有一个永远找得到的入口，否则想买的用户会买不到。
+     *
+     * 订阅用户和已买断用户不显示：他们已经无广告。
+     */
+    private void setupAdFreePreference() {
+        Preference adFreePref = getPreferenceScreen().findPreference("AD_FREE_PREFERENCE");
+        if (adFreePref == null || getContext() == null) {
+            return;
+        }
+
+        boolean alreadyAdFree =
+                com.quranaudio.common.ad.SubscriptionChecker.shouldHideAds(getContext());
+        adFreePref.setVisible(!alreadyAdFree);
+        if (alreadyAdFree) {
+            return;
+        }
+
+        // 有缓存价格就直接标在副标题上。一次性买断的价格通常远低于用户
+        // 对「订阅」的心理预期，把它提前暴露本身就是转化杠杆。
+        String price = com.quran.quranaudio.online.subscription.AdFreeBilling
+                .cachedPrice(getContext());
+        if (price != null && !price.isEmpty()) {
+            adFreePref.setSummary(getString(R.string.ad_free_cta_priced, price));
+        }
+
+        adFreePref.setOnPreferenceClickListener(preference -> {
+            if (getActivity() != null) {
+                new com.quran.quranaudio.online.subscription.AdFreeDialog(getActivity()).show();
+            }
+            return true;
+        });
     }
 
     /**

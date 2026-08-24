@@ -129,6 +129,22 @@ class PrayerNotification extends BaseNotification {
 
         notificationManager.notify(notificationId, builder.build());
 
+        // 邦克送达埋点 —— 整套留存埋点里最重要的一条。
+        //
+        // 礼拜提醒是这个品类每天 5 次的系统级触点，是核心留存杠杆，
+        // 但我们从来不知道用户到底有没有真的收到过。
+        //
+        // 关键细节：NotificationManagerCompat.notify() 在 POST_NOTIFICATIONS 被拒时
+        // 是「静默失败」——不抛异常、不返回错误。所以必须同时带上权限状态，
+        // 才能区分「调用了但用户没权限（等于没收到）」和「真的送达」。
+        // 只有 notifPermitted 为真时，RetentionFunnel 才会把 rf_adhan_ok 置为 true，
+        // 保证这个留存分层维度不被污染。
+        com.quran.quranaudio.online.analytics.RetentionFunnel.adhanShown(
+                context,
+                prayerKey,
+                notificationType == PreferencesHelper.TYPE_AZAN,
+                notificationManager.areNotificationsEnabled());
+
         boolean shouldPlayAdhan = false;
 
         if (prayerEnum != null) {

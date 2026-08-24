@@ -67,7 +67,7 @@ import kotlin.jvm.internal.Intrinsics;
  * - 主线程阻塞时间: 1.5-4.5秒 → 0.3-0.8秒 (减少80%)
  * - 启动时间: 10秒 → 3.5秒 (减少65%)
  */
-public class App extends BaseApp {
+public class App extends BaseApp implements androidx.work.Configuration.Provider {
 
     //Ads
     private AppOpenAdMob appOpenAdMob;
@@ -149,9 +149,21 @@ public class App extends BaseApp {
         android.util.Log.d("PERFORMANCE", "⚡ App.onCreate() START (Optimized Version)");
         android.util.Log.d("PERFORMANCE", "========================================");
         
-        // 🎯 Firebase Analytics: 记录应用启动
-        com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(this).logWorkflowStep("app_start");
-        
+        // 注意：这里刻意「不」上报 app_start。
+        //
+        // Application.onCreate 会在每一次进程创建时执行，包括祈祷闹钟 / Widget 刷新 /
+        // FCM / BootReceiver 拉起的后台进程。此前无条件上报，导致
+        // app_workflow_step 达到 1,317 万条、每用户 127 次（仅 9 个调用点），
+        // 把 splash → onboarding → main 这条真实漏斗彻底淹没，无法分析。
+        //
+        // 真实的「用户打开了 App」由 SplashScreenActivity 通过 RetentionFunnel.launch()
+        // 上报——那里必然有前台 Activity，语义准确。
+
+        // 面包屑：标记 onCreate 同步段开始。后续每一步结束都会记一条带累计耗时的面包屑，
+        // 这样任何发生在 Application.onCreate 内的 ANR，都能在 Crashlytics 的
+        // 「日志和面包屑导航」里直接读出卡在哪一步、之前各步各花了多久。
+        logBreadcrumb("onCreate:begin");
+
         try {
             super.onCreate();
             android.util.Log.d("PERFORMANCE", "✅ super.onCreate() completed [" + (System.currentTimeMillis() - startTime) + "ms]");
@@ -159,6 +171,7 @@ public class App extends BaseApp {
             android.util.Log.e("PERFORMANCE", "❌ super.onCreate() FAILED", e);
             throw e;
         }
+        markInitStep("super.onCreate", startTime);
         
         // ============================================================
         // 🟢 IMMEDIATE：主线程必须执行的初始化
@@ -168,17 +181,9 @@ public class App extends BaseApp {
             android.util.Log.d("CRASH_DEBUG", "🔄 Initializing WebView isolation...");
             initWebViewIsolation();
             android.util.Log.d("CRASH_DEBUG", "✅ WebView isolation initialized");
+            markInitStep("webview_isolation", startTime);
         } catch (Throwable e) {
             android.util.Log.e("CRASH_DEBUG", "❌ CRASH in initWebViewIsolation(): " + e.getMessage(), e);
-            // 继续执行，不要抛出异常
-        }
-        
-        try {
-            android.util.Log.d("CRASH_DEBUG", "🔄 Cleaning Vungle cache (prevent JSON crash)...");
-            cleanVungleCacheIfCorrupted();
-            android.util.Log.d("CRASH_DEBUG", "✅ Vungle cache cleaned");
-        } catch (Throwable e) {
-            android.util.Log.e("CRASH_DEBUG", "❌ CRASH in cleanVungleCacheIfCorrupted(): " + e.getMessage(), e);
             // 继续执行，不要抛出异常
         }
         
@@ -186,6 +191,7 @@ public class App extends BaseApp {
             android.util.Log.d("CRASH_DEBUG", "🔄 Initializing AdFactory...");
             initAdFactory();
             android.util.Log.d("CRASH_DEBUG", "✅ AdFactory initialized");
+            markInitStep("ad_factory", startTime);
         } catch (Throwable e) {
             android.util.Log.e("CRASH_DEBUG", "❌ CRASH in initAdFactory(): " + e.getMessage(), e);
             // 继续执行，不要抛出异常
@@ -195,6 +201,7 @@ public class App extends BaseApp {
             android.util.Log.d("CRASH_DEBUG", "🔄 Initializing Activity lifecycle callbacks...");
             initActivityLifecycleCallbacks();
             android.util.Log.d("CRASH_DEBUG", "✅ Activity lifecycle callbacks initialized");
+            markInitStep("lifecycle_callbacks", startTime);
         } catch (Throwable e) {
             android.util.Log.e("CRASH_DEBUG", "❌ CRASH in initActivityLifecycleCallbacks(): " + e.getMessage(), e);
             // 继续执行，不要抛出异常
@@ -204,6 +211,7 @@ public class App extends BaseApp {
             android.util.Log.d("CRASH_DEBUG", "🔄 Initializing crash handler...");
             initCrashHandler();
             android.util.Log.d("CRASH_DEBUG", "✅ Crash handler initialized");
+            markInitStep("crash_handler", startTime);
         } catch (Throwable e) {
             android.util.Log.e("CRASH_DEBUG", "❌ CRASH in initCrashHandler(): " + e.getMessage(), e);
             // 继续执行，不要抛出异常
@@ -213,15 +221,17 @@ public class App extends BaseApp {
             android.util.Log.d("CRASH_DEBUG", "🔄 Initializing notification channels...");
             initNotificationChannels();
             android.util.Log.d("CRASH_DEBUG", "✅ Notification channels initialized");
+            markInitStep("notification_channels", startTime);
         } catch (Throwable e) {
             android.util.Log.e("CRASH_DEBUG", "❌ CRASH in initNotificationChannels(): " + e.getMessage(), e);
             // 继续执行，不要抛出异常
         }
         
         try {
-            android.util.Log.d("CRASH_DEBUG", "🔄 Initializing WorkManager (SYNC - CRITICAL)...");
+            android.util.Log.d("CRASH_DEBUG", "🔄 Scheduling WorkManager setup (on-demand, off main thread)...");
             configureWorkManagerSync();
-            android.util.Log.d("CRASH_DEBUG", "✅ WorkManager initialized");
+            android.util.Log.d("CRASH_DEBUG", "✅ WorkManager setup scheduled");
+            markInitStep("workmanager", startTime);
         } catch (Throwable e) {
             android.util.Log.e("CRASH_DEBUG", "❌ CRASH in configureWorkManagerSync(): " + e.getMessage(), e);
             // 继续执行，不要抛出异常
@@ -250,8 +260,11 @@ public class App extends BaseApp {
         android.util.Log.d("PERFORMANCE", "📊 Main thread blocked: ~" + totalTime + "ms (80% reduction!)");
         android.util.Log.d("PERFORMANCE", "========================================");
         
-        // 🎯 Firebase Analytics: 应用完全启动成功
-        com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(this).logWorkflowStep("app_init_complete");
+        markInitStep("onCreate:end", startTime);
+
+        // 同上：app_init_complete 也不再无条件上报。
+        // Application.onCreate 的耗时改由 RetentionFunnel.launch() 的
+        // process_to_splash_ms 参数携带——它只在真实前台启动时上报，语义准确且不污染漏斗。
     }
 
     // ============================================================
@@ -259,92 +272,17 @@ public class App extends BaseApp {
     // ============================================================
     
     /**
-     * 清理 Vungle SDK 损坏的缓存文件
-     * ⚠️ CRITICAL FIX: 防止 JSON 解析崩溃
-     * 
-     * 错误信息：
-     * kotlinx.serialization.json.internal.JsonDecodingException: 
-     * Expected start of the array '[', but had 'EOF' instead
-     * 
-     * 根本原因：
-     * Vungle SDK 的 FilePreferences 尝试读取损坏或空的 JSON 文件
-     * 
-     * 解决方案：
-     * 在 AdFactory 初始化前清理 Vungle 的缓存目录
-     */
-    private void cleanVungleCacheIfCorrupted() {
-        android.util.Log.d("VUNGLE_FIX", "→ Checking Vungle cache files...");
-        long startTime = System.currentTimeMillis();
-        
-        try {
-            // Vungle SDK 缓存目录路径
-            java.io.File vungleDir = new java.io.File(getFilesDir(), "vungle_cache");
-            
-            if (vungleDir.exists() && vungleDir.isDirectory()) {
-                android.util.Log.d("VUNGLE_FIX", "Found Vungle cache directory: " + vungleDir.getAbsolutePath());
-                
-                // 检查并清理损坏的 JSON 文件
-                java.io.File[] files = vungleDir.listFiles();
-                if (files != null) {
-                    int cleanedCount = 0;
-                    for (java.io.File file : files) {
-                        if (file.isFile() && file.getName().endsWith(".json")) {
-                            // 检查文件是否为空或损坏
-                            if (file.length() == 0) {
-                                android.util.Log.w("VUNGLE_FIX", "Found empty JSON file: " + file.getName() + ", deleting...");
-                                if (file.delete()) {
-                                    cleanedCount++;
-                                }
-                            } else {
-                                // 尝试读取文件内容验证 JSON 格式
-                                try {
-                                    java.io.FileInputStream fis = new java.io.FileInputStream(file);
-                                    byte[] buffer = new byte[10];
-                                    int bytesRead = fis.read(buffer);
-                                    fis.close();
-                                    
-                                    if (bytesRead > 0) {
-                                        String content = new String(buffer, 0, bytesRead);
-                                        // 检查是否以 [ 或 { 开头（有效的 JSON）
-                                        if (!content.trim().startsWith("[") && !content.trim().startsWith("{")) {
-                                            android.util.Log.w("VUNGLE_FIX", "Found corrupted JSON file: " + file.getName() + ", deleting...");
-                                            if (file.delete()) {
-                                                cleanedCount++;
-                                            }
-                                        }
-                                    }
-                                } catch (Exception e) {
-                                    android.util.Log.w("VUNGLE_FIX", "Error reading file: " + file.getName() + ", deleting...");
-                                    if (file.delete()) {
-                                        cleanedCount++;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    
-                    if (cleanedCount > 0) {
-                        android.util.Log.i("VUNGLE_FIX", "✅ Cleaned " + cleanedCount + " corrupted Vungle cache files");
-                    } else {
-                        android.util.Log.d("VUNGLE_FIX", "✅ All Vungle cache files are valid");
-                    }
-                }
-            } else {
-                android.util.Log.d("VUNGLE_FIX", "Vungle cache directory not found (first launch or already clean)");
-            }
-            
-            android.util.Log.d("VUNGLE_FIX", "✅ Vungle cache check completed [" + (System.currentTimeMillis() - startTime) + "ms]");
-            
-        } catch (Exception e) {
-            android.util.Log.e("VUNGLE_FIX", "❌ Error cleaning Vungle cache (non-fatal)", e);
-            // 不要抛出异常，让应用继续运行
-        }
-    }
-    
-    /**
-     * WebView 进程隔离 + 轻量级初始化
-     * ⚠️ 优化：仅获取 UserAgent，完整初始化延迟到后台
-     * 阻塞时间: 200-500ms → 10-30ms (减少95%)
+     * WebView 进程隔离
+     *
+     * ⚠️ 这里只做「非主进程设置 WebView 数据目录后缀」这一件必须在 onCreate 完成的事。
+     *
+     * 曾经这里还会在主进程调 WebSettings.getDefaultUserAgent() 做「轻量预热」，
+     * 但该调用会触发 WebViewFactory 加载 WebView provider（Chromium 启动），
+     * 在低端机上耗时可达数秒，且它位于 Application.onCreate 的同步段——
+     * 进程被闹钟/Widget/FCM 在后台拉起时会阻塞主线程，造成后台 ANR
+     * （Crashlytics 堆栈：main 卡在 chromium provider 加载）。
+     * 该预热已移除：真正的 WebView 预热由 initFullWebViewDelayed() 承担，
+     * 且已加前台守卫，只在用户真正打开 App 后执行。
      */
     private void initWebViewIsolation() {
         android.util.Log.d("PERFORMANCE", "→ [IMMEDIATE] WebView isolation...");
@@ -362,20 +300,9 @@ public class App extends BaseApp {
                         WebView.setDataDirectorySuffix(suffix);
                         android.util.Log.d("PERFORMANCE", "✅ WebView suffix set: " + suffix);
                     }
-                } else {
-                    // 🚀 优化：主进程仅做轻量级初始化
-                    try {
-                        // 方法1: 仅获取 UserAgent（10-30ms，非常轻量）
-                        String userAgent = android.webkit.WebSettings.getDefaultUserAgent(this);
-                        android.util.Log.d("PERFORMANCE", "✅ [LIGHTWEIGHT] UserAgent retrieved [" + (System.currentTimeMillis() - startTime) + "ms]");
-                        
-                        // 方法2: 完整 WebView 初始化延迟到后台（5秒后）
-                        // 见 scheduleDelayedInitialization()
-                        
-                    } catch (Exception e) {
-                        android.util.Log.w("PERFORMANCE", "⚠️ Lightweight WebView init failed (non-fatal)", e);
-                    }
                 }
+                // 主进程：这里不做任何 WebView 触碰。
+                // WebView 预热见 initFullWebViewDelayed()（已加前台守卫，+5s 执行）。
             } catch (Exception e) {
                 android.util.Log.e("PERFORMANCE", "❌ WebView isolation failed", e);
             }
@@ -394,6 +321,19 @@ public class App extends BaseApp {
         long startTime = System.currentTimeMillis();
         
         try {
+            // 把插屏频控参数下发给 adlib（新装保护期 / 最小间隔 / 会话上限 / 单日上限）。
+            // 只是给几个 volatile 字段赋值，不做任何 IO，可安全放在同步段。
+            com.quran.quranaudio.online.ads.AdPolicy.applyToAdLib();
+
+            // 插屏关闭后尝试弹去广告买断弹窗。
+            // adlib 不能依赖 app，所以用回调把时机交回来；
+            // 真正是否展示由 AdFreeDialog.shouldShow() 判定
+            //（订阅/已买断用户不弹、24h 间隔、累计关闭 3 次后不再自动弹）。
+            com.quranaudio.common.ad.InterstitialAdManager.setAfterDismissListener(activity -> {
+                com.quran.quranaudio.online.subscription.AdFreeDialog.showIfEligible(activity);
+                return kotlin.Unit.INSTANCE;
+            });
+
             // 仅初始化框架，不预加载广告
             AdFactory.INSTANCE.init(this, BuildConfig.DEBUG);
             android.util.Log.d("PERFORMANCE", "✅ [IMMEDIATE] AdFactory init [" + (System.currentTimeMillis() - startTime) + "ms]");
@@ -525,35 +465,61 @@ public class App extends BaseApp {
      * 解决方案：从异步改为同步初始化（阻塞时间 50-100ms 可接受）
      */
     private void configureWorkManagerSync() {
-        android.util.Log.d("PERFORMANCE", "→ [IMMEDIATE] Configuring WorkManager (SYNC - CRITICAL)...");
-        long startTime = System.currentTimeMillis();
-        
+        android.util.Log.d("PERFORMANCE", "→ [IMMEDIATE] Scheduling WorkManager setup (on-demand)...");
+
+        // ⚠️ 这里刻意不再调用 WorkManager.initialize()。
+        // 初始化改由 App 实现的 Configuration.Provider 承担（见 getWorkManagerConfiguration()），
+        // 由首次 WorkManager.getInstance(context) 触发按需初始化。
+        // 下面这个后台任务会在后台线程率先触发它，把 Room 数据库的打开彻底移出主线程。
+        backgroundExecutor.execute(() -> {
+            long startTime = System.currentTimeMillis();
+            try {
+                // 这一行会在「尚未初始化」时触发按需初始化 —— 在后台线程，不阻塞主线程。
+                WorkManager workManager = WorkManager.getInstance(App.this);
+                android.util.Log.d("PERFORMANCE", "✅ [ASYNC] WorkManager ready [" + (System.currentTimeMillis() - startTime) + "ms]");
+                workManager.pruneWork();
+                com.quran.quranaudio.online.prayertimes.job.WorkCreator.scheduleWorkManagerCleanup(App.this);
+                android.util.Log.d("PERFORMANCE", "✅ [ASYNC] WorkManager cleanup scheduled");
+            } catch (Exception e) {
+                android.util.Log.e("PERFORMANCE", "❌ [ASYNC] WorkManager setup FAILED", e);
+            }
+        });
+    }
+
+    /**
+     * WorkManager 按需初始化的配置来源（androidx.work.Configuration.Provider）。
+     *
+     * 为什么这么做：
+     * 原实现在 Application.onCreate 同步段调用 WorkManager.initialize()，它会同步打开
+     * WorkDatabase（Room / SQLite）。进程被祈祷闹钟 / Widget / FCM / BootReceiver 在后台
+     * 拉起时，这一步直接阻塞主线程，在低端机（Tecno / Infinix）上造成后台 ANR
+     * （Crashlytics 堆栈：FrameworkSQLiteOpenHelper.&lt;clinit&gt; → WorkDatabase →
+     * WorkManagerImpl.&lt;init&gt; → WorkManager.initialize → App.onCreate）。
+     *
+     * 改为按需初始化后：
+     * - manifest 已通过 tools:node="remove" 关闭 WorkManagerInitializer，
+     *   WorkManagerImpl.getInstance(Context) 会走 Configuration.Provider 分支自行初始化，
+     *   不会再抛 "WorkManager is not initialized properly"。
+     * - 不触碰 WorkManager 的后台唤醒（祈祷闹钟、每日经文、Khatmah 提醒、FCM）
+     *   完全不会打开 WorkDatabase。
+     * - 需要 WorkManager 的路径行为不变，只是初始化时机后移到首次真正使用时。
+     *
+     * 注意：本方法可能在主线程或后台线程被调用，必须廉价且不抛异常。
+     */
+    @NonNull
+    @Override
+    public androidx.work.Configuration getWorkManagerConfiguration() {
+        Configuration.Builder builder = new Configuration.Builder()
+                .setMinimumLoggingLevel(android.util.Log.INFO);
         try {
             WorkerProviderFactory factory = appComponent.workerProviderFactory();
-            Configuration config = new Configuration.Builder()
-                    .setWorkerFactory(factory)
-                    .setMinimumLoggingLevel(android.util.Log.INFO)
-                    .build();
-
-            WorkManager.initialize(this, config);
-            android.util.Log.d("PERFORMANCE", "✅ [IMMEDIATE] WorkManager initialized [" + (System.currentTimeMillis() - startTime) + "ms]");
-            
-            // 数据库清理和任务调度可以异步执行
-            backgroundExecutor.execute(() -> {
-                try {
-                    WorkManager workManager = WorkManager.getInstance(App.this);
-                    workManager.pruneWork();
-                    com.quran.quranaudio.online.prayertimes.job.WorkCreator.scheduleWorkManagerCleanup(App.this);
-                    android.util.Log.d("PERFORMANCE", "✅ [ASYNC] WorkManager cleanup scheduled");
-                } catch (Exception e) {
-                    android.util.Log.e("PERFORMANCE", "❌ [ASYNC] WorkManager cleanup FAILED", e);
-                }
-            });
-            
-        } catch (Exception e) {
-            android.util.Log.e("PERFORMANCE", "❌ [IMMEDIATE] WorkManager initialization FAILED", e);
-            // 不要抛出异常，让应用继续运行
+            builder.setWorkerFactory(factory);
+        } catch (Throwable e) {
+            // 拿不到自定义 WorkerFactory 时退回默认工厂，保证 WorkManager 仍可用，
+            // 而不是让 getInstance() 抛异常把调用方拖崩。
+            android.util.Log.e("PERFORMANCE", "❌ WorkerFactory unavailable, using default", e);
         }
+        return builder.build();
     }
     
     /**
@@ -591,26 +557,144 @@ public class App extends BaseApp {
             preloadAdsDelayed();
         }, 3000);
         
+        // 延迟 0.5 秒：去广告权益复核 + 价格预取。
+        //
+        // 刻意排在其他延迟任务之前、且延迟远短于 3 秒：
+        // 换机 / 重装 / 清除数据后本地 is_ad_free 是 false，已付费用户会重新看到广告。
+        // 首页原生广告加载很快，复核越早返回，这个窗口越短。
+        // 内部有 3 小时节流，不会每次启动都连 Billing；且已被前台守卫包住，
+        // 后台被闹钟/Widget 拉起的进程不会执行。
+        postDelayedWhenForeground("ad_free_entitlement", 500, () -> {
+            android.util.Log.d("PERFORMANCE", "→ [DELAY-0.5s] Ad-free entitlement sync...");
+            com.quran.quranaudio.online.subscription.AdFreeBilling.syncIfNeeded(this);
+        });
+
         // 延迟 3 秒：匿名登录（500-2000ms，网络请求）
-        new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+        postDelayedWhenForeground("anonymous_auth", 3000, () -> {
             android.util.Log.d("PERFORMANCE", "→ [DELAY-3s] Starting anonymous auth...");
             performAnonymousAuthDelayed();
             com.quran.quranaudio.online.subscription.SubscriptionEntitlementSync.syncIfNeeded(this);
-        }, 3000);
-        
+        });
+
         // 延迟 5 秒：完整 WebView 初始化（200-500ms，资源密集）
-        new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+        postDelayedWhenForeground("webview_warmup", 5000, () -> {
             android.util.Log.d("PERFORMANCE", "→ [DELAY-5s] Full WebView initialization...");
             initFullWebViewDelayed();
-        }, 5000);
-        
+        });
+
         // 延迟 5 秒：反馈重试（后台，不阻塞）
-        new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+        postDelayedWhenForeground("feedback_retry", 5000, () -> {
             android.util.Log.d("PERFORMANCE", "→ [DELAY-5s] Retrying pending feedbacks...");
             retryPendingFeedbacksDelayed();
-        }, 5000);
-        
+        });
+
         android.util.Log.d("PERFORMANCE", "✅ [DELAY] 4 delayed tasks scheduled (3s, 5s)");
+    }
+
+    /**
+     * 写一条 Crashlytics 面包屑。纯诊断用途，任何异常都被吞掉，
+     * 保证不会影响调用方的执行路径。
+     */
+    private static void logBreadcrumb(String message) {
+        try {
+            com.google.firebase.crashlytics.FirebaseCrashlytics.getInstance().log(message);
+        } catch (Throwable ignored) {
+            // 诊断代码绝不允许影响主流程
+        }
+    }
+
+    /**
+     * 记录 Application.onCreate 同步段某一步完成时的累计耗时。
+     *
+     * 目的：Application.onCreate 里的 ANR（尤其是后台进程被闹钟/Widget/FCM 拉起时）
+     * 在 Crashlytics 里往往只能看到一个被混淆的 App.x 帧。有了这串面包屑，
+     * 下一批 ANR 报告的「日志和面包屑导航」里就能直接读出：
+     * 卡住的是哪一步（最后一条面包屑之后的那一步），以及在此之前各步各花了多久。
+     *
+     * 仅写日志，不改变任何行为。
+     *
+     * @param step      步骤名
+     * @param startTime onCreate 起始时间戳
+     */
+    private static void markInitStep(String step, long startTime) {
+        logBreadcrumb("onCreate:" + step + " done at +" + (System.currentTimeMillis() - startTime) + "ms");
+    }
+
+    /**
+     * 前台守卫：把延迟初始化任务限制在「App 真正处于前台」时执行。
+     *
+     * 为什么需要：
+     * 进程会被祈祷闹钟 / Widget 刷新 / FCM / BootReceiver 在后台拉起，此时
+     * Application.onCreate 照常执行，这些延迟任务会 post 到 **主线程**，
+     * 和广播投递抢同一个 Looper。在低端机（Infinix / Tecno / Itel）上，
+     * WebView 预热尤其容易把主线程占死，导致后台 ANR
+     * （android.os.MessageQueue.nativePollOnce，设备状态 100% 后台）。
+     *
+     * 行为保证（不改变任何用户可见行为）：
+     * - 前台启动：与改动前完全一致，仍按原延迟 post 到主线程。
+     * - 后台拉起：不在后台执行；若用户随后在同一进程内打开 App，
+     *   在第一个 Activity started 之后仍按原延迟执行一次，功能不丢失。
+     *
+     * @param tag     任务标识，仅用于日志和 Crashlytics 面包屑
+     * @param delayMs 原有延迟，保持不变
+     * @param task    原有任务体，保持不变
+     */
+    private void postDelayedWhenForeground(String tag, long delayMs, Runnable task) {
+        if (AdFactory.isAppInForeground()) {
+            new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(task, delayMs);
+            return;
+        }
+
+        android.util.Log.d("PERFORMANCE",
+                "⏸️ [DELAY] Background process start, deferring until foreground: " + tag);
+        try {
+            registerActivityLifecycleCallbacks(new ForegroundOneShotRunner(this, tag, delayMs, task));
+        } catch (Exception e) {
+            // 注册失败时退回到原有行为，宁可多跑一次也不要丢功能
+            android.util.Log.w("PERFORMANCE", "⚠️ [DELAY] Defer failed, falling back: " + tag, e);
+            new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(task, delayMs);
+        }
+    }
+
+    /**
+     * 一次性回调：等到第一个 Activity started（= App 进入前台）后，
+     * 按原延迟把任务 post 到主线程，然后立即注销自己。
+     */
+    private static final class ForegroundOneShotRunner implements ActivityLifecycleCallbacks {
+        private final Application app;
+        private final String tag;
+        private final long delayMs;
+        private final Runnable task;
+        private final java.util.concurrent.atomic.AtomicBoolean fired =
+                new java.util.concurrent.atomic.AtomicBoolean(false);
+
+        ForegroundOneShotRunner(Application app, String tag, long delayMs, Runnable task) {
+            this.app = app;
+            this.tag = tag;
+            this.delayMs = delayMs;
+            this.task = task;
+        }
+
+        @Override
+        public void onActivityStarted(Activity activity) {
+            if (!fired.compareAndSet(false, true)) {
+                return;
+            }
+            try {
+                app.unregisterActivityLifecycleCallbacks(this);
+            } catch (Exception ignored) {
+                // 注销失败不影响后续逻辑，fired 已保证只执行一次
+            }
+            android.util.Log.d("PERFORMANCE", "▶️ [DELAY] Foreground reached, running deferred: " + tag);
+            new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(task, delayMs);
+        }
+
+        @Override public void onActivityCreated(Activity activity, Bundle savedInstanceState) { }
+        @Override public void onActivityResumed(Activity activity) { }
+        @Override public void onActivityPaused(Activity activity) { }
+        @Override public void onActivityStopped(Activity activity) { }
+        @Override public void onActivitySaveInstanceState(Activity activity, Bundle outState) { }
+        @Override public void onActivityDestroyed(Activity activity) { }
     }
     
     /**
@@ -694,22 +778,27 @@ public class App extends BaseApp {
         new android.os.Handler(android.os.Looper.getMainLooper()).post(() -> {
             long startTime = System.currentTimeMillis();
             
+            // 面包屑：用于在 Crashlytics 的 ANR 报告里判断卡顿是否落在这段主线程区间内。
+            // 只写日志，不改变任何行为。
+            logBreadcrumb("webview_warmup:begin");
             try {
                 android.util.Log.d("PERFORMANCE", "→ [DELAY-5s] Creating WebView on main thread...");
-                
+
                 android.webkit.WebView tempWebView = new android.webkit.WebView(this);
                 android.webkit.WebSettings settings = tempWebView.getSettings();
-                
+
                 // 触发完整初始化
                 settings.getJavaScriptEnabled();
                 settings.setUseWideViewPort(true);
                 settings.setLoadWithOverviewMode(true);
-                
+
                 tempWebView.destroy();
-                
+
                 android.util.Log.d("PERFORMANCE", "✅ [DELAY-5s] Full WebView initialized [" + (System.currentTimeMillis() - startTime) + "ms]");
             } catch (Exception e) {
                 android.util.Log.w("PERFORMANCE", "⚠️ [DELAY-5s] Full WebView init failed (non-fatal)", e);
+            } finally {
+                logBreadcrumb("webview_warmup:end took=" + (System.currentTimeMillis() - startTime) + "ms");
             }
         });
     }

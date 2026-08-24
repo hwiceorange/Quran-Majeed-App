@@ -80,6 +80,9 @@ public class PrayerTimesWidgetProvider extends AppWidgetProvider {
         Log.i(TAG, "First widget added");
         // 漏斗终点埋点：真实添加（区别于 promo_accept 后在系统确认框取消的用户）
         PrayerWidgetPromoHelper.logEvent(context, "widget_added");
+        // 额外落成用户属性：Widget 触达率只有 1.3%，需要能把「装了 Widget 的人」
+        // 当成一个人群去看留存，而不只是数一个事件计数。
+        com.quran.quranaudio.online.analytics.RetentionFunnel.widget(context, "added");
         renderAll(context);
     }
 
@@ -88,6 +91,7 @@ public class PrayerTimesWidgetProvider extends AppWidgetProvider {
         super.onDisabled(context);
         Log.i(TAG, "Last widget removed, cancelling refresh alarm");
         PrayerWidgetPromoHelper.logEvent(context, "widget_removed");
+        com.quran.quranaudio.online.analytics.RetentionFunnel.widget(context, "removed");
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
             alarmManager.cancel(createRefreshPendingIntent(context));

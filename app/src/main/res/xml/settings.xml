@@ -15,6 +15,20 @@
             android:summary="@string/unlock_premium_features"
             android:icon="@drawable/ic_premium" />
 
+        <!--
+            去广告买断（removeads）的固定入口。
+            默认 isVisible=false，由 SettingsFragment 在运行时决定是否显示：
+            订阅用户和已买断用户都不显示——他们已经无广告，再摆一个购买入口
+            既没有意义，也显得贪婪。
+        -->
+        <Preference
+            android:key="AD_FREE_PREFERENCE"
+            android:layout="@layout/custom_preference"
+            android:title="@string/ad_free_settings_title"
+            android:summary="@string/ad_free_settings_summary"
+            android:icon="@drawable/ic_premium"
+            app:isPreferenceVisible="false" />
+
     </PreferenceCategory>
 
     <!-- Account and subscription controls required by Google Play policies. -->

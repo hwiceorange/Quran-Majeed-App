@@ -31,8 +31,9 @@ import com.quran.quranaudio.online.ads.rest.RestAdapter;
 import com.quran.quranaudio.online.BuildConfig;
 import com.quran.quranaudio.online.prayertimes.preferences.PreferencesConstants;
 import com.quran.quranaudio.online.prayertimes.ui.MainActivity;
-import com.quran.quranaudio.online.quran_module.activities.ActivityOnboarding;
 import com.quran.quranaudio.online.quran_module.utils.Log;
+import com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppActions;
+import com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPAppConfigs;
 import com.quran.quranaudio.quiz.utils.UserInfoUtils;
 import com.quran.quranaudio.quiz.utils.AppConfig;
 import com.quran.quranaudio.online.activities.OnboardingLoginActivity;
@@ -86,6 +87,22 @@ public class SplashScreenActivity extends AppCompatActivity {
     private SharedPref sharedPref;
     private Call<CallbackConfig> callbackConfigCall = null;
 
+    /** splash 进入时刻，用于给开屏广告埋点算「用户在启动页等了多久」 */
+    private long splashStartMs = 0L;
+
+    /**
+     * 是否安装后首次启动。判定逻辑与 startMainActivity() 中决定走引导还是主页的完全一致，
+     * 保证埋点里的 is_first_open 和用户实际看到的流程对得上。
+     */
+    private boolean isFirstLaunch() {
+        try {
+            return getSharedPreferences(PreferencesConstants.LOCATION, MODE_PRIVATE)
+                    .getBoolean(PreferencesConstants.FIRST_LAUNCH, true);
+        } catch (Throwable ignored) {
+            return false;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Force the platform decor/content container to be created before AppCompat installs its
@@ -102,8 +119,13 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         // Activity/window initialization must finish before SDK initialization or analytics work.
-        com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(this)
-                .logWorkflowStep("splash_start");
+        //
+        // 启动漏斗起点。这里必然有前台 Activity，所以「用户真的打开了 App」这个语义是准确的
+        // （Application.onCreate 做不到——它在后台被闹钟/Widget 拉起时也会跑）。
+        // 与 MainActivity 的 rf_first_render 配对，即可算出
+        // 「打开 App 的人里有多少真的看到了界面」。
+        splashStartMs = System.currentTimeMillis();
+        com.quran.quranaudio.online.analytics.RetentionFunnel.launch(this, isFirstLaunch());
         
         sharedPref = new SharedPref(this);
         progressBar = findViewById(R.id.progressbar);
@@ -287,13 +309,31 @@ public class SplashScreenActivity extends AppCompatActivity {
         // 取消总闸超时（因为已经准备好了）
         handler.removeCallbacks(maxWaitTimeoutRunnable);
         
+        // 开屏广告的处置结果。把「展示了广告」和「没广告直接过」分开记，
+        // 才能把启动流失归因到广告头上（或洗清它）——此前只有一个笼统的 ad_exposure_metric。
+        long waitMs = System.currentTimeMillis() - splashStartMs;
+
+        // 首启跳过开屏广告：新用户在看到任何内容之前不应先看一个全屏广告。
+        // 开关集中在 AdPolicy.SKIP_APP_OPEN_AD_ON_FIRST_LAUNCH，改回 false 即可恢复。
+        if (com.quran.quranaudio.online.ads.AdPolicy.shouldSkipAppOpenAd(this, isFirstLaunch())) {
+            android.util.Log.d(TAG, "⏭️ [AD] Skipping app open ad (first launch or ad-free user)");
+            com.quran.quranaudio.online.analytics.RetentionFunnel
+                    .launchAd(this, false, "first_launch_skip", waitMs);
+            startMainActivity();
+            return;
+        }
+
         if (AdFactory.INSTANCE.hasAppOpenAd(AdConfig.AD_APPOPEN)
                 || AdFactory.INSTANCE.hasFullScreenNativeFallback(this)) {
             // 广告已就绪，展示广告
+            com.quran.quranaudio.online.analytics.RetentionFunnel
+                    .launchAd(this, true, "shown", waitMs);
             showAd();
         } else {
             // 没有广告，直接跳转
             android.util.Log.d(TAG, "⚠️ [AD] No ad available, jumping to main");
+            com.quran.quranaudio.online.analytics.RetentionFunnel
+                    .launchAd(this, false, "not_available", waitMs);
             startMainActivity();
         }
     }
@@ -465,15 +505,33 @@ public class SplashScreenActivity extends AppCompatActivity {
         
         Intent intent;
         if (isFirstLaunch) {
-            android.util.Log.d(TAG, "🎯 First launch - Showing Onboarding");
-            com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(this).logWorkflowStep("onboarding_start");
-            intent = new Intent(this, ActivityOnboarding.class);
+            // Retention-first entry: do not force a five-page onboarding or a subscription
+            // decision before the user has seen any Quran content. getLocale() persists the
+            // supported device language (or English fallback), so MainActivity is created in
+            // the correct locale without a language-selection gate.
+            String selectedLanguage = SPAppConfigs.getLocale(this);
+            prefs.edit().putBoolean(PreferencesConstants.FIRST_LAUNCH, false).apply();
+            SPAppActions.setRequireOnboarding(this, false);
+
+            android.util.Log.d(TAG, "🎯 First launch - Direct Quran entry, locale=" + selectedLanguage);
+            com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(this)
+                    .logWorkflowStep("first_launch_direct_quran");
+            intent = new Intent(this, MainActivity.class);
+            intent.putExtra(MainActivity.EXTRA_FIRST_LAUNCH, true);
         } else {
             android.util.Log.d(TAG, "✅ Existing user - Jumping to MainActivity");
             com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(this).logWorkflowStep("main_activity_start");
             intent = new Intent(this, MainActivity.class);
         }
-        
+
+        // Preserve FCM campaign routing when a background notification launches Splash.
+        String pushCampaign = getIntent().getStringExtra("campaign_id");
+        String pushTarget = getIntent().getStringExtra("target");
+        if (pushCampaign != null && pushTarget != null) {
+            intent.putExtra(MainActivity.EXTRA_PUSH_CAMPAIGN, pushCampaign);
+            intent.putExtra(MainActivity.EXTRA_PUSH_TARGET, pushTarget);
+        }
+
         startActivity(intent);
         finish();
     }

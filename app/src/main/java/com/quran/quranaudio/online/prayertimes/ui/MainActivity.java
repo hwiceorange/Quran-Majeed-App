@@ -59,6 +59,11 @@ import java.util.concurrent.Executors;
 @SuppressWarnings("deprecation")
 public class MainActivity extends BaseActivity {
 
+    /** Splash-only signal used to keep first-open analytics accurate after onboarding removal. */
+    public static final String EXTRA_FIRST_LAUNCH = "extra_first_launch";
+    public static final String EXTRA_PUSH_CAMPAIGN = "push_campaign";
+    public static final String EXTRA_PUSH_TARGET = "push_target";
+
    /* ActivityResultLauncher<String[]> mPermissionResultLauncher;
     private boolean isLocationPermissionGranted = false;*/
 
@@ -111,9 +116,35 @@ public class MainActivity extends BaseActivity {
         preferencesHelper.ensureDefaultPrayerNotificationTypes();
 
         super.onCreate(savedInstanceState);
-        
+
+        // 在 AppCompat 装配 subDecor 之前，先强制平台创建 decor / content 容器。
+        //
+        // 原因：AppCompatDelegateImpl.createSubDecor() 只有在
+        // mWindow.findViewById(android.R.id.content) 非空时，才会把 android.R.id.content
+        // 这个 id 挪到自己的 ContentFrameLayout 上。某些机型（传音系为主）冷启动时该容器
+        // 尚未安装，id 迁移被跳过，随后 applyFixedSizeWindow() 里
+        // mSubDecor.findViewById(android.R.id.content) 取到 null，调用
+        // ContentFrameLayout.setDecorPadding() 时抛 NPE，导致 MainActivity 起不来。
+        //
+        // 位置很关键：必须在 super.onCreate() 之后。BaseActivity.onCreate() 会在它自己的
+        // super.onCreate() 前调用 setTheme()，decor 一旦创建就按当时的主题定型；
+        // 若提前到 super.onCreate() 之前强制创建，会用错主题渲染。
+        // （SplashScreenActivity 直接继承 AppCompatActivity、主题走 manifest，
+        //   所以那边放在 super.onCreate() 之前是安全的，不能照搬到这里。）
+        getWindow().getDecorView();
+
         // UI 初始化（必须在主线程）
         setContentView(R.layout.activity_main);
+
+        // 启动漏斗终点：第一个真正渲染出来的业务界面。
+        //
+        // rf_first_render 的用户数 ÷ rf_launch 的用户数 =「打开 App 的人里有多少真的看到了 App」。
+        // 这个比值是留存诊断的第一指标：GA4 里 screen_view/session_start 只有 52.9%，
+        // 但那是粗估且被后台进程污染，这一对事件给出的是干净的数。
+        boolean isFirstLaunchEntry = getIntent().getBooleanExtra(EXTRA_FIRST_LAUNCH, false);
+        com.quran.quranaudio.online.analytics.RetentionFunnel
+                .firstRender(this, isFirstLaunchEntry ? "quran" : "main", isFirstLaunchEntry);
+
         navView = findViewById(R.id.nav_view);
 
         // 🕌 导航必须在首帧渲染前设置好起始页：布局已去掉 app:navGraph(不自动加载 nav_home)，
@@ -232,12 +263,47 @@ public class MainActivity extends BaseActivity {
             }
 
             navController.setGraph(navGraph);
+            handlePushIntent(getIntent());
             
             // 🔥 使用 apply() 而不是隐式的 commit()
             preferencesHelper.setFirstTimeLaunch(false);
             
         } catch (Exception e) {
             android.util.Log.e("PERFORMANCE", "❌ Navigation setup failed", e);
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handlePushIntent(intent);
+    }
+
+    private void handlePushIntent(Intent intent) {
+        if (intent == null || navController == null) return;
+        String campaign = intent.getStringExtra(EXTRA_PUSH_CAMPAIGN);
+        String target = intent.getStringExtra(EXTRA_PUSH_TARGET);
+        if (campaign == null || target == null) return;
+
+        // Consume once so configuration changes cannot double-count the open.
+        intent.removeExtra(EXTRA_PUSH_CAMPAIGN);
+        intent.removeExtra(EXTRA_PUSH_TARGET);
+        com.quran.quranaudio.online.analytics.RetentionFunnel
+                .push(this, "opened", campaign, target, "notification_tap");
+        try {
+            if ("subscription".equals(target)) {
+                com.quran.quranaudio.online.subscription.SubscriptionHelper.INSTANCE
+                        .launchSubscriptionPage(this, "push_" + campaign);
+            } else if ("tasbih".equals(target)) {
+                navController.navigate(R.id.nav_tasbih);
+            } else if ("prayer".equals(target)) {
+                navController.navigate(R.id.nav_home);
+            } else {
+                navController.navigate(R.id.nav_quran);
+            }
+        } catch (Exception e) {
+            android.util.Log.w("MainActivity", "Push target navigation failed: " + target, e);
         }
     }
     
@@ -281,6 +347,14 @@ public class MainActivity extends BaseActivity {
                     com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(this);
             am.setUserProperty("notif_os_permission", String.valueOf(osGranted));
             am.setUserProperty("notif_prayer_enabled", String.valueOf(prayerEnabled));
+
+            // 补齐留存分层维度：是否收到过邦克、是否走完引导、机型档位、安装天数。
+            // 此前全 App 只有上面两个用户属性，导致 GA4 的留存报告无法按人群拆分——
+            // 「收到过邦克 vs 没收到过」的 D1/D7 留存对比（留存诊断第一优先项）跑不了。
+            com.quran.quranaudio.online.analytics.RetentionFunnel.syncUserProps(this, osGranted);
+
+            // 用户看到了礼拜时间 = 本 App 的首个价值时刻，只在首次发生时上报
+            com.quran.quranaudio.online.analytics.RetentionFunnel.firstValue(this, "prayer_times");
         } catch (Exception e) {
             android.util.Log.w("MainActivity", "reportNotificationUserProperties failed", e);
         }

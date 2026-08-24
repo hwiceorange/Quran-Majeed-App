@@ -1720,4 +1720,34 @@ Compass: point your phone and follow the arrow to the Kaaba in real time.</strin
     <string name="discount_expired">This offer has ended.</string>
     <!-- 主页订阅图标角标 -->
     <string name="discount_badge_percent">50% OFF</string>
+
+    <!-- ==================== 去广告买断（removeads） ====================
+         文案设计考量（目标是提升成交，而非单纯描述功能）：
+         1. 标题用「不被打断地诵读古兰经」这一宗教语境下的收益，
+            而不是「移除广告」这种交易感很强的说法；
+         2. 正文首先点明「一次性付费、非订阅」——订阅页转化率仅 0.27%，
+            主力市场（印尼/巴基斯坦/孟加拉/埃及/尼日利亚）对订阅的抗拒极强，
+            「一次付清」本身就是最大卖点，必须前置；
+         3. 结尾把用户从「被广告剥削的人」重新定位为「施予者」：
+            你的支持让这个应用对全世界的穆斯林保持免费。
+            这种接近 sadaqah 的心理位，在宗教类应用中显著优于「移除广告」。
+         保留激励广告不在文案中强调，避免削弱「彻底清净」的感受；
+         用户真正去解锁 Tafsir 时自然会遇到，届时是获得感而非落差。
+    -->
+    <string name="ad_free_badge">One-time purchase</string>
+    <string name="ad_free_banner_glyph">\u06DE</string>
+    <string name="ad_free_title">Read the Qur\'an without interruption</string>
+    <string name="ad_free_body">Pay once and ads are gone for good — no subscription, no renewals. Your support keeps this app free for Muslims everywhere.</string>
+    <string name="ad_free_cta">Remove ads forever</string>
+    <string name="ad_free_cta_priced">Remove ads forever · %1$s</string>
+    <string name="ad_free_restore">Restore purchase</string>
+    <string name="ad_free_close">Close</string>
+    <string name="ad_free_settings_title">Remove ads</string>
+    <string name="ad_free_settings_summary">One-time purchase, ads gone for good</string>
+    <string name="ad_free_owned">Ads removed. Thank you for your support.</string>
+    <string name="ad_free_restore_none">No previous purchase found</string>
+    <string name="ad_free_failed">Purchase could not be completed. Please try again.</string>
+
+    <string name="fcm_retention_channel_name">Quran reminders</string>
+    <string name="fcm_retention_channel_description">Helpful Quran reading and worship reminders</string>
 </resources>

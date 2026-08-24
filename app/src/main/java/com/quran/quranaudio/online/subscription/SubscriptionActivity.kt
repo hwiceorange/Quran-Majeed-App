@@ -112,6 +112,7 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
 
         // 📊 订阅来源打点：记录本次订阅页从哪里打开(定位哪个触发点带来付费)
         subscriptionSource = intent.getStringExtra(EXTRA_SOURCE) ?: "unknown"
+        logSubscription("page_open", result = "shown")
         try {
             val params = HashMap<String, Any>()
             params["source"] = subscriptionSource
@@ -190,9 +191,16 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
             }
             isFreeTrialEnabled = isChecked
             if (isChecked && isYearlySelected) selectMonthlyPlan(keepTrialSelection = true)
+            logSubscription(
+                "trial_toggle",
+                plan = "monthly",
+                offer = if (isChecked) "free" else "base",
+                result = if (isChecked) "on" else "off"
+            )
             updateSubscriptionInfo()
             updateButtonText()
             updateNoPaymentVisibility()
+            updateCheckoutAvailability()
         }
 
         // The whole row is a touch target. This restores the familiar behaviour from the
@@ -222,6 +230,8 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
         updateSubscriptionInfo()
         updateButtonText()
         updateNoPaymentVisibility()
+        updateCheckoutAvailability()
+        logSubscription("plan_select", plan = "yearly", offer = "base", result = "selected")
     }
 
     private fun selectMonthlyPlan(keepTrialSelection: Boolean = false) {
@@ -239,6 +249,13 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
         updateSubscriptionInfo()
         updateButtonText()
         updateNoPaymentVisibility()
+        updateCheckoutAvailability()
+        logSubscription(
+            "plan_select",
+            plan = "monthly",
+            offer = if (isFreeTrialEnabled) "free" else "base",
+            result = "selected"
+        )
     }
 
     private fun updateSubscriptionInfo() {
@@ -268,15 +285,31 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
 
     private fun setLoadingState(loading: Boolean) {
         isLoading = loading
-        binding.btnSubscribe.isEnabled = !loading
         
         if (loading) {
+            binding.btnSubscribe.isEnabled = false
             binding.btnSubscribe.setText(R.string.subscription_loading)
             binding.btnSubscribe.alpha = 0.6f
         } else {
-            binding.btnSubscribe.alpha = 1.0f
             updateButtonText()
+            updateCheckoutAvailability()
         }
+    }
+
+    /**
+     * 基础方案缺失时失败关闭：不允许拿 free/off 或其他促销 Token 代替普通购买。
+     * 这同时保证标准页价格和 Google Play 购物车来自同一个基础方案。
+     */
+    private fun updateCheckoutAvailability() {
+        if (isLoading) return
+        val product = if (isYearlySelected) yearlyProduct else monthlyProduct
+        val offerAvailable = if (isFreeTrialEnabled && !isYearlySelected) {
+            product?.let(::eligibleTrialOffer) != null
+        } else {
+            product?.let(::basePlanOffer) != null
+        }
+        binding.btnSubscribe.isEnabled = offerAvailable
+        binding.btnSubscribe.alpha = if (offerAvailable) 1.0f else 0.6f
     }
 
     // ==================== BillingManager 回调 ====================
@@ -318,9 +351,18 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
             updateTrialAvailability()
             updateAnnualSavings()
 
+            val yearlyBaseAvailable = yearlyProduct?.let(::basePlanOffer) != null
+            val monthlyBaseAvailable = monthlyProduct?.let(::basePlanOffer) != null
+            binding.cardYearlyPlan.alpha = if (yearlyBaseAvailable) 0.85f else 0.45f
+            binding.cardYearlyPlan.isEnabled = yearlyBaseAvailable
+            binding.radioYearly.isEnabled = yearlyBaseAvailable
+            binding.cardMonthlyPlan.alpha = if (monthlyBaseAvailable) 0.85f else 0.45f
+            binding.cardMonthlyPlan.isEnabled = monthlyBaseAvailable
+            binding.radioMonthly.isEnabled = monthlyBaseAvailable
+
             setLoadingState(false)
 
-            if (products.isEmpty()) {
+            if (products.isEmpty() || (!yearlyBaseAvailable && !monthlyBaseAvailable)) {
                 android.util.Log.e("SubscriptionActivity", "❌ No products found!")
                 // 加载失败：付费按钮保持禁用，避免用户点到没有价格的坏按钮；弹友好重试对话框。
                 binding.btnSubscribe.isEnabled = false
@@ -344,6 +386,12 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
     override fun onPurchaseSuccess(purchase: Purchase) {
         lifecycleScope.launch {
             android.util.Log.d("SubscriptionActivity", "🎉 Purchase successful!")
+            logSubscription(
+                "purchase_result",
+                plan = if (isYearlySelected) "yearly" else "monthly",
+                offer = if (isFreeTrialEnabled) "free" else "base",
+                result = "success"
+            )
 
             // 📊 记录付费来源 + 产品，定位哪个触发点真正带来付费转化
             try {
@@ -370,6 +418,12 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
     override fun onPurchaseFailure(errorCode: Int, errorMessage: String) {
         lifecycleScope.launch {
             android.util.Log.e("SubscriptionActivity", "❌ Purchase failed: $errorMessage")
+            logSubscription(
+                "purchase_result",
+                plan = if (isYearlySelected) "yearly" else "monthly",
+                offer = if (isFreeTrialEnabled) "free" else "base",
+                result = if (errorCode == 1) "cancel" else "error_$errorCode"
+            )
             
             val message = when (errorCode) {
                 1 -> getString(R.string.subscription_message_canceled)  // USER_CANCELED
@@ -405,16 +459,7 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
     // ==================== UI 更新 ====================
 
     private fun updateMonthlyPlanUI(product: ProductDetails) {
-        // 获取价格信息 - 获取实际付费价格（跳过免费试用期）
-        val offer = product.subscriptionOfferDetails?.firstOrNull()
-        val pricingPhases = offer?.pricingPhases?.pricingPhaseList
-        
-        // 查找实际付费阶段的价格（通常是第二个phase，第一个是免费试用）
-        val paidPhase = pricingPhases?.find { phase ->
-            phase.priceAmountMicros > 0
-        } ?: pricingPhases?.firstOrNull()
-        
-        val price = paidPhase?.formattedPrice
+        val price = basePlanRecurringPhase(product)?.formattedPrice
         
         if (price != null) {
             // 更新月度套餐价格显示 - 使用占位符格式化字符串
@@ -424,7 +469,7 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
     }
 
     private fun updateYearlyPlanUI(product: ProductDetails) {
-        val price = paidRecurringPhase(product)?.formattedPrice
+        val price = basePlanRecurringPhase(product)?.formattedPrice
         
         if (price != null) {
             // 更新年度套餐价格显示 - 使用占位符格式化字符串
@@ -435,7 +480,7 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
 
     /** Always show the exact Play-localized charge for the currently selected terms. */
     private fun updateDisplayedPlanPrices() {
-        val monthlyPhase = monthlyProduct?.let(::paidRecurringPhase)
+        val monthlyPhase = monthlyProduct?.let(::basePlanRecurringPhase)
         monthlyPhase?.formattedPrice?.let { price ->
             // 左侧：试用时提示试用条款；非试用时只留「随时取消」，价格交给右侧单价列（避免重复）。
             binding.tvMonthlySubText.text =
@@ -445,46 +490,43 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
             binding.tvMonthlyPermonth.text = price
         }
 
-        val yearlyPhase = yearlyProduct?.let(::paidRecurringPhase)
+        val yearlyPhase = yearlyProduct?.let(::basePlanRecurringPhase)
         yearlyPhase?.formattedPrice?.let { price ->
-            // 左侧：真实年费全额（加大醒目）；「随时取消」在下方独立成行（合规：真实计费金额始终完整展示）。
+            // 实际一次收取的完整年费是主视觉；月均换算只作为次要比较信息。
+            binding.tvYearlySubText.visibility = View.VISIBLE
             binding.tvYearlySubText.text = getString(R.string.subscription_amount_per_year, price)
-        }
-        // 右侧：年费拆算到「每月」，与月订阅同单位直接对比（对比锚点，非计费金额）。
-        yearlyPhase?.let { phase ->
-            perUnitPrice(phase.priceCurrencyCode, phase.priceAmountMicros, 12)?.let {
+            perUnitPrice(yearlyPhase.priceCurrencyCode, yearlyPhase.priceAmountMicros, 12)?.let {
                 binding.tvYearlyPermonth.text = it
             }
         }
     }
 
-    /**
-     * 把整期价格按 Play 返回的币种/金额换算成「每单位」价（如年费÷12=每月），
-     * 用系统货币格式化以匹配 Play 的本地化符号与小数位。仅用于对比展示，不用于计费。
-     */
+    /** 仅用于弱化的辅助月均价；实际扣款金额始终取上方完整年费。 */
     private fun perUnitPrice(currencyCode: String, totalMicros: Long, divisor: Int): String? =
         try {
             val amount = totalMicros.toDouble() / 1_000_000.0 / divisor
-            val formatter = java.text.NumberFormat.getCurrencyInstance()
-            formatter.currency = java.util.Currency.getInstance(currencyCode)
-            formatter.format(amount)
-        } catch (e: Exception) {
+            java.text.NumberFormat.getCurrencyInstance().apply {
+                currency = java.util.Currency.getInstance(currencyCode)
+            }.format(amount)
+        } catch (_: Exception) {
             null
         }
 
     /**
-     * 订阅页永远展示「原价」：取无限续订相（真实续订价）。合规关键——绝不能把折扣 offer 的
-     * 首月/首年折后价泄漏到订阅页醒目位置（那正是被 Play 拒审的原因）。若无无限相则兜底取
-     * 价格最高的付费相（折扣价一定更低，取最高即原价）。
+     * 标准订阅页只读取基础方案（offerId == null）的无限续订价格。
+     * 该基础方案的 offerToken 同时用于普通购买，保证页面醒目价格与 Play 购物车恒等。
      */
-    private fun paidRecurringPhase(product: ProductDetails): ProductDetails.PricingPhase? {
-        val paid = product.subscriptionOfferDetails
-            ?.flatMap { it.pricingPhases.pricingPhaseList }
-            ?.filter { it.priceAmountMicros > 0 }
-            ?: return null
-        return paid.firstOrNull { it.recurrenceMode == 1 }
-            ?: paid.maxByOrNull { it.priceAmountMicros }
-    }
+    private fun basePlanOffer(product: ProductDetails) =
+        product.subscriptionOfferDetails?.firstOrNull { offer ->
+            offer.offerId.isNullOrEmpty() && offer.pricingPhases.pricingPhaseList.none {
+                it.priceAmountMicros == 0L
+            }
+        }
+
+    private fun basePlanRecurringPhase(product: ProductDetails): ProductDetails.PricingPhase? =
+        basePlanOffer(product)?.pricingPhases?.pricingPhaseList?.firstOrNull {
+            it.priceAmountMicros > 0L && it.recurrenceMode == 1
+        }
 
     private fun updateTrialAvailability() {
         // ProductDetails only contains offers this Play account is eligible for. Do not bind
@@ -605,13 +647,7 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
             // 年订阅或未启用免费试用：选择基础方案（没有offerId的offer）
             android.util.Log.d("SubscriptionActivity", "📦 Looking for base plan offer (no trial)...")
             
-            val basePlanOffer = selectedProduct.subscriptionOfferDetails?.firstOrNull { offer ->
-                offer.offerId.isNullOrEmpty() && offer.pricingPhases.pricingPhaseList.none {
-                    it.priceAmountMicros == 0L
-                }
-            } ?: selectedProduct.subscriptionOfferDetails?.firstOrNull { offer ->
-                offer.pricingPhases.pricingPhaseList.none { it.priceAmountMicros == 0L }
-            }
+            val basePlanOffer = basePlanOffer(selectedProduct)
             
             if (basePlanOffer != null) {
                 android.util.Log.d("SubscriptionActivity", "✅ Found base plan: basePlanId=${basePlanOffer.basePlanId}")
@@ -642,6 +678,12 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
         }
 
         android.util.Log.d("SubscriptionActivity", "🚀 Starting purchase flow...")
+        logSubscription(
+            "checkout_start",
+            plan = if (isYearlySelected) "yearly" else "monthly",
+            offer = if (isFreeTrialEnabled) "free" else "base",
+            result = "launch"
+        )
         setLoadingState(true)
         
         billingManager.launchPurchaseFlow(
@@ -652,15 +694,13 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
     }
 
     private fun eligibleTrialOffer(product: ProductDetails) =
-        // Play only returns offers this account is eligible for, so any free phase it hands back
-        // is a genuinely claimable trial. Match the console offer ID first (this is the mapping
-        // production 1.9.35 shipped), then fall back to any zero-price phase regardless of how
-        // Play spells the period — P1W, P7D and localized base-plan variants are all valid.
+        // 免费试用必须精确绑定 Play Console 中配置的 "free" offer。
+        // 不按“任意零价阶段”兜底，避免未来新增其他促销后误提交错误的 offerToken。
+        // Play 会把 P1W/P7D 等实际试用周期放在 pricing phase 中；许可证测试账号
+        // 的结算页统一把免费试用压缩为约 3 分钟，这不改变正式用户的 7 天配置。
         product.subscriptionOfferDetails?.firstOrNull { offer ->
             offer.offerId == BillingManager.FREE_TRIAL_OFFER_ID &&
                 offer.pricingPhases.pricingPhaseList.any { it.priceAmountMicros == 0L }
-        } ?: product.subscriptionOfferDetails?.firstOrNull { offer ->
-            offer.pricingPhases.pricingPhaseList.any { it.priceAmountMicros == 0L }
         }
 
     /**
@@ -668,6 +708,12 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
      */
     private fun handleClose() {
         android.util.Log.d("SubscriptionActivity", "🔙 User closed subscription page")
+        logSubscription(
+            "page_close",
+            plan = if (isYearlySelected) "yearly" else "monthly",
+            offer = if (isFreeTrialEnabled) "free" else "base",
+            result = "user_close"
+        )
 
         // 检查是否来自引导流程
         val fromOnboarding = intent.getBooleanExtra("from_onboarding", false)
@@ -708,10 +754,25 @@ class SubscriptionActivity : AppCompatActivity(), BillingManager.BillingListener
             DiscountManager.cacheDiscountPercent(this, plan, it)
         }
         android.util.Log.d("SubscriptionActivity", "💡 Intercepting close with ${plan.key} discount recovery page")
+        logSubscription("discount_offer", plan.key, "off", "shown")
         startActivity(
             Intent(this, DiscountActivity::class.java)
                 .putExtra(DiscountActivity.EXTRA_PLAN, plan.key)
         )
+    }
+
+    private fun logSubscription(
+        stage: String,
+        plan: String = "none",
+        offer: String = "none",
+        result: String = "none"
+    ) {
+        try {
+            com.quran.quranaudio.online.analytics.RetentionFunnel.subscription(
+                this, stage, subscriptionSource, plan, offer, result
+            )
+        } catch (_: Throwable) {
+        }
     }
     
     /**

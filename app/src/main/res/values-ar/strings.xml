@@ -1638,4 +1638,22 @@
     <string name="discount_limited_pill">عرض لوقت محدود</string>
     <string name="asma_ul_husna">أسماء الله الحسنى</string>
     <string name="names99_home">أسماء الله</string>
+
+    <!-- ملاحظة: نفس منطق النص الإنجليزي — الدفع مرة واحدة أولاً، ثم الدعم -->
+    <string name="ad_free_badge">شراء لمرة واحدة</string>
+    <string name="ad_free_banner_glyph">\u06DE</string>
+    <string name="ad_free_title">اقرأ القرآن دون انقطاع</string>
+    <string name="ad_free_body">ادفع مرة واحدة وتختفي الإعلانات نهائيًا — بدون اشتراك ولا تجديد. دعمك يبقي هذا التطبيق مجانيًا للمسلمين في كل مكان.</string>
+    <string name="ad_free_cta">إزالة الإعلانات نهائيًا</string>
+    <string name="ad_free_cta_priced">إزالة الإعلانات نهائيًا · %1$s</string>
+    <string name="ad_free_restore">استعادة عملية الشراء</string>
+    <string name="ad_free_close">إغلاق</string>
+    <string name="ad_free_settings_title">إزالة الإعلانات</string>
+    <string name="ad_free_settings_summary">شراء لمرة واحدة، وتختفي الإعلانات نهائيًا</string>
+    <string name="ad_free_owned">تمت إزالة الإعلانات. شكرًا لدعمك.</string>
+    <string name="ad_free_restore_none">لم يتم العثور على عملية شراء سابقة</string>
+    <string name="ad_free_failed">تعذّر إتمام عملية الشراء. يرجى المحاولة مرة أخرى.</string>
+
+    <string name="fcm_retention_channel_name">تذكيرات القرآن</string>
+    <string name="fcm_retention_channel_description">تذكيرات مفيدة للقراءة والعبادة</string>
 </resources>

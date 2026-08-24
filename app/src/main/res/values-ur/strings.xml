@@ -2365,4 +2365,6 @@
     <string name="discount_limited_pill">محدود وقت کی پیشکش</string>
     <string name="asma_ul_husna">اللہ کے 99 نام</string>
     <string name="names99_home">99 نام</string>
+    <string name="fcm_retention_channel_name">قرآن کی یاد دہانیاں</string>
+    <string name="fcm_retention_channel_description">قرآن پڑھنے اور عبادت کی مفید یاد دہانیاں</string>
 </resources>

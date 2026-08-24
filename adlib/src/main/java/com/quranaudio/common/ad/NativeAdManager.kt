@@ -155,7 +155,7 @@ class NativeAdManager private constructor() {
         }
         
         // Check subscription status
-        if (SubscriptionChecker.isUserSubscribed(context)) {
+        if (SubscriptionChecker.shouldHideAds(context)) {
             android.util.Log.d("NATIVE_AD_TRACK", "🎁 User is subscribed, skipping native ad load")
             Log.d(TAG, "🎁 User is subscribed, skipping native ad load")
             return
@@ -289,7 +289,7 @@ class NativeAdManager private constructor() {
         }
         
         // Check subscription status
-        if (SubscriptionChecker.isUserSubscribed(activity)) {
+        if (SubscriptionChecker.shouldHideAds(activity)) {
             Log.d(TAG, "🎁 User is subscribed, no ad to load")
             callback(null)
             return
@@ -297,7 +297,12 @@ class NativeAdManager private constructor() {
         
         // ✅ 如果有缓存，立即返回（FIFO，🆕 跳过过期广告）
         while (cachedNativeAds.isNotEmpty()) {
-            val cachedAd = cachedNativeAds.removeFirst()
+            // ⚠️ 必须用 removeAt(0)，不能用 removeFirst()。
+            // removeFirst() 是 Java 21 SequencedCollection 的 List 成员方法，Android 从 API 35
+            // 才提供；compileSdk 36 下 Kotlin 会把 MutableList.removeFirst() 解析成该 JDK 方法，
+            // 导致 Android 14 及以下设备运行时抛
+            // NoSuchMethodError: No interface method removeFirst()Ljava/lang/Object; in class Ljava/util/List;
+            val cachedAd = cachedNativeAds.removeAt(0)
             
             // 🆕 检查是否过期
             if (cachedAd.isExpired()) {
@@ -361,14 +366,19 @@ class NativeAdManager private constructor() {
         }
         
         // Check subscription status
-        if (SubscriptionChecker.isUserSubscribed(activity)) {
+        if (SubscriptionChecker.shouldHideAds(activity)) {
             Log.d(TAG, "🎁 User is subscribed, no native ad to show")
             return null
         }
         
         // ✅ FIFO: 取第一个广告，🆕 自动跳过过期广告
         while (cachedNativeAds.isNotEmpty()) {
-            val cachedAd = cachedNativeAds.removeFirst()
+            // ⚠️ 必须用 removeAt(0)，不能用 removeFirst()。
+            // removeFirst() 是 Java 21 SequencedCollection 的 List 成员方法，Android 从 API 35
+            // 才提供；compileSdk 36 下 Kotlin 会把 MutableList.removeFirst() 解析成该 JDK 方法，
+            // 导致 Android 14 及以下设备运行时抛
+            // NoSuchMethodError: No interface method removeFirst()Ljava/lang/Object; in class Ljava/util/List;
+            val cachedAd = cachedNativeAds.removeAt(0)
             
             // 🆕 检查是否过期
             if (cachedAd.isExpired()) {
@@ -405,7 +415,7 @@ class NativeAdManager private constructor() {
      * ✅ 检查是否有缓存广告
      */
     fun hasCachedAd(context: Context): Boolean {
-        if (SubscriptionChecker.isUserSubscribed(context)) {
+        if (SubscriptionChecker.shouldHideAds(context)) {
             return false
         }
         return cachedNativeAds.isNotEmpty()

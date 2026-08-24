@@ -101,7 +101,10 @@ class DiscountActivity : AppCompatActivity(), BillingManager.BillingListener {
             else R.string.discount_price_period
         )
 
-        binding.btnClose.setOnClickListener { finish() }
+        binding.btnClose.setOnClickListener {
+            logFunnel("discount_close", "user_close")
+            finish()
+        }
         setupLegalLinks()
         startCountdown()
 
@@ -117,6 +120,7 @@ class DiscountActivity : AppCompatActivity(), BillingManager.BillingListener {
         billingManager.initialize()
 
         logEvent("discount_page_open")
+        logFunnel("discount_page", "shown")
     }
 
     // ---- Billing 回调 ----
@@ -137,14 +141,17 @@ class DiscountActivity : AppCompatActivity(), BillingManager.BillingListener {
             // Play 没有下发折扣 offer —— 绝不显示假折扣，直接退出。
             android.util.Log.w("DiscountActivity", "⚠️ No discount offer returned by Play; closing.")
             Toast.makeText(this, R.string.discount_unavailable, Toast.LENGTH_SHORT).show()
+            logFunnel("discount_offer", "unavailable")
             finish()
         } else {
+            logFunnel("discount_offer", "eligible")
             bindPrices(discountOffer!!)
         }
     }
 
     override fun onPurchaseSuccess(purchase: Purchase) = runOnUiThread {
         logEvent("discount_purchased")
+        logFunnel("discount_result", "success")
         // 购买成功即消费掉挽回机会（防止再次弹出）。
         markConsumed()
         Toast.makeText(this, R.string.subscription_message_success, Toast.LENGTH_LONG).show()
@@ -153,6 +160,7 @@ class DiscountActivity : AppCompatActivity(), BillingManager.BillingListener {
 
     override fun onPurchaseFailure(errorCode: Int, errorMessage: String) {
         android.util.Log.w("DiscountActivity", "Purchase failed: $errorCode $errorMessage")
+        logFunnel("discount_result", if (errorCode == 1) "cancel" else "error_$errorCode")
     }
 
     override fun onSubscriptionStatusChanged(isSubscribed: Boolean, productId: String?) = runOnUiThread {
@@ -215,12 +223,20 @@ class DiscountActivity : AppCompatActivity(), BillingManager.BillingListener {
             Toast.makeText(this, R.string.discount_unavailable, Toast.LENGTH_SHORT).show()
             return
         }
+        // 购买点击是最后一道有效期闸门，避免倒计时结束与点击竞争时提交已过期入口缓存的 token。
+        if (!DiscountManager.isActive(this, plan)) {
+            markConsumed()
+            Toast.makeText(this, R.string.discount_expired, Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
         // 用折扣 offer 的 token 发起付费 —— 结算即折后价，与页面醒目价一致。
         billingManager.launchPurchaseFlow(
             activity = this,
             productDetails = p,
             offerToken = offer.offerToken
         )
+        logFunnel("discount_checkout", "launch")
     }
 
     // ---- 倒计时 ----
@@ -238,6 +254,7 @@ class DiscountActivity : AppCompatActivity(), BillingManager.BillingListener {
                 // 窗口结束：恢复原价视角，关闭本页。
                 markConsumed()
                 Toast.makeText(this@DiscountActivity, R.string.discount_expired, Toast.LENGTH_SHORT).show()
+                logFunnel("discount_expired", "timeout")
                 finish()
             }
         }.start()
@@ -282,6 +299,15 @@ class DiscountActivity : AppCompatActivity(), BillingManager.BillingListener {
             com.quran.quranaudio.online.analytics.AnalyticsManager
                 .getInstance(this).logEvent(name, HashMap())
         } catch (_: Exception) {
+        }
+    }
+
+    private fun logFunnel(stage: String, result: String) {
+        try {
+            com.quran.quranaudio.online.analytics.RetentionFunnel.subscription(
+                this, stage, "discount_recovery", plan.key, "off", result
+            )
+        } catch (_: Throwable) {
         }
     }
 

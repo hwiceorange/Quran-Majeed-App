@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  八角星（Rub el Hizb / خاتم）。
+  由两个正方形旋转 45° 叠加而成，是古兰经分节符与清真寺装饰的经典几何母题。
+  用它替代原来的纯色块 + 通用图标：既有视觉分量，又与本 App 的宗教语境相符，
+  且是矢量，不需要位图资源、不受多语言目录影响。
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <!-- 正方形 A -->
+    <path
+        android:pathData="M20,20 L100,20 L100,100 L20,100 Z"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="3"
+        android:fillColor="#00000000" />
+    <!-- 正方形 B：旋转 45°，与 A 叠成八角星 -->
+    <path
+        android:pathData="M60,3 L117,60 L60,117 L3,60 Z"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="3"
+        android:fillColor="#00000000" />
+    <!-- 中心小圆 -->
+    <path
+        android:pathData="M60,48 a12,12 0 1,0 0.1,0 Z"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="3"
+        android:fillColor="#00000000" />
+</vector>

@@ -1,13 +1,15 @@
 package com.quran.quranaudio.online.subscription
 
 import android.content.Context
+import android.os.SystemClock
 import com.android.billingclient.api.ProductDetails
 
 /**
  * 折扣挽回状态机（按方案区分：月订阅首月5折 / 年订阅首年5折）。
  *
  * 合规底线：
- *  - 倒计时不可作弊。每个方案的起始时间戳只写一次；关掉重进、卸载重装都不重置；窗口一过即永久失效。
+ *  - 倒计时不可作弊。每个方案的起始时间戳只写一次；关掉重进、进程重启和应用升级都不重置；
+ *    窗口一过即永久失效。卸载会清除本地 SharedPreferences，跨卸载资格仍须由 Play 侧约束。
  *  - 折扣价格一律取自 Play 返回的折扣 offer，本类只负责“是否/何时展示”，不产出任何价格。
  *  - 每个方案（月/年）各自一生只主动弹一次（用户主动关闭对应方案的付费时）。
  *
@@ -40,6 +42,7 @@ object DiscountManager {
         YEARLY("yearly", BillingManager.YEARLY_PLAN_ID, YEARLY_DISCOUNT_OFFER_ID);
 
         val startKey get() = "${key}_window_start_ms"
+        val elapsedStartKey get() = "${key}_window_start_elapsed_ms"
         val consumedKey get() = "${key}_consumed"
         val percentKey get() = "${key}_percent"
 
@@ -65,7 +68,15 @@ object DiscountManager {
         val p = prefs(context)
         if (p.getBoolean(plan.consumedKey, false)) return true
         val start = p.getLong(plan.startKey, -1L)
-        if (start > 0 && System.currentTimeMillis() - start >= WINDOW_MS) {
+        val elapsedStart = p.getLong(plan.elapsedStartKey, -1L)
+        val elapsedNow = SystemClock.elapsedRealtime()
+        val expiredByWallClock =
+            start > 0 && System.currentTimeMillis() - start >= WINDOW_MS
+        // elapsedRealtime 不受用户修改系统时间影响；设备重启后数值会回绕，此时退回墙钟判断。
+        val expiredByMonotonicClock =
+            elapsedStart > 0 && elapsedNow >= elapsedStart &&
+                elapsedNow - elapsedStart >= WINDOW_MS
+        if (expiredByWallClock || expiredByMonotonicClock) {
             p.edit().putBoolean(plan.consumedKey, true).apply()
             return true
         }
@@ -75,9 +86,19 @@ object DiscountManager {
     /** 该方案窗口剩余毫秒；已终结或未启动返回 0。 */
     fun remainingMillis(context: Context, plan: Plan): Long {
         if (isConsumed(context, plan)) return 0
-        val start = prefs(context).getLong(plan.startKey, -1L)
+        val p = prefs(context)
+        val start = p.getLong(plan.startKey, -1L)
         if (start <= 0) return 0
-        return (start + WINDOW_MS - System.currentTimeMillis()).coerceAtLeast(0)
+        val wallRemaining = start + WINDOW_MS - System.currentTimeMillis()
+        val elapsedStart = p.getLong(plan.elapsedStartKey, -1L)
+        val elapsedNow = SystemClock.elapsedRealtime()
+        val elapsedRemaining =
+            if (elapsedStart > 0 && elapsedNow >= elapsedStart) {
+                elapsedStart + WINDOW_MS - elapsedNow
+            } else {
+                Long.MAX_VALUE
+            }
+        return minOf(wallRemaining, elapsedRemaining).coerceAtLeast(0)
     }
 
     /** 该方案折扣是否正在有效展示窗口内。 */
@@ -113,7 +134,10 @@ object DiscountManager {
     fun startWindow(context: Context, plan: Plan): Boolean {
         val p = prefs(context)
         if (p.contains(plan.startKey) || p.getBoolean(plan.consumedKey, false)) return false
-        p.edit().putLong(plan.startKey, System.currentTimeMillis()).apply()
+        p.edit()
+            .putLong(plan.startKey, System.currentTimeMillis())
+            .putLong(plan.elapsedStartKey, SystemClock.elapsedRealtime())
+            .apply()
         return true
     }
 
@@ -125,18 +149,24 @@ object DiscountManager {
     // ---- 折扣 offer 查找与价格（对任意方案通用） ----
 
     /**
-     * 在指定方案的 ProductDetails 中查找折扣 offer。
-     * 先按该方案的 Console offerId 精确匹配，再兜底到“含一个有限周期付费折扣阶段 + 一个无限续订阶段”的 offer。
-     * 结构探测天然排除：免费试用（首阶段价格==0）与基础方案（只有无限续订阶段）。
+     * 只接受 Play 返回且 offerId 精确为 off 的优惠。
+     * Play Console 必须把 off 配置为“新客户获取/从未购买过本应用订阅”；Play 未返回即无资格。
+     * 禁止按价格结构猜测，以免未来新增促销时误选其他 offerToken。
      */
     fun findDiscountOffer(product: ProductDetails?, plan: Plan): ProductDetails.SubscriptionOfferDetails? {
         val offers = product?.subscriptionOfferDetails ?: return null
-        offers.firstOrNull { it.offerId == plan.offerId }?.let { return it }
+        val expectedPeriod = when (plan) {
+            Plan.MONTHLY -> "P1M"
+            Plan.YEARLY -> "P1Y"
+        }
         return offers.firstOrNull { offer ->
-            val phases = offer.pricingPhases.pricingPhaseList
-            val hasPaidIntro = phases.any { it.priceAmountMicros > 0 && it.recurrenceMode != INFINITE_RECURRENCE }
-            val hasRenewal = phases.any { it.priceAmountMicros > 0 && it.recurrenceMode == INFINITE_RECURRENCE }
-            hasPaidIntro && hasRenewal
+            val intro = introPhase(offer)
+            val renewal = renewalPhase(offer)
+            offer.offerId == plan.offerId &&
+                intro?.billingPeriod == expectedPeriod &&
+                intro.billingCycleCount == 1 &&
+                renewal?.billingPeriod == expectedPeriod &&
+                computePercent(offer) != null
         }
     }
 
@@ -146,11 +176,11 @@ object DiscountManager {
             it.priceAmountMicros > 0 && it.recurrenceMode != INFINITE_RECURRENCE
         }
 
-    /** 续订阶段：无限周期且价格 > 0（原价）；兜底取最后一个付费阶段。 */
+    /** 续订阶段：必须是无限周期且价格 > 0（原价），不以其他有限付费阶段兜底。 */
     fun renewalPhase(offer: ProductDetails.SubscriptionOfferDetails) =
         offer.pricingPhases.pricingPhaseList.firstOrNull {
             it.priceAmountMicros > 0 && it.recurrenceMode == INFINITE_RECURRENCE
-        } ?: offer.pricingPhases.pricingPhaseList.lastOrNull { it.priceAmountMicros > 0 }
+        }
 
     /** 从真实 offer 计算折扣百分比；结构不完整返回 null。全程不硬编码数字。 */
     fun computePercent(offer: ProductDetails.SubscriptionOfferDetails): Int? {

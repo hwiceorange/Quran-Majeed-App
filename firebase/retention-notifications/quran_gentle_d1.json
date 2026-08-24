@@ -1,0 +1,19 @@
+{
+  "message": {
+    "token": "REPLACE_WITH_TEST_DEVICE_TOKEN",
+    "data": {
+      "title": "Continue with the Quran",
+      "body": "A few peaceful verses are waiting. Continue from where you feel comfortable.",
+      "campaign_id": "quran_gentle_d1",
+      "target": "quran"
+    },
+    "android": {
+      "priority": "HIGH",
+      "ttl": "43200s",
+      "collapse_key": "quran_retention"
+    },
+    "fcm_options": {
+      "analytics_label": "quran_gentle_d1"
+    }
+  }
+}

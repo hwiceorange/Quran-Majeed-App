@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 关闭键圆底。参考图中 X 是白色圆底上的深色叉，裸图标在插画上会看不清。 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+    <solid android:color="#66000000" />
+</shape>

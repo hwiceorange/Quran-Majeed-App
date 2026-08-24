@@ -1,107 +1,98 @@
-@file:Suppress("DEPRECATION")
-
 package com.quran.quranaudio.online
 
-import android.app.Notification
+import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
-import android.media.RingtoneManager
-import android.net.Uri
+import android.content.pm.PackageManager
 import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.quran.quranaudio.online.activities.HomeActivity
+import com.quran.quranaudio.online.analytics.RetentionFunnel
+import com.quran.quranaudio.online.prayertimes.ui.MainActivity
 
+/** Receives retention campaigns sent as FCM data messages. */
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
+    override fun onMessageReceived(message: RemoteMessage) {
+        super.onMessageReceived(message)
 
-    private val TAG = "FireBaseMessagingService"
-    var NOTIFICATION_CHANNEL_ID = "net.larntech.notification"
-    val NOTIFICATION_ID = 100
+        val data = message.data
+        val campaign = data[KEY_CAMPAIGN] ?: message.messageId ?: "unspecified"
+        val target = normalizeTarget(data[KEY_TARGET])
+        val title = data[KEY_TITLE] ?: message.notification?.title ?: getString(R.string.app_name)
+        val body = data[KEY_BODY] ?: message.notification?.body ?: return
 
-    override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        super.onMessageReceived(remoteMessage)
-
-        Log.e("message","Message Received ...");
-
-        if (remoteMessage.data.size > 0) {
-            val title = remoteMessage.data["title"]
-            val body = remoteMessage.data["body"]
-            showNotification(applicationContext, title, body)
-        } else {
-            val title = remoteMessage.notification!!.title
-            val body = remoteMessage.notification!!.body
-            showNotification(applicationContext, title, body)
+        RetentionFunnel.push(this, "received", campaign, target, "fcm")
+        if (!canPostNotifications()) {
+            RetentionFunnel.push(this, "blocked", campaign, target, "permission")
+            return
         }
+
+        createChannel()
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            putExtra(MainActivity.EXTRA_PUSH_CAMPAIGN, campaign)
+            putExtra(MainActivity.EXTRA_PUSH_TARGET, target)
+        }
+        val requestCode = (campaign + target).hashCode() and Int.MAX_VALUE
+        val pendingIntent = PendingIntent.getActivity(
+            this,
+            requestCode,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val notification = NotificationCompat.Builder(this, CHANNEL_RETENTION)
+            .setSmallIcon(R.drawable.notification_ic)
+            .setContentTitle(title)
+            .setContentText(body)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(body))
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+            .setOnlyAlertOnce(true)
+            .setCategory(NotificationCompat.CATEGORY_RECOMMENDATION)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .build()
+
+        NotificationManagerCompat.from(this).notify(requestCode, notification)
+        RetentionFunnel.push(this, "displayed", campaign, target, "fcm")
     }
 
-
-    override fun onNewToken(p0: String) {
-        super.onNewToken(p0)
-        Log.e("token","New Token")
-    }
-
-
-    fun showNotification(
-        context: Context,
-        title: String?,
-        message: String?
-    ) {
-        val ii: Intent
-        ii = Intent(context, HomeActivity::class.java)
-        ii.data = Uri.parse("custom://" + System.currentTimeMillis())
-        ii.action = "actionstring" + System.currentTimeMillis()
-        ii.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
-        val pi =
-            PendingIntent.getActivity(context, 0, ii, PendingIntent.FLAG_UPDATE_CURRENT)
-        val notification: Notification
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            //Log.e("Notification", "Created in up to orio OS device");
-            notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
-                .setOngoing(true)
-                .setSmallIcon(getNotificationIcon())
-                .setContentText(message)
-                .setAutoCancel(true)
-                .setContentIntent(pi)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setCategory(Notification.CATEGORY_SERVICE)
-                .setWhen(System.currentTimeMillis())
-                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                .setContentTitle(title).build()
-            val notificationManager = context.getSystemService(
-                Context.NOTIFICATION_SERVICE
-            ) as NotificationManager
-            val notificationChannel = NotificationChannel(
-                NOTIFICATION_CHANNEL_ID,
-                title,
+    private fun createChannel() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
+        val manager = getSystemService(NotificationManager::class.java) ?: return
+        manager.createNotificationChannel(
+            NotificationChannel(
+                CHANNEL_RETENTION,
+                getString(R.string.fcm_retention_channel_name),
                 NotificationManager.IMPORTANCE_DEFAULT
-            )
-            notificationManager.createNotificationChannel(notificationChannel)
-            notificationManager.notify(NOTIFICATION_ID, notification)
-        } else {
-            notification = NotificationCompat.Builder(context)
-                .setSmallIcon(getNotificationIcon())
-                .setAutoCancel(true)
-                .setContentText(message)
-                .setContentIntent(pi)
-                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                .setContentTitle(title).build()
-            val notificationManager = context.getSystemService(
-                Context.NOTIFICATION_SERVICE
-            ) as NotificationManager
-            notificationManager.notify(NOTIFICATION_ID, notification)
-        }
+            ).apply {
+                description = getString(R.string.fcm_retention_channel_description)
+                enableVibration(false)
+            }
+        )
     }
 
-    private fun getNotificationIcon(): Int {
-        val useWhiteIcon =
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-        return if (useWhiteIcon) R.drawable.notification_ic else R.drawable.notification_ic
+    private fun canPostNotifications(): Boolean =
+        Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+            PackageManager.PERMISSION_GRANTED
+
+    private fun normalizeTarget(value: String?): String = when (value) {
+        "quran", "prayer", "tasbih", "subscription" -> value
+        else -> "quran"
     }
 
+    companion object {
+        private const val CHANNEL_RETENTION = "retention_reminders_v1"
+        private const val KEY_TITLE = "title"
+        private const val KEY_BODY = "body"
+        private const val KEY_CAMPAIGN = "campaign_id"
+        private const val KEY_TARGET = "target"
+    }
 }

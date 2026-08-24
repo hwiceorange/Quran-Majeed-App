@@ -1532,4 +1532,6 @@ Kompas: arahkan ponsel dan ikuti panah menuju Kakbah secara langsung.</string>
     <string name="discount_limited_pill">Penawaran waktu terbatas</string>
     <string name="asma_ul_husna">99 Nama Allah</string>
     <string name="names99_home">99 Nama</string>
+    <string name="fcm_retention_channel_name">Pengingat Al-Qur’an</string>
+    <string name="fcm_retention_channel_description">Pengingat bermanfaat untuk membaca Al-Qur’an dan beribadah</string>
 </resources>

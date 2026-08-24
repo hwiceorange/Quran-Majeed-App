@@ -63,7 +63,10 @@ dependencies {
     api 'com.google.android.gms:play-services-ads:24.7.0'
 
     api platform('com.google.firebase:firebase-bom:31.3.0')
-    api 'com.google.firebase:firebase-perf'
+    // firebase-perf 已移除：全仓无任何 Performance API 调用，Gradle 插件也未启用，
+    // 但它的 FirebasePerfEarly/AppStartTrace 会在 FirebaseInitProvider(ContentProvider)
+    // 里、即 Application.onCreate 之前，于主线程用反射注册生命周期观察者
+    // (Lifecycling -> Class.getCanonicalName)，在低端机后台拉起的进程上造成 ANR。
     api 'com.google.firebase:firebase-datatransport'
     api "com.google.firebase:firebase-config"
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1'

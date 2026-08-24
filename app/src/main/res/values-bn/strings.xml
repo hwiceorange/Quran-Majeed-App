@@ -2372,4 +2372,6 @@
     <string name="discount_limited_pill">সীমিত সময়ের অফার</string>
     <string name="asma_ul_husna">আল্লাহর ৯৯ নাম</string>
     <string name="names99_home">৯৯ নাম</string>
+    <string name="fcm_retention_channel_name">কুরআন স্মরণিকা</string>
+    <string name="fcm_retention_channel_description">কুরআন পাঠ ও ইবাদতের সহায়ক স্মরণিকা</string>
 </resources>

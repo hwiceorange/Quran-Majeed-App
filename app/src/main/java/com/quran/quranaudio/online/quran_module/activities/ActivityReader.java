@@ -952,7 +952,13 @@ public class ActivityReader extends ReaderPossessingActivity {
             if (startedFromBeginning && reachedEnd && readAll) {
                 android.util.Log.d("ActivityReader", "🌟 Full Surah completed: " + surahNo + ", triggering rate prompt");
                 RatePromptManager.onSurahCompleted(this);
-                com.quranaudio.common.ad.InterstitialAdManager.Companion.getInstance().showAdIfAvailable(this);
+                // 此处原本会展示插屏广告，已移除。
+                //
+                // 读完一整章古兰经是本 App 里用户情绪最高、最接近神圣的时刻。
+                // 在这一刻插全屏商业广告，在穆斯林用户的感受里不是「烦」，是冒犯，
+                // 而且紧跟其后的评分请求会拿到最差的分数。
+                // 插屏已改到世俗区场景（答题结算 / Qada 记录完成 / 设置页跳转），
+                // 见 AdPolicy 与各场景调用点。
             }
         } catch (Exception e) {
             android.util.Log.e("ActivityReader", "Failed to evaluate surah completion", e);

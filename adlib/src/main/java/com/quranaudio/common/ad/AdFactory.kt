@@ -180,7 +180,7 @@ object AdFactory : ActivityLifecycleCallbacks {
             return
         }
         // Check if user is subscribed (premium user)
-        if (SubscriptionChecker.isUserSubscribed(activity)) {
+        if (SubscriptionChecker.shouldHideAds(activity)) {
             Log.d(TAG, "🎁 User is subscribed, skipping banner ad for $functionTag")
             bannerContainer?.visibility = View.GONE
             callback?.onAdFailedToLoad("user_subscribed")
@@ -247,7 +247,7 @@ object AdFactory : ActivityLifecycleCallbacks {
             return
         }
         // Check if user is subscribed (premium user)
-        if (SubscriptionChecker.isUserSubscribed(activity)) {
+        if (SubscriptionChecker.shouldHideAds(activity)) {
             Log.d(TAG, "🎁 User is subscribed, skipping app open ad")
             callback?.onAdFailedToLoad("user_subscribed")
             return
@@ -313,7 +313,7 @@ object AdFactory : ActivityLifecycleCallbacks {
             return
         }
         // Check if user is subscribed (premium user)
-        if (SubscriptionChecker.isUserSubscribed(activity)) {
+        if (SubscriptionChecker.shouldHideAds(activity)) {
             Log.d(TAG, "🎁 User is subscribed, skipping interstitial ad")
             callback?.onAdFailedToLoad("user_subscribed")
             return
@@ -479,7 +479,7 @@ object AdFactory : ActivityLifecycleCallbacks {
     }
 
     fun showAppOpenAd(activity: Activity, adPosition: String, callback: AdShowCallback?) {
-        if (SubscriptionChecker.isUserSubscribed(activity)) {
+        if (SubscriptionChecker.shouldHideAds(activity)) {
             callback?.onShowFail()
             return
         }
@@ -631,7 +631,7 @@ object AdFactory : ActivityLifecycleCallbacks {
         }
         
         // Check if user is subscribed (premium user)
-        if (SubscriptionChecker.isUserSubscribed(activity)) {
+        if (SubscriptionChecker.shouldHideAds(activity)) {
             Log.d(TAG, "🎁 User is subscribed, skipping native ad for $functionTag")
             callback?.onAdFailedToLoad("user_subscribed")
             showCallback?.onShowFail()

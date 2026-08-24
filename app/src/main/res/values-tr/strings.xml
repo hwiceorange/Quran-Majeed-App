@@ -2361,4 +2361,6 @@ Pusula: telefonu doğrultun ve oku takip ederek Kâbe\'ye anlık yönelin.</stri
     <string name="discount_limited_pill">Sınırlı süreli teklif</string>
     <string name="asma_ul_husna">Allah\'ın 99 İsmi</string>
     <string name="names99_home">99 İsim</string>
+    <string name="fcm_retention_channel_name">Kur’an hatırlatıcıları</string>
+    <string name="fcm_retention_channel_description">Kur’an okuma ve ibadet için faydalı hatırlatmalar</string>
 </resources>

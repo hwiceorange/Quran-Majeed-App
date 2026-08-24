@@ -319,40 +319,12 @@ public class TasbihFragment extends BaseFragment {
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    android.util.Log.d("DIAGNOSE", "→→ TasbihFragment: Back button clicked");
-                    android.util.Log.d("DIAGNOSE", "→→ Checking if Dhikr quest completed: " + dailyQuestCompleted);
-                    
-                    // 🔥 如果Dhikr任务完成，先展示插屏广告
-                    if (dailyQuestCompleted && getActivity() != null) {
-                        android.util.Log.d("DIAGNOSE", "→→ Dhikr completed! Showing interstitial ad before navigating back");
-                        
-                        try {
-                            // 展示插屏广告
-                            boolean adShown = com.quranaudio.common.ad.InterstitialAdManager.Companion.getInstance().showAdIfAvailable(getActivity());
-                            
-                            if (adShown) {
-                                android.util.Log.d("DIAGNOSE", "✅ Interstitial ad shown, delaying navigation");
-                                // 延迟返回，让广告有时间渲染
-                                new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        android.util.Log.d("DIAGNOSE", "✅ Ad display complete, navigating back");
-                                        navigateBack(v);
-                                    }
-                                }, 500); // 500ms延迟确保广告渲染
-                            } else {
-                                android.util.Log.d("DIAGNOSE", "⚠️ No ad shown (subscribed or unavailable), navigating back immediately");
-                                navigateBack(v);
-                            }
-                        } catch (Exception e) {
-                            android.util.Log.e("DIAGNOSE_ERROR", "❌ Failed to show interstitial ad", e);
-                            // 如果广告失败，直接返回
-                            navigateBack(v);
-                        }
-                    } else {
-                        android.util.Log.d("DIAGNOSE", "→→ Dhikr not completed, navigating back directly");
-                        navigateBack(v);
-                    }
+                    // 此处原本会在「完成 Dhikr（赞念）任务后」展示插屏广告，已移除。
+                    //
+                    // Tasbih 计数属于宗教实践本身，完成赞念的那一刻和读完古兰经一章同属
+                    // 情绪高点，在此插全屏商业广告会被用户感知为冒犯而非打扰。
+                    // 插屏已统一收敛到世俗区场景，见 AdPolicy。
+                    navigateBack(v);
                 }
             });
         }
