@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.CurrentLocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.CancellationTokenSource;
@@ -63,6 +64,7 @@ public class LocationHelper {
     private static final ScheduledExecutorService TIMEOUT_EXECUTOR =
             Executors.newSingleThreadScheduledExecutor();
     private static final long CURRENT_LOCATION_TIMEOUT_SECONDS = 15L;
+    private static final long MAX_FALLBACK_LOCATION_AGE_MS = TimeUnit.HOURS.toMillis(2);
 
     private final Context context;
 
@@ -107,7 +109,15 @@ public class LocationHelper {
                     }
                 }, CURRENT_LOCATION_TIMEOUT_SECONDS, TimeUnit.SECONDS);
 
-                fused.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, cts.getToken())
+                // Explicitly reject cached fixes. The old Priority-only overload is allowed to
+                // return a cached location, which is exactly how a previous city could survive
+                // a cold start even though permission was granted.
+                CurrentLocationRequest request = new CurrentLocationRequest.Builder()
+                        .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
+                        .setMaxUpdateAgeMillis(0L)
+                        .setDurationMillis(TimeUnit.SECONDS.toMillis(CURRENT_LOCATION_TIMEOUT_SECONDS))
+                        .build();
+                fused.getCurrentLocation(request, cts.getToken())
                         .addOnSuccessListener(CALLBACK_EXECUTOR, current -> {
                             if (!currentRequestFinished.compareAndSet(false, true)) return;
                             timeout.cancel(false);
@@ -141,10 +151,11 @@ public class LocationHelper {
         try {
             fused.getLastLocation()
                     .addOnSuccessListener(CALLBACK_EXECUTOR, last -> {
-                        if (isUsable(last)) {
+                        if (isUsable(last) && isRecent(last, MAX_FALLBACK_LOCATION_AGE_MS)) {
                             Log.i(TAG, "Using fused last-location fallback");
                             emitSuccess(emitter, last);
                         } else {
+                            Log.w(TAG, "Rejecting missing/stale fused last-location fallback");
                             emitLegacyFallback(emitter, lastLat, lastLng);
                         }
                     })
@@ -163,7 +174,7 @@ public class LocationHelper {
             GPSTracker gpsTracker = new GPSTracker(context);
             if (gpsTracker.canGetLocation()) {
                 Location legacy = gpsTracker.getLocation();
-                if (isUsable(legacy)) {
+                if (isUsable(legacy) && isRecent(legacy, MAX_FALLBACK_LOCATION_AGE_MS)) {
                     Log.w(TAG, "Using legacy LocationManager last-known fallback");
                     emitSuccess(emitter, legacy);
                     return;
@@ -173,12 +184,9 @@ public class LocationHelper {
             // 继续退到缓存
         }
 
-        if (isUsable(lastLat, lastLng)) {
-            Log.w(TAG, "Using cached last-known location from preferences");
-            emitSuccess(emitter, buildLocation(lastLat, lastLng));
-            return;
-        }
-
+        // The UI already renders the persisted address immediately. Do not emit that same
+        // undated cache as a successful "current" fix, otherwise downstream code rewrites it
+        // and reschedules old-city prayer alarms as if a refresh had succeeded.
         if (!emitter.isDisposed()) {
             emitter.onError(new LocationException(
                     context.getResources().getString(R.string.location_service_unavailable)));
@@ -211,6 +219,14 @@ public class LocationHelper {
                 && latitude >= -90 && latitude <= 90
                 && longitude >= -180 && longitude <= 180
                 && !(latitude == 0.0 && longitude == 0.0);
+    }
+
+    private boolean isRecent(Location location, long maxAgeMs) {
+        if (location == null) return false;
+        long timestamp = location.getTime();
+        if (timestamp <= 0L) return false;
+        long age = Math.max(0L, System.currentTimeMillis() - timestamp);
+        return age <= maxAgeMs;
     }
 
     @NonNull

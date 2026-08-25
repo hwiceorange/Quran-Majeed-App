@@ -52,6 +52,8 @@ public class HomeViewModel extends AndroidViewModel {
     private final MutableLiveData<String> mErrorMessage;
     private final LocalDate todayDate;
     private CompositeDisposable compositeDisposable;
+    private long lastForegroundRefreshRequestMs = 0L;
+    private static final long FOREGROUND_REFRESH_INTERVAL_MS = 5L * 60L * 1000L;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Inject
@@ -96,6 +98,17 @@ public class HomeViewModel extends AndroidViewModel {
         
         // Force update location in background
         tryUpdateLocationInBackground(timingsService);
+    }
+
+    /** Refresh on cold start / foreground return without issuing duplicate GPS requests. */
+    public void refreshLocationIfStale() {
+        long now = android.os.SystemClock.elapsedRealtime();
+        if (lastForegroundRefreshRequestMs > 0L
+                && now - lastForegroundRefreshRequestMs < FOREGROUND_REFRESH_INTERVAL_MS) {
+            return;
+        }
+        lastForegroundRefreshRequestMs = now;
+        forceRefreshLocation();
     }
 
     @Override
@@ -189,6 +202,7 @@ public class HomeViewModel extends AndroidViewModel {
      * This will update cached location and refresh prayer times
      */
     private void tryUpdateLocationInBackground(TimingsService timingsService) {
+        lastForegroundRefreshRequestMs = android.os.SystemClock.elapsedRealtime();
         compositeDisposable.add(
             locationHelper.getLocation()
                 .flatMap(addressHelper::getAddressFromLocation)

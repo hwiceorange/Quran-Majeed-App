@@ -422,6 +422,16 @@ public class PrayersFragment extends Fragment implements com.quran.quranaudio.on
     @Override
     public void onResume() {
         super.onResume();
+
+        boolean locationGranted = ContextCompat.checkSelfPermission(requireContext(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(requireContext(),
+                android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        if (locationGranted) {
+            new ViewModelProvider(requireActivity(), viewModelFactory)
+                    .get(HomeViewModel.class)
+                    .refreshLocationIfStale();
+        }
         
         // 🔄 刷新祷告状态（用户可能在其他页面记录了祷告）
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {

@@ -294,7 +294,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                             // Force ViewModel to reload with new location permission
                             HomeViewModel homeViewModel = new ViewModelProvider(requireActivity(), viewModelFactory)
                                     .get(HomeViewModel.class);
-                            // The ViewModel will automatically observe location changes
+                            homeViewModel.forceRefreshLocation();
                         }
                     }
                 }
@@ -762,6 +762,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
         
         super.onResume();
+        if (isAdded() && checkLocationPermission()) {
+            HomeViewModel homeViewModel = new ViewModelProvider(requireActivity(), viewModelFactory)
+                    .get(HomeViewModel.class);
+            homeViewModel.refreshLocationIfStale();
+        }
         //Initialize();
         if(allowRefresh){
             allowRefresh=false;
