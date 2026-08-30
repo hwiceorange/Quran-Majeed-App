@@ -353,8 +353,6 @@ public class MainActivity extends BaseActivity {
             // 「收到过邦克 vs 没收到过」的 D1/D7 留存对比（留存诊断第一优先项）跑不了。
             com.quran.quranaudio.online.analytics.RetentionFunnel.syncUserProps(this, osGranted);
 
-            // 用户看到了礼拜时间 = 本 App 的首个价值时刻，只在首次发生时上报
-            com.quran.quranaudio.online.analytics.RetentionFunnel.firstValue(this, "prayer_times");
         } catch (Exception e) {
             android.util.Log.w("MainActivity", "reportNotificationUserProperties failed", e);
         }

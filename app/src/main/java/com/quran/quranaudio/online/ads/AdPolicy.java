@@ -42,11 +42,11 @@ public final class AdPolicy {
     // ============================================================
 
     /**
-     * 新装用户的插屏保护期（小时）。期内不展示任何插屏。
-     * 让用户先建立习惯，再开始变现——活到 D7 的用户后续能看的广告，
-     * 远多于 D0 就卸载的用户。
+     * 新装用户的插屏保护期（小时）。当前为 0：不再全局屏蔽新用户首日插屏。
+     * 展示仍必须发生在答题结算、任务创建完成等自然断点，并继续受到下方
+     * 最小间隔、会话上限、日上限和订阅状态保护。
      */
-    public static final long INTERSTITIAL_NEW_USER_GRACE_HOURS = 24L;
+    public static final long INTERSTITIAL_NEW_USER_GRACE_HOURS = 0L;
 
     /** 两次插屏之间的最小间隔（分钟）。此前 InterstitialAdManager 完全没有频控。 */
     public static final long INTERSTITIAL_MIN_INTERVAL_MINUTES = 3L;

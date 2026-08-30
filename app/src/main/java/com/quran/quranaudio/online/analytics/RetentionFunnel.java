@@ -178,6 +178,37 @@ public final class RetentionFunnel {
         } catch (Throwable ignored) { }
     }
 
+    /**
+     * 真实价值行为。仅在用户确实完成动作后调用；duration/count 均来自业务现场，
+     * 不用页面曝光或权限状态代替价值。事件参数保持低基数，便于 GA4 漏斗和留存分层。
+     */
+    public static void valueAction(Context ctx, String action, long durationMs, int count) {
+        try {
+            Map<String, Object> p = new HashMap<>();
+            p.put("action", safe(action));
+            p.put("duration_bucket", durationBucket(durationMs));
+            p.put("count_bucket", countBucket(count));
+            log(ctx, "rf_value_action", p);
+        } catch (Throwable ignored) { }
+    }
+
+    private static String durationBucket(long durationMs) {
+        if (durationMs < 30_000L) return "lt_30s";
+        if (durationMs < 60_000L) return "30_59s";
+        if (durationMs < 180_000L) return "1_2m";
+        if (durationMs < 300_000L) return "3_4m";
+        if (durationMs < 600_000L) return "5_9m";
+        return "10m_plus";
+    }
+
+    private static String countBucket(int count) {
+        if (count <= 0) return "0";
+        if (count == 1) return "1";
+        if (count <= 3) return "2_3";
+        if (count <= 10) return "4_10";
+        return "11_plus";
+    }
+
     // ============================================================
     // 邦克通知投递链（留存第一杠杆）
     // ============================================================

@@ -286,6 +286,8 @@ public class ActivityReader extends ReaderPossessingActivity {
     @Override
     protected void onPause() {
         saveReaderState();
+        long retentionReadDurationMs = sessionStartTime > 0
+                ? Math.max(0L, System.currentTimeMillis() - sessionStartTime) : 0L;
         if (mPlayerService != null) {
             mPlayerService.setRecitationPlayer(null, this);
         }
@@ -318,6 +320,13 @@ public class ActivityReader extends ReaderPossessingActivity {
                         android.util.Log.d("ActivityReader", "✅ 记录阅读进度: " + versesRead + " verses");
 
                         maybeTriggerSurahCompletion(versesRead);
+
+                        com.quran.quranaudio.online.analytics.RetentionFunnel.valueAction(
+                                this, "quran_read", retentionReadDurationMs, versesRead);
+                        if (retentionReadDurationMs >= 30_000L) {
+                            com.quran.quranaudio.online.analytics.RetentionFunnel.firstValue(
+                                    this, "quran_read_30s");
+                        }
                     } else if (sessionStartPage > 0 && sessionEndPage > 0) {
                         // 回退到页码追踪
                         quranReadingTracker.recordPageRange(sessionStartPage, sessionEndPage);

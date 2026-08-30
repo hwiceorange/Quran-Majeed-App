@@ -8,7 +8,7 @@ import java.util.Calendar
  * 插屏广告频控。
  *
  * 此前 InterstitialAdManager.showAdIfAvailable() 只检查两件事：是否订阅、缓存是否过期。
- * **没有最小间隔、没有单次会话上限、没有单日上限、没有新装保护期**——
+ * **没有最小间隔、没有单次会话上限、没有单日上限**——
  * 只要触发点命中就播。一个活跃新用户在 D0 就可能吃到 4~5 个全屏广告。
  *
  * 默认值与 app 模块的 AdPolicy 保持一致；App 启动时会调用 [configure] 同步，
@@ -26,7 +26,7 @@ object InterstitialFrequencyCap {
     private const val K_DAY_COUNT = "day_count"
 
     // ---- 可由 AdPolicy 覆盖的配置（默认值与 AdPolicy 一致）----
-    @Volatile private var graceHours: Long = 24L
+    @Volatile private var graceHours: Long = 0L
     @Volatile private var minIntervalMinutes: Long = 3L
     @Volatile private var maxPerSession: Int = 2
     @Volatile private var maxPerDay: Int = 5
@@ -58,9 +58,8 @@ object InterstitialFrequencyCap {
             val sp = context.applicationContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
             val now = System.currentTimeMillis()
 
-            // 首次见到该用户的时间。用于新装保护期——
-            // 让用户先建立习惯再开始变现：活到 D7 的用户后续能看的广告，
-            // 远多于 D0 就卸载的用户。
+            // 首次见到该用户的时间。graceHours 配置为 0 时不会拦截；保留该字段，
+            // 便于将来只通过策略配置恢复保护期而无需迁移用户数据。
             var firstSeen = sp.getLong(K_FIRST_SEEN, 0L)
             if (firstSeen == 0L) {
                 firstSeen = now

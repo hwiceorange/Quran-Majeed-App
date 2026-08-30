@@ -172,6 +172,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private CircularProgressBar circularProgressBar;
     private Skeleton skeleton;
+    private boolean prayerTimesValueReported;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -324,12 +325,24 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         });
 
         homeViewModel.getDayPrayers().observe(getViewLifecycleOwner(), dayPrayer -> {
+            if (dayPrayer == null || dayPrayer.getTimings() == null || dayPrayer.getTimings().isEmpty()) {
+                return;
+            }
             updateDatesTextViews(dayPrayer);
             updateNextPrayerViews(dayPrayer);
             updateTimingsTextViews(dayPrayer);
             updateHeaderPrayerInfo(dayPrayer);
             updatePrayerCard(dayPrayer);  // Update Prayer Card with real-time data
             startPrayerSchedulerWork(dayPrayer);
+
+            // 只有真实礼拜时间数据已经返回并可展示，才记为用户获得了礼拜价值。
+            com.quran.quranaudio.online.analytics.RetentionFunnel.firstValue(
+                    requireContext(), "prayer_times_loaded");
+            if (!prayerTimesValueReported) {
+                prayerTimesValueReported = true;
+                com.quran.quranaudio.online.analytics.RetentionFunnel.valueAction(
+                        requireContext(), "prayer_times_viewed", 0L, dayPrayer.getTimings().size());
+            }
 
             skeleton.showOriginal();
 

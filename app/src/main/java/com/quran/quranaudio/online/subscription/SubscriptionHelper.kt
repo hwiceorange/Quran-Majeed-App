@@ -74,10 +74,10 @@ object SubscriptionHelper {
     private const val KEY_LAST_PROMPT_TIME = "last_prompt_time"
     private const val KEY_ENGAGED_SESSIONS = "engaged_sessions"
 
-    private const val MIN_INTERVAL_MS = 3L * 24 * 60 * 60 * 1000  // 两次提示最少间隔 3 天
+    private const val MIN_INTERVAL_MS = 2L * 24 * 60 * 60 * 1000  // 两次提示最少间隔 2 天
     private const val MAX_LIFETIME_PROMPTS = 6
-    // 在第 N 次"已产生阅读价值"的会话触发(错开、不打扰新用户首日)
-    private val TRIGGER_AT_SESSIONS = intArrayOf(2, 5, 10, 21, 45, 90)
+    // 首次真实阅读价值交付后即可邀请；后续节点逐步拉开，避免打断每日敬拜习惯。
+    private val TRIGGER_AT_SESSIONS = intArrayOf(1, 3, 7, 14, 30, 60)
 
     /**
      * 情境化订阅提示：仅对"已体验价值的非订阅用户"在自然节点软性触发。
@@ -86,7 +86,7 @@ object SubscriptionHelper {
      * - 未订阅
      * - 已有阅读价值(hasReadingValue=true，如已读过经文)
      * - 命中预设的第 N 次 engaged 会话
-     * - 距上次提示 >= 3 天，且一生提示 < 3 次
+     * - 距上次提示 >= 2 天，且一生提示 < 6 次
      *
      * 这修正了"仅首装硬弹付费墙"(价值交付前要钱、转化极低)的问题。
      *
