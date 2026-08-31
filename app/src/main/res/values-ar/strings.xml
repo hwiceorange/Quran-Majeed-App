@@ -1656,4 +1656,23 @@
 
     <string name="fcm_retention_channel_name">تذكيرات القرآن</string>
     <string name="fcm_retention_channel_description">تذكيرات مفيدة للقراءة والعبادة</string>
+    <string name="reward_ad_title">إعلان · مكافأة اختيارية</string>
+    <string name="reward_ad_message">شاهد إعلانًا بمكافأة من أجل %1$s. يمكنك الإلغاء ومتابعة استخدام التطبيق كالمعتاد.</string>
+    <string name="reward_ad_watch">مشاهدة الإعلان</string>
+    <string name="reward_ad_loading">جارٍ تجهيز الإعلان الاختياري…</string>
+    <string name="reward_ad_unavailable">لا يتوفر إعلان الآن. حاول مرة أخرى لاحقًا.</string>
+    <string name="reward_ad_badge">إعلان</string>
+    <string name="reward_translation_download">تنزيل هذه الترجمة الإضافية للاستخدام دون اتصال</string>
+    <string name="reward_audio_download">تنزيل هذه السورة للاستماع دون اتصال</string>
+    <string name="reward_ad_free_hour">القراءة دون إعلانات غير المكافآت لمدة ساعة</string>
+    <string name="quiet_reading_title">قراءة هادئة</string>
+    <string name="quiet_reading_summary">أزل الإعلانات نهائيًا أو احصل على ساعة دون إعلانات</string>
+    <string name="quiet_reading_one_hour">إعلان · إزالة الإعلانات لمدة ساعة</string>
+    <string name="quiet_reading_permanent">إزالة الإعلانات نهائيًا</string>
+    <string name="quiet_reading_active">وقت القراءة دون إعلانات نشط</string>
+    <string name="progress_insights_title">تقدمك في التعلم</string>
+    <string name="progress_insights_basic">السلسلة الحالية: %1$d أيام\nالتقدم الشهري: %2$d من %3$d يومًا</string>
+    <string name="progress_insights_deep">انتظام الدراسة\n\nالسلسلة الحالية: %1$d أيام\nأطول سلسلة: %2$d أيام\nإجمالي الأيام المكتملة: %3$d\nالإنجاز الشهري: %4$d من %5$d يومًا\n\nاجعل الجلسة التالية مناسبة، وعُد في وقت يلائم روتينك.</string>
+    <string name="progress_insights_open_deep">إعلان · عرض التحليل الأسبوعي</string>
+    <string name="progress_insights_reward">عرض تقرير تقدم الدراسة المفصل لهذا الأسبوع</string>
 </resources>

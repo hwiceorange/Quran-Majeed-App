@@ -56,6 +56,7 @@ object SubscriptionChecker {
     fun shouldHideAds(context: Context): Boolean {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         return prefs.getBoolean(KEY_IS_SUBSCRIBED, false) ||
-                prefs.getBoolean(KEY_IS_AD_FREE, false)
+                prefs.getBoolean(KEY_IS_AD_FREE, false) ||
+                TemporaryAdFreeManager.isActive(context)
     }
 }

@@ -240,6 +240,10 @@ class QuizReviewLearnActivity :
      * 用户点击加载并展示激励广告，完成后返回当前错误的题目重新作答
      */
     private fun handleTryAgainClick() {
+        if (checkSubscriptionStatus()) {
+            finishWithAction(ACTION_TRY_AGAIN)
+            return
+        }
         if (!hasRewardAdByPool(ExternalAdConfig.AD_QUIZ_REWARD)) {
             ToastUtils.showLong(R.string.quran_loading_ad)
             // 广告未加载，尝试重新加载
@@ -262,11 +266,7 @@ class QuizReviewLearnActivity :
                     reportClickEvent("quiz_review_try_again_success")
                     
                     // 🔧 使用 setResult 返回结果，避免 RxBus 被 Fragment 可见性检查拦截
-                    val resultIntent = Intent().apply {
-                        putExtra(RESULT_ACTION, ACTION_TRY_AGAIN)
-                    }
-                    setResult(RESULT_OK, resultIntent)
-                    finish()
+                    finishWithAction(ACTION_TRY_AGAIN)
                 } else {
                     android.util.Log.e(TAG, "❌ Reward ad failed")
                     ToastUtils.showLong(R.string.quran_no_ad_tips)
@@ -283,6 +283,10 @@ class QuizReviewLearnActivity :
      * 用户完成激励广告后更新题目回答状态为正确，继续下一步
      */
     private fun handleSkipClick() {
+        if (checkSubscriptionStatus()) {
+            finishWithAction(ACTION_SKIP)
+            return
+        }
         if (!hasRewardAdByPool(ExternalAdConfig.AD_QUIZ_REWARD)) {
             ToastUtils.showLong(R.string.quran_loading_ad)
             // 广告未加载，尝试重新加载
@@ -305,11 +309,7 @@ class QuizReviewLearnActivity :
                     reportClickEvent("quiz_review_skip_success")
                     
                     // 🔧 使用 setResult 返回结果，避免 RxBus 被 Fragment 可见性检查拦截
-                    val resultIntent = Intent().apply {
-                        putExtra(RESULT_ACTION, ACTION_SKIP)
-                    }
-                    setResult(RESULT_OK, resultIntent)
-                    finish()
+                    finishWithAction(ACTION_SKIP)
                 } else {
                     android.util.Log.e(TAG, "❌ Reward ad failed")
                     ToastUtils.showLong(R.string.quran_no_ad_tips)
@@ -331,6 +331,11 @@ class QuizReviewLearnActivity :
             putExtra(RESULT_ACTION, ACTION_QUIT)
         }
         setResult(RESULT_OK, resultIntent)
+        finish()
+    }
+
+    private fun finishWithAction(action: String) {
+        setResult(RESULT_OK, Intent().apply { putExtra(RESULT_ACTION, action) })
         finish()
     }
     

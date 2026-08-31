@@ -36,6 +36,10 @@ import com.quran.quranaudio.online.quran_module.utils.univ.MessageUtils
 import com.quran.quranaudio.online.quran_module.views.BoldHeader
 import com.quran.quranaudio.online.quran_module.views.BoldHeader.BoldHeaderCallback
 import com.quran.quranaudio.online.quran_module.widgets.PageAlert
+import com.quran.quranaudio.online.rewards.RewardEntitlementStore
+import com.quran.quranaudio.online.rewards.RewardedValueCoordinator
+import com.quranaudio.common.ad.AdConfig
+import com.quranaudio.common.ad.SubscriptionChecker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -355,10 +359,26 @@ class FragSettingsTranslationsDownload :
             .setTitle(R.string.strTitleDownloadTranslations)
             .setMessage("${bookInfo.bookName}\n${bookInfo.authorName}")
             .setPositiveButton(R.string.labelDownload) { _, _ ->
-                this.adapter?.onDownloadStatus(bookInfo.slug, true)
-
-                TranslationDownloadService.startDownloadService(ctx as ContextWrapper, bookInfo)
-                activity?.let { bindTranslService(requireActivity()) }
+                val startDownload = {
+                    this.adapter?.onDownloadStatus(bookInfo.slug, true)
+                    TranslationDownloadService.startDownloadService(ctx as ContextWrapper, bookInfo)
+                    activity?.let { bindTranslService(requireActivity()) }
+                }
+                val free = RewardEntitlementStore.canUseFirstTranslationFree(ctx)
+                val unlocked = RewardEntitlementStore.isUnlocked(ctx, "translation", bookInfo.slug)
+                if (SubscriptionChecker.isUserSubscribed(ctx) || free || unlocked) {
+                    if (free) RewardEntitlementStore.markFirstTranslationUsed(ctx)
+                    startDownload()
+                } else {
+                    RewardedValueCoordinator.request(
+                        requireActivity(),
+                        AdConfig.AD_TRANSLATION_REWARD,
+                        getString(R.string.reward_translation_download)
+                    ) {
+                        RewardEntitlementStore.unlock(ctx, "translation", bookInfo.slug)
+                        startDownload()
+                    }
+                }
             }
             .setNegativeButton(R.string.strLabelCancel, null)
             .show()

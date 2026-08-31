@@ -9,6 +9,8 @@ import com.quran.quranaudio.online.quran_module.components.recitation.ManageAudi
 import com.quran.quranaudio.online.databinding.LytManageAudioChapterItemBinding
 import com.quran.quranaudio.online.quran_module.frags.settings.recitations.manage.FragSettingsManageAudioReciter
 import com.quran.quranaudio.online.quran_module.utils.extensions.color
+import com.quran.quranaudio.online.rewards.RewardEntitlementStore
+import com.quranaudio.common.ad.SubscriptionChecker
 
 class ADPManageAudioChapters(
     private val frag: FragSettingsManageAudioReciter,
@@ -42,6 +44,13 @@ class ADPManageAudioChapters(
                 it.setColorFilter(if (model.downloaded) ctx.color(R.color.colorDanger) else ctx.color(R.color.colorIcon))
             }
             binding.loader.visibility = if (model.downloading) View.VISIBLE else View.GONE
+            val contentId = "${model.reciterModel.slug}_${model.chapterMeta.chapterNo}"
+            binding.adBadge.visibility = if (
+                !model.downloaded && !model.downloading &&
+                !SubscriptionChecker.isUserSubscribed(ctx) &&
+                !RewardEntitlementStore.canUseFirstAudioFree(ctx) &&
+                !RewardEntitlementStore.isUnlocked(ctx, "audio", contentId)
+            ) View.VISIBLE else View.GONE
 
             binding.root.setOnClickListener {
                 if (model.downloading) return@setOnClickListener

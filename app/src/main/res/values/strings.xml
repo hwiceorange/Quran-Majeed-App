@@ -1750,4 +1750,23 @@ Compass: point your phone and follow the arrow to the Kaaba in real time.</strin
 
     <string name="fcm_retention_channel_name">Quran reminders</string>
     <string name="fcm_retention_channel_description">Helpful Quran reading and worship reminders</string>
+    <string name="reward_ad_title">AD · Optional reward</string>
+    <string name="reward_ad_message">Watch one rewarded ad to %1$s. You can cancel and keep using the app normally.</string>
+    <string name="reward_ad_watch">Watch ad</string>
+    <string name="reward_ad_loading">Preparing the optional ad…</string>
+    <string name="reward_ad_unavailable">No ad is available right now. Please try again later.</string>
+    <string name="reward_ad_badge">AD</string>
+    <string name="reward_translation_download">download this extra translation for offline use</string>
+    <string name="reward_audio_download">download this Surah for offline listening</string>
+    <string name="reward_ad_free_hour">read without non-reward ads for 1 hour</string>
+    <string name="quiet_reading_title">Quiet reading</string>
+    <string name="quiet_reading_summary">Remove ads permanently or earn 1 ad-free hour</string>
+    <string name="quiet_reading_one_hour">AD · Remove ads for 1 hour</string>
+    <string name="quiet_reading_permanent">Remove ads permanently</string>
+    <string name="quiet_reading_active">Ad-free time is active</string>
+    <string name="progress_insights_title">Your learning progress</string>
+    <string name="progress_insights_basic">Current streak: %1$d days\nMonthly progress: %2$d of %3$d days</string>
+    <string name="progress_insights_deep">Study consistency\n\nCurrent streak: %1$d days\nLongest streak: %2$d days\nTotal completed days: %3$d\nMonthly completion: %4$d of %5$d days\n\nKeep the next session manageable and return at a time that fits your routine.</string>
+    <string name="progress_insights_open_deep">AD · View weekly deep insights</string>
+    <string name="progress_insights_reward">view this week’s detailed study-progress report</string>
 </resources>

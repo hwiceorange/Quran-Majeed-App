@@ -455,6 +455,10 @@ object AdFactory : ActivityLifecycleCallbacks {
         functionTag: String,
         callback: AdShowCallback?
     ) {
+        if (SubscriptionChecker.shouldHideAds(activity)) {
+            callback?.onShowFail()
+            return
+        }
         val adId = AdConfig.getAdIdByPosition(adPosition)
         consumeAd(adId)?.let { adItem ->
             (adItem.ad as? InterstitialAd)?.let {

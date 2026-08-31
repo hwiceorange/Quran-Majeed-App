@@ -13,6 +13,8 @@ import com.quran.quranaudio.online.R
 import com.quran.quranaudio.online.quran_module.components.transls.TranslModel
 import com.quran.quranaudio.online.databinding.LytSettingsDownlTranslItemBinding
 import com.quran.quranaudio.online.quran_module.utils.extensions.*
+import com.quran.quranaudio.online.rewards.RewardEntitlementStore
+import com.quranaudio.common.ad.SubscriptionChecker
 
 class ADPDownloadTranslations(
     private val impl: com.quran.quranaudio.online.quran_module.interfaceUtils.TranslDownloadExplorerImpl,
@@ -58,6 +60,12 @@ class ADPDownloadTranslations(
 
             binding.iconDownload.visibility = if (translModel.isDownloading) View.GONE else View.VISIBLE
             binding.iconDownload.disableView(translModel.isDownloadingDisabled)
+            binding.adBadge.visibility = if (
+                !translModel.isDownloading &&
+                !SubscriptionChecker.isUserSubscribed(binding.root.context) &&
+                !RewardEntitlementStore.canUseFirstTranslationFree(binding.root.context) &&
+                !RewardEntitlementStore.isUnlocked(binding.root.context, "translation", bookInfo.slug)
+            ) View.VISIBLE else View.GONE
 
             createMiniInfo(binding.miniInfosCont, translModel.miniInfos)
 

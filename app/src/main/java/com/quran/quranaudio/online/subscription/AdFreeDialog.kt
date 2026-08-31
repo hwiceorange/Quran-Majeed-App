@@ -13,6 +13,9 @@ import android.widget.Toast
 import com.quran.quranaudio.online.R
 import com.quran.quranaudio.online.ads.AdPolicy
 import com.quranaudio.common.ad.SubscriptionChecker
+import com.quranaudio.common.ad.AdConfig
+import com.quranaudio.common.ad.TemporaryAdFreeManager
+import com.quran.quranaudio.online.rewards.RewardedValueCoordinator
 
 /**
  * 去广告买断弹窗（商品 removeads）。
@@ -88,6 +91,21 @@ class AdFreeDialog(private val activity: Activity) : Dialog(activity) {
         }
 
         cta.setOnClickListener { startPurchase() }
+
+        findViewById<TextView>(R.id.adFreeRewardHour).apply {
+            visibility = if (TemporaryAdFreeManager.isActive(context)) android.view.View.GONE else android.view.View.VISIBLE
+            setOnClickListener {
+                RewardedValueCoordinator.request(
+                    activity,
+                    AdConfig.AD_AD_FREE_HOUR_REWARD,
+                    context.getString(R.string.reward_ad_free_hour)
+                ) {
+                    TemporaryAdFreeManager.grantOneHour(context)
+                    toast(R.string.quiet_reading_active)
+                    dismiss()
+                }
+            }
+        }
 
         findViewById<TextView>(R.id.adFreeRestore).setOnClickListener {
             AdFreeBilling.restore(context) { owned ->

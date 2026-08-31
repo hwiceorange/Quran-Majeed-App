@@ -34,6 +34,13 @@ import com.quran.quranaudio.online.quests.repository.QuestRepository;
 import com.quran.quranaudio.online.quran_module.utils.univ.Keys;
 import com.quran.quranaudio.online.quests.viewmodel.HomeQuestsViewModel;
 import com.quran.quranaudio.online.quran_module.utils.reader.factory.ReaderFactory;
+import com.quran.quranaudio.online.rewards.RewardEntitlementStore;
+import com.quran.quranaudio.online.rewards.RewardedValueCoordinator;
+import com.quranaudio.common.ad.AdConfig;
+import com.quranaudio.common.ad.SubscriptionChecker;
+
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
 
 import kotlinx.coroutines.CoroutineScope;
 import kotlinx.coroutines.Dispatchers;
@@ -93,6 +100,7 @@ public class DailyQuestsManager {
     private ImageView ivTask3Completed;
     
     private HomeQuestsViewModel viewModel;
+    private StreakStats latestStreakStats;
     
     // ⚡ 缓存的学习状态（预加载优化）
     private volatile DocumentSnapshot cachedLearningState = null;
@@ -440,6 +448,9 @@ public class DailyQuestsManager {
      * Sets up click listeners for quests cards
      */
     private void setupQuestsCardClickListeners(UserQuestConfig config) {
+        if (streakCard != null) {
+            streakCard.setOnClickListener(v -> showProgressInsights());
+        }
         Log.d(TAG, "Setting up quests card click listeners");
         
         // Settings icon
@@ -563,6 +574,7 @@ public class DailyQuestsManager {
      * Updates streak card UI
      */
     private void updateStreakCard(StreakStats stats) {
+        latestStreakStats = stats;
         if (tvStreakDays != null) {
             String daysText = fragment.getString(R.string.x_days, stats.getCurrentStreak());
             tvStreakDays.setText(daysText);
@@ -581,6 +593,48 @@ public class DailyQuestsManager {
         
         Log.d(TAG, "Streak card updated: " + stats.getCurrentStreak() + " days, " + 
                    stats.getMonthlyProgress() + "/" + stats.getMonthlyGoal());
+    }
+
+    private void showProgressInsights() {
+        if (!fragment.isAdded() || latestStreakStats == null) return;
+        StreakStats stats = latestStreakStats;
+        new androidx.appcompat.app.AlertDialog.Builder(fragment.requireContext())
+                .setTitle(R.string.progress_insights_title)
+                .setMessage(fragment.getString(
+                        R.string.progress_insights_basic,
+                        stats.getCurrentStreak(), stats.getMonthlyProgress(), stats.getMonthlyGoal()))
+                .setPositiveButton(R.string.progress_insights_open_deep, (dialog, which) -> openDeepInsights(stats))
+                .setNegativeButton(R.string.strLabelClose, null)
+                .show();
+    }
+
+    private void openDeepInsights(StreakStats stats) {
+        Context context = fragment.requireContext();
+        Runnable showReport = () -> new androidx.appcompat.app.AlertDialog.Builder(context)
+                .setTitle(R.string.progress_insights_title)
+                .setMessage(fragment.getString(
+                        R.string.progress_insights_deep,
+                        stats.getCurrentStreak(), stats.getLongestStreak(), stats.getTotalDays(),
+                        stats.getMonthlyProgress(), stats.getMonthlyGoal()))
+                .setPositiveButton(android.R.string.ok, null)
+                .show();
+
+        if (SubscriptionChecker.isUserSubscribed(context) ||
+                RewardEntitlementStore.isDeepInsightUnlockedThisWeek(context)) {
+            showReport.run();
+            return;
+        }
+        RewardedValueCoordinator.INSTANCE.request(
+                fragment.requireActivity(),
+                AdConfig.AD_PROGRESS_INSIGHT_REWARD,
+                fragment.getString(R.string.progress_insights_reward),
+                new Function0<Unit>() {
+                    @Override public Unit invoke() {
+                        RewardEntitlementStore.unlockDeepInsightThisWeek(context);
+                        showReport.run();
+                        return Unit.INSTANCE;
+                    }
+                });
     }
     
     /**
@@ -1067,5 +1121,4 @@ public class DailyQuestsManager {
         Log.d(TAG, "Daily Quests manager destroyed");
     }
 }
-
 

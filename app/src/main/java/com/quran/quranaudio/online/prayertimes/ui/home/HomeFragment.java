@@ -248,6 +248,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
         
         initializeViews(rootView);
+        View quietReadingEntry = rootView.findViewById(R.id.quiet_reading_entry);
+        boolean alreadyAdFree = com.quranaudio.common.ad.SubscriptionChecker.shouldHideAds(requireContext());
+        quietReadingEntry.setVisibility(alreadyAdFree ? View.GONE : View.VISIBLE);
+        quietReadingEntry.setOnClickListener(v -> {
+            if (getActivity() != null && !getActivity().isFinishing()) {
+                new com.quran.quranaudio.online.subscription.AdFreeDialog(getActivity()).show();
+            }
+        });
         android.util.Log.d("NATIVE_AD_TRACK", "✅ initializeViews() completed");
         
         initializeQuizEntry(rootView);

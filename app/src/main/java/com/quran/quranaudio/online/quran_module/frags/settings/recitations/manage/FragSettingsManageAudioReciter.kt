@@ -36,6 +36,10 @@ import com.quran.quranaudio.online.quran_module.utils.receivers.RecitationChapte
 import com.quran.quranaudio.online.quran_module.utils.receivers.RecitationChapterDownloadReceiver.Companion.RECITATION_DOWNLOAD_STATUS_PROGRESS
 import com.quran.quranaudio.online.quran_module.utils.receivers.RecitationChapterDownloadReceiver.Companion.RECITATION_DOWNLOAD_STATUS_SUCCEED
 import com.quran.quranaudio.online.quran_module.utils.services.RecitationChapterDownloadService
+import com.quran.quranaudio.online.rewards.RewardEntitlementStore
+import com.quran.quranaudio.online.rewards.RewardedValueCoordinator
+import com.quranaudio.common.ad.AdConfig
+import com.quranaudio.common.ad.SubscriptionChecker
 import com.quran.quranaudio.online.quran_module.utils.univ.FileUtils
 import com.quran.quranaudio.online.quran_module.utils.univ.MessageUtils
 import com.quran.quranaudio.online.quran_module.views.BoldHeader
@@ -302,11 +306,29 @@ class FragSettingsManageAudioReciter :
 
         if (NetworkStateReceiver.canProceed(requireActivity()).not()) return
 
-        model.downloading = true
-        model.prepareTitle(recyclerView.context)
-        adapter!!.notifyItemChanged(position)
-
-        RecitationChapterDownloadService.startDownloadService(requireActivity(), model)
+        val ctx = requireActivity()
+        val contentId = "${model.reciterModel.slug}_${model.chapterMeta.chapterNo}"
+        val startDownload = {
+            model.downloading = true
+            model.prepareTitle(recyclerView.context)
+            adapter!!.notifyItemChanged(position)
+            RecitationChapterDownloadService.startDownloadService(ctx, model)
+        }
+        val free = RewardEntitlementStore.canUseFirstAudioFree(ctx)
+        val unlocked = RewardEntitlementStore.isUnlocked(ctx, "audio", contentId)
+        if (SubscriptionChecker.isUserSubscribed(ctx) || free || unlocked) {
+            if (free) RewardEntitlementStore.markFirstAudioUsed(ctx)
+            startDownload()
+        } else {
+            RewardedValueCoordinator.request(
+                ctx,
+                AdConfig.AD_AUDIO_REWARD,
+                getString(R.string.reward_audio_download)
+            ) {
+                RewardEntitlementStore.unlock(ctx, "audio", contentId)
+                startDownload()
+            }
+        }
     }
 
     fun deleteDownloaded(model: ManageAudioChapterModel, position: Int) {

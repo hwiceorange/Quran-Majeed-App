@@ -180,6 +180,25 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/adFreeBody" />
 
+            <TextView
+                android:id="@+id/adFreeRewardHour"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="22dp"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:text="@string/quiet_reading_one_hour"
+                android:textColor="#2E7D5B"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/adFreeCta" />
+
             <!-- 恢复购买：换机/重装的已付费用户必须有入口，否则会重复付费或给差评 -->
             <TextView
                 android:id="@+id/adFreeRestore"
@@ -195,7 +214,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/adFreeCta" />
+                app:layout_constraintTop_toBottomOf="@id/adFreeRewardHour" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
