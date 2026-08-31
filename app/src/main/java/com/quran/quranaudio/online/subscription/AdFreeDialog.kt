@@ -6,6 +6,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.content.Intent
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.TextView
@@ -91,6 +92,11 @@ class AdFreeDialog(private val activity: Activity) : Dialog(activity) {
         }
 
         cta.setOnClickListener { startPurchase() }
+
+        findViewById<TextView>(R.id.adFreeSubscribe).setOnClickListener {
+            activity.startActivity(Intent(activity, SubscriptionActivity::class.java))
+            dismiss()
+        }
 
         findViewById<TextView>(R.id.adFreeRewardHour).apply {
             visibility = if (TemporaryAdFreeManager.isActive(context)) android.view.View.GONE else android.view.View.VISIBLE

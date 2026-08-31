@@ -1669,6 +1669,7 @@
     <string name="quiet_reading_summary">أزل الإعلانات نهائيًا أو احصل على ساعة دون إعلانات</string>
     <string name="quiet_reading_one_hour">إعلان · إزالة الإعلانات لمدة ساعة</string>
     <string name="quiet_reading_permanent">إزالة الإعلانات نهائيًا</string>
+    <string name="quiet_reading_subscribe">استكشاف اشتراك Premium</string>
     <string name="quiet_reading_active">وقت القراءة دون إعلانات نشط</string>
     <string name="progress_insights_title">تقدمك في التعلم</string>
     <string name="progress_insights_basic">السلسلة الحالية: %1$d أيام\nالتقدم الشهري: %2$d من %3$d يومًا</string>

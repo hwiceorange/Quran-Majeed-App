@@ -1763,6 +1763,7 @@ Compass: point your phone and follow the arrow to the Kaaba in real time.</strin
     <string name="quiet_reading_summary">Remove ads permanently or earn 1 ad-free hour</string>
     <string name="quiet_reading_one_hour">AD · Remove ads for 1 hour</string>
     <string name="quiet_reading_permanent">Remove ads permanently</string>
+    <string name="quiet_reading_subscribe">Explore Premium subscription</string>
     <string name="quiet_reading_active">Ad-free time is active</string>
     <string name="progress_insights_title">Your learning progress</string>
     <string name="progress_insights_basic">Current streak: %1$d days\nMonthly progress: %2$d of %3$d days</string>
