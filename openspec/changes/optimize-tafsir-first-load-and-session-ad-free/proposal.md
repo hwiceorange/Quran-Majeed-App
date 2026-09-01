@@ -10,6 +10,7 @@ The first Tafsir open can perform a manifest network refresh before requesting t
 - Add an owned action beside the Tafsir native-ad area that first opens Premium subscription.
 - After a non-subscribing user returns, replace that action with an explicit `AD` rewarded choice that hides Tafsir native ads for the remainder of the current app process only after the earned-reward callback.
 - Hide both the native ad and owned action for subscribers, permanent/temporary ad-free users, and users who earned the Tafsir process-session reward.
+- Keep the action text size unchanged while reducing its visible background height, and attach the same subscription-first/rewarded-second pattern to the bottom home native ad.
 
 ## Capabilities
 
@@ -17,6 +18,7 @@ The first Tafsir open can perform a manifest network refresh before requesting t
 
 - `tafsir-fast-first-content`: Local-first manifest readiness, single-flight verse fetching, targeted prefetching, lifecycle-safe rendering, and measurable first-content stages.
 - `tafsir-session-ad-free`: Subscription-first owned entry and voluntary rewarded removal of Tafsir native ads for the current app process.
+- `home-session-ad-free`: Subscription-first owned entry and voluntary rewarded removal of the bottom home native ad for the current app process.
 
 ### Modified Capabilities
 
@@ -27,3 +29,4 @@ The first Tafsir open can perform a manifest network refresh before requesting t
 - Adds a process-memory Tafsir ad-free entitlement and a distinct logical rewarded placement while reusing the existing ad-provider configuration.
 - Extends the native-ad helper with display-state reporting without changing existing call signatures.
 - Adds localized English and Arabic UI copy and modifies the Tafsir footer layout without changing subscription products or permanent/one-hour ad-free entitlements.
+- Adds one compact action above the actual `FragMain` bottom native ad and a distinct home process-session rewarded placement without adding another large promo card.

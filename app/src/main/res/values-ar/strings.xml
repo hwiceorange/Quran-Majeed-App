@@ -1681,4 +1681,8 @@
     <string name="tafsir_ad_free_reward_description">إخفاء الإعلانات المدمجة في التفسير حتى إغلاق التطبيق</string>
     <string name="tafsir_ad_free_reward_earned">تم إخفاء إعلانات التفسير حتى إغلاق التطبيق</string>
     <string name="tafsir_load_failed">تعذّر تحميل التفسير. يرجى المحاولة مرة أخرى.</string>
+    <string name="home_ad_free_vip">إزالة الإعلانات · VIP</string>
+    <string name="home_ad_free_reward">إعلان · إزالة إعلان الرئيسية</string>
+    <string name="home_ad_free_reward_description">إخفاء الإعلان المدمج السفلي في الصفحة الرئيسية حتى إغلاق التطبيق</string>
+    <string name="home_ad_free_reward_earned">تم إخفاء الإعلان السفلي في الصفحة الرئيسية حتى إغلاق التطبيق</string>
 </resources>

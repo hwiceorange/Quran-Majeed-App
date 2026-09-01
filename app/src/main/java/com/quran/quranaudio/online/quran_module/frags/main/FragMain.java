@@ -34,6 +34,7 @@ import androidx.asynclayoutinflater.view.AsyncLayoutInflater;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import com.google.android.material.button.MaterialButton;
 
 import android.widget.ImageView;
 import android.os.Build;
@@ -57,6 +58,9 @@ import com.quran.quranaudio.online.quests.repository.QuestRepository;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.quran.quranaudio.online.home.quiz.QuizRepository;
 import com.quran.quranaudio.online.home.quiz.QuizQuestion;
+import com.quran.quranaudio.online.home.HomeSessionAdFreeManager;
+import com.quran.quranaudio.online.rewards.RewardedValueCoordinator;
+import com.quran.quranaudio.online.subscription.SubscriptionHelper;
 import com.quran.quranaudio.quiz.QuestionBean;
 import com.quran.quranaudio.quiz.base.Constants;
 import com.quranaudio.quiz.quiz.QuranQuizNotifyResultActivity;
@@ -88,8 +92,13 @@ import com.quran.quranaudio.online.quran_module.frags.BaseFragment;
 import com.quran.quranaudio.online.quran_module.utils.app.UpdateManager;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
+import kotlin.jvm.functions.Function1;
 
 public class FragMain extends BaseFragment {
     private FragMainBinding mBinding;
@@ -140,6 +149,13 @@ public class FragMain extends BaseFragment {
     private VOTDView votdViewEmbedded;  // Embedded VOTDView for data and formatting
     private int votdChapterNo = -1;
     private int votdVerseNo = -1;
+    private View homeNativeAdFooter;
+    private ViewGroup homeNativeAdContainer;
+    private MaterialButton homeAdFreeAction;
+    private boolean homeNativeAdRequestInFlight;
+    private boolean homeNativeAdDisplayed;
+    private boolean homeAdFreeSubscriptionPending;
+    private boolean pausedAfterHomeAdFreeSubscription;
     
     // Daily Quests Manager
     private DailyQuestsManager dailyQuestsManager;
@@ -375,12 +391,25 @@ public class FragMain extends BaseFragment {
     @Override
     public void onPause() {
         super.onPause();
+        if (homeAdFreeSubscriptionPending) {
+            pausedAfterHomeAdFreeSubscription = true;
+        }
         stopDiscountBadgeTicker();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
+        if (homeAdFreeSubscriptionPending && pausedAfterHomeAdFreeSubscription) {
+            homeAdFreeSubscriptionPending = false;
+            pausedAfterHomeAdFreeSubscription = false;
+            if (getContext() != null &&
+                    !com.quranaudio.common.ad.SubscriptionChecker.shouldHideAds(requireContext())) {
+                HomeSessionAdFreeManager.enableRewardedAlternative();
+            }
+        }
+        refreshHomeNativeAdState();
 
         Log.d(TAG, "========================================");
         Log.d(TAG, "📱 onResume() called");
@@ -1818,9 +1847,12 @@ public class FragMain extends BaseFragment {
         android.util.Log.d("NATIVE_AD_TRACK", "═══════════════════════════════════════════════");
         
         try {
-            // Find native ad container in frag_main.xml (independent, outside the card)
+            // Find the owned footer and native container in frag_main.xml.
             View rootView = mBinding.getRoot();
-            android.view.ViewGroup votdNativeAdContainer = rootView.findViewById(R.id.votd_native_ad_container);
+            homeNativeAdFooter = rootView.findViewById(R.id.home_native_ad_footer);
+            homeAdFreeAction = rootView.findViewById(R.id.home_ad_free_action);
+            homeNativeAdContainer = rootView.findViewById(R.id.votd_native_ad_container);
+            android.view.ViewGroup votdNativeAdContainer = homeNativeAdContainer;
             
             android.util.Log.d("NATIVE_AD_TRACK", "→ votdNativeAdContainer: " + (votdNativeAdContainer != null ? "NOT NULL" : "NULL"));
             
@@ -1834,26 +1866,54 @@ public class FragMain extends BaseFragment {
                 return;
             }
             
-            // Check subscription
-            boolean isSubscribed = com.quranaudio.common.ad.SubscriptionChecker.INSTANCE.isUserSubscribed(getActivity());
-            android.util.Log.d("NATIVE_AD_TRACK", "→ User subscribed: " + isSubscribed);
-            
-            if (isSubscribed) {
-                android.util.Log.d("NATIVE_AD_TRACK", "❌ User is subscribed, hiding VOTD ad");
-                votdNativeAdContainer.setVisibility(android.view.View.GONE);
+            if (homeNativeAdFooter == null || homeAdFreeAction == null) {
+                android.util.Log.e("NATIVE_AD_TRACK", "❌ Home native footer/action is NULL!");
                 return;
             }
+
+            homeAdFreeAction.setOnClickListener(v -> onHomeAdFreeActionClicked());
+
+            if (shouldSuppressHomeNativeAd()) {
+                android.util.Log.d("NATIVE_AD_TRACK", "❌ Ads suppressed, hiding home native footer");
+                hideHomeNativeAd();
+                return;
+            }
+            if (homeNativeAdDisplayed) {
+                showHomeNativeAdFooter();
+                return;
+            }
+            if (homeNativeAdRequestInFlight) return;
             
             android.util.Log.d("NATIVE_AD_TRACK", "→ Calling NativeAdHelper.displayNativeAdWithAutoLoad()...");
             android.util.Log.d("NATIVE_AD_TRACK", "   Activity: " + getActivity().getClass().getSimpleName());
             android.util.Log.d("NATIVE_AD_TRACK", "   Container: " + votdNativeAdContainer.getClass().getSimpleName());
             android.util.Log.d("NATIVE_AD_TRACK", "   Layout: com.quran.quranaudio.quiz.R.layout.layout_ad_native_small_wrapper");
             
-            // Load native ad
+            homeNativeAdRequestInFlight = true;
             com.quranaudio.common.ad.NativeAdHelper.INSTANCE.displayNativeAdWithAutoLoad(
                 getActivity(),
                 votdNativeAdContainer,
-                com.quran.quranaudio.quiz.R.layout.layout_ad_native_small_wrapper
+                com.quran.quranaudio.quiz.R.layout.layout_ad_native_small_wrapper,
+                new Function1<Boolean, Unit>() {
+                    @Override
+                    public Unit invoke(Boolean displayed) {
+                        if (!isAdded() || getView() == null || homeNativeAdContainer == null) {
+                            return Unit.INSTANCE;
+                        }
+                        homeNativeAdRequestInFlight = false;
+                        if (shouldSuppressHomeNativeAd()) {
+                            hideHomeNativeAd();
+                            return Unit.INSTANCE;
+                        }
+                        homeNativeAdDisplayed = Boolean.TRUE.equals(displayed);
+                        if (homeNativeAdDisplayed) {
+                            showHomeNativeAdFooter();
+                        } else {
+                            hideHomeNativeAd();
+                        }
+                        return Unit.INSTANCE;
+                    }
+                }
             );
             
             android.util.Log.d("NATIVE_AD_TRACK", "✅ displayNativeAdWithAutoLoad() call completed");
@@ -1864,6 +1924,102 @@ public class FragMain extends BaseFragment {
             android.util.Log.e("NATIVE_AD_TRACK", "❌ Exception in loadVOTDNativeAd()", e);
             Log.e(TAG, "Error loading VOTD native ad", e);
         }
+    }
+
+    private void onHomeAdFreeActionClicked() {
+        Activity activity = getActivity();
+        if (activity == null || activity.isFinishing() || activity.isDestroyed()) return;
+
+        if (shouldSuppressHomeNativeAd()) {
+            hideHomeNativeAd();
+            return;
+        }
+
+        if (HomeSessionAdFreeManager.shouldOfferRewardedAlternative()) {
+            logHomeAdFreeAction("reward_request");
+            RewardedValueCoordinator.INSTANCE.request(
+                    activity,
+                    com.quranaudio.common.ad.AdConfig.AD_HOME_SESSION_AD_FREE_REWARD,
+                    getString(R.string.home_ad_free_reward_description),
+                    new Function0<Unit>() {
+                        @Override
+                        public Unit invoke() {
+                            HomeSessionAdFreeManager.activate();
+                            logHomeAdFreeAction("reward_earned");
+                            hideHomeNativeAd();
+                            if (isAdded()) {
+                                Toast.makeText(requireContext(), R.string.home_ad_free_reward_earned,
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                            return Unit.INSTANCE;
+                        }
+                    }
+            );
+            return;
+        }
+
+        homeAdFreeSubscriptionPending = true;
+        pausedAfterHomeAdFreeSubscription = false;
+        logHomeAdFreeAction("subscription_open");
+        SubscriptionHelper.INSTANCE.launchSubscriptionPage(activity, "home_native_ad_vip");
+    }
+
+    private boolean shouldSuppressHomeNativeAd() {
+        Context context = getContext();
+        return context == null ||
+                com.quranaudio.common.ad.SubscriptionChecker.shouldHideAds(context) ||
+                HomeSessionAdFreeManager.isActive();
+    }
+
+    private void refreshHomeNativeAdState() {
+        if (getView() == null || homeNativeAdFooter == null) return;
+        if (shouldSuppressHomeNativeAd()) {
+            hideHomeNativeAd();
+        } else if (homeNativeAdDisplayed) {
+            showHomeNativeAdFooter();
+        } else if (!homeNativeAdRequestInFlight) {
+            loadVOTDNativeAd();
+        }
+    }
+
+    private void showHomeNativeAdFooter() {
+        if (homeAdFreeAction == null || homeNativeAdContainer == null || homeNativeAdFooter == null) return;
+        if (shouldSuppressHomeNativeAd() || !homeNativeAdDisplayed) {
+            hideHomeNativeAd();
+            return;
+        }
+
+        boolean rewardedAlternative = HomeSessionAdFreeManager.shouldOfferRewardedAlternative();
+        int label = rewardedAlternative ? R.string.home_ad_free_reward : R.string.home_ad_free_vip;
+        homeAdFreeAction.setText(label);
+        homeAdFreeAction.setContentDescription(getString(label));
+        homeAdFreeAction.setIconResource(
+                rewardedAlternative
+                        ? com.quran.quranaudio.quiz.R.drawable.ic_rewarded_video
+                        : R.drawable.dr_icon_premium
+        );
+        homeAdFreeAction.setVisibility(View.VISIBLE);
+        homeNativeAdContainer.setVisibility(View.VISIBLE);
+        homeNativeAdFooter.setVisibility(View.VISIBLE);
+    }
+
+    private void hideHomeNativeAd() {
+        homeNativeAdDisplayed = false;
+        homeNativeAdRequestInFlight = false;
+        if (homeNativeAdContainer != null) {
+            homeNativeAdContainer.removeAllViews();
+            homeNativeAdContainer.setVisibility(View.GONE);
+        }
+        if (homeNativeAdFooter != null) {
+            homeNativeAdFooter.setVisibility(View.GONE);
+        }
+    }
+
+    private void logHomeAdFreeAction(String action) {
+        Context context = getContext();
+        if (context == null) return;
+        com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(context)
+                .logEvent("home_ad_free_entry", Collections.<String, Object>singletonMap("action", action));
     }
     
     /**
@@ -2468,6 +2624,10 @@ public class FragMain extends BaseFragment {
 
     @Override
     public void onDestroyView() {
+        hideHomeNativeAd();
+        homeNativeAdContainer = null;
+        homeNativeAdFooter = null;
+        homeAdFreeAction = null;
         // Stop countdown timer to prevent memory leaks
         stopCountdownTimer();
         

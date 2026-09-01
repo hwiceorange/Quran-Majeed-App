@@ -1775,4 +1775,8 @@ Compass: point your phone and follow the arrow to the Kaaba in real time.</strin
     <string name="tafsir_ad_free_reward_description">Hide native ads in Tafsir until you close the app</string>
     <string name="tafsir_ad_free_reward_earned">Tafsir ads are hidden until you close the app</string>
     <string name="tafsir_load_failed">Tafsir could not be loaded. Please try again.</string>
+    <string name="home_ad_free_vip">Remove ads · VIP</string>
+    <string name="home_ad_free_reward">AD · Remove home ad</string>
+    <string name="home_ad_free_reward_description">Hide the bottom home native ad until you close the app</string>
+    <string name="home_ad_free_reward_earned">The bottom home ad is hidden until you close the app</string>
 </resources>

@@ -66,13 +66,32 @@
                 android:id="@+id/verse_of_day_card"
                 layout="@layout/layout_verse_of_day_card" />
 
-            <!-- Native Ad Container - 在 Verse of The Day Card 外部独立展示 -->
-            <FrameLayout
-                android:id="@+id/votd_native_ad_container"
+            <!-- Owned action remains outside NativeAdView and only appears after ad fill. -->
+            <LinearLayout
+                android:id="@+id/home_native_ad_footer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:visibility="gone" />
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/home_ad_free_action"
+                    style="@style/Widget.Quran.NativeAdFreeAction"
+                    android:layout_width="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:contentDescription="@string/home_ad_free_vip"
+                    android:text="@string/home_ad_free_vip" />
+
+                <!-- Native Ad Container - 在 Verse of The Day Card 外部独立展示 -->
+                <FrameLayout
+                    android:id="@+id/votd_native_ad_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+            </LinearLayout>
 
             <!-- Daily Quran Quiz Card - 放在 Verse of The Day Card 下方 -->
             <include

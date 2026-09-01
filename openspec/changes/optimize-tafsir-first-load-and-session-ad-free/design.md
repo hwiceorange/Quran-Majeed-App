@@ -14,6 +14,8 @@ The Tafsir footer currently contains only the native-ad container. The requested
 - Report manifest/cache/network/render stages for post-release performance diagnosis.
 - Provide a 48dp, RTL-safe owned action next to the Tafsir ad area with subscription-first and rewarded-second states.
 - Hide only Tafsir native ads for the current process after a successfully earned reward.
+- Keep the visible Tafsir action background compact while retaining its 48dp Android touch target and current text size.
+- Attach an equivalent compact action directly to the actual `FragMain` bottom native ad without introducing a second large promo card.
 
 **Non-Goals:**
 
@@ -21,6 +23,7 @@ The Tafsir footer currently contains only the native-ad container. The requested
 - Removing app-open, banner, interstitial, or native ads on other pages with the Tafsir session reward.
 - Changing subscription products, the one-hour global ad-free reward, permanent ad removal, or premium Tafsir content access.
 - Automatically showing rewarded ads on return from subscription.
+- Treating a home-only rewarded removal as global ad-free access.
 
 ## Decisions
 
@@ -39,6 +42,10 @@ The Tafsir footer currently contains only the native-ad container. The requested
 7. **Earned callback is authoritative.** The process entitlement is activated only by `onUserEarnedReward`. Cancel, no-fill, load timeout, close-before-reward, or show failure leaves the native ad and reading content unchanged.
 
 8. **Native display callback is backward compatible.** The ad helper retains its existing three-argument method and adds a four-argument overload for display-state reporting, avoiding JVM signature changes for Java callers.
+
+9. **Compact visual bounds do not shrink interaction bounds.** The action remains a 48dp `MaterialButton`, while 8dp Android top/bottom background insets reduce the visible background to about 32dp. Text remains 14sp and the existing ripple/semantic button behavior is retained.
+
+10. **Home uses an independent process state.** The actual `FragMain` VOTD-bottom native ad receives the same subscription-first/rewarded-second flow, but its earned state is separate from Tafsir so the benefit copy remains exact. No second large home promo is introduced.
 
 ## Risks / Trade-offs
 

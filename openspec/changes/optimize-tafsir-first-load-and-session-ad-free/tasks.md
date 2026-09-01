@@ -24,3 +24,11 @@
 - [x] 4.2 Compile adlib and app Kotlin/Java and run relevant unit tests
 - [x] 4.3 Build Google Play debug APK and run strict OpenSpec and diff validation
 - [x] 4.4 Review small-screen, landscape, RTL, large text, dark theme, failure/cancel, and reading/navigation behavior
+
+## 5. Compact and extend the native ad-removal entry
+
+- [x] 5.1 Reduce the Tafsir action's visible background height while preserving 14sp text and a 48dp touch target
+- [x] 5.2 Attach a compact action to the actual `FragMain` bottom native ad without adding a duplicate large promo card
+- [x] 5.3 Add a distinct home process state, rewarded placement, English/Arabic copy, and subscription-return state machine
+- [x] 5.4 Apply centralized and home-session suppression before requests, on resume, and in late native callbacks
+- [x] 5.5 Add unit coverage and run compile, APK, strict OpenSpec, diff, and responsive/RTL/theme interaction checks
