@@ -36,6 +36,18 @@ object NativeAdHelper {
         container: ViewGroup,
         layoutResId: Int
     ) {
+        displayNativeAdWithAutoLoad(activity, container, layoutResId, null)
+    }
+
+    /**
+     * Backward-compatible overload for owned UI that must follow the actual ad display state.
+     */
+    fun displayNativeAdWithAutoLoad(
+        activity: Activity,
+        container: ViewGroup,
+        layoutResId: Int,
+        onDisplayStateChanged: ((Boolean) -> Unit)?
+    ) {
         val callerInfo = Thread.currentThread().stackTrace.getOrNull(3)?.let {
             "${it.className.substringAfterLast('.')}.${it.methodName}:${it.lineNumber}"
         } ?: "Unknown"
@@ -62,6 +74,7 @@ object NativeAdHelper {
                 android.util.Log.e("NATIVE_AD_TRACK", "   Reason: Subscribed or failed to load")
                 Log.d(TAG, "⚠️ No ad available (subscribed or failed to load)")
                 container.visibility = View.GONE
+                onDisplayStateChanged?.invoke(false)
                 return@loadAdWithCallback
             }
             
@@ -126,6 +139,7 @@ object NativeAdHelper {
                 
                 android.util.Log.d("NATIVE_AD_TRACK", "✅ Native ad displayed successfully for: $callerInfo")
                 Log.d(TAG, "✅ Native ad displayed successfully")
+                onDisplayStateChanged?.invoke(true)
             } catch (e: Exception) {
                 android.util.Log.e("NATIVE_AD_TRACK", "❌ Failed to display ad for: $callerInfo", e)
                 android.util.Log.e("NATIVE_AD_TRACK", "   Exception: ${e.javaClass.simpleName}")
@@ -133,6 +147,7 @@ object NativeAdHelper {
                 e.printStackTrace()
                 Log.e(TAG, "❌ Failed to display ad: ${e.message}", e)
                 container.visibility = View.GONE
+                onDisplayStateChanged?.invoke(false)
             }
         }
         
@@ -315,4 +330,3 @@ object NativeAdHelper {
         Log.d(TAG, "🙈 Native ad container hidden")
     }
 }
-

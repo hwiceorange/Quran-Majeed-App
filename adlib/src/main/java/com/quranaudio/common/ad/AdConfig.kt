@@ -22,6 +22,7 @@ object AdConfig {
     const val AD_AUDIO_REWARD = "reward_ad_audio"
     const val AD_AD_FREE_HOUR_REWARD = "reward_ad_free_hour"
     const val AD_PROGRESS_INSIGHT_REWARD = "reward_ad_progress_insight"
+    const val AD_TAFSIR_SESSION_AD_FREE_REWARD = "reward_ad_tafsir_session_ad_free"
 
     private const val AD_TEST_APPOPEN_ID = "ca-app-pub-3940256099942544/9257395921"
     private const val AD_TEST_INTERS_ID = "ca-app-pub-3940256099942544/1033173712"
@@ -78,7 +79,8 @@ object AdConfig {
             AD_TRANSLATION_REWARD,
             AD_AUDIO_REWARD,
             AD_AD_FREE_HOUR_REWARD,
-            AD_PROGRESS_INSIGHT_REWARD -> if (useTest) AD_TEST_REWARD_ID else AD_QUIZ_REWARD_ID
+            AD_PROGRESS_INSIGHT_REWARD,
+            AD_TAFSIR_SESSION_AD_FREE_REWARD -> if (useTest) AD_TEST_REWARD_ID else AD_QUIZ_REWARD_ID
             else -> ""
         }
         

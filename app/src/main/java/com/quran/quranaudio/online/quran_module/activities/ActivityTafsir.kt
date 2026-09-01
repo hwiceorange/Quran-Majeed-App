@@ -22,13 +22,16 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.activity.result.ActivityResult
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.button.MaterialButton
 import com.peacedesign.android.utils.DrawableUtils
 import com.peacedesign.android.utils.WindowUtils
 import com.quran.quranaudio.online.R
 import com.quran.quranaudio.online.model.UnlockedContent
 import com.quran.quranaudio.online.repository.UnlockedContentRepository
+import com.quran.quranaudio.online.rewards.RewardedValueCoordinator
 import com.quran.quranaudio.online.subscription.SubscriptionHelper
+import com.quran.quranaudio.online.tafsir.TafsirSessionAdFreeManager
 import com.quran.quranaudio.online.ui.dialog.RewardedAdLoadingDialog
 import com.quran.quranaudio.online.quran_module.api.JsonHelper
 import com.quran.quranaudio.online.quran_module.api.RetrofitInstance
@@ -46,6 +49,7 @@ import com.quran.quranaudio.online.quran_module.utils.receivers.NetworkStateRece
 import com.quran.quranaudio.online.quran_module.utils.simplified.SimpleSeekbarChangeListener
 import com.quran.quranaudio.online.quran_module.utils.tafsir.TafsirJsInterface
 import com.quran.quranaudio.online.quran_module.utils.tafsir.TafsirLanguageMapper
+import com.quran.quranaudio.online.quran_module.utils.tafsir.TafsirCacheManager
 import com.quran.quranaudio.online.quran_module.utils.tafsir.TafsirWebViewClient
 import com.quran.quranaudio.online.quran_module.utils.univ.Codes
 import com.quran.quranaudio.online.quran_module.utils.univ.Keys
@@ -54,8 +58,10 @@ import com.quran.quranaudio.online.quran_module.widgets.PageAlert
 import com.quran.quranaudio.online.quran_module.widgets.bottomSheet.PeaceBottomSheet
 import com.quranaudio.common.ad.AdConfig
 import com.quranaudio.common.ad.AdFactory
+import com.quranaudio.common.ad.SubscriptionChecker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -73,6 +79,19 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
     private var isContentUnlocked = false
     private var isAdLoaded = false
     private var adLoadingDialog: RewardedAdLoadingDialog? = null
+    private var contentLoadJob: Job? = null
+    private var contentRequestId = 0L
+    private var lastReadyLoggedRequestId = -1L
+    private var currentContentLoadStartedAt = 0L
+    private var currentContentSource = "unknown"
+    private var currentManifestPrepareMs = 0L
+    private var currentContentReadyMs = 0L
+    private var currentRenderSubmitMs = 0L
+    private var nativeAdRequestInFlight = false
+    private var nativeAdDisplayed = false
+    private var webPageReady = false
+    private var tafsirAdFreeSubscriptionPending = false
+    private var pausedAfterTafsirAdFreeSubscription = false
 
     var tafsirKey: String? = null
     var chapterNo = 0
@@ -107,6 +126,7 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
                 startActivity4Result(intent, null)
             }
             it.fontSize.setOnClickListener { showFontSizeDialog() }
+            it.tafsirAdFreeAction.setOnClickListener { onTafsirAdFreeActionClicked() }
 
             ViewCompat.setOnApplyWindowInsetsListener(it.appBar) { view, insets ->
                 val topInset = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
@@ -178,11 +198,13 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
 
         initWebView()
 
-        // 首次使用时强制下载Tafsirs资源
-        val forceDownload = TafsirManager.getModels() == null
-        
-        TafsirManager.prepare(this, forceDownload) {
-            android.util.Log.d("ActivityTafsir", "✅ TafsirManager prepared, models available: ${TafsirManager.getModels() != null}")
+        val manifestStartedAt = System.currentTimeMillis()
+        TafsirManager.prepare(this, false) {
+            currentManifestPrepareMs = System.currentTimeMillis() - manifestStartedAt
+            android.util.Log.d(
+                "ActivityTafsir",
+                "✅ TafsirManager local-first prepare completed in ${currentManifestPrepareMs}ms, models available: ${TafsirManager.getModels() != null}"
+            )
             initContent(intent)
         }
     }
@@ -205,9 +227,11 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
             it.webViewClient = object : TafsirWebViewClient(this) {
                 override fun onPageFinished(view: WebView, url: String) {
                     super.onPageFinished(view, url)
+                    webPageReady = true
                     binding.loader.visibility = View.GONE
                     binding.tafsirHeader.btnPrevVerse.visibility = View.VISIBLE
                     binding.tafsirHeader.btnNextVerse.visibility = View.VISIBLE
+                    logTafsirReadyIfNeeded()
                     loadTafsirNativeAd()
                 }
             }
@@ -373,63 +397,75 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
     private fun loadContent() {
         pageAlert.remove()
         binding.loader.visibility = View.VISIBLE
-        
-        val loadStartTime = System.currentTimeMillis()
-        android.util.Log.d("ActivityTafsir", "⏱️ [性能] loadContent 开始: $chapterNo:$verseNo")
+        webPageReady = false
 
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                // 🔥 优化：使用三级缓存（内存 → 文件 → 网络）
-                val tafsir = com.quran.quranaudio.online.quran_module.utils.tafsir.TafsirCacheManager.getTafsir(
-                    context = this@ActivityTafsir,
-                    tafsirKey = tafsirKey,
-                    chapterNo = chapterNo,
-                    verseNo = verseNo
+        val requestedKey = tafsirKey ?: run {
+            fail("Failed to load tafsir.", true)
+            return
+        }
+        val requestedChapter = chapterNo
+        val requestedVerse = verseNo
+        val requestId = ++contentRequestId
+        currentContentLoadStartedAt = System.currentTimeMillis()
+        currentContentSource = "unknown"
+        currentContentReadyMs = 0L
+        currentRenderSubmitMs = 0L
+        contentLoadJob?.cancel()
+
+        android.util.Log.d("ActivityTafsir", "⏱️ [性能] loadContent 开始: $requestedChapter:$requestedVerse, request=$requestId")
+        contentLoadJob = lifecycleScope.launch {
+            val result = TafsirCacheManager.getOrLoadTafsir(
+                context = applicationContext,
+                tafsirKey = requestedKey,
+                chapterNo = requestedChapter,
+                verseNo = requestedVerse
+            )
+
+            if (!isCurrentContentRequest(requestId, requestedKey, requestedChapter, requestedVerse)) {
+                android.util.Log.d("ActivityTafsir", "Ignoring stale Tafsir result for request=$requestId")
+                return@launch
+            }
+
+            result.onSuccess { loaded ->
+                currentContentSource = loaded.source.name.lowercase(Locale.ROOT)
+                currentContentReadyMs = System.currentTimeMillis() - currentContentLoadStartedAt
+                android.util.Log.d(
+                    "ActivityTafsir",
+                    "✅ [性能] Tafsir ${currentContentSource} ready in ${currentContentReadyMs}ms"
                 )
-                
-                if (tafsir != null) {
-                    // ✅ 缓存命中，立即渲染
-                    val elapsed = System.currentTimeMillis() - loadStartTime
-                    android.util.Log.d("ActivityTafsir", "✅ [性能] Tafsir 从缓存加载成功 (${elapsed}ms)")
-                    renderData(tafsir)
-                    return@launch
-                }
-                
-                // 🔥 缓存不存在，检查网络
+                renderData(loaded.tafsir)
+
+                val verseCount = mQuranRef.get().getChapter(requestedChapter).verseCount
+                TafsirCacheManager.prefetchAdjacent(
+                    applicationContext,
+                    requestedKey,
+                    requestedChapter,
+                    requestedVerse,
+                    verseCount
+                )
+            }.onFailure { error ->
+                Log.saveError(error, "ActivityTafsir")
                 if (!NetworkStateReceiver.isNetworkConnected(this@ActivityTafsir)) {
-                    runOnUiThread { 
-                        if (!isFinishing && !isDestroyed) {
-                            noInternet() 
-                        }
-                    }
-                    return@launch
+                    noInternet()
+                } else {
+                    fail(getString(R.string.tafsir_load_failed), true)
                 }
-                
-                // 🔥 从网络加载并缓存
-                val result = com.quran.quranaudio.online.quran_module.utils.tafsir.TafsirCacheManager.loadAndCacheTafsir(
-                    context = this@ActivityTafsir,
-                    tafsirKey = tafsirKey!!,
-                    chapterNo = chapterNo,
-                    verseNo = verseNo
-                )
-                
-                result.onSuccess { loadedTafsir ->
-                    val elapsed = System.currentTimeMillis() - loadStartTime
-                    android.util.Log.d("ActivityTafsir", "✅ [性能] Tafsir 从网络加载成功 (${elapsed}ms)")
-                    renderData(loadedTafsir)
-                }.onFailure { e ->
-                    val slug = com.quran.quranaudio.online.quran_module.utils.tafsir.TafsirUtils.getTafsirSlugFromKey(tafsirKey)
-                    val apiSource = if (slug.startsWith("id-")) "custom server (dochubai.com)" else "Quran.com"
-                    android.util.Log.e("ActivityTafsir", "❌ Failed to load tafsir from $apiSource: ${e.message}")
-                    Log.saveError(e, "ActivityTafsir")
-                    fail("Failed to load tafsir.", true)
-                }
-                
-            } catch (e: Exception) {
-                android.util.Log.e("ActivityTafsir", "❌ Unexpected error: ${e.message}")
-                fail("Failed to load tafsir.", true)
             }
         }
+    }
+
+    private fun isCurrentContentRequest(
+        requestId: Long,
+        requestedKey: String,
+        requestedChapter: Int,
+        requestedVerse: Int
+    ): Boolean {
+        return !isFinishing &&
+            !isDestroyed &&
+            requestId == contentRequestId &&
+            requestedKey == tafsirKey &&
+            requestedChapter == chapterNo &&
+            requestedVerse == verseNo
     }
 
     private fun renderData(tafsir: TafsirModel) {
@@ -449,17 +485,39 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
         val replaceElapsed = System.currentTimeMillis() - renderStartTime
         android.util.Log.d("ActivityTafsir", "⏱️ [性能] HTML 替换完成 (${replaceElapsed}ms)")
 
-        runOnUiThread {
-            if (!isFinishing && !isDestroyed) {
-                binding.webView.loadDataWithBaseURL(null, html, "text/html; charset=UTF-8", "utf-8", null)
-                
-                val totalElapsed = System.currentTimeMillis() - renderStartTime
-                android.util.Log.d("ActivityTafsir", "⏱️ [性能] renderData 完成 (${totalElapsed}ms)")
-                
-                // 内容加载完成后，检查解锁状态
-                checkUnlockStatus()
-            }
+        if (!isFinishing && !isDestroyed) {
+            binding.webView.loadDataWithBaseURL(null, html, "text/html; charset=UTF-8", "utf-8", null)
+
+            val totalElapsed = System.currentTimeMillis() - renderStartTime
+            currentRenderSubmitMs = totalElapsed
+            android.util.Log.d("ActivityTafsir", "⏱️ [性能] renderData 提交 WebView (${totalElapsed}ms)")
+
+            // 内容加载完成后，检查解锁状态
+            checkUnlockStatus()
         }
+    }
+
+    private fun logTafsirReadyIfNeeded() {
+        if (lastReadyLoggedRequestId == contentRequestId || currentContentLoadStartedAt <= 0L) return
+        lastReadyLoggedRequestId = contentRequestId
+        val totalMs = System.currentTimeMillis() - currentContentLoadStartedAt
+        android.util.Log.d(
+            "ActivityTafsir",
+            "✅ [性能] Tafsir first content visible: source=$currentContentSource, total=${totalMs}ms"
+        )
+        com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(this).logEvent(
+            "tafsir_load_performance",
+            mapOf(
+                "source" to currentContentSource,
+                "manifest_ms" to currentManifestPrepareMs,
+                "content_ms" to currentContentReadyMs,
+                "network_ms" to if (currentContentSource == "network") currentContentReadyMs else 0L,
+                "render_submit_ms" to currentRenderSubmitMs,
+                "total_ms" to totalMs,
+                "chapter" to chapterNo,
+                "verse" to verseNo
+            )
+        )
     }
 
     /**
@@ -1020,15 +1078,62 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
         android.util.Log.d("ActivityTafsir", "🛒 Navigating to subscription page")
         SubscriptionHelper.launchSubscriptionPage(this, "tafsir_unlock")
     }
+
+    private fun onTafsirAdFreeActionClicked() {
+        if (shouldSuppressTafsirNativeAd()) {
+            hideTafsirNativeAd()
+            return
+        }
+
+        if (TafsirSessionAdFreeManager.shouldOfferRewardedAlternative()) {
+            com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(this).logEvent(
+                "tafsir_ad_free_entry",
+                mapOf("action" to "reward_request")
+            )
+            RewardedValueCoordinator.request(
+                activity = this,
+                placement = AdConfig.AD_TAFSIR_SESSION_AD_FREE_REWARD,
+                rewardDescription = getString(R.string.tafsir_ad_free_reward_description)
+            ) {
+                TafsirSessionAdFreeManager.activate()
+                com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(this).logEvent(
+                    "tafsir_ad_free_entry",
+                    mapOf("action" to "reward_earned")
+                )
+                hideTafsirNativeAd()
+                Toast.makeText(this, R.string.tafsir_ad_free_reward_earned, Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            tafsirAdFreeSubscriptionPending = true
+            pausedAfterTafsirAdFreeSubscription = false
+            com.quran.quranaudio.online.analytics.AnalyticsManager.getInstance(this).logEvent(
+                "tafsir_ad_free_entry",
+                mapOf("action" to "subscription_open")
+            )
+            SubscriptionHelper.launchSubscriptionPage(this, "tafsir_native_ad_vip")
+        }
+    }
     
     /**
      * 在onResume中检查订阅状态
      */
     override fun onResume() {
         super.onResume()
-        
+
+        if (tafsirAdFreeSubscriptionPending && pausedAfterTafsirAdFreeSubscription) {
+            tafsirAdFreeSubscriptionPending = false
+            pausedAfterTafsirAdFreeSubscription = false
+            if (!SubscriptionChecker.shouldHideAds(this)) {
+                TafsirSessionAdFreeManager.enableRewardedAlternative()
+            }
+        }
+
+        refreshTafsirNativeAdState()
+
         // 检查解锁状态（可能用户刚订阅回来）
-        checkUnlockStatus()
+        if (tafsirKey != null && chapterNo > 0 && verseNo > 0) {
+            checkUnlockStatus()
+        }
     }
     
     /**
@@ -1036,7 +1141,11 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
      */
     override fun onPause() {
         super.onPause()
-        
+
+        if (tafsirAdFreeSubscriptionPending) {
+            pausedAfterTafsirAdFreeSubscription = true
+        }
+
         // 关闭广告加载对话框
         if (adLoadingDialog != null && adLoadingDialog!!.isShowing) {
             android.util.Log.d("ActivityTafsir", "⏸️ onPause: Dismissing ad loading dialog")
@@ -1055,21 +1164,97 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
      * 清理资源
      */
     private fun loadTafsirNativeAd() {
+        if (shouldSuppressTafsirNativeAd()) {
+            hideTafsirNativeAd()
+            return
+        }
+        if (nativeAdDisplayed) {
+            showTafsirAdFooter()
+            return
+        }
+        if (nativeAdRequestInFlight) return
+
+        nativeAdRequestInFlight = true
         val container = binding.tafsirNativeAdContainer
         com.quranaudio.common.ad.NativeAdHelper.displayNativeAdWithAutoLoad(
             this,
             container,
             com.quran.quranaudio.quiz.R.layout.layout_ad_native_small_wrapper
-        )
+        ) { displayed ->
+            nativeAdRequestInFlight = false
+            if (isFinishing || isDestroyed || shouldSuppressTafsirNativeAd()) {
+                hideTafsirNativeAd()
+                return@displayNativeAdWithAutoLoad
+            }
+
+            nativeAdDisplayed = displayed
+            if (displayed) {
+                showTafsirAdFooter()
+            } else {
+                binding.tafsirAdFooter.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun shouldSuppressTafsirNativeAd(): Boolean {
+        return SubscriptionChecker.shouldHideAds(this) || TafsirSessionAdFreeManager.isActive()
+    }
+
+    private fun refreshTafsirNativeAdState() {
+        if (!::binding.isInitialized) return
+        if (shouldSuppressTafsirNativeAd()) {
+            hideTafsirNativeAd()
+        } else if (nativeAdDisplayed) {
+            showTafsirAdFooter()
+        } else if (webPageReady) {
+            loadTafsirNativeAd()
+        }
+    }
+
+    private fun showTafsirAdFooter() {
+        if (shouldSuppressTafsirNativeAd() || !nativeAdDisplayed) {
+            hideTafsirNativeAd()
+            return
+        }
+
+        val rewardedAlternative = TafsirSessionAdFreeManager.shouldOfferRewardedAlternative()
+        binding.tafsirAdFreeAction.apply {
+            val label = getString(
+                if (rewardedAlternative) R.string.tafsir_ad_free_reward else R.string.tafsir_ad_free_vip
+            )
+            text = label
+            contentDescription = label
+            setIconResource(
+                if (rewardedAlternative) {
+                    com.quran.quranaudio.quiz.R.drawable.ic_rewarded_video
+                } else {
+                    R.drawable.dr_icon_premium
+                }
+            )
+            visibility = View.VISIBLE
+        }
+        binding.tafsirNativeAdContainer.visibility = View.VISIBLE
+        binding.tafsirAdFooter.visibility = View.VISIBLE
+    }
+
+    private fun hideTafsirNativeAd() {
+        if (!::binding.isInitialized) return
+        nativeAdDisplayed = false
+        nativeAdRequestInFlight = false
+        binding.tafsirNativeAdContainer.removeAllViews()
+        binding.tafsirNativeAdContainer.visibility = View.GONE
+        binding.tafsirAdFooter.visibility = View.GONE
     }
 
     override fun onDestroy() {
-        super.onDestroy()
-        
+        contentLoadJob?.cancel()
+        contentLoadJob = null
+
         // 清理广告相关资源
         adLoadingDialog?.dismiss()
         adLoadingDialog = null
         adRetryHandler.removeCallbacks(adRetryRunnable)
         isUserRequestedAd = false
+        super.onDestroy()
     }
 }

@@ -283,6 +283,11 @@ object ReaderFactory {
 
     @JvmStatic
     fun startTafsir(context: Context, chapterNo: Int, verseNo: Int) {
+        com.quran.quranaudio.online.quran_module.utils.tafsir.TafsirPreloader.preloadCurrent(
+            context.applicationContext,
+            chapterNo,
+            verseNo
+        )
         val intent = prepareTafsirIntent(chapterNo, verseNo)
         intent.setClass(context, ActivityTafsir::class.java)
         context.startActivity(intent)

@@ -58,7 +58,7 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/tafsir_native_ad_container"
+        app:layout_constraintBottom_toTopOf="@+id/tafsir_ad_footer"
         app:layout_constraintTop_toBottomOf="@id/appBar">
 
         <WebView
@@ -89,14 +89,47 @@
         </RelativeLayout>
     </RelativeLayout>
 
-    <FrameLayout
-        android:id="@+id/tafsir_native_ad_container"
+    <LinearLayout
+        android:id="@+id/tafsir_ad_footer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorBGPage"
+        android:orientation="vertical"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/tafsir_ad_free_action"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/tafsir_ad_free_vip"
+            android:gravity="center"
+            android:minHeight="48dp"
+            android:minLines="1"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/tafsir_ad_free_vip"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:icon="@drawable/dr_icon_premium"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp"
+            app:iconSize="20dp"
+            app:iconTint="@color/colorPrimary" />
+
+        <FrameLayout
+            android:id="@+id/tafsir_native_ad_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+    </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fontSize"
@@ -109,7 +142,7 @@
         app:elevation="0dp"
         app:rippleColor="@android:color/transparent"
         app:fabSize="mini"
-        app:layout_constraintBottom_toTopOf="@+id/tafsir_native_ad_container"
+        app:layout_constraintBottom_toTopOf="@+id/tafsir_ad_footer"
         app:layout_constraintEnd_toEndOf="parent"
         app:tint="@color/white" />
 

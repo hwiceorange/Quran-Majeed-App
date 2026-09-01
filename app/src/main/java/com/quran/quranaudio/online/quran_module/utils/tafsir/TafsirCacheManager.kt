@@ -35,9 +35,22 @@ object TafsirCacheManager {
     // 预加载任务管理
     private val preloadScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val activePreloadJobs = mutableMapOf<String, Job>()
+    private val inFlightLock = Any()
+    private val inFlightLoads = mutableMapOf<String, Deferred<Result<TafsirModel>>>()
     
     // JSON 解析器
     private val json = Json { ignoreUnknownKeys = true }
+
+    enum class CacheSource {
+        MEMORY,
+        FILE,
+        NETWORK
+    }
+
+    data class TafsirLoadResult(
+        val tafsir: TafsirModel,
+        val source: CacheSource
+    )
     
     /**
      * 生成缓存 key
@@ -56,7 +69,14 @@ object TafsirCacheManager {
         tafsirKey: String?,
         chapterNo: Int,
         verseNo: Int
-    ): TafsirModel? = withContext(Dispatchers.IO) {
+    ): TafsirModel? = getCachedTafsir(context, tafsirKey, chapterNo, verseNo)?.tafsir
+
+    private suspend fun getCachedTafsir(
+        context: Context,
+        tafsirKey: String?,
+        chapterNo: Int,
+        verseNo: Int
+    ): TafsirLoadResult? = withContext(Dispatchers.IO) {
         val cacheKey = getCacheKey(tafsirKey, chapterNo, verseNo)
         val startTime = System.currentTimeMillis()
         
@@ -64,7 +84,7 @@ object TafsirCacheManager {
         memoryCache.get(cacheKey)?.let {
             val elapsed = System.currentTimeMillis() - startTime
             Log.d(TAG, "✅ [L1-内存] 命中缓存: $cacheKey (${elapsed}ms)")
-            return@withContext it
+            return@withContext TafsirLoadResult(it, CacheSource.MEMORY)
         }
         
         // 🔥 第2级：文件缓存（较快，10-50ms）
@@ -80,7 +100,7 @@ object TafsirCacheManager {
                 
                 val elapsed = System.currentTimeMillis() - startTime
                 Log.d(TAG, "✅ [L2-文件] 命中缓存: $cacheKey (${elapsed}ms)")
-                return@withContext tafsir
+                return@withContext TafsirLoadResult(tafsir, CacheSource.FILE)
             }
         } catch (e: Exception) {
             Log.e(TAG, "❌ [L2-文件] 读取失败: ${e.message}")
@@ -89,6 +109,25 @@ object TafsirCacheManager {
         // 🔥 第3级：网络加载（最慢，1-5秒）
         Log.d(TAG, "⏳ [L3-网络] 缓存不存在，需要网络加载: $cacheKey")
         return@withContext null
+    }
+
+    /**
+     * Returns the fastest available content and merges all concurrent network requests for the
+     * same Tafsir/Surah/Ayah into one shared deferred request.
+     */
+    suspend fun getOrLoadTafsir(
+        context: Context,
+        tafsirKey: String,
+        chapterNo: Int,
+        verseNo: Int
+    ): Result<TafsirLoadResult> {
+        getCachedTafsir(context, tafsirKey, chapterNo, verseNo)?.let {
+            return Result.success(it)
+        }
+
+        return loadAndCacheTafsir(context, tafsirKey, chapterNo, verseNo).map {
+            TafsirLoadResult(it, CacheSource.NETWORK)
+        }
     }
     
     /**
@@ -99,14 +138,49 @@ object TafsirCacheManager {
         tafsirKey: String,
         chapterNo: Int,
         verseNo: Int
+    ): Result<TafsirModel> {
+        val cacheKey = getCacheKey(tafsirKey, chapterNo, verseNo)
+        getCachedTafsir(context, tafsirKey, chapterNo, verseNo)?.let {
+            return Result.success(it.tafsir)
+        }
+
+        val deferred = synchronized(inFlightLock) {
+            inFlightLoads[cacheKey] ?: preloadScope.async {
+                fetchAndCacheTafsir(context.applicationContext, tafsirKey, chapterNo, verseNo)
+            }.also {
+                inFlightLoads[cacheKey] = it
+                Log.d(TAG, "🚀 [SingleFlight] started: $cacheKey")
+            }
+        }
+
+        if (deferred.isActive && synchronized(inFlightLock) { inFlightLoads[cacheKey] === deferred }) {
+            Log.d(TAG, "🤝 [SingleFlight] awaiting: $cacheKey")
+        }
+
+        return try {
+            deferred.await()
+        } finally {
+            if (deferred.isCompleted) {
+                synchronized(inFlightLock) {
+                    if (inFlightLoads[cacheKey] === deferred) {
+                        inFlightLoads.remove(cacheKey)
+                    }
+                }
+            }
+        }
+    }
+
+    private suspend fun fetchAndCacheTafsir(
+        context: Context,
+        tafsirKey: String,
+        chapterNo: Int,
+        verseNo: Int
     ): Result<TafsirModel> = withContext(Dispatchers.IO) {
         val cacheKey = getCacheKey(tafsirKey, chapterNo, verseNo)
         val startTime = System.currentTimeMillis()
-        
+
         try {
             val slug = TafsirUtils.getTafsirSlugFromKey(tafsirKey)
-            
-            // 从网络加载
             val tafsir = when {
                 slug.startsWith("id-") -> {
                     Log.d(TAG, "📥 [网络] 从自定义服务器加载: $slug")
@@ -117,24 +191,40 @@ object TafsirCacheManager {
                     RetrofitInstance.quran.getTafsir(slug, "$chapterNo:$verseNo")["tafsir"]!!
                 }
             }
-            
-            // 保存到文件缓存
+
             val fileUtils = FileUtils.newInstance(context)
             val tafsirFile = fileUtils.getTafsirFileSingleVerse(tafsirKey, chapterNo, verseNo)
             fileUtils.createFile(tafsirFile)
             tafsirFile.writeText(json.encodeToString(TafsirModel.serializer(), tafsir))
-            
-            // 保存到内存缓存
             memoryCache.put(cacheKey, tafsir)
-            
-            val elapsed = System.currentTimeMillis() - startTime
-            Log.d(TAG, "✅ [网络] 加载并缓存成功: $cacheKey (${elapsed}ms)")
-            
+
+            Log.d(TAG, "✅ [网络] 加载并缓存成功: $cacheKey (${System.currentTimeMillis() - startTime}ms)")
             Result.success(tafsir)
         } catch (e: Exception) {
             Log.e(TAG, "❌ [网络] 加载失败: ${e.message}")
             Result.failure(e)
         }
+    }
+
+    fun prefetchVerse(context: Context, tafsirKey: String?, chapterNo: Int, verseNo: Int) {
+        if (tafsirKey.isNullOrBlank() || chapterNo < 1 || verseNo < 1) return
+        preloadScope.launch {
+            getOrLoadTafsir(context.applicationContext, tafsirKey, chapterNo, verseNo)
+        }
+    }
+
+    fun prefetchAdjacent(
+        context: Context,
+        tafsirKey: String,
+        chapterNo: Int,
+        verseNo: Int,
+        verseCount: Int
+    ) {
+        listOf(verseNo - 1, verseNo + 1)
+            .filter { it in 1..verseCount }
+            .forEach { adjacentVerse ->
+                prefetchVerse(context, tafsirKey, chapterNo, adjacentVerse)
+            }
     }
     
     /**
@@ -276,4 +366,3 @@ object TafsirCacheManager {
         Log.d(TAG, "🛑 所有预加载任务已取消")
     }
 }
-

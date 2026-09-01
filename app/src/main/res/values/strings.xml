@@ -1770,4 +1770,9 @@ Compass: point your phone and follow the arrow to the Kaaba in real time.</strin
     <string name="progress_insights_deep">Study consistency\n\nCurrent streak: %1$d days\nLongest streak: %2$d days\nTotal completed days: %3$d\nMonthly completion: %4$d of %5$d days\n\nKeep the next session manageable and return at a time that fits your routine.</string>
     <string name="progress_insights_open_deep">AD · View weekly deep insights</string>
     <string name="progress_insights_reward">view this week’s detailed study-progress report</string>
+    <string name="tafsir_ad_free_vip">Remove ads · VIP</string>
+    <string name="tafsir_ad_free_reward">AD · Remove Tafsir ads</string>
+    <string name="tafsir_ad_free_reward_description">Hide native ads in Tafsir until you close the app</string>
+    <string name="tafsir_ad_free_reward_earned">Tafsir ads are hidden until you close the app</string>
+    <string name="tafsir_load_failed">Tafsir could not be loaded. Please try again.</string>
 </resources>

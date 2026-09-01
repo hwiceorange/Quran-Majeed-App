@@ -1676,4 +1676,9 @@
     <string name="progress_insights_deep">انتظام الدراسة\n\nالسلسلة الحالية: %1$d أيام\nأطول سلسلة: %2$d أيام\nإجمالي الأيام المكتملة: %3$d\nالإنجاز الشهري: %4$d من %5$d يومًا\n\nاجعل الجلسة التالية مناسبة، وعُد في وقت يلائم روتينك.</string>
     <string name="progress_insights_open_deep">إعلان · عرض التحليل الأسبوعي</string>
     <string name="progress_insights_reward">عرض تقرير تقدم الدراسة المفصل لهذا الأسبوع</string>
+    <string name="tafsir_ad_free_vip">إزالة الإعلانات · VIP</string>
+    <string name="tafsir_ad_free_reward">إعلان · إزالة إعلانات التفسير</string>
+    <string name="tafsir_ad_free_reward_description">إخفاء الإعلانات المدمجة في التفسير حتى إغلاق التطبيق</string>
+    <string name="tafsir_ad_free_reward_earned">تم إخفاء إعلانات التفسير حتى إغلاق التطبيق</string>
+    <string name="tafsir_load_failed">تعذّر تحميل التفسير. يرجى المحاولة مرة أخرى.</string>
 </resources>
