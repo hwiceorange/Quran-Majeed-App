@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="rewarded_flow_preparing">Preparing reward video…</string>
+    <string name="rewarded_flow_reward_message">Watch an ad to receive: %1$s\nTap outside to cancel</string>
+    <string name="rewarded_flow_cancel_hint">Tap outside to cancel</string>
+    <string name="rewarded_flow_unavailable">No reward video is available</string>
+    <string name="rewarded_flow_retry_message">Please try loading the reward video again.</string>
+    <string name="rewarded_flow_retry">Retry</string>
+</resources>

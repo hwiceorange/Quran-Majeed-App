@@ -24,12 +24,18 @@ object AdConfig {
     const val AD_PROGRESS_INSIGHT_REWARD = "reward_ad_progress_insight"
     const val AD_TAFSIR_SESSION_AD_FREE_REWARD = "reward_ad_tafsir_session_ad_free"
     const val AD_HOME_SESSION_AD_FREE_REWARD = "reward_ad_home_session_ad_free"
+    /**
+     * Reward-bearing fallback for rewarded placements.
+     * This must be a Rewarded Interstitial ad unit, never a standard interstitial unit.
+     */
+    const val AD_REWARDED_INTERSTITIAL_FALLBACK = "rewarded_interstitial_fallback"
 
     private const val AD_TEST_APPOPEN_ID = "ca-app-pub-3940256099942544/9257395921"
     private const val AD_TEST_INTERS_ID = "ca-app-pub-3940256099942544/1033173712"
     private const val AD_TEST_NATIVE_ID = "ca-app-pub-3940256099942544/2247696110"
     private const val AD_TEST_BANNER_ID = "ca-app-pub-3940256099942544/6300978111"
     private const val AD_TEST_REWARD_ID = "ca-app-pub-3940256099942544/5224354917"
+    private const val AD_TEST_REWARDED_INTERSTITIAL_ID = "ca-app-pub-3940256099942544/5354046379"
 
     private const val AD_QUIZ_INTERS_ID = "ca-app-pub-3966802724737141/2182661506"
     private const val AD_QUIZ_REWARD_ID = "ca-app-pub-3966802724737141/2186558832"
@@ -83,6 +89,10 @@ object AdConfig {
             AD_PROGRESS_INSIGHT_REWARD,
             AD_TAFSIR_SESSION_AD_FREE_REWARD,
             AD_HOME_SESSION_AD_FREE_REWARD -> if (useTest) AD_TEST_REWARD_ID else AD_QUIZ_REWARD_ID
+            // Production intentionally has no hard-coded fallback ID. Configure
+            // rewarded_interstitial_fallback_admob in Firebase Remote Config after
+            // creating a Rewarded Interstitial unit in AdMob.
+            AD_REWARDED_INTERSTITIAL_FALLBACK -> if (useTest) AD_TEST_REWARDED_INTERSTITIAL_ID else ""
             else -> ""
         }
         

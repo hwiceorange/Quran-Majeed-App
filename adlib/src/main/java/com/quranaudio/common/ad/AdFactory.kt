@@ -21,6 +21,8 @@ import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
+import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback
 import com.quranaudio.common.ad.AdConfig.AD_APP_OPEN_CACHE_MAX_TIME
 import com.quranaudio.common.ad.model.RewardItem
 import com.quranaudio.common.ad.model.AdItem
@@ -57,6 +59,7 @@ object AdFactory : ActivityLifecycleCallbacks {
                 // A slow consent decision may finish after the scheduled preload was blocked.
                 InterstitialAdManager.getInstance().preloadAd()
                 NativeAdManager.getInstance().preloadAd()
+                preloadRewardFlowAds(activity)
             }
             callback.onConsentResult(canRequestAds)
         }
@@ -440,6 +443,85 @@ object AdFactory : ActivityLifecycleCallbacks {
         })
     }
 
+    /**
+     * Preloads the shared rewarded cache and the policy-compliant reward fallback.
+     * The physical-ID cache and [needLoadAd] make this single-flight even when
+     * several placements request it at the same time.
+     */
+    @JvmStatic
+    fun preloadRewardFlowAds(activity: Activity, rewardPosition: String = AdConfig.AD_QUIZ_REWARD) {
+        if (!isAppInForeground() || activity.isFinishing || activity.isDestroyed) return
+        loadRewardAd(activity, rewardPosition, null)
+        loadRewardedInterstitialAd(activity, AdConfig.AD_REWARDED_INTERSTITIAL_FALLBACK, null)
+    }
+
+    @JvmStatic
+    fun loadRewardedInterstitialAd(
+        activity: Activity,
+        adPosition: String,
+        callback: AdLoadCallback?
+    ) {
+        if (!ConsentManager.canRequestAds()) {
+            callback?.onAdFailedToLoad("consent_not_ready")
+            return
+        }
+        if (SubscriptionChecker.isUserSubscribed(activity)) {
+            callback?.onAdFailedToLoad("user_subscribed")
+            return
+        }
+        val adId = AdConfig.getAdIdByPosition(adPosition)
+        if (adId.isBlank()) {
+            Log.w(TAG, "Rewarded interstitial fallback ID is not configured")
+            callback?.onAdFailedToLoad("fallback_not_configured")
+            return
+        }
+        if (!needLoadAd(adId)) return
+
+        val rewardItem = AdItem(adId)
+        adsCache[adId] = rewardItem
+        val request = AdRequest.Builder().build()
+        reportEvent("startLoadAd", adPosition, null, adId)
+        RewardedInterstitialAd.load(
+            activity,
+            adId,
+            request,
+            object : RewardedInterstitialAdLoadCallback() {
+                private val startTime = System.currentTimeMillis()
+
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    reportEvent(
+                        "onAdFailedToLoad",
+                        adPosition,
+                        adId,
+                        System.currentTimeMillis() - startTime,
+                        adError.code.toString(),
+                        adError.message,
+                        null,
+                        null
+                    )
+                    rewardItem.loadingState = LoadingState.FAILED
+                    callback?.onAdFailedToLoad(adPosition)
+                }
+
+                override fun onAdLoaded(ad: RewardedInterstitialAd) {
+                    reportEvent(
+                        "onAdLoaded",
+                        adPosition,
+                        adId,
+                        System.currentTimeMillis() - startTime,
+                        null,
+                        null,
+                        null,
+                        ad.responseInfo.mediationAdapterClassName ?: ""
+                    )
+                    rewardItem.ad = ad
+                    rewardItem.loadingState = LoadingState.LOADED
+                    callback?.onAdLoaded(rewardItem)
+                }
+            }
+        )
+    }
+
     private fun consumeAd(adId: String, maxCacheTime: Long = AdConfig.AD_CACHE_MAX_TIME): AdItem? {
         adsCache[adId]?.let {
             if (it.isValid(maxCacheTime)) {
@@ -545,6 +627,44 @@ object AdFactory : ActivityLifecycleCallbacks {
                             }
 
                         })
+                }
+                return
+            }
+        }
+        callback?.onShowFail()
+    }
+
+    @JvmStatic
+    fun showRewardedInterstitialAd(
+        activity: Activity,
+        adPosition: String,
+        functionTag: String,
+        callback: AdShowCallback?
+    ) {
+        if (SubscriptionChecker.isUserSubscribed(activity)) {
+            callback?.onShowFail()
+            return
+        }
+        val adId = AdConfig.getAdIdByPosition(adPosition)
+        consumeAd(adId)?.let { adItem ->
+            (adItem.ad as? RewardedInterstitialAd)?.let { ad ->
+                ad.fullScreenContentCallback = AdmobFullScreenContentCallback(
+                    adPosition,
+                    functionTag,
+                    adItem,
+                    callback,
+                    ad.responseInfo.mediationAdapterClassName
+                )
+                ad.onPaidEventListener = AdmobOnPaidEventListener(adPosition, functionTag, adId, ad)
+                reportEvent("startShowAd", adPosition, adId, 0, null, null, functionTag, null)
+                ad.show(activity) { reward ->
+                    callback?.onUserEarnedReward(
+                        adItem,
+                        object : RewardItem() {
+                            override fun getAmount(): Int = reward.amount
+                            override fun getType(): String = reward.type
+                        }
+                    )
                 }
                 return
             }
@@ -725,6 +845,16 @@ object AdFactory : ActivityLifecycleCallbacks {
         return false
     }
 
+    @JvmStatic
+    fun hasRewardedInterstitialAd(adPosition: String = AdConfig.AD_REWARDED_INTERSTITIAL_FALLBACK): Boolean {
+        val adId = AdConfig.getAdIdByPosition(adPosition)
+        if (adId.isBlank()) return false
+        adsCache[adId]?.let {
+            return it.isValid() && it.ad is RewardedInterstitialAd
+        }
+        return false
+    }
+
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
         // ❌ 移除：loadInterstitialAd(activity, AdConfig.AD_INTERS, null)
         // 该缓存池只有 Quiz 会消费，Quiz 已在 QuranQuestionFragment.initData() 按需预加载；
@@ -741,6 +871,11 @@ object AdFactory : ActivityLifecycleCallbacks {
     }
 
     override fun onActivityResumed(activity: Activity) {
+        // Foreground-only warm cache. Physical-ID single-flight prevents duplicate
+        // network requests across rapid Activity transitions.
+        if (ConsentManager.canRequestAds()) {
+            preloadRewardFlowAds(activity)
+        }
     }
 
     override fun onActivityPaused(activity: Activity) {

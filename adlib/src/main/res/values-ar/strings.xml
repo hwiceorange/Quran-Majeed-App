@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="rewarded_flow_preparing">جارٍ تجهيز فيديو المكافأة…</string>
+    <string name="rewarded_flow_reward_message">شاهد إعلانًا لتحصل على: %1$s\nاضغط خارج النافذة للإلغاء</string>
+    <string name="rewarded_flow_cancel_hint">اضغط خارج النافذة للإلغاء</string>
+    <string name="rewarded_flow_unavailable">لا يتوفر فيديو مكافأة حاليًا</string>
+    <string name="rewarded_flow_retry_message">يرجى محاولة تحميل فيديو المكافأة مرة أخرى.</string>
+    <string name="rewarded_flow_retry">إعادة المحاولة</string>
+</resources>

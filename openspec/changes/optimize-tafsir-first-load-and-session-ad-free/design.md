@@ -17,6 +17,8 @@ The Tafsir footer currently contains only the native-ad container. The requested
 - Keep the visible Tafsir action background compact while retaining its 48dp Android touch target and current text size.
 - Attach an equivalent compact action directly to the actual `FragMain` bottom native ad without introducing a second large promo card.
 
+- Give all rewarded placements one cache-first, eight-second request and fallback state machine with cancel/retry behavior.
+
 **Non-Goals:**
 
 - Bundling all Tafsir verse content, changing Tafsir sources, or guaranteeing zero network time on uncached verses.
@@ -24,6 +26,8 @@ The Tafsir footer currently contains only the native-ad container. The requested
 - Changing subscription products, the one-hour global ad-free reward, permanent ad removal, or premium Tafsir content access.
 - Automatically showing rewarded ads on return from subscription.
 - Treating a home-only rewarded removal as global ad-free access.
+
+- Granting a promised reward from a standard `InterstitialAd`; only `RewardedAd` or `RewardedInterstitialAd` may complete a promised reward flow.
 
 ## Decisions
 
@@ -47,6 +51,14 @@ The Tafsir footer currently contains only the native-ad container. The requested
 
 10. **Home uses an independent process state.** The actual `FragMain` VOTD-bottom native ad receives the same subscription-first/rewarded-second flow, but its earned state is separate from Tafsir so the benefit copy remains exact. No second large home promo is introduced.
 
+11. **One rewarded request coordinator.** App and Quiz entry points delegate to an adlib coordinator. A cached `RewardedAd` shows immediately; otherwise the coordinator starts or joins the physical rewarded-ID load and polls the cache on the main thread for no longer than eight seconds.
+
+12. **Compliant fallback format only.** The fallback is `RewardedInterstitialAd`, never ordinary `InterstitialAd`, and uses its real earned callback. Debug uses Google's rewarded-interstitial test unit; release resolves `rewarded_interstitial_fallback_admob` and safely reaches the unavailable state while that key is blank.
+
+13. **Cancelable loading and retry.** A dimmed dialog explains that a reward ad is being prepared, keeps a clear cancel path, and switches after the attempt to `No reward video is available` with a 48dp Retry button. Retry starts a new rewarded-first/fallback attempt; outside or Back cancellation never grants value.
+
+14. **Preload around user demand.** Consent completion preloads the shared rewarded physical ID and rewarded-interstitial fallback. Successful consumption, close, and show failure replenish their respective one-item caches. `needLoadAd` remains the single-flight guard, while polling lets a second caller observe an in-progress load without issuing a duplicate request.
+
 ## Risks / Trade-offs
 
 - **Uncached content still depends on network quality** → Show stable loading/retry feedback, start the request before navigation, and expose stage timings.
@@ -54,3 +66,4 @@ The Tafsir footer currently contains only the native-ad container. The requested
 - **Subscription state may update shortly after resume** → Recheck centralized ad suppression on every resume and hide the footer as soon as entitlement is visible.
 - **Process-scoped reward is intentionally not durable** → Keep it in memory and use copy that says it lasts until the app is closed.
 - **Adjacent prefetch uses additional data** → Limit to at most two valid adjacent verses and never block rendering on it.
+- **Fallback production ID is not yet configured** → Keep the default blank, document the Remote Config key, and fail safely instead of sending a rewarded-interstitial request through an incompatible standard-interstitial unit.

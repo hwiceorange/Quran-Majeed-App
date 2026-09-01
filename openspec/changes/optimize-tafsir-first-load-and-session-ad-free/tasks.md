@@ -32,3 +32,12 @@
 - [x] 5.3 Add a distinct home process state, rewarded placement, English/Arabic copy, and subscription-return state machine
 - [x] 5.4 Apply centralized and home-session suppression before requests, on resume, and in late native callbacks
 - [x] 5.5 Add unit coverage and run compile, APK, strict OpenSpec, diff, and responsive/RTL/theme interaction checks
+
+## 6. Unified rewarded loading and fallback
+
+- [x] 6.1 Add rewarded-interstitial cache/load/show support with a debug test ID and blank-by-default production Remote Config key
+- [x] 6.2 Build the shared eight-second rewarded-first coordinator with immediate cache show, main-thread polling, lifecycle cancellation, and earned-only callbacks
+- [x] 6.3 Add the dimmed loading and no-reward-video retry UI with outside/back dismissal, 48dp controls, and English/Arabic resources
+- [x] 6.4 Migrate app, Tafsir unlock, Quiz gems/review, download, audio, insight, and ad-removal rewarded entry points to the shared flow
+- [x] 6.5 Preload after consent and replenish after consumption while preserving one physical request per cache ID
+- [ ] 6.6 Add decision/cache tests and run app/quiz/adlib compile, unit tests, APK, strict OpenSpec, diff, and device interaction checks

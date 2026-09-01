@@ -32,7 +32,6 @@ import com.quran.quranaudio.online.repository.UnlockedContentRepository
 import com.quran.quranaudio.online.rewards.RewardedValueCoordinator
 import com.quran.quranaudio.online.subscription.SubscriptionHelper
 import com.quran.quranaudio.online.tafsir.TafsirSessionAdFreeManager
-import com.quran.quranaudio.online.ui.dialog.RewardedAdLoadingDialog
 import com.quran.quranaudio.online.quran_module.api.JsonHelper
 import com.quran.quranaudio.online.quran_module.api.RetrofitInstance
 import com.quran.quranaudio.online.quran_module.api.models.tafsir.TafsirInfoModel
@@ -57,7 +56,7 @@ import com.quran.quranaudio.online.quran_module.utils.univ.ResUtils
 import com.quran.quranaudio.online.quran_module.widgets.PageAlert
 import com.quran.quranaudio.online.quran_module.widgets.bottomSheet.PeaceBottomSheet
 import com.quranaudio.common.ad.AdConfig
-import com.quranaudio.common.ad.AdFactory
+import com.quranaudio.common.ad.RewardedAdFlowCoordinator
 import com.quranaudio.common.ad.SubscriptionChecker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -77,8 +76,6 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
     // 解锁内容相关
     private lateinit var unlockedContentRepository: UnlockedContentRepository
     private var isContentUnlocked = false
-    private var isAdLoaded = false
-    private var adLoadingDialog: RewardedAdLoadingDialog? = null
     private var contentLoadJob: Job? = null
     private var contentRequestId = 0L
     private var lastReadyLoggedRequestId = -1L
@@ -834,56 +831,8 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
      * 预加载激励广告
      * ⚠️ 注意：只预加载，不自动播放（只有用户点击解锁按钮时才播放）
      */
-    private var isLoadingAd: Boolean = false
-    private var isUserRequestedAd: Boolean = false  // 标记是否是用户主动请求广告
-    private val adRetryHandler = android.os.Handler(android.os.Looper.getMainLooper())
-    private val adRetryRunnable = Runnable {
-        if (!isAdLoaded && !isLoadingAd) {
-            android.util.Log.d("ActivityTafsir", "🔄 Retrying rewarded ad preload after failure/close")
-            preloadRewardedAd()
-        }
-    }
-    
     private fun preloadRewardedAd() {
-        if (isAdLoaded || isLoadingAd) {
-            android.util.Log.d("ActivityTafsir", "✅ Ad already loaded or loading")
-            return
-        }
-        
-        android.util.Log.d("ActivityTafsir", "📡 Preloading rewarded ad...")
-        isLoadingAd = true
-        adRetryHandler.removeCallbacks(adRetryRunnable)
-        
-        AdFactory.loadRewardAd(this, AdConfig.AD_TAFSIR_REWARD, object : com.quranaudio.common.ad.AdLoadCallback {
-            override fun onAdLoaded(adItem: com.quranaudio.common.ad.model.AdItem?) {
-                isAdLoaded = true
-                isLoadingAd = false
-                android.util.Log.d("ActivityTafsir", "✅ Rewarded ad loaded successfully")
-                
-                // ⚠️ 【关键修复】只有在用户主动点击解锁按钮时才自动播放
-                // 避免在滚动到底部或退出页面时意外播放广告
-                if (isUserRequestedAd && adLoadingDialog != null && adLoadingDialog!!.isShowing) {
-                    android.util.Log.d("ActivityTafsir", "✅ User requested ad, showing immediately")
-                    adLoadingDialog?.onAdReadyToShow()
-                } else {
-                    android.util.Log.d("ActivityTafsir", "ℹ️ Ad loaded but not user-requested, just caching")
-                }
-            }
-            
-            override fun onAdFailedToLoad(adPosition: String?) {
-                isAdLoaded = false
-                isLoadingAd = false
-                android.util.Log.e("ActivityTafsir", "❌ Rewarded ad failed to load")
-                
-                // 如果Loading对话框还在显示，显示错误提示
-                if (isUserRequestedAd && adLoadingDialog != null) {
-                    adLoadingDialog?.showAdNotReadyError()
-                }
-                
-                // 安排重试，防止缓存池为空
-                adRetryHandler.postDelayed(adRetryRunnable, 5000)
-            }
-        })
+        RewardedAdFlowCoordinator.preload(this, AdConfig.AD_TAFSIR_REWARD)
     }
     
     /**
@@ -891,66 +840,11 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
      * ⚠️ 只有在用户点击解锁按钮时调用
      */
     private fun showRewardedAd() {
-        // 标记为用户主动请求
-        isUserRequestedAd = true
-        
-        if (isAdLoaded) {
-            // 广告已加载，直接播放
-            android.util.Log.d("ActivityTafsir", "▶️ Showing loaded ad immediately")
-            playRewardedAd()
-        } else {
-            // 广告未加载，显示Loading对话框
-            android.util.Log.d("ActivityTafsir", "⏳ Ad not loaded, showing loading dialog")
-            showAdLoadingDialog()
-        }
-    }
-    
-    /**
-     * 显示广告加载对话框
-     */
-    private fun showAdLoadingDialog() {
-        // Check if activity is still valid before showing dialog
-        if (isFinishing || isDestroyed) {
-            return
-        }
-        
-        adLoadingDialog = RewardedAdLoadingDialog(
-            context = this,
-            onAdReady = {
-                // 广告准备好，播放广告
-                android.util.Log.d("ActivityTafsir", "✅ Ad ready from dialog callback")
-                playRewardedAd()
-            },
-            onRetry = {
-                // 用户点击重试
-                android.util.Log.d("ActivityTafsir", "🔄 User clicked retry")
-                isAdLoaded = false
-                preloadRewardedAd()
-            },
-            onDismiss = {
-                // 用户关闭对话框
-                android.util.Log.d("ActivityTafsir", "❌ User dismissed loading dialog")
-                adLoadingDialog = null
-                isUserRequestedAd = false  // 重置用户请求标记
-            }
-        )
-        
-        adLoadingDialog?.show()
-        
-        // 如果广告还没开始加载，现在开始加载
-        if (!isAdLoaded) {
-            preloadRewardedAd()
-        }
-    }
-    
-    /**
-     * 播放激励广告
-     */
-    private fun playRewardedAd() {
-        AdFactory.showRewardAd(
+        RewardedAdFlowCoordinator.request(
             this,
             AdConfig.AD_TAFSIR_REWARD,
             "tafsir_unlock",
+            getString(R.string.unlock_full_content),
             object : com.quranaudio.common.ad.AdShowCallback {
                 override fun onAdImpression(p0: com.quranaudio.common.ad.model.AdItem?) {
                     android.util.Log.d("ActivityTafsir", "👁️ Ad impression")
@@ -972,13 +866,6 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
                 
                 override fun onAdClosed(p0: com.quranaudio.common.ad.model.AdItem?) {
                     android.util.Log.d("ActivityTafsir", "🚪 Ad closed")
-                    
-                    // 重置广告加载状态和用户请求标记
-                    isAdLoaded = false
-                    isUserRequestedAd = false
-                    
-                    // 预加载下一条广告（但不自动播放）
-                    preloadRewardedAd()
                 }
                 
                 override fun onShow(p0: com.quranaudio.common.ad.model.AdItem?) {
@@ -986,16 +873,7 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
                 }
                 
                 override fun onShowFail() {
-                    android.util.Log.e("ActivityTafsir", "❌ Ad show failed")
-                    Toast.makeText(
-                        this@ActivityTafsir,
-                        R.string.ad_not_ready_message,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    
-                    // 重置状态并重新加载
-                    isAdLoaded = false
-                    preloadRewardedAd()
+                    android.util.Log.d("ActivityTafsir", "Reward flow cancelled or unavailable")
                 }
             }
         )
@@ -1146,18 +1024,6 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
             pausedAfterTafsirAdFreeSubscription = true
         }
 
-        // 关闭广告加载对话框
-        if (adLoadingDialog != null && adLoadingDialog!!.isShowing) {
-            android.util.Log.d("ActivityTafsir", "⏸️ onPause: Dismissing ad loading dialog")
-            adLoadingDialog?.dismiss()
-        }
-        adLoadingDialog = null
-        
-        // 重置用户请求标记
-        isUserRequestedAd = false
-        
-        // 取消广告重试任务
-        adRetryHandler.removeCallbacks(adRetryRunnable)
     }
     
     /**
@@ -1250,11 +1116,6 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
         contentLoadJob?.cancel()
         contentLoadJob = null
 
-        // 清理广告相关资源
-        adLoadingDialog?.dismiss()
-        adLoadingDialog = null
-        adRetryHandler.removeCallbacks(adRetryRunnable)
-        isUserRequestedAd = false
         super.onDestroy()
     }
 }

@@ -14,7 +14,6 @@ import com.quran.quranaudio.quiz.base.BaseBindingActivity
 import com.quran.quranaudio.quiz.databinding.ActivityQuizReviewLearnBinding
 import com.quran.quranaudio.quiz.extension.reportClickEvent
 import com.quran.quranaudio.quiz.extension.reportExitFunShowEvent
-import com.quran.quranaudio.quiz.extension.hasRewardAdByPool
 import com.quran.quranaudio.quiz.extension.showRewardAd
 import com.quran.quranaudio.quiz.extension.reloadQuizRewardAd
 import com.quran.quranaudio.quiz.ad.ExternalAdConfig
@@ -244,13 +243,6 @@ class QuizReviewLearnActivity :
             finishWithAction(ACTION_TRY_AGAIN)
             return
         }
-        if (!hasRewardAdByPool(ExternalAdConfig.AD_QUIZ_REWARD)) {
-            ToastUtils.showLong(R.string.quran_loading_ad)
-            // 广告未加载，尝试重新加载
-            preloadRewardedAd()
-            return
-        }
-        
         // 展示激励广告
         this.showRewardAd(
             adPosition = ExternalAdConfig.AD_QUIZ_REWARD,
@@ -287,13 +279,6 @@ class QuizReviewLearnActivity :
             finishWithAction(ACTION_SKIP)
             return
         }
-        if (!hasRewardAdByPool(ExternalAdConfig.AD_QUIZ_REWARD)) {
-            ToastUtils.showLong(R.string.quran_loading_ad)
-            // 广告未加载，尝试重新加载
-            preloadRewardedAd()
-            return
-        }
-        
         // 展示激励广告
         this.showRewardAd(
             adPosition = ExternalAdConfig.AD_QUIZ_REWARD,
