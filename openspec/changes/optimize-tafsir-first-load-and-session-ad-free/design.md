@@ -59,6 +59,10 @@ The Tafsir footer currently contains only the native-ad container. The requested
 
 14. **Preload around user demand.** Consent completion preloads the shared rewarded physical ID and rewarded-interstitial fallback. Successful consumption, close, and show failure replenish their respective one-item caches. `needLoadAd` remains the single-flight guard, while polling lets a second caller observe an in-progress load without issuing a duplicate request.
 
+15. **Manifest-gated Tafsir navigation prefetch.** `TafsirPreloader` joins `TafsirManager.prepare(false)` before resolving the saved/default key and starting the selected verse. This preserves pre-navigation warming while preventing slug resolution against an empty process model on a new-user/cold-process open.
+
+16. **Completed failures never remain reusable.** Tafsir single-flight entries own a completion hook that removes the exact deferred on success, failure, or cancellation before a later foreground caller can join it. A bounded second network attempt handles cold DNS/TLS and retryable server failures in the same page visit.
+
 ## Risks / Trade-offs
 
 - **Uncached content still depends on network quality** → Show stable loading/retry feedback, start the request before navigation, and expose stage timings.
@@ -67,3 +71,4 @@ The Tafsir footer currently contains only the native-ad container. The requested
 - **Process-scoped reward is intentionally not durable** → Keep it in memory and use copy that says it lasts until the app is closed.
 - **Adjacent prefetch uses additional data** → Limit to at most two valid adjacent verses and never block rendering on it.
 - **Fallback production ID is not yet configured** → Keep the default blank, document the Remote Config key, and fail safely instead of sending a rewarded-interstitial request through an incompatible standard-interstitial unit.
+- **A cold-network retry adds a short wait on genuine outages** → Retry only once with a small backoff, then expose the existing page Retry/no-internet state without blocking navigation indefinitely.

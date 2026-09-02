@@ -39,3 +39,18 @@ The system SHALL cancel superseded page jobs, SHALL ignore stale results, and SH
 #### Scenario: Content is uncached
 - **WHEN** the selected verse completes through the network path
 - **THEN** diagnostics identify the network source and elapsed time separately from WebView render completion
+
+### Requirement: First navigation cannot be poisoned by premature prefetch
+The system SHALL prepare the local Tafsir manifest before resolving metadata for navigation prefetch, and SHALL NOT reuse a completed failed in-flight request for the foreground page.
+
+#### Scenario: New user opens Tafsir with a saved key in a cold process
+- **WHEN** navigation prefetch starts before the process Tafsir model has been populated
+- **THEN** the prefetch joins local manifest preparation, resolves a valid slug, and the first foreground page shares the valid request
+
+#### Scenario: An earlier prefetch has already failed
+- **WHEN** a foreground page requests the same Tafsir/Surah/Ayah after that failed deferred completed
+- **THEN** the completed failure has already been evicted and the page starts or joins a fresh request
+
+#### Scenario: First network attempt is transiently unavailable
+- **WHEN** the first uncached Tafsir request fails with a retryable connection or server error
+- **THEN** the same page performs one bounded retry before showing the existing failure state

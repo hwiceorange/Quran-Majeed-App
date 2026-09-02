@@ -9,7 +9,10 @@ import com.quran.quranaudio.online.quran_module.utils.univ.FileUtils
 import kotlinx.coroutines.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
+import retrofit2.HttpException
+import java.io.IOException
 
 /**
  * Tafsir 内存缓存管理器
@@ -35,8 +38,7 @@ object TafsirCacheManager {
     // 预加载任务管理
     private val preloadScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val activePreloadJobs = mutableMapOf<String, Job>()
-    private val inFlightLock = Any()
-    private val inFlightLoads = mutableMapOf<String, Deferred<Result<TafsirModel>>>()
+    private val inFlightLoads = TafsirInFlightRegistry<Result<TafsirModel>>()
     
     // JSON 解析器
     private val json = Json { ignoreUnknownKeys = true }
@@ -144,30 +146,17 @@ object TafsirCacheManager {
             return Result.success(it.tafsir)
         }
 
-        val deferred = synchronized(inFlightLock) {
-            inFlightLoads[cacheKey] ?: preloadScope.async {
+        val acquisition = inFlightLoads.getOrStart(cacheKey) {
+            preloadScope.async {
                 fetchAndCacheTafsir(context.applicationContext, tafsirKey, chapterNo, verseNo)
-            }.also {
-                inFlightLoads[cacheKey] = it
-                Log.d(TAG, "🚀 [SingleFlight] started: $cacheKey")
             }
         }
-
-        if (deferred.isActive && synchronized(inFlightLock) { inFlightLoads[cacheKey] === deferred }) {
-            Log.d(TAG, "🤝 [SingleFlight] awaiting: $cacheKey")
-        }
-
-        return try {
-            deferred.await()
-        } finally {
-            if (deferred.isCompleted) {
-                synchronized(inFlightLock) {
-                    if (inFlightLoads[cacheKey] === deferred) {
-                        inFlightLoads.remove(cacheKey)
-                    }
-                }
-            }
-        }
+        Log.d(
+            TAG,
+            if (acquisition.started) "🚀 [SingleFlight] started: $cacheKey"
+            else "🤝 [SingleFlight] joined: $cacheKey"
+        )
+        return acquisition.deferred.await()
     }
 
     private suspend fun fetchAndCacheTafsir(
@@ -179,32 +168,61 @@ object TafsirCacheManager {
         val cacheKey = getCacheKey(tafsirKey, chapterNo, verseNo)
         val startTime = System.currentTimeMillis()
 
-        try {
-            val slug = TafsirUtils.getTafsirSlugFromKey(tafsirKey)
-            val tafsir = when {
-                slug.startsWith("id-") -> {
-                    Log.d(TAG, "📥 [网络] 从自定义服务器加载: $slug")
-                    RetrofitInstance.customTafsir.getTafsir(slug, "$chapterNo:$verseNo")["tafsir"]!!
+        val slug = resolveTafsirRequestSlug(
+            TafsirUtils.getTafsirSlugFromKey(tafsirKey),
+            tafsirKey
+        )
+            ?: return@withContext Result.failure(IllegalArgumentException("Blank Tafsir key"))
+
+        var lastError: Throwable? = null
+        repeat(MAX_NETWORK_ATTEMPTS) { zeroBasedAttempt ->
+            val attempt = zeroBasedAttempt + 1
+            try {
+                val response = when {
+                    slug.startsWith("id-") -> {
+                        Log.d(TAG, "📥 [网络] 从自定义服务器加载: $slug, attempt=$attempt")
+                        RetrofitInstance.customTafsir.getTafsir(slug, "$chapterNo:$verseNo")
+                    }
+                    else -> {
+                        Log.d(TAG, "📥 [网络] 从 Quran.com 加载: $slug, attempt=$attempt")
+                        RetrofitInstance.quran.getTafsir(slug, "$chapterNo:$verseNo")
+                    }
                 }
-                else -> {
-                    Log.d(TAG, "📥 [网络] 从 Quran.com 加载: $slug")
-                    RetrofitInstance.quran.getTafsir(slug, "$chapterNo:$verseNo")["tafsir"]!!
+                val tafsir = response["tafsir"]
+                    ?.takeIf { it.text.isNotBlank() }
+                    ?: throw IOException("Tafsir response did not contain readable content")
+
+                val fileUtils = FileUtils.newInstance(context)
+                val tafsirFile = fileUtils.getTafsirFileSingleVerse(tafsirKey, chapterNo, verseNo)
+                fileUtils.createFile(tafsirFile)
+                tafsirFile.writeText(json.encodeToString(TafsirModel.serializer(), tafsir))
+                memoryCache.put(cacheKey, tafsir)
+
+                Log.d(TAG, "✅ [网络] 加载并缓存成功: $cacheKey (${System.currentTimeMillis() - startTime}ms), attempt=$attempt")
+                return@withContext Result.success(tafsir)
+            } catch (error: Exception) {
+                if (error is CancellationException) throw error
+                lastError = error
+                val retry = attempt < MAX_NETWORK_ATTEMPTS && isRetryableFetchFailure(error)
+                Log.e(TAG, "❌ [网络] 加载失败: ${error.message}, attempt=$attempt, retry=$retry")
+                if (!retry) {
+                    return@withContext Result.failure(error)
                 }
+                delay(NETWORK_RETRY_DELAY_MS)
             }
-
-            val fileUtils = FileUtils.newInstance(context)
-            val tafsirFile = fileUtils.getTafsirFileSingleVerse(tafsirKey, chapterNo, verseNo)
-            fileUtils.createFile(tafsirFile)
-            tafsirFile.writeText(json.encodeToString(TafsirModel.serializer(), tafsir))
-            memoryCache.put(cacheKey, tafsir)
-
-            Log.d(TAG, "✅ [网络] 加载并缓存成功: $cacheKey (${System.currentTimeMillis() - startTime}ms)")
-            Result.success(tafsir)
-        } catch (e: Exception) {
-            Log.e(TAG, "❌ [网络] 加载失败: ${e.message}")
-            Result.failure(e)
         }
+        Result.failure(lastError ?: IOException("Tafsir request failed"))
     }
+
+    private fun isRetryableFetchFailure(error: Exception): Boolean = when (error) {
+        is IOException -> true
+        is SerializationException -> true
+        is HttpException -> error.code() == 408 || error.code() == 429 || error.code() >= 500
+        else -> false
+    }
+
+    private const val MAX_NETWORK_ATTEMPTS = 2
+    private const val NETWORK_RETRY_DELAY_MS = 450L
 
     fun prefetchVerse(context: Context, tafsirKey: String?, chapterNo: Int, verseNo: Int) {
         if (tafsirKey.isNullOrBlank() || chapterNo < 1 || verseNo < 1) return

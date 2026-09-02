@@ -12,6 +12,7 @@ The first Tafsir open can perform a manifest network refresh before requesting t
 - Hide both the native ad and owned action for subscribers, permanent/temporary ad-free users, and users who earned the Tafsir process-session reward.
 - Keep the action text size unchanged while reducing its visible background height, and attach the same subscription-first/rewarded-second pattern to the bottom home native ad.
 - Route every rewarded entry through one cache-first flow: show an available rewarded ad immediately, otherwise poll/load for at most eight seconds, then use a policy-compliant rewarded-interstitial fallback, or expose a retryable no-reward-video state.
+- Prevent a new user's navigation prefetch from resolving Tafsir metadata before the local manifest is ready, and ensure a completed failed prefetch cannot poison the foreground page request.
 
 ## Capabilities
 

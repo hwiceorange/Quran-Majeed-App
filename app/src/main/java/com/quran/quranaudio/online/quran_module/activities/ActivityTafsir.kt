@@ -295,23 +295,31 @@ class ActivityTafsir : com.quran.quranaudio.online.quran_module.activities.Reade
      * 在 TafsirManager 准备完成后初始化内容
      */
     private fun initContentAfterPrepare(intent: Intent, chapterNo: Int, verseNo: Int) {
-        var key = intent.getStringExtra("tafsirKey") ?: com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPReader.getSavedTafsirKey(this)
-        
-        if (key == null) {
-            key = com.quran.quranaudio.online.quran_module.utils.tafsir.TafsirUtils.getPreferredTafsirKey(this)
-        }
-
-        if (key == null) {
-            android.util.Log.e("ActivityTafsir", "❌ Tafsir key is null")
-            showTafsirSetupDialog()
-            return
-        }
-
-        val model = TafsirManager.getModel(key)
+        val requestedKey = intent.getStringExtra("tafsirKey")
+            ?.takeIf { it.isNotBlank() }
+            ?: com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPReader
+                .getSavedTafsirKey(this)
+                ?.takeIf { it.isNotBlank() }
+        var key = requestedKey
+        var model = key?.let(TafsirManager::getModel)
 
         if (model == null) {
-            android.util.Log.e("ActivityTafsir", "❌ Tafsir model not found for key: $key")
-            android.util.Log.e("ActivityTafsir", "❌ Available models: ${TafsirManager.getModels()}")
+            key = com.quran.quranaudio.online.quran_module.utils.tafsir.TafsirUtils
+                .getPreferredTafsirKey(this)
+            model = key?.let(TafsirManager::getModel)
+            if (model != null) {
+                com.quran.quranaudio.online.quran_module.utils.sharedPrefs.SPReader
+                    .setSavedTafsirKey(this, model.key)
+                android.util.Log.w(
+                    "ActivityTafsir",
+                    "Recovered missing/stale Tafsir selection '$requestedKey' with '${model.key}'"
+                )
+            }
+        }
+
+        if (key == null || model == null) {
+            android.util.Log.e("ActivityTafsir", "❌ No valid Tafsir selection after local manifest prepare")
+            android.util.Log.e("ActivityTafsir", "❌ Requested key: $requestedKey, available models: ${TafsirManager.getModels()}")
             showTafsirSetupDialog()
             return
         }

@@ -41,3 +41,10 @@
 - [x] 6.4 Migrate app, Tafsir unlock, Quiz gems/review, download, audio, insight, and ad-removal rewarded entry points to the shared flow
 - [x] 6.5 Preload after consent and replenish after consumption while preserving one physical request per cache ID
 - [ ] 6.6 Add decision/cache tests and run app/quiz/adlib compile, unit tests, APK, strict OpenSpec, diff, and device interaction checks
+
+## 7. New-user first Tafsir reliability
+
+- [x] 7.1 Gate navigation Tafsir prefetch on local manifest readiness before resolving the saved/default key
+- [x] 7.2 Evict single-flight entries from their completion callback so a completed failed prefetch cannot be reused
+- [x] 7.3 Add one bounded retry for retryable cold-network failures and fall back to a valid language Tafsir when a saved selection is stale
+- [x] 7.4 Add regression tests and run Tafsir/app compile, unit tests, APK, strict OpenSpec, diff, and first-open self-checks
