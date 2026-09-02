@@ -16,12 +16,19 @@ import org.robolectric.annotation.Config
 class QuizModuleNavigatorTest {
     @Test
     fun quranEntryTargetsCanonicalMainQuizAndIsConsumedOnce() {
-        val intent = QuizModuleNavigator.createIntent(ApplicationProvider.getApplicationContext())
+        val intent = QuizModuleNavigator.createIntent(
+            ApplicationProvider.getApplicationContext(),
+            surahId = 1,
+            surahName = "Al-Fatihah"
+        )
 
         assertEquals(MainActivity::class.java.name, intent.component?.className)
         assertTrue(intent.flags and Intent.FLAG_ACTIVITY_CLEAR_TOP != 0)
         assertTrue(intent.flags and Intent.FLAG_ACTIVITY_SINGLE_TOP != 0)
-        assertTrue(QuizModuleNavigator.consumeOpenQuiz(intent))
-        assertFalse(QuizModuleNavigator.consumeOpenQuiz(intent))
+        val destination = QuizModuleNavigator.consumeDestination(intent)
+        assertEquals(1, destination?.surahId)
+        assertEquals("Al-Fatihah", destination?.surahName)
+        assertFalse(intent.hasExtra(QuizModuleNavigator.EXTRA_SURAH_ID))
+        assertTrue(QuizModuleNavigator.consumeDestination(intent) == null)
     }
 }

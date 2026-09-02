@@ -9,12 +9,15 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 
 object QuestionResponse {
     private var allQuestions = listOf<QuestionBean>()
     private var cachedLanguage: String? = null  // 🔧 跟踪缓存的语言
+    private val loadMutex = Mutex()
     private const val limitQuizLength = 120
 
     @OptIn(DelicateCoroutinesApi::class)
@@ -53,20 +56,29 @@ object QuestionResponse {
         val currentLanguage = com.quran.quranaudio.quiz.utils.AppConfig.lan
         
         // 🔧 如果语言改变了，清空缓存并重新加载
-        if (cachedLanguage != currentLanguage) {
-            android.util.Log.d("QuestionResponse", "🔄 语言已切换: $cachedLanguage -> $currentLanguage，重新加载题目")
-            allQuestions = listOf()  // 清空缓存
-            cachedLanguage = currentLanguage
+        loadMutex.withLock {
+            if (cachedLanguage != currentLanguage) {
+                android.util.Log.d("QuestionResponse", "🔄 语言已切换: $cachedLanguage -> $currentLanguage，重新加载题目")
+                allQuestions = listOf()
+                cachedLanguage = currentLanguage
+            }
+
+            if (allQuestions.isEmpty()) {
+                android.util.Log.d("QuestionResponse", "📚 开始加载题目文件...")
+                allQuestions = initAllQuestions()
+                if (allQuestions.isEmpty()) {
+                    // 首次安装时 BaseApp 的延迟解压可能尚未完成。在首个真实读取点自愈，
+                    // 避免入口因一次空读取永久隐藏。QuestionTools 内部已串行化解压。
+                    android.util.Log.w("QuestionResponse", "Quiz files not ready; extracting synchronously once")
+                    QuestionTools.unZipBibleQuiz()
+                    allQuestions = initAllQuestions()
+                }
+                android.util.Log.d("QuestionResponse", "✅ 题目加载完成，共 ${allQuestions.size} 题")
+            } else {
+                android.util.Log.d("QuestionResponse", "♻️ 使用缓存的题目，共 ${allQuestions.size} 题")
+            }
+            allQuestions
         }
-        
-        if (allQuestions.isEmpty()) {
-            android.util.Log.d("QuestionResponse", "📚 开始加载题目文件...")
-            allQuestions = initAllQuestions()
-            android.util.Log.d("QuestionResponse", "✅ 题目加载完成，共 ${allQuestions.size} 题")
-        } else {
-            android.util.Log.d("QuestionResponse", "♻️ 使用缓存的题目，共 ${allQuestions.size} 题")
-        }
-        allQuestions
     }
 
     /** 情境化联动：按 surah 过滤该章题目（供阅读器"本章测验"使用）。当前语言题库。 */

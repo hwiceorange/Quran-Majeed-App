@@ -55,3 +55,11 @@
 - [x] 8.2 Route the Quran reader action through a one-shot MainActivity intent to the existing `QuranQuestionFragment`
 - [x] 8.3 Add regression coverage for canonical Quiz intent target, flags, and one-shot consumption
 - [x] 8.4 Run app/quiz/adlib tests, APK, strict OpenSpec, diff, and loading/Quiz device interaction checks
+
+## 9. Surah-consistent canonical Quiz
+
+- [x] 9.1 Pass the live reader Surah through the one-shot canonical navigation request
+- [x] 9.2 Select contextual rounds exclusively from that Surah while preserving normal Quiz state outside reader sessions
+- [x] 9.3 Make first-use question extraction synchronous and single-flight at the repository boundary
+- [x] 9.4 Refresh eligibility on chapter changes and ignore stale count callbacks
+- [x] 9.5 Run selector/navigation tests, APK build, strict OpenSpec validation, and connected-device reader-to-Quiz verification

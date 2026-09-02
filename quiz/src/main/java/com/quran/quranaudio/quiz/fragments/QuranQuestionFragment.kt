@@ -65,8 +65,10 @@ import kotlinx.coroutines.launch
 @Suppress("DEPRECATION")
 class QuranQuestionFragment :
     BaseBindingFragment<FragmentQuestionBinding>(FragmentQuestionBinding::inflate) {
-        companion object{
-            var isSelected=false
+    companion object{
+        const val ARG_SURAH_ID = "quiz_surah_id"
+        const val ARG_SURAH_NAME = "quiz_surah_name"
+        var isSelected=false
         }
     val TAG = "QuestionFragment"
     private var currentBean: QuestionBean? = null
@@ -126,7 +128,10 @@ class QuranQuestionFragment :
     private val PER_ADD_DELAY_TIME = 15f
     private var countValueAnimator: ValueAnimator? = null
     private val viewModel by viewModels<QuestionViewModel> {
-        QuestionViewModel.Factory()
+        QuestionViewModel.Factory(
+            surahId = arguments?.getInt(ARG_SURAH_ID, 0)?.takeIf { it > 0 },
+            surahName = arguments?.getString(ARG_SURAH_NAME)
+        )
     }
 
 
@@ -572,7 +577,11 @@ class QuranQuestionFragment :
         binding.levelThoughtCl.root.gone()
         binding.quizNsv.visible()
         val currentLevel = SPTools.getInt(Constants.KEY_LAST_QUESTION_LEVEL, 1)
-        binding.levelTv.text = R.string.quran_level.getResString(currentLevel.toString())
+        binding.levelTv.text = if (viewModel.isSurahSession() && !viewModel.getSurahName().isNullOrBlank()) {
+            viewModel.getSurahName()
+        } else {
+            R.string.quran_level.getResString(currentLevel.toString())
+        }
         binding.levelThoughtCl.nextLevelTv.text =
             R.string.quran_level.getResString((currentLevel + 1).toString())
         binding.questionContentTv.text = questionBean.question

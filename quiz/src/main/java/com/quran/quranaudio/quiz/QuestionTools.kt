@@ -85,6 +85,7 @@ object QuestionTools {
      * quiz 解压缩到 file 目录
      * 存放地址:data/data/package/file/quiz
      */
+    @Synchronized
     fun unZipBibleQuiz() {
         android.util.Log.d("QuestionTools", "📦 Starting unZipBibleQuiz...")
         try {

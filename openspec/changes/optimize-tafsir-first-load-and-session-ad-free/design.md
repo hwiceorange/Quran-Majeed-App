@@ -65,7 +65,7 @@ The Tafsir footer currently contains only the native-ad container. The requested
 
 17. **Loading and unavailable are separate visual states.** The eight-second loading window uses only a centered 48dp spinner over the existing dim layer. The material card, explanatory message, and 48dp Retry control are created for the unavailable state only, so users get immediate feedback without a visually heavy interruption.
 
-18. **Reader Quiz is a navigation request, not a second game.** The contextual reader action uses a localized `Quran Quiz` label and creates a clear-top/single-top intent for MainActivity. MainActivity consumes a one-shot Quiz flag and selects the existing `QuranQuestionFragment`; this preserves standard progress, gems, review flow, bottom navigation, and localization while eliminating the duplicate standalone visual path and a misleading Surah-only promise.
+18. **Reader Quiz is a contextual request into the existing game.** The reader creates a clear-top/single-top intent containing a one-shot Quiz flag plus the current Surah ID/name. MainActivity consumes all fields and selects the existing `QuranQuestionFragment`; its standard progress, gems, review flow, bottom navigation, and localization remain intact, while the ViewModel selects every round item from that Surah without mutating global Quiz progression. The reader entry is exposed only for a ready localized bank with at least three matching questions; synchronized first-use extraction and stale-result rejection prevent intermittent disappearance.
 
 ## Risks / Trade-offs
 

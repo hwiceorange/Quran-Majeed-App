@@ -12,15 +12,50 @@ import com.quran.quranaudio.quiz.QuestionBean
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 
-class QuestionViewModel : ViewModel() {
+class QuestionViewModel(
+    private val surahId: Int? = null,
+    private val surahName: String? = null
+) : ViewModel() {
     // 每个关卡的答题数
     private val QUESTION_COUNT_PRE = 3
     private var leveQuestions = listOf<QuestionBean>()
+    private var contextualStartIndex = 0
     val currentQuestionBean = MutableSharedFlow<QuestionBean?>()
     var currentQuestionIndex = 0
     fun initLevel() {
         viewModelScope.launch {
             val allQuestion = QuestionResponse.getAllQuestion()
+            val contextualSurahId = surahId?.takeIf { it > 0 }
+            if (contextualSurahId != null) {
+                leveQuestions = selectSurahQuestions(
+                    questions = allQuestion,
+                    surahId = contextualSurahId,
+                    startIndex = contextualStartIndex,
+                    count = QUESTION_COUNT_PRE
+                )
+                if (leveQuestions.size < QUESTION_COUNT_PRE) {
+                    android.util.Log.w(
+                        "QuizContext",
+                        "Insufficient questions for surahId=$contextualSurahId count=${leveQuestions.size}"
+                    )
+                    currentQuestionBean.emit(null)
+                    return@launch
+                }
+                android.util.Log.i(
+                    "QuizContext",
+                    "round expectedSurahId=$contextualSurahId actualSurahIds=${leveQuestions.joinToString(",") { it.surah_id.toString() }} questionIds=${leveQuestions.joinToString(",") { it.id }}"
+                )
+                currentQuestionIndex = 0
+                logContextQuestion(leveQuestions[currentQuestionIndex])
+                currentQuestionBean.emit(leveQuestions[currentQuestionIndex])
+                return@launch
+            }
+
+            if (allQuestion.size < QUESTION_COUNT_PRE) {
+                android.util.Log.w("QuizContext", "Question bank unavailable: count=${allQuestion.size}")
+                currentQuestionBean.emit(null)
+                return@launch
+            }
             val startIndex = getStartIndex(allQuestion.size)
             logd(
                 "end quiz range = [$startIndex, ${startIndex + QUESTION_COUNT_PRE - 1}], all count = ${allQuestion.size}",
@@ -44,6 +79,13 @@ class QuestionViewModel : ViewModel() {
     }
 
     fun intoNextLevel() {
+        val contextualSurahId = surahId?.takeIf { it > 0 }
+        if (contextualSurahId != null) {
+            contextualStartIndex += QUESTION_COUNT_PRE
+            currentQuestionIndex = 0
+            initLevel()
+            return
+        }
         val lastLevel = SPTools.getInt(Constants.KEY_LAST_QUESTION_LEVEL, 1)
         SPTools.put(Constants.KEY_LAST_QUESTION_LEVEL, lastLevel + 1)
         val lastLevelStartIndex = SPTools.getInt(Constants.KEY_LAST_QUESTION_START_INDEX, 0)
@@ -58,6 +100,7 @@ class QuestionViewModel : ViewModel() {
     fun showNextQuestion() {
         currentQuestionIndex += 1
         viewModelScope.launch {
+            logContextQuestion(leveQuestions[currentQuestionIndex])
             currentQuestionBean.emit(leveQuestions[currentQuestionIndex])
         }
     }
@@ -65,6 +108,7 @@ class QuestionViewModel : ViewModel() {
     fun tryAgainQuestion() {
         currentQuestionIndex = 0
         viewModelScope.launch {
+            logContextQuestion(leveQuestions[currentQuestionIndex])
             currentQuestionBean.emit(leveQuestions[currentQuestionIndex])
         }
     }
@@ -74,12 +118,42 @@ class QuestionViewModel : ViewModel() {
     }
 
     fun getProgressQuestion() =
-        R.string.quran_question.getResString("${currentQuestionIndex + 1}/$QUESTION_COUNT_PRE")
+        R.string.quran_question.getResString("${currentQuestionIndex + 1}/${leveQuestions.size}")
 
-    class Factory() : ViewModelProvider.Factory {
+    fun isSurahSession(): Boolean = surahId?.let { it > 0 } == true
+
+    fun getSurahName(): String? = surahName
+
+    private fun logContextQuestion(question: QuestionBean) {
+        val expectedSurahId = surahId?.takeIf { it > 0 } ?: return
+        android.util.Log.i(
+            "QuizContext",
+            "expectedSurahId=$expectedSurahId actualSurahId=${question.surah_id} questionId=${question.id} index=$currentQuestionIndex"
+        )
+    }
+
+    class Factory(
+        private val surahId: Int? = null,
+        private val surahName: String? = null
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return QuestionViewModel() as T
+            return QuestionViewModel(surahId, surahName) as T
+        }
+    }
+
+    companion object {
+        internal fun selectSurahQuestions(
+            questions: List<QuestionBean>,
+            surahId: Int,
+            startIndex: Int,
+            count: Int
+        ): List<QuestionBean> {
+            if (surahId <= 0 || count <= 0) return emptyList()
+            val matching = questions.filter { it.surah_id == surahId }
+            if (matching.size < count) return matching
+            val normalizedStart = Math.floorMod(startIndex, matching.size)
+            return List(count) { offset -> matching[(normalizedStart + offset) % matching.size] }
         }
     }
 }

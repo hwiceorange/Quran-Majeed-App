@@ -282,19 +282,41 @@ public class MainActivity extends BaseActivity {
 
     private void handleNavigationIntent(Intent intent) {
         if (intent == null || navController == null) return;
-        if (com.quran.quranaudio.online.navigation.QuizModuleNavigator.consumeOpenQuiz(intent)) {
-            navigateToQuiz();
+        com.quran.quranaudio.online.navigation.QuizModuleNavigator.Destination quizDestination =
+                com.quran.quranaudio.online.navigation.QuizModuleNavigator.consumeDestination(intent);
+        if (quizDestination != null) {
+            navigateToQuiz(quizDestination.getSurahId(), quizDestination.getSurahName());
             return;
         }
         handlePushIntent(intent);
     }
 
     private void navigateToQuiz() {
+        navigateToQuiz(0, null);
+    }
+
+    private void navigateToQuiz(int surahId, String surahName) {
         if (navController == null || navView == null) return;
         try {
-            navView.setSelectedItemId(R.id.nav_name_99);
+            if (surahId <= 0) {
+                navView.setSelectedItemId(R.id.nav_name_99);
+            } else {
+                android.view.MenuItem quizItem = navView.getMenu().findItem(R.id.nav_name_99);
+                if (quizItem != null) quizItem.setChecked(true);
+            }
             androidx.navigation.NavDestination destination = navController.getCurrentDestination();
-            if (destination == null || destination.getId() != R.id.nav_name_99) {
+            if (surahId > 0) {
+                android.os.Bundle args = new android.os.Bundle();
+                args.putInt(
+                        com.quran.quranaudio.quiz.fragments.QuranQuestionFragment.ARG_SURAH_ID,
+                        surahId
+                );
+                args.putString(
+                        com.quran.quranaudio.quiz.fragments.QuranQuestionFragment.ARG_SURAH_NAME,
+                        surahName
+                );
+                navController.navigate(R.id.nav_name_99, args);
+            } else if (destination == null || destination.getId() != R.id.nav_name_99) {
                 navController.navigate(R.id.nav_name_99);
             }
         } catch (Exception e) {

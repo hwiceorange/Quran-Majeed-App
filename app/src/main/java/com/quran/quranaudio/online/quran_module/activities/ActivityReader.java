@@ -114,6 +114,7 @@ public class ActivityReader extends ReaderPossessingActivity {
     public ActivityReaderBinding mBinding;
     public ReaderLayoutManager mLayoutManager;
     private boolean mProtectFromPlayerReset;
+    private final AtomicInteger surahQuizEntryGeneration = new AtomicInteger(0);
     public RecitationService mPlayerService;
     private final ServiceConnection mPlayerServiceConnection = new ServiceConnection() {
         @Override
@@ -501,16 +502,27 @@ public class ActivityReader extends ReaderPossessingActivity {
                 return;
             }
             final int chNo = ch.getChapterNumber();
+            final String chName = ch.getName();
+            final int requestGeneration = surahQuizEntryGeneration.incrementAndGet();
             com.quranaudio.quiz.quiz.QuestionResponse.countBySurahAsync(chNo, count -> {
                 try {
                     if (isFinishing() || isDestroyed() || mBinding == null || mBinding.btnSurahQuizEntry == null) return;
+                    com.quran.quranaudio.online.quran_module.components.quran.subcomponents.Chapter liveChapter =
+                            (mReaderParams != null) ? mReaderParams.currChapter : null;
+                    if (requestGeneration != surahQuizEntryGeneration.get()
+                            || liveChapter == null
+                            || liveChapter.getChapterNumber() != chNo) {
+                        android.util.Log.d("QuizEntry", "Ignoring stale quiz count for surahId=" + chNo);
+                        return;
+                    }
+                    android.util.Log.i("QuizEntry", "surahId=" + chNo + " questionCount=" + count);
                     if (count >= 3) {
                         mBinding.btnSurahQuizEntry.setVisibility(android.view.View.VISIBLE);
                         mBinding.btnSurahQuizEntry.setOnClickListener(v -> {
                             try {
                                 startActivity(
                                         com.quran.quranaudio.online.navigation.QuizModuleNavigator
-                                                .createIntent(ActivityReader.this)
+                                                .createIntent(ActivityReader.this, chNo, chName)
                                 );
                                 finish();
                             } catch (Throwable t) {
@@ -1461,6 +1473,7 @@ public class ActivityReader extends ReaderPossessingActivity {
     public void initChapter(Chapter chapter) {
         mReaderParams.readType = ReaderParams.READER_READ_TYPE_CHAPTER;
         mReaderParams.setCurrChapter(chapter);
+        updateSurahQuizEntry();
         mReaderParams.currJuzNo = -1;
 
         mReaderParams.verseRange = new Pair<>(1, chapter.getVerseCount());
@@ -1605,6 +1618,7 @@ public class ActivityReader extends ReaderPossessingActivity {
             mReaderParams.setCurrChapter(chapter);
             mBinding.readerHeader.initVerseSelector(null, chapter.getChapterNumber());
         }
+        updateSurahQuizEntry();
 
         mBinding.readerHeader.initChapterSelector();
         mBinding.readerHeader.selectChapterIntoSpinner(mNavigator.getCurrChapterNo());
@@ -1686,6 +1700,10 @@ public class ActivityReader extends ReaderPossessingActivity {
 
     public void initJuz(int juzNo) {
         mReaderParams.setCurrChapter(null);
+        surahQuizEntryGeneration.incrementAndGet();
+        if (mBinding != null && mBinding.btnSurahQuizEntry != null) {
+            mBinding.btnSurahQuizEntry.setVisibility(android.view.View.GONE);
+        }
 
         if (mPlayer != null) {
             if (!mProtectFromPlayerReset && mReaderParams.currJuzNo != juzNo) {
