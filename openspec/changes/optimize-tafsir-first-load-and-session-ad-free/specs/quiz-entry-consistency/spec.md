@@ -13,6 +13,11 @@ The system SHALL route the Quran reader's contextual Quiz action to the same Lea
 - **WHEN** the user taps the reader Quiz action without an existing MainActivity below it
 - **THEN** MainActivity is created once and opens the same canonical Learn/Quiz destination
 
+#### Scenario: Reader itself starts in a cold process
+- **WHEN** an exported reading action opens ActivityReader before any app Activity has installed a window decor
+- **THEN** system-bar appearance setup is deferred until the reader layout is bound
+- **AND** the reader does not crash while creating the window content container
+
 ### Requirement: Quiz navigation request is one-shot
 The system SHALL consume the Quiz destination request after navigation so recreation or a later unrelated intent cannot reopen Quiz unexpectedly.
 

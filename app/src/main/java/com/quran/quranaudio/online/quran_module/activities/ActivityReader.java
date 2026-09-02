@@ -1072,7 +1072,13 @@ public class ActivityReader extends ReaderPossessingActivity {
     @Override
     public void adjustStatusAndNavigationBar() {
         Window window = getWindow();
-        View decorView = window.getDecorView();
+        // BaseActivity invokes this before setContentView(). On Android 16 a cold launch of the
+        // exported reader can throw while getDecorView() tries to install a window without its
+        // content container. initDummyBars() invokes us again after binding, so defer safely.
+        View decorView = window.peekDecorView();
+        if (decorView == null) {
+            return;
+        }
 
         // For Android 35, adjust the approach to avoid status bar overlap
         if (Build.VERSION.SDK_INT >= 35) {

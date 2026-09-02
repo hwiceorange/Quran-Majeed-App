@@ -63,3 +63,4 @@
 - [x] 9.3 Make first-use question extraction synchronous and single-flight at the repository boundary
 - [x] 9.4 Refresh eligibility on chapter changes and ignore stale count callbacks
 - [x] 9.5 Run selector/navigation tests, APK build, strict OpenSpec validation, and connected-device reader-to-Quiz verification
+- [x] 9.6 Prevent Android 16 exported-reader cold-start window setup crash and verify on the connected device
