@@ -40,7 +40,7 @@
 - [x] 6.3 Add the dimmed loading and no-reward-video retry UI with outside/back dismissal, 48dp controls, and English/Arabic resources
 - [x] 6.4 Migrate app, Tafsir unlock, Quiz gems/review, download, audio, insight, and ad-removal rewarded entry points to the shared flow
 - [x] 6.5 Preload after consent and replenish after consumption while preserving one physical request per cache ID
-- [ ] 6.6 Add decision/cache tests and run app/quiz/adlib compile, unit tests, APK, strict OpenSpec, diff, and device interaction checks
+- [x] 6.6 Add decision/cache tests and run app/quiz/adlib compile, unit tests, APK, strict OpenSpec, diff, and device interaction checks
 
 ## 7. New-user first Tafsir reliability
 
@@ -48,3 +48,10 @@
 - [x] 7.2 Evict single-flight entries from their completion callback so a completed failed prefetch cannot be reused
 - [x] 7.3 Add one bounded retry for retryable cold-network failures and fall back to a valid language Tafsir when a saved selection is stale
 - [x] 7.4 Add regression tests and run Tafsir/app compile, unit tests, APK, strict OpenSpec, diff, and first-open self-checks
+
+## 8. Reward loading polish and canonical Quiz entry
+
+- [x] 8.1 Replace the loading card and visible copy with one centered spinner while retaining cancel and unavailable/retry behavior
+- [x] 8.2 Route the Quran reader action through a one-shot MainActivity intent to the existing `QuranQuestionFragment`
+- [x] 8.3 Add regression coverage for canonical Quiz intent target, flags, and one-shot consumption
+- [x] 8.4 Run app/quiz/adlib tests, APK, strict OpenSpec, diff, and loading/Quiz device interaction checks

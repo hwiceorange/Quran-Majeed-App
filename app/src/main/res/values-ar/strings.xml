@@ -1685,4 +1685,5 @@
     <string name="home_ad_free_reward">إعلان · إزالة إعلان الرئيسية</string>
     <string name="home_ad_free_reward_description">إخفاء الإعلان المدمج السفلي في الصفحة الرئيسية حتى إغلاق التطبيق</string>
     <string name="home_ad_free_reward_earned">تم إخفاء الإعلان السفلي في الصفحة الرئيسية حتى إغلاق التطبيق</string>
+  <string name="quran_quiz_entry">اختبار القرآن</string>
 </resources>

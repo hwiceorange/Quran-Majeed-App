@@ -68,7 +68,7 @@
         android:fontFamily="sans-serif-medium"
         android:paddingHorizontal="18dp"
         android:paddingVertical="10dp"
-        android:text="@string/quiz_surah_test_btn"
+        android:text="@string/quran_quiz_entry"
         android:textColor="@android:color/white"
         android:textSize="14sp"
         android:visibility="gone" />

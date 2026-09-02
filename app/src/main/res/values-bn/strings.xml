@@ -2374,4 +2374,5 @@
     <string name="names99_home">৯৯ নাম</string>
     <string name="fcm_retention_channel_name">কুরআন স্মরণিকা</string>
     <string name="fcm_retention_channel_description">কুরআন পাঠ ও ইবাদতের সহায়ক স্মরণিকা</string>
+    <string name="quran_quiz_entry">কুরআন কুইজ</string>
 </resources>

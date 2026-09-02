@@ -25,6 +25,10 @@ The system SHALL attempt a cached `RewardedInterstitialAd` after the rewarded de
 ### Requirement: Unavailable state is retryable and dismissible
 The system SHALL replace loading with a clear no-reward-video message and Retry control when neither rewarding format is cached at the deadline.
 
+#### Scenario: Reward video is being prepared
+- **WHEN** a rewarded request has no immediate cached ad and remains inside the eight-second loading window
+- **THEN** the system shows only one centered indeterminate spinner over the dimmed current screen, with no visible card, title, reward description, or cancel instructions
+
 #### Scenario: User retries
 - **WHEN** the unavailable state is visible and the user taps Retry
 - **THEN** a fresh rewarded-first eight-second attempt begins and the fallback cache is prepared again

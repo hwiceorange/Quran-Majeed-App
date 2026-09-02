@@ -12,7 +12,9 @@ The first Tafsir open can perform a manifest network refresh before requesting t
 - Hide both the native ad and owned action for subscribers, permanent/temporary ad-free users, and users who earned the Tafsir process-session reward.
 - Keep the action text size unchanged while reducing its visible background height, and attach the same subscription-first/rewarded-second pattern to the bottom home native ad.
 - Route every rewarded entry through one cache-first flow: show an available rewarded ad immediately, otherwise poll/load for at most eight seconds, then use a policy-compliant rewarded-interstitial fallback, or expose a retryable no-reward-video state.
+- Reduce the rewarded loading state to one centered spinner while retaining the separate retryable unavailable state and cancel behavior.
 - Prevent a new user's navigation prefetch from resolving Tafsir metadata before the local manifest is ready, and ensure a completed failed prefetch cannot poison the foreground page request.
+- Route the Quran reader's quiz entry to the canonical Learn/Quiz destination instead of the duplicate standalone Surah quiz screen.
 
 ## Capabilities
 
@@ -22,6 +24,7 @@ The first Tafsir open can perform a manifest network refresh before requesting t
 - `tafsir-session-ad-free`: Subscription-first owned entry and voluntary rewarded removal of Tafsir native ads for the current app process.
 - `home-session-ad-free`: Subscription-first owned entry and voluntary rewarded removal of the bottom home native ad for the current app process.
 - `rewarded-ad-fallback`: Shared rewarded loading, rewarded-interstitial fallback, retry UI, earned-only delivery, and preload/cache governance for all rewarded placements.
+- `quiz-entry-consistency`: One canonical Quiz UI and navigation contract for Quran-reader and bottom-navigation entry points.
 
 ### Modified Capabilities
 
@@ -34,3 +37,4 @@ The first Tafsir open can perform a manifest network refresh before requesting t
 - Adds localized English and Arabic UI copy and modifies the Tafsir footer layout without changing subscription products or permanent/one-hour ad-free entitlements.
 - Adds one compact action above the actual `FragMain` bottom native ad and a distinct home process-session rewarded placement without adding another large promo card.
 - Adds an adlib-owned cancelable loading/retry surface and one Remote Config key, `rewarded_interstitial_fallback_admob`; production fallback stays disabled until that rewarded-interstitial ad unit is configured.
+- Adds a one-shot MainActivity Quiz navigation intent so the reader can return to the existing Quiz fragment without duplicating question UI or progress behavior.

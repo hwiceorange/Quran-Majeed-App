@@ -2442,4 +2442,5 @@ Kompas: halakan telefon dan ikut anak panah ke arah Kaabah secara langsung.</str
     <string name="names99_home">99 Nama</string>
     <string name="fcm_retention_channel_name">Peringatan al-Quran</string>
     <string name="fcm_retention_channel_description">Peringatan berguna untuk bacaan al-Quran dan ibadah</string>
+    <string name="quran_quiz_entry">Kuiz Al-Quran</string>
 </resources>

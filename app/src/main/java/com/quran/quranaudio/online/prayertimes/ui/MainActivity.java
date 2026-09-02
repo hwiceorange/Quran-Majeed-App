@@ -263,7 +263,7 @@ public class MainActivity extends BaseActivity {
             }
 
             navController.setGraph(navGraph);
-            handlePushIntent(getIntent());
+            handleNavigationIntent(getIntent());
             
             // 🔥 使用 apply() 而不是隐式的 commit()
             preferencesHelper.setFirstTimeLaunch(false);
@@ -277,7 +277,29 @@ public class MainActivity extends BaseActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
+        handleNavigationIntent(intent);
+    }
+
+    private void handleNavigationIntent(Intent intent) {
+        if (intent == null || navController == null) return;
+        if (com.quran.quranaudio.online.navigation.QuizModuleNavigator.consumeOpenQuiz(intent)) {
+            navigateToQuiz();
+            return;
+        }
         handlePushIntent(intent);
+    }
+
+    private void navigateToQuiz() {
+        if (navController == null || navView == null) return;
+        try {
+            navView.setSelectedItemId(R.id.nav_name_99);
+            androidx.navigation.NavDestination destination = navController.getCurrentDestination();
+            if (destination == null || destination.getId() != R.id.nav_name_99) {
+                navController.navigate(R.id.nav_name_99);
+            }
+        } catch (Exception e) {
+            android.util.Log.e("MainActivity", "Quiz navigation failed", e);
+        }
     }
 
     private void handlePushIntent(Intent intent) {
@@ -365,14 +387,7 @@ public class MainActivity extends BaseActivity {
         try {
             RxBus.INSTANCE().register(this, MainTabChangeEvent.class, event -> {
                 if (MainTabChangeEvent.TO_QUIZ.equals(event.toType)) {
-                    if (navController != null && navView != null) {
-                        try {
-                            navController.navigate(R.id.nav_name_99);
-                            navView.setSelectedItemId(R.id.nav_name_99);
-                        } catch (Exception e) {
-                            android.util.Log.e("MainActivity", "❌ Navigation to Discover failed", e);
-                        }
-                    }
+                    navigateToQuiz();
                 }
             });
         } catch (Exception e) {

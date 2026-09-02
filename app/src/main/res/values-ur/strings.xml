@@ -2367,4 +2367,5 @@
     <string name="names99_home">99 نام</string>
     <string name="fcm_retention_channel_name">قرآن کی یاد دہانیاں</string>
     <string name="fcm_retention_channel_description">قرآن پڑھنے اور عبادت کی مفید یاد دہانیاں</string>
+    <string name="quran_quiz_entry">قرآنی کوئز</string>
 </resources>

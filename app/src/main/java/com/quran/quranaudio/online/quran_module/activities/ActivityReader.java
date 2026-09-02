@@ -488,8 +488,8 @@ public class ActivityReader extends ReaderPossessingActivity {
     }
 
     /**
-     * 情境化联动：若当前章题量足够(≥3)，显示"本章测验"入口；点击启动独立的 SurahQuizActivity。
-     * 全程 try-catch，任何异常都只是不显示入口，绝不影响阅读器现有功能/交互/数据/登录/UIUX。
+     * 情境化联动：若当前章题量足够(≥3)，显示答题入口；点击回到主界面的标准 Quiz 模块。
+     * 不再启动第二套独立答题 Activity，避免同一功能出现不同布局、进度与交互模型。
      */
     private void updateSurahQuizEntry() {
         try {
@@ -501,7 +501,6 @@ public class ActivityReader extends ReaderPossessingActivity {
                 return;
             }
             final int chNo = ch.getChapterNumber();
-            final String chName = ch.getName();
             com.quranaudio.quiz.quiz.QuestionResponse.countBySurahAsync(chNo, count -> {
                 try {
                     if (isFinishing() || isDestroyed() || mBinding == null || mBinding.btnSurahQuizEntry == null) return;
@@ -509,15 +508,13 @@ public class ActivityReader extends ReaderPossessingActivity {
                         mBinding.btnSurahQuizEntry.setVisibility(android.view.View.VISIBLE);
                         mBinding.btnSurahQuizEntry.setOnClickListener(v -> {
                             try {
-                                // 点击时读取实时当前章，保证滚动到别章后仍正确
-                                com.quran.quranaudio.online.quran_module.components.quran.subcomponents.Chapter live =
-                                        (mReaderParams != null) ? mReaderParams.currChapter : null;
-                                int liveNo = (live != null) ? live.getChapterNumber() : chNo;
-                                String liveName = (live != null) ? live.getName() : chName;
-                                com.quran.quranaudio.quiz.activity.SurahQuizActivity.Companion.start(
-                                        ActivityReader.this, liveNo, liveName);
+                                startActivity(
+                                        com.quran.quranaudio.online.navigation.QuizModuleNavigator
+                                                .createIntent(ActivityReader.this)
+                                );
+                                finish();
                             } catch (Throwable t) {
-                                android.util.Log.e("ActivityReader", "surah quiz launch failed", t);
+                                android.util.Log.e("ActivityReader", "standard quiz launch failed", t);
                             }
                         });
                     } else {

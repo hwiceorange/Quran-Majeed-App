@@ -7,8 +7,10 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Window
 import android.view.WindowManager
+import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.button.MaterialButton
 import com.quran.quranaudio.common.ad.R
 
@@ -20,6 +22,7 @@ internal class RewardedAdFlowDialog(
 ) : Dialog(context) {
 
     private lateinit var progress: ProgressBar
+    private lateinit var unavailableCard: MaterialCardView
     private lateinit var title: TextView
     private lateinit var message: TextView
     private lateinit var retry: MaterialButton
@@ -33,6 +36,7 @@ internal class RewardedAdFlowDialog(
         setCanceledOnTouchOutside(true)
 
         progress = findViewById(R.id.rewardedFlowProgress)
+        unavailableCard = findViewById(R.id.rewardedFlowUnavailableCard)
         title = findViewById(R.id.rewardedFlowTitle)
         message = findViewById(R.id.rewardedFlowMessage)
         retry = findViewById(R.id.rewardedFlowRetry)
@@ -59,11 +63,10 @@ internal class RewardedAdFlowDialog(
     fun showLoading() {
         notifyingCancellation = true
         if (!::progress.isInitialized) return
-        progress.visibility = android.view.View.VISIBLE
-        retry.visibility = android.view.View.GONE
-        title.setText(R.string.rewarded_flow_preparing)
-        message.text = if (rewardDescription.isBlank()) {
-            context.getString(R.string.rewarded_flow_cancel_hint)
+        progress.visibility = View.VISIBLE
+        unavailableCard.visibility = View.GONE
+        progress.contentDescription = if (rewardDescription.isBlank()) {
+            context.getString(R.string.rewarded_flow_preparing)
         } else {
             context.getString(R.string.rewarded_flow_reward_message, rewardDescription)
         }
@@ -72,8 +75,9 @@ internal class RewardedAdFlowDialog(
     fun showUnavailable() {
         notifyingCancellation = true
         if (!::progress.isInitialized) return
-        progress.visibility = android.view.View.GONE
-        retry.visibility = android.view.View.VISIBLE
+        progress.visibility = View.GONE
+        unavailableCard.visibility = View.VISIBLE
+        retry.visibility = View.VISIBLE
         title.setText(R.string.rewarded_flow_unavailable)
         message.setText(R.string.rewarded_flow_retry_message)
     }

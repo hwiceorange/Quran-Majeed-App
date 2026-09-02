@@ -63,6 +63,10 @@ The Tafsir footer currently contains only the native-ad container. The requested
 
 16. **Completed failures never remain reusable.** Tafsir single-flight entries own a completion hook that removes the exact deferred on success, failure, or cancellation before a later foreground caller can join it. A bounded second network attempt handles cold DNS/TLS and retryable server failures in the same page visit.
 
+17. **Loading and unavailable are separate visual states.** The eight-second loading window uses only a centered 48dp spinner over the existing dim layer. The material card, explanatory message, and 48dp Retry control are created for the unavailable state only, so users get immediate feedback without a visually heavy interruption.
+
+18. **Reader Quiz is a navigation request, not a second game.** The contextual reader action uses a localized `Quran Quiz` label and creates a clear-top/single-top intent for MainActivity. MainActivity consumes a one-shot Quiz flag and selects the existing `QuranQuestionFragment`; this preserves standard progress, gems, review flow, bottom navigation, and localization while eliminating the duplicate standalone visual path and a misleading Surah-only promise.
+
 ## Risks / Trade-offs
 
 - **Uncached content still depends on network quality** → Show stable loading/retry feedback, start the request before navigation, and expose stage timings.
@@ -72,3 +76,4 @@ The Tafsir footer currently contains only the native-ad container. The requested
 - **Adjacent prefetch uses additional data** → Limit to at most two valid adjacent verses and never block rendering on it.
 - **Fallback production ID is not yet configured** → Keep the default blank, document the Remote Config key, and fail safely instead of sending a rewarded-interstitial request through an incompatible standard-interstitial unit.
 - **A cold-network retry adds a short wait on genuine outages** → Retry only once with a small backoff, then expose the existing page Retry/no-internet state without blocking navigation indefinitely.
+- **Returning from the reader can recreate MainActivity if it is not in the task** → The same one-shot intent works for both reuse and creation, and is consumed before later recreation.
